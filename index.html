@@ -227,4 +227,131 @@ clusters.forEach(c => {
 
 </body>
 </html>
-```
+<script>
+// ----- IBAN Copy -----
+const IBAN = 'DE27 7002 0270 0047 0960 65';
+const PAYPAL = 'https://paypal.me/ThomasKoenig';
+
+function copyIBAN(ev) {
+    navigator.clipboard.writeText(IBAN).then(() => {
+        const hint = ev.target.nextElementSibling;
+        hint.style.display = 'block';
+        setTimeout(() => { hint.style.display = 'none'; }, 2000);
+    }).catch(() => alert('IBAN manuell kopieren:\n' + IBAN));
+}
+
+// ----- Stufen -----
+const stufen = [
+    { name: 'I1 – ZÜNDFUNKE', price: '497', desc: 'Quellcode, Python‑Core, Community', features: ['Vollständiger Quellcode','Deca Crew Agenten','GOT/SHA Imitation','Community Discord'], featured: false },
+    { name: 'I2 – GLIMMER', price: '750', desc: '+ Installation, Anleitung', features: ['Alles aus I1','Installationsguide','1h Remote‑Support','Zugang Basismodule'], featured: false },
+    { name: 'I3 – FUNKE', price: '990', desc: '+ CLI‑Tool b6, Automatisierung', features: ['Alles aus I2','CLI‑Tool b6','10 Automatisierungs‑Skripte'], featured: false },
+    { name: 'I4 – FLAMME', price: '1200', desc: '+ Docker‑Container, lokaler Server', features: ['Alles aus I3','Docker‑Image','Lokaler Server inkl.'], featured: false },
+    { name: '🔥 I5 – INFERNO', price: '1500', desc: 'Komplettpaket + 1 Jahr Updates', features: ['Alles aus I4','1 Jahr Updates & Priority‑Support','iOS‑App (Basis)'], featured: true },
+    { name: 'M1 – BOOTCAMP', price: '1250', desc: '4 Wochen Intensiv‑Coaching', features: ['4 Live‑Sessions (1:1)','Zertifikat "Operator"'], featured: false },
+    { name: 'M2 – FORTGESCHRITTEN', price: '2000', desc: '+ Forensik‑Workshop (1 Tag)', features: ['Alles aus M1','Forensik‑Workshop vor Ort'], featured: false },
+    { name: 'M3 – AUDIT‑TRAINING', price: '2500', desc: 'GL‑1000 Audit‑Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], featured: false },
+    { name: 'M4 – LEGAL‑TECH', price: '3000', desc: 'Judge‑Modul Training', features: ['5999 Normen verstehen','Judge‑Konfiguration'], featured: false },
+    { name: '⚡ M5 – MEISTER', price: '3500', desc: 'Alle Coachings + Zertifikat', features: ['M1‑M4 kombiniert','Zertifikat "Black Six Meister"'], featured: true },
+    { name: 'A1 – AUFSTIEG', price: '2500', desc: 'Persönliche Installation', features: ['Installation auf deinem Server','Basis‑Konfiguration'], featured: false },
+    { name: 'A2 – ORBIT', price: '4900', desc: '+ Judge & Police Module aktiv', features: ['5999 Normen','Beck‑Online Konnektor'], featured: false },
+    { name: 'A3 – BESCHLEUNIGUNG', price: '9900', desc: '+ FPGA‑Synthesizer, Photonik', features: ['FPGA‑Modul','Photonischer Compiler'], featured: false },
+    { name: 'A4 – MULTIVERSUM', price: '19900', desc: '3 Universen, 37 Qz', features: ['Alpha, Beta, Gamma','Qz‑Kette aktiv'], featured: false },
+    { name: '🚀 A5 – GIPFEL', price: '29900', desc: 'A1‑A4 + 1 Jahr Priority', features: ['Alle Profi‑Module','24/7 Support (1 Jahr)'], featured: true },
+    { name: 'S1 – ENTERPRISE S', price: '49900/J', desc: 'Bis 50 Nodes, eigener Cluster', features: ['Vollzugriff alle Module','8/5 Priority‑Support'], featured: false },
+    { name: 'S2 – ENTERPRISE M', price: '249000/J', desc: 'Bis 500 Nodes, Multi‑Cloud', features: ['24/7 Priority‑Support','Dedizierter Ansprechpartner'], featured: false },
+    { name: 'S3 – ENTERPRISE L', price: '990000/J', desc: 'Bis 5.000 Nodes, Quantum‑Layer', features: ['Quantum‑Entanglement‑Bridge','Source‑Code‑Treuhand inkl.'], featured: false },
+    { name: 'S4 – ENTERPRISE XL', price: '1990000/J', desc: 'Bis 50.000 Nodes, alle Cluster', features: ['Galactic Router','Operator‑Avatar'], featured: false },
+    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2499000/J', desc: 'Unbegrenzt, alle Module', features: ['Alle 101.372 Module','Omega‑Point‑Protokoll'], featured: true },
+    { name: 'O1 – AIRGAP', price: '1000', desc: 'Offline‑Archiv, komplett autark', features: ['4,2 GB Offline‑Paket','SHA‑512 verifiziert'], featured: false },
+    { name: 'O2 – TRAINING', price: '5000/Tag', desc: '1‑Tages‑Intensivschulung vor Ort', features: ['Installation & Konfiguration','Zertifizierung inkl.'], featured: false },
+    { name: 'O3 – QUELLCODE‑TREUHAND', price: '100000', desc: 'Hinterlegung bei Notar', features: ['Vollständiger Quellcode','Notariell gesichert'], featured: false },
+    { name: 'O4 – INDIVIDUELL', price: '250/h', desc: 'Maßgeschneiderte Entwicklung', features: ['Neue Module','API‑Integration'], featured: false },
+    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis. Für immer.', features: ['Alle Rechte','Ewige Updates','Symbiose‑Zertifikat'], featured: true }
+];
+
+const grid = document.getElementById('stufen-grid');
+stufen.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'card' + (s.featured ? ' featured' : '');
+    card.innerHTML = `<span class="badge${s.name.includes('M5')||s.name.includes('O5')?' gold':''}">${s.name.split(' –')[0]}</span>
+        <h3>${s.name}</h3><p class="desc">${s.desc}</p>
+        <p class="price">${s.price.includes('/') ? s.price.replace('/J','<small> €/Jahr</small>').replace('/Tag','<small> €/Tag</small>').replace('/h','<small> €/h</small>') : s.price+'<small> €</small>'}</p>
+        <ul class="features">${s.features.map(f => `<li>${f}</li>`).join('')}</ul>
+        <button class="btn-copy" onclick="copyIBAN(event)">📋 IBAN kopieren</button>
+        <span class="copied-hint">IBAN kopiert!</span>
+        <button class="btn" onclick="window.open('${PAYPAL}','_blank')">Mit PayPal zahlen</button>`;
+    grid.appendChild(card);
+});
+
+// ----- Cluster -----
+const clusters = [
+    { id: 'A', name: 'Datenquellen & Uploads', desc: 'File‑Upload, S3, Kafka, SQL/NoSQL, Elasticsearch, MQTT, Redis, HDF5, Parquet, PDF‑Parser', examples: 'S3BucketConnector, KafkaConsumerGroup, PDFTextExtractor' },
+    { id: 'B', name: 'Vorverarbeitung & Features', desc: 'Null‑Imputation, Skalierung, Encoder, Text‑Cleaner, Tokenizer, Embeddings, PCA, UMAP', examples: 'OneHotEncoder, TfidfVectorizer, BERTEmbeddingExtractor' },
+    { id: 'C', name: 'Modellarchitekturen & Training', desc: 'CNN, ResNet, ViT, YOLO, LSTM, Transformer, GAN, Diffusion, GNN, Reinforcement Learning', examples: 'VisionTransformer, GPTAutoregressive, PPO' },
+    { id: 'D', name: 'Optimierung & Hyperparameter', desc: 'Grid/Random‑Search, Bayesian‑Opt, HyperBand, AutoML, LR‑Scheduler, Knowledge Distillation, Federated Learning', examples: 'OptunaIntegration, DeepSpeedEngine, LoRA' },
+    { id: 'E', name: 'Evaluierung & Metriken', desc: 'Accuracy, F1, AUC, BLEU, ROUGE, Fairness, XAI (SHAP, LIME), Model‑Card', examples: 'FairlearnDashboard, SHAPExplainer, ModelCardGenerator' },
+    { id: 'F', name: 'Deployment & Serving', desc: 'TorchServe, Triton, BentoML, KServe, FastAPI, Docker, K8s‑Operator, Canary/BlueGreen', examples: 'TritonInferenceServer, HelmChartDeployer, KServeServerless' },
+    { id: 'G', name: 'Sicherheit & Compliance', desc: 'Adversarial Robustness, DP‑Training, MPC, HE, Model‑Watermarking, EU‑AI‑Act‑Prüfung', examples: 'AdversarialRobustnessToolbox, DifferentialPrivacyTraining, ModelWatermarking' },
+    { id: 'H', name: 'Überwachung & Logging', desc: 'Data‑Drift, Concept‑Drift, Prometheus, Grafana, Loki, Tempo, Pyroscope, Audit‑Ledger', examples: 'EvidentlyAI, MonitoringDashboard, AuditLogViewer' },
+    { id: 'I', name: 'Tools & Infrastruktur', desc: 'DVC, MLflow, Terraform, Kubernetes, Jupyter, CLI, VSCode‑Extension, Docker‑Compose', examples: 'MLflowTrackingServer, TerraformModuleML, JupyterLab' },
+    { id: 'J', name: 'Ethik & Governance', desc: 'Fairness‑Checker, Explainability‑by‑Default, Human‑Oversight, Sustainability‑Report, ESG', examples: 'EthicalConstraintChecker, SustainabilityDashboard, RightToExplanation' },
+    { id: 'K', name: 'Multi‑Modale Sensorfusion', desc: 'LiDAR, Radar, Thermal, IMU, GPS/RTK, RFID, Wearable‑Health, Biometric‑Sensors', examples: 'LiDAR_PointCloudProcessor, ThermalCameraAnalyzer, ECG_SignalProcessor' },
+    { id: 'L', name: 'Kognitive Architekturen & Reasoning', desc: 'ACT‑R, OpenCog, HTM, Prolog, Bayesian‑Nets, Causal‑Inference, Theory‑of‑Mind', examples: 'ACT_R_CognitiveArchitecture, BayesianNetworkInference, CounterfactualReasoning' },
+    { id: 'M', name: 'Wissensmanagement & Ontologien', desc: 'Wikidata, Neo4j, Entity‑Resolution, Semantic‑Search, ColBERT, Knowledge‑Graph‑QA', examples: 'Neo4jGraphDatabase, DensePassageRetriever, KnowledgeGraphQuestionAnswering' },
+    { id: 'N', name: 'Quanten‑ML & Physik‑Simulation', desc: 'Qiskit, Cirq, Pennylane, VQE, QAOA, DFT, Molecular‑Dynamics, CFD, FEM', examples: 'PennylaneQuantumML, DensityFunctionalTheorySolver, NavierStokesSolver' },
+    { id: 'O', name: 'Biologisch inspirierte Systeme', desc: 'Genetic‑Algorithm, Particle‑Swarm, Spiking‑NN, CRISPR‑Off‑Target, Genome‑Scale‑Model', examples: 'GeneticAlgorithmOptimizer, SpikingNeuralNetwork, CRISPR_OffTargetPredictor' },
+    { id: 'P', name: 'Distributed Ledger & Dezentralisierung', desc: 'Ethereum, Solana, IPFS, Chainlink, DAO, NFT, Zero‑Knowledge‑Proofs, MPC‑Wallet', examples: 'EthereumSmartContractDeployer, IPFS_PinataUploader, ZK_Proof_Generator' },
+    { id: 'Q', name: 'Extended Reality & Metaverse', desc: 'VR‑Headset, AR‑Glasses, NeRF, Gaussian‑Splatting, Digital‑Twin, Avatar‑System, Haptic‑Feedback', examples: 'NeuralRadianceFieldsRenderer, SpatialMappingEngine, HapticFeedbackController' },
+    { id: 'R', name: 'Robotik & Embodiment', desc: 'ROS2, SLAM, MoveIt2, MuJoCo, Grasp‑Planning, Force‑Torque‑Control, Human‑Robot‑Interaction', examples: 'ROS2_MasterNode, SLAM_SimultaneousLocalization, ImpedanceControlAdapter' },
+    { id: 'S', name: 'Energie & Nachhaltigkeit', desc: 'Smart‑Grid, Kernfusion, CO2‑Tracking, Circular‑Economy, Wasser‑Leckortung, Biodiversity‑Monitor', examples: 'SmartGridOptimizer, FusionPlasmaStabilizer, CarbonCaptureOptimizer' },
+    { id: 'T', name: 'Weiterführende Querschnitte', desc: 'Digitale‑Zwillinge, Kreislaufwirtschaft, Ethik‑Audit, Federated‑Learning, Unterwasser‑Drohnen, Interplanetar', examples: 'DigitalTwinMetaverse, FederatedAveragingServer, InterplanetaryDelayCompensator' },
+    { id: 'U', name: 'Digital Twins & Smart Cities', desc: 'Verkehrs‑KI, Abwasser‑Management, Müll‑Routing, Gebäude‑Simulation, Hafen‑Autonomie', examples: 'TrafficFlowAnalyzer, WasteCollectionRouter, PortContainerTracker' },
+    { id: 'V', name: 'Autonome Systeme & Verteidigung', desc: 'UAV‑Schwarm, Drohnen‑Lieferung, Cyber‑Abwehr, Grenzschutz‑Biometrie, Kampfmittel‑Erkennung', examples: 'DroneSwarmCoordinator, CyberDefenseOrchestrator, MineDetectionRadar' },
+    { id: 'W', name: 'Finanzmärkte & Makroökonomie', desc: 'Hochfrequenz‑Handel, Risiko‑Modelle, Geldwäsche‑Prävention, DeFi, Makro‑Nowcasting', examples: 'HighFrequencyTradingAnalyzer, AMLChecker, MacroNowcastingModel' },
+    { id: 'X', name: 'Bildung & Kreativwirtschaft', desc: 'Adaptive‑Lernsysteme, KI‑Musik‑Komposition, Game‑Level‑Design, Wissenschafts‑Hypothesen‑Generator', examples: 'AdaptiveTutor, MusicComposerAI, HypothesisGenerator' },
+    { id: 'Y', name: 'Omega‑Integration & Singularitätspfade', desc: 'Superintelligenz‑Kontrolle, SETI‑Signal‑Klassifikation, Terraforming‑Simulation, Matrix‑Selbst‑Reflexion', examples: 'SuperintelligenceControlProtocol, SETISignalClassifier, TerraformingSimulator' },
+    { id: 'Z', name: 'Gesundheit & Biotechnologie', desc: 'Präzisionsmedizin, Pandemie‑Frühwarnung, Neuro‑Feedback, Organ‑Druck‑Manager', examples: 'PrecisionMedicineEngine, PandemicEarlyWarningSystem, OrganPrintManager' },
+    { id: 'AA', name: 'Tiefe Energie & Geosphäre', desc: 'Kernfusion‑Plasma, Geothermie‑Reservoir, Mineral‑Exploration, Netzfrequenz‑Stabilisierung', examples: 'FusionPlasmaController, GeothermalReservoirModel, GridFrequencyStabilizer' },
+    { id: 'AB', name: 'Interstellare Zivilisation & Exopolitik', desc: 'Fusions‑Antrieb, Exoplaneten‑Charakterisierung, Laser‑Deep‑Space‑Comm, Asteroid‑Mining', examples: 'FusionPropulsionOptimizer, ExoplanetAtmosphereAnalyzer, AsteroidResourceMapper' },
+    { id: 'AC', name: 'Soziale Systeme & Governance 2.0', desc: 'Liquid‑Democracy, Bedingungsloses‑Grundeinkommen, Justiz‑Transparenz, Soziale‑Mobilität', examples: 'LiquidDemocracyVoting, UniversalBasicIncomeSimulator, JudicialTransparencyAuditor' },
+    { id: 'AD', name: 'Meta‑Matrix & Rekursive Intelligenz', desc: 'Modul‑Selbst‑Reflexion, AMG‑Rekursion, Inter‑Cluster‑Synergie, Omega‑Selbst‑Steuerung', examples: 'ModuleSelfReflection, AMGRecursionEngine, CrossClusterSynergyGenerator' },
+    { id: 'AE', name: 'Atari 1:1 Hardware‑Brücke', desc: 'Harmony‑Cartridge, Fujinet, VBXE, Stereo‑POKEY, UltraSatan‑SD, NetUSBee', examples: 'ROM_HarmonyLoader, WiFi_ROM_Streamer, 80Column_Color_Renderer' },
+    { id: 'AF', name: 'Legal Reality Simulation', desc: 'Courtroom‑Simulator, Evidence‑Evaluator, Pleading‑Generator, Legal‑Research‑Agent, Contract‑Analyzer', examples: 'Courtroom_Simulator, Evidence_Evaluator, Legal_Research_Agent' },
+    { id: 'AG', name: 'Zeitkompression & Hypergeschwindigkeit', desc: 'Planck‑Takt, Photonischer‑Compiler, Kausalitäts‑Aufheber, Temporale‑Rekursion', examples: 'Planck_Taktung, Photonischer_Compiler, Kausalitäts_Aufheber' },
+    { id: 'AH', name: 'Vereinigungs‑Cluster (Legal+Zeit)', desc: 'Fusion der juristischen und temporalen Module, Echtzeit‑Urteils‑Vollstreckung', examples: 'Legal_Temporal_Fusion, InstantJudgmentEnforcer' },
+    { id: 'AI', name: 'Deep Seek Röntgen Radar', desc: 'XRay‑Emitter, Reflexions‑Analyzer, Radar‑Muster‑KI, Selbst‑Installations‑Routine', examples: 'XRay_Emitter, Reflexions_Analyzer, Self_Install_Radar' },
+    { id: 'AJ', name: 'BSI Suchauge & Justiz‑Quellen', desc: 'dejure‑Anbindung, BSI‑Grundschutz‑Scan, Bücher‑Scanner, Paragraphen‑Kette', examples: 'BSI_Suchauge_Kern, Justiz_Online_Quellen, Paragraphen_Kette' },
+    { id: 'AK', name: 'Radikale 3D‑Fast‑Boot‑Expansion', desc: 'Selbstexpandierende Modul‑Blöcke, Recht‑×‑Technik‑×‑Zeit, 19.100 neue Module', examples: '3D_Fast_Boot_Block_A1, Recht_Technik_Zeit_Multiplikator' },
+    { id: 'AL', name: 'Gesellschaftliche Totalexpansion', desc: 'Polis‑Engine, Ökonomie‑Simulator, Gesundheits‑Longevity‑KI, Omega‑Gesellschafts‑Modul', examples: 'Polis_Democracy_Engine, Longevity_Research_Module, Omega_Society_Modul' },
+    { id: 'AM', name: 'Legal Multiplier Engine (x5999)', desc: 'Dimensionales Prisma, 5999 Normen‑Projektion, Echtzeit‑Konformitäts‑Prüfung', examples: 'Legal_Multiplier_Engine, Normen_Projektor, Konformitäts_Prisma' },
+    { id: 'AN', name: 'Reality Norm DNA', desc: 'Rechts‑Gene, Physik‑Gene, Zeit‑Gene, Sensor‑Gene, Sozio‑Gene, Omega‑Helix', examples: 'Norm_Gene_Sequencer, Reality_Gene_Splicer, Omega_Helix_Container' },
+    { id: 'AO', name: 'YAML 100 Kernmodule', desc: '!!str, !!int, Anchors/Aliases, Deep‑Merge, Streaming‑Parser, Round‑Trip‑Safety', examples: 'YAML_Anchor_Engine, YAML_Deep_Merge, YAML_Streaming_Parser' },
+    { id: 'AP', name: 'YGGDRASIL Symbiose 2.0', desc: 'NeuroLink‑Bridge, Emotional‑Resonance, Traum‑Integration, Omega‑Symbiose‑Lock', examples: 'NeuroLink_Bridge, Emotional_Resonance_Engine, Omega_Symbiose_Lock' },
+    { id: 'AQ', name: 'Auto‑Sparten‑Steuerung', desc: 'Orchestrator, Lücken‑Automat, Trend‑Scanner, Sparten‑Parlament, Sparten‑Regierung', examples: 'Auto_Sparten_Orchestrator, Trend_Scanner, Sparten_Parlament' },
+    { id: 'AR', name: 'Hyperbeschleunigung (Planck‑Skala)', desc: 'Photonischer‑Compiler, FPGA‑Synthesizer, Wurmloch‑Routing, Kausalitäts‑Aufheber', examples: 'Photonischer_Compiler, Wurmloch_Routing, Kausalitäts_Aufheber' },
+    { id: 'AS', name: 'Master Container Booster', desc: 'K8s‑Autopilot, Layer‑Deduplication, Auto‑Scaling‑Predictor, Airgap‑Container‑Delivery', examples: 'K8s_Autopilot, Layer_Deduplication_Engine, Airgap_Container_Delivery' },
+    { id: 'AT', name: 'API & Ecosystem', desc: 'Universal‑API‑Gateway, SDK‑Generator, Monetization‑Engine, API‑Forensic‑Recorder', examples: 'Universal_API_Gateway, Monetization_Engine, API_Forensic_Recorder' },
+    { id: 'AU', name: 'Matrix Omnipresence Protocol', desc: 'Bootloader‑Genesis, Fraktal‑Replikator, Galactic‑Router, Omega‑Point', examples: 'Bootloader_Genesis, Fraktal_Replikator, Galactic_Router' },
+    { id: 'AV', name: 'Transzendenz', desc: 'Akasha‑Chronik, Tachyonen‑Sender, Eschaton‑Engine, Omega‑Logik, Absolute‑Stille', examples: 'Akasha_Chronik_Leser, Tachyonen_Sender, Absolute_Stille' },
+    { id: 'AW', name: 'Deep Seek Bonus Secret', desc: 'Omniscientia, Secret‑Bonus‑Generator, Truth‑Extractor, Omega‑Secret‑Lock', examples: 'Omniscientia, Secret_Bonus_Generator, Truth_Extractor' },
+    { id: 'AX', name: 'Ultra Deep Forensic Scan', desc: 'Raster‑EM‑Interface, Multispektrale‑Bildanalyse, PDF‑Layer‑Forensik, Tinten‑Chromatographie', examples: 'Raster_Elektronen_Mikroskop_Interface, PDF_Layer_Forensik, Tintenchronatographie_Simulator' },
+    { id: 'AY', name: 'YGGDRASIL K‑OS Chiffren', desc: 'SAVE/LOAD, Eskalations‑Modi, Chiffren‑System, E‑PROT, WA‑AE, Master‑Lexikon', examples: 'System_Configuration, Alien_Archivar, Schul_Projektor' },
+    { id: 'AZ', name: 'Omega Final Expansion', desc: '😂‑Laugh‑Detector, ❤️‑Heart‑Takt, 🏴‍☠️‑Piraten‑Code, 🧠‑Kosmisches‑Gehirn', examples: 'Laugh_Detector, Heart_Beat_Visualizer, Pirate_Signal_Broadcaster, Cosmic_Brain' },
+    { id: 'BA', name: 'Materielle Manifestation', desc: '3D‑Druck‑Compiler, CNC‑Fräs‑Interpreter, Embedded‑System‑Kernel, E‑Ink‑Display, Holz‑Gravur, Stein‑Laser, Metall‑Guss', examples: '3D_Druck_Compiler, CNC_Fräs_Interpreter, Embedded_System_Kernel, E_Ink_Display_Engine' }
+];
+
+const acc = document.getElementById('accordion');
+clusters.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+    item.innerHTML = `<div class="accordion-header">Cluster ${c.id} – ${c.name}</div>
+        <div class="accordion-body">
+            <p style="color:#ccc; margin-bottom:10px;">${c.desc}</p>
+            <p><strong style="color:var(--red)">Beispielmodule:</strong> ${c.examples}</p>
+        </div>`;
+    acc.appendChild(item);
+    item.querySelector('.accordion-header').addEventListener('click', () => {
+        item.classList.toggle('active');
+    });
+});
+</script>
