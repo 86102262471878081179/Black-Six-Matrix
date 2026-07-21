@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>Black Six</title>
+<style>body{background:#0a0a0a;color:#e0e0e0;font-family:Arial;padding:40px}.card{border:1px solid #333;padding:20px;margin:10px;border-radius:8px;background:#111}.btn{background:#c00;color:#fff;padding:12px 24px;border:none;border-radius:4px}</style>
+</head>
+<body>
+<h1>BLACK SIX</h1><h2>Sovereign Enterprise Framework</h2>
+<div class="card"><h3>B5 EVOLUTION</h3><p>Kontinuierliche Verbesserung</p></div>
+<div class="card"><h3>B6 LEGACY</h3><p>Langfristige Wissenssicherung</p></div>
+<h2>Pricing</h2>
+<div class="card"><h3>Setup 5.000€</h3><button class="btn">Jetzt buchen</button></div>
+<div class="card"><h3>Cluster 25.000€</h3><button class="btn">Jetzt buchen</button></div>
+<h2>Case Studies</h2>
+<div class="card">Legal-Tech Automation</div>
+<div class="card">Finanz-Strategie Engine</div>
+<div class="card">Souveräne Prozess-Optimierung</div>
+<footer><p>Powered by <b>Manus | ∞Meta</b></p></footer>
+</body>
+</html>
