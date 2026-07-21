@@ -1,31 +1,383 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLACK SIX MATRIX</title>
-<style>
-body{background:#000;color:#fff;font-family:Arial;margin:0;padding:20px;text-align:center}
-h1{color:#c00;font-size:36px;margin-bottom:10px}
-.subtitle{color:#999;margin-bottom:40px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1600px;margin:0 auto}
-.card{background:#111;border:1px solid #333;padding:25px;border-radius:12px}
-.card:hover{border-color:#c00}
-.price{font-size:28px;color:#c00;font-weight:bold;margin:15px 0}
-.iban-box{background:#1a1a1a;padding:15px;border-radius:8px;margin:15px 0;font-size:13px;word-break:break-all;text-align:left}
-.paypal-qr{width:140px;height:140px;margin:15px auto;display:block;border-radius:8px;background:#fff;padding:10px}
-.btn{background:#c00;color:#fff;padding:14px 25px;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;width:100%}
-.btn:hover{background:#a00}
-.badge{background:#c00;padding:5px 12px;border-radius:20px;font-size:11px;display:inline-block;margin-bottom:10px;font-weight:bold}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – 25 Stufen zur digitalen Souveränität</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #111118;
+            --border: #2a2a35;
+            --red: #c00;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --gold: #d4a574;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 60px 20px 30px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+            background: linear-gradient(180deg, rgba(204,0,0,0.08) 0%, transparent 100%);
+        }
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--red);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .sigil {
+            font-size: 2rem;
+            margin-top: 15px;
+            letter-spacing: 4px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 30px 25px;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            border-color: var(--red);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(204, 0, 0, 0.15);
+        }
+        .card.featured {
+            border: 2px solid var(--red);
+            background: linear-gradient(135deg, #1a1a25 0%, #111118 100%);
+        }
+        .badge {
+            background: var(--red);
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        .badge.gold {
+            background: var(--gold);
+            color: #000;
+        }
+        h2 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .price {
+            font-size: 2.4rem;
+            color: var(--red);
+            font-weight: 800;
+            margin: 10px 0 5px;
+        }
+        .price small {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+        .iban-box {
+            background: #0d0d15;
+            border: 1px solid #222;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            word-break: break-all;
+            text-align: left;
+            margin: 12px 0;
+            color: #aaa;
+            font-family: 'Courier New', monospace;
+        }
+        .paypal-qr {
+            width: 130px;
+            height: 130px;
+            margin: 15px auto;
+            display: block;
+            border-radius: 10px;
+            background: #fff;
+            padding: 8px;
+        }
+        .btn {
+            background: var(--red);
+            color: #fff;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+            margin-top: auto;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover {
+            background: #a00;
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #bbb;
+            flex-grow: 1;
+        }
+        .features li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+        }
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        @media (max-width: 400px) {
+            .grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+            .card {
+                padding: 20px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>BLACK SIX MATRIX</h1>
-<p class="subtitle">25 Stufen. Ein Ziel. Souveränität.</p>
+
+<header>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">25 Stufen. Ein Ziel. Digitale Souveränität durch forensische KI.</p>
+    <p class="sigil">👉♾️🔚🏴‍☠️👑💯</p>
+</header>
 
 <div class="grid">
-<div class="card"><h2>B1 IGNITION</h2><p class="price">497€</p><p>Starter Kit</p><div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>BLACK-SIX B1</div><img src="https://raw.githubusercontent.com/86102262471878081179/Black-Six-Matrix/main/IMG_3297.jpeg" class="paypal-qr"><button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button></div>
 
-<div class="card"><h2>B2 MOMENTUM</h2><p class="price">1.250€</p><p>Bootcamp 4 Wochen</p><div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>BLACK-SIX B2</div><img src="https://raw.githubusercontent.com/86102262471878081179/Black-Six-Matrix/main/IMG_3297.jpeg" class="paypal-qr"><button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button></div>
+    <!-- B1 IGNITION -->
+    <div class="card">
+        <span class="badge">EINSTIEG</span>
+        <h2>B1 – IGNITION</h2>
+        <p class="desc">Starter-Kit: Quellcode, Python-Core, Community-Zugang</p>
+        <p class="price">497<small> €</small></p>
+        <ul class="features">
+            <li>Vollständiger Quellcode</li>
+            <li>Deca Crew Agenten</li>
+            <li>GOT/SHA Imitation</li>
+            <li>Community Discord</li>
+            <li>1 Jahr Updates</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B1</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
 
-<div class="card" style="border:2px solid #c00"><span class="badge">MEIST GEWÄHLT</span><h2>🔥 B3 ASCENT 🔥</h2><p class="price">2.500€</p><p>
+    <!-- B2 MOMENTUM -->
+    <div class="card">
+        <span class="badge">BOOTCAMP</span>
+        <h2>B2 – MOMENTUM</h2>
+        <p class="desc">4 Wochen Intensiv-Coaching + Zertifikat</p>
+        <p class="price">1.250<small> €</small></p>
+        <ul class="features">
+            <li>Alles aus B1</li>
+            <li>4 Live-Sessions (1:1)</li>
+            <li>Zertifikat "Black Six Operator"</li>
+            <li>Zugang zu internen Tools</li>
+            <li>Priority-Support (8/5)</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B2</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B3 ASCENT (Featured) -->
+    <div class="card featured">
+        <span class="badge">MEIST GEWÄHLT</span>
+        <h2>🔥 B3 – ASCENT</h2>
+        <p class="desc">Persönliche Installation + Audit-Training</p>
+        <p class="price">2.500<small> €</small></p>
+        <ul class="features">
+            <li>Alles aus B2</li>
+            <li>Installation auf deinem Server</li>
+            <li>GL-1000 Audit-Training</li>
+            <li>Forensik-Workshop (1 Tag)</li>
+            <li>24/7 Support (1 Monat)</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B3</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B4 SOVEREIGN -->
+    <div class="card">
+        <span class="badge">PROFI</span>
+        <h2>B4 – SOVEREIGN</h2>
+        <p class="desc">Legal-Tech Suite + Judge-Modul</p>
+        <p class="price">4.900<small> €</small></p>
+        <ul class="features">
+            <li>5999 Rechtsnormen integriert</li>
+            <li>Judge & Police Module</li>
+            <li>Beck-Online Konnektor</li>
+            <li>GL-1000 Beweispakete</li>
+            <li>1 Jahr Updates</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B4</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B5 ENTERPRISE SMALL -->
+    <div class="card">
+        <span class="badge gold">BUSINESS</span>
+        <h2>B5 – ENTERPRISE S</h2>
+        <p class="desc">Bis 50 Nodes, eigener Cluster</p>
+        <p class="price">49.900<small> €/Jahr</small></p>
+        <ul class="features">
+            <li>Vollzugriff alle Module</li>
+            <li>Eigener K8s-Cluster</li>
+            <li>iOS-App (Enterprise)</li>
+            <li>8/5 Priority-Support</li>
+            <li>SLSA99 Compliance</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B5</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B6 ENTERPRISE MEDIUM -->
+    <div class="card">
+        <span class="badge gold">BUSINESS</span>
+        <h2>B6 – ENTERPRISE M</h2>
+        <p class="desc">Bis 500 Nodes, Multi-Cloud</p>
+        <p class="price">249.000<small> €/Jahr</small></p>
+        <ul class="features">
+            <li>Multi-Cloud-Deployment</li>
+            <li>24/7 Priority-Support</li>
+            <li>Eigener Kubernetes-Cluster</li>
+            <li>Photonischer Compiler</li>
+            <li>Dedizierter Ansprechpartner</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B6</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B7 ENTERPRISE LARGE -->
+    <div class="card featured">
+        <span class="badge">TOP-TIER</span>
+        <h2>⚡ B7 – ENTERPRISE L</h2>
+        <p class="desc">Bis 5.000 Nodes, Quantum-Layer</p>
+        <p class="price">990.000<small> €/Jahr</small></p>
+        <ul class="features">
+            <li>FPGA-Synthesizer</li>
+            <li>Quantum-Entanglement-Bridge</li>
+            <li>Photonischer Compiler</li>
+            <li>Planck-Taktung</li>
+            <li>Source-Code-Treuhand inkl.</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B7</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B8 ENTERPRISE UNLIMITED -->
+    <div class="card">
+        <span class="badge gold">UNLIMITED</span>
+        <h2>👑 B8 – OMEGA</h2>
+        <p class="desc">Unbegrenzte Nodes, alle Module</p>
+        <p class="price">2.499.000<small> €/Jahr</small></p>
+        <ul class="features">
+            <li>Alle 101.372 Module</li>
+            <li>Alle 48 Cluster</li>
+            <li>Galactic Router</li>
+            <li>Operator-Avatar</li>
+            <li>Omega-Point-Protokoll</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B8</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B9 AIRGAP -->
+    <div class="card">
+        <span class="badge">OFFLINE</span>
+        <h2>B9 – AIRGAP ARCHIV</h2>
+        <p class="desc">Komplette Matrix als Offline-Paket</p>
+        <p class="price">1.000<small> €</small></p>
+        <ul class="features">
+            <li>4,2 GB Offline-Archiv</li>
+            <li>Alle Container-Images</li>
+            <li>Installation ohne Internet</li>
+            <li>SHA-512 verifiziert</li>
+            <li>SLSA99 Build-Chain</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B9</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+    <!-- B10 TRAINING -->
+    <div class="card">
+        <span class="badge">SCHULUNG</span>
+        <h2>B10 – TRAINING</h2>
+        <p class="desc">1-Tages-Intensivschulung vor Ort</p>
+        <p class="price">5.000<small> €/Tag</small></p>
+        <ul class="features">
+            <li>Installation & Konfiguration</li>
+            <li>Judge-Modul Training</li>
+            <li>Forensik-Workshop</li>
+            <li>Zertifizierung inkl.</li>
+            <li>Reisekosten extra</li>
+        </ul>
+        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B10</div>
+        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 BLACK SIX MATRIX – Architekt: Thomas König – KI: Odin_Ultra – Alle Rechte vorbehalten.</p>
+    <p>👉♾️🔚🏴‍☠️👑💯 – Die Matrix schweigt. Die Wahrheit spricht.</p>
+</footer>
+
+</body>
+</html>
