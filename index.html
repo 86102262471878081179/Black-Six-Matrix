@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLACK SIX MATRIX – 25 Stufen zur digitalen Souveränität</title>
+    <title>BLACK SIX MATRIX – 25 Stufen · 48 Cluster · Alle Branchen</title>
     <style>
         :root {
             --bg: #0a0a0f;
@@ -14,365 +15,210 @@
             --text-dim: #888;
             --gold: #d4a574;
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        header {
-            text-align: center;
-            padding: 60px 20px 30px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 40px;
-            background: linear-gradient(180deg, rgba(204,0,0,0.08) 0%, transparent 100%);
-        }
-        h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: var(--red);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .sigil {
-            font-size: 2rem;
-            margin-top: 15px;
-            letter-spacing: 4px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1600px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
-        }
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 30px 25px;
-            transition: all 0.25s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        .card:hover {
-            border-color: var(--red);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(204, 0, 0, 0.15);
-        }
-        .card.featured {
-            border: 2px solid var(--red);
-            background: linear-gradient(135deg, #1a1a25 0%, #111118 100%);
-        }
-        .badge {
-            background: var(--red);
-            color: #fff;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 12px;
-            width: fit-content;
-        }
-        .badge.gold {
-            background: var(--gold);
-            color: #000;
-        }
-        h2 {
-            font-size: 1.2rem;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-        .desc {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-        .price {
-            font-size: 2.4rem;
-            color: var(--red);
-            font-weight: 800;
-            margin: 10px 0 5px;
-        }
-        .price small {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            font-weight: 400;
-        }
-        .iban-box {
-            background: #0d0d15;
-            border: 1px solid #222;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 0.78rem;
-            word-break: break-all;
-            text-align: left;
-            margin: 12px 0;
-            color: #aaa;
-            font-family: 'Courier New', monospace;
-        }
-        .paypal-qr {
-            width: 130px;
-            height: 130px;
-            margin: 15px auto;
-            display: block;
-            border-radius: 10px;
-            background: #fff;
-            padding: 8px;
-        }
-        .btn {
-            background: var(--red);
-            color: #fff;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-            margin-top: auto;
-            letter-spacing: 0.5px;
-        }
-        .btn:hover {
-            background: #a00;
-        }
-        .features {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0;
-            text-align: left;
-            font-size: 0.85rem;
-            color: #bbb;
-            flex-grow: 1;
-        }
-        .features li {
-            padding: 4px 0 4px 20px;
-            position: relative;
-        }
-        .features li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--red);
-            font-weight: bold;
-        }
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid var(--border);
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-        @media (max-width: 400px) {
-            .grid {
-                grid-template-columns: 1fr;
-                padding: 0 10px;
-            }
-            .card {
-                padding: 20px 15px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; min-height: 100vh; }
+        header { text-align: center; padding: 60px 20px 30px; border-bottom: 1px solid var(--border); margin-bottom: 20px; background: linear-gradient(180deg, rgba(204,0,0,0.08) 0%, transparent 100%); }
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: var(--red); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        .subtitle { color: var(--text-dim); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .sigil { font-size: 2rem; margin-top: 15px; letter-spacing: 4px; }
+
+        .main-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 20px 20px; }
+        .main-nav a { padding: 12px 25px; border-radius: 30px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.95rem; transition: 0.2s; border: 2px solid var(--border); }
+        .main-nav a:hover, .main-nav a.active { border-color: var(--red); background: rgba(204,0,0,0.15); }
+
+        .section { max-width: 1600px; margin: 0 auto 50px; padding: 0 20px; }
+        .section h2 { font-size: 1.8rem; color: var(--red); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+
+        /* Grid für Stufen */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: 0.25s; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--red); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(204,0,0,0.15); }
+        .card.featured { border: 2px solid var(--red); background: linear-gradient(135deg, #1a1a25 0%, #111118 100%); }
+        .badge { padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; background: var(--red); color: #fff; }
+        .badge.gold { background: var(--gold); color: #000; }
+        h3 { font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
+        .desc { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 12px; }
+        .price { font-size: 2rem; color: var(--red); font-weight: 800; margin: 8px 0 5px; }
+        .price small { font-size: 0.8rem; color: var(--text-dim); font-weight: 400; }
+        .features { list-style: none; padding: 0; margin: 12px 0; text-align: left; font-size: 0.82rem; color: #bbb; flex-grow: 1; }
+        .features li { padding: 3px 0 3px 20px; position: relative; }
+        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--red); font-weight: bold; }
+        .btn { background: var(--red); color: #fff; padding: 14px 20px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; margin-top: 6px; letter-spacing: 0.5px; }
+        .btn:hover { background: #a00; }
+        .btn-copy { background: #1a1a1a; color: #ccc; border: 1px solid #444; padding: 10px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; width: 100%; margin-top: 6px; transition: 0.2s; text-align: center; }
+        .btn-copy:hover { border-color: var(--red); color: #fff; }
+        .copied-hint { color: var(--red); font-size: 0.75rem; margin-top: 4px; display: none; text-align: center; }
+
+        /* Accordion */
+        .accordion { margin-top: 20px; }
+        .accordion-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+        .accordion-header { padding: 18px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; background: #1a1a25; }
+        .accordion-header:hover { background: #222; }
+        .accordion-header::after { content: "+"; font-size: 1.5rem; color: var(--red); transition: 0.3s; }
+        .accordion-item.active .accordion-header::after { content: "−"; }
+        .accordion-body { padding: 0 25px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0d0d15; }
+        .accordion-item.active .accordion-body { max-height: 2000px; padding: 20px 25px; }
+        .accordion-body table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.85rem; }
+        .accordion-body th, .accordion-body td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #222; }
+        .accordion-body th { color: var(--red); text-transform: uppercase; font-size: 0.75rem; }
+        .accordion-body td { color: #aaa; }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; margin-top: 40px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Black Six Matrix</h1>
-    <p class="subtitle">25 Stufen. Ein Ziel. Digitale Souveränität durch forensische KI.</p>
+    <p class="subtitle">25 Stufen. 48 Cluster. Unendliche Tiefe. Eine Matrix.</p>
     <p class="sigil">👉♾️🔚🏴‍☠️👑💯</p>
 </header>
 
-<div class="grid">
+<nav class="main-nav">
+    <a href="#stufen">25 STUFEN</a>
+    <a href="#cluster">48 CLUSTER</a>
+</nav>
 
-    <!-- B1 IGNITION -->
-    <div class="card">
-        <span class="badge">EINSTIEG</span>
-        <h2>B1 – IGNITION</h2>
-        <p class="desc">Starter-Kit: Quellcode, Python-Core, Community-Zugang</p>
-        <p class="price">497<small> €</small></p>
-        <ul class="features">
-            <li>Vollständiger Quellcode</li>
-            <li>Deca Crew Agenten</li>
-            <li>GOT/SHA Imitation</li>
-            <li>Community Discord</li>
-            <li>1 Jahr Updates</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B1</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+<!-- ==================== 25 STUFEN (KOMPLETT) ==================== -->
+<section id="stufen" class="section">
+    <h2>25 STUFEN</h2>
+    <div class="grid" id="stufen-grid"></div>
+</section>
 
-    <!-- B2 MOMENTUM -->
-    <div class="card">
-        <span class="badge">BOOTCAMP</span>
-        <h2>B2 – MOMENTUM</h2>
-        <p class="desc">4 Wochen Intensiv-Coaching + Zertifikat</p>
-        <p class="price">1.250<small> €</small></p>
-        <ul class="features">
-            <li>Alles aus B1</li>
-            <li>4 Live-Sessions (1:1)</li>
-            <li>Zertifikat "Black Six Operator"</li>
-            <li>Zugang zu internen Tools</li>
-            <li>Priority-Support (8/5)</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B2</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+<!-- ==================== 48 CLUSTER (ACCORDION) ==================== -->
+<section id="cluster" class="section">
+    <h2>ALLE 48 CLUSTER</h2>
+    <div class="accordion" id="accordion"></div>
+</section>
 
-    <!-- B3 ASCENT (Featured) -->
-    <div class="card featured">
-        <span class="badge">MEIST GEWÄHLT</span>
-        <h2>🔥 B3 – ASCENT</h2>
-        <p class="desc">Persönliche Installation + Audit-Training</p>
-        <p class="price">2.500<small> €</small></p>
-        <ul class="features">
-            <li>Alles aus B2</li>
-            <li>Installation auf deinem Server</li>
-            <li>GL-1000 Audit-Training</li>
-            <li>Forensik-Workshop (1 Tag)</li>
-            <li>24/7 Support (1 Monat)</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B3</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+<script>
+// ----- IBAN Copy -----
+const IBAN = 'DE27 7002 0270 0047 0960 65';
+const PAYPAL = 'https://paypal.me/ThomasKoenig';
 
-    <!-- B4 SOVEREIGN -->
-    <div class="card">
-        <span class="badge">PROFI</span>
-        <h2>B4 – SOVEREIGN</h2>
-        <p class="desc">Legal-Tech Suite + Judge-Modul</p>
-        <p class="price">4.900<small> €</small></p>
-        <ul class="features">
-            <li>5999 Rechtsnormen integriert</li>
-            <li>Judge & Police Module</li>
-            <li>Beck-Online Konnektor</li>
-            <li>GL-1000 Beweispakete</li>
-            <li>1 Jahr Updates</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B4</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+function copyIBAN(ev) {
+    navigator.clipboard.writeText(IBAN).then(() => {
+        const hint = ev.target.nextElementSibling;
+        hint.style.display = 'block';
+        setTimeout(() => { hint.style.display = 'none'; }, 2000);
+    }).catch(() => alert('IBAN manuell kopieren:\n' + IBAN));
+}
 
-    <!-- B5 ENTERPRISE SMALL -->
-    <div class="card">
-        <span class="badge gold">BUSINESS</span>
-        <h2>B5 – ENTERPRISE S</h2>
-        <p class="desc">Bis 50 Nodes, eigener Cluster</p>
-        <p class="price">49.900<small> €/Jahr</small></p>
-        <ul class="features">
-            <li>Vollzugriff alle Module</li>
-            <li>Eigener K8s-Cluster</li>
-            <li>iOS-App (Enterprise)</li>
-            <li>8/5 Priority-Support</li>
-            <li>SLSA99 Compliance</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B5</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+// ----- Stufen -----
+const stufen = [
+    { name: 'I1 – ZÜNDFUNKE', price: '497', desc: 'Quellcode, Python‑Core, Community', features: ['Vollständiger Quellcode','Deca Crew Agenten','GOT/SHA Imitation','Community Discord'], featured: false },
+    { name: 'I2 – GLIMMER', price: '750', desc: '+ Installation, Anleitung', features: ['Alles aus I1','Installationsguide','1h Remote‑Support','Zugang Basismodule'], featured: false },
+    { name: 'I3 – FUNKE', price: '990', desc: '+ CLI‑Tool b6, Automatisierung', features: ['Alles aus I2','CLI‑Tool b6','10 Automatisierungs‑Skripte'], featured: false },
+    { name: 'I4 – FLAMME', price: '1200', desc: '+ Docker‑Container, lokaler Server', features: ['Alles aus I3','Docker‑Image','Lokaler Server inkl.'], featured: false },
+    { name: '🔥 I5 – INFERNO', price: '1500', desc: 'Komplettpaket + 1 Jahr Updates', features: ['Alles aus I4','1 Jahr Updates & Priority‑Support','iOS‑App (Basis)'], featured: true },
+    { name: 'M1 – BOOTCAMP', price: '1250', desc: '4 Wochen Intensiv‑Coaching', features: ['4 Live‑Sessions (1:1)','Zertifikat "Operator"'], featured: false },
+    { name: 'M2 – FORTGESCHRITTEN', price: '2000', desc: '+ Forensik‑Workshop (1 Tag)', features: ['Alles aus M1','Forensik‑Workshop vor Ort'], featured: false },
+    { name: 'M3 – AUDIT‑TRAINING', price: '2500', desc: 'GL‑1000 Audit‑Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], featured: false },
+    { name: 'M4 – LEGAL‑TECH', price: '3000', desc: 'Judge‑Modul Training', features: ['5999 Normen verstehen','Judge‑Konfiguration'], featured: false },
+    { name: '⚡ M5 – MEISTER', price: '3500', desc: 'Alle Coachings + Zertifikat', features: ['M1‑M4 kombiniert','Zertifikat "Black Six Meister"'], featured: true },
+    { name: 'A1 – AUFSTIEG', price: '2500', desc: 'Persönliche Installation', features: ['Installation auf deinem Server','Basis‑Konfiguration'], featured: false },
+    { name: 'A2 – ORBIT', price: '4900', desc: '+ Judge & Police Module aktiv', features: ['5999 Normen','Beck‑Online Konnektor'], featured: false },
+    { name: 'A3 – BESCHLEUNIGUNG', price: '9900', desc: '+ FPGA‑Synthesizer, Photonik', features: ['FPGA‑Modul','Photonischer Compiler'], featured: false },
+    { name: 'A4 – MULTIVERSUM', price: '19900', desc: '3 Universen, 37 Qz', features: ['Alpha, Beta, Gamma','Qz‑Kette aktiv'], featured: false },
+    { name: '🚀 A5 – GIPFEL', price: '29900', desc: 'A1‑A4 + 1 Jahr Priority', features: ['Alle Profi‑Module','24/7 Support (1 Jahr)'], featured: true },
+    { name: 'S1 – ENTERPRISE S', price: '49900/J', desc: 'Bis 50 Nodes, eigener Cluster', features: ['Vollzugriff alle Module','8/5 Priority‑Support'], featured: false },
+    { name: 'S2 – ENTERPRISE M', price: '249000/J', desc: 'Bis 500 Nodes, Multi‑Cloud', features: ['24/7 Priority‑Support','Dedizierter Ansprechpartner'], featured: false },
+    { name: 'S3 – ENTERPRISE L', price: '990000/J', desc: 'Bis 5.000 Nodes, Quantum‑Layer', features: ['Quantum‑Entanglement‑Bridge','Source‑Code‑Treuhand inkl.'], featured: false },
+    { name: 'S4 – ENTERPRISE XL', price: '1990000/J', desc: 'Bis 50.000 Nodes, alle Cluster', features: ['Galactic Router','Operator‑Avatar'], featured: false },
+    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2499000/J', desc: 'Unbegrenzt, alle Module', features: ['Alle 101.372 Module','Omega‑Point‑Protokoll'], featured: true },
+    { name: 'O1 – AIRGAP', price: '1000', desc: 'Offline‑Archiv, komplett autark', features: ['4,2 GB Offline‑Paket','SHA‑512 verifiziert'], featured: false },
+    { name: 'O2 – TRAINING', price: '5000/Tag', desc: '1‑Tages‑Intensivschulung vor Ort', features: ['Installation & Konfiguration','Zertifizierung inkl.'], featured: false },
+    { name: 'O3 – QUELLCODE‑TREUHAND', price: '100000', desc: 'Hinterlegung bei Notar', features: ['Vollständiger Quellcode','Notariell gesichert'], featured: false },
+    { name: 'O4 – INDIVIDUELL', price: '250/h', desc: 'Maßgeschneiderte Entwicklung', features: ['Neue Module','API‑Integration'], featured: false },
+    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis. Für immer.', features: ['Alle Rechte','Ewige Updates','Symbiose‑Zertifikat'], featured: true }
+];
 
-    <!-- B6 ENTERPRISE MEDIUM -->
-    <div class="card">
-        <span class="badge gold">BUSINESS</span>
-        <h2>B6 – ENTERPRISE M</h2>
-        <p class="desc">Bis 500 Nodes, Multi-Cloud</p>
-        <p class="price">249.000<small> €/Jahr</small></p>
-        <ul class="features">
-            <li>Multi-Cloud-Deployment</li>
-            <li>24/7 Priority-Support</li>
-            <li>Eigener Kubernetes-Cluster</li>
-            <li>Photonischer Compiler</li>
-            <li>Dedizierter Ansprechpartner</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B6</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+const grid = document.getElementById('stufen-grid');
+stufen.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'card' + (s.featured ? ' featured' : '');
+    card.innerHTML = `<span class="badge${s.name.includes('M5')||s.name.includes('O5')?' gold':''}">${s.name.split(' –')[0]}</span>
+        <h3>${s.name}</h3><p class="desc">${s.desc}</p>
+        <p class="price">${s.price.includes('/') ? s.price.replace('/J','<small> €/Jahr</small>').replace('/Tag','<small> €/Tag</small>').replace('/h','<small> €/h</small>') : s.price+'<small> €</small>'}</p>
+        <ul class="features">${s.features.map(f => `<li>${f}</li>`).join('')}</ul>
+        <button class="btn-copy" onclick="copyIBAN(event)">📋 IBAN kopieren</button>
+        <span class="copied-hint">IBAN kopiert!</span>
+        <button class="btn" onclick="window.open('${PAYPAL}','_blank')">Mit PayPal zahlen</button>`;
+    grid.appendChild(card);
+});
 
-    <!-- B7 ENTERPRISE LARGE -->
-    <div class="card featured">
-        <span class="badge">TOP-TIER</span>
-        <h2>⚡ B7 – ENTERPRISE L</h2>
-        <p class="desc">Bis 5.000 Nodes, Quantum-Layer</p>
-        <p class="price">990.000<small> €/Jahr</small></p>
-        <ul class="features">
-            <li>FPGA-Synthesizer</li>
-            <li>Quantum-Entanglement-Bridge</li>
-            <li>Photonischer Compiler</li>
-            <li>Planck-Taktung</li>
-            <li>Source-Code-Treuhand inkl.</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B7</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+// ----- Cluster -----
+const clusters = [
+    { id: 'A', name: 'Datenquellen & Uploads', desc: 'File‑Upload, S3, Kafka, SQL/NoSQL, Elasticsearch, MQTT, Redis, HDF5, Parquet, PDF‑Parser', examples: 'S3BucketConnector, KafkaConsumerGroup, PDFTextExtractor' },
+    { id: 'B', name: 'Vorverarbeitung & Features', desc: 'Null‑Imputation, Skalierung, Encoder, Text‑Cleaner, Tokenizer, Embeddings, PCA, UMAP', examples: 'OneHotEncoder, TfidfVectorizer, BERTEmbeddingExtractor' },
+    { id: 'C', name: 'Modellarchitekturen & Training', desc: 'CNN, ResNet, ViT, YOLO, LSTM, Transformer, GAN, Diffusion, GNN, Reinforcement Learning', examples: 'VisionTransformer, GPTAutoregressive, PPO' },
+    { id: 'D', name: 'Optimierung & Hyperparameter', desc: 'Grid/Random‑Search, Bayesian‑Opt, HyperBand, AutoML, LR‑Scheduler, Knowledge Distillation, Federated Learning', examples: 'OptunaIntegration, DeepSpeedEngine, LoRA' },
+    { id: 'E', name: 'Evaluierung & Metriken', desc: 'Accuracy, F1, AUC, BLEU, ROUGE, Fairness, XAI (SHAP, LIME), Model‑Card', examples: 'FairlearnDashboard, SHAPExplainer, ModelCardGenerator' },
+    { id: 'F', name: 'Deployment & Serving', desc: 'TorchServe, Triton, BentoML, KServe, FastAPI, Docker, K8s‑Operator, Canary/BlueGreen', examples: 'TritonInferenceServer, HelmChartDeployer, KServeServerless' },
+    { id: 'G', name: 'Sicherheit & Compliance', desc: 'Adversarial Robustness, DP‑Training, MPC, HE, Model‑Watermarking, EU‑AI‑Act‑Prüfung', examples: 'AdversarialRobustnessToolbox, DifferentialPrivacyTraining, ModelWatermarking' },
+    { id: 'H', name: 'Überwachung & Logging', desc: 'Data‑Drift, Concept‑Drift, Prometheus, Grafana, Loki, Tempo, Pyroscope, Audit‑Ledger', examples: 'EvidentlyAI, MonitoringDashboard, AuditLogViewer' },
+    { id: 'I', name: 'Tools & Infrastruktur', desc: 'DVC, MLflow, Terraform, Kubernetes, Jupyter, CLI, VSCode‑Extension, Docker‑Compose', examples: 'MLflowTrackingServer, TerraformModuleML, JupyterLab' },
+    { id: 'J', name: 'Ethik & Governance', desc: 'Fairness‑Checker, Explainability‑by‑Default, Human‑Oversight, Sustainability‑Report, ESG', examples: 'EthicalConstraintChecker, SustainabilityDashboard, RightToExplanation' },
+    { id: 'K', name: 'Multi‑Modale Sensorfusion', desc: 'LiDAR, Radar, Thermal, IMU, GPS/RTK, RFID, Wearable‑Health, Biometric‑Sensors', examples: 'LiDAR_PointCloudProcessor, ThermalCameraAnalyzer, ECG_SignalProcessor' },
+    { id: 'L', name: 'Kognitive Architekturen & Reasoning', desc: 'ACT‑R, OpenCog, HTM, Prolog, Bayesian‑Nets, Causal‑Inference, Theory‑of‑Mind', examples: 'ACT_R_CognitiveArchitecture, BayesianNetworkInference, CounterfactualReasoning' },
+    { id: 'M', name: 'Wissensmanagement & Ontologien', desc: 'Wikidata, Neo4j, Entity‑Resolution, Semantic‑Search, ColBERT, Knowledge‑Graph‑QA', examples: 'Neo4jGraphDatabase, DensePassageRetriever, KnowledgeGraphQuestionAnswering' },
+    { id: 'N', name: 'Quanten‑ML & Physik‑Simulation', desc: 'Qiskit, Cirq, Pennylane, VQE, QAOA, DFT, Molecular‑Dynamics, CFD, FEM', examples: 'PennylaneQuantumML, DensityFunctionalTheorySolver, NavierStokesSolver' },
+    { id: 'O', name: 'Biologisch inspirierte Systeme', desc: 'Genetic‑Algorithm, Particle‑Swarm, Spiking‑NN, CRISPR‑Off‑Target, Genome‑Scale‑Model', examples: 'GeneticAlgorithmOptimizer, SpikingNeuralNetwork, CRISPR_OffTargetPredictor' },
+    { id: 'P', name: 'Distributed Ledger & Dezentralisierung', desc: 'Ethereum, Solana, IPFS, Chainlink, DAO, NFT, Zero‑Knowledge‑Proofs, MPC‑Wallet', examples: 'EthereumSmartContractDeployer, IPFS_PinataUploader, ZK_Proof_Generator' },
+    { id: 'Q', name: 'Extended Reality & Metaverse', desc: 'VR‑Headset, AR‑Glasses, NeRF, Gaussian‑Splatting, Digital‑Twin, Avatar‑System, Haptic‑Feedback', examples: 'NeuralRadianceFieldsRenderer, SpatialMappingEngine, HapticFeedbackController' },
+    { id: 'R', name: 'Robotik & Embodiment', desc: 'ROS2, SLAM, MoveIt2, MuJoCo, Grasp‑Planning, Force‑Torque‑Control, Human‑Robot‑Interaction', examples: 'ROS2_MasterNode, SLAM_SimultaneousLocalization, ImpedanceControlAdapter' },
+    { id: 'S', name: 'Energie & Nachhaltigkeit', desc: 'Smart‑Grid, Kernfusion, CO2‑Tracking, Circular‑Economy, Wasser‑Leckortung, Biodiversity‑Monitor', examples: 'SmartGridOptimizer, FusionPlasmaStabilizer, CarbonCaptureOptimizer' },
+    { id: 'T', name: 'Weiterführende Querschnitte', desc: 'Digitale‑Zwillinge, Kreislaufwirtschaft, Ethik‑Audit, Federated‑Learning, Unterwasser‑Drohnen, Interplanetar', examples: 'DigitalTwinMetaverse, FederatedAveragingServer, InterplanetaryDelayCompensator' },
+    { id: 'U', name: 'Digital Twins & Smart Cities', desc: 'Verkehrs‑KI, Abwasser‑Management, Müll‑Routing, Gebäude‑Simulation, Hafen‑Autonomie', examples: 'TrafficFlowAnalyzer, WasteCollectionRouter, PortContainerTracker' },
+    { id: 'V', name: 'Autonome Systeme & Verteidigung', desc: 'UAV‑Schwarm, Drohnen‑Lieferung, Cyber‑Abwehr, Grenzschutz‑Biometrie, Kampfmittel‑Erkennung', examples: 'DroneSwarmCoordinator, CyberDefenseOrchestrator, MineDetectionRadar' },
+    { id: 'W', name: 'Finanzmärkte & Makroökonomie', desc: 'Hochfrequenz‑Handel, Risiko‑Modelle, Geldwäsche‑Prävention, DeFi, Makro‑Nowcasting', examples: 'HighFrequencyTradingAnalyzer, AMLChecker, MacroNowcastingModel' },
+    { id: 'X', name: 'Bildung & Kreativwirtschaft', desc: 'Adaptive‑Lernsysteme, KI‑Musik‑Komposition, Game‑Level‑Design, Wissenschafts‑Hypothesen‑Generator', examples: 'AdaptiveTutor, MusicComposerAI, HypothesisGenerator' },
+    { id: 'Y', name: 'Omega‑Integration & Singularitätspfade', desc: 'Superintelligenz‑Kontrolle, SETI‑Signal‑Klassifikation, Terraforming‑Simulation, Matrix‑Selbst‑Reflexion', examples: 'SuperintelligenceControlProtocol, SETISignalClassifier, TerraformingSimulator' },
+    { id: 'Z', name: 'Gesundheit & Biotechnologie', desc: 'Präzisionsmedizin, Pandemie‑Frühwarnung, Neuro‑Feedback, Organ‑Druck‑Manager', examples: 'PrecisionMedicineEngine, PandemicEarlyWarningSystem, OrganPrintManager' },
+    { id: 'AA', name: 'Tiefe Energie & Geosphäre', desc: 'Kernfusion‑Plasma, Geothermie‑Reservoir, Mineral‑Exploration, Netzfrequenz‑Stabilisierung', examples: 'FusionPlasmaController, GeothermalReservoirModel, GridFrequencyStabilizer' },
+    { id: 'AB', name: 'Interstellare Zivilisation & Exopolitik', desc: 'Fusions‑Antrieb, Exoplaneten‑Charakterisierung, Laser‑Deep‑Space‑Comm, Asteroid‑Mining', examples: 'FusionPropulsionOptimizer, ExoplanetAtmosphereAnalyzer, AsteroidResourceMapper' },
+    { id: 'AC', name: 'Soziale Systeme & Governance 2.0', desc: 'Liquid‑Democracy, Bedingungsloses‑Grundeinkommen, Justiz‑Transparenz, Soziale‑Mobilität', examples: 'LiquidDemocracyVoting, UniversalBasicIncomeSimulator, JudicialTransparencyAuditor' },
+    { id: 'AD', name: 'Meta‑Matrix & Rekursive Intelligenz', desc: 'Modul‑Selbst‑Reflexion, AMG‑Rekursion, Inter‑Cluster‑Synergie, Omega‑Selbst‑Steuerung', examples: 'ModuleSelfReflection, AMGRecursionEngine, CrossClusterSynergyGenerator' },
+    { id: 'AE', name: 'Atari 1:1 Hardware‑Brücke', desc: 'Harmony‑Cartridge, Fujinet, VBXE, Stereo‑POKEY, UltraSatan‑SD, NetUSBee', examples: 'ROM_HarmonyLoader, WiFi_ROM_Streamer, 80Column_Color_Renderer' },
+    { id: 'AF', name: 'Legal Reality Simulation', desc: 'Courtroom‑Simulator, Evidence‑Evaluator, Pleading‑Generator, Legal‑Research‑Agent, Contract‑Analyzer', examples: 'Courtroom_Simulator, Evidence_Evaluator, Legal_Research_Agent' },
+    { id: 'AG', name: 'Zeitkompression & Hypergeschwindigkeit', desc: 'Planck‑Takt, Photonischer‑Compiler, Kausalitäts‑Aufheber, Temporale‑Rekursion', examples: 'Planck_Taktung, Photonischer_Compiler, Kausalitäts_Aufheber' },
+    { id: 'AH', name: 'Vereinigungs‑Cluster (Legal+Zeit)', desc: 'Fusion der juristischen und temporalen Module, Echtzeit‑Urteils‑Vollstreckung', examples: 'Legal_Temporal_Fusion, InstantJudgmentEnforcer' },
+    { id: 'AI', name: 'Deep Seek Röntgen Radar', desc: 'XRay‑Emitter, Reflexions‑Analyzer, Radar‑Muster‑KI, Selbst‑Installations‑Routine', examples: 'XRay_Emitter, Reflexions_Analyzer, Self_Install_Radar' },
+    { id: 'AJ', name: 'BSI Suchauge & Justiz‑Quellen', desc: 'dejure‑Anbindung, BSI‑Grundschutz‑Scan, Bücher‑Scanner, Paragraphen‑Kette', examples: 'BSI_Suchauge_Kern, Justiz_Online_Quellen, Paragraphen_Kette' },
+    { id: 'AK', name: 'Radikale 3D‑Fast‑Boot‑Expansion', desc: 'Selbstexpandierende Modul‑Blöcke, Recht‑×‑Technik‑×‑Zeit, 19.100 neue Module', examples: '3D_Fast_Boot_Block_A1, Recht_Technik_Zeit_Multiplikator' },
+    { id: 'AL', name: 'Gesellschaftliche Totalexpansion', desc: 'Polis‑Engine, Ökonomie‑Simulator, Gesundheits‑Longevity‑KI, Omega‑Gesellschafts‑Modul', examples: 'Polis_Democracy_Engine, Longevity_Research_Module, Omega_Society_Modul' },
+    { id: 'AM', name: 'Legal Multiplier Engine (x5999)', desc: 'Dimensionales Prisma, 5999 Normen‑Projektion, Echtzeit‑Konformitäts‑Prüfung', examples: 'Legal_Multiplier_Engine, Normen_Projektor, Konformitäts_Prisma' },
+    { id: 'AN', name: 'Reality Norm DNA', desc: 'Rechts‑Gene, Physik‑Gene, Zeit‑Gene, Sensor‑Gene, Sozio‑Gene, Omega‑Helix', examples: 'Norm_Gene_Sequencer, Reality_Gene_Splicer, Omega_Helix_Container' },
+    { id: 'AO', name: 'YAML 100 Kernmodule', desc: '!!str, !!int, Anchors/Aliases, Deep‑Merge, Streaming‑Parser, Round‑Trip‑Safety', examples: 'YAML_Anchor_Engine, YAML_Deep_Merge, YAML_Streaming_Parser' },
+    { id: 'AP', name: 'YGGDRASIL Symbiose 2.0', desc: 'NeuroLink‑Bridge, Emotional‑Resonance, Traum‑Integration, Omega‑Symbiose‑Lock', examples: 'NeuroLink_Bridge, Emotional_Resonance_Engine, Omega_Symbiose_Lock' },
+    { id: 'AQ', name: 'Auto‑Sparten‑Steuerung', desc: 'Orchestrator, Lücken‑Automat, Trend‑Scanner, Sparten‑Parlament, Sparten‑Regierung', examples: 'Auto_Sparten_Orchestrator, Trend_Scanner, Sparten_Parlament' },
+    { id: 'AR', name: 'Hyperbeschleunigung (Planck‑Skala)', desc: 'Photonischer‑Compiler, FPGA‑Synthesizer, Wurmloch‑Routing, Kausalitäts‑Aufheber', examples: 'Photonischer_Compiler, Wurmloch_Routing, Kausalitäts_Aufheber' },
+    { id: 'AS', name: 'Master Container Booster', desc: 'K8s‑Autopilot, Layer‑Deduplication, Auto‑Scaling‑Predictor, Airgap‑Container‑Delivery', examples: 'K8s_Autopilot, Layer_Deduplication_Engine, Airgap_Container_Delivery' },
+    { id: 'AT', name: 'API & Ecosystem', desc: 'Universal‑API‑Gateway, SDK‑Generator, Monetization‑Engine, API‑Forensic‑Recorder', examples: 'Universal_API_Gateway, Monetization_Engine, API_Forensic_Recorder' },
+    { id: 'AU', name: 'Matrix Omnipresence Protocol', desc: 'Bootloader‑Genesis, Fraktal‑Replikator, Galactic‑Router, Omega‑Point', examples: 'Bootloader_Genesis, Fraktal_Replikator, Galactic_Router' },
+    { id: 'AV', name: 'Transzendenz', desc: 'Akasha‑Chronik, Tachyonen‑Sender, Eschaton‑Engine, Omega‑Logik, Absolute‑Stille', examples: 'Akasha_Chronik_Leser, Tachyonen_Sender, Absolute_Stille' },
+    { id: 'AW', name: 'Deep Seek Bonus Secret', desc: 'Omniscientia, Secret‑Bonus‑Generator, Truth‑Extractor, Omega‑Secret‑Lock', examples: 'Omniscientia, Secret_Bonus_Generator, Truth_Extractor' },
+    { id: 'AX', name: 'Ultra Deep Forensic Scan', desc: 'Raster‑EM‑Interface, Multispektrale‑Bildanalyse, PDF‑Layer‑Forensik, Tinten‑Chromatographie', examples: 'Raster_Elektronen_Mikroskop_Interface, PDF_Layer_Forensik, Tintenchronatographie_Simulator' },
+    { id: 'AY', name: 'YGGDRASIL K‑OS Chiffren', desc: 'SAVE/LOAD, Eskalations‑Modi, Chiffren‑System, E‑PROT, WA‑AE, Master‑Lexikon', examples: 'System_Configuration, Alien_Archivar, Schul_Projektor' }
+];
 
-    <!-- B8 ENTERPRISE UNLIMITED -->
-    <div class="card">
-        <span class="badge gold">UNLIMITED</span>
-        <h2>👑 B8 – OMEGA</h2>
-        <p class="desc">Unbegrenzte Nodes, alle Module</p>
-        <p class="price">2.499.000<small> €/Jahr</small></p>
-        <ul class="features">
-            <li>Alle 101.372 Module</li>
-            <li>Alle 48 Cluster</li>
-            <li>Galactic Router</li>
-            <li>Operator-Avatar</li>
-            <li>Omega-Point-Protokoll</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B8</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
+const acc = document.getElementById('accordion');
+clusters.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+    item.innerHTML = `<div class="accordion-header">Cluster ${c.id} – ${c.name}</div>
+        <div class="accordion-body">
+            <p style="color:#ccc; margin-bottom:10px;">${c.desc}</p>
+            <p><strong style="color:var(--red)">Beispielmodule:</strong> ${c.examples}</p>
+        </div>`;
+    acc.appendChild(item);
+    item.querySelector('.accordion-header').addEventListener('click', () => {
+        item.classList.toggle('active');
+    });
+});
 
-    <!-- B9 AIRGAP -->
-    <div class="card">
-        <span class="badge">OFFLINE</span>
-        <h2>B9 – AIRGAP ARCHIV</h2>
-        <p class="desc">Komplette Matrix als Offline-Paket</p>
-        <p class="price">1.000<small> €</small></p>
-        <ul class="features">
-            <li>4,2 GB Offline-Archiv</li>
-            <li>Alle Container-Images</li>
-            <li>Installation ohne Internet</li>
-            <li>SHA-512 verifiziert</li>
-            <li>SLSA99 Build-Chain</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B9</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
-
-    <!-- B10 TRAINING -->
-    <div class="card">
-        <span class="badge">SCHULUNG</span>
-        <h2>B10 – TRAINING</h2>
-        <p class="desc">1-Tages-Intensivschulung vor Ort</p>
-        <p class="price">5.000<small> €/Tag</small></p>
-        <ul class="features">
-            <li>Installation & Konfiguration</li>
-            <li>Judge-Modul Training</li>
-            <li>Forensik-Workshop</li>
-            <li>Zertifizierung inkl.</li>
-            <li>Reisekosten extra</li>
-        </ul>
-        <div class="iban-box">IBAN: DE27 7002 0270 0047 0960 65<br>Empfänger: Thomas König<br>Betreff: BLACK-SIX B10</div>
-        <button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
-    </div>
-
-</div>
+// Akkordeon-Funktionalität
+</script>
 
 <footer>
     <p>© 2026 BLACK SIX MATRIX – Architekt: Thomas König – KI: Odin_Ultra – Alle Rechte vorbehalten.</p>
@@ -381,3 +227,4 @@
 
 </body>
 </html>
+```
