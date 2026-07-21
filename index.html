@@ -335,6 +335,103 @@ clusters.forEach(c => {
     });
 });
 </script>
+<!-- ==================== UPDATE: COUNTDOWN + VERTRAUEN ==================== -->
+<style>
+    .trust-bar {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin: 30px auto;
+        max-width: 800px;
+        padding: 20px;
+        background: rgba(204,0,0,0.05);
+        border: 1px solid #2a2a35;
+        border-radius: 14px;
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+    .trust-bar span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .countdown-box {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #111118;
+        border: 1px solid #c00;
+        border-radius: 14px;
+        text-align: center;
+    }
+    .countdown-box h3 {
+        color: #c00;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    .countdown-timer {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #c00;
+    }
+    .countdown-unit {
+        background: #1a1a1a;
+        padding: 10px 15px;
+        border-radius: 8px;
+        min-width: 60px;
+    }
+    .countdown-label {
+        font-size: 0.7rem;
+        color: #888;
+        font-weight: 400;
+    }
+</style>
 
+<div class="trust-bar">
+    <span>🔒 SHA‑512 gesiegelt</span>
+    <span>⚖️ 5.999 Normen</span>
+    <span>🛡️ Post‑Quantum Sicher</span>
+    <span>📡 50 Cluster aktiv</span>
+</div>
+
+<div class="countdown-box">
+    <h3>⏳ NÄCHSTER PREIS-SPRUNG</h3>
+    <div class="countdown-timer" id="countdown">
+        <div><span class="countdown-unit" id="cd-days">00</span><div class="countdown-label">Tage</div></div>
+        <div><span class="countdown-unit" id="cd-hours">00</span><div class="countdown-label">Std</div></div>
+        <div><span class="countdown-unit" id="cd-minutes">00</span><div class="countdown-label">Min</div></div>
+        <div><span class="countdown-unit" id="cd-seconds">00</span><div class="countdown-label">Sek</div></div>
+    </div>
+    <p style="color:#888; margin-top:10px;">Danach erhöhen sich alle Preise um 20 %.</p>
+</div>
+
+<script>
+(function() {
+    // Countdown: 7 Tage ab jetzt
+    const end = new Date();
+    end.setDate(end.getDate() + 7);
+    end.setHours(23, 59, 59, 0);
+
+    function update() {
+        const now = new Date();
+        let diff = Math.floor((end - now) / 1000);
+        if (diff < 0) diff = 0;
+        const d = Math.floor(diff / 86400);
+        const h = Math.floor((diff % 86400) / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+        document.getElementById('cd-days').textContent    = String(d).padStart(2,'0');
+        document.getElementById('cd-hours').textContent   = String(h).padStart(2,'0');
+        document.getElementById('cd-minutes').textContent = String(m).padStart(2,'0');
+        document.getElementById('cd-seconds').textContent = String(s).padStart(2,'0');
+    }
+    update();
+    setInterval(update, 1000);
+})();
+</script>
 </body>
 </html>
