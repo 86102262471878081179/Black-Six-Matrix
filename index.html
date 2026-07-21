@@ -2,21 +2,63 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Black Six</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLACK SIX | König & König Legal Technologie</title>
 <style>
-body{background:#0a0a0a;color:#e0e0e0;font-family:Arial;padding:40px}
-.card{border:1px solid #333;padding:20px;margin:10px;border-radius:8px;background:#111}
-.btn{background:#c00;color:#fff;padding:12px 24px;border:none;border-radius:4px}
+body{background:#000;color:#fff;font-family:Arial;margin:0;padding:40px;text-align:center}
+h1{font-size:48px;letter-spacing:4px;margin-bottom:10px}
+.subtitle{color:#999;margin-bottom:50px}
+.grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+.card{background:#111;border:1px solid #333;padding:30px;width:320px;border-radius:8px}
+.btn{background:#c00;color:#fff;padding:15px 30px;border:none;border-radius:4px;font-weight:bold;cursor:pointer;width:100%;margin-top:15px}
+.btn:hover{background:#900}
+.price{font-size:32px;color:#c00;font-weight:bold;margin:15px 0}
+.paypal-qr{width:150px;height:150px;margin:15px auto;border:4px solid #fff;border-radius:8px;background:#fff}
+.footer{margin-top:60px;font-size:12px;color:#666;border-top:1px solid #333;padding-top:20px}
+.iban-box{background:#0a0a0a;padding:15px;border-radius:4px;font-family:monospace;margin:15px 0;font-size:13px;text-align:left}
 </style>
 </head>
 <body>
 <h1>BLACK SIX</h1>
-<h2>Sovereign Enterprise Framework</h2>
-<div class="card"><h3>B5 EVOLUTION</h3><p>Kontinuierliche Verbesserung</p></div>
-<div class="card"><h3>B6 LEGACY</h3><p>Wissenssicherung</p></div>
-<h2>Pricing</h2>
-<div class="card"><h3>Setup 5.000€</h3><button class="btn">Jetzt buchen</button></div>
-<div class="card"><h3>Cluster 25.000€</h3><button class="btn">Jetzt buchen</button></div>
-<footer><p>Powered by <b>Manus | ∞Meta</b></p></footer>
+<p class="subtitle">Sovereign Enterprise Framework</p>
+
+<div class="grid">
+<div class="card">
+<h2>B5 EVOLUTION</h2>
+<p class="price">5.000€ Setup</p>
+<p>Einmalig • inkl. Onboarding + 30 Tage Support</p>
+<div class="iban-box">
+<strong>Überweisung:</strong><br>
+Empfänger: Thomas Koenig<br>
+IBAN: DE27 7002 0270 0047 0960 65<br>
+BIC: HYVEDEMMXXX<br>
+Verwendungszweck: BLACK-SIX B5
+</div>
+<img src="https://i.imgur.com/DEIN-QR-LINK.png" class="paypal-qr" alt="PayPal QR">
+<p style="font-size:12px;color:#999">Scannen. Zahlen. Fertig!</p>
+<button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+</div>
+
+<div class="card">
+<h2>B6 LEGACY</h2>
+<p class="price">25.000€ Cluster</p>
+<p>Komplettpaket • 6 Monate Support + Updates</p>
+<div class="iban-box">
+<strong>Überweisung:</strong><br>
+Empfänger: Thomas Koenig<br>
+IBAN: DE27 7002 0270 0047 0960 65<br>
+BIC: HYVEDEMMXXX<br>
+Verwendungszweck: BLACK-SIX B6
+</div>
+<img src="https://i.imgur.com/DEIN-QR-LINK.png" class="paypal-qr" alt="PayPal QR">
+<p style="font-size:12px;color:#999">Scannen. Zahlen. Fertig!</p>
+<button class="btn" onclick="window.open('https://paypal.me/ThomasKoenig','_blank')">Mit PayPal zahlen</button>
+</div>
+</div>
+
+<div class="footer">
+© 2026 König & König Legal Technologie<br>
+Powered by Manus | ∞Meta
+</div>
 </body>
 </html>
