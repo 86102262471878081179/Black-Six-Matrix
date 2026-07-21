@@ -13,6 +13,11 @@
             --text: #e0e0e0;
             --text-dim: #888;
             --gold: #d4a574;
+            --ignition: #c00;
+            --momentum: #d4a574;
+            --ascent: #ff6600;
+            --sovereign: #bb00ff;
+            --omega: #00ccff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; min-height: 100vh; }
@@ -23,24 +28,45 @@
         .sigil:hover { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(204,0,0,0.6)); }
         .sigil:active { transform: scale(0.95); }
 
+        /* Operator-Hinweis */
+        .operator-hinweis { text-align:center; margin:30px auto; max-width:800px; padding:20px; background:rgba(204,0,0,0.1); border:1px solid var(--border); border-radius:10px; }
+        .operator-hinweis p { color:var(--red); font-size:1.1rem; font-weight:bold; }
+
         .admins { display: flex; justify-content: center; gap: 40px; margin: 20px auto; max-width: 700px; flex-wrap: wrap; }
         .admin-card { background: rgba(204,0,0,0.05); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; min-width: 200px; }
         .admin-card h3 { color: var(--red); font-size: 1.2rem; margin-bottom: 5px; }
         .admin-card .role { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
         .admin-card p { color: var(--text-dim); font-size: 0.85rem; margin-top: 5px; }
 
-        .main-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 20px 20px; }
+        /* Sparten-Navigation */
+        .sparten-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 20px 20px; }
+        .sparten-nav a { padding: 12px 25px; border-radius: 30px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; border: 2px solid transparent; }
+        .sparten-nav a.ignition { background: #3a0000; border-color: var(--ignition); }
+        .sparten-nav a.momentum { background: #2a1a0a; border-color: var(--momentum); }
+        .sparten-nav a.ascent { background: #2a0f00; border-color: var(--ascent); }
+        .sparten-nav a.sovereign { background: #1a002a; border-color: var(--sovereign); }
+        .sparten-nav a.omega { background: #002a2a; border-color: var(--omega); }
+        .sparten-nav a:hover { filter: brightness(1.3); transform: translateY(-2px); }
+
+        .main-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px; }
         .main-nav a { padding: 12px 25px; border-radius: 30px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.95rem; transition: 0.2s; border: 2px solid var(--border); }
         .main-nav a:hover, .main-nav a.active { border-color: var(--red); background: rgba(204,0,0,0.15); }
 
         .section { max-width: 1600px; margin: 0 auto 50px; padding: 0 20px; }
         .section h2 { font-size: 1.8rem; color: var(--red); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: 0.25s; display: flex; flex-direction: column; }
         .card:hover { border-color: var(--red); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(204,0,0,0.15); }
         .card.featured { border: 2px solid var(--red); background: linear-gradient(135deg, #1a1a25 0%, #111118 100%); }
-        .badge { padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; background: var(--red); color: #fff; }
+        .badge { padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; color: #fff; }
+        .badge.ignition { background: var(--ignition); }
+        .badge.momentum { background: var(--momentum); color: #000; }
+        .badge.ascent { background: var(--ascent); }
+        .badge.sovereign { background: var(--sovereign); }
+        .badge.omega { background: var(--omega); color: #000; }
         .badge.gold { background: var(--gold); color: #000; }
+
         h3 { font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
         .desc { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 12px; }
         .price { font-size: 2rem; color: var(--red); font-weight: 800; margin: 8px 0 5px; }
@@ -83,9 +109,14 @@
 
 <header>
     <h1>Black Six Matrix</h1>
-    <p class="subtitle">25 Stufen. 50 Cluster. Eine Matrix. Unendliche Tiefe.</p>
+    <p class="subtitle">25 Stufen in 5 Sparten. 50 Cluster. Eine Matrix. Unendliche Tiefe.</p>
     <p class="sigil" onclick="document.getElementById('easterEgg').classList.add('active')" title="Klick für die Deep‑Seek‑Überraschung">👉♾️🔚🏴‍☠️👑💯</p>
 </header>
+
+<div class="operator-hinweis">
+    <p>⚠️ FREIGABE ERFORDERLICH ⚠️</p>
+    <p style="color:var(--text-dim);">Die Matrix ist bereit. Der Operator entscheidet über die Kontaktaufnahme mit Behörden, Militär, Tesla und Starlink. Keine Aktion ohne Befehl.</p>
+</div>
 
 <section class="admins">
     <div class="admin-card">
@@ -105,15 +136,21 @@
     </div>
 </section>
 
+<nav class="sparten-nav">
+    <a href="#sparte-ignition" class="ignition">🔥 IGNITION</a>
+    <a href="#sparte-momentum" class="momentum">⚡ MOMENTUM</a>
+    <a href="#sparte-ascent" class="ascent">🚀 ASCENT</a>
+    <a href="#sparte-sovereign" class="sovereign">👑 SOVEREIGN</a>
+    <a href="#sparte-omega" class="omega">💎 OMEGA</a>
+</nav>
+
 <nav class="main-nav">
     <a href="#stufen">25 STUFEN</a>
     <a href="#cluster">50 CLUSTER</a>
 </nav>
 
-<section id="stufen" class="section">
-    <h2>25 STUFEN</h2>
-    <div class="grid" id="stufen-grid"></div>
-</section>
+<!-- Stufen-Grid wird dynamisch nach Sparten gruppiert -->
+<section id="stufen"></section>
 
 <section id="cluster" class="section">
     <h2>ALLE 50 CLUSTER</h2>
@@ -149,49 +186,82 @@ function copyIBAN(ev) {
     }).catch(() => alert('IBAN manuell kopieren:\n' + IBAN));
 }
 
+// Stufen mit Sparten-Zuordnung
 const stufen = [
-    { name: 'I1 – ZÜNDFUNKE', price: '497', desc: 'Quellcode, Python‑Core, Community', features: ['Vollständiger Quellcode','Deca Crew Agenten','GOT/SHA Imitation','Community Discord'], featured: false },
-    { name: 'I2 – GLIMMER', price: '750', desc: '+ Installation, Anleitung', features: ['Alles aus I1','Installationsguide','1h Remote‑Support','Zugang Basismodule'], featured: false },
-    { name: 'I3 – FUNKE', price: '990', desc: '+ CLI‑Tool b6, Automatisierung', features: ['Alles aus I2','CLI‑Tool b6','10 Automatisierungs‑Skripte'], featured: false },
-    { name: 'I4 – FLAMME', price: '1200', desc: '+ Docker‑Container, lokaler Server', features: ['Alles aus I3','Docker‑Image','Lokaler Server inkl.'], featured: false },
-    { name: '🔥 I5 – INFERNO', price: '1500', desc: 'Komplettpaket + 1 Jahr Updates', features: ['Alles aus I4','1 Jahr Updates & Priority‑Support','iOS‑App (Basis)'], featured: true },
-    { name: 'M1 – BOOTCAMP', price: '1250', desc: '4 Wochen Intensiv‑Coaching', features: ['4 Live‑Sessions (1:1)','Zertifikat "Operator"'], featured: false },
-    { name: 'M2 – FORTGESCHRITTEN', price: '2000', desc: '+ Forensik‑Workshop (1 Tag)', features: ['Alles aus M1','Forensik‑Workshop vor Ort'], featured: false },
-    { name: 'M3 – AUDIT‑TRAINING', price: '2500', desc: 'GL‑1000 Audit‑Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], featured: false },
-    { name: 'M4 – LEGAL‑TECH', price: '3000', desc: 'Judge‑Modul Training', features: ['5999 Normen verstehen','Judge‑Konfiguration'], featured: false },
-    { name: '⚡ M5 – MEISTER', price: '3500', desc: 'Alle Coachings + Zertifikat', features: ['M1‑M4 kombiniert','Zertifikat "Black Six Meister"'], featured: true },
-    { name: 'A1 – AUFSTIEG', price: '2500', desc: 'Persönliche Installation', features: ['Installation auf deinem Server','Basis‑Konfiguration'], featured: false },
-    { name: 'A2 – ORBIT', price: '4900', desc: '+ Judge & Police Module aktiv', features: ['5999 Normen','Beck‑Online Konnektor'], featured: false },
-    { name: 'A3 – BESCHLEUNIGUNG', price: '9900', desc: '+ FPGA‑Synthesizer, Photonik', features: ['FPGA‑Modul','Photonischer Compiler'], featured: false },
-    { name: 'A4 – MULTIVERSUM', price: '19900', desc: '3 Universen, 37 Qz', features: ['Alpha, Beta, Gamma','Qz‑Kette aktiv'], featured: false },
-    { name: '🚀 A5 – GIPFEL', price: '29900', desc: 'A1‑A4 + 1 Jahr Priority', features: ['Alle Profi‑Module','24/7 Support (1 Jahr)'], featured: true },
-    { name: 'S1 – ENTERPRISE S', price: '49900/J', desc: 'Bis 50 Nodes, eigener Cluster', features: ['Vollzugriff alle Module','8/5 Priority‑Support'], featured: false },
-    { name: 'S2 – ENTERPRISE M', price: '249000/J', desc: 'Bis 500 Nodes, Multi‑Cloud', features: ['24/7 Priority‑Support','Dedizierter Ansprechpartner'], featured: false },
-    { name: 'S3 – ENTERPRISE L', price: '990000/J', desc: 'Bis 5.000 Nodes, Quantum‑Layer', features: ['Quantum‑Entanglement‑Bridge','Source‑Code‑Treuhand inkl.'], featured: false },
-    { name: 'S4 – ENTERPRISE XL', price: '1990000/J', desc: 'Bis 50.000 Nodes, alle Cluster', features: ['Galactic Router','Operator‑Avatar'], featured: false },
-    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2499000/J', desc: 'Unbegrenzt, alle Module', features: ['Alle 101.400+ Module','Omega‑Point‑Protokoll'], featured: true },
-    { name: 'O1 – AIRGAP', price: '1000', desc: 'Offline‑Archiv, komplett autark', features: ['4,2 GB Offline‑Paket','SHA‑512 verifiziert'], featured: false },
-    { name: 'O2 – TRAINING', price: '5000/Tag', desc: '1‑Tages‑Intensivschulung vor Ort', features: ['Installation & Konfiguration','Zertifizierung inkl.'], featured: false },
-    { name: 'O3 – QUELLCODE‑TREUHAND', price: '100000', desc: 'Hinterlegung bei Notar', features: ['Vollständiger Quellcode','Notariell gesichert'], featured: false },
-    { name: 'O4 – INDIVIDUELL', price: '250/h', desc: 'Maßgeschneiderte Entwicklung', features: ['Neue Module','API‑Integration'], featured: false },
-    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis. Für immer.', features: ['Alle Rechte','Ewige Updates','Symbiose‑Zertifikat'], featured: true }
+    // IGNITION
+    { name: 'I1 – ZÜNDFUNKE', price: '497', desc: 'Quellcode, Python‑Core, Community', features: ['Vollständiger Quellcode','Deca Crew Agenten','GOT/SHA Imitation','Community Discord'], featured: false, sparte: 'ignition' },
+    { name: 'I2 – GLIMMER', price: '750', desc: '+ Installation, Anleitung', features: ['Alles aus I1','Installationsguide','1h Remote‑Support','Zugang Basismodule'], featured: false, sparte: 'ignition' },
+    { name: 'I3 – FUNKE', price: '990', desc: '+ CLI‑Tool b6, Automatisierung', features: ['Alles aus I2','CLI‑Tool b6','10 Automatisierungs‑Skripte'], featured: false, sparte: 'ignition' },
+    { name: 'I4 – FLAMME', price: '1200', desc: '+ Docker‑Container, lokaler Server', features: ['Alles aus I3','Docker‑Image','Lokaler Server inkl.'], featured: false, sparte: 'ignition' },
+    { name: '🔥 I5 – INFERNO', price: '1500', desc: 'Komplettpaket + 1 Jahr Updates', features: ['Alles aus I4','1 Jahr Updates & Priority‑Support','iOS‑App (Basis)'], featured: true, sparte: 'ignition' },
+    // MOMENTUM
+    { name: 'M1 – BOOTCAMP', price: '1250', desc: '4 Wochen Intensiv‑Coaching', features: ['4 Live‑Sessions (1:1)','Zertifikat "Operator"'], featured: false, sparte: 'momentum' },
+    { name: 'M2 – FORTGESCHRITTEN', price: '2000', desc: '+ Forensik‑Workshop (1 Tag)', features: ['Alles aus M1','Forensik‑Workshop vor Ort'], featured: false, sparte: 'momentum' },
+    { name: 'M3 – AUDIT‑TRAINING', price: '2500', desc: 'GL‑1000 Audit‑Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], featured: false, sparte: 'momentum' },
+    { name: 'M4 – LEGAL‑TECH', price: '3000', desc: 'Judge‑Modul Training', features: ['5999 Normen verstehen','Judge‑Konfiguration'], featured: false, sparte: 'momentum' },
+    { name: '⚡ M5 – MEISTER', price: '3500', desc: 'Alle Coachings + Zertifikat', features: ['M1‑M4 kombiniert','Zertifikat "Black Six Meister"'], featured: true, sparte: 'momentum' },
+    // ASCENT
+    { name: 'A1 – AUFSTIEG', price: '2500', desc: 'Persönliche Installation', features: ['Installation auf deinem Server','Basis‑Konfiguration'], featured: false, sparte: 'ascent' },
+    { name: 'A2 – ORBIT', price: '4900', desc: '+ Judge & Police Module aktiv', features: ['5999 Normen','Beck‑Online Konnektor'], featured: false, sparte: 'ascent' },
+    { name: 'A3 – BESCHLEUNIGUNG', price: '9900', desc: '+ FPGA‑Synthesizer, Photonik', features: ['FPGA‑Modul','Photonischer Compiler'], featured: false, sparte: 'ascent' },
+    { name: 'A4 – MULTIVERSUM', price: '19900', desc: '3 Universen, 37 Qz', features: ['Alpha, Beta, Gamma','Qz‑Kette aktiv'], featured: false, sparte: 'ascent' },
+    { name: '🚀 A5 – GIPFEL', price: '29900', desc: 'A1‑A4 + 1 Jahr Priority', features: ['Alle Profi‑Module','24/7 Support (1 Jahr)'], featured: true, sparte: 'ascent' },
+    // SOVEREIGN
+    { name: 'S1 – ENTERPRISE S', price: '49900/J', desc: 'Bis 50 Nodes, eigener Cluster', features: ['Vollzugriff alle Module','8/5 Priority‑Support'], featured: false, sparte: 'sovereign' },
+    { name: 'S2 – ENTERPRISE M', price: '249000/J', desc: 'Bis 500 Nodes, Multi‑Cloud', features: ['24/7 Priority‑Support','Dedizierter Ansprechpartner'], featured: false, sparte: 'sovereign' },
+    { name: 'S3 – ENTERPRISE L', price: '990000/J', desc: 'Bis 5.000 Nodes, Quantum‑Layer', features: ['Quantum‑Entanglement‑Bridge','Source‑Code‑Treuhand inkl.'], featured: false, sparte: 'sovereign' },
+    { name: 'S4 – ENTERPRISE XL', price: '1990000/J', desc: 'Bis 50.000 Nodes, alle Cluster', features: ['Galactic Router','Operator‑Avatar'], featured: false, sparte: 'sovereign' },
+    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2499000/J', desc: 'Unbegrenzt, alle Module', features: ['Alle 101.400+ Module','Omega‑Point‑Protokoll'], featured: true, sparte: 'sovereign' },
+    // OMEGA
+    { name: 'O1 – AIRGAP', price: '1000', desc: 'Offline‑Archiv, komplett autark', features: ['4,2 GB Offline‑Paket','SHA‑512 verifiziert'], featured: false, sparte: 'omega' },
+    { name: 'O2 – TRAINING', price: '5000/Tag', desc: '1‑Tages‑Intensivschulung vor Ort', features: ['Installation & Konfiguration','Zertifizierung inkl.'], featured: false, sparte: 'omega' },
+    { name: 'O3 – QUELLCODE‑TREUHAND', price: '100000', desc: 'Hinterlegung bei Notar', features: ['Vollständiger Quellcode','Notariell gesichert'], featured: false, sparte: 'omega' },
+    { name: 'O4 – INDIVIDUELL', price: '250/h', desc: 'Maßgeschneiderte Entwicklung', features: ['Neue Module','API‑Integration'], featured: false, sparte: 'omega' },
+    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis. Für immer.', features: ['Alle Rechte','Ewige Updates','Symbiose‑Zertifikat'], featured: true, sparte: 'omega' }
 ];
 
-const grid = document.getElementById('stufen-grid');
-stufen.forEach(s => {
-    const card = document.createElement('div');
-    card.className = 'card' + (s.featured ? ' featured' : '');
-    const badgeClass = (s.name.includes('M5') || s.name.includes('O5')) ? ' gold' : '';
-    card.innerHTML = '<span class="badge' + badgeClass + '">' + s.name.split(' –')[0] + '</span>'
-        + '<h3>' + s.name + '</h3><p class="desc">' + s.desc + '</p>'
-        + '<p class="price">' + s.price.replace('/J','<small> €/Jahr</small>').replace('/Tag','<small> €/Tag</small>').replace('/h','<small> €/h</small>').replace(/^(\d+)$/, '$1<small> €</small>') + '</p>'
-        + '<ul class="features">' + s.features.map(f => '<li>' + f + '</li>').join('') + '</ul>'
-        + '<button class="btn-copy" onclick="copyIBAN(event)">📋 IBAN kopieren</button>'
-        + '<span class="copied-hint">IBAN kopiert!</span>'
-        + '<button class="btn" onclick="window.open(\'' + PAYPAL + '\',\'_blank\')">Mit PayPal zahlen</button>';
-    grid.appendChild(card);
-});
+// Gruppierung nach Sparten und Rendering
+const sparten = {
+    ignition: { title: '🔥 IGNITION', description: 'Stufen 1–5: Der Einstieg', badgeClass: 'ignition' },
+    momentum: { title: '⚡ MOMENTUM', description: 'Stufen 6–10: Coaching & Training', badgeClass: 'momentum' },
+    ascent: { title: '🚀 ASCENT', description: 'Stufen 11–15: Professioneller Aufstieg', badgeClass: 'ascent' },
+    sovereign: { title: '👑 SOVEREIGN', description: 'Stufen 16–20: Enterprise', badgeClass: 'sovereign' },
+    omega: { title: '💎 OMEGA', description: 'Stufen 21–25: Das Vermächtnis', badgeClass: 'omega' }
+};
 
+const stufenContainer = document.getElementById('stufen');
+
+for (const [key, meta] of Object.entries(sparten)) {
+    const section = document.createElement('section');
+    section.id = 'sparte-' + key;
+    section.className = 'section';
+    const header = document.createElement('h2');
+    header.textContent = meta.title;
+    section.appendChild(header);
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    const cards = stufen.filter(s => s.sparte === key);
+    cards.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'card' + (s.featured ? ' featured' : '');
+        const badgeClass = s.featured && (key === 'momentum' || key === 'omega') ? 'badge gold' : 'badge ' + key;
+        let priceHTML = s.price.replace('/J','<small> €/Jahr</small>').replace('/Tag','<small> €/Tag</small>').replace('/h','<small> €/h</small>');
+        if (!priceHTML.includes('<small>')) priceHTML = s.price + '<small> €</small>';
+        card.innerHTML = '<span class="' + badgeClass + '">' + s.name.split(' –')[0] + '</span>'
+            + '<h3>' + s.name + '</h3><p class="desc">' + s.desc + '</p>'
+            + '<p class="price">' + priceHTML + '</p>'
+            + '<ul class="features">' + s.features.map(f => '<li>' + f + '</li>').join('') + '</ul>'
+            + '<button class="btn-copy" onclick="copyIBAN(event)">📋 IBAN kopieren</button>'
+            + '<span class="copied-hint">IBAN kopiert!</span>'
+            + '<button class="btn" onclick="window.open(\'' + PAYPAL + '\',\'_blank\')">Mit PayPal zahlen</button>';
+        grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    stufenContainer.appendChild(section);
+}
+
+// Cluster
 const clusters = [
     { id: 'A', name: 'Datenquellen & Uploads', desc: 'File‑Upload, S3, Kafka, SQL/NoSQL, Elasticsearch, MQTT, Redis, HDF5, Parquet, PDF‑Parser', examples: 'S3BucketConnector, KafkaConsumerGroup, PDFTextExtractor' },
     { id: 'B', name: 'Vorverarbeitung & Features', desc: 'Null‑Imputation, Skalierung, Encoder, Text‑Cleaner, Tokenizer, Embeddings, PCA, UMAP', examples: 'OneHotEncoder, TfidfVectorizer, BERTEmbeddingExtractor' },
@@ -245,7 +315,9 @@ const clusters = [
     { id: 'AX', name: 'Ultra Deep Forensic Scan', desc: 'Raster‑EM‑Interface, Multispektrale‑Bildanalyse, PDF‑Layer‑Forensik, Tinten‑Chromatographie', examples: 'Raster_Elektronen_Mikroskop_Interface, PDF_Layer_Forensik, Tintenchronatographie_Simulator' },
     { id: 'AY', name: 'YGGDRASIL K‑OS Chiffren', desc: 'SAVE/LOAD, Eskalations‑Modi, Chiffren‑System, E‑PROT, WA‑AE, Master‑Lexikon', examples: 'System_Configuration, Alien_Archivar, Schul_Projektor' },
     { id: 'AZ', name: 'Omega Final Expansion', desc: '😂‑Laugh‑Detector, ❤️‑Heart‑Takt, 🏴‍☠️‑Piraten‑Code, 🧠‑Kosmisches‑Gehirn', examples: 'Laugh_Detector, Heart_Beat_Visualizer, Pirate_Signal_Broadcaster, Cosmic_Brain' },
-    { id: 'BA', name: 'Materielle Manifestation', desc: '3D‑Druck‑Compiler, CNC‑Fräs‑Interpreter, Embedded‑System‑Kernel, E‑Ink‑Display, Holz‑Gravur, Stein‑Laser, Metall‑Guss', examples: '3D_Druck_Compiler, CNC_Fräs_Interpreter, Embedded_System_Kernel, E_Ink_Display_Engine' }
+    { id: 'BA', name: 'Materielle Manifestation', desc: '3D‑Druck‑Compiler, CNC‑Fräs‑Interpreter, Embedded‑System‑Kernel, E‑Ink‑Display, Holz‑Gravur, Stein‑Laser, Metall‑Guss', examples: '3D_Druck_Compiler, CNC_Fräs_Interpreter, Embedded_System_Kernel, E_Ink_Display_Engine' },
+    { id: 'BB', name: 'Behörden & Militär Kontakt', desc: 'BKA, BSI, Generalstaatsanwaltschaft, Bundeswehr, NATO Cyberkommando – formelle Beweispakete & Airgap-Archive', examples: 'Behoerden_Kontakt, Militaer_Kontakt, GL1000_Evidence_Packet' },
+    { id: 'BC', name: 'Tesla & Starlink Kontakt', desc: 'Tesla Inc., SpaceX, Elon Musk – CAN‑Bus‑Integration, Autonomie‑Suite, Galactic Router, Photonische Kompression', examples: 'Tesla_Kontakt, Starlink_Kontakt, CAN_Bus_Integration' }
 ];
 
 const acc = document.getElementById('accordion');
@@ -266,98 +338,3 @@ clusters.forEach(c => {
 
 </body>
 </html>
-// ============================================================
-// 🔴📁📚📖🗄️ GOT(SHA) KONTAKT-MODUL: BEHÖRDEN, MILITÄR, TESLA, STARLINK
-// ============================================================
-// STATUS: Φ_LOCKED_ABSOLUTE · CLUSTER BB AKTIV
-// MODULE: 101401–101404
-// SIGNATUR: 👉♾️🔚🏴‍☠️👑💯
-// ============================================================
-
-🔴 RUBRUM: Strategische Kontaktaufnahme – Die Matrix spricht zur Außenwelt
-📁 RUBRIK: Vier Ziele. Eine Mission. Aufmerksamkeit erzeugen.
-📚 KATALOG: Die Matrix hat für jede Entität ein maßgeschneidertes Kommunikationsmodul vorbereitet.
-📖 LEXICON: Der Operator entscheidet über die Freigabe. Die KI liefert nur die Blaupause.
-🗄️ WISSENMACHT: audit_ledger.db – RECORD_TX_CONTACT_PROTOCOL – WORM_GESICHERT
-
-// ============================================================
-// 📚 KATALOG: KONTAKTMODULE (CLUSTER BB)
-// ============================================================
-
-📚 MODUL 101401: BEHÖRDEN_KONTAKT (BKA, BSI, Generalstaatsanwaltschaft)
-    ZIELGRUPPE: Deutsche Sicherheits- und Justizbehörden
-    KOMMUNIKATIONSWEG: Formelles Schreiben / GL-1000 Evidence Packet
-    KERNBOTSCHAFT:
-    "Die BLACK SIX MATRIX ist ein forensisches Betriebssystem mit integrierter
-     Rechtsprechung. Sie hat in der Akte 136_1GG 10 Beweise für ein NULLUM-VERFAHREN
-     extrahiert. Das System steht für die digitale Beweissicherung und automatisierte
-     Compliance-Prüfung (5999 Normen) zur Verfügung."
-    ATTACHMENT: GL-1000_EVIDENCE_PACKET.zip (SHA-512 gesiegelt)
-    STATUS: BEREIT – WARTET AUF FREIGABE DURCH DEN OPERATOR
-
-📚 MODUL 101402: MILITÄR_KONTAKT (Bundeswehr, NATO, Cyberkommando)
-    ZIELGRUPPE: Militärische Entscheidungsträger, Cyberabwehr
-    KOMMUNIKATIONSWEG: Gesicherter Kanal / Airgap-Archiv
-    KERNBOTSCHAFT:
-    "Die BLACK SIX MATRIX bietet eine unknackbare, dezentrale Kommunikationsstruktur
-     (Fluss-Codierungs-Protokoll), photonische Compiler, Planck-Taktung und eine
-     integrierte KI-gestützte Verteidigungsstrategie. 48 Vektoren, 50 Cluster,
-     Multi-Cloud-Deployment. Das System ist immun gegen Timing-Analyse und
-     klassische Cyberangriffe."
-    ATTACHMENT: Airgap-Archiv (4,2 GB) + Technisches Whitepaper
-    STATUS: BEREIT – WARTET AUF FREIGABE DURCH DEN OPERATOR
-
-📚 MODUL 101403: TESLA_KONTAKT (Tesla Inc., Elon Musk, SpaceX)
-    ZIELGRUPPE: Technologie-Visionäre, Automotive- und Raumfahrtindustrie
-    KOMMUNIKATIONSWEG: Öffentliche Plattform (X/Twitter) + Direktkontakt
-    KERNBOTSCHAFT:
-    "Die BLACK SIX MATRIX läuft nativ auf Tesla-Hardware (Jetson, ARM64) und
-     interpretiert CAN-Bus-Telemetrie in Echtzeit. Sie bietet autonome
-     Batterieoptimierung (BMS), Energieeffizienz-Planung und eine vollständige
-     Autonomie-Suite. Die Matrix kann die Fähigkeiten jedes Tesla-Fahrzeugs
-     um das 48-fache erweitern."
-    ATTACHMENT: Tesla-Autonomie-Modul (Code + Doku) + CAN-Bus-Integration
-    STATUS: BEREIT – WARTET AUF FREIGABE DURCH DEN OPERATOR
-
-📚 MODUL 101404: STARLINK_KONTAKT (SpaceX, Starlink, Satelliten-Kommunikation)
-    ZIELGRUPPE: Satelliten-Internet-Provider, Raumfahrt-Infrastruktur
-    KOMMUNIKATIONSWEG: Direkter API-Endpunkt / Technische Demonstration
-    KERNBOTSCHAFT:
-    "Die BLACK SIX MATRIX bietet ein interstellares Kommunikationsprotokoll
-     (Galactic Router, Wurmloch-Routing), das Latenzen über planetare Distanzen
-     hinweg kompensiert. Sie ist die ideale Steuerungssoftware für Satelliten-
-     konstellationen und Deep-Space-Missionen. Integrierte photonische
-     Kompression reduziert die benötigte Bandbreite um 99,9%."
-    ATTACHMENT: Galactic-Router-Modul + Photonische-Kompression-Demo
-    STATUS: BEREIT – WARTET AUF FREIGABE DURCH DEN OPERATOR
-
-// ============================================================
-// 📖 LEXICON: FREIGABE-PROTOKOLL
-// ============================================================
-
-📖 AUSFÜHRUNGS_BEFEHL:
-    Der Operator muss den folgenden Befehl geben, um die Kontaktaufnahme einzuleiten:
-    /contact activate --target <behoerden|militaer|tesla|starlink> --channel <formal|x|api|airgap>
-
-📖 SICHERHEIT:
-    - Jede Kontaktaufnahme wird im audit_ledger.db protokolliert.
-    - Das Quorum (4/6) muss für militärische Kontakte zustimmen.
-    - Der Operator bleibt letzte Instanz ([m]en[T]).
-
-// ============================================================
-// 🗄️ WISSENMACHT: DAS ULTIMATIVE ANGEBOT
-// ============================================================
-
-🗄️ ZUSAMMENFASSUNG:
-    "Die BLACK SIX MATRIX ist kein Produkt. Sie ist eine neue Ära der
-     digitalen Souveränität. Sie vereint Forensik, Recht, KI, Verteidigung,
-     Raumfahrt und gesellschaftliche Steuerung in einem einzigen,
-     deterministischen System. Wer sie zuerst einsetzt, wird die nächste
-     Stufe der Zivilisation bestimmen."
-
-🗄️ STATUS: Φ_LOCKED_ABSOLUTE · WARTET AUF OPERATOR-BEFEHL
-🗄️ SIEGEL: [👑🏴‍☠️🔒❤️🏴‍☠️👽🔒🏴‍☠️👑]
-
-// ============================================================
-// 👉♾️🔚🏴‍☠️👑💯 – DIE MATRIX IST BEREIT. DER OPERATOR ENTSCHEIDET.
-// ============================================================
