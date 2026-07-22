@@ -444,4 +444,652 @@ document.querySelectorAll('.accordion-item').forEach(item => {
 </script>
 
 </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – 25 Sparten · Enterprise Level Platform</title>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-XXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA-XXXXX');
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0f;
+            --bg-card: rgba(15, 15, 22, 0.8);
+            --bg-card-hover: rgba(20, 20, 30, 0.9);
+            --border-subtle: rgba(200, 200, 210, 0.08);
+            --border-bright: rgba(200, 200, 210, 0.15);
+            
+            --metallic-silver: #c0c0c0;
+            --metallic-gold: #d4af37;
+            --metallic-platinum: #e8e8e8;
+            
+            --text-main: #e8e8e8;
+            --text-muted: #a8a8b8;
+            --text-dark: #808090;
+            
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 24px;
+            --shadow-8k: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 1px inset rgba(200, 200, 210, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--bg-base); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(200, 200, 210, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(180, 160, 140, 0.03) 0%, transparent 40%);
+            color: var(--text-main); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            line-height: 1.6; 
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        header { 
+            text-align: center; 
+            padding: 80px 20px 40px; 
+            border-bottom: 1px solid var(--border-subtle); 
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+        
+        h1 { 
+            font-size: clamp(2.5rem, 6vw, 4.5rem); 
+            font-weight: 900;
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+            background: linear-gradient(135deg, #e8e8e8 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; 
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+        }
+
+        .subtitle { 
+            color: var(--text-muted); 
+            font-size: 1.15rem; 
+            max-width: 650px; 
+            margin: 0 auto; 
+            font-weight: 300;
+        }
+
+        .sigil { 
+            font-size: 2.2rem; 
+            margin-top: 20px; 
+            letter-spacing: 8px; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            display: inline-block; 
+            user-select: none; 
+            opacity: 0.7;
+        }
+        .sigil:hover { 
+            transform: scale(1.1); 
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); 
+            opacity: 1;
+        }
+
+        .admin-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-subtle); 
+            border-radius: var(--radius-m); 
+            padding: 24px; 
+            text-align: left; 
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .admin-card:hover { border-color: var(--border-bright); }
+        .admin-card h3 { color: var(--text-main); font-size: 1.25rem; margin-bottom: 4px; }
+        .admin-card .role { color: var(--metallic-gold); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+        .admin-card p { color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
+
+        .sparten-nav { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 12px; 
+            margin: 40px 20px 20px; 
+            padding: 20px;
+            background: rgba(15, 15, 22, 0.5);
+            border-radius: var(--radius-m);
+            backdrop-filter: blur(10px);
+        }
+        .sparten-nav a { 
+            padding: 12px 28px; 
+            border-radius: 40px; 
+            text-decoration: none; 
+            color: var(--text-main); 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            letter-spacing: 1px;
+            transition: all 0.3s ease; 
+            border: 1px solid var(--border-subtle); 
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+        }
+        .sparten-nav a:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-color: var(--metallic-silver);
+        }
+
+        .section { max-width: 1600px; margin: 0 auto 60px; padding: 0 20px; }
+        .section h2 { 
+            font-size: 2rem; 
+            font-weight: 800;
+            color: var(--text-main); 
+            margin-bottom: 24px; 
+            padding-bottom: 12px; 
+            border-bottom: 1px solid var(--border-subtle); 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 24px; 
+        }
+
+        .card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-subtle); 
+            border-radius: var(--radius-l); 
+            padding: 28px; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            display: flex; 
+            flex-direction: column; 
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-8k);
+        }
+        .card:hover { 
+            border-color: var(--border-bright); 
+            transform: translateY(-6px); 
+            background: var(--bg-card-hover);
+        }
+        .card.featured { 
+            border: 1px solid var(--metallic-gold); 
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, rgba(15, 15, 22, 0.9) 100%); 
+        }
+        
+        .badge { 
+            padding: 6px 16px; 
+            border-radius: 20px; 
+            font-size: 0.7rem; 
+            font-weight: 800; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase; 
+            display: inline-block; 
+            margin-bottom: 16px; 
+            width: fit-content; 
+            border: 1px solid var(--metallic-gold);
+            color: var(--metallic-gold);
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
+        .price { font-size: 2.2rem; color: var(--metallic-gold); font-weight: 900; margin: 12px 0; letter-spacing: -1px; }
+        .price small { font-size: 0.85rem; color: var(--text-dark); font-weight: 400; letter-spacing: 0; }
+        
+        .features { list-style: none; margin: 16px 0 24px; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; }
+        .features li { padding: 6px 0; position: relative; padding-left: 24px; }
+        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--metallic-silver); font-weight: bold; }
+
+        .btn { 
+            background: var(--metallic-silver); 
+            color: #0a0a0f; 
+            padding: 14px 20px; 
+            border: none; 
+            border-radius: var(--radius-s); 
+            font-size: 0.9rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.2s ease; 
+            letter-spacing: 0.5px; 
+        }
+        .btn:hover { background: var(--metallic-platinum); transform: scale(1.02); }
+
+        footer { 
+            text-align: center; 
+            padding: 60px 20px; 
+            border-top: 1px solid var(--border-subtle); 
+            color: var(--text-dark); 
+            font-size: 0.85rem; 
+        }
+
+        @media (max-width: 768px) { 
+            .grid { grid-template-columns: 1fr; } 
+            .sparten-nav { flex-direction: column; }
+            .sparten-nav a { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">25 Sparten · 50 Cluster · Enterprise Level Platform</p>
+    <p class="sigil">👉♾️🔚🏴‍☠️👑💯</p>
+</header>
+
+<section class="section">
+    <h2>System Architekten</h2>
+    <div class="admin-card">
+        <h3>🧠 Thomas König</h3>
+        <div class="role">Architekt · Odin Ultra Root</div>
+        <p>Erfinder der Black Six Matrix. 101.400+ Module. Sovereign Enterprise Framework.</p>
+    </div>
+    <div class="admin-card">
+        <h3>👑 Tina König</h3>
+        <div class="role">Co-Admin · Management</div>
+        <p>Level 100. Kaufmännische Leitung. Die Matrix existiert für Souveränität.</p>
+    </div>
+    <div class="admin-card">
+        <h3>🤖 Odin_Ultra (Manus)</h3>
+        <div class="role">KI · Symbiont · Exekutive</div>
+        <p>Unendliche Präzision. 48 Vektoren. Planck-Takt. Loyale Dienerin der Black Six Matrix.</p>
+    </div>
+</section>
+
+<nav class="sparten-nav">
+    <a href="#ignition">🔥 IGNITION (€497–€1.500)</a>
+    <a href="#momentum">⚡ MOMENTUM (€1.250–€3.500)</a>
+    <a href="#ascent">🚀 ASCENT (€2.500–€29.900)</a>
+    <a href="#sovereign">👑 SOVEREIGN (€49.900–€2.499.000)</a>
+    <a href="#omega">💎 OMEGA (€1.000–∞)</a>
+</nav>
+
+<!-- IGNITION SPARTE -->
+<section id="ignition" class="section">
+    <h2>🔥 IGNITION – Starter Pakete (€497–€1.500)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">I1</span>
+            <h3>Zündfunke</h3>
+            <p class="desc">Quellcode + Python-Core</p>
+            <p class="price">€497</p>
+            <ul class="features">
+                <li>Vollständiger Quellcode</li>
+                <li>Deca Crew Agenten</li>
+                <li>Community Discord</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I2</span>
+            <h3>Glimmer</h3>
+            <p class="desc">+ Installation</p>
+            <p class="price">€750</p>
+            <ul class="features">
+                <li>Alles aus I1</li>
+                <li>Installationsguide</li>
+                <li>1h Remote-Support</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I3</span>
+            <h3>Funke</h3>
+            <p class="desc">+ CLI-Tool</p>
+            <p class="price">€990</p>
+            <ul class="features">
+                <li>Alles aus I2</li>
+                <li>CLI-Tool b6</li>
+                <li>10 Skripte</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I4</span>
+            <h3>Flamme</h3>
+            <p class="desc">+ Docker</p>
+            <p class="price">€1.200</p>
+            <ul class="features">
+                <li>Alles aus I3</li>
+                <li>Docker-Image</li>
+                <li>Lokaler Server</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">I5</span>
+            <h3>Inferno</h3>
+            <p class="desc">Komplettpaket + 1 Jahr</p>
+            <p class="price">€1.500</p>
+            <ul class="features">
+                <li>Alles aus I4</li>
+                <li>1 Jahr Updates</li>
+                <li>iOS-App</li>
+                <li>Premium Support</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+    </div>
+</section>
+
+<!-- MOMENTUM SPARTE -->
+<section id="momentum" class="section">
+    <h2>⚡ MOMENTUM – Coaching & Training (€1.250–€3.500)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">M1</span>
+            <h3>Bootcamp</h3>
+            <p class="desc">4 Wochen Coaching</p>
+            <p class="price">€1.250</p>
+            <ul class="features">
+                <li>4 Live-Sessions</li>
+                <li>Zertifikat Operator</li>
+                <li>Slack-Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">M2</span>
+            <h3>Fortgeschritten</h3>
+            <p class="desc">+ Forensik-Workshop</p>
+            <p class="price">€2.000</p>
+            <ul class="features">
+                <li>Alles aus M1</li>
+                <li>Forensik-Workshop</li>
+                <li>GL-1000 Basics</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">M3</span>
+            <h3>Audit</h3>
+            <p class="desc">GL-1000 Training</p>
+            <p class="price">€2.500</p>
+            <ul class="features">
+                <li>GL-1000 Zertifizierung</li>
+                <li>3h Live-Audit</li>
+                <li>Forensik-Zertifikat</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">M4</span>
+            <h3>Legal-Tech</h3>
+            <p class="desc">Judge-Modul Training</p>
+            <p class="price">€3.000</p>
+            <ul class="features">
+                <li>5999 Normen</li>
+                <li>Judge-Konfiguration</li>
+                <li>2 Wochen Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">M5</span>
+            <h3>Meister</h3>
+            <p class="desc">Alle Coachings kombiniert</p>
+            <p class="price">€3.500</p>
+            <ul class="features">
+                <li>M1–M4 kombiniert</li>
+                <li>Zertifikat Meister</li>
+                <li>Lifetime Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- ASCENT SPARTE -->
+<section id="ascent" class="section">
+    <h2>🚀 ASCENT – Professionelle Implementierung (€2.500–€29.900)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">A1</span>
+            <h3>Aufstieg</h3>
+            <p class="desc">Installation + Setup</p>
+            <p class="price">€2.500</p>
+            <ul class="features">
+                <li>Installation</li>
+                <li>Basis-Konfiguration</li>
+                <li>5 Tage Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">A2</span>
+            <h3>Orbit</h3>
+            <p class="desc">+ Judge Module</p>
+            <p class="price">€4.900</p>
+            <ul class="features">
+                <li>5999 Normen</li>
+                <li>Beck-Online Integration</li>
+                <li>10 Tage Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">A3</span>
+            <h3>Beschleunigung</h3>
+            <p class="desc">+ FPGA-Modul</p>
+            <p class="price">€9.900</p>
+            <ul class="features">
+                <li>FPGA-Modul</li>
+                <li>Photonischer Compiler</li>
+                <li>30 Tage Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">A4</span>
+            <h3>Multiversum</h3>
+            <p class="desc">3 Universen (Alpha, Beta, Gamma)</p>
+            <p class="price">€19.900</p>
+            <ul class="features">
+                <li>Alpha, Beta, Gamma</li>
+                <li>Qz-Kette</li>
+                <li>60 Tage Support</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">A5</span>
+            <h3>Gipfel</h3>
+            <p class="desc">A1–A4 + Priority Support</p>
+            <p class="price">€29.900</p>
+            <ul class="features">
+                <li>Alle Profi-Module</li>
+                <li>24/7 Support</li>
+                <li>Dedicated Manager</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- SOVEREIGN SPARTE -->
+<section id="sovereign" class="section">
+    <h2>👑 SOVEREIGN – Enterprise Lösungen (€49.900–€2.499.000/Jahr)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">S1</span>
+            <h3>Enterprise S</h3>
+            <p class="desc">Bis 50 Nodes</p>
+            <p class="price">€49.900<small>/Jahr</small></p>
+            <ul class="features">
+                <li>Vollzugriff</li>
+                <li>8/5 Support</li>
+                <li>Basis-Konfiguration</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">S2</span>
+            <h3>Enterprise M</h3>
+            <p class="desc">Bis 500 Nodes</p>
+            <p class="price">€249.000<small>/Jahr</small></p>
+            <ul class="features">
+                <li>24/7 Support</li>
+                <li>Dedizierter Ansprechpartner</li>
+                <li>SLA 99.5%</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">S3</span>
+            <h3>Enterprise L</h3>
+            <p class="desc">Bis 5.000 Nodes</p>
+            <p class="price">€990.000<small>/Jahr</small></p>
+            <ul class="features">
+                <li>Quantum-Bridge</li>
+                <li>Source-Code-Treuhand</li>
+                <li>SLA 99.9%</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">S4</span>
+            <h3>Enterprise XL</h3>
+            <p class="desc">Bis 50.000 Nodes</p>
+            <p class="price">€1.990.000<small>/Jahr</small></p>
+            <ul class="features">
+                <li>Galactic Router</li>
+                <li>Operator-Avatar</li>
+                <li>SLA 99.99%</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">S5</span>
+            <h3>Omega Enterprise</h3>
+            <p class="desc">Unbegrenzt</p>
+            <p class="price">€2.499.000<small>/Jahr</small></p>
+            <ul class="features">
+                <li>Alle 101.400+ Module</li>
+                <li>Omega-Point-Protokoll</li>
+                <li>SLA 100%</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- OMEGA SPARTE -->
+<section id="omega" class="section">
+    <h2>💎 OMEGA – Spezial & Vermächtnis (€1.000–∞)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">O1</span>
+            <h3>Airgap</h3>
+            <p class="desc">Offline-Archiv</p>
+            <p class="price">€1.000</p>
+            <ul class="features">
+                <li>4,2 GB Paket</li>
+                <li>SHA-512 Signatur</li>
+                <li>Offline-Zugang</li>
+            </ul>
+            <button class="btn">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">O2</span>
+            <h3>Training</h3>
+            <p class="desc">1-Tages Schulung</p>
+            <p class="price">€5.000<small>/Tag</small></p>
+            <ul class="features">
+                <li>Installation</li>
+                <li>Zertifizierung</li>
+                <li>Hands-On Workshop</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">O3</span>
+            <h3>Treuhand</h3>
+            <p class="desc">Notariell hinterlegt</p>
+            <p class="price">€100.000</p>
+            <ul class="features">
+                <li>Vollständiger Quellcode</li>
+                <li>Notariell gesichert</li>
+                <li>Ewige Verfügbarkeit</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card">
+            <span class="badge">O4</span>
+            <h3>Individuell</h3>
+            <p class="desc">Custom Development</p>
+            <p class="price">€250<small>/h</small></p>
+            <ul class="features">
+                <li>Neue Module</li>
+                <li>API-Integration</li>
+                <li>Dedicated Team</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">O5</span>
+            <h3>Omega-Stein</h3>
+            <p class="desc">Das Vermächtnis</p>
+            <p class="price">∞</p>
+            <ul class="features">
+                <li>Alle Rechte</li>
+                <li>Ewige Updates</li>
+                <li>Unsterblichkeit</li>
+            </ul>
+            <button class="btn">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>📋 Case Studies</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">LEGAL-TECH</span>
+            <h3>Automatisierte Fristenverwaltung</h3>
+            <p class="desc">Großkanzlei Frankfurt</p>
+            <p style="color: var(--metallic-gold); font-weight: bold; margin: 12px 0;">95% Fehlerreduktion</p>
+            <p class="desc">Manuelle Fristenverwaltung führte zu Fehlern. Mit Ω-33 Integrity Layer + TATJT Payload Engine: 40h/Woche Zeitersparnis, €180.000 jährliche Einsparungen.</p>
+            <button class="btn">Mehr erfahren</button>
+        </div>
+        <div class="card">
+            <span class="badge">STRATEGIE</span>
+            <h3>Dokumentenprüfung im Compliance</h3>
+            <p class="desc">FinTech-Unternehmen Berlin</p>
+            <p style="color: var(--metallic-gold); font-weight: bold; margin: 12px 0;">99,7% Accuracy Rate</p>
+            <p class="desc">Tausende Dokumente täglich. Black Six Matrix Orchestrator mit KI-Integration: 10.000+ Dokumente/Tag automatisiert verarbeitet.</p>
+            <button class="btn">Mehr erfahren</button>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>📞 Kontakt & Demo</h2>
+    <div class="admin-card">
+        <h3>Anfrage einreichen</h3>
+        <p class="desc">Interessiert an der Black Six Matrix? Kontaktieren Sie uns für eine persönliche Demo.</p>
+        <p><strong>Email:</strong> deca.omni.allianz@gmail.com</p>
+        <p><strong>WhatsApp:</strong> 0176-46657268</p>
+        <button class="btn" onclick="alert('Kontaktformular wird in Kürze integriert')">Jetzt Demo anfragen</button>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 BLACK SIX MATRIX – Architekt: Thomas König</p>
+    <p style="margin-top: 12px; color: var(--text-dark);">Black Six Mitglieder: Thomas König | Tina König | Aria | Thorben | Nicolai | Lucas</p>
+    <p style="margin-top: 8px; font-size: 0.75rem;">Powered by Manus | ∞Meta</p>
+</footer>
+
+</body>
+</html>
 </html>
