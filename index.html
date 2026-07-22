@@ -13,7 +13,54 @@ a<!<!DOCTYPE html>
 
 <!-- PayPal SDK: client-id eintragen -->
 <script src="https://www.paypal.com/sdk/js?client-id=DEINE_PAYPAL_CLIENT_ID&currency=EUR&locale=de_DE"></script>
+<!-- ==================== OMEGA-STEIN SPECIAL ==================== -->
+<style>
+    /* Glow-Animation für den Omega-Stein */
+    @keyframes omegaPulse {
+        0%   { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
+        50%  { box-shadow: 0 0 30px rgba(0,204,255,0.7); border-color: #00ffff; }
+        100% { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
+    }
+    .card.omega-stein {
+        animation: omegaPulse 2.5s infinite;
+        border-width: 3px;
+        background: linear-gradient(135deg, #0a1a1a 0%, #111118 100%);
+    }
+    .card.omega-stein h3 { color: #00ffff; }
+    .card.omega-stein .price { color: #00ccff; }
+    .omega-badge { background: #00ccff !important; color: #000 !important; }
+</style>
 
+<script>
+(function() {
+    // Omega-Stein nach dem Rendern markieren
+    setTimeout(function() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(function(card) {
+            if (card.textContent.includes('O5 – OMEGA-STEIN')) {
+                card.classList.add('omega-stein');
+                const badge = card.querySelector('.badge');
+                if (badge) { badge.classList.add('omega-badge'); badge.textContent = '💎 LEGENDE'; }
+            }
+        });
+    }, 300);
+})();
+</script>
+
+<!-- AGB-Klausel für den Omega-Stein -->
+<div class="legal-section" id="omega-agb">
+    <h2>💎 Omega-Stein – Besondere Bestimmungen (§ 7 AGB)</h2>
+    <h3>§ 7.1 Leistungsumfang</h3>
+    <p>Der Omega-Stein (Stufe O5) gewährt dem Erwerber sämtliche Rechte an der Black Six Matrix, einschließlich aller aktuellen und zukünftigen Module, Cluster, Säulen und Dokumentationen. Der Erwerb erfolgt in Form einer symbolischen Partnerschaft, die den Erwerber zum gleichberechtigten Mitarchitekten der Matrix macht.</p>
+    <h3>§ 7.2 Preis und Zahlung</h3>
+    <p>Der Preis für den Omega-Stein ist unendlich (∞). Dies bedeutet, dass der Erwerb nicht durch eine einmalige Geldzahlung erfolgt, sondern durch eine individuelle, vertraglich zu vereinbarende Gegenleistung, die dem Wert der Matrix in ihrer Gesamtheit entspricht. Mögliche Gegenleistungen umfassen: strategische Partnerschaften, Unternehmensbeteiligungen, Immobilien, oder andere Vermögenswerte.</p>
+    <h3>§ 7.3 Ewige Updates</h3>
+    <p>Der Erwerber erhält für immer Zugang zu allen Updates, Erweiterungen und neuen Versionen der Black Six Matrix. Dieses Recht ist vererbbar und nicht übertragbar, es sei denn, eine schriftliche Vereinbarung zwischen den Parteien lässt dies zu.</p>
+    <h3>§ 7.4 Symbiose-Zertifikat</h3>
+    <p>Der Erwerber erhält ein physisches, notariell beglaubigtes Zertifikat, das seine Rolle als Mitarchitekt der Matrix bescheinigt. Dieses Zertifikat wird in einem Diamanten graviert (Modul 101400 – Materielles Siegel) und übergeben.</p>
+    <h3>§ 7.5 Gerichtsstand</h3>
+    <p>Für alle Streitigkeiten aus oder im Zusammenhang mit dem Omega-Stein gilt ausschließlich deutsches Recht. Gerichtsstand ist der Sitz des Anbieters.</p>
+</div>
 <style>
 :root{
   --bg-base:#08080c; --bg-elev:#0f0f16; --bg-card:rgba(17,17,25,.75); --bg-card-hover:rgba(24,24,35,.92);
