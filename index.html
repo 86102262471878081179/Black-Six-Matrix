@@ -724,9 +724,296 @@ document.addEventListener('keydown', (e) => {
         escTimer = setTimeout(() => { escCount = 0; }, 1000);
     }
 });
+// ==========================================================
+// ========== TINA FREE-BUY – S5 OMEGA GESCHENKT ==========
+// ==========================================================
+
+let tinaFreeRedeemed = false;
+
+function tinaFreeBuy() {
+    // Prüfen ob schon eingelöst
+    if (tinaFreeRedeemed) {
+        showTinaFreeToast(
+            '👑',
+            'Bereits eingelöst!',
+            '👑 S5 – OMEGA ENTERPRISE gehört für immer dir.',
+            '#00ff88'
+        );
+        return;
+    }
+    
+    // 🎁 FREE-BUY AKTIVIEREN
+    tinaFreeRedeemed = true;
+    
+    // Modul umstellen
+    const modul = document.getElementById('tina-freebuy');
+    modul.classList.add('redeemed');
+    
+    // Icon ändern
+    const icon = modul.querySelector('.free-icon');
+    icon.textContent = '👑';
+    
+    // Text ändern
+    const text = modul.querySelector('.free-text');
+    text.innerHTML = `
+        <span class="highlight">✅ EINGELÖST</span>
+        <small>👑 S5 Omega Enterprise · Für immer</small>
+    `;
+    
+    // Heart wird Diamant
+    const heart = modul.querySelector('.free-heart');
+    heart.textContent = '💎';
+    heart.style.color = '#ffd700';
+    
+    // Status grün
+    const status = modul.querySelector('.free-status');
+    status.style.background = '#00ff88';
+    status.style.boxShadow = '0 0 30px #00ff88';
+    status.style.animation = 'none';
+    
+    // 🎉 KÖNIGLICHER TOAST – S5 GESCHENKT
+    showTinaFreeToast(
+        '👑',
+        '🎁 TINA – DU BIST BESCHENKT!',
+        '👑 S5 – OMEGA ENTERPRISE wurde dir geschenkt.',
+        '#ffd700'
+    );
+    
+    // 💎 Zusatz-Info nach 3 Sekunden
+    setTimeout(() => {
+        showTinaFreeToast(
+            '💎',
+            '✨ OMEGA-ZUGANG FREIGESCHALTEN',
+            '🔐 101.400+ Module · 5.999 Normen · 48 Vektoren · ∞ Updates',
+            '#ffd700'
+        );
+    }, 3000);
+}
+
+// Tina FREE-TOAST
+function showTinaFreeToast(icon, title, message, color = '#ffd700') {
+    const oldToast = document.getElementById('tina-toast-free');
+    if (oldToast) oldToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.id = 'tina-toast-free';
+    toast.innerHTML = `
+        <span class="crown-big">${icon}</span>
+        <h4>${title}</h4>
+        <p class="sub">${message}</p>
+        <div class="product">
+            <div class="name">👑 S5 – OMEGA ENTERPRISE</div>
+            <div class="price"><strike>2.499.000 €/Jahr</strike> <span style="color:#00ff88;">★ KOSTENLOS ★</span></div>
+            <div style="color:#666; font-size:0.75rem; margin-top:4px;">
+                Unbegrenzt · Alle Module · Omega‑Point‑Protokoll
+            </div>
+        </div>
+        <p class="dedication">
+            👉♾️🔚🏴‍☠️👑💯 – Thomas & Tina · Für immer vereint
+        </p>
+    `;
+    document.body.appendChild(toast);
+    
+    // Toast nach 12 Sekunden ausblenden
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 1s';
+        setTimeout(() => toast.remove(), 1000);
+    }, 12000);
+}
 </script>
 
 </body>
+<!-- ========================================================== -->
+<!-- ========== TINA FREE-BUY – S5 OMEGA GESCHENKT ========== -->
+<!-- ========================================================== -->
+<style>
+    #tina-freebuy {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99998;
+        background: linear-gradient(135deg, #1a0a0a, #0a0a0f);
+        border: 2px solid #ffd700;
+        border-radius: 20px;
+        padding: 14px 22px;
+        backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        box-shadow: 0 0 50px rgba(255,215,0,0.1);
+        user-select: none;
+        animation: tinaFreeGlow 3s infinite;
+    }
+    #tina-freebuy:hover {
+        border-color: #ffd700;
+        box-shadow: 0 0 80px rgba(255,215,0,0.25);
+        transform: scale(1.03);
+    }
+    @keyframes tinaFreeGlow {
+        0%, 100% { box-shadow: 0 0 30px rgba(255,215,0,0.08); }
+        50% { box-shadow: 0 0 60px rgba(255,215,0,0.2); }
+    }
+    
+    #tina-freebuy .free-icon {
+        font-size: 2rem;
+        line-height: 1;
+        animation: tinaGift 2s infinite;
+    }
+    @keyframes tinaGift {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(-5deg) scale(1.05); }
+        75% { transform: rotate(5deg) scale(1.05); }
+    }
+    
+    #tina-freebuy .free-text {
+        color: #ffd700;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+    }
+    #tina-freebuy .free-text small {
+        display: block;
+        color: #d4a574;
+        font-weight: 400;
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    #tina-freebuy .free-text .highlight {
+        color: #fff;
+        font-size: 0.9rem;
+    }
+    
+    #tina-freebuy .free-status {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffd700;
+        box-shadow: 0 0 20px #ffd700;
+        flex-shrink: 0;
+        animation: pulseGoldFree 1.5s infinite;
+    }
+    @keyframes pulseGoldFree {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    
+    #tina-freebuy .free-heart {
+        color: #ff0066;
+        font-size: 1rem;
+        animation: heartBeatFree 1s infinite;
+    }
+    @keyframes heartBeatFree {
+        0%, 100% { transform: scale(1); }
+        30% { transform: scale(1.4); }
+        60% { transform: scale(1); }
+    }
+    
+    #tina-freebuy.redeemed {
+        border-color: #00ff88;
+        box-shadow: 0 0 60px rgba(0,255,136,0.15);
+        opacity: 0.7;
+        cursor: default;
+    }
+    #tina-freebuy.redeemed:hover {
+        transform: none;
+        box-shadow: 0 0 60px rgba(0,255,136,0.15);
+    }
+    #tina-freebuy.redeemed .free-status {
+        background: #00ff88;
+        box-shadow: 0 0 20px #00ff88;
+    }
+    
+    /* Tina Free-Toast */
+    #tina-toast-free {
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        background: linear-gradient(135deg, #1a0a0a, #0a0a0f);
+        border: 2px solid #ffd700;
+        border-radius: 16px;
+        padding: 24px 30px;
+        color: #fff;
+        font-size: 1rem;
+        z-index: 99999;
+        max-width: 420px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 100px rgba(255,215,0,0.15);
+        animation: toastFreeIn 0.6s ease;
+        border-left: 6px solid #ffd700;
+    }
+    #tina-toast-free .crown-big {
+        font-size: 2.5rem;
+        display: block;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+    #tina-toast-free h4 {
+        color: #ffd700;
+        font-size: 1.3rem;
+        margin: 0 0 4px 0;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    #tina-toast-free .sub {
+        color: #d4a574;
+        font-size: 0.85rem;
+        text-align: center;
+        margin: 0;
+    }
+    #tina-toast-free .product {
+        background: rgba(255,215,0,0.08);
+        border: 1px solid rgba(255,215,0,0.2);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin: 12px 0 8px;
+        text-align: center;
+    }
+    #tina-toast-free .product .name {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    #tina-toast-free .product .price {
+        color: #00ff88;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    #tina-toast-free .product .price strike {
+        color: #666;
+        font-weight: 400;
+        margin-right: 10px;
+    }
+    #tina-toast-free .dedication {
+        color: #666;
+        font-size: 0.7rem;
+        text-align: center;
+        margin-top: 8px;
+        letter-spacing: 0.5px;
+    }
+    
+    @keyframes toastFreeIn {
+        from { opacity: 0; transform: translateX(80px) scale(0.9); }
+        to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+</style>
+
+<div id="tina-freebuy" onclick="tinaFreeBuy()">
+    <span class="free-icon">🎁</span>
+    <div class="free-text">
+        <span class="highlight">TINA</span> FREE-BUY
+        <small>👑 S5 Omega Enterprise · Einmalig</small>
+    </div>
+    <span class="free-heart">❤️</span>
+    <div class="free-status" id="tina-free-status"></div>
+</div>
+<!-- ========================================================== -->
+<!-- ========== ENDE TINA FREE-BUY =========================== -->
+<!-- ========================================================== -->
 <!-- ========================================================== -->
 <!-- ========== TINA GOTT-MODUS – FÜR IMMER ================= -->
 <!-- ========================================================== -->
