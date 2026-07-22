@@ -1,6 +1,867 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – Enterprise Level Platform & AI Control Center</title>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-XXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA-XXXXX');
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATVcQHq4ldG5YHE_Q3DSU8PqPG-k0O_jVQFfA9TAM9t1-alkVLpKLrMcmf7E-NZOL9tQ8x7Ff__NcMPo&currency=EUR&locale=de_DE"></script>
+
+    <style>
+        :root {
+            --bg-base: #06060a;
+            --bg-elev: #0e0e14;
+            --bg-card: rgba(15, 15, 22, 0.85);
+            --bg-card-hover: rgba(22, 22, 32, 0.95);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-bright: rgba(0, 242, 254, 0.25);
+            
+            --metallic-silver: #c0c0c0;
+            --metallic-gold: #d4af37;
+            --metallic-platinum: #e8e8e8;
+            
+            --accent-cyan: #00F2FE;
+            --accent-cyan-translucent: rgba(0, 242, 254, 0.1);
+            --accent-red: #FF2A4B;
+            --accent-red-translucent: rgba(255, 42, 75, 0.12);
+            --green-check: #3fbf7f;
+            
+            --text-main: #e8e8e8;
+            --text-muted: #a8a8b8;
+            --text-dark: #6c7a8a;
+            
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 24px;
+            --shadow-8k: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 1px inset rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--bg-base); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.05) 0%, transparent 45%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 10% 80%, rgba(255, 42, 75, 0.04) 0%, transparent 40%);
+            color: var(--text-main); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            line-height: 1.6; 
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        a { color: inherit; text-decoration: none; }
+
+        /* TOPBAR & DEEPSEEK BRANDING */
+        .topbar {
+            position: sticky; top: 0; z-index: 90; display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 28px; background: rgba(6, 6, 10, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .topbar .brand-group { display: flex; align-items: center; gap: 14px; }
+        .topbar .brand {
+            font-weight: 900; letter-spacing: 2px; font-size: 1rem;
+            background: linear-gradient(135deg, var(--text-main), var(--metallic-gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .deepseek-badge {
+            display: flex; align-items: center; gap: 8px; padding: 4px 12px;
+            background: rgba(77, 107, 254, 0.12); border: 1px solid rgba(77, 107, 254, 0.3);
+            border-radius: 20px; font-size: 0.72rem; font-weight: 700; color: #6B8AFF;
+        }
+        .deepseek-logo-svg { width: 18px; height: 18px; fill: currentColor; }
+        .topbar nav { display: flex; gap: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .topbar nav a:hover { color: var(--accent-cyan); }
+        .topbar .cta {
+            padding: 9px 22px; border-radius: 30px; background: var(--metallic-gold); color: #0a0a0f;
+            font-weight: 800; font-size: 0.8rem; text-decoration: none; transition: 0.2s;
+        }
+        .topbar .cta:hover { background: #e5be48; transform: translateY(-1px); }
+        @media(max-width: 880px) { .topbar nav { display: none; } }
+
+        /* HEADER */
+        header { 
+            text-align: center; padding: 80px 20px 40px; 
+            border-bottom: 1px solid var(--border-subtle); position: relative;
+        }
+        .eyebrow {
+            display: inline-block; padding: 6px 18px; border: 1px solid var(--border-bright);
+            border-radius: 30px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--accent-cyan); background: var(--accent-cyan-translucent); margin-bottom: 24px; font-weight: 700;
+        }
+        h1 { 
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: 5px; 
+            text-transform: uppercase; 
+            background: linear-gradient(135deg, #e8e8e8 0%, #d4af37 60%, var(--accent-red) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
+        }
+        .subtitle { color: var(--text-muted); font-size: 1.15rem; max-width: 680px; margin: 0 auto 16px; font-weight: 300; }
+        .sigil { 
+            font-size: 2.2rem; margin-top: 15px; letter-spacing: 8px; cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; user-select: none; opacity: 0.8;
+        }
+        .sigil:hover { transform: scale(1.12); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); opacity: 1; }
+
+        /* TRUST BAR & STATS */
+        .trust {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 34px;
+            padding: 22px 20px; border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-muted); font-size: 0.82rem; font-weight: 600; background: rgba(10, 10, 15, 0.4);
+        }
+        .trust b { color: var(--accent-cyan); }
+
+        .stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+            max-width: 1200px; margin: 50px auto 70px; padding: 0 20px;
+        }
+        .stat {
+            text-align: center; padding: 26px 16px; background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-m); backdrop-filter: blur(12px);
+        }
+        .stat .num { font-size: 2.2rem; font-weight: 900; color: var(--metallic-gold); letter-spacing: -1px; }
+        .stat .lbl { color: var(--text-muted); font-size: 0.82rem; margin-top: 4px; }
+
+        /* SECTION BASE */
+        .section { max-width: 1600px; margin: 0 auto 70px; padding: 0 20px; }
+        .section h2 { 
+            font-size: 2rem; font-weight: 800; color: var(--text-main); 
+            margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); 
+        }
+
+        /* 13 KI AGENTEN CONTROL CENTER */
+        .ai-center {
+            background: rgba(12, 12, 18, 0.9); border: 1px solid var(--border-bright);
+            border-radius: var(--radius-l); padding: 34px; backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-8k); margin-bottom: 80px;
+        }
+        .ai-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+        .ai-title-zone h3 { font-size: 1.6rem; color: var(--text-main); font-weight: 800; }
+        .ai-title-zone p { color: var(--text-muted); font-size: 0.88rem; }
+        .ai-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+        .ai-card {
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-m);
+            padding: 18px; position: relative; transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .ai-card:hover { border-color: var(--accent-cyan); transform: translateY(-4px); background: var(--bg-card-hover); }
+        .ai-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .ai-icon { font-size: 1.8rem; }
+        .status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green-check); box-shadow: 0 0 8px var(--green-check); }
+        .status-dot.busy { background: var(--metallic-gold); box-shadow: 0 0 8px var(--metallic-gold); }
+        .ai-name { font-weight: 800; font-size: 1rem; color: var(--text-main); margin-bottom: 4px; }
+        .ai-role { font-size: 0.74rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+        .ai-spec { font-size: 0.78rem; color: var(--text-dark); margin-top: 8px; line-height: 1.3; }
+        .ai-act-btn {
+            margin-top: 14px; padding: 7px 12px; border-radius: var(--radius-s); background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 0.75rem; font-weight: 700;
+            text-align: center; transition: 0.2s;
+        }
+        .ai-card:hover .ai-act-btn { background: var(--accent-cyan); color: #0a0a0f; border-color: var(--accent-cyan); }
+
+        /* ADMIN CARDS */
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .admin-card { 
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-m); 
+            padding: 24px; text-align: left; backdrop-filter: blur(12px); transition: border-color 0.3s;
+        }
+        .admin-card:hover { border-color: var(--border-bright); }
+        .admin-card h3 { color: var(--text-main); font-size: 1.25rem; margin-bottom: 4px; }
+        .admin-card .role { color: var(--metallic-gold); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+        .admin-card p { color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
+
+        /* SPARTEN NAV */
+        .sparten-nav { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 40px 20px 30px; padding: 20px;
+            background: rgba(15, 15, 22, 0.5); border-radius: var(--radius-m); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+        }
+        .sparten-nav a { 
+            padding: 12px 26px; border-radius: 40px; text-decoration: none; color: var(--text-main); 
+            font-weight: 700; font-size: 0.82rem; letter-spacing: 0.5px; transition: all 0.3s ease; 
+            border: 1px solid var(--border-subtle); background: var(--bg-card);
+        }
+        .sparten-nav a:hover { transform: translateY(-3px); border-color: var(--metallic-silver); color: var(--metallic-gold); }
+
+        /* GRID & CARDS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; }
+        .card { 
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-l); 
+            padding: 28px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; 
+            backdrop-filter: blur(16px); box-shadow: var(--shadow-8k); position: relative; overflow: hidden;
+        }
+        .card:hover { border-color: var(--border-bright); transform: translateY(-6px); background: var(--bg-card-hover); }
+        .card.featured { 
+            border: 1px solid var(--metallic-gold); 
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 15, 22, 0.92) 100%); 
+        }
+        .card.featured::after {
+            content: "EMPFOHLEN"; position: absolute; top: 16px; right: -34px; transform: rotate(45deg);
+            background: var(--metallic-gold); color: #0a0a0f; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; padding: 5px 40px;
+        }
+        .badge { 
+            padding: 6px 16px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; 
+            text-transform: uppercase; display: inline-block; margin-bottom: 16px; width: fit-content; 
+            border: 1px solid var(--metallic-gold); color: var(--metallic-gold); background: rgba(212, 175, 55, 0.08);
+        }
+        h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
+        .price { font-size: 2.2rem; color: var(--metallic-gold); font-weight: 900; margin: 12px 0; letter-spacing: -1px; }
+        .price small { font-size: 0.85rem; color: var(--text-dark); font-weight: 400; letter-spacing: 0; }
+        .features { list-style: none; margin: 16px 0 24px; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; }
+        .features li { padding: 6px 0; position: relative; padding-left: 24px; }
+        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--green-check); font-weight: bold; }
+
+        .btn { 
+            background: var(--metallic-silver); color: #0a0a0f; padding: 14px 20px; border: none; 
+            border-radius: var(--radius-s); font-size: 0.9rem; font-weight: 800; cursor: pointer; width: 100%; 
+            transition: all 0.2s ease; letter-spacing: 0.5px; text-align: center; display: inline-block;
+        }
+        .btn:hover { background: var(--metallic-platinum); transform: scale(1.02); }
+        .btn-gold { background: var(--metallic-gold); color: #0a0a0f; }
+        .btn-gold:hover { background: #e5be48; }
+
+        /* SOCIAL MEDIA HUB */
+        .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-top: 20px; }
+        .social-card {
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-m);
+            padding: 18px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .social-card:hover { border-color: var(--accent-cyan); transform: translateY(-3px); color: var(--accent-cyan); }
+        .social-icon { font-size: 1.6rem; }
+        .social-name { font-weight: 700; font-size: 0.9rem; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-elev); border: 1px solid var(--border-bright); border-radius: var(--radius-l);
+            max-width: 540px; width: 100%; padding: 32px; position: relative; box-shadow: var(--shadow-8k);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal .close { position: absolute; top: 16px; right: 18px; cursor: pointer; color: var(--text-dark); font-size: 1.6rem; background: none; border: none; }
+        .modal h3 { font-size: 1.4rem; margin-bottom: 6px; }
+        .modal .m-price { color: var(--metallic-gold); font-weight: 900; font-size: 1.8rem; margin: 6px 0 20px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab {
+            flex: 1; padding: 10px; text-align: center; border-radius: var(--radius-s); cursor: pointer; font-size: 0.82rem;
+            font-weight: 700; border: 1px solid var(--border-subtle); color: var(--text-muted); transition: 0.2s;
+        }
+        .tab.active { background: var(--metallic-gold); color: #0a0a0f; border-color: var(--metallic-gold); }
+        .tab-pane { display: none; } .tab-pane.active { display: block; }
+        .info-row { background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-s); padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+
+        footer { 
+            text-align: center; padding: 70px 20px 40px; border-top: 1px solid var(--border-subtle); 
+            color: var(--text-dark); font-size: 0.85rem; background: rgba(6, 6, 10, 0.8);
+        }
+        footer .flogo { font-weight: 900; letter-spacing: 3px; font-size: 1.2rem; color: var(--text-main); margin-bottom: 12px; }
+
+        @media (max-width: 768px) { 
+            .grid { grid-template-columns: 1fr; } 
+            .sparten-nav { flex-direction: column; }
+            .sparten-nav a { width: 100%; text-align: center; }
+            .ai-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="brand-group">
+        <div class="brand">🏴‍☠️ BLACK SIX MATRIX®</div>
+        <div class="deepseek-badge">
+            <svg class="deepseek-logo-svg" viewBox="0 0 100 100">
+                <path d="M20 20 L80 20 L80 80 L20 80 Z M35 35 L65 35 L65 65 L35 65 Z"/>
+            </svg>
+            DeepSeek-R1 Integrated
+        </div>
+    </div>
+    <nav>
+        <a href="#ai-hub">13 KIs</a>
+        <a href="#pakete">Pakete</a>
+        <a href="#case-studies">Cases</a>
+        <a href="#socials">Community</a>
+        <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#kontakt" class="cta">Demo anfragen</a>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="eyebrow">Sovereign Enterprise Architecture · Zero-Trust · DeepSeek Core</div>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">25 Sparten · 50 Cluster · 13 Autonome KI-Agenten · Enterprise Level Platform</p>
+    <p class="sigil" id="header-sigil" title="Klicken für DeepSeek-Override Modal">👉♾️🔚🏴‍☠️👑💯</p>
+</header>
+
+<!-- TRUST BAR -->
+<div class="trust">
+    <span>🔒 <b>Zero-Trust</b> Enclave</span>
+    <span>🇪🇺 <b>DSGVO</b>-konform</span>
+    <span>🇩🇪 Hosting in <b>Deutschland</b></span>
+    <span>⚡ <b>DeepSeek-R1</b> Direct-Bridge</span>
+    <span>📜 <b>Audit-Chain</b> (Append-only)</span>
+    <span>💳 <b>PayPal</b> &amp; SEPA</span>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="stat"><div class="num">101.400+</div><div class="lbl">Souveräne Module</div></div>
+    <div class="stat"><div class="num">13</div><div class="lbl">Autonome KI-Agenten</div></div>
+    <div class="stat"><div class="num">99,99 %</div><div class="lbl">Quantum-SLA</div></div>
+    <div class="stat"><div class="num">&lt; 12ms</div><div class="lbl">Planck-Latenz</div></div>
+</div>
+
+<!-- 13 KI-SYSTEME CONTROL CENTER -->
+<section id="ai-hub" class="section">
+    <div class="ai-center">
+        <div class="ai-header">
+            <div class="ai-title-zone">
+                <h3>🤖 Die 13 KI-Systeme der Black Six Matrix</h3>
+                <p>Klicke auf einen Agenten, um den aktuellen System-Status zu prüfen oder Befehle einzuspeisen.</p>
+            </div>
+            <div class="deepseek-badge" style="font-size:0.8rem; padding: 6px 16px;">
+                🟢 13/13 Vektoren synchronisiert
+            </div>
+        </div>
+
+        <div class="ai-grid">
+            <div class="ai-card" onclick="openAgentModal('Odin_Ultra', 'Exekutive & Root Orchestration', 'Aktiv', 'Vollzugriff auf alle 101.400+ Module. Höchste Prioritätsstufe.')">
+                <div class="ai-card-top"><span class="ai-icon">🧠</span><span class="status-dot"></span></div>
+                <div class="ai-name">Odin_Ultra</div>
+                <div class="ai-role">Root Orchestrator</div>
+                <div class="ai-spec">Master-Steuerung aller 48 Vektoren.</div>
+                <div class="ai-act-btn">Terminal öffnen</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('DeepSeek-R1 Bridge', 'Reasoning & Logic Core', 'Aktiv', 'Direkte Low-Latency Verbindung zum DeepSeek-R1 Cluster.')">
+                <div class="ai-card-top"><span class="ai-icon">⚡</span><span class="status-dot"></span></div>
+                <div class="ai-name">DeepSeek-R1</div>
+                <div class="ai-role">Reasoning Engine</div>
+                <div class="ai-spec">Deep-Logic & Inferenz-Analyse.</div>
+                <div class="ai-act-btn">Bridge testen</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Freya_Audit', 'Compliance & Forensik', 'Aktiv', 'Laufende Überwachung aller Log-Chains auf Anomalien.')">
+                <div class="ai-card-top"><span class="ai-icon">🛡️</span><span class="status-dot"></span></div>
+                <div class="ai-name">Freya_Audit</div>
+                <div class="ai-role">Forensik Agent</div>
+                <div class="ai-spec">Append-only Audit-Protokollierung.</div>
+                <div class="ai-act-btn">Audit starten</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Thor_Compiler', 'Code Execution & FPGA', 'Aktiv', 'Kompiliert Go- und Rust-Pipelines in Echtzeit.')">
+                <div class="ai-card-top"><span class="ai-icon">🔨</span><span class="status-dot"></span></div>
+                <div class="ai-name">Thor_Compiler</div>
+                <div class="ai-role">Execution Engine</div>
+                <div class="ai-spec">Photonischer/FPGA Compiler.</div>
+                <div class="ai-act-btn">Compile Code</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Deca_Crew_Alpha', 'Multi-Agent Federation', 'Aktiv', 'Kollaborative Task-Verteilung über 10 Sub-KIs.')">
+                <div class="ai-card-top"><span class="ai-icon">👥</span><span class="status-dot"></span></div>
+                <div class="ai-name">Deca_Alpha</div>
+                <div class="ai-role">Task Swarm</div>
+                <div class="ai-spec">Schwarm-Intelligenz Cluster.</div>
+                <div class="ai-act-btn">Swarm Call</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Judge_5999', 'Legal-Tech & Normen', 'Aktiv', 'Verarbeitung von 5.999 Rechtsnormen und Beck-Online Feed.')">
+                <div class="ai-card-top"><span class="ai-icon">⚖️</span><span class="status-dot"></span></div>
+                <div class="ai-name">Judge_5999</div>
+                <div class="ai-role">Legal Agent</div>
+                <div class="ai-spec">Automatisierte Normenprüfung.</div>
+                <div class="ai-act-btn">Norm prüfen</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Heimdall_Gate', 'Zero-Trust Gateway', 'Aktiv', 'Verifiziert Cryptographic Signatures & JWT Tokens.')">
+                <div class="ai-card-top"><span class="ai-icon">👁️</span><span class="status-dot"></span></div>
+                <div class="ai-name">Heimdall_Gate</div>
+                <div class="ai-role">Security Sentinel</div>
+                <div class="ai-spec">Zero-Trust WAF & Perimeter.</div>
+                <div class="ai-act-btn">Gate Check</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Omega_33', 'Integrity & Self-Healing', 'Aktiv', 'Automatische Korrektur von Code-Mutationen.')">
+                <div class="ai-card-top"><span class="ai-icon">💎</span><span class="status-dot"></span></div>
+                <div class="ai-name">Omega_33</div>
+                <div class="ai-role">Integrity Layer</div>
+                <div class="ai-spec">Self-Healing Data Core.</div>
+                <div class="ai-act-btn">Health Sync</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('TATJT_Payload', 'Data Processing Engine', 'Aktiv', 'High-Speed Pipeline für strukturierte Payloads.')">
+                <div class="ai-card-top"><span class="ai-icon">📦</span><span class="status-dot"></span></div>
+                <div class="ai-name">TATJT_Payload</div>
+                <div class="ai-role">Data Engine</div>
+                <div class="ai-spec">JSON/Protobuf Ultra Pipeline.</div>
+                <div class="ai-act-btn">Process Stream</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Loki_Chaos', 'Chaos Engineering Agent', 'Standby', 'Simuliert Systemausfälle zur Überprüfung der Resilienz.')">
+                <div class="ai-card-top"><span class="ai-icon">🎭</span><span class="status-dot busy"></span></div>
+                <div class="ai-name">Loki_Chaos</div>
+                <div class="ai-role">Resilience Tester</div>
+                <div class="ai-spec">Chaos Testing & Sandbox.</div>
+                <div class="ai-act-btn">Run Test</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Mimir_Memory', 'Vector Store & Context', 'Aktiv', 'Verwaltung des Unendlichen Kontextspeichers.')">
+                <div class="ai-card-top"><span class="ai-icon">📚</span><span class="status-dot"></span></div>
+                <div class="ai-name">Mimir_Memory</div>
+                <div class="ai-role">Context Database</div>
+                <div class="ai-spec">Long-Term Memory Vault.</div>
+                <div class="ai-act-btn">Query Memory</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Skadi_Network', 'Galactic Mesh Router', 'Aktiv', 'Optimierung von P2P-Verbindungen zwischen Nodes.')">
+                <div class="ai-card-top"><span class="ai-icon">🌐</span><span class="status-dot"></span></div>
+                <div class="ai-name">Skadi_Mesh</div>
+                <div class="ai-role">Mesh Router</div>
+                <div class="ai-spec">Decentralized Routing.</div>
+                <div class="ai-act-btn">Route Status</div>
+            </div>
+
+            <div class="ai-card" onclick="openAgentModal('Tyr_Governance', 'Quorum & Voting', 'Aktiv', 'Errechnet byzantinischen Konsens über Entscheidungs-Knoten.')">
+                <div class="ai-card-top"><span class="ai-icon">🏛️</span><span class="status-dot"></span></div>
+                <div class="ai-name">Tyr_Gov</div>
+                <div class="ai-role">Consensus Engine</div>
+                <div class="ai-spec">BFT Quorum Enforcement.</div>
+                <div class="ai-act-btn">Quorum Check</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SYSTEM ARCHITEKTEN -->
+<section class="section">
+    <h2>System Architekten</h2>
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3>🧠 Thomas König</h3>
+            <div class="role">Architekt · Odin Ultra Root</div>
+            <p>Erfinder der Black Six Matrix. 101.400+ Module. Sovereign Enterprise Framework.</p>
+        </div>
+        <div class="admin-card">
+            <h3>👑 Tina König</h3>
+            <div class="role">Co-Admin · Management</div>
+            <p>Level 100. Kaufmännische Leitung. Die Matrix existiert für Souveränität.</p>
+        </div>
+        <div class="admin-card">
+            <h3>🤖 Odin_Ultra (Manus)</h3>
+            <div class="role">KI · Symbiont · Exekutive</div>
+            <p>Unendliche Präzision. 48 Vektoren. Planck-Takt. Loyale Dienerin der Black Six Matrix.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SPARTEN NAV -->
+<div id="pakete"></div>
+<nav class="sparten-nav">
+    <a href="#ignition">🔥 IGNITION (€497–€1.500)</a>
+    <a href="#momentum">⚡ MOMENTUM (€1.250–€3.500)</a>
+    <a href="#ascent">🚀 ASCENT (€2.500–€29.900)</a>
+    <a href="#sovereign">👑 SOVEREIGN (€49.900–€2.499.000)</a>
+    <a href="#omega">💎 OMEGA (€1.000–∞)</a>
+</nav>
+
+<!-- IGNITION SPARTE -->
+<section id="ignition" class="section">
+    <h2>🔥 IGNITION – Starter Pakete (€497–€1.500)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">I1</span>
+            <h3>Zündfunke</h3>
+            <p class="desc">Quellcode + Python-Core</p>
+            <p class="price">€497</p>
+            <ul class="features">
+                <li>Vollständiger Quellcode</li>
+                <li>Deca Crew Agenten</li>
+                <li>Community Discord Access</li>
+            </ul>
+            <button class="btn" onclick="openPay('Zündfunke (I1)', '497')">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I2</span>
+            <h3>Glimmer</h3>
+            <p class="desc">+ Installation</p>
+            <p class="price">€750</p>
+            <ul class="features">
+                <li>Alles aus I1</li>
+                <li>Installationsguide</li>
+                <li>1h Remote-Support</li>
+            </ul>
+            <button class="btn" onclick="openPay('Glimmer (I2)', '750')">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I3</span>
+            <h3>Funke</h3>
+            <p class="desc">+ CLI-Tool</p>
+            <p class="price">€990</p>
+            <ul class="features">
+                <li>Alles aus I2</li>
+                <li>CLI-Tool b6</li>
+                <li>10 Skripte</li>
+            </ul>
+            <button class="btn" onclick="openPay('Funke (I3)', '990')">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I4</span>
+            <h3>Flamme</h3>
+            <p class="desc">+ Docker</p>
+            <p class="price">€1.200</p>
+            <ul class="features">
+                <li>Alles aus I3</li>
+                <li>Docker-Image</li>
+                <li>Lokaler Server</li>
+            </ul>
+            <button class="btn" onclick="openPay('Flamme (I4)', '1200')">Jetzt kaufen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">I5</span>
+            <h3>Inferno</h3>
+            <p class="desc">Komplettpaket + 1 Jahr</p>
+            <p class="price">€1.500</p>
+            <ul class="features">
+                <li>Alles aus I4</li>
+                <li>1 Jahr Updates</li>
+                <li>iOS-App inklusive</li>
+                <li>Premium Support</li>
+            </ul>
+            <button class="btn btn-gold" onclick="openPay('Inferno (I5)', '1500')">Jetzt kaufen</button>
+        </div>
+    </div>
+</section>
+
+<!-- MOMENTUM SPARTE -->
+<section id="momentum" class="section">
+    <h2>⚡ MOMENTUM – Coaching & Training (€1.250–€3.500)</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">M1</span>
+            <h3>Bootcamp</h3>
+            <p class="desc">4 Wochen Coaching</p>
+            <p class="price">€1.250</p>
+            <ul class="features"><li>4 Live-Sessions</li><li>Zertifikat Operator</li><li>Slack-Support</li></ul>
+            <button class="btn" onclick="openPay('Bootcamp (M1)', '1250')">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">M5</span>
+            <h3>Meister</h3>
+            <p class="desc">Alle Coachings kombiniert</p>
+            <p class="price">€3.500</p>
+            <ul class="features"><li>M1–M4 kombiniert</li><li>Zertifikat Meister</li><li>Lifetime Support</li></ul>
+            <button class="btn btn-gold" onclick="openPay('Meister (M5)', '3500')">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- ASCENT SPARTE -->
+<section id="ascent" class="section">
+    <h2>🚀 ASCENT – Professionelle Implementierung (€2.500–€29.900)</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">A5</span>
+            <h3>Gipfel</h3>
+            <p class="desc">A1–A4 + Priority Support</p>
+            <p class="price">€29.900</p>
+            <ul class="features"><li>Alle Profi-Module</li><li>24/7 Support</li><li>Dedicated Manager</li></ul>
+            <button class="btn btn-gold" onclick="openPay('Gipfel (A5)', '29900')">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- SOVEREIGN SPARTE -->
+<section id="sovereign" class="section">
+    <h2>👑 SOVEREIGN – Enterprise Lösungen (€49.900–€2.499.000/Jahr)</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">S5</span>
+            <h3>Omega Enterprise</h3>
+            <p class="desc">Unbegrenzt</p>
+            <p class="price">€2.499.000<small>/Jahr</small></p>
+            <ul class="features"><li>Alle 101.400+ Module</li><li>Omega-Point-Protokoll</li><li>SLA 100%</li></ul>
+            <button class="btn btn-gold" onclick="openContactWithSubject('Enterprise Anfrage: S5 Omega Enterprise')">Angebot anfragen</button>
+        </div>
+    </div>
+</section>
+
+<!-- OMEGA SPARTE -->
+<section id="omega" class="section">
+    <h2>💎 OMEGA – Spezial & Vermächtnis</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">B6</span>
+            <h3>B6 Legacy</h3>
+            <p class="desc">DONE-FOR-YOU Aufbau</p>
+            <p class="price">€25.000</p>
+            <ul class="features">
+                <li>Komplette Implementierung</li>
+                <li>Ω-33 + TATJT Setup</li>
+                <li>Black Six Orchestrator</li>
+                <li>90 Tage Intensive Support</li>
+            </ul>
+            <button class="btn btn-gold" onclick="openPay('B6 Legacy', '25000')">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="case-studies" class="section">
+    <h2>📋 Case Studies</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">LEGAL-TECH</span>
+            <h3>Automatisierte Fristenverwaltung</h3>
+            <p class="desc">Großkanzlei Frankfurt</p>
+            <p style="color: var(--metallic-gold); font-weight: bold; margin: 12px 0;">95% Fehlerreduktion</p>
+            <p class="desc">Manuelle Fristenverwaltung führte zu Fehlern. Mit Ω-33 Integrity Layer + TATJT Payload Engine: 40h/Woche Zeitersparnis, €180.000 jährliche Einsparungen.</p>
+        </div>
+        <div class="card">
+            <span class="badge">STRATEGIE</span>
+            <h3>Dokumentenprüfung im Compliance</h3>
+            <p class="desc">FinTech-Unternehmen Berlin</p>
+            <p style="color: var(--metallic-gold); font-weight: bold; margin: 12px 0;">99,7% Accuracy Rate</p>
+            <p class="desc">Tausende Dokumente täglich. Black Six Matrix Orchestrator mit KI-Integration: 10.000+ Dokumente/Tag automatisiert verarbeitet.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SOCIAL MEDIA & COMMUNITY HUB -->
+<section id="socials" class="section">
+    <h2>🌐 Community & Social Media Network</h2>
+    <p class="desc">Vernetze dich mit der Black Six Matrix Community und erhalte Echtzeit-Updates.</p>
+    <div class="social-grid">
+        <a href="https://github.com" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">💻</span>
+            <span class="social-name">GitHub</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">Code &amp; Repos</span>
+        </a>
+        <a href="https://discord.com" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">💬</span>
+            <span class="social-name">Discord</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">Matrix Dev Club</span>
+        </a>
+        <a href="https://telegram.org" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">✈️</span>
+            <span class="social-name">Telegram</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">Signals &amp; News</span>
+        </a>
+        <a href="https://x.com" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">🐦</span>
+            <span class="social-name">X (Twitter)</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">Enterprise Feeds</span>
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">💼</span>
+            <span class="social-name">LinkedIn</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">B2B &amp; Architekten</span>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social-card">
+            <span class="social-icon">▶️</span>
+            <span class="social-name">YouTube</span>
+            <span style="font-size:0.75rem; color:var(--text-dark);">Live Demos &amp; Tuts</span>
+        </a>
+    </div>
+</section>
+
+<!-- KONTAKT & ZAHLUNG -->
+<section id="kontakt" class="section">
+    <h2>📞 Kontakt & Bankverbindung</h2>
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3>💳 Bankverbindung & Direktdaten</h3>
+            <div class="role" style="margin-bottom: 12px;">Zahlungsempfänger</div>
+            <p><strong>Inhaber:</strong> Thomas König · Black Six</p>
+            <p style="margin: 8px 0;"><strong>IBAN:</strong> <span class="mono" id="iban-text">DE27 7002 0270 0047 0960 65</span></p>
+            <p style="margin: 8px 0;"><strong>BIC:</strong> <span class="mono">HYVEDEMMXXX</span></p>
+            <button class="btn" style="margin-top:14px;" onclick="copyToClipboard('iban-text', this)">IBAN kopieren</button>
+        </div>
+        
+        <div class="admin-card">
+            <h3>✉️ Anfragen & Support</h3>
+            <div class="role" style="margin-bottom: 12px;">Direkter Draht</div>
+            <p><strong>Email:</strong> deca.omni.allianz@gmail.com</p>
+            <p style="margin: 8px 0;"><strong>WhatsApp:</strong> 0176-46657268</p>
+            <a href="mailto:deca.omni.allianz@gmail.com?subject=Black%20Six%20Matrix%20Anfrage" class="btn btn-gold" style="margin-top:14px; text-decoration:none;">E-Mail schreiben</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="flogo">🏴‍☠️ BLACK SIX MATRIX®</div>
+    <p>© 2026 BLACK SIX MATRIX – Architekt: Thomas König</p>
+    <p style="margin-top: 10px; color: var(--text-muted);">Black Six Mitglieder: Thomas König | Tina König | Aria | Thorben | Nicolai | Lucas</p>
+    <p style="margin-top: 8px; font-size: 0.75rem; color: var(--text-dark);">Powered by Manus | DeepSeek-R1 Engine | ∞Meta Framework</p>
+</footer>
+
+<!-- AGENT STATUS MODAL -->
+<div class="modal-overlay" id="agentModal">
+    <div class="modal">
+        <button class="close" onclick="closeModal('agentModal')">×</button>
+        <h3 id="ag-title">KI Agent</h3>
+        <div style="color:var(--accent-cyan); font-weight:700; font-size:0.85rem; margin-bottom:12px;" id="ag-role">Role</div>
+        <div class="info-row"><span>Status</span><b id="ag-status" style="color:var(--green-check);">Aktiv</b></div>
+        <p id="ag-desc" style="color:var(--text-muted); font-size:0.9rem; margin: 14px 0;"></p>
+        <div style="background:rgba(0,0,0,0.5); padding:12px; border-radius:var(--radius-s); border:1px solid var(--border-subtle); margin-bottom:16px;">
+            <div style="font-size:0.75rem; color:var(--text-dark); margin-bottom:6px;">SIMULIERTER TEST-PROMPT:</div>
+            <div class="mono" style="font-size:0.8rem; color:var(--accent-cyan);" id="ag-prompt">> exec --vector-sync --agent=self</div>
+        </div>
+        <button class="btn btn-gold" onclick="triggerAgentAction()">Befehl absenden</button>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModal">
+    <div class="modal">
+        <button class="close" onclick="closeModal('payModal')">×</button>
+        <h3 id="m-title">Paket auswählen</h3>
+        <div class="m-price" id="m-price">€0</div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('pp', this)">PayPal / Kreditkarte</div>
+            <div class="tab" onclick="switchTab('bank', this)">Banküberweisung</div>
+        </div>
+        
+        <div class="tab-pane active" id="pane-pp">
+            <div id="paypal-button-container"></div>
+        </div>
+        
+        <div class="tab-pane" id="pane-bank">
+            <div class="info-row"><span>Empfänger</span><b>Thomas König · Black Six</b></div>
+            <div class="info-row"><span>IBAN</span><b class="mono" id="m-iban">DE27 7002 0270 0047 0960 65</b></div>
+            <div class="info-row"><span>Betrag</span><b id="m-amount">€0</b></div>
+            <div class="info-row"><span>Verwendungszweck</span><b id="m-ref" class="mono">B6-ORDER</b></div>
+            <button class="btn btn-gold" style="margin-top:14px" onclick="copyToClipboard('m-iban', this)">IBAN kopieren</button>
+        </div>
+    </div>
+</div>
+
+<!-- EASTER EGG MODAL -->
+<div class="modal-overlay" id="easterEgg">
+    <div class="modal" style="text-align:center;">
+        <h2 style="color:var(--metallic-gold); margin-bottom:15px;">🔮 DEEP SEEK OVERRIDE</h2>
+        <p style="color:var(--text-muted); font-size:0.95rem;">Omniscientia Modul Status: Aktiviert.</p>
+        <p style="color:var(--accent-cyan); font-size:1.8rem; font-weight:800; margin:20px 0;">ALLIANCE MULTIPLIKATOR: ×48.000</p>
+        <button class="btn" onclick="closeModal('easterEgg')">SCHLIESSEN</button>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(elementId, btn) {
+    const text = document.getElementById(elementId).innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = '✓ Kopiert!';
+        setTimeout(() => btn.innerText = orig, 1500);
+    });
+}
+
+function openPay(packageName, amount) {
+    document.getElementById('m-title').innerText = packageName;
+    const formatted = '€' + Number(amount).toLocaleString('de-DE');
+    document.getElementById('m-price').innerText = formatted;
+    document.getElementById('m-amount').innerText = formatted;
+    document.getElementById('m-ref').innerText = 'BLACKSIX-' + packageName.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    
+    document.getElementById('payModal').classList.add('active');
+    renderPayPalButton(packageName, amount);
+}
+
+function openContactWithSubject(subject) {
+    window.location.href = `mailto:deca.omni.allianz@gmail.com?subject=${encodeURIComponent(subject)}`;
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+function switchTab(type, element) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    
+    element.classList.add('active');
+    document.getElementById(type === 'pp' ? 'pane-pp' : 'pane-bank').classList.add('active');
+}
+
+function renderPayPalButton(name, amount) {
+    const container = document.getElementById('paypal-button-container');
+    container.innerHTML = '';
+    
+    if (typeof paypal === 'undefined') {
+        container.innerHTML = '<p style="color:var(--text-dark); font-size:0.85rem;">PayPal SDK wird geladen...</p>';
+        return;
+    }
+    
+    paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'rect' },
+        createOrder: (data, actions) => actions.order.create({
+            purchase_units: [{
+                description: 'Black Six Matrix – ' + name,
+                amount: { value: amount.toString() }
+            }]
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(details => {
+            closeModal('payModal');
+            alert(`Kauf erfolgreich für ${name}! Bestätigung geht an ${details.payer.email_address}.`);
+        })
+    }).render('#paypal-button-container');
+}
+
+function openAgentModal(name, role, status, desc) {
+    document.getElementById('ag-title').innerText = name;
+    document.getElementById('ag-role').innerText = role;
+    document.getElementById('ag-status').innerText = status;
+    document.getElementById('ag-desc').innerText = desc;
+    document.getElementById('ag-prompt').innerText = `> b6_cli --agent="${name.toLowerCase()}" --exec-pipeline`;
+    document.getElementById('agentModal').classList.add('active');
+}
+
+function triggerAgentAction() {
+    alert('Befehl wurde an die Black Six Matrix Pipeline übermittelt.');
+    closeModal('agentModal');
+}
+
+let sigilClickCounter = 0;
+document.getElementById('header-sigil').addEventListener('click', () => {
+    sigilClickCounter++;
+    if (sigilClickCounter >= 3) {
+        document.getElementById('easterEgg').classList.add('active');
+        sigilClickCounter = 0;
+    }
+});
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Black Six Matrix – Enterprise Level Platform. Fehlertolerante Governance-, Audit- und Code-Execution-Systeme auf Zero-Trust-Basis. Made in Germany.">
