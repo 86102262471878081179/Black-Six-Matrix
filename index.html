@@ -110,6 +110,63 @@
     </style>
 </head>
 <body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Six Matrix – Technische Plattform</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #111118;
+            --border: #2a2a35;
+            --accent: #c0c0c0;
+            --text: #e0e0e0;
+            --text-dim: #888;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+        }
+        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 2.8rem; color: var(--accent); letter-spacing: 4px; }
+        .section { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+        .card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            padding: 24px; 
+            margin-bottom: 20px; 
+        }
+        .status { color: #00cc66; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BLACK SIX MATRIX</h1>
+        <p>Technische Plattform – Version Ω</p>
+    </header>
+
+    <div class="section">
+        <h2>System Status</h2>
+        <div class="card">
+            <p><strong>Core:</strong> Go + Rust + Zig aktiv</p>
+            <p><strong>Observability:</strong> Prometheus, Jaeger, Grafana, eBPF</p>
+            <p><strong>Deployment:</strong> Kubernetes + Helm</p>
+            <p class="status">Status: Produktionsbereit • Stabil • Erweitert</p>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding:40px; color:var(--text-dim);">
+        © Black Six Matrix – Technische Implementierung<br>
+        Operator: Thomas &amp; Tina König
+    </footer>
+</body>
+</html>
 
 <!-- ========================================================== -->
 <!-- ========== MATA SECRET MODULE – UNSICHTBAR ========== -->
@@ -1612,33 +1669,3 @@ import (
         style="background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.2); color:#d4a574; padding:8px 20px; border-radius:30px; cursor:pointer; font-size:0.8rem;">
     📦 25 STUFEN – INHALTE
 </button>
-/<go>BLACK_SIX_OMNI_CORE.py// ============================================================
-// BLACK SIX MATRIX vFINAL – GO CORE (1:1)
-// ============================================================
-// Enthält:
-// - OmniHyperGalaxyKernel
-// - TeslaAutonomySubModule (CAN, MPC, BlackBox, ISOBUS, RTK-GPS, PREEMPT_RT)
-// - BlackSix50SparteRules (alle 50 Regeln)
-// - HyperVaultKernel + PilotGatekeeper
-// - RETRO_SEC Integration (Atari Root of Trust)
-// - Deterministische CAN-Loop
-// ============================================================
-
-package main
-
-import (
-	"context"
-	"crypto/ed25519"
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"math"
-	"sync"
-	"time"
-)
-
-</go>
-    
