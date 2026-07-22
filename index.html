@@ -464,115 +464,76 @@ document.getElementById('mata-sigil').addEventListener('click', () => {
     }
 });
 </script>
-</body>// matrix/modules/social_media.go
-package modules
+</body>// path: matrix/platform/social_engine.go
+package platform
 
 import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 )
 
-// SocialPlatform defines supported platforms
-type SocialPlatform string
-
-const (
-	PlatformLinkedIn SocialPlatform = "LINKEDIN"
-	PlatformX        SocialPlatform = "X"
-	PlatformGitHub   SocialPlatform = "GITHUB"
-)
-
-// ContentPayload defines input for content generation
-type ContentPayload struct {
-	ClusterID      string         `json:"cluster_id"`
-	AgentID        string         `json:"agent_id"`
-	Platform       SocialPlatform `json:"platform"`
-	Topic          string         `json:"topic"`
-	RawDetails     string         `json:"raw_details"`
-	MaxLen         int            `json:"max_len"`
-	TargetAudience string         `json:"target_audience"`
+// InternalBodyPayload defines local-only post composition
+type InternalBodyPayload struct {
+	ClusterID   string             `json:"cluster_id"`
+	AgentID     string             `json:"agent_id"`
+	Target      DistributionTarget `json:"target"`
+	Topic       string             `json:"topic"`
+	RawContent  string             `json:"raw_content"`
+	SubDetails  []string           `json:"sub_details"`
+	Hashtags    []string           `json:"hashtags"`
 }
 
-// GeneratedContent represents the formatted output
-type GeneratedContent struct {
-	Platform       SocialPlatform `json:"platform"`
-	Headline       string         `json:"headline"`
-	BodyText       string         `json:"body_text"`
-	Hashtags       []string       `json:"hashtags"`
-	CharacterCount int            `json:"character_count"`
-	Timestamp      int64          `json:"timestamp"`
+// FormattedBodyResult contains assembled text components
+type FormattedBodyResult struct {
+	Header      string `json:"header"`
+	Body        string `json:"body"`
+	Footer      string `json:"footer"`
+	FullPayload string `json:"full_payload"`
+	CharCount   int    `json:"char_count"`
 }
 
-// SocialMediaProcessor handles deterministic social media content generation
-type SocialMediaProcessor struct {
-	mu          sync.RWMutex
-	isActive    bool
-	executionCt int64
-}
-
-// NewSocialMediaProcessor creates a new processor instance
-func NewSocialMediaProcessor() *SocialMediaProcessor {
-	return &SocialMediaProcessor{
-		isActive:    true,
-		executionCt: 0,
-	}
-}
-
-// GenerateText generates platform-optimized social media content
-func (p *SocialMediaProcessor) GenerateText(ctx context.Context, payload *ContentPayload) (*GeneratedContent, error) {
-	if payload == nil {
-		return nil, errors.New("payload cannot be nil")
+// BuildInternalBody constructs body text locally while blocking public API delivery
+func (se *SocialEngine) BuildInternalBody(ctx context.Context, p *InternalBodyPayload) (*FormattedBodyResult, error) {
+	if p == nil {
+		return nil, errors.New("err: internal body payload cannot be nil")
 	}
 
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-
-	p.mu.Lock()
-	p.executionCt++
-	p.mu.Unlock()
-
-	tags := []string{"#BlackSixMatrix", "#Automation", "#DecaCrew", "#GoLang"}
-
-	var headline, body string
-
-	switch payload.Platform {
-	case PlatformLinkedIn:
-		headline = fmt.Sprintf("🚀 Matrix Cluster %s – %s", payload.ClusterID, payload.Topic)
-		body = fmt.Sprintf("%s\n\n%s\n\nAgent: %s | Audience: %s", headline, payload.RawDetails, payload.AgentID, payload.TargetAudience)
-	case PlatformX:
-		headline = fmt.Sprintf("⚡ %s", payload.Topic)
-		body = fmt.Sprintf("%s – %s [Node %s]", headline, payload.RawDetails, payload.ClusterID)
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
 	default:
-		headline = fmt.Sprintf("📌 %s", payload.Topic)
-		body = fmt.Sprintf("%s\n%s", headline, payload.RawDetails)
 	}
 
-	// Apply length limit if specified
-	if payload.MaxLen > 0 && len(body) > payload.MaxLen {
-		body = body[:payload.MaxLen]
+	se.mu.Lock()
+	defer se.mu.Unlock()
+
+	var subText string
+	if len(p.SubDetails) > 0 {
+		subText = "\n\nKey Points:\n• " + strings.Join(p.SubDetails, "\n• ")
 	}
 
-	return &GeneratedContent{
-		Platform:       payload.Platform,
-		Headline:       headline,
-		BodyText:       body,
-		Hashtags:       tags,
-		CharacterCount: len(body),
-		Timestamp:      time.Now().Unix(),
+	header := fmt.Sprintf("[%s | Agent: %s]", p.ClusterID, p.AgentID)
+	body := fmt.Sprintf("%s\n\n%s%s", p.Topic, p.RawContent, subText)
+	
+	tags := "#BlackSixMatrix #InternalOnly"
+	if len(p.Hashtags) > 0 {
+		tags = strings.Join(p.Hashtags, " ") + " " + tags
+	}
+	footer := fmt.Sprintf("%s\n[STATUS: NOT_OFFERED_AS_PUBLIC_PLATFORM]", tags)
+
+	full := fmt.Sprintf("%s\n\n%s\n\n%s", header, body, footer)
+
+	return &FormattedBodyResult{
+		Header:      header,
+		Body:        body,
+		Footer:      footer,
+		FullPayload: full,
+		CharCount:   len(full),
+		Timestamp:   time.Now().Unix(),
 	}, nil
 }
 
-// GetStats returns processor statistics
-func (p *SocialMediaProcessor) GetStats() map[string]interface{} {
-	p.mu.RLock()
-	defer p.mu.RUnlock()
-	return map[string]interface{}{
-		"active":      p.isActive,
-		"executions":  p.executionCt,
-		"last_active": time.Now(),
-	}
-}
-</html>
