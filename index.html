@@ -556,4 +556,245 @@ function renderPayPal(name,amount){
 }
 </script>
 </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BLACK SIX MATRIX – Enterprise Platform</title>
+<meta name="description" content="Black Six Matrix – Enterprise Governance, Audit & Execution Platform. PayPal-QR + Bankverbindung eingebettet.">
+
+<!-- PayPal SDK: client-id ersetzen -->
+<script src="https://www.paypal.com/sdk/js?client-id=DEINE_PAYPAL_CLIENT_ID&currency=EUR&locale=de_DE"></script>
+
+<style>
+  :root{
+    --bg:#0a0a0f; --card:#0f0f16aa; --gold:#d4af37; --muted:#a8a8b8; --radius:14px;
+    --accent:#b8860b; --text:#e8e8e8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .container{max-width:1200px;margin:0 auto;padding:28px}
+  header{text-align:center;padding:48px 0}
+  header h1{font-size:2.4rem;margin:6px 0;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  header p{color:var(--muted)}
+  .hero-cta{margin-top:18px;display:flex;gap:12px;justify-content:center}
+  a.btn{padding:10px 18px;border-radius:999px;background:var(--gold);color:#080808;text-decoration:none;font-weight:800}
+  nav.pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+  nav.pills a{background:rgba(255,255,255,0.02);padding:8px 14px;border-radius:999px;color:var(--muted);text-decoration:none;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{background:var(--card);padding:22px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.04)}
+  .card h3{margin-top:0}
+  .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(212,175,55,0.08);color:var(--gold);font-weight:800;margin-bottom:12px}
+  .price{color:var(--gold);font-weight:900;font-size:1.6rem}
+  ul.features{color:var(--muted);margin:12px 0 18px;padding-left:18px}
+  .btn-primary{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--gold);color:#080808;text-decoration:none;font-weight:800}
+  .pay-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:22px}
+  .pay-box{background:rgba(255,255,255,0.02);padding:16px;border-radius:12px}
+  .field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03);font-size:0.95rem}
+  .field:last-child{border-bottom:none}
+  .mono{font-family:monospace}
+  .copy{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:8px;color:var(--gold);cursor:pointer}
+  footer{margin-top:36px;padding:28px 0;border-top:1px solid rgba(255,255,255,0.03);color:var(--muted);font-size:0.9rem;text-align:center}
+  /* small modal for QR view */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:90}
+  .modal.open{display:flex}
+  .modal .inner{background:#0b0b0f;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)}
+  img.responsive{max-width:100%;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+  /* Impressum/Privacy */
+  .legal{display:grid;grid-template-columns:1fr;gap:18px;margin-top:28px}
+  .legal .box{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px}
+  @media (max-width:700px){header h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div style="color:var(--gold);font-weight:800">Enterprise · DSGVO · Made in Germany</div>
+    <h1>Black Six Matrix</h1>
+    <p>Byzantinisch-fehlertolerante Governance-, Audit- und Execution-Plattform — Pakete, PayPal-QR und Bankverbindung integriert.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#pakete">Pakete ansehen</a>
+      <a class="btn" href="#kontakt" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)">Kontakt / Demo</a>
+    </div>
+  </header>
+
+  <nav class="pills" aria-label="Sparten">
+    <a href="#ignition">Ignition</a><a href="#momentum">Momentum</a><a href="#ascent">Ascent</a><a href="#sovereign">Sovereign</a><a href="#omega">Omega</a>
+  </nav>
+
+  <!-- Pakete (kurz) -->
+  <section id="pakete">
+    <div class="grid">
+      <div class="card">
+        <span class="badge">I1</span>
+        <h3>Zündfunke</h3>
+        <p class="desc">Quellcode + Python-Core</p>
+        <div class="price">€497</div>
+        <ul class="features"><li>Vollständiger Quellcode</li><li>Deca Crew Agenten</li><li>Community Discord</li></ul>
+        <a class="btn-primary" href="#" onclick="openPayModal('Zündfunke',497);return false">Kaufen (PayPal/SEPA)</a>
+      </div>
+      <div class="card">
+        <span class="badge">I5</span>
+        <h3>Inferno (Featured)</h3>
+        <p class="desc">Komplettpaket + 1 Jahr Updates</p>
+        <div class="price">€1.500</div>
+        <ul class="features"><li>Alles aus I4</li><li>iOS-App</li><li>Premium Support</li></ul>
+        <a class="btn-primary" href="#" onclick="openPayModal('Inferno',1500);return false">Kaufen</a>
+      </div>
+      <div class="card">
+        <span class="badge">S1</span>
+        <h3>Enterprise S</h3>
+        <p class="desc">Bis 50 Nodes · Jahreslizenz</p>
+        <div class="price">€49.900 <small style="color:var(--muted);font-weight:600">/Jahr</small></div>
+        <ul class="features"><li>Vollzugriff</li><li>8/5 Support</li><li>Basis-Konfiguration</li></ul>
+        <a class="btn-primary" href="#kontakt">Anfrage</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zahlungs- & Kontaktinfo -->
+  <section id="kontakt" style="margin-top:28px">
+    <h2 style="margin-bottom:12px">Kontakt & Zahlung</h2>
+    <p style="color:var(--muted)">Nutze PayPal-QR (mobil scannen) oder Überweisung (IBAN/BIC unten). Bei Enterprise-Angeboten bitte Anfrage per E‑Mail.</p>
+
+    <div class="pay-strip">
+      <!-- PAYPAL QR -->
+      <div class="pay-box card">
+        <h4 style="margin-top:0">PayPal QR</h4>
+        <p style="color:var(--muted)">Scanne den QR-Code mit der PayPal-App.</p>
+        <!-- Bild: assets/paypal-qr.jpg -->
+        <img src="assets/paypal-qr.jpg" alt="PayPal QR von Thomas König" class="responsive" style="cursor:pointer" onclick="showModal('assets/paypal-qr.jpg')">
+        <div style="margin-top:10px;font-weight:700">Scannen. Zahlen. Fertig!</div>
+        <div style="margin-top:8px;font-size:0.9rem;color:var(--muted)">Hinweis: Der QR ist ein Shortcut zu PayPal; für Integration in den Checkout empfehlen wir zusätzlich die Smart Buttons (oben).</div>
+      </div>
+
+      <!-- BANK -->
+      <div class="pay-box card">
+        <h4 style="margin-top:0">Bankverbindung (SEPA) — Rechnung</h4>
+        <div class="field"><div>Kontoinhaber</div><div class="mono">Thomas König · Black Six</div></div>
+        <div class="field"><div>IBAN</div><div class="mono" id="iban">DE27 7002 0270 0047 0960 65</div></div>
+        <div class="field"><div>BIC</div><div class="mono">HYVEDEMMXXX</div></div>
+        <div style="margin-top:10px">
+          <button class="copy" onclick="copyText('iban', this)">IBAN kopieren</button>
+        </div>
+        <p style="margin-top:10px;color:var(--muted)">Bitte Verwendungszweck: Paketname + Ihr Name. Rechnung wird per E-Mail zugesandt.</p>
+        <!-- small photo of the bank card / IBAN for visual trust -->
+        <img src="assets/iban.jpg" alt="IBAN Foto" class="responsive" style="margin-top:12px;border-radius:8px" onclick="showModal('assets/iban.jpg')">
+      </div>
+
+      <!-- Kontakt -->
+      <div class="pay-box card">
+        <h4 style="margin-top:0">Direktkontakt</h4>
+        <div class="field"><div>E‑Mail</div><div class="mono">deca.omni.allianz@gmail.com</div></div>
+        <div class="field"><div>WhatsApp</div><div class="mono">0176 46657268</div></div>
+        <div style="margin-top:12px">
+          <a class="btn-primary" href="mailto:deca.omni.allianz@gmail.com?subject=Demo%20Black%20Six%20Matrix">Demo anfragen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impressum & Datenschutz -->
+  <section class="legal" aria-labelledby="legal-heading">
+    <div class="box card">
+      <h3 id="legal-heading">Impressum</h3>
+      <p><strong>Angaben gemäß § 5 TMG / Anbieterkennzeichnung:</strong></p>
+      <p>
+        Name: Thomas König<br>
+        Geschäftsname: Black Six Matrix<br>
+        E‑Mail: <a href="mailto:deca.omni.allianz@gmail.com">deca.omni.allianz@gmail.com</a><br>
+        Telefon: 0176 46657268<br>
+        Anschrift: [Bitte hier vollständige postalische Geschäftsadresse eintragen] <br>
+        Rechtsform: [Bitte Rechtsform eintragen; z. B. Einzelunternehmen / GmbH / UG]<br>
+        Umsatzsteuer‑ID: [falls vorhanden, bitte eintragen]
+      </p>
+      <p><strong>Haftungshinweis:</strong> Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+    </div>
+
+    <div class="box card">
+      <h3>Datenschutzerklärung (Kurzfassung)</h3>
+      <p>Wir nehmen Datenschutz ernst. Nachfolgend die wichtigsten Punkte in Kürze:</p>
+      <ul>
+        <li>Verantwortlich: Thomas König (Kontaktdaten oben).</li>
+        <li>Verarbeitung: Wir verarbeiten Kontaktdaten (E‑Mail, Telefon) ausschließlich zur Beantwortung von Anfragen und Vertragsabwicklung.</li>
+        <li>Rechtsgrundlage: Einwilligung / Vertragserfüllung / berechtigtes Interesse.</li>
+        <li>Datenübermittlung: Zahlungen werden über PayPal oder Bank (SEPA) abgewickelt. PayPal als Drittanbieter verarbeitet Zahlungsdaten – siehe PayPal‑Datenschutzhinweise.</li>
+        <li>Speicherdauer: Daten werden nur so lange gespeichert wie nötig (gesetzliche Aufbewahrungsfristen für Rechnungen, sonst auf Widerruf).</li>
+      </ul>
+      <p>Eine ausführliche Datenschutzerklärung (inkl. Betroffenenrechte, Auftragsverarbeitung, Cookies) stellen wir auf Anfrage oder als eigene Seite /pdf zur Verfügung.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-weight:800;margin-bottom:6px">© 2026 BLACK SIX MATRIX · Architekt: Thomas König</div>
+    <div style="color:var(--muted)">Team: Thomas König · Tina König · Aria · Thorben · Nicolai · Lucas</div>
+  </footer>
+</div>
+
+<!-- simple modal to show images -->
+<div id="modal" class="modal" onclick="hideModal()">
+  <div class="inner" onclick="event.stopPropagation()">
+    <button style="float:right;background:none;border:none;color:#ddd;font-size:18px;cursor:pointer" onclick="hideModal()">✕</button>
+    <img id="modalImg" src="" alt="" style="max-width:72vw;max-height:80vh;border-radius:8px;display:block">
+  </div>
+</div>
+
+<script>
+  function showModal(src){
+    document.getElementById('modalImg').src = src;
+    document.getElementById('modal').classList.add('open');
+  }
+  function hideModal(){
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('modalImg').src = '';
+  }
+
+  function copyText(id, btn){
+    const t = document.getElementById(id).innerText.trim();
+    navigator.clipboard.writeText(t).then(()=> {
+      const original = btn.innerText;
+      btn.innerText = '✓ Kopiert';
+      setTimeout(()=> btn.innerText = original, 1400);
+    });
+  }
+
+  /* Minimaler Pay-Modal-Flow: öffnet die PayPal-Buttons in einem kleinen Fenster */
+  function openPayModal(name, amount){
+    // einfache Bestätigung – öffnet PayPal-Buttons in neuem Fenster oder Modal
+    // Für volle Integration: Smart Buttons in einem Modal oder Checkout-Flow rendern.
+    const want = confirm(name + ' — Betrag: €' + amount + '\n\nZahlung per PayPal jetzt starten?');
+    if(!want) return;
+    // öffne PayPal Checkout in neuem Fenster (Empfehlung: richte Smart Buttons im Modal ein)
+    // fallback: öffne PayPal-Zahlungsseite (hier: Wunschweise euer Backend/PayPal-Integration)
+    alert('Bitte die PayPal-Schaltfläche in der Seite verwenden. Für Live-Checkout: Smart Buttons einbinden (client-id oben).');
+  }
+
+  /* small helper: rendering PayPal Smart Buttons example (you can implement inside a modal) */
+  function renderPayPalSample(containerId, name, amount){
+    if(typeof paypal === 'undefined'){
+      console.warn('PayPal SDK nicht geladen (client-id fehlt).');
+      return;
+    }
+    paypal.Buttons({
+      style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
+      createOrder: function(data, actions){
+        return actions.order.create({
+          purchase_units: [{
+            description: name,
+            amount: { value: String(amount) }
+          }]
+        });
+      },
+      onApprove: function(data, actions){
+        return actions.order.capture().then(function(details){
+          alert('Zahlung erfolgreich. Danke, ' + (details.payer.name && details.payer.name.given_name ? details.payer.name.given_name : 'Kunde') + '!');
+        });
+      }
+    }).render('#' + containerId);
+  }
+</script>
+</body>
+</html>
 </html>
