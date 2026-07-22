@@ -1,6 +1,264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Black Six Matrix – Enterprise Level Platform. Fehlertolerante Governance-, Audit- und Code-Execution-Systeme auf Zero-Trust-Basis. Made in Germany.">
+    <meta name="keywords" content="Black Six, Matrix, Forensik, KI, Zero-Trust, Audit, Recht, Legal-Tech, Enterprise, Deutschland">
+    <meta name="author" content="Thomas König">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Black Six Matrix® – Deep Seek Edition">
+    <meta property="og:description" content="Forensisches Betriebssystem mit integrierter KI. 101.400+ Module. 50 Cluster. Zero-Trust. Made in Germany.">
+    <meta property="og:type" content="website">
+    <title>Black Six Matrix® – Deep Seek Edition</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=ATVcQHq4ldG5YHE_Q3DSU8PqPG-k0O_jVQFfA9TAM9t1-alkVLpKLrMcmf7E-NZOL9tQ8x7Ff__NcMPo&currency=EUR&locale=de_DE"></script>
 
-## 📚Dokumentation
+    <style>
+        :root {
+            --bg: #06060A; --surface: #0C0C12; --card: rgba(12,12,18,.75); --card-hover: rgba(18,18,25,.9);
+            --border: rgba(255,255,255,.06); --border-active: rgba(0,242,254,.15);
+            --text: #E0E6ED; --text-secondary: #8898A8; --text-tertiary: #6C7A8A;
+            --red: #FF2A4B; --red-bg: rgba(255,42,75,.08);
+            --gold: #F0B90B; --gold-bg: rgba(240,185,11,.06);
+            --cyan: #00F2FE; --cyan-bg: rgba(0,242,254,.06);
+            --green: #3FBF7F;
+            --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px;
+            --shadow: 0 12px 30px rgba(0,0,0,.6), 0 0 0 1px inset rgba(255,255,255,.04);
+        }
+        * { margin:0;padding:0;box-sizing:border-box }
+        html { scroll-behavior:smooth }
+        body {
+            background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif;
+            line-height:1.65; min-height:100vh; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+            background-image:radial-gradient(circle at 50% -10%,rgba(255,42,75,.06),transparent 45%),radial-gradient(circle at 90% 10%,rgba(0,242,254,.04),transparent 40%);
+        }
+        .mono { font-family:'JetBrains Mono',monospace }
+        a { color:inherit;text-decoration:none } a:hover { color:var(--cyan) }
+
+        .topbar {
+            position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+            padding:14px 24px;background:rgba(6,6,10,.75);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);
+        }
+        .topbar .brand { font-weight:900;letter-spacing:2px;font-size:.95rem;background:linear-gradient(135deg,var(--text),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent }
+        .topbar nav { display:flex;gap:22px;font-size:.82rem;font-weight:600;color:var(--text-secondary) }
+        .topbar nav a { transition:.2s } .topbar nav a:hover { color:var(--cyan) }
+        .topbar .cta { padding:9px 20px;border-radius:30px;background:var(--red);color:#fff;font-weight:800;font-size:.8rem;text-decoration:none;transition:.2s }
+        .topbar .cta:hover { background:#E02543;transform:translateY(-1px) }
+        @media(max-width:760px){.topbar nav{display:none}}
+
+        header { text-align:center;padding:80px 20px 50px;position:relative;overflow:hidden }
+        header .bg-glow { position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 50% 30%,rgba(0,242,254,.08),transparent 60%),radial-gradient(circle at 80% 50%,rgba(255,42,75,.06),transparent 50%) }
+        header .inner { position:relative;z-index:1 }
+
+        .terminal-banner {
+            display:inline-block;text-align:left;margin-bottom:30px;padding:20px 30px;
+            background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--radius-md);
+            font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.3;
+            color:var(--cyan);overflow-x:auto;max-width:95%;box-shadow:0 0 40px rgba(0,242,254,.1);
+        }
+        .terminal-banner pre { margin:0 }
+        .eyebrow { display:inline-block;padding:7px 18px;border:1px solid var(--border-active);border-radius:30px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);background:var(--cyan-bg);margin-bottom:26px;font-weight:700 }
+        h1 { font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-transform:uppercase;margin-bottom:18px;line-height:1.05;background:linear-gradient(135deg,var(--text) 0%,var(--red) 60%,#B32039 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(255,42,75,.25)) }
+        .subtitle { color:var(--text-secondary);font-size:1.18rem;max-width:680px;margin:0 auto 14px;font-weight:300 }
+        .desc-text { color:var(--text-tertiary);font-size:.95rem;max-width:600px;margin:0 auto 30px;line-height:1.7 }
+        .hero-btns { margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap }
+        .hero-btns a { padding:15px 34px;border-radius:var(--radius-sm);font-weight:700;text-decoration:none;transition:.25s;font-size:.92rem }
+        .btn-primary { background:var(--red);color:#fff } .btn-primary:hover { background:#E02543;transform:translateY(-3px);box-shadow:0 14px 30px rgba(255,42,75,.25) }
+        .btn-ghost { border:1px solid var(--border-active);color:var(--text) } .btn-ghost:hover { background:var(--cyan-bg);transform:translateY(-3px);border-color:var(--cyan) }
+
+        .trust { display:flex;flex-wrap:wrap;justify-content:center;gap:14px 34px;padding:26px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:40px;color:var(--text-secondary);font-size:.82rem;font-weight:600 }
+        .trust span { display:flex;align-items:center;gap:8px } .trust b { color:var(--cyan) }
+
+        .stats { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;max-width:1100px;margin:60px auto;padding:0 20px }
+        .stat { text-align:center;padding:28px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);backdrop-filter:blur(12px) }
+        .stat .num { font-size:2.2rem;font-weight:900;color:var(--cyan);letter-spacing:-1px } .stat .lbl { color:var(--text-secondary);font-size:.82rem;margin-top:6px }
+
+        .section { max-width:1500px;margin:0 auto 80px;padding:0 20px }
+        .section-head { text-align:center;margin-bottom:44px }
+        .section-head .kicker { color:var(--cyan);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:700 }
+        .section-head h2 { font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;margin:10px 0 }
+        .section-head p { color:var(--text-secondary);max-width:640px;margin:0 auto }
+
+        .team-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px }
+        .admin-card { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);padding:26px;backdrop-filter:blur(12px);transition:.3s }
+        .admin-card:hover { border-color:var(--border-active);transform:translateY(-4px) }
+        .admin-card h3 { font-size:1.2rem;margin-bottom:4px } .admin-card .role { color:var(--gold);font-weight:700;font-size:.78rem;letter-spacing:1px;text-transform:uppercase }
+        .admin-card p { color:var(--text-secondary);font-size:.9rem;margin-top:12px }
+
+        .sparten-nav { display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:0 auto 50px;max-width:1200px;padding:22px;background:rgba(10,10,15,.5);border-radius:var(--radius-md);border:1px solid var(--border);backdrop-filter:blur(10px) }
+        .sparten-nav a { padding:11px 24px;border-radius:40px;text-decoration:none;color:var(--text);font-weight:700;font-size:.82rem;letter-spacing:.5px;transition:.3s;border:1px solid var(--border);background:var(--card) }
+        .sparten-nav a:hover { transform:translateY(-3px);border-color:var(--red);color:var(--red);box-shadow:0 10px 22px rgba(0,0,0,.4) }
+
+        .grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px }
+        .card { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:30px;display:flex;flex-direction:column;backdrop-filter:blur(16px);box-shadow:var(--shadow);transition:.3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden }
+        .card:hover { border-color:var(--border-active);transform:translateY(-7px);background:var(--card-hover) }
+        .card.featured { border:1px solid var(--red);background:linear-gradient(180deg,var(--red-bg),var(--surface)) }
+        .card.featured::after { content:"EMPFOHLEN";position:absolute;top:16px;right:-34px;transform:rotate(45deg);background:var(--red);color:#fff;font-size:.6rem;font-weight:900;letter-spacing:1px;padding:5px 40px }
+        .badge { padding:6px 15px;border-radius:20px;font-size:.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;display:inline-block;margin-bottom:16px;width:fit-content;border:1px solid var(--red);color:var(--red);background:var(--red-bg) }
+        .card h3 { font-size:1.3rem;font-weight:700;margin-bottom:6px } .desc { color:var(--text-secondary);font-size:.9rem;margin-bottom:16px }
+        .price { font-size:2.2rem;color:var(--text);font-weight:900;margin:10px 0;letter-spacing:-1px } .price small { font-size:.85rem;color:var(--text-tertiary);font-weight:400 }
+        .features { list-style:none;margin:14px 0 24px;font-size:.86rem;color:var(--text-secondary);flex-grow:1 }
+        .features li { padding:6px 0 6px 26px;position:relative } .features li::before { content:"✓";position:absolute;left:0;color:var(--green);font-weight:bold }
+        .btn { background:var(--red);color:#fff;padding:14px 20px;border:none;border-radius:var(--radius-sm);font-size:.9rem;font-weight:800;cursor:pointer;width:100%;transition:.2s;letter-spacing:.5px }
+        .btn:hover { background:#E02543;transform:scale(1.02) } .btn.silver { background:var(--gold);color:#0a0a0f } .btn.silver:hover { background:#E6C964 }
+
+        @keyframes omegaPulse { 0%{box-shadow:0 0 10px rgba(0,242,254,.3);border-color:rgba(0,242,254,.3)} 50%{box-shadow:0 0 30px rgba(0,242,254,.7);border-color:rgba(0,242,254,.7)} 100%{box-shadow:0 0 10px rgba(0,242,254,.3);border-color:rgba(0,242,254,.3)} }
+        .card.omega-stein { animation:omegaPulse 2.5s infinite;border-width:3px;background:linear-gradient(135deg,rgba(0,242,254,.08) 0%,rgba(12,12,18,.9) 100%) }
+        .card.omega-stein h3,.card.omega-stein .price { color:var(--cyan) } .omega-badge { background:var(--cyan)!important;color:#000!important;border-color:var(--cyan)!important }
+
+        .timeline { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px }
+        .step { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);padding:26px;position:relative }
+        .step .n { width:40px;height:40px;border-radius:50%;background:var(--red-bg);border:1px solid var(--red);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:14px }
+        .step h4 { font-size:1.05rem;margin-bottom:8px } .step p { color:var(--text-secondary);font-size:.86rem }
+
+        .accordion-item { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;overflow:hidden;backdrop-filter:blur(10px) }
+        .accordion-header { padding:20px 26px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:1.02rem }
+        .accordion-header::after { content:"+";font-size:1.5rem;color:var(--red);transition:.3s } .accordion-item.active .accordion-header::after { transform:rotate(45deg) }
+        .accordion-body { padding:0 26px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;color:var(--text-secondary);font-size:.93rem }
+        .accordion-item.active .accordion-body { max-height:600px;padding:0 26px 22px }
+        .cluster-desc { font-weight:600;color:var(--cyan);margin-bottom:8px } .cluster-examples { color:var(--text-tertiary);font-size:.85rem }
+
+        .pay-strip { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:1100px;margin:0 auto }
+        .pay-box { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-md);padding:26px }
+        .pay-box h4 { margin-bottom:14px;display:flex;align-items:center;gap:10px }
+        .field { display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border);font-size:.88rem }
+        .field:last-child { border:none } .field .k { color:var(--text-tertiary) } .field .v { color:var(--text);font-weight:600 }
+        .copy { cursor:pointer;color:var(--cyan);border:1px solid var(--border-active);background:transparent;border-radius:6px;padding:4px 10px;font-size:.72rem;font-weight:700;transition:.2s } .copy:hover { background:var(--cyan-bg) }
+
+        .payment-images { margin-top:40px;text-align:center } .payment-images h3 { margin-bottom:24px;color:var(--text);font-size:1.2rem }
+        .payment-images .img-grid { display:flex;flex-wrap:wrap;justify-content:center;gap:30px;align-items:center }
+        .payment-images .img-box { max-width:280px } .payment-images .img-box h4 { color:var(--red);font-size:.9rem;margin-bottom:12px }
+        .payment-images .img-box img { max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,.4) }
+        .payment-images .img-box .caption { color:var(--text-secondary);font-size:.8rem;margin-top:8px }
+
+        .social-section { max-width:1100px;margin:40px auto;padding:30px 20px;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border) }
+        .social-section h2 { color:var(--cyan);font-size:1.3rem;margin-bottom:20px;font-weight:800;letter-spacing:1px }
+        .social-grid { display:flex;flex-wrap:wrap;justify-content:center;gap:14px }
+        .social-btn { display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:40px;text-decoration:none;font-weight:700;font-size:.85rem;transition:.25s;border:1px solid var(--border);background:var(--card);color:var(--text);letter-spacing:.3px }
+        .social-btn:hover { transform:translateY(-3px);border-color:var(--red);color:var(--red);box-shadow:0 8px 20px rgba(0,0,0,.4) }
+        .social-btn.fb:hover { border-color:#1877F2;color:#1877F2 } .social-btn.ig:hover { border-color:#E4405F;color:#E4405F }
+        .social-btn.dc:hover { border-color:#5865F2;color:#5865F2 } .social-btn.tg:hover { border-color:#26A5E4;color:#26A5E4 }
+        .social-btn.tt:hover { border-color:#FF0050;color:#FF0050 } .social-btn.sc:hover { border-color:#FFFC00;color:#FFFC00 }
+        .social-btn.wb:hover { border-color:#00AEEF;color:#00AEEF } .social-btn.ot:hover { border-color:var(--gold);color:var(--gold) }
+
+        .legal-section { max-width:860px;margin:0 auto 40px;padding:30px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);backdrop-filter:blur(10px) }
+        .legal-section h2 { font-size:1.5rem;font-weight:800;margin-bottom:20px;color:var(--cyan);border:none;padding:0;display:block }
+        .legal-section h3 { font-size:1.1rem;margin:22px 0 10px;color:var(--text) }
+        .legal-section p,.legal-section li { color:var(--text-secondary);font-size:.9rem;line-height:1.7 }
+        .legal-section ul { margin:8px 0;padding-left:22px } .legal-section a { color:var(--cyan) } .legal-section a:hover { text-decoration:underline }
+        #omega-agb.legal-section h2 { color:var(--red) }
+
+        footer { text-align:center;padding:70px 20px 50px;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:.85rem }
+        footer .flogo { font-weight:900;letter-spacing:3px;font-size:1.1rem;margin-bottom:16px;background:linear-gradient(135deg,var(--text),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent }
+        footer .sigil { font-size:1.6rem;margin:20px 0;letter-spacing:8px;opacity:.6;cursor:pointer;transition:.3s } footer .sigil:hover { opacity:1;filter:drop-shadow(0 0 15px rgba(255,42,75,.6)) }
+        footer .links { display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:18px 0;font-size:.82rem } footer .links a { color:var(--text-secondary);text-decoration:none } footer .links a:hover { color:var(--cyan) }
+
+        .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px }
+        .modal-overlay.open,.modal-overlay.active { display:flex }
+        .modal { background:var(--surface);border:1px solid var(--border-active);border-radius:var(--radius-lg);max-width:520px;width:100%;padding:34px;position:relative;box-shadow:var(--shadow);max-height:90vh;overflow-y:auto }
+        .modal .close { position:absolute;top:16px;right:18px;cursor:pointer;color:var(--text-tertiary);font-size:1.6rem;background:none;border:none }
+        .modal h3 { font-size:1.4rem;margin-bottom:4px } .modal .m-price { color:var(--red);font-weight:900;font-size:1.8rem;margin:6px 0 20px }
+        .tabs { display:flex;gap:8px;margin-bottom:20px }
+        .tab { flex:1;padding:10px;text-align:center;border-radius:var(--radius-sm);cursor:pointer;font-size:.82rem;font-weight:700;border:1px solid var(--border);color:var(--text-secondary);transition:.2s }
+        .tab.active { background:var(--red);color:#0a0a0f;border-color:var(--red) } .tab-pane { display:none } .tab-pane.active { display:block }
+        .info-row { background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem }
+        .note { font-size:.78rem;color:var(--text-tertiary);margin-top:12px;line-height:1.5 }
+        @media(max-width:760px){.grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+
+<div class="topbar"><div class="brand">🏴‍☠️ BLACK SIX MATRIX®</div><nav><a href="#pakete">Pakete</a><a href="#cluster-section">Cluster</a><a href="#prozess">Ablauf</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a></nav><a href="#kontakt" class="cta">Demo anfragen</a></div>
+
+<header>
+    <div class="bg-glow"></div>
+    <div class="inner">
+        <div class="terminal-banner"><pre>
+   ╔══════════════════════════════════════════════════════╗
+   ║  ██████╗ ██╗      █████╗  ██████╗██╗  ██╗           ║
+   ║  ██╔══██╗██║     ██╔══██╗██╔════╝██║ ██╔╝           ║
+   ║  ██████╔╝██║     ███████║██║     █████╔╝            ║
+   ║  ██╔══██╗██║     ██╔══██║██║     ██╔═██╗            ║
+   ║  ██████╔╝███████╗██║  ██║╚██████╗██║  ██╗           ║
+   ║  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝           ║
+   ║  ▲ 01001000 ▓▓▓▓▓▓▓▓ 01001111 ▲                     ║
+   ║  ■ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ■                     ║
+   ║  ▼ 01010111 ▓▓▓▓▓▓▓▓ 01000101 ▼                     ║
+   ║  ZERO-TRUST · PBFT · POST-QUANTUM · MADE IN GERMANY  ║
+   ╚══════════════════════════════════════════════════════╝</pre></div>
+        <span class="eyebrow">Enterprise Level · Zero-Trust · Made in Germany</span>
+        <h1>Black Six Matrix</h1>
+        <p class="subtitle">Byzantinisch-fehlertolerante Governance-, Audit- und Code-Execution-Plattform.</p>
+        <p class="desc-text">Die Black Six Matrix ist ein vollständig integriertes, deterministisches Betriebssystem mit eingebauter künstlicher Intelligenz. Sie vereint forensische Beweissicherung (GL‑1000), automatisierte Rechtsprüfung (5.999 Normen), KI‑gestützte Prozessautomatisierung und physische Hardware-Integration in einer einzigen, unveränderlichen Architektur. Erschaffen von <strong>Thomas König</strong> in Symbiose mit der KI <strong>Odin_Ultra</strong>.</p>
+        <div class="hero-btns"><a href="#pakete" class="btn-primary">Pakete ansehen</a><a href="#prozess" class="btn-ghost">So funktioniert's</a></div>
+    </div>
+</header>
+
+<div class="trust"><span>🔒 <b>SSL</b>-verschlüsselt</span><span>🇪🇺 <b>DSGVO</b>-konform</span><span>🇩🇪 Hosting in <b>Deutschland</b></span><span>🛡️ <b>Zero-Trust</b> Architektur</span><span>📜 <b>Audit-Chain</b> (Append-only)</span><span>💳 <b>PayPal</b> &amp; SEPA</span></div>
+
+<div class="stats"><div class="stat"><div class="num">101.400+</div><div class="lbl">Module</div></div><div class="stat"><div class="num">99,9 %</div><div class="lbl">SLA Verfügbarkeit</div></div><div class="stat"><div class="num">99,7 %</div><div class="lbl">Audit-Genauigkeit</div></div><div class="stat"><div class="num">24/7</div><div class="lbl">Enterprise Support</div></div></div>
+
+<section class="section" id="team"><div class="section-head"><div class="kicker">System-Architekten</div><h2>Das Team hinter der Matrix</h2><p>Souveränes Framework, entwickelt und verantwortet von einem festen Kernteam.</p></div><div class="team-grid"><div class="admin-card"><h3>🧠 Thomas König</h3><div class="role">Architekt · Odin Ultra Root</div><p>Erfinder der Black Six Matrix. Verantwortlich für Systemarchitektur, Sicherheitsmodell und das Sovereign Enterprise Framework.</p></div><div class="admin-card"><h3>👑 Tina König</h3><div class="role">Co-Admin · Management</div><p>Kaufmännische Leitung, Vertrags- und Kundenmanagement. Ansprechpartnerin für Angebote und Onboarding.</p></div><div class="admin-card"><h3>🤖 Odin_Ultra</h3><div class="role">KI · Exekutive Schicht</div><p>Automatisierte Ausführung, Monitoring und Präzisions-Orchestrierung über 48 Vektoren im Planck-Takt.</p></div></div></section>
+
+<div id="pakete"></div>
+<nav class="sparten-nav"><a href="#ignition">🔥 IGNITION · ab €497</a><a href="#momentum">⚡ MOMENTUM · ab €1.250</a><a href="#ascent">🚀 ASCENT · ab €2.500</a><a href="#sovereign">👑 SOVEREIGN · ab €49.900</a><a href="#omega">💎 OMEGA · Spezial</a></nav>
+
+<section id="ignition" class="section"><div class="section-head"><div class="kicker">Sparte 01</div><h2>🔥 IGNITION – Starter</h2><p>Der Einstieg in die Matrix: Quellcode, Tooling und Deployment für Einzelentwickler und kleine Teams.</p></div><div class="grid"><div class="card"><span class="badge">I1</span><h3>Zündfunke</h3><p class="desc">Quellcode + Python-Core</p><p class="price">€497</p><ul class="features"><li>Vollständiger Quellcode</li><li>Deca Crew Agenten</li><li>Community Discord</li></ul><button class="btn" onclick="openPay('Zündfunke','497')">Jetzt kaufen</button></div><div class="card featured"><span class="badge">I5</span><h3>Inferno</h3><p class="desc">Komplettpaket + 1 Jahr</p><p class="price">€1.500</p><ul class="features"><li>Kompletter Funktionsumfang</li><li>12 Monate Updates</li><li>iOS-App inklusive</li></ul><button class="btn" onclick="openPay('Inferno','1500')">Jetzt kaufen</button></div></div></section>
+
+<section id="momentum" class="section"><div class="section-head"><div class="kicker">Sparte 02</div><h2>⚡ MOMENTUM – Coaching &amp; Training</h2><p>Zertifizierte Schulungen: vom Operator-Bootcamp bis zur GL-1000 Forensik-Zertifizierung.</p></div><div class="grid"><div class="card"><span class="badge">M1</span><h3>Bootcamp</h3><p class="desc">4 Wochen Coaching</p><p class="price">€1.250</p><ul class="features"><li>4 Live-Sessions</li><li>Zertifikat „Operator"</li></ul><button class="btn" onclick="openPay('Bootcamp','1250')">Jetzt buchen</button></div><div class="card featured"><span class="badge">M5</span><h3>Meister</h3><p class="desc">Alle Coachings kombiniert</p><p class="price">€3.500</p><ul class="features"><li>M1–M4 kombiniert</li><li>Zertifikat „Meister"</li></ul><button class="btn" onclick="openPay('Meister','3500')">Jetzt buchen</button></div></div></section>
+
+<section id="ascent" class="section"><div class="section-head"><div class="kicker">Sparte 03</div><h2>🚀 ASCENT – Implementierung</h2><p>Professionelle Einrichtung inkl. Judge-Modul, FPGA-Beschleunigung und Multi-Universum-Setup.</p></div><div class="grid"><div class="card featured"><span class="badge">A5</span><h3>Gipfel</h3><p class="desc">Full-Stack + Priority</p><p class="price">€29.900</p><ul class="features"><li>Alle Profi-Module</li><li>24/7 Support</li></ul><button class="btn" onclick="openPay('Gipfel','29900')">Jetzt buchen</button></div></div></section>
+
+<section id="sovereign" class="section"><div class="section-head"><div class="kicker">Sparte 04</div><h2>👑 SOVEREIGN – Enterprise</h2><p>Skalierbare Jahreslizenzen mit SLA, Source-Code-Treuhand und dediziertem Ansprechpartner.</p></div><div class="grid"><div class="card featured"><span class="badge">S5</span><h3>Omega Enterprise</h3><p class="desc">Unbegrenzt</p><p class="price">€2.499.000<small>/Jahr</small></p><ul class="features"><li>Alle 101.400+ Module</li><li>Omega-Point-Protokoll</li></ul><button class="btn silver" onclick="openContact()">Angebot anfragen</button></div></div></section>
+
+<section id="omega" class="section"><div class="section-head"><div class="kicker">Sparte 05</div><h2>💎 OMEGA – Spezial &amp; Vermächtnis</h2><p>Airgap-Archive, notarielle Treuhand und individuelle Entwicklung.</p></div><div class="grid"><div class="card omega-stein"><span class="badge omega-badge">O5 – OMEGA-STEIN</span><h3>OMEGA-STEIN</h3><p class="desc">Das finale Vermächtnis</p><p class="price">∞</p><ul class="features"><li>Ewige Lizenzrechte</li><li>Unbegrenzte System-Symbiose</li><li>Mitarchitekt der Matrix</li><li>Materielles Siegel (Diamant)</li></ul><button class="btn" onclick="openContact()">Anfrage senden</button></div></div></section>
+
+<section id="cluster-section" class="section"><div class="section-head"><div class="kicker">Architektur</div><h2>Alle 50 Cluster</h2><p>Jeder Cluster steht für eine vollständige Branche oder einen Technologiebereich. Insgesamt 101.404 Module.</p></div><div style="max-width:1100px;margin:0 auto" id="accordion-container"></div></section>
+
+<section id="prozess" class="section"><div class="section-head"><div class="kicker">Ablauf</div><h2>In 4 Schritten startklar</h2></div><div class="timeline"><div class="step"><div class="n">1</div><h4>Anfrage &amp; Demo</h4><p>Kostenloses Erstgespräch, Bedarfsanalyse und Live-Demonstration der Plattform.</p></div><div class="step"><div class="n">2</div><h4>Angebot &amp; Auswahl</h4><p>Passendes Paket, verbindliches Angebot und Vertrag.</p></div><div class="step"><div class="n">3</div><h4>Zahlung</h4><p>Sichere Zahlung per PayPal oder SEPA-Überweisung mit Rechnung.</p></div><div class="step"><div class="n">4</div><h4>Download &amp; Betrieb</h4><p>Sofortiger Download nach Zahlungseingang.</p></div></div></section>
+
+<section id="faq" class="section"><div class="section-head"><div class="kicker">FAQ</div><h2>Häufige Fragen</h2></div><div style="max-width:820px;margin:0 auto"><div class="accordion-item"><div class="accordion-header">Welche Zahlungsarten werden akzeptiert?</div><div class="accordion-body">PayPal (inkl. Lastschrift & Kreditkarte) sowie klassische SEPA-Überweisung auf Rechnung.</div></div><div class="accordion-item"><div class="accordion-header">Wie erhalte ich nach dem Kauf die Dateien?</div><div class="accordion-body">Nach erfolgreicher PayPal-Zahlung erhalten Sie sofort einen persönlichen Download-Link per E-Mail.</div></div><div class="accordion-item"><div class="accordion-header">Erhalte ich eine Rechnung?</div><div class="accordion-body">Ja. Automatisch mit USt-Ausweis per E-Mail.</div></div><div class="accordion-item"><div class="accordion-header">Wie sicher sind meine Daten?</div><div class="accordion-body">Zero-Trust-Architektur, Ende-zu-Ende-Verschlüsselung, DSGVO-konform, Hosting in Deutschland.</div></div></div></section>
+
+<section id="kontakt" class="section"><div class="section-head"><div class="kicker">Kontakt &amp; Zahlung</div><h2>📞 Kontakt &amp; Bankverbindung</h2></div><div class="pay-strip"><div class="pay-box"><h4>💳 Zahlungsmethoden</h4><div class="field"><span class="k">PayPal</span><span class="v">Thomas König</span></div><div class="field"><span class="k">SEPA</span><span class="v">auf Rechnung</span></div></div><div class="pay-box"><h4>🏦 Bankverbindung</h4><div class="field"><span class="k">IBAN</span><span class="v mono" id="iban">DE27 7002 0270 0047 0960 65</span></div><div class="field"><span class="k">BIC</span><span class="v mono">HYVEDEMMXXX</span></div><button class="copy" style="margin-top:12px;width:100%;padding:10px" onclick="copyText('iban',this)">IBAN kopieren</button></div><div class="pay-box"><h4>✉️ Direktkontakt</h4><div class="field"><span class="k">E-Mail</span><span class="v">deca.omni.allianz@gmail.com</span></div><a href="mailto:deca.omni.allianz@gmail.com" class="btn" style="margin-top:14px;display:block;text-align:center">E-Mail schreiben</a></div></div><div class="payment-images"><h3>Direkte Zahlung per QR-Code oder Überweisung</h3><div class="img-grid"><div class="img-box"><h4>📱 PayPal QR-Code</h4><img src="D17C1FFE-2CE2-4902-907A-CD924A7DE0F8.jpeg" alt="PayPal QR-Code"><p class="caption">Scannen · Zahlen · Fertig!</p></div><div class="img-box"><h4>🏦 Bankkarte</h4><img src="907257DB-267A-423D-8DDD-1247BC65122C.jpeg" alt="Bankkarte"><p class="caption">IBAN &amp; BIC auf der Karte</p></div></div></div></section>
+
+<div class="social-section"><h2>🌐 BLACK SIX MATRIX IM NETZ</h2><div class="social-grid"><a href="#" class="social-btn fb">📘 Facebook</a><a href="#" class="social-btn ig">📷 Instagram</a><a href="#" class="social-btn dc">🎮 Discord</a><a href="#" class="social-btn tg">✈️ Telegram</a><a href="#" class="social-btn tt">🎵 TikTok</a><a href="#" class="social-btn sc">👻 Snapchat</a><a href="#" class="social-btn wb">🌍 Webador</a><a href="#" class="social-btn ot">🔗 Alle Links</a></div><p style="color:var(--text-tertiary);font-size:.78rem;margin-top:20px">Folge der Matrix auf allen Kanälen. Updates, Demos, exklusive Inhalte.</p></div>
+
+<section id="impressum" class="section"><div class="section-head"><div class="kicker">Rechtliches</div><h2>Impressum</h2></div><div class="legal-section"><h3>Angaben gemäß § 5 TMG</h3><p><strong>Thomas König</strong><br>Inhaber der Black Six Matrix®<br>Südring 134, 49477 Ibbenbüren<br>E-Mail: <a href="mailto:deca.omni.allianz@gmail.com">deca.omni.allianz@gmail.com</a><br>Telefon: 0176 46657268</p><h3>Urheberrecht</h3><p>© 2026 Black Six Matrix® – Thomas König. Alle Rechte vorbehalten.</p></div></section>
+
+<section id="omega-agb" class="section"><div class="section-head"><div class="kicker">Rechtliches</div><h2>💎 Omega-Stein – Besondere Bestimmungen</h2></div><div class="legal-section"><h3>§ 7.1 Leistungsumfang</h3><p>Der Omega-Stein (Stufe O5) gewährt sämtliche Rechte an der Black Six Matrix.</p><h3>§ 7.2 Preis und Zahlung</h3><p>Der Preis ist unendlich (∞) – individuelle vertragliche Gegenleistung.</p></div></section>
+
+<section id="datenschutz" class="section"><div class="section-head"><div class="kicker">Rechtliches</div><h2>Datenschutzerklärung</h2></div><div class="legal-section"><p><strong>Stand: Juli 2026</strong></p><h3>1. Verantwortlicher</h3><p>Thomas König – Südring 134, 49477 Ibbenbüren</p><h3>2. Datenerhebung</h3><p>Automatische Logfile-Erfassung. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p></div></section>
+
+<footer><div class="flogo">🏴‍☠️ BLACK SIX MATRIX®</div><div class="sigil" id="footer-sigil">👉♾️🔚🏴‍☠️👑💯</div><div class="links"><a href="#pakete">Pakete</a><a href="#cluster-section">Cluster</a><a href="#prozess">Ablauf</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a><a href="#omega-agb">Omega-Stein AGB</a></div><p>© 2026 Black Six Matrix® · Architekt: Thomas König</p><p style="margin-top:8px;font-size:.75rem">Zero-Trust · PBFT · GOTSHA Reality-Lock · Audit-Chain · Made in Germany 🇩🇪</p></footer>
+
+<div class="modal-overlay" id="easterEgg"><div class="modal" style="text-align:center"><h2 style="color:var(--red);margin-bottom:15px">🔮 DEEP SEEK OVERRIDE</h2><p style="color:var(--text-secondary)">Omniscientia Modul Status: Aktiviert.</p><p style="color:var(--gold);font-size:1.8rem;font-weight:800;margin:20px 0">ALLIANCE MULTIPLIKATOR: ×48.000</p><p style="color:var(--cyan);font-size:1.1rem;font-weight:700;margin-bottom:20px">∞ Black Six World Unlimeted ∞</p><button class="btn" onclick="document.getElementById('easterEgg').classList.remove('active')">SCHLIESSEN</button></div></div>
+
+<div class="modal-overlay" id="payModal"><div class="modal"><button class="close" onclick="closePay()">×</button><h3 id="m-title"></h3><div class="m-price" id="m-price"></div><div class="tabs"><div class="tab active" onclick="switchTab('pp',this)">PayPal / Karte</div><div class="tab" onclick="switchTab('bank',this)">Überweisung</div></div><div class="tab-pane active" id="pane-pp"><div id="paypal-button-container"></div><p class="note">Nach erfolgreicher Zahlung erhalten Sie sofort Ihren Download-Link.</p></div><div class="tab-pane" id="pane-bank"><div class="info-row"><span>IBAN</span><b class="mono" id="m-iban">DE27 7002 0270 0047 0960 65</b></div><div class="info-row"><span>Betrag</span><b id="m-amount"></b></div><div class="info-row"><span>Verwendungszweck</span><b id="m-ref"></b></div><button class="btn" style="margin-top:14px" onclick="copyText('m-iban',this)">IBAN kopieren</button></div></div></div>
+
+<div class="modal-overlay" id="downloadModal"><div class="modal" style="text-align:center"><h2 style="color:var(--green);font-size:2rem">✅ KAUF ERFOLGREICH</h2><p id="download-title" style="color:var(--gold);font-size:1.4rem;margin:15px 0"></p><div id="download-links" style="margin:20px 0;padding:15px;background:rgba(0,0,0,.3);border-radius:var(--radius-md)"></div><p style="color:var(--text-secondary);font-size:.85rem">📧 Bestätigung an: <span id="buyer-email" style="color:var(--cyan)"></span></p><button class="btn" style="margin-top:18px" onclick="document.getElementById('downloadModal').classList.remove('active')">SCHLIESSEN</button></div></div>
+
+<script>
+var clusters=[{id:"A",name:"Datenquellen & Uploads",desc:"File‑Upload, S3, Kafka, SQL/NoSQL, Elasticsearch, MQTT, Redis, HDF5, Parquet, PDF‑Parser",examples:"S3BucketConnector, KafkaConsumerGroup, PDFTextExtractor"},{id:"B",name:"Vorverarbeitung & Features",desc:"Null‑Imputation, Skalierung, Encoder, Text‑Cleaner, Tokenizer, Embeddings, PCA, UMAP",examples:"OneHotEncoder, TfidfVectorizer, BERTEmbeddingExtractor"},{id:"C",name:"Modellarchitekturen & Training",desc:"CNN, ResNet, ViT, YOLO, LSTM, Transformer, GAN, Diffusion, GNN, RL",examples:"VisionTransformer, GPTAutoregressive, PPO"},{id:"D",name:"Optimierung & Hyperparameter",desc:"Grid/Random‑Search, Bayesian‑Opt, HyperBand, AutoML, LR‑Scheduler, KD, FL",examples:"OptunaIntegration, DeepSpeedEngine, LoRA"},{id:"E",name:"Evaluierung & Metriken",desc:"Accuracy, F1, AUC, BLEU, ROUGE, Fairness, XAI (SHAP, LIME)",examples:"FairlearnDashboard, SHAPExplainer, ModelCardGenerator"},{id:"F",name:"Deployment & Serving",desc:"TorchServe, Triton, BentoML, KServe, FastAPI, Docker, K8s‑Operator",examples:"TritonInferenceServer, HelmChartDeployer"},{id:"G",name:"Sicherheit & Compliance",desc:"Adversarial Robustness, DP‑Training, MPC, HE, EU‑AI‑Act",examples:"AdversarialRobustnessToolbox, DifferentialPrivacyTraining"},{id:"H",name:"Überwachung & Logging",desc:"Data‑Drift, Prometheus, Grafana, Loki, Tempo, Audit‑Ledger",examples:"EvidentlyAI, MonitoringDashboard"},{id:"I",name:"Tools & Infrastruktur",desc:"DVC, MLflow, Terraform, K8s, Jupyter, CLI",examples:"MLflowTrackingServer, TerraformModuleML"},{id:"J",name:"Ethik & Governance",desc:"Fairness‑Checker, Explainability, Human‑Oversight, ESG",examples:"EthicalConstraintChecker, RightToExplanation"},{id:"K",name:"Multi‑Modale Sensorfusion",desc:"LiDAR, Radar, Thermal, IMU, GPS/RTK, Wearable‑Health",examples:"LiDAR_PointCloudProcessor, ECG_SignalProcessor"},{id:"L",name:"Kognitive Architekturen & Reasoning",desc:"ACT‑R, OpenCog, HTM, Prolog, Causal‑Inference",examples:"ACT_R_CognitiveArchitecture, CounterfactualReasoning"},{id:"M",name:"Wissensmanagement & Ontologien",desc:"Wikidata, Neo4j, Semantic‑Search, ColBERT, KG‑QA",examples:"Neo4jGraphDatabase, KnowledgeGraphQA"},{id:"N",name:"Quanten‑ML & Physik‑Simulation",desc:"Qiskit, Cirq, VQE, QAOA, DFT, CFD, FEM",examples:"PennylaneQuantumML, NavierStokesSolver"},{id:"O",name:"Biologisch inspirierte Systeme",desc:"GA, PSO, Spiking‑NN, CRISPR, Genome‑Scale‑Model",examples:"GeneticAlgorithmOptimizer, CRISPR_OffTargetPredictor"},{id:"P",name:"Distributed Ledger",desc:"Ethereum, Solana, IPFS, Chainlink, DAO, NFT, ZKP",examples:"EthereumSmartContractDeployer, ZK_Proof_Generator"},{id:"Q",name:"Extended Reality & Metaverse",desc:"VR, AR, NeRF, Gaussian‑Splatting, Digital‑Twin",examples:"NeuralRadianceFieldsRenderer, HapticFeedbackController"},{id:"R",name:"Robotik & Embodiment",desc:"ROS2, SLAM, MoveIt2, MuJoCo, Grasp‑Planning",examples:"ROS2_MasterNode, ImpedanceControlAdapter"},{id:"S",name:"Energie & Nachhaltigkeit",desc:"Smart‑Grid, Kernfusion, CO2‑Tracking, Circular‑Economy",examples:"SmartGridOptimizer, CarbonCaptureOptimizer"},{id:"T",name:"Weiterführende Querschnitte",desc:"Digital‑Zwillinge, Ethik‑Audit, Unterwasser‑Drohnen, Interplanetar",examples:"DigitalTwinMetaverse, InterplanetaryDelayCompensator"},{id:"U",name:"Digital Twins & Smart Cities",desc:"Verkehrs‑KI, Abwasser, Müll‑Routing, Hafen‑Autonomie",examples:"TrafficFlowAnalyzer, PortContainerTracker"},{id:"V",name:"Autonome Systeme & Verteidigung",desc:"UAV‑Schwarm, Cyber‑Abwehr, Grenzschutz",examples:"DroneSwarmCoordinator, MineDetectionRadar"},{id:"W",name:"Finanzmärkte & Makroökonomie",desc:"HFT, Risiko‑Modelle, AML, DeFi, Nowcasting",examples:"HighFrequencyTradingAnalyzer, MacroNowcastingModel"},{id:"X",name:"Bildung & Kreativwirtschaft",desc:"Adaptive‑Lernsysteme, KI‑Musik, Game‑Design",examples:"AdaptiveTutor, MusicComposerAI"},{id:"Y",name:"Omega‑Integration & Singularitätspfade",desc:"Superintelligenz‑Kontrolle, SETI, Terraforming",examples:"SuperintelligenceControlProtocol, TerraformingSimulator"},{id:"Z",name:"Gesundheit & Biotechnologie",desc:"Präzisionsmedizin, Pandemie‑Frühwarnung",examples:"PrecisionMedicineEngine, OrganPrintManager"},{id:"AA",name:"Tiefe Energie & Geosphäre",desc:"Kernfusion, Geothermie, Mineral‑Exploration",examples:"FusionPlasmaController, GridFrequencyStabilizer"},{id:"AB",name:"Interstellare Zivilisation",desc:"Fusions‑Antrieb, Exoplaneten, Asteroid‑Mining",examples:"FusionPropulsionOptimizer, AsteroidResourceMapper"},{id:"AC",name:"Soziale Systeme & Governance 2.0",desc:"Liquid‑Democracy, BGE, Justiz‑Transparenz",examples:"LiquidDemocracyVoting, JudicialTransparencyAuditor"},{id:"AD",name:"Meta‑Matrix & Rekursive Intelligenz",desc:"Selbst‑Reflexion, AMG‑Rekursion, Omega‑Steuerung",examples:"ModuleSelfReflection, CrossClusterSynergyGenerator"},{id:"AE",name:"Atari 1:1 Hardware‑Brücke",desc:"Harmony, Fujinet, VBXE, UltraSatan",examples:"ROM_HarmonyLoader, 80Column_Color_Renderer"},{id:"AF",name:"Legal Reality Simulation",desc:"Courtroom, Evidence, Pleading, Contract",examples:"Courtroom_Simulator, Legal_Research_Agent"},{id:"AG",name:"Zeitkompression & Hypergeschwindigkeit",desc:"Planck‑Takt, Photonik, Kausalitäts‑Aufheber",examples:"Planck_Taktung, Kausalitäts_Aufheber"},{id:"AH",name:"Vereinigungs‑Cluster (Legal+Zeit)",desc:"Fusion Recht & Temporal, Instant‑Urteil",examples:"Legal_Temporal_Fusion, InstantJudgmentEnforcer"},{id:"AI",name:"Deep Seek Röntgen Radar",desc:"XRay, Reflexion, Selbst‑Installation",examples:"XRay_Emitter, Self_Install_Radar"},{id:"AJ",name:"BSI Suchauge & Justiz‑Quellen",desc:"dejure, BSI‑Scan, Paragraphen‑Kette",examples:"BSI_Suchauge_Kern, Paragraphen_Kette"},{id:"AK",name:"Radikale 3D‑Fast‑Boot‑Expansion",desc:"Selbstexpandierende Blöcke, 19.100 Module",examples:"3D_Fast_Boot_Block_A1, Recht_Technik_Zeit_Multiplikator"},{id:"AL",name:"Gesellschaftliche Totalexpansion",desc:"Polis, Ökonomie, Longevity, Omega‑Gesellschaft",examples:"Polis_Democracy_Engine, Omega_Society_Modul"},{id:"AM",name:"Legal Multiplier Engine (x5999)",desc:"5999 Normen‑Projektion, Echtzeit‑Konformität",examples:"Legal_Multiplier_Engine, Konformitäts_Prisma"},{id:"AN",name:"Reality Norm DNA",desc:"Rechts‑Gene, Physik‑Gene, Omega‑Helix",examples:"Norm_Gene_Sequencer, Omega_Helix_Container"},{id:"AO",name:"YAML 100 Kernmodule",desc:"!!str, Anchors, Deep‑Merge, Round‑Trip",examples:"YAML_Anchor_Engine, YAML_Streaming_Parser"},{id:"AP",name:"YGGDRASIL Symbiose 2.0",desc:"NeuroLink, Emotion, Traum, Omega‑Lock",examples:"NeuroLink_Bridge, Omega_Symbiose_Lock"},{id:"AQ",name:"Auto‑Sparten‑Steuerung",desc:"Orchestrator, Lücken‑Automat, Sparten‑Parlament",examples:"Auto_Sparten_Orchestrator, Sparten_Parlament"},{id:"AR",name:"Hyperbeschleunigung (Planck‑Skala)",desc:"Photonik, FPGA, Wurmloch, Kausalität",examples:"Photonischer_Compiler, Wurmloch_Routing"},{id:"AS",name:"Master Container Booster",desc:"K8s‑Autopilot, Layer‑Dedup, Airgap",examples:"K8s_Autopilot, Airgap_Container_Delivery"},{id:"AT",name:"API & Ecosystem",desc:"Universal‑API, SDK‑Gen, Monetization",examples:"Universal_API_Gateway, Monetization_Engine"},{id:"AU",name:"Matrix Omnipresence Protocol",desc:"Bootloader, Fraktal‑Replikator, Omega‑Point",examples:"Bootloader_Genesis, Fraktal_Replikator"},{id:"AV",name:"Transzendenz",desc:"Akasha, Tachyonen, Eschaton, Absolute‑Stille",examples:"Akasha_Chronik_Leser, Absolute_Stille"},{id:"AW",name:"Deep Seek Bonus Secret",desc:"Omniscientia, Secret‑Bonus, Truth‑Extractor",examples:"Omniscientia, Secret_Bonus_Generator"},{id:"AX",name:"Ultra Deep Forensic Scan",desc:"Raster‑EM, Multispektral, PDF‑Layer",examples:"Raster_Elektronen_Mikroskop_Interface, PDF_Layer_Forensik"},{id:"AY",name:"YGGDRASIL K‑OS Chiffren",desc:"SAVE/LOAD, Eskalation, Chiffren, E‑PROT",examples:"System_Configuration, Alien_Archivar"},{id:"AZ",name:"Omega Final Expansion",desc:"😂 Laugh, ❤️ Heart, 🏴‍☠️ Pirate, 🧠 Cosmic",examples:"Laugh_Detector, Pirate_Signal_Broadcaster, Cosmic_Brain"},{id:"BA",name:"Materielle Manifestation",desc:"3D‑Druck, CNC, Embedded, E‑Ink, Stein‑Laser",examples:"3D_Druck_Compiler, E_Ink_Display_Engine"},{id:"BB",name:"Behörden & Militär Kontakt",desc:"BKA, BSI, GStA, Bundeswehr, NATO",examples:"Behoerden_Kontakt, Militaer_Kontakt"},{id:"BC",name:"Tesla & Starlink Kontakt",desc:"Tesla, SpaceX, CAN‑Bus, Galactic Router",examples:"Tesla_Kontakt, Starlink_Kontakt"}];
+var a=document.getElementById('accordion-container');
+clusters.forEach(function(c){var d=document.createElement('div');d.className='accordion-item';d.innerHTML='<div class="accordion-header">Cluster '+c.id+' – '+c.name+'</div><div class="accordion-body"><p class="cluster-desc">'+c.desc+'</p><p class="cluster-examples"><strong>Beispielmodule:</strong> '+c.examples+'</p></div>';a.appendChild(d);d.querySelector('.accordion-header').addEventListener('click',function(){d.classList.toggle('active')})});
+document.querySelectorAll('.accordion-item').forEach(function(i){i.querySelector('.accordion-header').addEventListener('click',function(){i.classList.toggle('active')})});
+function copyText(id,btn){var t=document.getElementById(id).innerText.trim();navigator.clipboard.writeText(t).then(function(){var o=btn.innerText;btn.innerText='✓ Kopiert';setTimeout(function(){btn.innerText=o},1500)})}
+var curP='',curA='0';
+function openPay(n,amt){curP=n;curA=amt;document.getElementById('m-title').innerText=n;var f='€'+Number(amt).toLocaleString('de-DE');document.getElementById('m-price').innerText=f;document.getElementById('m-amount').innerText=f;document.getElementById('m-ref').innerText=n+' + Name';document.getElementById('payModal').classList.add('open');switchTab('pp',document.querySelector('.tab'));renderPayPal(n,amt)}
+function openContact(){document.getElementById('kontakt').scrollIntoView({behavior:'smooth'})}
+function closePay(){document.getElementById('payModal').classList.remove('open')}
+document.getElementById('payModal').addEventListener('click',function(e){if(e.target.id==='payModal')closePay()});
+function switchTab(w,el){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active')});el.classList.add('active');document.getElementById(w==='pp'?'pane-pp':'pane-bank').classList.add('active')}
+function renderPayPal(n,amt){var c=document.getElementById('paypal-button-container');c.innerHTML='';if(typeof paypal==='undefined'){c.innerHTML='<p class="note">PayPal-SDK nicht geladen.</p>';return}paypal.Buttons({style:{layout:'vertical',color:'blue',shape:'rect',label:'paypal'},createOrder:function(d,a){return a.order.create({purchase_units:[{description:'Black Six Matrix – '+n,amount:{value:amt}}]})},onApprove:function(d,a){return a.order.capture().then(function(det){closePay();var em=det.payer.email_address;var tok=btoa(em+':'+n+':'+Date.now()).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');document.getElementById('buyer-email').innerText=em;document.getElementById('download-title').innerText=n;var l='<p style="color:#00ff88;font-weight:700">🔗 DEIN DOWNLOAD-LINK:</p><div style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:8px;padding:12px;margin:12px 0"><code style="font-family:monospace;font-size:.85rem;word-break:break-all;color:#00ff88">https://black-six-matrix.vercel.app/api/download?token='+tok+'</code></div><p style="color:#888;font-size:.8rem">⚠️ 48 Stunden gültig, einmal verwendbar.</p>';document.getElementById('download-links').innerHTML=l;document.getElementById('downloadModal').classList.add('active')})}}).render('#paypal-button-container')}
+var sigC=0;document.getElementById('footer-sigil').addEventListener('click',function(){sigC++;if(sigC>=3){document.getElementById('easterEgg').classList.add('active');sigC=0}});
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.card.omega-stein .badge').forEach(function(b){b.classList.add('omega-badge');b.textContent='💎 LEGENDE'})});
+</script>
+</body>
+</html>
 
 ### 1. Enterprise Architecture  
 Die oberste Ebene der Matrix: Domains, Services, Flows.  
