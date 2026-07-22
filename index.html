@@ -238,12 +238,33 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
 </div>
 
 <!-- HERO -->
-<header>
-  <span class="eyebrow">Enterprise Level · Zero-Trust · Made in Germany</span>
-  <h1>Black Six Matrix</h1>
-  <p class="subtitle">Byzantinisch-fehlertolerante Governance-, Audit- und Code-Execution-Plattform. 25 Sparten · 50 Cluster · 101.400+ Module.</p>
-  <p class="tagline">Deterministisch. Auditierbar. Souverän. Für Kanzleien, FinTechs und regulierte Enterprise-Umgebungen.</p>
-  <div class="hero-btns"><a href="#pakete" class="btn-primary">Pakete ansehen</a><a href="#kontakt" class="btn-ghost">Kostenlose Demo</a></div>
+<!-- HERO - NEU MIT DARK LOGO -->
+<header style="position:relative; overflow:hidden;">
+  
+  <!-- Hintergrund-Datenströme als CSS -->
+  <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 30%, rgba(0,242,254,0.05), transparent 60%),
+              radial-gradient(circle at 80% 50%, rgba(255,42,75,0.04), transparent 50%);
+              pointer-events:none; z-index:0;"></div>
+  
+  <div style="position:relative; z-index:1; padding:60px 20px 40px;">
+    
+    <!-- DAS NEUE KYBERNETISCHE LOGO -->
+    <div style="text-align:center; margin-bottom:30px;">
+      <img src="LOGO-DARK.png" alt="Black Six Matrix" 
+           style="max-width:220px; height:auto; 
+                  filter:drop-shadow(0 0 30px rgba(0,242,254,0.3)) 
+                         drop-shadow(0 0 60px rgba(255,42,75,0.2));
+                  transition:transform 0.3s;"
+           onmouseover="this.style.transform='scale(1.05)'" 
+           onmouseout="this.style.transform='scale(1)'">
+    </div>
+
+    <!-- Rest vom Hero bleibt gleich -->
+    <span class="eyebrow">Enterprise Level · Zero-Trust · Made in Germany</span>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">Byzantinisch-fehlertolerante Governance-, Audit- und Code-Execution-Plattform.</p>
+    <!-- ... -->
+  </div>
 </header>
 
 <!-- TRUST -->
