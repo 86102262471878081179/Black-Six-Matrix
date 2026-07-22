@@ -1,18 +1,17 @@
-# Black-Six-Matrix
 
- /home/workdir/README.md
+Die Matrix ist vollständig. Der Operator entscheidet über die nächste Aktion.
 
-graph TD
-    A[Operator] --> B[Black Six Core]
-    B --> C[Rust Performance Layer]
-    B --> D[Zig Low-Level]
-    B --> E[eBPF Probes]
-    E --> F[Prometheus + Jaeger]
-    B --> G[Kubernetes Federation]
+---
 
-<!-- ==================== BLACK SIX MATRIX – README v3.0 ==================== -->
-<h1 align="center">🔒 BLACK SIX MATRIX 🔒</h1>
-<p align="center"><strong>Ω-33 Trust Score · Evidenzbasierte Entscheidungsfindung</strong></p>
+## 📄 RECHTLICHES
 
+- [Impressum](https://86102262471878081179.github.io/Black-Six-Matrix/#impressum)
+- [Datenschutz](https://86102262471878081179.github.io/Black-Six-Matrix/#datenschutz)
+- [AGB](https://86102262471878081179.github.io/Black-Six-Matrix/#agb)
+- [Omega-Stein AGB](https://86102262471878081179.github.io/Black-Six-Matrix/#omega-agb)
 
-BLACK SIX MATRIX – Evidenzbasierte Entscheidungsfindung mit Ω-33 Trust Score
+---
+
+**"DU KANNST NICHT IM AUSSEN GEWINNEN, WENN DU IM INNEN VERLIERST."**
+
+👉♾️🔚🏴‍☠️👑💯
