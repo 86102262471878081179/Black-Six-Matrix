@@ -415,6 +415,27 @@ clusters.forEach(c => {
     update();
     setInterval(update, 1000);
 })();
+// MATA SECRET KEY SEQUENCE
+let mataKeys = [];
+const mataCode = ['Alt','m','a','t','a'];
+
+document.addEventListener('keydown', (e) => {
+    mataKeys.push(e.key);
+    mataKeys = mataKeys.slice(-5);
+    if (JSON.stringify(mataKeys) === JSON.stringify(mataCode)) {
+        document.getElementById('mata-secret').style.display = 'flex';
+    }
+});
+
+// 5x Klick auf Sigil
+let sigilClicks = 0;
+document.querySelector('.sigil').addEventListener('click', () => {
+    sigilClicks++;
+    if (sigilClicks >= 5) {
+        document.getElementById('mata-secret').style.display = 'flex';
+        sigilClicks = 0;
+    }
+});
 </script>
 
 <!-- ========================================================== -->
@@ -651,6 +672,7 @@ clusters.forEach(c => {
 </footer>
 
 </body>
+
 <body>
 
 <!-- ========== MATA SECRET MODULE ========== -->
