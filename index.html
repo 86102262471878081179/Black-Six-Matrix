@@ -1,5 +1,4 @@
-
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -113,32 +112,34 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 12px; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
         }
-        .subtitle { color: var(--text-muted); font-size: 1.15rem; max-width: 680px; margin: 0 auto 16px; font-weight: 300; }
+        .subtitle { color: var(--text-muted); font-size: 1.15rem; max-width: 780px; margin: 0 auto 16px; font-weight: 300; }
         .sigil { 
             font-size: 2.2rem; margin-top: 15px; letter-spacing: 8px; cursor: pointer; 
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; user-select: none; opacity: 0.8;
+            transition: all 0.4s ease; display: inline-block; user-select: none; opacity: 0.85;
         }
 
         /* SPARTEN NAV */
         .sparten-nav { 
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 40px 20px 30px; padding: 20px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 20px 20px; padding: 16px;
             background: rgba(15, 15, 22, 0.5); border-radius: var(--radius-m); backdrop-filter: blur(10px);
             border: 1px solid var(--border-subtle);
         }
         .sparten-nav a { 
-            padding: 12px 26px; border-radius: 40px; text-decoration: none; color: var(--text-main); 
-            font-weight: 700; font-size: 0.82rem; letter-spacing: 0.5px; transition: all 0.3s ease; 
+            padding: 10px 20px; border-radius: 40px; text-decoration: none; color: var(--text-main); 
+            font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px; transition: all 0.3s ease; 
             border: 1px solid var(--border-subtle); background: var(--bg-card);
         }
-        .sparten-nav a:hover { transform: translateY(-3px); border-color: var(--metallic-silver); color: var(--metallic-gold); }
+        .sparten-nav a:hover { transform: translateY(-2px); border-color: var(--metallic-silver); color: var(--metallic-gold); }
 
-        /* GRID & CARDS */
+        /* SECTION & CARDS */
         .section { max-width: 1600px; margin: 0 auto 70px; padding: 0 20px; }
         .section h2 { 
             font-size: 1.8rem; font-weight: 800; color: var(--text-main); 
             margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); 
         }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .grid-50 { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+        
         .card { 
             background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-l); 
             padding: 24px; transition: all 0.3s ease; display: flex; flex-direction: column; 
@@ -149,6 +150,23 @@
             border: 1px solid var(--metallic-gold); 
             background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 15, 22, 0.92) 100%); 
         }
+
+        .cluster-node {
+            background: rgba(10, 10, 16, 0.7); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-s); padding: 14px; text-align: center;
+            font-size: 0.82rem; transition: 0.2s;
+        }
+        .cluster-node:hover { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.05); }
+        .cluster-node b { display: block; color: var(--metallic-gold); font-size: 0.9rem; margin-bottom: 4px; }
+
+        .agent-card {
+            background: rgba(14, 14, 20, 0.8); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-m); padding: 18px; position: relative;
+        }
+        .agent-card h4 { color: var(--accent-cyan); font-size: 1rem; margin-bottom: 4px; }
+        .agent-card .role { font-size: 0.75rem; color: var(--text-dark); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .agent-card p { font-size: 0.85rem; color: var(--text-muted); }
+
         .badge { 
             padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; 
             text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; 
@@ -205,8 +223,10 @@
         <div class="deepseek-badge">DeepSeek-R1 Integrated</div>
     </div>
     <nav>
+        <a href="#kids">Die Kids (Agenten)</a>
+        <a href="#cluster50">50 Cluster</a>
         <a href="#pakete">Alle Pakete</a>
-        <a href="#kontakt">Kontakt & Impressum</a>
+        <a href="#kontakt">Kontakt</a>
     </nav>
     <a href="#pakete" class="cta">Jetzt Bestellen</a>
 </div>
@@ -215,18 +235,75 @@
 <header>
     <div class="eyebrow">Sovereign Enterprise Architecture · Master Deliveries</div>
     <h1>Black Six Matrix</h1>
-    <p class="subtitle">Alle 25 MVP-Pakete · Sofort-Download nach Autorisierung</p>
+    <p class="subtitle">Deca Crew Core, Sub-Agents („Die Kids“), 50 Sovereign Cluster & 25 Tarife</p>
     <p class="sigil" id="header-sigil">👉♾️🔚🏴‍☠️👑💯</p>
 </header>
 
 <div id="pakete"></div>
 <nav class="sparten-nav">
-    <a href="#ignition">🔥 IGNITION (5)</a>
-    <a href="#momentum">⚡ MOMENTUM (5)</a>
-    <a href="#ascent">🚀 ASCENT (5)</a>
-    <a href="#sovereign">👑 SOVEREIGN (5)</a>
-    <a href="#omega">💎 OMEGA (5)</a>
+    <a href="#kids">👶 DIE KIDS (AGENTEN)</a>
+    <a href="#cluster50">🌐 50 CLUSTER GRID</a>
+    <a href="#ignition">🔥 IGNITION</a>
+    <a href="#momentum">⚡ MOMENTUM</a>
+    <a href="#ascent">🚀 ASCENT</a>
+    <a href="#sovereign">👑 SOVEREIGN</a>
+    <a href="#omega">💎 OMEGA</a>
 </nav>
+
+<!-- DIE KIDS (DECA CREW & SUB-AGENTEN) -->
+<section id="kids" class="section">
+    <h2>👶 Die Kids – Deca Crew & Sub-Agenten Flotte</h2>
+    <div class="grid">
+        <div class="agent-card">
+            <h4>Deca Alpha (Nemesis)</h4>
+            <div class="role">Core Orchestrator</div>
+            <p>Haupt-Steuereinheit für Prompt-Routinen, Kontext-Isolierung und State-Machine-Synchronisation.</p>
+        </div>
+        <div class="agent-card">
+            <h4>Deca Beta (Odin)</h4>
+            <div class="role">Data & Audit Ledger</div>
+            <p>Überwacht unumkehrbare Datenbank-Transaktionen, Mutex-Locks und SQLite Audit Logs.</p>
+        </div>
+        <div class="agent-card">
+            <h4>Deca Gamma (Omega)</h4>
+            <div class="role">Code Refactoring & Go-Engine</div>
+            <p>Prüft Go-Syntax, Goroutine-Limits, Mutex-Safety und native Speicherallokationen.</p>
+        </div>
+        <div class="agent-card">
+            <h4>Deca Delta (YYGSADRIL)</h4>
+            <div class="role">Autonomous Pipeline Exec</div>
+            <p>Führt Docker-Container, Air-Gapped CLI-Pipelines und Shell-Befehle sicher aus.</p>
+        </div>
+        <div class="agent-card">
+            <h4>Sub-Agent 01 (Kid-Zero)</h4>
+            <div class="role">Local File Watcher</div>
+            <p>Überwacht Dateisystemänderungen, schließt verwaiste Desktoptasks und Defer File Descriptors.</p>
+        </div>
+        <div class="agent-card">
+            <h4>Sub-Agent 02 (Kid-Sync)</h4>
+            <div class="role">Federation Sync</div>
+            <p>Verwaltet dezentrale Inter-Cluster Gateway Synchronisationen und Invarianten-Prüfung.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 50 CLUSTER GRID -->
+<section id="cluster50" class="section">
+    <h2>🌐 50 Matrix Cluster Nodes (C01 – C50)</h2>
+    <div class="grid-50">
+        <script>
+            for(let i=1; i<=50; i++) {
+                const num = i < 10 ? '0' + i : i;
+                document.write(`
+                    <div class="cluster-node">
+                        <b>Cluster ${num}</b>
+                        <span>Node-ID: B6-C${num}</span>
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+</section>
 
 <!-- IGNITION SPARTE -->
 <section id="ignition" class="section">
@@ -478,3 +555,4 @@ function copyToClipboard(elementId, btn) {
 
 </body>
 </html>
+
