@@ -277,6 +277,65 @@
     </div>
 </div>
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BLACK SIX MATRIX – Ω Luxury 8K</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070B;--card:#12121B;--b:rgba(255,255,255,.08);--b2:rgba(255,255,255,.14);--t:#EDEEF2;--d:#8B8DA3;--red:#FF1A1A;--gold:#E9C78A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+header{text-align:center;padding:96px 24px 40px;background:radial-gradient(800px 400px at 50% 0%, rgba(255,26,26,.12), transparent)}
+.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}
+h1{font-family:'Instrument Serif',serif;font-size:clamp(44px,9vw,88px);font-weight:400;letter-spacing:-.03em;line-height:.9}
+h1 i{color:var(--red);font-style:italic}
+.sub{max-width:600px;margin:16px auto;color:var(--d);font-weight:300;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--b);border-radius:22px;padding:22px;display:flex;flex-direction:column;transition:.3s}
+.card:hover{transform:translateY(-3px);border-color:var(--b2);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.card.feat{border-color:rgba(255,26,26,.3);background:linear-gradient(180deg,#1A1214,#12121B)}
+.price{font-size:28px;font-weight:800} .price small{font-size:11px;color:var(--d)}
+.btn{width:100%;padding:13px;border-radius:12px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+.btn.primary{background:#fff;color:#000} .btn.ghost{background:transparent;color:var(--d);border:1px solid var(--b);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">Black Six Matrix · Version Ω · 8K Luxury Edition</div>
+<h1>BLACK SIX <i>MATRIX</i></h1>
+<p class="sub">25 Stufen in 5 Sparten. 50 Cluster. Eine Matrix. Klar. Edel. Marktreif.</p>
+</header>
+
+<div class="wrap" id="app"></div>
+
+<script>
+const IBAN='DE27 7002 0270 0047 0960 65';
+const PAYPAL='https://paypal.me/ThomasKoenig';
+const data=[
+{name:'🔥 I5 – INFERNO',price:'1.500',desc:'Komplettpaket + 1 Jahr Updates',f:['Vollständiger Code','1 Jahr Updates','iOS Basis'],k:'ignition',feat:true},
+{name:'⚡ M5 – MEISTER',price:'3.500',desc:'Alle Coachings + Zertifikat',f:['M1-M4 kombiniert','Meister Zertifikat'],k:'momentum',feat:true},
+{name:'🚀 A5 – GIPFEL',price:'29.900',desc:'A1-A4 + Priority',f:['Alle Profi-Module','24/7 Support'],k:'ascent',feat:true},
+{name:'👑 S5 – OMEGA',price:'2.499.000',desc:'Unbegrenzt, alle Module',f:['101.400+ Module','Omega-Point'],k:'sovereign',feat:true},
+{name:'💎 O5 – OMEGA-STEIN',price:'∞',desc:'Das Vermächtnis',f:['Alle Rechte','Ewige Updates'],k:'omega',feat:true},
+];
+const app=document.getElementById('app');
+app.innerHTML=`<div class="grid">${data.map(c=>`
+<div class="card ${c.feat?'feat':''}">
+<span style="font-size:10px;letter-spacing:1.6px;opacity:.5">${c.k.toUpperCase()}</span>
+<h3>${c.name}</h3><p style="color:#8B8DA3;font-size:13px">${c.desc}</p>
+<div class="price">${c.price}<small> €</small></div>
+<ul style="list-style:none;margin:14px 0;flex:1">${c.f.map(x=>`<li style="font-size:12.5px;color:#B8BBCE;padding:4px 0 4px 20px;position:relative">— ${x}</li>`).join('')}</ul>
+<button class="btn primary" onclick="alert('PayPal: ${PAYPAL} – ${c.name}')">PayPal zahlen</button>
+<button class="btn ghost" onclick="navigator.clipboard.writeText('${IBAN}');alert('IBAN kopiert')">IBAN kopieren</button>
+</div>`).join('')}</div>`;
+</script>
+</body>
+</html>
+
 <!-- ========================================================== -->
 <!-- ==================== RECHTLICHER FOOTER ==================== -->
 <!-- ========================================================== -->
