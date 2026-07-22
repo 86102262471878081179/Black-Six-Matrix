@@ -276,4 +276,118 @@ document.querySelectorAll('.plus').forEach(btn => {
 </script>
 
 </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Black Six Matrix – Code Matrix</title>
+<style>
+body { margin:0; font-family:system-ui, sans-serif; background:#05060a; color:#f5f5f5; }
+header { padding:16px 20px; border-bottom:1px solid #1f2933; background:#0b0d12; }
+h1 { margin:0; font-size:18px; letter-spacing:0.12em; text-transform:uppercase; }
+main { padding:20px; max-width:960px; margin:0 auto; }
+.tabs { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.tab { padding:6px 10px; border-radius:999px; border:1px solid #1f2933; font-size:13px; cursor:pointer; background:#0b1120; }
+.tab.active { border-color:#ff3366; color:#ff3366; }
+.panel { display:none; border-radius:8px; border:1px solid #1f2933; background:#0b1120; padding:12px; }
+pre { margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; background:#020617; padding:10px; border-radius:6px; overflow-x:auto; }
+section { margin-bottom:24px; }
+small { color:#9ca3af; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BLACK SIX MATRIX – CODE MATRIX</h1>
+  <small>HTML · YAML · Zig · Go · Rust</small>
+</header>
+
+<main>
+  <section>
+    <h2>Overview</h2>
+    <p>Diese Seite ist ein einfacher, aber robuster Einstiegspunkt für deine Code‑Matrix: sie zeigt HTML, YAML, Zig, Go und Rust in einer einzigen Datei.</p>
+  </section>
+
+  <section>
+    <h2>Code Tabs</h2>
+    <div class="tabs">
+      <div class="tab active" data-target="yaml">YAML</div>
+      <div class="tab" data-target="zig">Zig</div>
+      <div class="tab" data-target="go">Go</div>
+      <div class="tab" data-target="rust">Rust</div>
+      <div class="tab" data-target="html">HTML</div>
+    </div>
+
+    <div id="yaml" class="panel" style="display:block;">
+      <pre>black-six-matrix:
+  products:
+    - IGNITION
+    - MOMENTUM
+    - ASCENT
+    - SOVEREIGN
+    - OMEGA
+  clusters:
+    count: 50
+    zero_trust: true
+    audit_chain: true</pre>
+    </div>
+
+    <div id="zig" class="panel">
+      <pre>const std = @import("std");
+
+pub fn main() !void {
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("Black Six Matrix – Zig Kernel\\n", .{});
+}</pre>
+    </div>
+
+    <div id="go" class="panel">
+      <pre>package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Black Six Matrix – Go Cluster")
+}</pre>
+    </div>
+
+    <div id="rust" class="panel">
+      <pre>fn main() {
+    println!("Black Six Matrix – Rust Core");
+}</pre>
+    </div>
+
+    <div id="html" class="panel">
+      <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="de"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Black Six Matrix – HTML Entry&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Black Six Matrix – HTML Entry&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+  </section>
+</main>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.target;
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.style.display = 'none');
+    tab.classList.add('active');
+    document.getElementById(target).style.display = 'block';
+  });
+});
+</script>
+
+</body>
+</html>
+
 </html>
