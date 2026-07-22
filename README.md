@@ -1,7 +1,14 @@
 # Black-Six-Matrix
-**Datei bereit** unter `/home/workdir/README.md`
 
-**Düsterer Datenstrom-Hintergrund + Vorhängeschloss-Ästhetik** integriert. Die README ist stark, technisch und geheimnisvoll – genau im Grok-Stil.
+ /home/workdir/README.md
+
+graph TD
+    A[Operator] --> B[Black Six Core]
+    B --> C[Rust Performance Layer]
+    B --> D[Zig Low-Level]
+    B --> E[eBPF Probes]
+    E --> F[Prometheus + Jaeger]
+    B --> G[Kubernetes Federation]
 
 <!-- ==================== BLACK SIX MATRIX – README v3.0 ==================== -->
 <h1 align="center">🔒 BLACK SIX MATRIX 🔒</h1>
