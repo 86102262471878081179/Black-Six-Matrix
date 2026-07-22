@@ -1,290 +1,67 @@
-name: Build & Release
-on:
-  push:
-    tags: ['v*']
+# Black Six Matrix – Full Cluster Execution Flow
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+## 1. Eingang
 
-      - name: Build ZIPs
-        run: |
-          mkdir -p releases
-          for dir in I1-ZUENDFUNKE I2-GLIMMER I3-FUNKE I4-FLAMME I5-INFERNO \
-                     M1-BOOTCAMP M2-FORTGESCHRITTEN M3-AUDIT M4-LEGAL-TECH M5-MEISTER \
-                     A1-AUFSTIEG A2-ORBIT A3-BESCHLEUNIGUNG A4-MULTIVERSUM A5-GIPFEL \
-                     S1-ENTERPRISE-S S2-ENTERPRISE-M S3-ENTERPRISE-L S4-ENTERPRISE-XL S5-OMEGA-ENTERPRISE \
-                     O1-AIRGAP O2-TRAINING O3-TREUHAND O4-INDIVIDUELL O5-OMEGA-STEIN; do
-            if [ -d "$dir" ]; then
-              zip -r "releases/${dir}.zip" "$dir/"
-            fi
-          done
-          ls -la releases/
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: releases/*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-{
-  "version": 2,
-  "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/download", "dest": "/api/download.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
-
-  ]
-}
-const crypto = require('crypto');
-
-const DOWNLOAD_MAP = {
-  'I1 – ZÜNDFUNKE': 'https://github.com/.../I1-ZUENDFUNKE.zip',
-  // ... alle 25 Einträge ...
-  'O5 – OMEGA-STEIN': 'https://github.com/.../O5-OMEGA-STEIN.zip'
-};
-
-module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  const { token } = req.query;
-  if (!token) {
-    return res.status(400).json({ error: 'missing token' });
-  }
-
-  let payload;
-  try {
-    const decoded = Buffer.from(token, 'base64').toString('utf8');
-    const [email, product, ts] = decoded.split(':');
-    payload = { email, product, ts: Number(ts) };
-  } catch {
-    return res.status(403).json({ error: 'invalid token' });
-  }
-
-  const now = Date.now();
-  const maxAgeMs = 48 * 60 * 60 * 1000; // 48h
-  if (now - payload.ts > maxAgeMs) {
-    return res.status(410).json({ error: 'token expired' });
-  }
-
-  const url = DOWNLOAD_MAP[payload.product];
-  if (!url || url === '#') {
-    return res.status(404).json({ error: 'unknown product' });
-  }
-  return res.writeHead(302, { Location: url }).end();
-function openPay(name, amount) {
-  document.getElementById('m-title').innerText = name;
-  const formatted = '€' + Number(amount).toLocaleString('de-DE');
-  document.getElementById('m-price').innerText = formatted;
-  document.getElementById('m-amount').innerText = formatted;
-  document.getElementById('m-ref').innerText = name + ' + Name';
-  document.getElementById('payModal').classList.add('open');
-  renderPayPal(name, amount);
-type ModuleExecutionPayload struct {
-    ClusterID     string `json:"cluster_id"`
-    ProductCode   string `json:"product_code"`
-    SocialMedia   bool   `json:"enable_social_media"`
-    KIS13Engine   bool   `json:"enable_kis_13"`
-    BankConnector bool   `json:"enable_bank_connector"`
-}
-
-type ModuleExecutionResult struct {
-    ClusterID     string       `json:"cluster_id"`
-    Product       *ProductLink `json:"product"`
-    SocialStatus  string       `json:"social_status"`
-    KIS13Status   string       `json:"kis_13_status"`
-    BankStatus    string       `json:"bank_status"`
-    ExecutionTime int64        `json:"execution_time"`
-}
-type SparteCategory string
-
-const (
-    SparteIgnition  SparteCategory = "IGNITION"
-    SparteMomentum  SparteCategory = "MOMENTUM"
-    SparteAscent    SparteCategory = "ASCENT"
-    SparteSovereign SparteCategory = "SOVEREIGN"
-    SparteOmega     SparteCategory = "OMEGA"
-)
-
-func (b1 *Block1Integration) ExecuteBlock1Pipeline(
-    ctx context.Context,
-    req *ModuleExecutionPayload,
-) (*ModuleExecutionResult, error) {
-    if req == nil {
-        return nil, errors.New("err: execution payload cannot be nil")
-    }
-
-    select {
-    case <-ctx.Done():
-        return nil, ctx.Err()
-    default:
-    }
-
-    b1.mu.Lock()
-    defer b1.mu.Unlock()
-
-    cluster, exists := b1.Clusters[req.ClusterID]
-    if !exists || !cluster.IsActive {
-        return nil, fmt.Errorf("err: invalid or inactive cluster id %s", req.ClusterID)
-    }
-
-    prod, exists := b1.Products[req.ProductCode]
-    if !exists {
-        return nil, fmt.Errorf("err: unknown product code %s", req.ProductCode)
-    }
-
-    social := "DISABLED"
-    if req.SocialMedia {
-        social = "INTERNAL_ONLY_ISOLATED"
-    }
-
-    kis13 := "DISABLED"
-    if req.KIS13Engine {
-        kis13 = "KIS_13_ACTIVE_STANDALONE"
-    }
-
-    bank := "DISABLED"
-    if req.BankConnector {
-        bank = "BANKING_GATEWAY_MUTEX_LOCKED"
-    }
-
-    return &ModuleExecutionResult{
-        ClusterID:     cluster.ClusterID,
-        Product:       prod,
-        SocialStatus:  social,
-        KIS13Status:   kis13,
-        BankStatus:    bank,
-        ExecutionTime: time.Now().Unix(),
-    }, nil
-}
-
-		type ProductLink struct {
-    Code        string         `json:"code"`         // I1, M5, A3, ...
-    Name        string         `json:"name"`         // MATRIX-PRODUCT-I1
-    Sparte      SparteCategory `json:"sparte"`       // IGNITION, ...
-    DeliveryURL string         `json:"delivery_url"` // GitHub Release ZIP
-}
-
-type Block1Integration struct {
-    NodeCount    int
-    SparteCount  int
-    ProductCount int
-    Products     map[string]*ProductLink
-    Clusters     map[string]*ClusterNode
-}
-
-func NewBlock1Integration() *Block1Integration {
-    b1 := &Block1Integration{
-        NodeCount:    50,
-        SparteCount:  5,
-        ProductCount: 25,
-        Products:     make(map[string]*ProductLink),
-        Clusters:     make(map[string]*ClusterNode),
-    }
-
-    codes := []string{
-        "I1","I2","I3","I4","I5",
-        "M1","M2","M3","M4","M5",
-        "A1","A2","A3","A4","A5",
-        "S1","S2","S3","S4","S5",
-        "O1","O2","O3","O4","O5",
-    }
-
-    for _, code := range codes {
-        var cat SparteCategory
-        switch code[0] {
-        case 'I': cat = SparteIgnition
-        case 'M': cat = SparteMomentum
-        case 'A': cat = SparteAscent
-        case 'S': cat = SparteSovereign
-        case 'O': cat = SparteOmega
-        }
-
-        b1.Products[code] = &ProductLink{
-            Code:        code,
-            Name:        fmt.Sprintf("MATRIX-PRODUCT-%s", code),
-            Sparte:      cat,
-            DeliveryURL: fmt.Sprintf(
-                "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/%s-PACKAGE.zip",
-                code,
-            ),
-        }
-    }
-
-    for i := 1; i <= 50; i++ {
-        cid := fmt.Sprintf("CLUSTER-%02d", i)
-        b1.Clusters[cid] = &ClusterNode{
-            ClusterID:   cid,
-            ClusterName: fmt.Sprintf("B6-Node-Grid-%02d", i),
-            IsActive:    true,
-        }
-    }
-
-    return b1
-}
-
-		type ClusterNode struct {
-    ClusterID   string `json:"cluster_id"`   // CLUSTER-01 ... CLUSTER-50
-    ClusterName string `json:"cluster_name"` // B6-Node-Grid-01 ...
-    IsActive    bool   `json:"is_active"`
-}
-# BLACK SIX MATRIX · Enterprise Architecture & Deployment
-
-Evidenzbasierte Entscheidungsplattform mit Ω‑33 Trust Score  
-25 Sparten · 50 Cluster · 25 Produkte · Zero‑Trust · Audit‑Chain
+- **Request:**
+  - `productId`
+  - `userId`
+  - `token`
+  - `origin`
 
 ---
 
-## 1. Systemübersicht
+## 2. API-Gateway
 
-**Root‑Identität**
-
-- **Name:** Black Six Matrix
-- **Typ:** Sovereign Enterprise Platform
-- **Domänen:** 5 Sparten (IGNITION, MOMENTUM, ASCENT, SOVEREIGN, OMEGA)
-- **Produkte:** 25 Tarife (I1–I5, M1–M5, A1–A5, S1–S5, O1–O5)
-- **Cluster:** 50 operative Cluster‑Nodes
-- **Deployment:** Vercel Edge Gateway + GitHub Releases
-
-**Governance**
-
-- **Architekt:** Thomas König (Odin Ultra Root)
-- **Co‑Admin:** Tina König (Management)
-- **Exekutive KI:** Odin_Ultra (Planck‑Takt, 48 Vektoren)
+1. `checkCors(origin)`
+2. `validateToken(token)`
+3. `routeDelivery(req)` → `{ clusterId, artifactId }`
 
 ---
 
-## 2. Repository‑Struktur
+## 3. Registry
 
-```text
-📁 Black-Six-Matrix/
-├── 📄 index.html              # Portal / UI-Shell
-├── 📁 api/
-│   └── 📄 download.js         # Serverless Download-API (Zero-Trust Gateway)
-├── 📄 vercel.json             # Deployment-Manifest (Vercel)
-├── 📁 matrix/
-│   └── 📁 config/
-│       └── 📄 matrix_clusters.go  # Backend-Registry (Block1Integration)
-├── 📁 .github/
-│   └── 📁 workflows/
-│       └── 📄 release.yml     # CI/CD: Build & Release ZIPs
-├── 🖼️ LOGO-DARK.png           # Logo
-├── 🖼️ IMG_3297.jpeg           # Bankkarte (IBAN/BIC)
-├── 🖼️ D17C1FFE-....jpeg       # PayPal QR-Code
-└── (25 ZIPs via GitHub Releases)
+1. `linkProductToCluster(productId)` → `clusterId`
+2. `defineClusterNode(clusterId)` → `{ id, status }`
+3. `buildExecutionPipeline(clusterId)` → `["validate","execute","deliver"]`
+4. `setStatusFlag(clusterId, "running")`
 
+---
+
+## 4. YGGDRASIL
+
+1. `evaluateContext({ productId, userId })` → `{ risk, priority }`
+2. `routeControl({ productId, risk })` → `{ clusterId }`
+3. `storeArchiveRecord({ req, evalResult, controlRoute })`
+
+---
+
+## 5. Security
+
+1. `enforceZeroTrust(req)`
+2. `checkCompliance({ productId })`
+3. `recordAuditEvent({ type: "execution-start", req })`
+4. optional: `applyIsolation(userId)` bei Verstößen
+
+---
+
+## 6. Cluster Execution
+
+```ts
+for (const step of pipeline) {
+  recordAuditEvent({ type: "step", step, clusterId });
+
+  switch (step) {
+    case "validate":
+      // Input prüfen
+      break;
+    case "execute":
+      // Produktlogik / Cluster-Job
+      break;
+    case "deliver":
+      // Artefakt erzeugen
+      break;
+  }
 }
 
-
-};
-		
+setStatusFlag(clusterId, "completed");
+recordAuditEvent({ type: "execution-complete", clusterId });
