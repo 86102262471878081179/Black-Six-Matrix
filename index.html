@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<a!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -933,9 +933,211 @@ function showTinaS5Toast(icon, title, message, color = '#ffd700') {
         setTimeout(() => toast.remove(), 1000);
     }, 12000);
 }
+// ==========================================================
+// ========== STUFEN-ANZEIGE – RENDER =====================
+// ==========================================================
+
+const stufenData = [
+    // IGNITION
+    { name: 'I1 – ZÜNDFUNKE', price: '497 €', desc: 'Quellcode, Python‑Core, Community', features: ['Vollständiger Quellcode','Deca Crew Agenten','GOT/SHA Imitation','Community Discord'], sparte: 'ignition' },
+    { name: 'I2 – GLIMMER', price: '750 €', desc: '+ Installation, Anleitung', features: ['Alles aus I1','Installationsguide','1h Remote‑Support','Zugang Basismodule'], sparte: 'ignition' },
+    { name: 'I3 – FUNKE', price: '990 €', desc: '+ CLI‑Tool b6, Automatisierung', features: ['Alles aus I2','CLI‑Tool b6','10 Automatisierungs‑Skripte'], sparte: 'ignition' },
+    { name: 'I4 – FLAMME', price: '1.200 €', desc: '+ Docker‑Container, lokaler Server', features: ['Alles aus I3','Docker‑Image','Lokaler Server inkl.'], sparte: 'ignition' },
+    { name: '🔥 I5 – INFERNO', price: '1.500 €', desc: 'Komplettpaket + 1 Jahr Updates', features: ['Alles aus I4','1 Jahr Updates & Priority‑Support','iOS‑App (Basis)'], sparte: 'ignition' },
+    // MOMENTUM
+    { name: 'M1 – BOOTCAMP', price: '1.250 €', desc: '4 Wochen Intensiv‑Coaching', features: ['4 Live‑Sessions (1:1)','Zertifikat "Operator"'], sparte: 'momentum' },
+    { name: 'M2 – FORTGESCHRITTEN', price: '2.000 €', desc: '+ Forensik‑Workshop (1 Tag)', features: ['Alles aus M1','Forensik‑Workshop vor Ort'], sparte: 'momentum' },
+    { name: 'M3 – AUDIT‑TRAINING', price: '2.500 €', desc: 'GL‑1000 Audit‑Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], sparte: 'momentum' },
+    { name: 'M4 – LEGAL‑TECH', price: '3.000 €', desc: 'Judge‑Modul Training', features: ['5.999 Normen verstehen','Judge‑Konfiguration'], sparte: 'momentum' },
+    { name: '⚡ M5 – MEISTER', price: '3.500 €', desc: 'Alle Coachings + Zertifikat', features: ['M1‑M4 kombiniert','Zertifikat "Black Six Meister"'], sparte: 'momentum' },
+    // ASCENT
+    { name: 'A1 – AUFSTIEG', price: '2.500 €', desc: 'Persönliche Installation', features: ['Installation auf deinem Server','Basis‑Konfiguration'], sparte: 'ascent' },
+    { name: 'A2 – ORBIT', price: '4.900 €', desc: '+ Judge & Police Module aktiv', features: ['5.999 Normen','Beck‑Online Konnektor'], sparte: 'ascent' },
+    { name: 'A3 – BESCHLEUNIGUNG', price: '9.900 €', desc: '+ FPGA‑Synthesizer, Photonik', features: ['FPGA‑Modul','Photonischer Compiler'], sparte: 'ascent' },
+    { name: 'A4 – MULTIVERSUM', price: '19.900 €', desc: '3 Universen, 37 Qz', features: ['Alpha, Beta, Gamma','Qz‑Kette aktiv'], sparte: 'ascent' },
+    { name: '🚀 A5 – GIPFEL', price: '29.900 €', desc: 'A1‑A4 + 1 Jahr Priority', features: ['Alle Profi‑Module','24/7 Support (1 Jahr)'], sparte: 'ascent' },
+    // SOVEREIGN
+    { name: 'S1 – ENTERPRISE S', price: '49.900 €/J', desc: 'Bis 50 Nodes, eigener Cluster', features: ['Vollzugriff alle Module','8/5 Priority‑Support'], sparte: 'sovereign' },
+    { name: 'S2 – ENTERPRISE M', price: '249.000 €/J', desc: 'Bis 500 Nodes, Multi‑Cloud', features: ['24/7 Priority‑Support','Dedizierter Ansprechpartner'], sparte: 'sovereign' },
+    { name: 'S3 – ENTERPRISE L', price: '990.000 €/J', desc: 'Bis 5.000 Nodes, Quantum‑Layer', features: ['Quantum‑Entanglement‑Bridge','Source‑Code‑Treuhand inkl.'], sparte: 'sovereign' },
+    { name: 'S4 – ENTERPRISE XL', price: '1.990.000 €/J', desc: 'Bis 50.000 Nodes, alle Cluster', features: ['Galactic Router','Operator‑Avatar'], sparte: 'sovereign' },
+    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2.499.000 €/J', desc: 'Unbegrenzt, alle Module', features: ['Alle 101.400+ Module','Omega‑Point‑Protokoll'], sparte: 'sovereign' },
+    // OMEGA
+    { name: 'O1 – AIRGAP', price: '1.000 €', desc: 'Offline‑Archiv, komplett autark', features: ['4,2 GB Offline‑Paket','SHA‑512 verifiziert'], sparte: 'omega' },
+    { name: 'O2 – TRAINING', price: '5.000 €/Tag', desc: '1‑Tages‑Intensivschulung vor Ort', features: ['Installation & Konfiguration','Zertifizierung inkl.'], sparte: 'omega' },
+    { name: 'O3 – QUELLCODE‑TREUHAND', price: '100.000 €', desc: 'Hinterlegung bei Notar', features: ['Vollständiger Quellcode','Notariell gesichert'], sparte: 'omega' },
+    { name: 'O4 – INDIVIDUELL', price: '250 €/h', desc: 'Maßgeschneiderte Entwicklung', features: ['Neue Module','API‑Integration'], sparte: 'omega' },
+    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis. Für immer.', features: ['Alle Rechte','Ewige Updates','Symbiose‑Zertifikat'], sparte: 'omega' }
+];
+
+// Render
+const grid = document.getElementById('stufen-grid');
+stufenData.forEach(s => {
+    const card = document.createElement('div');
+    card.className = `stufen-card ${s.sparte}`;
+    card.innerHTML = `
+        <div class="header">
+            <span class="name">${s.name}</span>
+            <span class="price">${s.price}</span>
+        </div>
+        <div class="desc">${s.desc}</div>
+        <ul class="features">${s.features.map(f => `<li>${f}</li>`).join('')}</ul>
+    `;
+    grid.appendChild(card);
+});
 </script>
 
 </body>
+<!-- ========================================================== -->
+<!-- ========== 25 STUFEN – INHALTS-ANZEIGE ================= -->
+<!-- ========================================================== -->
+<style>
+    #stufen-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.92);
+        backdrop-filter: blur(12px);
+        z-index: 999999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+        padding: 40px 20px;
+    }
+    #stufen-overlay.active { display: flex; }
+    
+    #stufen-overlay .panel {
+        max-width: 1100px;
+        width: 100%;
+        background: rgba(10,10,15,0.96);
+        border: 1px solid rgba(255,215,0,0.15);
+        border-radius: 24px;
+        padding: 40px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 0 80px rgba(0,0,0,0.8);
+    }
+    #stufen-overlay .panel h2 {
+        color: #ffd700;
+        font-size: 1.8rem;
+        text-align: center;
+        letter-spacing: 3px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid rgba(255,215,0,0.1);
+        padding-bottom: 16px;
+    }
+    #stufen-overlay .panel .sub {
+        text-align: center;
+        color: rgba(255,255,255,0.3);
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+    }
+    #stufen-overlay .panel .close-btn {
+        position: sticky;
+        top: 0;
+        float: right;
+        background: none;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #888;
+        padding: 6px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: 0.3s;
+        z-index: 10;
+    }
+    #stufen-overlay .panel .close-btn:hover {
+        border-color: #c00;
+        color: #fff;
+    }
+    
+    .stufen-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+        margin-top: 10px;
+    }
+    .stufen-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 12px;
+        padding: 14px 16px;
+        transition: 0.3s;
+        border-left: 3px solid transparent;
+    }
+    .stufen-card:hover {
+        background: rgba(255,255,255,0.04);
+        border-color: rgba(255,215,0,0.1);
+    }
+    .stufen-card .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+    .stufen-card .header .name {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+    }
+    .stufen-card .header .price {
+        color: #ffd700;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+    .stufen-card .desc {
+        color: rgba(255,255,255,0.4);
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+    .stufen-card .features {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 0;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.5);
+    }
+    .stufen-card .features li {
+        padding: 2px 0 2px 16px;
+        position: relative;
+        line-height: 1.3;
+    }
+    .stufen-card .features li::before {
+        content: "◆";
+        position: absolute;
+        left: 0;
+        color: rgba(255,215,0,0.2);
+        font-size: 0.5rem;
+        top: 4px;
+    }
+    
+    /* Sparten-Farben */
+    .stufen-card.ignition { border-left-color: #c00; }
+    .stufen-card.momentum { border-left-color: #d4a574; }
+    .stufen-card.ascent { border-left-color: #ff6600; }
+    .stufen-card.sovereign { border-left-color: #bb00ff; }
+    .stufen-card.omega { border-left-color: #00ccff; }
+</style>
+
+<div id="stufen-overlay" onclick="if(event.target===this) this.classList.remove('active')">
+    <div class="panel">
+        <button class="close-btn" onclick="document.getElementById('stufen-overlay').classList.remove('active')">✕ SCHLIESSEN</button>
+        <h2>📦 25 STUFEN – INHALTE</h2>
+        <p class="sub">👑 Black Six Matrix · Alle Produkte im Überblick</p>
+        <div class="stufen-grid" id="stufen-grid"></div>
+    </div>
+</div>
+<!-- ========================================================== -->
+<!-- ========== ENDE STUFEN-ANZEIGE =========================== -->
+<!-- ========================================================== -->
 <!-- ========================================================== -->
 <!-- ========== TINA S5 – DIREKT-LINK + VERSCHWINDET ======== -->
 <!-- ========================================================== -->
@@ -1379,3 +1581,38 @@ function showTinaS5Toast(icon, title, message, color = '#ffd700') {
 <!-- ========== ENDE TINA GOTT-MODUS ========================= -->
 <!-- ========================================================== -->
 </html>
+<button onclick="document.getElementById('stufen-overlay').classList.add('active')" 
+        style="background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.2); color:#d4a574; padding:8px 20px; border-radius:30px; cursor:pointer; font-size:0.8rem;">
+    📦 25 STUFEN – INHALTE
+</button>
+
+/<go>BLACK_SIX_OMNI_CORE.py// ============================================================
+// BLACK SIX MATRIX vFINAL – GO CORE (1:1)
+// ============================================================
+// Enthält:
+// - OmniHyperGalaxyKernel
+// - TeslaAutonomySubModule (CAN, MPC, BlackBox, ISOBUS, RTK-GPS, PREEMPT_RT)
+// - BlackSix50SparteRules (alle 50 Regeln)
+// - HyperVaultKernel + PilotGatekeeper
+// - RETRO_SEC Integration (Atari Root of Trust)
+// - Deterministische CAN-Loop
+// ============================================================
+
+package main
+
+import (
+	"context"
+	"crypto/ed25519"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"math"
+	"sync"
+	"time"
+)
+
+</go>
+    
