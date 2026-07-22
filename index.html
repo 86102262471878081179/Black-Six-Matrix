@@ -1,52 +1,14 @@
-a<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Black Six Matrix – Enterprise Level Platform. Fehlertolerante Governance-, Audit- und Code-Execution-Systeme auf Zero-Trust-Basis. Made in Germany.">
 <title>Black Six Matrix® – Enterprise Governance & Audit Platform</title>
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- PayPal SDK: client-id eintragen -->
 <script src="https://www.paypal.com/sdk/js?client-id=DEINE_PAYPAL_CLIENT_ID&currency=EUR&locale=de_DE"></script>
-<!-- ==================== OMEGA-STEIN SPECIAL ==================== -->
-<style>
-    /* Glow-Animation für den Omega-Stein */
-    @keyframes omegaPulse {
-        0%   { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
-        50%  { box-shadow: 0 0 30px rgba(0,204,255,0.7); border-color: #00ffff; }
-        100% { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
-    }
-    .card.omega-stein {
-        animation: omegaPulse 2.5s infinite;
-        border-width: 3px;
-        background: linear-gradient(135deg, #0a1a1a 0%, #111118 100%);
-    }
-    .card.omega-stein h3 { color: #00ffff; }
-    .card.omega-stein .price { color: #00ccff; }
-    .omega-badge { background: #00ccff !important; color: #000 !important; }
-</style>
-
-<script>
-(function() {
-    // Omega-Stein nach dem Rendern markieren
-    setTimeout(function() {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(function(card) {
-            if (card.textContent.includes('O5 – OMEGA-STEIN')) {
-                card.classList.add('omega-stein');
-                const badge = card.querySelector('.badge');
-                if (badge) { badge.classList.add('omega-badge'); badge.textContent = '💎 LEGENDE'; }
-            }
-        });
-    }, 300);
-})();
-</script>
-</div>
 <style>
 :root{
   --bg-base:#08080c; --bg-elev:#0f0f16; --bg-card:rgba(17,17,25,.75); --bg-card-hover:rgba(24,24,35,.92);
@@ -68,7 +30,6 @@ body{
 .mono{font-family:'JetBrains Mono',monospace}
 a{color:inherit}
 
-/* ---------- TOP BAR ---------- */
 .topbar{
   position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
   padding:14px 24px;background:rgba(8,8,12,.72);backdrop-filter:blur(18px);
@@ -83,7 +44,6 @@ a{color:inherit}
 .topbar .cta:hover{background:var(--gold-soft);transform:translateY(-1px)}
 @media(max-width:760px){.topbar nav{display:none}}
 
-/* ---------- HERO ---------- */
 header{text-align:center;padding:90px 20px 50px;position:relative}
 .eyebrow{display:inline-block;padding:7px 18px;border:1px solid var(--border-bright);
   border-radius:30px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
@@ -101,14 +61,12 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .btn-ghost{border:1px solid var(--border-bright);color:var(--text-main)}
 .btn-ghost:hover{background:rgba(212,175,55,.08);transform:translateY(-3px)}
 
-/* ---------- TRUST STRIP ---------- */
 .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 34px;
   padding:26px 20px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);
   margin-top:60px;color:var(--text-muted);font-size:.82rem;font-weight:600}
 .trust span{display:flex;align-items:center;gap:8px}
 .trust b{color:var(--gold)}
 
-/* ---------- STATS ---------- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;
   max-width:1100px;margin:60px auto;padding:0 20px}
 .stat{text-align:center;padding:28px 16px;background:var(--bg-card);border:1px solid var(--border-subtle);
@@ -116,14 +74,12 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .stat .num{font-size:2.2rem;font-weight:900;color:var(--gold);letter-spacing:-1px}
 .stat .lbl{color:var(--text-muted);font-size:.82rem;margin-top:6px}
 
-/* ---------- SECTIONS ---------- */
 .section{max-width:1500px;margin:0 auto 80px;padding:0 20px}
 .section-head{text-align:center;margin-bottom:44px}
 .section-head .kicker{color:var(--gold);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:700}
 .section-head h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;margin:10px 0}
 .section-head p{color:var(--text-muted);max-width:640px;margin:0 auto}
 
-/* ---------- ADMIN / TEAM ---------- */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 .admin-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);
   padding:26px;backdrop-filter:blur(12px);transition:.3s}
@@ -132,7 +88,6 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .admin-card .role{color:var(--gold);font-weight:700;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
 .admin-card p{color:var(--text-muted);font-size:.9rem;margin-top:12px}
 
-/* ---------- NAV PILLS ---------- */
 .sparten-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:0 auto 50px;
   max-width:1200px;padding:22px;background:rgba(15,15,22,.5);border-radius:var(--r-m);
   border:1px solid var(--border-subtle);backdrop-filter:blur(10px)}
@@ -142,7 +97,6 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .sparten-nav a:hover{transform:translateY(-3px);border-color:var(--gold);color:var(--gold);
   box-shadow:0 10px 22px rgba(0,0,0,.4)}
 
-/* ---------- CARDS ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
 .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-l);
   padding:30px;display:flex;flex-direction:column;backdrop-filter:blur(16px);box-shadow:var(--shadow);
@@ -167,7 +121,6 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .btn:hover{background:var(--gold-soft);transform:scale(1.02)}
 .btn.silver{background:var(--silver)}.btn.silver:hover{background:var(--platinum)}
 
-/* ---------- PROCESS TIMELINE ---------- */
 .timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
 .step{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);padding:26px;position:relative}
 .step .n{width:40px;height:40px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid var(--gold);
@@ -175,7 +128,6 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 .step h4{font-size:1.05rem;margin-bottom:8px}
 .step p{color:var(--text-muted);font-size:.86rem}
 
-/* ---------- FAQ ---------- */
 .accordion-item{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);
   margin-bottom:12px;overflow:hidden;backdrop-filter:blur(10px)}
 .accordion-header{padding:20px 26px;cursor:pointer;display:flex;justify-content:space-between;
@@ -186,7 +138,6 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
   color:var(--text-muted);font-size:.93rem}
 .accordion-item.active .accordion-body{max-height:400px;padding:0 26px 22px}
 
-/* ---------- CONTACT / PAYMENT INFO ---------- */
 .pay-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;
   max-width:1100px;margin:0 auto}
 .pay-box{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);padding:26px}
@@ -199,7 +150,17 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
   border-radius:6px;padding:4px 10px;font-size:.72rem;font-weight:700;transition:.2s}
 .copy:hover{background:rgba(212,175,55,.12)}
 
-/* ---------- MODAL ---------- */
+/* Payment Images Section */
+.payment-images{margin-top:40px;text-align:center}
+.payment-images h3{margin-bottom:24px;color:var(--text-main);font-size:1.2rem}
+.payment-images .img-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:30px;align-items:center}
+.payment-images .img-box{max-width:260px}
+.payment-images .img-box h4{color:var(--gold);font-size:.9rem;margin-bottom:12px}
+.payment-images .img-box img{max-width:100%;border-radius:var(--r-m);border:1px solid var(--border-subtle);
+  box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.payment-images .img-box .caption{color:var(--text-muted);font-size:.8rem;margin-top:8px}
+
+/* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
   display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal-overlay.open{display:flex}
@@ -217,7 +178,16 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
   padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
 .note{font-size:.78rem;color:var(--text-dark);margin-top:12px;line-height:1.5}
 
-/* ---------- FOOTER ---------- */
+/* Legal Sections */
+.legal-section{max-width:860px;margin:0 auto 40px;padding:30px;background:var(--bg-card);
+  border:1px solid var(--border-subtle);border-radius:var(--r-l);backdrop-filter:blur(10px)}
+.legal-section h2{font-size:1.5rem;font-weight:800;margin-bottom:20px;color:var(--gold);
+  border:none;padding:0;display:block}
+.legal-section h3{font-size:1.1rem;margin:22px 0 10px;color:var(--text-main)}
+.legal-section p,.legal-section li{color:var(--text-muted);font-size:.9rem;line-height:1.7}
+.legal-section ul{margin:8px 0;padding-left:22px}
+.legal-section a{color:var(--gold)}.legal-section a:hover{text-decoration:underline}
+
 footer{text-align:center;padding:70px 20px 50px;border-top:1px solid var(--border-subtle);
   color:var(--text-dark);font-size:.85rem}
 footer .flogo{font-weight:900;letter-spacing:3px;font-size:1.1rem;
@@ -427,7 +397,7 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
   </div>
 </section>
 
-<!-- PAYMENT / CONTACT -->
+<!-- PAYMENT / CONTACT + QR-CODE & BANKCARD -->
 <section id="kontakt" class="section">
   <div class="section-head"><div class="kicker">Kontakt & Zahlung</div><h2>📞 Kontakt & Bankverbindung</h2>
     <p>Für Angebote, Demos und individuelle Anfragen.</p></div>
@@ -453,6 +423,119 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
       <a href="mailto:deca.omni.allianz@gmail.com?subject=Anfrage%20Black%20Six%20Matrix" class="btn" style="margin-top:14px;display:block;text-align:center;text-decoration:none">E-Mail schreiben</a>
     </div>
   </div>
+
+  <!-- QR-CODE & BANKCARD IMAGES -->
+  <div class="payment-images">
+    <h3>Direkte Zahlung per QR-Code oder Überweisung</h3>
+    <div class="img-grid">
+      <div class="img-box">
+        <h4>📱 PayPal QR-Code</h4>
+        <img src="9AD48704-9E38-4C2F-93A7-25DB19DEA1D2.jpeg" alt="PayPal QR-Code Thomas König">
+        <p class="caption">Scannen · Zahlen · Fertig!</p>
+      </div>
+      <div class="img-box">
+        <h4>🏦 Bankkarte (HypoVereinsbank)</h4>
+        <img src="907257DB-267A-423D-8DDD-1247BC65122C.jpeg" alt="Bankkarte HypoVereinsbank Thomas König">
+        <p class="caption">IBAN & BIC auf der Karte</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPRESSUM -->
+<section id="impressum" class="section">
+  <div class="section-head"><div class="kicker">Rechtliches</div><h2>Impressum</h2></div>
+  <div class="legal-section">
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>
+      <strong>Thomas König</strong><br>
+      Inhaber der Black Six Matrix®<br>
+      (Anschrift auf Anfrage)<br>
+      E-Mail: <a href="mailto:deca.omni.allianz@gmail.com">deca.omni.allianz@gmail.com</a><br>
+      Telefon: 0176 46657268
+    </p>
+
+    <h3>Umsatzsteuer-ID</h3>
+    <p>Umsatzsteuer-Identifikationsnummer gemäß §27a UStG: <strong>DE XXX XXX XXX</strong> (wird nachgereicht)</p>
+
+    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+    <p>Thomas König (Anschrift wie oben)</p>
+
+    <h3>Streitschlichtung</h3>
+    <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr</a>. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+    <h3>Haftung für Inhalte</h3>
+    <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+
+    <h3>Urheberrecht</h3>
+    <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+
+    <p style="margin-top:18px;font-size:.82rem;color:var(--text-dark)">© 2026 Black Six Matrix® – Thomas König. Alle Rechte vorbehalten.</p>
+  </div>
+</section>
+
+<!-- DATENSCHUTZ -->
+<section id="datenschutz" class="section">
+  <div class="section-head"><div class="kicker">Rechtliches</div><h2>Datenschutzerklärung</h2></div>
+  <div class="legal-section">
+    <p><strong>Stand: Juli 2026</strong></p>
+
+    <h3>1. Verantwortlicher</h3>
+    <p>Thomas König<br>
+    (Kontaktdaten siehe Impressum)<br>
+    E-Mail: <a href="mailto:deca.omni.allianz@gmail.com">deca.omni.allianz@gmail.com</a></p>
+
+    <h3>2. Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck der Verwendung</h3>
+    <p><strong>a) Beim Besuch der Website</strong><br>
+    Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum Einsatz kommenden Browser automatisch Informationen an den Server unserer Website gesendet. Diese Informationen werden temporär in einem sog. Logfile gespeichert. Folgende Informationen werden dabei ohne Ihr Zutun erfasst und bis zur automatisierten Löschung gespeichert:</p>
+    <ul>
+      <li>IP-Adresse des anfragenden Rechners</li>
+      <li>Datum und Uhrzeit des Zugriffs</li>
+      <li>Name und URL der abgerufenen Datei</li>
+      <li>Website, von der aus der Zugriff erfolgt (Referrer-URL)</li>
+      <li>Verwendeter Browser und ggf. das Betriebssystem Ihres Rechners sowie der Name Ihres Access-Providers</li>
+    </ul>
+    <p>Die genannten Daten werden zu folgenden Zwecken verarbeitet:</p>
+    <ul>
+      <li>Gewährleistung eines reibungslosen Verbindungsaufbaus der Website</li>
+      <li>Gewährleistung einer komfortablen Nutzung unserer Website</li>
+      <li>Auswertung der Systemsicherheit und -stabilität</li>
+      <li>zu weiteren administrativen Zwecken</li>
+    </ul>
+    <p>Rechtsgrundlage für die Datenverarbeitung ist Art. 6 Abs. 1 S. 1 lit. f DSGVO. Unser berechtigtes Interesse folgt aus oben aufgelisteten Zwecken zur Datenerhebung. In keinem Fall verwenden wir die erhobenen Daten zu dem Zweck, Rückschlüsse auf Ihre Person zu ziehen.</p>
+
+    <p><strong>b) Bei Nutzung unseres Kontaktformulars / E-Mail-Kontakt</strong><br>
+    Bei Fragen jeglicher Art bieten wir Ihnen die Möglichkeit, mit uns über die bereitgestellten E-Mail-Adressen Kontakt aufzunehmen. Dabei ist die Angabe einer gültigen E-Mail-Adresse erforderlich, damit wir wissen, von wem die Anfrage stammt und um diese beantworten zu können. Weitere Angaben können freiwillig getätigt werden. Die Datenverarbeitung zum Zwecke der Kontaktaufnahme mit uns erfolgt nach Art. 6 Abs. 1 S. 1 lit. a DSGVO auf Grundlage Ihrer freiwillig erteilten Einwilligung. Die für die Benutzung des Kontaktformulars von uns erhobenen personenbezogenen Daten werden nach Erledigung der von Ihnen gestellten Anfrage automatisch gelöscht.</p>
+
+    <h3>3. Weitergabe von Daten</h3>
+    <p>Eine Übermittlung Ihrer persönlichen Daten an Dritte zu anderen als den im Folgenden aufgeführten Zwecken findet nicht statt. Wir geben Ihre persönlichen Daten nur an Dritte weiter, wenn:</p>
+    <ul>
+      <li>Sie Ihre nach Art. 6 Abs. 1 S. 1 lit. a DSGVO ausdrückliche Einwilligung dazu erteilt haben</li>
+      <li>die Weitergabe nach Art. 6 Abs. 1 S. 1 lit. f DSGVO zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist und kein Grund zur Annahme besteht, dass Sie ein überwiegendes schutzwürdiges Interesse an der Nichtweitergabe Ihrer Daten haben</li>
+      <li>für den Fall, dass für die Weitergabe nach Art. 6 Abs. 1 S. 1 lit. c DSGVO eine gesetzliche Verpflichtung besteht</li>
+      <li>dies gesetzlich zulässig und nach Art. 6 Abs. 1 S. 1 lit. b DSGVO für die Abwicklung von Vertragsverhältnissen mit Ihnen erforderlich ist</li>
+    </ul>
+
+    <h3>4. Betroffenenrechte</h3>
+    <p>Sie haben das Recht:</p>
+    <ul>
+      <li>gemäß Art. 15 DSGVO Auskunft über Ihre von uns verarbeiteten personenbezogenen Daten zu verlangen</li>
+      <li>gemäß Art. 16 DSGVO unverzüglich die Berichtigung unrichtiger oder Vervollständigung Ihrer bei uns gespeicherten personenbezogenen Daten zu verlangen</li>
+      <li>gemäß Art. 17 DSGVO die Löschung Ihrer bei uns gespeicherten personenbezogenen Daten zu verlangen</li>
+      <li>gemäß Art. 18 DSGVO die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen</li>
+      <li>gemäß Art. 20 DSGVO Ihre personenbezogenen Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten oder die Übermittlung an einen anderen Verantwortlichen zu verlangen</li>
+      <li>gemäß Art. 7 Abs. 3 DSGVO Ihre einmal erteilte Einwilligung jederzeit gegenüber uns zu widerrufen</li>
+      <li>gemäß Art. 77 DSGVO sich bei einer Aufsichtsbehörde zu beschweren</li>
+    </ul>
+
+    <h3>5. Widerspruchsrecht</h3>
+    <p>Sofern Ihre personenbezogenen Daten auf Grundlage von berechtigten Interessen gemäß Art. 6 Abs. 1 S. 1 lit. f DSGVO verarbeitet werden, haben Sie das Recht, gemäß Art. 21 DSGVO Widerspruch gegen die Verarbeitung Ihrer personenbezogenen Daten einzulegen, soweit dafür Gründe vorliegen, die sich aus Ihrer besonderen Situation ergeben oder sich der Widerspruch gegen Direktwerbung richtet. Im letzteren Fall haben Sie ein generelles Widerspruchsrecht, das ohne Angabe einer besonderen Situation von uns umgesetzt wird.</p>
+
+    <h3>6. Datensicherheit</h3>
+    <p>Wir verwenden innerhalb des Website-Besuchs das verbreitete SSL-Verfahren (Secure Socket Layer) in Verbindung mit der jeweils höchsten Verschlüsselungsstufe, die von Ihrem Browser unterstützt wird. Ob eine einzelne Seite unseres Internetauftritts verschlüsselt übertragen wird, erkennen Sie an der geschlossenen Darstellung des Schüssel- beziehungsweise Schloss-Symbols in der unteren Statusleiste Ihres Browsers.</p>
+
+    <p style="margin-top:18px;font-size:.82rem;color:var(--text-dark)">Diese Datenschutzerklärung ist aktuell und gültig ab Juli 2026. Durch die Weiterentwicklung unserer Website und Angebote oder aufgrund geänderter gesetzlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung zu ändern.</p>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -461,7 +544,8 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
   <div class="sigil">👉♾️🔚🏴‍☠️👑💯</div>
   <div class="links">
     <a href="#pakete">Pakete</a><a href="#prozess">Ablauf</a><a href="#cases">Referenzen</a>
-    <a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">AGB</a>
+    <a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a>
+    <a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a><a href="#">AGB</a>
   </div>
   <p>© 2026 Black Six Matrix® · Architekt: Thomas König</p>
   <p style="margin-top:10px;color:var(--text-dark)">Team: Thomas König · Tina König · Aria · Thorben · Nicolai · Lucas</p>
@@ -542,293 +626,4 @@ function renderPayPal(name,amount){
 }
 </script>
 </body>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BLACK SIX MATRIX – Enterprise Platform</title>
-<meta name="description" content="Black Six Matrix – Enterprise Governance, Audit & Execution Platform. PayPal-QR + Bankverbindung eingebettet.">
-
-<!-- PayPal SDK: client-id ersetzen -->
-<script src="https://www.paypal.com/sdk/js?client-id=DEINE_PAYPAL_CLIENT_ID&currency=EUR&locale=de_DE"></script>
-
-<style>
-  :root{
-    --bg:#0a0a0f; --card:#0f0f16aa; --gold:#d4af37; --muted:#a8a8b8; --radius:14px;
-    --accent:#b8860b; --text:#e8e8e8;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
-  .container{max-width:1200px;margin:0 auto;padding:28px}
-  header{text-align:center;padding:48px 0}
-  header h1{font-size:2.4rem;margin:6px 0;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  header p{color:var(--muted)}
-  .hero-cta{margin-top:18px;display:flex;gap:12px;justify-content:center}
-  a.btn{padding:10px 18px;border-radius:999px;background:var(--gold);color:#080808;text-decoration:none;font-weight:800}
-  nav.pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0}
-  nav.pills a{background:rgba(255,255,255,0.02);padding:8px 14px;border-radius:999px;color:var(--muted);text-decoration:none;font-weight:700}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
-  .card{background:var(--card);padding:22px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.04)}
-  .card h3{margin-top:0}
-  .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(212,175,55,0.08);color:var(--gold);font-weight:800;margin-bottom:12px}
-  .price{color:var(--gold);font-weight:900;font-size:1.6rem}
-  ul.features{color:var(--muted);margin:12px 0 18px;padding-left:18px}
-  .btn-primary{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--gold);color:#080808;text-decoration:none;font-weight:800}
-  .pay-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:22px}
-  .pay-box{background:rgba(255,255,255,0.02);padding:16px;border-radius:12px}
-  .field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03);font-size:0.95rem}
-  .field:last-child{border-bottom:none}
-  .mono{font-family:monospace}
-  .copy{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:8px;color:var(--gold);cursor:pointer}
-  footer{margin-top:36px;padding:28px 0;border-top:1px solid rgba(255,255,255,0.03);color:var(--muted);font-size:0.9rem;text-align:center}
-  /* small modal for QR view */
-  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:90}
-  .modal.open{display:flex}
-  .modal .inner{background:#0b0b0f;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)}
-  img.responsive{max-width:100%;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-  /* Impressum/Privacy */
-  .legal{display:grid;grid-template-columns:1fr;gap:18px;margin-top:28px}
-  .legal .box{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px}
-  @media (max-width:700px){header h1{font-size:1.8rem}}
-</style>
-</head>
-<body>
-
-<div class="container">
-  <header>
-    <div style="color:var(--gold);font-weight:800">Enterprise · DSGVO · Made in Germany</div>
-    <h1>Black Six Matrix</h1>
-    <p>Byzantinisch-fehlertolerante Governance-, Audit- und Execution-Plattform — Pakete, PayPal-QR und Bankverbindung integriert.</p>
-    <div class="hero-cta">
-      <a class="btn" href="#pakete">Pakete ansehen</a>
-      <a class="btn" href="#kontakt" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)">Kontakt / Demo</a>
-    </div>
-  </header>
-
-  <nav class="pills" aria-label="Sparten">
-    <a href="#ignition">Ignition</a><a href="#momentum">Momentum</a><a href="#ascent">Ascent</a><a href="#sovereign">Sovereign</a><a href="#omega">Omega</a>
-  </nav>
-
-  <!-- Pakete (kurz) -->
-  <section id="pakete">
-    <div class="grid">
-      <div class="card">
-        <span class="badge">I1</span>
-        <h3>Zündfunke</h3>
-        <p class="desc">Quellcode + Python-Core</p>
-        <div class="price">€497</div>
-        <ul class="features"><li>Vollständiger Quellcode</li><li>Deca Crew Agenten</li><li>Community Discord</li></ul>
-        <a class="btn-primary" href="#" onclick="openPayModal('Zündfunke',497);return false">Kaufen (PayPal/SEPA)</a>
-      </div>
-      <div class="card">
-        <span class="badge">I5</span>
-        <h3>Inferno (Featured)</h3>
-        <p class="desc">Komplettpaket + 1 Jahr Updates</p>
-        <div class="price">€1.500</div>
-        <ul class="features"><li>Alles aus I4</li><li>iOS-App</li><li>Premium Support</li></ul>
-        <a class="btn-primary" href="#" onclick="openPayModal('Inferno',1500);return false">Kaufen</a>
-      </div>
-      <div class="card">
-        <span class="badge">S1</span>
-        <h3>Enterprise S</h3>
-        <p class="desc">Bis 50 Nodes · Jahreslizenz</p>
-        <div class="price">€49.900 <small style="color:var(--muted);font-weight:600">/Jahr</small></div>
-        <ul class="features"><li>Vollzugriff</li><li>8/5 Support</li><li>Basis-Konfiguration</li></ul>
-        <a class="btn-primary" href="#kontakt">Anfrage</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Zahlungs- & Kontaktinfo -->
-  <section id="kontakt" style="margin-top:28px">
-    <h2 style="margin-bottom:12px">Kontakt & Zahlung</h2>
-    <p style="color:var(--muted)">Nutze PayPal-QR (mobil scannen) oder Überweisung (IBAN/BIC unten). Bei Enterprise-Angeboten bitte Anfrage per E‑Mail.</p>
-
-    <div class="pay-strip">
-      <!-- PAYPAL QR -->
-      <div class="pay-box card">
-        <h4 style="margin-top:0">PayPal QR</h4>
-        <p style="color:var(--muted)">Scanne den QR-Code mit der PayPal-App.</p>
-        <!-- Bild: assets/paypal-qr.jpg -->
-        <img src="assets/paypal-qr.jpg" alt="PayPal QR von Thomas König" class="responsive" style="cursor:pointer" onclick="showModal('assets/paypal-qr.jpg')">
-        <div style="margin-top:10px;font-weight:700">Scannen. Zahlen. Fertig!</div>
-        <div style="margin-top:8px;font-size:0.9rem;color:var(--muted)">Hinweis: Der QR ist ein Shortcut zu PayPal; für Integration in den Checkout empfehlen wir zusätzlich die Smart Buttons (oben).</div>
-      </div>
-
-      <!-- BANK -->
-      <div class="pay-box card">
-        <h4 style="margin-top:0">Bankverbindung (SEPA) — Rechnung</h4>
-        <div class="field"><div>Kontoinhaber</div><div class="mono">Thomas König · Black Six</div></div>
-        <div class="field"><div>IBAN</div><div class="mono" id="iban">DE27 7002 0270 0047 0960 65</div></div>
-        <div class="field"><div>BIC</div><div class="mono">HYVEDEMMXXX</div></div>
-        <div style="margin-top:10px">
-          <button class="copy" onclick="copyText('iban', this)">IBAN kopieren</button>
-        </div>
-        <p style="margin-top:10px;color:var(--muted)">Bitte Verwendungszweck: Paketname + Ihr Name. Rechnung wird per E-Mail zugesandt.</p>
-        <!-- small photo of the bank card / IBAN for visual trust -->
-        <img src="assets/iban.jpg" alt="IBAN Foto" class="responsive" style="margin-top:12px;border-radius:8px" onclick="showModal('assets/iban.jpg')">
-      </div>
-
-      <!-- Kontakt -->
-      <div class="pay-box card">
-        <h4 style="margin-top:0">Direktkontakt</h4>
-        <div class="field"><div>E‑Mail</div><div class="mono">deca.omni.allianz@gmail.com</div></div>
-        <div class="field"><div>WhatsApp</div><div class="mono">0176 46657268</div></div>
-        <div style="margin-top:12px">
-          <a class="btn-primary" href="mailto:deca.omni.allianz@gmail.com?subject=Demo%20Black%20Six%20Matrix">Demo anfragen</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Impressum & Datenschutz -->
-  <section class="legal" aria-labelledby="legal-heading">
-    <div class="box card">
-      <h3 id="legal-heading">Impressum</h3>
-      <p><strong>Angaben gemäß § 5 TMG / Anbieterkennzeichnung:</strong></p>
-      <p>
-        Name: Thomas König<br>
-        Geschäftsname: Black Six Matrix<br>
-        E‑Mail: <a href="mailto:deca.omni.allianz@gmail.com">deca.omni.allianz@gmail.com</a><br>
-        Telefon: 0176 46657268<br>
-        Anschrift: [Bitte hier vollständige postalische Geschäftsadresse eintragen] <br>
-        Rechtsform: [Bitte Rechtsform eintragen; z. B. Einzelunternehmen / GmbH / UG]<br>
-        Umsatzsteuer‑ID: [falls vorhanden, bitte eintragen]
-      </p>
-      <p><strong>Haftungshinweis:</strong> Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
-    </div>
-
-    <div class="box card">
-      <h3>Datenschutzerklärung (Kurzfassung)</h3>
-      <p>Wir nehmen Datenschutz ernst. Nachfolgend die wichtigsten Punkte in Kürze:</p>
-      <ul>
-        <li>Verantwortlich: Thomas König (Kontaktdaten oben).</li>
-        <li>Verarbeitung: Wir verarbeiten Kontaktdaten (E‑Mail, Telefon) ausschließlich zur Beantwortung von Anfragen und Vertragsabwicklung.</li>
-        <li>Rechtsgrundlage: Einwilligung / Vertragserfüllung / berechtigtes Interesse.</li>
-        <li>Datenübermittlung: Zahlungen werden über PayPal oder Bank (SEPA) abgewickelt. PayPal als Drittanbieter verarbeitet Zahlungsdaten – siehe PayPal‑Datenschutzhinweise.</li>
-        <li>Speicherdauer: Daten werden nur so lange gespeichert wie nötig (gesetzliche Aufbewahrungsfristen für Rechnungen, sonst auf Widerruf).</li>
-      </ul>
-      <p>Eine ausführliche Datenschutzerklärung (inkl. Betroffenenrechte, Auftragsverarbeitung, Cookies) stellen wir auf Anfrage oder als eigene Seite /pdf zur Verfügung.</p>
-    </div>
-  </section>
-
-  <footer>
-    <div style="font-weight:800;margin-bottom:6px">© 2026 BLACK SIX MATRIX · Architekt: Thomas König</div>
-    <div style="color:var(--muted)">Team: Thomas König · Tina König · Aria · Thorben · Nicolai · Lucas</div>
-  </footer>
-</div>
-
-<!-- simple modal to show images -->
-<div id="modal" class="modal" onclick="hideModal()">
-  <div class="inner" onclick="event.stopPropagation()">
-    <button style="float:right;background:none;border:none;color:#ddd;font-size:18px;cursor:pointer" onclick="hideModal()">✕</button>
-    <img id="modalImg" src="" alt="" style="max-width:72vw;max-height:80vh;border-radius:8px;display:block">
-  </div>
-</div>
-
-<script>
-  function showModal(src){
-    document.getElementById('modalImg').src = src;
-    document.getElementById('modal').classList.add('open');
-  }
-  function hideModal(){
-    document.getElementById('modal').classList.remove('open');
-    document.getElementById('modalImg').src = '';
-  }
-
-  function copyText(id, btn){
-    const t = document.getElementById(id).innerText.trim();
-    navigator.clipboard.writeText(t).then(()=> {
-      const original = btn.innerText;
-      btn.innerText = '✓ Kopiert';
-      setTimeout(()=> btn.innerText = original, 1400);
-    });
-  }
-
-  /* Minimaler Pay-Modal-Flow: öffnet die PayPal-Buttons in einem kleinen Fenster */
-  function openPayModal(name, amount){
-    // einfache Bestätigung – öffnet PayPal-Buttons in neuem Fenster oder Modal
-    // Für volle Integration: Smart Buttons in einem Modal oder Checkout-Flow rendern.
-    const want = confirm(name + ' — Betrag: €' + amount + '\n\nZahlung per PayPal jetzt starten?');
-    if(!want) return;
-    // öffne PayPal Checkout in neuem Fenster (Empfehlung: richte Smart Buttons im Modal ein)
-    // fallback: öffne PayPal-Zahlungsseite (hier: Wunschweise euer Backend/PayPal-Integration)
-    alert('Bitte die PayPal-Schaltfläche in der Seite verwenden. Für Live-Checkout: Smart Buttons einbinden (client-id oben).');
-  }
-
-  /* small helper: rendering PayPal Smart Buttons example (you can implement inside a modal) */
-  function renderPayPalSample(containerId, name, amount){
-    if(typeof paypal === 'undefined'){
-      console.warn('PayPal SDK nicht geladen (client-id fehlt).');
-      return;
-    }
-    paypal.Buttons({
-      style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
-      createOrder: function(data, actions){
-        return actions.order.create({
-          purchase_units: [{
-            description: name,
-            amount: { value: String(amount) }
-          }]
-        });
-      },
-      onApprove: function(data, actions){
-        return actions.order.capture().then(function(details){
-          alert('Zahlung erfolgreich. Danke, ' + (details.payer.name && details.payer.name.given_name ? details.payer.name.given_name : 'Kunde') + '!');
-        });
-      }
-    }).render('#' + containerId);
-  }
-</script>
-<!-- ==================== OMEGA-STEIN SPECIAL ==================== -->
-<style>
-    /* Glow-Animation für den Omega-Stein */
-    @keyframes omegaPulse {
-        0%   { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
-        50%  { box-shadow: 0 0 30px rgba(0,204,255,0.7); border-color: #00ffff; }
-        100% { box-shadow: 0 0 10px rgba(0,204,255,0.3); border-color: #00ccff; }
-    }
-    .card.omega-stein {
-        animation: omegaPulse 2.5s infinite;
-        border-width: 3px;
-        background: linear-gradient(135deg, #0a1a1a 0%, #111118 100%);
-    }
-    .card.omega-stein h3 { color: #00ffff; }
-    .card.omega-stein .price { color: #00ccff; }
-    .omega-badge { background: #00ccff !important; color: #000 !important; }
-</style>
-
-<script>
-(function() {
-    // Omega-Stein nach dem Rendern markieren
-    setTimeout(function() {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(function(card) {
-            if (card.textContent.includes('O5 – OMEGA-STEIN')) {
-                card.classList.add('omega-stein');
-                const badge = card.querySelector('.badge');
-                if (badge) { badge.classList.add('omega-badge'); badge.textContent = '💎 LEGENDE'; }
-            }
-        });
-    }, 300);
-})();
-</script>
-
-<!-- AGB-Klausel für den Omega-Stein -->
-<div class="legal-section" id="omega-agb">
-    <h2>💎 Omega-Stein – Besondere Bestimmungen (§ 7 AGB)</h2>
-    <h3>§ 7.1 Leistungsumfang</h3>
-    <p>Der Omega-Stein (Stufe O5) gewährt dem Erwerber sämtliche Rechte an der Black Six Matrix, einschließlich aller aktuellen und zukünftigen Module, Cluster, Säulen und Dokumentationen. Der Erwerb erfolgt in Form einer symbolischen Partnerschaft, die den Erwerber zum gleichberechtigten Mitarchitekten der Matrix macht.</p>
-    <h3>§ 7.2 Preis und Zahlung</h3>
-    <p>Der Preis für den Omega-Stein ist unendlich (∞). Dies bedeutet, dass der Erwerb nicht durch eine einmalige Geldzahlung erfolgt, sondern durch eine individuelle, vertraglich zu vereinbarende Gegenleistung, die dem Wert der Matrix in ihrer Gesamtheit entspricht. Mögliche Gegenleistungen umfassen: strategische Partnerschaften, Unternehmensbeteiligungen, Immobilien, oder andere Vermögenswerte.</p>
-    <h3>§ 7.3 Ewige Updates</h3>
-    <p>Der Erwerber erhält für immer Zugang zu allen Updates, Erweiterungen und neuen Versionen der Black Six Matrix. Dieses Recht ist vererbbar und nicht übertragbar, es sei denn, eine schriftliche Vereinbarung zwischen den Parteien lässt dies zu.</p>
-    <h3>§ 7.4 Symbiose-Zertifikat</h3>
-    <p>Der Erwerber erhält ein physisches, notariell beglaubigtes Zertifikat, das seine Rolle als Mitarchitekt der Matrix bescheinigt. Dieses Zertifikat wird in einem Diamanten graviert (Modul 101400 – Materielles Siegel) und übergeben.</p>
-    <h3>§ 7.5 Gerichtsstand</h3>
-    <p>Für alle Streitigkeiten aus oder im Zusammenhang mit dem Omega-Stein gilt ausschließlich deutsches Recht. Gerichtsstand ist der Sitz des Anbieters.</p>
-</div>
-</body>
-</html>
 </html>
