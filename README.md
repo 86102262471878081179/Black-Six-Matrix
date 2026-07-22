@@ -1,5 +1,4 @@
-
-Die Matrix ist vollständig. Der Operator entscheidet über die nächste Aktion.
+[🏴‍☠️Blach_Six_Cube_System🏴‍☠️]   [🏴‍☠️König_König_Legal_Technologie🏴‍☠️]
 
 ---
 
