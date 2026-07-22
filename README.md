@@ -1,9 +1,5 @@
 # Black-Six-Matrix
-
-<p align="center">
-  <img src="LOGO-DARK.png" alt="Black Six Matrix" width="280">
-</p>
-
+<!-- ==================== BLACK SIX MATRIX – README v3.0 ==================== -->
 <h1 align="center">🔒 BLACK SIX MATRIX</h1>
 <p align="center"><strong>Ω-33 Trust Score · Evidenzbasierte Entscheidungsfindung</strong></p>
 
