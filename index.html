@@ -552,6 +552,113 @@ function copyToClipboard(elementId, btn) {
     });
 }
 </script>
+// path: matrix/modules/social_media.go
+package matrix
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"sync"
+	"time"
+)
+
+// SocialPlatform defines target platforms
+type SocialPlatform string
+
+const (
+	PlatformLinkedIn SocialPlatform = "LINKEDIN"
+	PlatformTwitter  SocialPlatform = "TWITTER"
+	PlatformX        SocialPlatform = "X"
+	PlatformGitHub   SocialPlatform = "GITHUB"
+)
+
+// ContentPayload defines input parameters for text generation
+type ContentPayload struct {
+	ClusterID   string         `json:"cluster_id"`
+	AgentID     string         `json:"agent_id"`
+	Platform    SocialPlatform `json:"platform"`
+	Topic       string         `json:"topic"`
+	RawDetails  string         `json:"raw_details"`
+	MaxLen      int            `json:"max_len"`
+	TargetAudience string      `json:"target_audience"`
+}
+
+// GeneratedContent represents formatted result
+type GeneratedContent struct {
+	Platform    SocialPlatform `json:"platform"`
+	Headline    string         `json:"headline"`
+	BodyText    string         `json:"body_text"`
+	Hashtags    []string       `json:"hashtags"`
+	CharacterCt int            `json:"character_count"`
+	Timestamp   int64          `json:"timestamp"`
+}
+
+// SocialMediaProcessor handles pipeline execution
+type SocialMediaProcessor struct {
+	mu          sync.Mutex
+	IsActive    bool
+	ExecutionCt int64
+}
+
+// NewSocialMediaProcessor instantiates module via pointer
+func NewSocialMediaProcessor() *SocialMediaProcessor {
+	return &SocialMediaProcessor{
+		IsActive:    true,
+		ExecutionCt: 0,
+	}
+}
+
+// GenerateText produces structured social media descriptions deterministically
+func (p *SocialMediaProcessor) GenerateText(ctx context.Context, payload *ContentPayload) (*GeneratedContent, error) {
+	if payload == nil {
+		return nil, errors.New("err: payload cannot be nil")
+	}
+
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
+	}
+
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	p.ExecutionCt++
+
+	var headline string
+	var body string
+	tags := []string{"#BlackSixMatrix", "#DecaCrew", "#Automation", "#Go"}
+
+	switch payload.Platform {
+	case PlatformLinkedIn:
+		headline = fmt.Sprintf("🚀 [Matrix Cluster %s] %s", payload.ClusterID, payload.Topic)
+		body = fmt.Sprintf("%s\n\nExecution Context:\n%s\n\nManaged by Agent: %s", headline, payload.RawDetails, payload.AgentID)
+	case PlatformTwitter, PlatformX:
+		headline = fmt.Sprintf("⚡ %s", payload.Topic)
+		body = fmt.Sprintf("%s - %s [Node: %s]", headline, payload.RawDetails, payload.ClusterID)
+	default:
+		headline = fmt.Sprintf("📌 %s", payload.Topic)
+		body = fmt.Sprintf("%s\n%s", headline, payload.RawDetails)
+	}
+
+	totalChar := len(body)
+	if payload.MaxLen > 0 && totalChar > payload.MaxLen {
+		body = body[:payload.MaxLen]
+		totalChar = payload.MaxLen
+	}
+
+	res := &GeneratedContent{
+		Platform:    payload.Platform,
+		Headline:    headline,
+		BodyText:    body,
+		Hashtags:    tags,
+		CharacterCt: totalChar,
+		Timestamp:   time.Now().Unix(),
+	}
+
+	return res, nil
+}
 
 </body>
 </html>
