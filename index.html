@@ -1,5 +1,5 @@
 
-<!<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -88,7 +88,6 @@
             background: rgba(77, 107, 254, 0.12); border: 1px solid rgba(77, 107, 254, 0.3);
             border-radius: 20px; font-size: 0.72rem; font-weight: 700; color: #6B8AFF;
         }
-        .deepseek-logo-svg { width: 18px; height: 18px; fill: currentColor; }
         .topbar nav { display: flex; gap: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         .topbar nav a:hover { color: var(--accent-cyan); }
         .topbar .cta {
@@ -96,7 +95,6 @@
             font-weight: 800; font-size: 0.8rem; text-decoration: none; transition: 0.2s;
         }
         .topbar .cta:hover { background: #e5be48; transform: translateY(-1px); }
-        @media(max-width: 880px) { .topbar nav { display: none; } }
 
         /* HEADER */
         header { 
@@ -120,22 +118,6 @@
             font-size: 2.2rem; margin-top: 15px; letter-spacing: 8px; cursor: pointer; 
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; user-select: none; opacity: 0.8;
         }
-        .sigil:hover { transform: scale(1.12); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); opacity: 1; }
-
-        /* TRUST BAR & STATS */
-        .trust {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 34px;
-            padding: 22px 20px; border-bottom: 1px solid var(--border-subtle);
-            color: var(--text-muted); font-size: 0.82rem; font-weight: 600; background: rgba(10, 10, 15, 0.4);
-        }
-        .trust b { color: var(--accent-cyan); }
-
-        /* SECTION BASE */
-        .section { max-width: 1600px; margin: 0 auto 70px; padding: 0 20px; }
-        .section h2 { 
-            font-size: 2rem; font-weight: 800; color: var(--text-main); 
-            margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); 
-        }
 
         /* SPARTEN NAV */
         .sparten-nav { 
@@ -151,34 +133,35 @@
         .sparten-nav a:hover { transform: translateY(-3px); border-color: var(--metallic-silver); color: var(--metallic-gold); }
 
         /* GRID & CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; }
+        .section { max-width: 1600px; margin: 0 auto 70px; padding: 0 20px; }
+        .section h2 { 
+            font-size: 1.8rem; font-weight: 800; color: var(--text-main); 
+            margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); 
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .card { 
             background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-l); 
-            padding: 28px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; 
-            backdrop-filter: blur(16px); box-shadow: var(--shadow-8k); position: relative; overflow: hidden;
+            padding: 24px; transition: all 0.3s ease; display: flex; flex-direction: column; 
+            backdrop-filter: blur(16px); box-shadow: var(--shadow-8k); position: relative;
         }
-        .card:hover { border-color: var(--border-bright); transform: translateY(-6px); background: var(--bg-card-hover); }
+        .card:hover { border-color: var(--border-bright); transform: translateY(-4px); background: var(--bg-card-hover); }
         .card.featured { 
             border: 1px solid var(--metallic-gold); 
             background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 15, 22, 0.92) 100%); 
         }
         .badge { 
-            padding: 6px 16px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; 
-            text-transform: uppercase; display: inline-block; margin-bottom: 16px; width: fit-content; 
+            padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; 
+            text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; 
             border: 1px solid var(--metallic-gold); color: var(--metallic-gold); background: rgba(212, 175, 55, 0.08);
         }
-        h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
-        .desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
-        .price { font-size: 2.2rem; color: var(--metallic-gold); font-weight: 900; margin: 12px 0; letter-spacing: -1px; }
-        .price small { font-size: 0.85rem; color: var(--text-dark); font-weight: 400; letter-spacing: 0; }
-        .features { list-style: none; margin: 16px 0 24px; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; }
-        .features li { padding: 6px 0; position: relative; padding-left: 24px; }
-        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--green-check); font-weight: bold; }
+        h3 { font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; }
+        .price { font-size: 1.8rem; color: var(--metallic-gold); font-weight: 900; margin: 8px 0 16px; }
 
         .btn { 
-            background: var(--metallic-silver); color: #0a0a0f; padding: 14px 20px; border: none; 
-            border-radius: var(--radius-s); font-size: 0.9rem; font-weight: 800; cursor: pointer; width: 100%; 
-            transition: all 0.2s ease; letter-spacing: 0.5px; text-align: center; display: inline-block;
+            background: var(--metallic-silver); color: #0a0a0f; padding: 12px 18px; border: none; 
+            border-radius: var(--radius-s); font-size: 0.85rem; font-weight: 800; cursor: pointer; width: 100%; 
+            transition: all 0.2s ease; margin-top: auto; text-align: center;
         }
         .btn:hover { background: var(--metallic-platinum); transform: scale(1.02); }
         .btn-gold { background: var(--metallic-gold); color: #0a0a0f; }
@@ -219,16 +202,11 @@
 <div class="topbar">
     <div class="brand-group">
         <div class="brand">🏴‍☠️ BLACK SIX MATRIX®</div>
-        <div class="deepseek-badge">
-            <svg class="deepseek-logo-svg" viewBox="0 0 100 100">
-                <path d="M20 20 L80 20 L80 80 L20 80 Z M35 35 L65 35 L65 65 L35 65 Z"/>
-            </svg>
-            DeepSeek-R1 Integrated
-        </div>
+        <div class="deepseek-badge">DeepSeek-R1 Integrated</div>
     </div>
     <nav>
-        <a href="#pakete">Pakete</a>
-        <a href="#kontakt">Kontakt</a>
+        <a href="#pakete">Alle Pakete</a>
+        <a href="#kontakt">Kontakt & Impressum</a>
     </nav>
     <a href="#pakete" class="cta">Jetzt Bestellen</a>
 </div>
@@ -237,82 +215,40 @@
 <header>
     <div class="eyebrow">Sovereign Enterprise Architecture · Master Deliveries</div>
     <h1>Black Six Matrix</h1>
-    <p class="subtitle">25 MVP-Pakete · Sofort-Download nach Autorisierung</p>
+    <p class="subtitle">Alle 25 MVP-Pakete · Sofort-Download nach Autorisierung</p>
     <p class="sigil" id="header-sigil">👉♾️🔚🏴‍☠️👑💯</p>
 </header>
 
 <div id="pakete"></div>
 <nav class="sparten-nav">
-    <a href="#ignition">🔥 IGNITION</a>
-    <a href="#momentum">⚡ MOMENTUM</a>
-    <a href="#ascent">🚀 ASCENT</a>
-    <a href="#sovereign">👑 SOVEREIGN</a>
-    <a href="#omega">💎 OMEGA</a>
+    <a href="#ignition">🔥 IGNITION (5)</a>
+    <a href="#momentum">⚡ MOMENTUM (5)</a>
+    <a href="#ascent">🚀 ASCENT (5)</a>
+    <a href="#sovereign">👑 SOVEREIGN (5)</a>
+    <a href="#omega">💎 OMEGA (5)</a>
 </nav>
 
 <!-- IGNITION SPARTE -->
 <section id="ignition" class="section">
-    <h2>🔥 IGNITION – Starter Pakete</h2>
+    <h2>🔥 IGNITION – Starter & Code Pakete</h2>
     <div class="grid">
-        <div class="card">
-            <span class="badge">I1</span>
-            <h3>I1 – ZÜNDFUNKE</h3>
-            <p class="desc">Quellcode + Python-Core</p>
-            <p class="price">€497</p>
-            <ul class="features"><li>Vollständiger Quellcode</li><li>Deca Crew Agenten</li></ul>
-            <button class="btn" onclick="kaufeJetzt('I1 – ZÜNDFUNKE', 497)">Jetzt kaufen</button>
-        </div>
-        <div class="card">
-            <span class="badge">I2</span>
-            <h3>I2 – GLIMMER</h3>
-            <p class="desc">+ Installation</p>
-            <p class="price">€750</p>
-            <ul class="features"><li>Alles aus I1</li><li>1h Remote-Support</li></ul>
-            <button class="btn" onclick="kaufeJetzt('I2 – GLIMMER', 750)">Jetzt kaufen</button>
-        </div>
-        <div class="card">
-            <span class="badge">I3</span>
-            <h3>I3 – FUNKE</h3>
-            <p class="desc">+ CLI-Tool</p>
-            <p class="price">€990</p>
-            <ul class="features"><li>Alles aus I2</li><li>CLI-Tool b6</li></ul>
-            <button class="btn" onclick="kaufeJetzt('I3 – FUNKE', 990)">Jetzt kaufen</button>
-        </div>
-        <div class="card">
-            <span class="badge">I4</span>
-            <h3>I4 – FLAMME</h3>
-            <p class="desc">+ Docker</p>
-            <p class="price">€1.200</p>
-            <ul class="features"><li>Alles aus I3</li><li>Docker-Container</li></ul>
-            <button class="btn" onclick="kaufeJetzt('I4 – FLAMME', 1200)">Jetzt kaufen</button>
-        </div>
-        <div class="card featured">
-            <span class="badge">I5</span>
-            <h3>I5 – INFERNO</h3>
-            <p class="desc">Komplettpaket + iOS Basis</p>
-            <p class="price">€1.500</p>
-            <ul class="features"><li>Alles aus I4</li><li>1 Jahr Updates</li><li>iOS Xcode Basis</li></ul>
-            <button class="btn btn-gold" onclick="kaufeJetzt('I5 – INFERNO', 1500)">Jetzt kaufen</button>
-        </div>
+        <div class="card"><span class="badge">I1</span><h3>I1 – ZÜNDFUNKE</h3><p class="desc">Quellcode + Python Core</p><p class="price">€497</p><button class="btn" onclick="kaufeJetzt('I1 – ZÜNDFUNKE', 497)">Jetzt kaufen</button></div>
+        <div class="card"><span class="badge">I2</span><h3>I2 – GLIMMER</h3><p class="desc">+ 1h Remote Support</p><p class="price">€750</p><button class="btn" onclick="kaufeJetzt('I2 – GLIMMER', 750)">Jetzt kaufen</button></div>
+        <div class="card"><span class="badge">I3</span><h3>I3 – FUNKE</h3><p class="desc">+ CLI-Tooling b6</p><p class="price">€990</p><button class="btn" onclick="kaufeJetzt('I3 – FUNKE', 990)">Jetzt kaufen</button></div>
+        <div class="card"><span class="badge">I4</span><h3>I4 – FLAMME</h3><p class="desc">+ Docker & Setup</p><p class="price">€1.200</p><button class="btn" onclick="kaufeJetzt('I4 – FLAMME', 1200)">Jetzt kaufen</button></div>
+        <div class="card featured"><span class="badge">I5</span><h3>I5 – INFERNO</h3><p class="desc">Komplett + iOS Basis + 1J Updates</p><p class="price">€1.500</p><button class="btn btn-gold" onclick="kaufeJetzt('I5 – INFERNO', 1500)">Jetzt kaufen</button></div>
     </div>
 </section>
 
 <!-- MOMENTUM SPARTE -->
 <section id="momentum" class="section">
-    <h2>⚡ MOMENTUM – Training & Audit</h2>
+    <h2>⚡ MOMENTUM – Schulung, Training & Audit</h2>
     <div class="grid">
-        <div class="card">
-            <span class="badge">M1</span>
-            <h3>M1 – BOOTCAMP</h3>
-            <p class="price">€1.250</p>
-            <button class="btn" onclick="kaufeJetzt('M1 – BOOTCAMP', 1250)">Jetzt buchen</button>
-        </div>
-        <div class="card featured">
-            <span class="badge">M5</span>
-            <h3>M5 – MEISTER</h3>
-            <p class="price">€3.500</p>
-            <button class="btn btn-gold" onclick="kaufeJetzt('M5 – MEISTER', 3500)">Jetzt buchen</button>
-        </div>
+        <div class="card"><span class="badge">M1</span><h3>M1 – BOOTCAMP</h3><p class="desc">1 Tag Schulung Live</p><p class="price">€1.250</p><button class="btn" onclick="kaufeJetzt('M1 – BOOTCAMP', 1250)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">M2</span><h3>M2 – FORTGESCHRITTEN</h3><p class="desc">2 Tage Vertiefung</p><p class="price">€1.800</p><button class="btn" onclick="kaufeJetzt('M2 – FORTGESCHRITTEN', 1800)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">M3</span><h3>M3 – AUDIT</h3><p class="desc">Code-Review & Sicherheit</p><p class="price">€2.200</p><button class="btn" onclick="kaufeJetzt('M3 – AUDIT', 2200)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">M4</span><h3>M4 – LEGAL TECH</h3><p class="desc">DSGVO & Compliance</p><p class="price">€2.800</p><button class="btn" onclick="kaufeJetzt('M4 – LEGAL TECH', 2800)">Jetzt buchen</button></div>
+        <div class="card featured"><span class="badge">M5</span><h3>M5 – MEISTER</h3><p class="desc">5-Tage Voll-Zertifizierung</p><p class="price">€3.500</p><button class="btn btn-gold" onclick="kaufeJetzt('M5 – MEISTER', 3500)">Jetzt buchen</button></div>
     </div>
 </section>
 
@@ -320,12 +256,11 @@
 <section id="ascent" class="section">
     <h2>🚀 ASCENT – Professional Implementation</h2>
     <div class="grid">
-        <div class="card featured">
-            <span class="badge">A5</span>
-            <h3>A5 – GIPFEL</h3>
-            <p class="price">€29.900</p>
-            <button class="btn btn-gold" onclick="kaufeJetzt('A5 – GIPFEL', 29900)">Jetzt buchen</button>
-        </div>
+        <div class="card"><span class="badge">A1</span><h3>A1 – AUFSTIEG</h3><p class="desc">Basis Setup On-Site</p><p class="price">€4.900</p><button class="btn" onclick="kaufeJetzt('A1 – AUFSTIEG', 4900)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">A2</span><h3>A2 – ORBIT</h3><p class="desc">Multi-Node Integration</p><p class="price">€8.500</p><button class="btn" onclick="kaufeJetzt('A2 – ORBIT', 8500)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">A3</span><h3>A3 – BESCHLEUNIGUNG</h3><p class="desc">Custom Pipeline Adaption</p><p class="price">€12.900</p><button class="btn" onclick="kaufeJetzt('A3 – BESCHLEUNIGUNG', 12900)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">A4</span><h3>A4 – MULTIVERSUM</h3><p class="desc">High-Availability Cluster</p><p class="price">€18.500</p><button class="btn" onclick="kaufeJetzt('A4 – MULTIVERSUM', 18500)">Jetzt buchen</button></div>
+        <div class="card featured"><span class="badge">A5</span><h3>A5 – GIPFEL</h3><p class="desc">Full Architecture Modernization</p><p class="price">€29.900</p><button class="btn btn-gold" onclick="kaufeJetzt('A5 – GIPFEL', 29900)">Jetzt buchen</button></div>
     </div>
 </section>
 
@@ -333,24 +268,39 @@
 <section id="sovereign" class="section">
     <h2>👑 SOVEREIGN – Enterprise Solutions</h2>
     <div class="grid">
-        <div class="card featured">
-            <span class="badge">S5</span>
-            <h3>S5 – OMEGA ENTERPRISE</h3>
-            <p class="price">€2.499.000</p>
-            <button class="btn btn-gold" onclick="kaufeJetzt('S5 – OMEGA ENTERPRISE', 2499000)">Jetzt buchen</button>
-        </div>
+        <div class="card"><span class="badge">S1</span><h3>S1 – ENTERPRISE S</h3><p class="desc">Dedicated Node Setup</p><p class="price">€49.000</p><button class="btn" onclick="kaufeJetzt('S1 – ENTERPRISE S', 49000)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">S2</span><h3>S2 – ENTERPRISE M</h3><p class="desc">Multi-Region Redundanz</p><p class="price">€99.000</p><button class="btn" onclick="kaufeJetzt('S2 – ENTERPRISE M', 99000)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">S3</span><h3>S3 – ENTERPRISE L</h3><p class="desc">Custom ASIC / GPU Tuning</p><p class="price">€249.000</p><button class="btn" onclick="kaufeJetzt('S3 – ENTERPRISE L', 249000)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">S4</span><h3>S4 – ENTERPRISE XL</h3><p class="desc">Sovereign Cloud Migration</p><p class="price">€499.000</p><button class="btn" onclick="kaufeJetzt('S4 – ENTERPRISE XL', 499000)">Jetzt buchen</button></div>
+        <div class="card featured"><span class="badge">S5</span><h3>S5 – OMEGA ENTERPRISE</h3><p class="desc">Full Source Transfer & IP Buyout</p><p class="price">€2.499.000</p><button class="btn btn-gold" onclick="kaufeJetzt('S5 – OMEGA ENTERPRISE', 2499000)">Jetzt buchen</button></div>
     </div>
 </section>
 
 <!-- OMEGA SPARTE -->
 <section id="omega" class="section">
-    <h2>💎 OMEGA – Custom Build</h2>
+    <h2>💎 OMEGA – Custom & Air-Gapped Special Builds</h2>
     <div class="grid">
-        <div class="card featured">
-            <span class="badge">O5</span>
-            <h3>O5 – OMEGA STEIN</h3>
-            <p class="price">€25.000</p>
-            <button class="btn btn-gold" onclick="kaufeJetzt('O5 – OMEGA STEIN', 25000)">Jetzt buchen</button>
+        <div class="card"><span class="badge">O1</span><h3>O1 – AIRGAP</h3><p class="desc">Isoliertes High-Security System</p><p class="price">€15.000</p><button class="btn" onclick="kaufeJetzt('O1 – AIRGAP', 15000)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">O2</span><h3>O2 – TRAINING</h3><p class="desc">Lokales LLM Fine-Tuning</p><p class="price">€18.500</p><button class="btn" onclick="kaufeJetzt('O2 – TRAINING', 18500)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">O3</span><h3>O3 – TREUHAND</h3><p class="desc">Escrow & Secure Storage</p><p class="price">€21.000</p><button class="btn" onclick="kaufeJetzt('O3 – TREUHAND', 21000)">Jetzt buchen</button></div>
+        <div class="card"><span class="badge">O4</span><h3>O4 – INDIVIDUELL</h3><p class="desc">Maßgeschneiderte Algorithmen</p><p class="price">€23.500</p><button class="btn" onclick="kaufeJetzt('O4 – INDIVIDUELL', 23500)">Jetzt buchen</button></div>
+        <div class="card featured"><span class="badge">O5</span><h3>O5 – OMEGA STEIN</h3><p class="desc">Finaler Sovereign Benchmark Build</p><p class="price">€25.000</p><button class="btn btn-gold" onclick="kaufeJetzt('O5 – OMEGA STEIN', 25000)">Jetzt buchen</button></div>
+    </div>
+</section>
+
+<!-- KONTAKT & ANSPRECHPARTNER -->
+<section id="kontakt" class="section">
+    <h2>📬 Kontakt & Systemverantwortliche</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Thomas König</h3>
+            <p class="desc">System Architect & Owner</p>
+            <p class="mono" style="font-size:0.8rem; color:var(--metallic-gold);">deca.omni.allianz@gmail.com</p>
+        </div>
+        <div class="card">
+            <h3>Support & Operations</h3>
+            <p class="desc">Black Six Matrix Operations</p>
+            <p class="mono" style="font-size:0.8rem; color:var(--text-muted);">Münsterland / Ibbenbüren</p>
         </div>
     </div>
 </section>
@@ -358,7 +308,7 @@
 <!-- FOOTER -->
 <footer>
     <div class="flogo">🏴‍☠️ BLACK SIX MATRIX®</div>
-    <p>© 2026 Thomas König · All Rights Reserved</p>
+    <p>© 2026 Thomas König · All Rights Reserved · Deca Omni Allianz</p>
 </footer>
 
 <!-- PAYMENT MODAL -->
@@ -394,9 +344,7 @@
         <button class="close" onclick="closeModal('downloadModal')">×</button>
         <h3 style="color:var(--green-check); margin-bottom:10px;">✓ Autorisierung Erfolgreich</h3>
         <p style="color:var(--text-muted); font-size:0.9rem;" id="download-title">Ihr Paket steht bereit</p>
-        <div id="download-links" style="margin: 25px 0; background:rgba(0,0,0,0.4); padding:20px; border-radius:var(--radius-m); border:1px solid var(--border-bright);">
-            <!-- Dynamic Download Button -->
-        </div>
+        <div id="download-links" style="margin: 25px 0; background:rgba(0,0,0,0.4); padding:20px; border-radius:var(--radius-m); border:1px solid var(--border-bright);"></div>
         <p style="font-size:0.75rem; color:var(--text-dark);">Bestätigung zugestellt an: <span id="buyer-email" style="color:var(--text-main);"></span></p>
     </div>
 </div>
@@ -458,7 +406,7 @@ function switchTab(type, element) {
 
 function renderPayPalButton(name, amount) {
     const container = document.getElementById('paypal-button-container');
-    container.innerHTML = ''; // Sauberes Clearing verhindert UI-Freeze
+    container.innerHTML = '';
     
     if (typeof paypal === 'undefined') {
         container.innerHTML = '<p style="color:var(--text-dark); padding:10px; font-size:0.85rem;">PayPal SDK nicht erreichbar. Nutzen Sie die SEPA-Überweisung.</p>';
