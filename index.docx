@@ -1,0 +1,102 @@
+
+
+## 📚Dokumentation
+
+### 1. Enterprise Architecture  
+Die oberste Ebene der Matrix: Domains, Services, Flows.  
+➡️ [`docs/enterprise-architecture.md`](docs/enterprise-architecture.md)
+
+### 2. Kernel Full Architecture  
+Technischer Kern: API‑Gateway, Registry, YGGDRASIL, Security, Deployment.  
+➡️ [`docs/kernel-overview.md`](docs/kernel-overview.md)
+
+### 3. Atomic Microkernel  
+Alle atomaren Funktionen des Systems — die kleinste logische Ebene.  
+➡️ [`docs/atomic-microkernel.md`](docs/atomic-microkernel.md)
+
+### 4. Deep Blueprint  
+Der vollständige Architektur‑Bauplan mit Systempfaden & Graphen.  
+➡️ [`docs/deep-blueprint.md`](docs/deep-blueprint.md)
+
+### 5. Full Cluster Execution Flow  
+Der komplette Ausführungspfad eines Produkts durch die gesamte Matrix.  
+➡️ [`docs/cluster-execution-flow.md`](docs/cluster-execution-flow.md)
+
+---
+
+## 🧠 Kernprinzipien
+
+- **Souveränität**  
+- **Modularität**  
+- **Auditierbarkeit**  
+- **Zero‑Trust**  
+- **Cognitive Routing**  
+- **Reproduzierbarkeit**  
+
+---
+
+## 🛠️ Services
+
+- API‑Gateway  
+- Registry  
+- YGGDRASIL Cognitive Engine  
+- Security Layer  
+- Deployment Layer  
+- CI/CD Pipeline  
+
+---
+
+## 🗺️ Roadmap v1.0.0
+
+- M1: Foundation  
+- M2: Kernel  
+- M3: Atomic Layer  
+- M4: Execution Flow  
+- M5: Release Pipeline  
+
+Status: **Alle Module vollständig dokumentiert und einsatzbereit.**
+
+---
+
+## 🌐 Live Deployment
+
+Die Plattform läuft auf **Vercel Edge**:
+
+🔗 https://black-six-matrix.vercel.app/
+
+---
+
+## 🏴‍☠️ Black Six Matrix  
+Sovereign Architecture • Audit‑Chain • Zero‑Trust • Cognitive Routing
+
+---
+
+# 8. ROADMAP v1.0.0
+
+## Milestones
+- M1: Foundation  
+- M2: Kernel  
+- M3: Atomic Layer  
+- M4: Execution Flow  
+- M5: Release Pipeline  
+
+## Status
+✔ Enterprise Architecture  
+✔ Kernel Full Architecture  
+✔ Atomic Microkernel  
+✔ Deep Blueprint  
+✔ Execution Flow  
+✔ README  
+✔ Roadmap  
+✔ GitHub‑Ready
+
+---
+
+# 9. LIVE DEPLOYMENT
+Vercel Edge Gateway:  
+https://black-six-matrix.vercel.app/
+
+---
+
+# 10. SOVEREIGN STATUS
+Die Black Six Matrix ist vollständig dokumentiert, strukturiert und bereit für Erweiterungen.
