@@ -892,6 +892,80 @@ pre {
 .social a:hover {
     text-decoration:underline;
 }
+<!-- SYSTEM MODULES -->
+<div id="system" class="panel">
+    <h2 class="neon">System Modules – Deep Seed Architecture</h2>
+
+    <h3>Product Matrix</h3>
+    <pre>
+IGNITION   → Entry Layer
+MOMENTUM   → Mid-Core Services
+ASCENT     → High-Core Services
+SOVEREIGN  → Enterprise Layer
+OMEGA      → Final Execution Layer
+    </pre>
+
+    <h3>Registry Mapping</h3>
+    <pre>
+Product → Cluster → Execution Pipeline
+IGNITION  → CL-01 → validate → execute → deliver
+MOMENTUM  → CL-07 → validate → execute → deliver
+ASCENT    → CL-12 → validate → execute → deliver
+SOVEREIGN → CL-22 → validate → execute → deliver
+OMEGA     → CL-50 → validate → execute → deliver
+    </pre>
+
+    <h3>API-Gateway Flow</h3>
+    <pre>
+Frontend → API-Gateway → Registry → YGGDRASIL → Cluster → Delivery
+    </pre>
+
+    <h3>Security Layer (Zero-Trust)</h3>
+    <pre>
+validateToken()
+expireToken()
+applyIsolation()
+recordAuditEvent()
+checkCompliance()
+    </pre>
+
+    <h3>Audit Chain</h3>
+    <pre>
+API → Security.auditChain → YGGDRASIL.archive → Delivery
+    </pre>
+
+    <h3>YGGDRASIL Decision Tree</h3>
+    <pre>
+evaluateContext()
+routeControl()
+storeArchiveRecord()
+blockPath()
+traceDecision()
+    </pre>
+
+    <h3>Cluster Execution Flow</h3>
+    <pre>
+validate → execute → deliver → status: completed
+    </pre>
+
+    <h3>Operator Console Commands</h3>
+    <pre>
+$ matrix status
+$ matrix cluster 01
+$ matrix audit
+$ matrix yggdrasil
+$ matrix product IGNITION
+    </pre>
+
+    <h3>System Status HUD</h3>
+    <pre>
+Kernel: ACTIVE
+YGGDRASIL: ONLINE
+Audit-Chain: VERIFIED
+Zero-Trust: ENABLED
+Clusters: 01–50 ONLINE
+    </pre>
+</div>
 
 /* ===== DARK MODE SWITCH ===== */
 .switch {
