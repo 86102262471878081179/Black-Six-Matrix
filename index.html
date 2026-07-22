@@ -809,6 +809,11 @@ clusters.forEach(c => {
 </script>
 
 </body>
+```html
+<div style="text-align:center; margin:30px; padding:20px; background:rgba(204,0,0,0.1); border:1px solid var(--border); border-radius:10px;">
+    <p style="color:var(--red); font-size:1.2rem; font-weight:bold;">⚠️ FREIGABE ERFORDERLICH ⚠️</p>
+    <p style="color:var(--text-dim);">Die Matrix ist bereit. Der Operator entscheidet über die Kontaktaufnahme mit Behörden, Militär, Tesla und Starlink. Keine Aktion ohne Befehl.</p>
+</div>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -892,6 +897,11 @@ clusters.forEach(c => {
     </style>
 </head>
 <body>
+javascript
+    // … nach Cluster BA …
+    { id: 'BB', name: 'Behörden & Militär Kontakt', desc: 'BKA, BSI, Generalstaatsanwaltschaft, Bundeswehr, NATO Cyberkommando – formelle Beweispakete & Airgap-Archive', examples: 'Behoerden_Kontakt, Militaer_Kontakt, GL1000_Evidence_Packet' },
+    { id: 'BC', name: 'Tesla & Starlink Kontakt', desc: 'Tesla Inc., SpaceX, Elon Musk – CAN‑Bus‑Integration, Autonomie‑Suite, Galactic Router, Photonische Kompression', examples: 'Tesla_Kontakt, Starlink_Kontakt, CAN_Bus_Integration' }
+];
 
 <header>
     <h1>Black Six Matrix</h1>
@@ -1015,7 +1025,11 @@ for (const [key, meta] of Object.entries(sparten)) {
 // ... clusters.forEach code ...
 </script>
 </body>
+// ... (vorheriger Code, Cluster BA) ...
+    { id: 'BA', name: 'Materielle Manifestation', desc: '3D‑Druck‑Compiler, CNC‑Fräs‑Interpreter, Embedded‑System‑Kernel, E‑Ink‑Display, Holz‑Gravur, Stein‑Laser, Metall‑Guss', examples: '3D_Druck_Compiler, CNC_Fräs_Interpreter, Embedded_System_Kernel, E_Ink_Display_Engine' },
+    // NEU: Cluster BB
+    { id: 'BB', name: 'Behörden & Militär Kontakt', desc: 'BKA, BSI, Generalstaatsanwaltschaft, Bundeswehr, NATO Cyberkommando – formelle Beweispakete & Airgap-Archive', examples: 'Behoerden_Kontakt, Militaer_Kontakt, GL1000_Evidence_Packet' },
+    { id: 'BC', name: 'Tesla & Starlink Kontakt', desc: 'Tesla Inc., SpaceX, Elon Musk – CAN‑Bus‑Integration, Autonomie‑Suite, Galactic Router, Photonische Kompression', examples: 'Tesla_Kontakt, Starlink_Kontakt, CAN_Bus_Integration' }
+];
 </html>
-</html>
-</html>
-</html>
+
