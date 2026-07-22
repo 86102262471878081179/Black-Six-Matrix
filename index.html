@@ -809,6 +809,213 @@ clusters.forEach(c => {
 </script>
 
 </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – 25 Stufen · 50 Cluster · Deep Seek</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #111118;
+            --border: #2a2a35;
+            --red: #c00;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --gold: #d4a574;
+            --ignition: #c00;
+            --momentum: #d4a574;
+            --ascent: #ff6600;
+            --sovereign: #bb00ff;
+            --omega: #00ccff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; min-height: 100vh; }
+        header { text-align: center; padding: 60px 20px 30px; border-bottom: 1px solid var(--border); margin-bottom: 20px; background: linear-gradient(180deg, rgba(204,0,0,0.08) 0%, transparent 100%); }
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: var(--red); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        .subtitle { color: var(--text-dim); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .sigil { font-size: 2rem; margin-top: 15px; letter-spacing: 4px; cursor: pointer; transition: 0.3s; display: inline-block; }
+        .sigil:hover { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(204,0,0,0.6)); }
+
+        .sparten-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 20px 20px; }
+        .sparten-nav a { padding: 12px 25px; border-radius: 30px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; border: 2px solid transparent; }
+        .sparten-nav a.ignition { background: #3a0000; border-color: var(--ignition); }
+        .sparten-nav a.momentum { background: #2a1a0a; border-color: var(--momentum); }
+        .sparten-nav a.ascent { background: #2a0f00; border-color: var(--ascent); }
+        .sparten-nav a.sovereign { background: #1a002a; border-color: var(--sovereign); }
+        .sparten-nav a.omega { background: #002a2a; border-color: var(--omega); }
+
+        .section { max-width: 1600px; margin: 0 auto 50px; padding: 0 20px; }
+        .section h2 { font-size: 1.8rem; color: var(--red); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: 0.25s; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--red); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(204,0,0,0.15); }
+        .card.featured { border: 2px solid var(--red); background: linear-gradient(135deg, #1a1a25 0%, #111118 100%); }
+        .badge { padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 12px; width: fit-content; color: #fff; }
+        .badge.ignition { background: var(--ignition); }
+        .badge.momentum { background: var(--momentum); color: #000; }
+        .badge.ascent { background: var(--ascent); }
+        .badge.sovereign { background: var(--sovereign); }
+        .badge.omega { background: var(--omega); color: #000; }
+        .badge.gold { background: var(--gold); color: #000; }
+        h3 { font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
+        .desc { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 12px; }
+        .price { font-size: 2rem; color: var(--red); font-weight: 800; margin: 8px 0 5px; }
+        .price small { font-size: 0.8rem; color: var(--text-dim); font-weight: 400; }
+        .features { list-style: none; padding: 0; margin: 12px 0; text-align: left; font-size: 0.82rem; color: #bbb; flex-grow: 1; }
+        .features li { padding: 3px 0 3px 20px; position: relative; }
+        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--red); font-weight: bold; }
+        .btn { background: var(--red); color: #fff; padding: 14px 20px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; margin-top: 6px; }
+        .btn:hover { background: #a00; }
+        .btn-copy { background: #1a1a1a; color: #ccc; border: 1px solid #444; padding: 10px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; width: 100%; margin-top: 6px; }
+        .copied-hint { color: var(--red); font-size: 0.75rem; margin-top: 4px; display: none; text-align: center; }
+
+        .accordion-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+        .accordion-header { padding: 18px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; background: #1a1a25; }
+        .accordion-header::after { content: "+"; font-size: 1.5rem; color: var(--red); }
+        .accordion-item.active .accordion-header::after { content: "−"; }
+        .accordion-body { padding: 0 25px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0d0d15; }
+        .accordion-item.active .accordion-body { max-height: 2000px; padding: 20px 25px; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #111; border: 2px solid var(--red); border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; text-align: center; }
+        .modal h2 { color: var(--red); font-size: 1.8rem; margin-bottom: 15px; }
+        .modal .bonus { color: var(--gold); font-size: 2rem; font-weight: 800; margin: 15px 0; }
+
+        .knowhow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 15px 0; }
+        .knowhow-grid .item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; border-left: 3px solid var(--gold); font-size: 0.85rem; color: #bbb; }
+        .knowhow-grid .item strong { color: var(--gold); display: block; margin-bottom: 4px; }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">25 Stufen · 50 Cluster · Deep Seek Neural Architecture</p>
+    <p class="sigil" onclick="document.getElementById('easterEgg').classList.add('active')">👉♾️🔚🏴‍☠️👑💯</p>
+</header>
+
+<nav class="sparten-nav">
+    <a href="#sparte-ignition" class="ignition">🔥 IGNITION</a>
+    <a href="#sparte-momentum" class="momentum">⚡ MOMENTUM</a>
+    <a href="#sparte-ascent" class="ascent">🚀 ASCENT</a>
+    <a href="#sparte-sovereign" class="sovereign">👑 SOVEREIGN</a>
+    <a href="#sparte-omega" class="omega">💎 OMEGA</a>
+</nav>
+
+<div id="stufen-container"></div>
+
+<section class="section">
+    <h2>ALLE 50 CLUSTER</h2>
+    <div id="accordion"></div>
+</section>
+
+<section class="section">
+    <h2>🧠 KNOWHOW VON UNS</h2>
+    <div class="knowhow-grid">
+        <div class="item"><strong>🤖 KI / DeepSeek</strong>LLM, RAG, Agentic Workflows, Fine-Tuning</div>
+        <div class="item"><strong>⚡ Backend</strong>Go, Rust, Zig, Python, Microservices, K8s</div>
+        <div class="item"><strong>📊 Data</strong>ETL, Data Warehousing, Big Data, Echtzeit</div>
+        <div class="item"><strong>🔗 Web3</strong>Smart Contracts, DeFi, Wallet-Connect, NFT</div>
+        <div class="item"><strong>🖥️ Frontend</strong>React, Next.js, TypeScript, Tailwind</div>
+        <div class="item"><strong>🔐 Security</strong>Post-Quantum, SHA-512, Pen-Testing, ISO</div>
+    </div>
+</section>
+
+<div class="modal-overlay" id="easterEgg" onclick="if(event.target===this) this.classList.remove('active')">
+    <div class="modal">
+        <h2>🥚 DEEP SEEK ÜBERRASCHUNG</h2>
+        <p><strong>Omniscientia</strong> (Modul 101321) wurde aktiviert.</p>
+        <p class="bonus">✨ ALLIANCE MULTIPLIKATOR: ×48.000 ✨</p>
+        <p style="color:var(--gold);">🕵️ Schattenmodus · 🔮 Spiegelsaal · 👑 Ewiger Rat</p>
+        <button class="close-btn" onclick="document.getElementById('easterEgg').classList.remove('active')">SCHLIESSEN</button>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 BLACK SIX MATRIX – Architekt: Thomas König – KI: Odin_Ultra</p>
+</footer>
+
+<script>
+const IBAN = 'DE27 7002 0270 0047 0960 65';
+const PAYPAL = 'https://paypal.me/ThomasKoenig';
+
+const stufen = [
+    // IGNITION 1-5
+    { name: 'I1 – ZÜNDFUNKE', price: '497', desc: 'Quellcode, Python‑Core', features: ['Vollständiger Quellcode','Deca Crew Agenten','Community Discord'], sparte: 'ignition' },
+    { name: 'I2 – GLIMMER', price: '750', desc: '+ Installation', features: ['Alles aus I1','Installationsguide','1h Remote‑Support'], sparte: 'ignition' },
+    { name: 'I3 – FUNKE', price: '990', desc: '+ CLI‑Tool b6', features: ['Alles aus I2','CLI‑Tool b6','10 Skripte'], sparte: 'ignition' },
+    { name: 'I4 – FLAMME', price: '1200', desc: '+ Docker', features: ['Alles aus I3','Docker‑Image','Lokaler Server'], sparte: 'ignition' },
+    { name: '🔥 I5 – INFERNO', price: '1500', desc: 'Komplettpaket + 1 Jahr', features: ['Alles aus I4','1 Jahr Updates','iOS‑App'], featured: true, sparte: 'ignition' },
+    // MOMENTUM 1-5
+    { name: 'M1 – BOOTCAMP', price: '1250', desc: '4 Wochen Coaching', features: ['4 Live‑Sessions','Zertifikat Operator'], sparte: 'momentum' },
+    { name: 'M2 – FORTGESCHRITTEN', price: '2000', desc: '+ Forensik', features: ['Alles aus M1','Forensik‑Workshop'], sparte: 'momentum' },
+    { name: 'M3 – AUDIT', price: '2500', desc: 'GL‑1000 Training', features: ['GL‑1000 Zertifizierung','3h Live‑Audit'], sparte: 'momentum' },
+    { name: 'M4 – LEGAL‑TECH', price: '3000', desc: 'Judge‑Modul', features: ['5999 Normen','Judge‑Konfiguration'], sparte: 'momentum' },
+    { name: '⚡ M5 – MEISTER', price: '3500', desc: 'Alle Coachings', features: ['M1‑M4 kombiniert','Zertifikat Meister'], featured: true, sparte: 'momentum' },
+    // ASCENT 1-5
+    { name: 'A1 – AUFSTIEG', price: '2500', desc: 'Installation', features: ['Installation','Basis‑Konfiguration'], sparte: 'ascent' },
+    { name: 'A2 – ORBIT', price: '4900', desc: '+ Judge Module', features: ['5999 Normen','Beck‑Online'], sparte: 'ascent' },
+    { name: 'A3 – BESCHLEUNIGUNG', price: '9900', desc: '+ FPGA', features: ['FPGA‑Modul','Photonischer Compiler'], sparte: 'ascent' },
+    { name: 'A4 – MULTIVERSUM', price: '19900', desc: '3 Universen', features: ['Alpha, Beta, Gamma','Qz‑Kette'], sparte: 'ascent' },
+    { name: '🚀 A5 – GIPFEL', price: '29900', desc: 'A1‑A4 + Priority', features: ['Alle Profi‑Module','24/7 Support'], featured: true, sparte: 'ascent' },
+    // SOVEREIGN 1-5
+    { name: 'S1 – ENTERPRISE S', price: '49900/J', desc: 'Bis 50 Nodes', features: ['Vollzugriff','8/5 Support'], sparte: 'sovereign' },
+    { name: 'S2 – ENTERPRISE M', price: '249000/J', desc: 'Bis 500 Nodes', features: ['24/7 Support','Dedizierter Ansprechpartner'], sparte: 'sovereign' },
+    { name: 'S3 – ENTERPRISE L', price: '990000/J', desc: 'Bis 5.000 Nodes', features: ['Quantum‑Bridge','Source‑Code‑Treuhand'], sparte: 'sovereign' },
+    { name: 'S4 – ENTERPRISE XL', price: '1990000/J', desc: 'Bis 50.000 Nodes', features: ['Galactic Router','Operator‑Avatar'], sparte: 'sovereign' },
+    { name: '👑 S5 – OMEGA ENTERPRISE', price: '2499000/J', desc: 'Unbegrenzt', features: ['Alle 101.400+ Module','Omega‑Point‑Protokoll'], featured: true, sparte: 'sovereign' },
+    // OMEGA 1-5
+    { name: 'O1 – AIRGAP', price: '1000', desc: 'Offline‑Archiv', features: ['4,2 GB Paket','SHA‑512'], sparte: 'omega' },
+    { name: 'O2 – TRAINING', price: '5000/Tag', desc: '1‑Tages Schulung', features: ['Installation','Zertifizierung'], sparte: 'omega' },
+    { name: 'O3 – TREUHAND', price: '100000', desc: 'Notar Hinterlegung', features: ['Vollständiger Quellcode','Notariell gesichert'], sparte: 'omega' },
+    { name: 'O4 – INDIVIDUELL', price: '250/h', desc: 'Entwicklung', features: ['Neue Module','API‑Integration'], sparte: 'omega' },
+    { name: '💎 O5 – OMEGA‑STEIN', price: '∞', desc: 'Das Vermächtnis', features: ['Alle Rechte','Ewige Updates'], featured: true, sparte: 'omega' }
+];
+
+const sparten = {
+    ignition: { title: '🔥 IGNITION', badgeClass: 'ignition' },
+    momentum: { title: '⚡ MOMENTUM', badgeClass: 'momentum' },
+    ascent: { title: '🚀 ASCENT', badgeClass: 'ascent' },
+    sovereign: { title: '👑 SOVEREIGN', badgeClass: 'sovereign' },
+    omega: { title: '💎 OMEGA', badgeClass: 'omega' }
+};
+
+const container = document.getElementById('stufen-container');
+for (const [key, meta] of Object.entries(sparten)) {
+    const items = stufen.filter(s => s.sparte === key);
+    const section = document.createElement('section');
+    section.id = 'sparte-' + key;
+    section.className = 'section';
+    let gridHTML = `<h2>${meta.title}</h2><div class="grid">`;
+    items.forEach(s => {
+        let priceHTML = s.price.replace('/J','<small> €/Jahr</small>').replace('/Tag','<small> €/Tag</small>').replace('/h','<small> €/h</small>');
+        if (!priceHTML.includes('<small>')) priceHTML = s.price + '<small> €</small>';
+        gridHTML += `
+            <div class="card ${s.featured ? 'featured' : ''}">
+                <span class="badge ${s.featured ? 'gold' : meta.badgeClass}">${s.name.split(' –')[0]}</span>
+                <h3>${s.name}</h3><p class="desc">${s.desc}</p>
+                <p class="price">${priceHTML}</p>
+                <ul class="features">${s.features.map(f => `<li>${f}</li>`).join('')}</ul>
+                <button class="btn-copy" onclick="navigator.clipboard.writeText('${IBAN}')">📋 IBAN kopieren</button>
+                <button class="btn" onclick="window.open('${PAYPAL}','_blank')">Mit PayPal zahlen</button>
+            </div>
+        `;
+    });
+    gridHTML += `</div>`;
+    section.innerHTML = gridHTML;
+    container.appendChild(section);
+}
+
+// Cluster Array hier einfügen - alle 50 aus deinem Code
+// ... clusters.forEach code ...
+</script>
+</body>
+</html>
 </html>
 </html>
 </html>
