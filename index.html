@@ -4,140 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Black Six Matrix – Enterprise Level Platform. Fehlertolerante Governance-, Audit- und Code-Execution-Systeme auf Zero-Trust-Basis. Made in Germany.">
-<title>Black Six Matrix® – Enterprise Governance & Audit Platform</title>
+<title>Black Six Matrix® – Deep Seek Edition</title>
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- PayPal SDK: client-id eintragen -->
 <script src="https://www.paypal.com/sdk/js?client-id=DEINE_PAYPAL_CLIENT_ID&currency=EUR&locale=de_DE"></script>
+
 <style>
 :root{
-  --bg-base:#08080c; --bg-elev:#0f0f16; --bg-card:rgba(17,17,25,.75); --bg-card-hover:rgba(24,24,35,.92);
-  --border-subtle:rgba(200,200,215,.09); --border-bright:rgba(212,175,55,.35);
-  --silver:#c8c8d0; --gold:#d4af37; --gold-soft:#e6c964; --platinum:#eef0f4;
-  --text-main:#ecedf2; --text-muted:#a6a7b5; --text-dark:#75768a; --green:#3fbf7f;
-  --r-s:10px; --r-m:16px; --r-l:22px;
-  --shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px inset rgba(200,200,215,.06);
+  --bg-base:#06060A;
+  --bg-elev:#0e0e14;
+  --bg-card:rgba(12,12,18,.75);
+  --bg-card-hover:rgba(18,18,25,.9);
+  --border-subtle:rgba(255,255,255,.07);
+  --border-bright:rgba(0,242,254,.2); /* Omega Cyan */
+
+  --text-main:#e0e6ed;
+  --text-muted:#8898a8;
+  --text-dark:#6c7a8a;
+
+  --accent-red:#FF2A4B; /* Deep Seek Primary */
+  --accent-red-translucent:rgba(255,42,75,.1);
+  --accent-gold:#F0B90B; /* Deep Seek Secondary */
+  --accent-gold-translucent:rgba(240,185,11,.1);
+  --accent-cyan:#00F2FE; /* Omega Highlight */
+  --accent-cyan-translucent:rgba(0,242,254,.1);
+
+  --green-check:#3fbf7f;
+
+  --r-s:8px; --r-m:14px; --r-l:20px;
+  --shadow:0 12px 30px rgba(0,0,0,.6),0 0 0 1px inset rgba(255,255,255,.05);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   background:var(--bg-base);
-  background-image:radial-gradient(circle at 50% -10%,rgba(212,175,55,.08),transparent 45%),
-                   radial-gradient(circle at 90% 10%,rgba(120,140,200,.05),transparent 40%);
+  background-image:radial-gradient(circle at 50% -10%,rgba(255,42,75,.08),transparent 45%),
+                   radial-gradient(circle at 90% 10%,rgba(0,242,254,.05),transparent 40%);
   color:var(--text-main);font-family:'Inter',system-ui,sans-serif;line-height:1.65;
   min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 .mono{font-family:'JetBrains Mono',monospace}
-a{color:inherit}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent-cyan)}
 
+/* ---------- TOP BAR ---------- */
 .topbar{
   position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-  padding:14px 24px;background:rgba(8,8,12,.72);backdrop-filter:blur(18px);
+  padding:14px 24px;background:rgba(6,6,10,.72);backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border-subtle);
 }
 .topbar .brand{font-weight:900;letter-spacing:2px;font-size:.95rem;
-  background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(135deg,var(--text-main),var(--accent-red));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .topbar nav{display:flex;gap:22px;font-size:.82rem;font-weight:600;color:var(--text-muted)}
-.topbar nav a{text-decoration:none;transition:.2s}.topbar nav a:hover{color:var(--gold)}
-.topbar .cta{padding:9px 20px;border-radius:30px;background:var(--gold);color:#0a0a0f;
+.topbar nav a{transition:.2s}.topbar nav a:hover{color:var(--accent-cyan)}
+.topbar .cta{padding:9px 20px;border-radius:30px;background:var(--accent-red);color:#fff;
   font-weight:800;font-size:.8rem;text-decoration:none;transition:.2s}
-.topbar .cta:hover{background:var(--gold-soft);transform:translateY(-1px)}
+.topbar .cta:hover{background:#E02543;transform:translateY(-1px)}
 @media(max-width:760px){.topbar nav{display:none}}
 
+/* ---------- HERO ---------- */
 header{text-align:center;padding:90px 20px 50px;position:relative}
 .eyebrow{display:inline-block;padding:7px 18px;border:1px solid var(--border-bright);
   border-radius:30px;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
-  color:var(--gold);background:rgba(212,175,55,.06);margin-bottom:26px;font-weight:700}
+  color:var(--accent-cyan);background:var(--accent-cyan-translucent);margin-bottom:26px;font-weight:700}
 h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-transform:uppercase;
-  background:linear-gradient(135deg,#fff 0%,var(--gold) 60%,#8a6d1f 100%);
+  background:linear-gradient(135deg,var(--text-main) 0%,var(--accent-red) 60%,#B32039 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 30px rgba(212,175,55,.25));margin-bottom:18px;line-height:1.05}
+  filter:drop-shadow(0 0 30px rgba(255,42,75,.25));margin-bottom:18px;line-height:1.05}
 .subtitle{color:var(--text-muted);font-size:1.18rem;max-width:680px;margin:0 auto 14px;font-weight:300}
 .tagline{color:var(--text-dark);font-size:.9rem;max-width:620px;margin:0 auto}
 .hero-btns{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .hero-btns a{padding:15px 34px;border-radius:var(--r-s);font-weight:700;text-decoration:none;transition:.25s;font-size:.92rem}
-.btn-primary{background:var(--gold);color:#0a0a0f}
-.btn-primary:hover{background:var(--gold-soft);transform:translateY(-3px);box-shadow:0 14px 30px rgba(212,175,55,.25)}
+.btn-primary{background:var(--accent-red);color:#fff}
+.btn-primary:hover{background:#E02543;transform:translateY(-3px);box-shadow:0 14px 30px rgba(255,42,75,.25)}
 .btn-ghost{border:1px solid var(--border-bright);color:var(--text-main)}
-.btn-ghost:hover{background:rgba(212,175,55,.08);transform:translateY(-3px)}
+.btn-ghost:hover{background:rgba(0,242,254,.08);transform:translateY(-3px);border-color:var(--accent-cyan)}
 
+/* ---------- TRUST STRIP ---------- */
 .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 34px;
   padding:26px 20px;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);
   margin-top:60px;color:var(--text-muted);font-size:.82rem;font-weight:600}
 .trust span{display:flex;align-items:center;gap:8px}
-.trust b{color:var(--gold)}
+.trust b{color:var(--accent-cyan)}
 
+/* ---------- STATS ---------- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;
   max-width:1100px;margin:60px auto;padding:0 20px}
 .stat{text-align:center;padding:28px 16px;background:var(--bg-card);border:1px solid var(--border-subtle);
   border-radius:var(--r-m);backdrop-filter:blur(12px)}
-.stat .num{font-size:2.2rem;font-weight:900;color:var(--gold);letter-spacing:-1px}
+.stat .num{font-size:2.2rem;font-weight:900;color:var(--accent-cyan);letter-spacing:-1px}
 .stat .lbl{color:var(--text-muted);font-size:.82rem;margin-top:6px}
 
+/* ---------- SECTIONS ---------- */
 .section{max-width:1500px;margin:0 auto 80px;padding:0 20px}
 .section-head{text-align:center;margin-bottom:44px}
-.section-head .kicker{color:var(--gold);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.section-head .kicker{color:var(--accent-cyan);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;font-weight:700}
 .section-head h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;margin:10px 0}
 .section-head p{color:var(--text-muted);max-width:640px;margin:0 auto}
 
+/* ---------- ADMIN / TEAM ---------- */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 .admin-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);
   padding:26px;backdrop-filter:blur(12px);transition:.3s}
 .admin-card:hover{border-color:var(--border-bright);transform:translateY(-4px)}
 .admin-card h3{font-size:1.2rem;margin-bottom:4px}
-.admin-card .role{color:var(--gold);font-weight:700;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+.admin-card .role{color:var(--accent-gold);font-weight:700;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
 .admin-card p{color:var(--text-muted);font-size:.9rem;margin-top:12px}
 
+/* ---------- NAV PILLS ---------- */
 .sparten-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:0 auto 50px;
-  max-width:1200px;padding:22px;background:rgba(15,15,22,.5);border-radius:var(--r-m);
+  max-width:1200px;padding:22px;background:rgba(10,10,15,.5);border-radius:var(--r-m);
   border:1px solid var(--border-subtle);backdrop-filter:blur(10px)}
 .sparten-nav a{padding:11px 24px;border-radius:40px;text-decoration:none;color:var(--text-main);
   font-weight:700;font-size:.82rem;letter-spacing:.5px;transition:.3s;
   border:1px solid var(--border-subtle);background:var(--bg-card)}
-.sparten-nav a:hover{transform:translateY(-3px);border-color:var(--gold);color:var(--gold);
+.sparten-nav a:hover{transform:translateY(-3px);border-color:var(--accent-red);color:var(--accent-red);
   box-shadow:0 10px 22px rgba(0,0,0,.4)}
 
+/* ---------- CARDS ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
 .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-l);
   padding:30px;display:flex;flex-direction:column;backdrop-filter:blur(16px);box-shadow:var(--shadow);
   transition:.3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
 .card:hover{border-color:var(--border-bright);transform:translateY(-7px);background:var(--bg-card-hover)}
-.card.featured{border:1px solid var(--gold);
-  background:linear-gradient(180deg,rgba(212,175,55,.08),rgba(15,15,22,.92))}
+.card.featured{border:1px solid var(--accent-red);
+  background:linear-gradient(180deg,var(--accent-red-translucent),var(--bg-elev))}
 .card.featured::after{content:"EMPFOHLEN";position:absolute;top:16px;right:-34px;transform:rotate(45deg);
-  background:var(--gold);color:#0a0a0f;font-size:.6rem;font-weight:900;letter-spacing:1px;padding:5px 40px}
+  background:var(--accent-red);color:#fff;font-size:.6rem;font-weight:900;letter-spacing:1px;padding:5px 40px}
 .badge{padding:6px 15px;border-radius:20px;font-size:.68rem;font-weight:800;letter-spacing:1.5px;
   text-transform:uppercase;display:inline-block;margin-bottom:16px;width:fit-content;
-  border:1px solid var(--gold);color:var(--gold);background:rgba(212,175,55,.08)}
+  border:1px solid var(--accent-red);color:var(--accent-red);background:var(--accent-red-translucent)}
 .card h3{font-size:1.3rem;font-weight:700;margin-bottom:6px}
 .desc{color:var(--text-muted);font-size:.9rem;margin-bottom:16px}
-.price{font-size:2.2rem;color:var(--gold);font-weight:900;margin:10px 0;letter-spacing:-1px}
+.price{font-size:2.2rem;color:var(--text-main);font-weight:900;margin:10px 0;letter-spacing:-1px}
 .price small{font-size:.85rem;color:var(--text-dark);font-weight:400}
 .features{list-style:none;margin:14px 0 24px;font-size:.86rem;color:var(--text-muted);flex-grow:1}
 .features li{padding:6px 0 6px 26px;position:relative}
-.features li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:bold}
-.btn{background:var(--gold);color:#0a0a0f;padding:14px 20px;border:none;border-radius:var(--r-s);
+.features li::before{content:"✓";position:absolute;left:0;color:var(--green-check);font-weight:bold}
+.btn{background:var(--accent-red);color:#fff;padding:14px 20px;border:none;border-radius:var(--r-s);
   font-size:.9rem;font-weight:800;cursor:pointer;width:100%;transition:.2s;letter-spacing:.5px}
-.btn:hover{background:var(--gold-soft);transform:scale(1.02)}
-.btn.silver{background:var(--silver)}.btn.silver:hover{background:var(--platinum)}
+.btn:hover{background:#E02543;transform:scale(1.02)}
+.btn.silver{background:var(--accent-gold);color:#0a0a0f}.btn.silver:hover{background:#E6C964}
 
+/* ---------- OMEGA-STEIN SPECIAL ---------- */
+@keyframes omegaPulse {
+    0%   { box-shadow: 0 0 10px rgba(0,242,254,0.3); border-color: rgba(0,242,254,0.3); }
+    50%  { box-shadow: 0 0 30px rgba(0,242,254,0.7); border-color: rgba(0,242,254,0.7); }
+    100% { box-shadow: 0 0 10px rgba(0,242,254,0.3); border-color: rgba(0,242,254,0.3); }
+}
+.card.omega-stein {
+    animation: omegaPulse 2.5s infinite;
+    border-width: 3px;
+    background: linear-gradient(135deg, rgba(0,242,254,.08) 0%, rgba(12,12,18,.9) 100%);
+}
+.card.omega-stein h3 { color: var(--accent-cyan); }
+.card.omega-stein .price { color: var(--accent-cyan); }
+.omega-badge { background: var(--accent-cyan) !important; color: #000 !important; border-color: var(--accent-cyan) !important; }
+
+/* ---------- PROCESS TIMELINE ---------- */
 .timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
 .step{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);padding:26px;position:relative}
-.step .n{width:40px;height:40px;border-radius:50%;background:rgba(212,175,55,.12);border:1px solid var(--gold);
-  color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:14px}
+.step .n{width:40px;height:40px;border-radius:50%;background:var(--accent-red-translucent);border:1px solid var(--accent-red);
+  color:var(--accent-red);display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:14px}
 .step h4{font-size:1.05rem;margin-bottom:8px}
 .step p{color:var(--text-muted);font-size:.86rem}
 
+/* ---------- FAQ ---------- */
 .accordion-item{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);
   margin-bottom:12px;overflow:hidden;backdrop-filter:blur(10px)}
 .accordion-header{padding:20px 26px;cursor:pointer;display:flex;justify-content:space-between;
   align-items:center;font-weight:700;font-size:1.02rem}
-.accordion-header::after{content:"+";font-size:1.5rem;color:var(--gold);transition:.3s}
+.accordion-header::after{content:"+";font-size:1.5rem;color:var(--accent-red);transition:.3s}
 .accordion-item.active .accordion-header::after{transform:rotate(45deg)}
 .accordion-body{padding:0 26px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;
   color:var(--text-muted);font-size:.93rem}
 .accordion-item.active .accordion-body{max-height:400px;padding:0 26px 22px}
 
+/* ---------- CONTACT / PAYMENT INFO ---------- */
 .pay-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;
   max-width:1100px;margin:0 auto}
 .pay-box{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-m);padding:26px}
@@ -146,21 +194,21 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
   border-bottom:1px dashed var(--border-subtle);font-size:.88rem}
 .field:last-child{border:none}
 .field .k{color:var(--text-dark)}.field .v{color:var(--text-main);font-weight:600}
-.copy{cursor:pointer;color:var(--gold);border:1px solid var(--border-bright);background:transparent;
+.copy{cursor:pointer;color:var(--accent-cyan);border:1px solid var(--border-bright);background:transparent;
   border-radius:6px;padding:4px 10px;font-size:.72rem;font-weight:700;transition:.2s}
-.copy:hover{background:rgba(212,175,55,.12)}
+.copy:hover{background:var(--accent-cyan-translucent)}
 
 /* Payment Images Section */
 .payment-images{margin-top:40px;text-align:center}
 .payment-images h3{margin-bottom:24px;color:var(--text-main);font-size:1.2rem}
 .payment-images .img-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:30px;align-items:center}
 .payment-images .img-box{max-width:260px}
-.payment-images .img-box h4{color:var(--gold);font-size:.9rem;margin-bottom:12px}
+.payment-images .img-box h4{color:var(--accent-red);font-size:.9rem;margin-bottom:12px}
 .payment-images .img-box img{max-width:100%;border-radius:var(--r-m);border:1px solid var(--border-subtle);
   box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .payment-images .img-box .caption{color:var(--text-muted);font-size:.8rem;margin-top:8px}
 
-/* Modal */
+/* ---------- MODAL ---------- */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
   display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal-overlay.open{display:flex}
@@ -168,11 +216,11 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
   max-width:460px;width:100%;padding:34px;position:relative;box-shadow:var(--shadow);max-height:90vh;overflow-y:auto}
 .modal .close{position:absolute;top:16px;right:18px;cursor:pointer;color:var(--text-dark);font-size:1.6rem;background:none;border:none}
 .modal h3{font-size:1.4rem;margin-bottom:4px}
-.modal .m-price{color:var(--gold);font-weight:900;font-size:1.8rem;margin:6px 0 20px}
+.modal .m-price{color:var(--accent-red);font-weight:900;font-size:1.8rem;margin:6px 0 20px}
 .tabs{display:flex;gap:8px;margin-bottom:20px}
 .tab{flex:1;padding:10px;text-align:center;border-radius:var(--r-s);cursor:pointer;font-size:.82rem;
   font-weight:700;border:1px solid var(--border-subtle);color:var(--text-muted);transition:.2s}
-.tab.active{background:var(--gold);color:#0a0a0f;border-color:var(--gold)}
+.tab.active{background:var(--accent-red);color:#0a0a0f;border-color:var(--accent-red)}
 .tab-pane{display:none}.tab-pane.active{display:block}
 .info-row{background:rgba(0,0,0,.25);border:1px solid var(--border-subtle);border-radius:var(--r-s);
   padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
@@ -181,20 +229,23 @@ h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:4px;text-tran
 /* Legal Sections */
 .legal-section{max-width:860px;margin:0 auto 40px;padding:30px;background:var(--bg-card);
   border:1px solid var(--border-subtle);border-radius:var(--r-l);backdrop-filter:blur(10px)}
-.legal-section h2{font-size:1.5rem;font-weight:800;margin-bottom:20px;color:var(--gold);
+.legal-section h2{font-size:1.5rem;font-weight:800;margin-bottom:20px;color:var(--accent-cyan);
   border:none;padding:0;display:block}
 .legal-section h3{font-size:1.1rem;margin:22px 0 10px;color:var(--text-main)}
 .legal-section p,.legal-section li{color:var(--text-muted);font-size:.9rem;line-height:1.7}
 .legal-section ul{margin:8px 0;padding-left:22px}
-.legal-section a{color:var(--gold)}.legal-section a:hover{text-decoration:underline}
+.legal-section a{color:var(--accent-cyan)}.legal-section a:hover{text-decoration:underline}
+.legal-section#omega-agb h2 {color: var(--accent-red);}
 
+
+/* ---------- FOOTER ---------- */
 footer{text-align:center;padding:70px 20px 50px;border-top:1px solid var(--border-subtle);
   color:var(--text-dark);font-size:.85rem}
 footer .flogo{font-weight:900;letter-spacing:3px;font-size:1.1rem;
-  background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+  background:linear-gradient(135deg,var(--text-main),var(--accent-red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+footer .sigil{font-size:1.6rem;margin:20px 0;letter-spacing:8px;opacity:.6}
 footer .links{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:18px 0;font-size:.82rem}
-footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hover{color:var(--gold)}
-.sigil{font-size:1.6rem;margin:20px 0;letter-spacing:8px;opacity:.6}
+footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hover{color:var(--accent-cyan)}
 
 @media(max-width:760px){.grid{grid-template-columns:1fr}}
 </style>
@@ -235,64 +286,6 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
   <span>📜 <b>Audit-Chain</b> (Append-only)</span>
   <span>💳 <b>PayPal</b> & SEPA</span>
 </div>
-
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Six Matrix – Technische Plattform</title>
-    <style>
-        :root {
-            --bg: #0a0a0f;
-            --card: #111118;
-            --border: #2a2a35;
-            --accent: #c0c0c0;
-            --text: #e0e0e0;
-            --text-dim: #888;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            line-height: 1.6; 
-        }
-        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); }
-        h1 { font-size: 2.8rem; color: var(--accent); letter-spacing: 4px; }
-        .section { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
-        .card { 
-            background: var(--card); 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            padding: 24px; 
-            margin-bottom: 20px; 
-        }
-        .status { color: #00cc66; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>BLACK SIX MATRIX</h1>
-        <p>Technische Plattform – Version Ω</p>
-    </header>
-
-    <div class="section">
-        <h2>System Status</h2>
-        <div class="card">
-            <p><strong>Core:</strong> Go + Rust + Zig aktiv</p>
-            <p><strong>Observability:</strong> Prometheus, Jaeger, Grafana, eBPF</p>
-            <p><strong>Deployment:</strong> Kubernetes + Helm</p>
-            <p class="status">Status: Produktionsbereit • Stabil • Erweitert</p>
-        </div>
-    </div>
-
-    <footer style="text-align:center; padding:40px; color:var(--text-dim);">
-        © Black Six Matrix – Technische Implementierung<br>
-        Operator: Thomas &amp; Tina König
-    </footer>
-</body>
-</html>
 
 <!-- STATS -->
 <div class="stats">
@@ -408,9 +401,9 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <div class="card"><span class="badge">O3</span><h3>Treuhand</h3><p class="desc">Notariell hinterlegt</p><p class="price">€100.000</p>
       <ul class="features"><li>Vollständiger Quellcode</li><li>Notariell gesichert</li><li>Ewige Verfügbarkeit</li></ul>
       <button class="btn silver" onclick="openContact()">Anfrage senden</button></div>
-    <div class="card"><span class="badge">O4</span><h3>Individuell</h3><p class="desc">Custom Development</p><p class="price">€250<small>/h</small></p>
-      <ul class="features"><li>Neue Module</li><li>API-Integration</li><li>Dedicated Team</li></ul>
-      <button class="btn silver" onclick="openContact()">Projekt anfragen</button></div>
+    <div class="card omega-stein"><span class="badge omega-badge">O5</span><h3>OMEGA-STEIN</h3><p class="desc">Das finale Vermächtnis</p><p class="price">∞</p>
+      <ul class="features"><li>Ewige Lizenzrechte</li><li>Unbegrenzte System-Symbiose</li><li>Mitarchitekt der Matrix</li><li>Materielles Siegel (Diamant)</li></ul>
+      <button class="btn" onclick="openContact()">Anfrage senden</button></div>
   </div>
 </section>
 
@@ -432,10 +425,10 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <p>Ausgewählte Projekte aus regulierten Branchen.</p></div>
   <div class="grid">
     <div class="card"><span class="badge">Legal-Tech</span><h3>Automatisierte Fristenverwaltung</h3><p class="desc">Großkanzlei · Frankfurt</p>
-      <p style="color:var(--gold);font-weight:800;margin:12px 0;font-size:1.1rem">95 % Fehlerreduktion</p>
+      <p style="color:var(--accent-red);font-weight:800;margin:12px 0;font-size:1.1rem">95 % Fehlerreduktion</p>
       <p class="desc">Ω-33 Integrity Layer + TATJT Payload Engine: 40 h/Woche Zeitersparnis, ca. €180.000 jährliche Einsparung.</p></div>
     <div class="card"><span class="badge">FinTech</span><h3>Compliance-Dokumentenprüfung</h3><p class="desc">FinTech · Berlin</p>
-      <p style="color:var(--gold);font-weight:800;margin:12px 0;font-size:1.1rem">99,7 % Accuracy</p>
+      <p style="color:var(--accent-red);font-weight:800;margin:12px 0;font-size:1.1rem">99,7 % Accuracy</p>
       <p class="desc">Matrix Orchestrator mit KI-Integration verarbeitet 10.000+ Dokumente/Tag vollautomatisiert und auditierbar.</p></div>
   </div>
 </section>
@@ -470,7 +463,8 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <div class="pay-box">
       <h4>🏦 Bankverbindung</h4>
       <div class="field"><span class="k">Kontoinhaber</span><span class="v">Thomas König · Black Six</span></div>
-      <div class="field"><span class="k">IBAN</span><span class="v mono" id="iban">DE27 700202700047096065</span></div>
+      <div class="field"><span class="k">IBAN</span><span class="v mono" id="iban">DE27 7002 0270 0047 0960 65</span></div>
+      <div class="field"><span class="k">BIC</span><span class="v mono">HYVEDEMMXXX</span></div>
       <div class="field"><span class="k">Verwendungszweck</span><span class="v">Paket + Ihr Name</span></div>
       <button class="copy" style="margin-top:12px;width:100%;padding:10px" onclick="copyText('iban',this)">IBAN kopieren</button>
     </div>
@@ -490,11 +484,13 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
         <h4>📱 PayPal QR-Code</h4>
         <img src="9AD48704-9E38-4C2F-93A7-25DB19DEA1D2.jpeg" alt="PayPal QR-Code Thomas König">
         <p class="caption">Scannen · Zahlen · Fertig!</p>
+        <a href="https://paypal.me/ThomasKoenig" target="_blank" class="btn-ghost" style="margin-top:12px;display:block;padding:10px">Via PayPal.me</a>
       </div>
       <div class="img-box">
         <h4>🏦 Bankkarte (HypoVereinsbank)</h4>
         <img src="907257DB-267A-423D-8DDD-1247BC65122C.jpeg" alt="Bankkarte HypoVereinsbank Thomas König">
         <p class="caption">IBAN & BIC auf der Karte</p>
+        <button class="btn-ghost" style="margin-top:12px;width:100%;padding:10px" onclick="copyText('iban',this)">IBAN kopieren</button>
       </div>
     </div>
   </div>
@@ -529,6 +525,23 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
 
     <p style="margin-top:18px;font-size:.82rem;color:var(--text-dark)">© 2026 Black Six Matrix® – Thomas König. Alle Rechte vorbehalten.</p>
+  </div>
+</section>
+
+<!-- AGB-Klausel für den Omega-Stein -->
+<section id="omega-agb" class="section">
+  <div class="section-head"><div class="kicker">Rechtliches</div><h2>💎 Omega-Stein – Besondere Bestimmungen (§ 7 AGB)</h2></div>
+  <div class="legal-section">
+    <h3>§ 7.1 Leistungsumfang</h3>
+    <p>Der Omega-Stein (Stufe O5) gewährt dem Erwerber sämtliche Rechte an der Black Six Matrix, einschließlich aller aktuellen und zukünftigen Module, Cluster, Säulen und Dokumentationen. Der Erwerb erfolgt in Form einer symbolischen Partnerschaft, die den Erwerber zum gleichberechtigten Mitarchitekten der Matrix macht.</p>
+    <h3>§ 7.2 Preis und Zahlung</h3>
+    <p>Der Preis für den Omega-Stein ist unendlich (∞). Dies bedeutet, dass der Erwerb nicht durch eine einmalige Geldzahlung erfolgt, sondern durch eine individuelle, vertraglich zu vereinbarende Gegenleistung, die dem Wert der Matrix in ihrer Gesamtheit entspricht. Mögliche Gegenleistungen umfassen: strategische Partnerschaften, Unternehmensbeteiligungen, Immobilien, oder andere Vermögenswerte.</p>
+    <h3>§ 7.3 Ewige Updates</h3>
+    <p>Der Erwerber erhält für immer Zugang zu allen Updates, Erweiterungen und neuen Versionen der Black Six Matrix. Dieses Recht ist vererbbar und nicht übertragbar, es sei denn, eine schriftliche Vereinbarung zwischen den Parteien lässt dies zu.</p>
+    <h3>§ 7.4 Symbiose-Zertifikat</h3>
+    <p>Der Erwerber erhält ein physisches, notariell beglaubigtes Zertifikat, das seine Rolle als Mitarchitekt der Matrix bescheinigt. Dieses Zertifikat wird in einem Diamanten graviert (Modul 101400 – Materielles Siegel) und übergeben.</p>
+    <h3>§ 7.5 Gerichtsstand</h3>
+    <p>Für alle Streitigkeiten aus oder im Zusammenhang mit dem Omega-Stein gilt ausschließlich deutsches Recht. Gerichtsstand ist der Sitz des Anbieters.</p>
   </div>
 </section>
 
@@ -570,7 +583,7 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <ul>
       <li>Sie Ihre nach Art. 6 Abs. 1 S. 1 lit. a DSGVO ausdrückliche Einwilligung dazu erteilt haben</li>
       <li>die Weitergabe nach Art. 6 Abs. 1 S. 1 lit. f DSGVO zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist und kein Grund zur Annahme besteht, dass Sie ein überwiegendes schutzwürdiges Interesse an der Nichtweitergabe Ihrer Daten haben</li>
-      <li>für den Fall, dass für die Weitergabe nach Art. 6 Abs. 1 S. 1 lit. c DSGVO eine gesetzliche Verpflichtung besteht</li>
+      <li>für den Fall, dass für die Weitergabe nach Art. 1 S. 1 lit. c DSGVO eine gesetzliche Verpflichtung besteht</li>
       <li>dies gesetzlich zulässig und nach Art. 6 Abs. 1 S. 1 lit. b DSGVO für die Abwicklung von Vertragsverhältnissen mit Ihnen erforderlich ist</li>
     </ul>
 
@@ -604,9 +617,10 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     <a href="#pakete">Pakete</a><a href="#prozess">Ablauf</a><a href="#cases">Referenzen</a>
     <a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a>
     <a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a><a href="#">AGB</a>
+    <a href="#omega-agb">Omega-Stein AGB</a>
   </div>
   <p>© 2026 Black Six Matrix® · Architekt: Thomas König</p>
-  <p style="margin-top:10px;color:var(--text-dark)">Team: Thomas König · Tina König · Aria · Thorben · Jason•</p>
+  <p style="margin-top:10px;color:var(--text-dark)">Team: Thomas König · Tina König · Aria · Thorben · Nicolai · Lucas</p>
   <p style="margin-top:8px;font-size:.75rem">Zero-Trust · PBFT · GOTSHA Reality-Lock · Audit-Chain · Made in Germany 🇩🇪</p>
 </footer>
 
@@ -626,7 +640,8 @@ footer .links a{color:var(--text-muted);text-decoration:none}footer .links a:hov
     </div>
     <div class="tab-pane" id="pane-bank">
       <div class="info-row"><span>Kontoinhaber</span><b>Thomas König · Black Six</b></div>
-      <div class="info-row"><span>IBAN</span><b class="mono" id="m-iban">DE27 700202700047096065</b></div>
+      <div class="info-row"><span>IBAN</span><b class="mono" id="m-iban">DE27 7002 0270 0047 0960 65</b></div>
+      <div class="info-row"><span>BIC</span><b class="mono">HYVEDEMMXXX</b></div>
       <div class="info-row"><span>Betrag</span><b id="m-amount">€0</b></div>
       <div class="info-row"><span>Verwendungszweck</span><b id="m-ref">Paket + Name</b></div>
       <button class="btn" style="margin-top:14px" onclick="copyText('m-iban',this)">IBAN kopieren</button>
@@ -677,11 +692,24 @@ function renderPayPal(name,amount){
   c.innerHTML='';
   if(typeof paypal==='undefined'){c.innerHTML='<p class="note">PayPal-SDK nicht geladen – bitte client-id eintragen.</p>';return;}
   paypal.Buttons({
-    style:{layout:'vertical',color:'gold',shape:'rect',label:'paypal'},
+    style:{layout:'vertical',color:'blue',shape:'rect',label:'paypal'}, /* PayPal blue for better contrast */
     createOrder:(d,a)=>a.order.create({purchase_units:[{description:'Black Six Matrix – '+name,amount:{value:amount}}]}),
     onApprove:(d,a)=>a.order.capture().then(det=>{alert('Zahlung erfolgreich! Danke, '+det.payer.name.given_name+'. Sie erhalten Zugang & Rechnung per E-Mail.');closePay();})
   }).render('#paypal-button-container');
 }
+
+/* Omega-Stein Special highlight on load */
+document.addEventListener('DOMContentLoaded', function() {
+    const omegaSteinCard = document.querySelector('.card.omega-stein');
+    if (omegaSteinCard) {
+        // Findet das Badge innerhalb der Omega-Stein Karte und aktualisiert es
+        const badge = omegaSteinCard.querySelector('.badge');
+        if (badge) {
+            badge.classList.add('omega-badge');
+            badge.textContent = '💎 LEGENDE';
+        }
+    }
+});
 </script>
 </body>
 </html>
