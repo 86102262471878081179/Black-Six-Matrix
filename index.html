@@ -1,9 +1,5 @@
-Das Einfrieren des Fensters und die Fehlverhalten der Zahlungsmodals liegen an drei konkreten JavaScript-Fehlern im bisherigen Code:
- * PayPal-Initialisierungsfehler (Infinite Re-render): Die Funktion renderPayPalButton() wird bei jedem Klick erneut aufgerufen, räumt den DOM-Container (#paypal-button-container) aber nicht sauber auf bzw. schlägt fehl, wenn das PayPal SDK nicht korrekt geladen wird. Dadurch blockiert der UI-Thread.
- * Defekter Tab-Switch / Modal-Overlay State: Wenn das Bezahlen-Modal aufgerufen wird, fehlen Event-Stop-Propagation-Handling und saubere Tab-Status-Resets.
- * Fehlendes Rendering der Download-Pipeline: Es fehlt das dedizierte Download-Modal aus deiner Logik sowie eine saubere Anbindung der DOWNLOADS-Map an die Checkout-Logik.
-Hier ist der vollständige, korrigierte und fehlerfreie Code, in dem die PayPal-Initialisierung, das SEPA-Modal und das Download-Modal für die 25 ZIP-Pakete zu 100 % funktionsfähig und absturzsicher integriert sind.
-<!DOCTYPE html>
+
+<!<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -534,4 +530,3 @@ function copyToClipboard(elementId, btn) {
 
 </body>
 </html>
-
