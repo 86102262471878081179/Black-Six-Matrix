@@ -4,6 +4,443 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="description" content="Black Six Matrix® – Deep Seed. Sovereign Enterprise Architecture, Zero-Trust, Multi-Cluster, YGGDRASIL Cognitive Routing.">
+    <meta name="keywords" content="Black Six Matrix, Deep Seed, Zero Trust, Multi Cluster, YGGDRASIL, Sovereign Architecture">
+    <meta name="author" content="Thomas">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="Black Six Matrix® – Deep Seed">
+    <meta property="og:description" content="Sovereign Enterprise Platform mit Multi-Cluster Execution und Cognitive Routing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://black-six-matrix.vercel.app/">
+
+    <title>Black Six Matrix® – Deep Seed</title>
+
+    <style>
+        body {
+            margin:0;
+            background:#01030a;
+            color:#e8e8e8;
+            font-family:system-ui, sans-serif;
+            overflow-x:hidden;
+        }
+        .matrix {
+            position:fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            pointer-events:none;
+            opacity:0.15;
+            z-index:-1;
+            font-family:monospace;
+            color:#00ff99;
+            font-size:14px;
+            line-height:14px;
+            white-space:pre;
+        }
+        .neon {
+            text-shadow:0 0 6px #ff3366, 0 0 12px #ff3366, 0 0 24px #ff3366;
+        }
+        header {
+            padding:30px;
+            background:linear-gradient(to bottom,#0b0d12,#01030a);
+            border-bottom:1px solid #1f2933;
+            position:sticky;
+            top:0;
+            z-index:10;
+        }
+        h1 {
+            margin:0;
+            font-size:32px;
+            letter-spacing:0.15em;
+            text-transform:uppercase;
+        }
+        main {
+            padding:30px;
+            max-width:1200px;
+            margin:0 auto;
+        }
+        .nav {
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+        }
+        .nav a {
+            padding:10px 18px;
+            border-radius:999px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            color:#ff3366;
+            text-decoration:none;
+            transition:0.2s;
+        }
+        .nav a:hover {
+            background:#16213a;
+            box-shadow:0 0 10px #ff3366aa;
+        }
+        .panel {
+            margin-top:20px;
+            padding:20px;
+            border-radius:12px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            box-shadow:0 0 20px rgba(255,51,102,0.2);
+        }
+        .terminal {
+            background:#000;
+            color:#00ff99;
+            padding:20px;
+            border-radius:10px;
+            font-family:monospace;
+            font-size:15px;
+            border:1px solid #003300;
+            box-shadow:0 0 12px #00ff99aa;
+        }
+        .grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+            gap:12px;
+        }
+        .node {
+            padding:14px;
+            border-radius:10px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            text-align:center;
+            transition:0.2s;
+        }
+        .node:hover {
+            background:#16213a;
+            box-shadow:0 0 10px #00ff99aa;
+        }
+        pre {
+            background:#020617;
+            padding:16px;
+            border-radius:10px;
+            overflow-x:auto;
+            font-size:14px;
+            border:1px solid #1e293b;
+            box-shadow:0 0 12px #000 inset;
+        }
+        .switch {
+            margin-top:20px;
+            cursor:pointer;
+            padding:10px 16px;
+            border-radius:999px;
+            background:#1f2933;
+            display:inline-block;
+            transition:0.2s;
+        }
+        .switch:hover {
+            background:#334155;
+        }
+        .social a {
+            display:block;
+            margin:6px 0;
+            color:#ff3366;
+            font-size:16px;
+            text-decoration:none;
+        }
+        .social a:hover {
+            text-decoration:underline;
+        }
+        table {
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px;
+            font-size:13px;
+        }
+        th, td {
+            border:1px solid #1f2933;
+            padding:6px 8px;
+            text-align:left;
+        }
+        th {
+            background:#111827;
+        }
+        .ok { color:#00ff99; }
+        .iso { color:#ffcc00; }
+        .err { color:#ff3366; }
+    </style>
+</head>
+<body>
+
+<div class="matrix" id="matrix"></div>
+
+<header>
+    <h1 class="neon">BLACK SIX MATRIX® – DEEP SEED</h1>
+    <small>Sovereign Enterprise Platform · Zero‑Trust · Multi‑Cluster · YGGDRASIL</small>
+</header>
+
+<main>
+
+    <div class="switch" id="modeSwitch">Dark Mode wechseln</div>
+
+    <div class="nav">
+        <a href="#boot">Boot</a>
+        <a href="#clusters">Cluster</a>
+        <a href="#code">Code</a>
+        <a href="#ygg">YGGDRASIL</a>
+        <a href="#terminal">Terminal</a>
+        <a href="#social">Social</a>
+        <a href="#system">System</a>
+        <a href="#cluster-table">Cluster 01–50</a>
+        <a href="#ygg-map">YGG‑Map</a>
+    </div>
+
+    <!-- BOOT -->
+    <div id="boot" class="panel">
+        <h2 class="neon">System Boot</h2>
+        <div class="terminal">
+            $ boot<br>
+            > initializing kernel...<br>
+            > loading YGGDRASIL cognitive engine...<br>
+            > verifying audit-chain...<br>
+            > enabling zero-trust...<br>
+            > scanning clusters...<br>
+            > cluster[01] online<br>
+            > cluster[02] online<br>
+            > cluster[03] secure<br>
+            > cluster[04] isolated<br>
+            > cluster[05] ready<br>
+            <br>
+            $ system ready.
+        </div>
+    </div>
+
+    <!-- CLUSTERS (GRID) -->
+    <div id="clusters" class="panel">
+        <h2 class="neon">Cluster Nodes</h2>
+        <div class="grid">
+            <div class="node">01</div>
+            <div class="node">02</div>
+            <div class="node">03</div>
+            <div class="node">04</div>
+            <div class="node">05</div>
+            <div class="node">06</div>
+            <div class="node">07</div>
+            <div class="node">08</div>
+            <div class="node">09</div>
+            <div class="node">10</div>
+        </div>
+    </div>
+
+    <!-- CODE -->
+    <div id="code" class="panel">
+        <h2 class="neon">Code Chambers</h2>
+
+        <h3>YAML</h3>
+        <pre>black-six-matrix:
+  clusters: 50
+  zero_trust: true
+  audit_chain: true</pre>
+
+        <h3>Zig</h3>
+        <pre>pub fn main() !void {
+    std.debug.print("Zig Kernel\\n", .{});
+}</pre>
+
+        <h3>Go</h3>
+        <pre>package main
+func main() { println("Go Cluster") }</pre>
+
+        <h3>Rust</h3>
+        <pre>fn main() { println!("Rust Core"); }</pre>
+
+        <h3>HTML</h3>
+        <pre>&lt;h1&gt;Black Six Matrix&lt;/h1&gt;</pre>
+    </div>
+
+    <!-- YGGDRASIL -->
+    <div id="ygg" class="panel">
+        <h2 class="neon">YGGDRASIL Core</h2>
+        <div class="terminal">
+            $ yggdrasil<br>
+            > evaluating context...<br>
+            > routing control...<br>
+            > storing archive record...<br>
+            > blocking malicious path...<br>
+            > tracing decision...<br>
+            <br>
+            $ cognitive engine active.
+        </div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div id="terminal" class="panel">
+        <h2 class="neon">Operator Terminal</h2>
+        <div class="terminal">
+            $ matrix-os<br>
+            > welcome, operator.<br>
+            > system integrity: OK<br>
+            > audit-chain: VERIFIED<br>
+            > zero-trust: ENABLED<br>
+            > clusters: ONLINE<br>
+            <br>
+            $ awaiting commands...
+        </div>
+    </div>
+
+    <!-- SOCIAL -->
+    <div id="social" class="panel social">
+        <h2 class="neon">Social Media</h2>
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+
+    <!-- SYSTEM MODULES -->
+    <div id="system" class="panel">
+        <h2 class="neon">System Modules – Deep Seed Architecture</h2>
+
+        <h3>Product Matrix</h3>
+        <pre>
+IGNITION   → Entry Layer
+MOMENTUM   → Mid-Core Services
+ASCENT     → High-Core Services
+SOVEREIGN  → Enterprise Layer
+OMEGA      → Final Execution Layer
+        </pre>
+
+        <h3>Registry Mapping</h3>
+        <pre>
+Product → Cluster → Execution Pipeline
+IGNITION  → CL-01 → validate → execute → deliver
+MOMENTUM  → CL-07 → validate → execute → deliver
+ASCENT    → CL-12 → validate → execute → deliver
+SOVEREIGN → CL-22 → validate → execute → deliver
+OMEGA     → CL-50 → validate → execute → deliver
+        </pre>
+
+        <h3>API-Gateway Flow</h3>
+        <pre>
+Frontend → API-Gateway → Registry → YGGDRASIL → Cluster → Delivery
+        </pre>
+
+        <h3>Security Layer (Zero-Trust)</h3>
+        <pre>
+validateToken()
+expireToken()
+applyIsolation()
+recordAuditEvent()
+checkCompliance()
+        </pre>
+
+        <h3>Audit Chain</h3>
+        <pre>
+API → Security.auditChain → YGGDRASIL.archive → Delivery
+        </pre>
+
+        <h3>YGGDRASIL Decision Tree</h3>
+        <pre>
+evaluateContext()
+routeControl()
+storeArchiveRecord()
+blockPath()
+traceDecision()
+        </pre>
+
+        <h3>Cluster Execution Flow</h3>
+        <pre>
+validate → execute → deliver → status: completed
+        </pre>
+
+        <h3>Operator Console Commands</h3>
+        <pre>
+$ matrix status
+$ matrix cluster 01
+$ matrix audit
+$ matrix yggdrasil
+$ matrix product IGNITION
+        </pre>
+
+        <h3>System Status HUD</h3>
+        <pre>
+Kernel: ACTIVE
+YGGDRASIL: ONLINE
+Audit-Chain: VERIFIED
+Zero-Trust: ENABLED
+Clusters: 01–50 ONLINE
+        </pre>
+    </div>
+
+    <!-- CLUSTER TABLE 01–50 -->
+    <div id="cluster-table" class="panel">
+        <h2 class="neon">Cluster Status 01–50</h2>
+        <table>
+            <tr><th>Cluster</th><th>Product</th><th>Status</th></tr>
+            <tr><td>CL-01</td><td>IGNITION</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-07</td><td>MOMENTUM</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-12</td><td>ASCENT</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-22</td><td>SOVEREIGN</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-50</td><td>OMEGA</td><td class="iso">ISOLATED</td></tr>
+            <tr><td>CL-03</td><td>IGNITION</td><td class="ok">SECURE</td></tr>
+            <tr><td>CL-09</td><td>MOMENTUM</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-18</td><td>ASCENT</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-30</td><td>SOVEREIGN</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-41</td><td>OMEGA</td><td class="err">ERROR</td></tr>
+        </table>
+        <pre>
+Legend:
+ONLINE   → active, routable
+SECURE   → hardened, monitored
+ISOLATED → quarantined, no external routing
+ERROR    → requires operator attention
+        </pre>
+    </div>
+
+    <!-- YGGDRASIL ASCII MAP -->
+    <div id="ygg-map" class="panel">
+        <h2 class="neon">YGGDRASIL Decision Map</h2>
+        <pre>
+          [ FRONTEND ]
+               |
+               v
+        [ API-GATEWAY ]
+               |
+               v
+          [ REGISTRY ]
+               |
+               v
+          [ YGGDRASIL ]
+        /       |       \
+       v        v        v
+ [ IGNITION ] [ MOMENTUM ] [ ASCENT ]
+       |           |            |
+       v           v            v
+   [ CL-01 ]   [ CL-07 ]    [ CL-12 ]
+       |           |            |
+       v           v            v
+   validate → execute → deliver → auditChain
+        </pre>
+    </div>
+
+</main>
+
+<script>
+const matrix=document.getElementById("matrix");
+const chars="01";
+let out="";
+for(let i=0;i<4000;i++){
+    out+=chars[Math.floor(Math.random()*chars.length)];
+    if(i%80===0) out+="\n";
+}
+matrix.textContent=out;
+
+document.getElementById("modeSwitch").addEventListener("click",()=>{
+    document.body.style.filter=document.body.style.filter==="invert(1)"?"invert(0)":"invert(1)";
+});
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- SEO -->
     <meta name="description" content="Black Six Matrix® – Deep Seed. Sovereign Enterprise Architecture, Zero-Trust, Multi-Cluster, YGGDRASIL Cognitive Routing.">
     <meta name="keywords" content="Black Six Matrix, Deep Seed, Zero Trust, Multi Cluster, YGGDRASIL, Sovereign Architecture">
