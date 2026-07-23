@@ -1,6 +1,421 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Black Six Matrix® – Deep Seed OS – Infinity Overdrive</title>
+
+<meta name="description" content="Black Six Matrix – Sovereign Enterprise Architecture, Zero-Trust, Multi-Cluster, YGGDRASIL Cognitive Routing.">
+<meta name="keywords" content="Black Six Matrix, Deep Seed, Zero Trust, Multi Cluster, YGGDRASIL, Sovereign Architecture">
+<meta name="author" content="Thomas">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Black Six Matrix® – Deep Seed">
+<meta property="og:description" content="Sovereign Enterprise Platform mit Multi-Cluster Execution und Cognitive Routing.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://black-six-matrix.vercel.app/">
+
+<style>
+body {
+    margin:0;
+    background:#01030a;
+    color:#e8e8e8;
+    font-family:system-ui, sans-serif;
+    overflow-x:hidden;
+}
+
+/* MATRIX RAIN */
+.matrix {
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    pointer-events:none;
+    opacity:0.15;
+    z-index:-1;
+    font-family:monospace;
+    color:#00ff99;
+    font-size:14px;
+    line-height:14px;
+    white-space:pre;
+}
+
+/* NEON */
+.neon {
+    text-shadow:0 0 6px #ff3366, 0 0 12px #ff3366, 0 0 24px #ff3366;
+}
+
+/* HEADER */
+header {
+    padding:30px;
+    background:linear-gradient(to bottom,#0b0d12,#01030a);
+    border-bottom:1px solid #1f2933;
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+h1 {
+    margin:0;
+    font-size:28px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+}
+
+/* MAIN */
+main {
+    padding:30px;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+/* NAV */
+.nav {
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+.nav a {
+    padding:10px 18px;
+    border-radius:999px;
+    background:#0b1120;
+    border:1px solid #1f2933;
+    color:#ff3366;
+    text-decoration:none;
+    transition:0.2s;
+}
+.nav a:hover {
+    background:#16213a;
+    box-shadow:0 0 10px #ff3366aa;
+}
+
+/* PANEL */
+.panel {
+    margin-top:20px;
+    padding:20px;
+    border-radius:12px;
+    background:#0b1120;
+    border:1px solid #1f2933;
+    box-shadow:0 0 20px rgba(255,51,102,0.2);
+}
+
+/* TERMINAL */
+.terminal {
+    background:#000;
+    color:#00ff99;
+    padding:20px;
+    border-radius:10px;
+    font-family:monospace;
+    font-size:15px;
+    border:1px solid #003300;
+    box-shadow:0 0 12px #00ff99aa;
+}
+
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+    gap:10px;
+}
+.node {
+    padding:10px;
+    border-radius:10px;
+    background:#0b1120;
+    border:1px solid #1f2933;
+    text-align:center;
+    transition:0.2s;
+    font-size:13px;
+}
+.node.online { box-shadow:0 0 10px #00ff99aa; border-color:#00ff99; }
+.node.isolated { box-shadow:0 0 10px #ffcc00aa; border-color:#ffcc00; }
+.node.error { box-shadow:0 0 10px #ff3366aa; border-color:#ff3366; }
+.node.secure { box-shadow:0 0 10px #00ccffaa; border-color:#00ccff; }
+.node span.status {
+    display:block;
+    font-size:11px;
+    margin-top:4px;
+}
+
+/* CODEBLOCK */
+pre {
+    background:#020617;
+    padding:16px;
+    border-radius:10px;
+    overflow-x:auto;
+    font-size:14px;
+    border:1px solid #1e293b;
+    box-shadow:0 0 12px #000 inset;
+}
+
+/* SWITCH */
+.switch {
+    margin-top:20px;
+    cursor:pointer;
+    padding:10px 16px;
+    border-radius:999px;
+    background:#1f2933;
+    display:inline-block;
+    transition:0.2s;
+}
+.switch:hover {
+    background:#334155;
+}
+
+/* SOCIAL */
+.social a {
+    display:block;
+    margin:6px 0;
+    color:#ff3366;
+    font-size:16px;
+    text-decoration:none;
+}
+.social a:hover {
+    text-decoration:underline;
+}
+</style>
+</head>
+
+<body>
+
+<div class="matrix" id="matrix"></div>
+
+<header>
+    <!-- Deep Seed Logo (SVG) -->
+    <svg width="80" height="80" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="#ff3366" stroke-width="2"/>
+        <polygon points="50,15 70,50 50,85 30,50" fill="none" stroke="#00ff99" stroke-width="2"/>
+        <circle cx="50" cy="50" r="4" fill="#ff3366"/>
+        <line x1="50" y1="15" x2="50" y2="85" stroke="#ff3366" stroke-width="1" stroke-dasharray="2,2"/>
+    </svg>
+
+    <div>
+        <h1 class="neon">BLACK SIX MATRIX® – DEEP SEED OS</h1>
+        <small>Sovereign Enterprise Platform · Zero‑Trust · Multi‑Cluster · YGGDRASIL</small>
+    </div>
+</header>
+
+<main>
+
+<div class="switch" id="modeSwitch">Dark Mode wechseln</div>
+
+<div class="nav">
+    <a href="#boot">Boot</a>
+    <a href="#clusters">Cluster</a>
+    <a href="#code">Code</a>
+    <a href="#ygg">YGGDRASIL</a>
+    <a href="#terminal">Terminal</a>
+    <a href="#products">Produkte</a>
+    <a href="#social">Social</a>
+    <a href="#system">System</a>
+    <a href="#cluster-table">Cluster 01–50</a>
+    <a href="#ygg-map">YGG‑Map</a>
+    <a href="#console">Operator‑Console</a>
+</div>
+<!-- BOOT -->
+<div id="boot" class="panel">
+    <h2 class="neon">System Boot</h2>
+    <div class="terminal" id="bootTerminal">
+        $ boot<br>
+        > initializing kernel...<br>
+        > loading YGGDRASIL cognitive engine...<br>
+        > verifying audit-chain...<br>
+        > enabling zero-trust...<br>
+        > scanning clusters...<br>
+        > cluster[01] online<br>
+        > cluster[02] online<br>
+        > cluster[03] secure<br>
+        > cluster[04] isolated<br>
+        > cluster[05] ready<br>
+        <br>
+        $ system ready.
+    </div>
+</div>
+
+<!-- CLUSTERS -->
+<div id="clusters" class="panel">
+    <h2 class="neon">Cluster Nodes – Live Status</h2>
+    <div class="grid" id="clusterGrid"></div>
+</div>
+
+<!-- CODE -->
+<div id="code" class="panel">
+    <h2 class="neon">Code Chambers — Enhanced</h2>
+
+    <div class="switch" id="codeThemeSwitch">Code Theme wechseln</div>
+
+    <div class="nav" style="margin-top:20px;">
+        <a href="#tab-yaml" class="code-tab active">YAML</a>
+        <a href="#tab-zig" class="code-tab">Zig</a>
+        <a href="#tab-go" class="code-tab">Go</a>
+        <a href="#tab-rust" class="code-tab">Rust</a>
+        <a href="#tab-html" class="code-tab">HTML</a>
+    </div>
+
+    <div id="tab-yaml" class="code-panel" style="display:block;">
+        <pre class="codeblock">
+black-six-matrix:
+  clusters: 50
+  zero_trust: true
+  audit_chain: true
+        </pre>
+    </div>
+
+    <div id="tab-zig" class="code-panel">
+        <pre class="codeblock">
+pub fn main() !void {
+    std.debug.print("Zig Kernel\n", .{});
+}
+        </pre>
+    </div>
+
+    <div id="tab-go" class="code-panel">
+        <pre class="codeblock">
+package main
+func main() { println("Go Cluster") }
+        </pre>
+    </div>
+
+    <div id="tab-rust" class="code-panel">
+        <pre class="codeblock">
+fn main() {
+    println!("Rust Core");
+}
+        </pre>
+    </div>
+
+    <div id="tab-html" class="code-panel">
+        <pre class="codeblock">
+<h1>Black Six Matrix</h1>
+        </pre>
+    </div>
+</div>
+
+<!-- YGGDRASIL -->
+<div id="ygg" class="panel">
+    <h2 class="neon">YGGDRASIL Core</h2>
+    <div class="terminal" id="yggTerminal">
+        $ yggdrasil<br>
+        > evaluating context...<br>
+        > routing control...<br>
+        > storing archive record...<br>
+        > blocking malicious path...<br>
+        > tracing decision...<br>
+        <br>
+        $ cognitive engine active.
+    </div>
+
+    <!-- SVG Routing Graph -->
+    <svg class="ygg-svg" viewBox="0 0 400 220">
+        <rect x="20" y="20" width="80" height="40" rx="6" fill="none" stroke="#ff3366"/>
+        <text x="60" y="45" fill="#ff3366" font-size="10" text-anchor="middle">FRONTEND</text>
+
+        <rect x="160" y="20" width="80" height="40" rx="6" fill="none" stroke="#ffcc00"/>
+        <text x="200" y="45" fill="#ffcc00" font-size="10" text-anchor="middle">API-GATEWAY</text>
+
+        <rect x="300" y="20" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+        <text x="340" y="45" fill="#00ff99" font-size="10" text-anchor="middle">REGISTRY</text>
+
+        <rect x="200" y="100" width="80" height="40" rx="6" fill="none" stroke="#00ddff"/>
+        <text x="240" y="125" fill="#00ddff" font-size="10" text-anchor="middle">YGGDRASIL</text>
+
+        <rect x="40" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+        <text x="80" y="195" fill="#00ff99" font-size="10" text-anchor="middle">IGNITION / CL-01</text>
+
+        <rect x="200" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+        <text x="240" y="195" fill="#00ff99" font-size="10" text-anchor="middle">MOMENTUM / CL-07</text>
+
+        <rect x="320" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+        <text x="360" y="195" fill="#00ff99" font-size="10" text-anchor="middle">ASCENT / CL-12</text>
+
+        <line x1="100" y1="40" x2="160" y2="40" stroke="#ff3366" stroke-width="1"/>
+        <line x1="240" y1="40" x2="300" y2="40" stroke="#ffcc00" stroke-width="1"/>
+        <line x1="340" y1="60" x2="240" y2="100" stroke="#00ff99" stroke-width="1"/>
+
+        <line x1="240" y1="140" x2="80" y2="170" stroke="#00ddff" stroke-width="1"/>
+        <line x1="240" y1="140" x2="240" y2="170" stroke="#00ddff" stroke-width="1"/>
+        <line x1="240" y1="140" x2="360" y2="170" stroke="#00ddff" stroke-width="1"/>
+    </svg>
+</div>
+
+<!-- TERMINAL -->
+<div id="terminal" class="panel">
+    <h2 class="neon">Operator Terminal – Live Input</h2>
+    <div class="terminal" id="liveTerminal">
+        $ matrix-os<br>
+        > welcome, operator.<br>
+        > system integrity: OK<br>
+        > audit-chain: VERIFIED<br>
+        > zero-trust: ENABLED<br>
+        > clusters: ONLINE<br>
+        <br>
+        $ awaiting commands...
+    </div>
+    <div class="terminal-input">
+        <input id="terminalCommand" placeholder="Befehl eingeben, z.B. 'matrix status'">
+        <button id="terminalSend">Enter</button>
+    </div>
+</div>
+
+<!-- PRODUCT MATRIX -->
+<div id="products" class="panel">
+    <h2 class="neon">Product Matrix – Interactive</h2>
+    <div class="product-grid" id="productGrid">
+        <div class="product-card" data-product="IGNITION" data-cluster="CL-01">
+            <div class="product-title">IGNITION</div>
+            <div class="product-layer">Entry Layer</div>
+        </div>
+        <div class="product-card" data-product="MOMENTUM" data-cluster="CL-07">
+            <div class="product-title">MOMENTUM</div>
+            <div class="product-layer">Mid-Core Services</div>
+        </div>
+        <div class="product-card" data-product="ASCENT" data-cluster="CL-12">
+            <div class="product-title">ASCENT</div>
+            <div class="product-layer">High-Core Services</div>
+        </div>
+        <div class="product-card" data-product="SOVEREIGN" data-cluster="CL-22">
+            <div class="product-title">SOVEREIGN</div>
+            <div class="product-layer">Enterprise Layer</div>
+        </div>
+        <div class="product-card" data-product="OMEGA" data-cluster="CL-50">
+            <div class="product-title">OMEGA</div>
+            <div class="product-layer">Final Execution Layer</div>
+        </div>
+    </div>
+    <pre id="productInfo">
+Select a product to view routing:
+    </pre>
+</div>
+<!-- SOCIAL -->
+<div id="social" class="panel social">
+    <h2 class="neon">Social Media</h2>
+    <a href="https://instagram.com" target="_blank">Instagram</a>
+    <a href="https://twitter.com" target="_blank">Twitter</a>
+    <a href="https://github.com" target="_blank">GitHub</a>
+</div>
+
+<!-- SYSTEM -->
+<div id="system" class="panel">
+    <h2 class="neon">System Modules – Deep Seed Architecture</h2>
+    <pre>
+IGNITION   → Entry Layer
+MOMENTUM   → Mid-Core Services
+ASCENT     → High-Core Services
+SOVEREIGN  → Enterprise Layer
+OMEGA      → Final Execution Layer
+    </pre>
+</div>
+
+<!-- CLUSTER TABLE -->
+<div id="cluster-table" class="panel">
+    <h2 class="neon">Cluster Status 01–50</h
+
+                                             um
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
