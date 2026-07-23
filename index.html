@@ -802,6 +802,761 @@ terminalInput.addEventListener('keydown', e => {
             position:sticky;
             top:0;
             z-index:10;
+            display:flex;
+            align-items:center;
+            gap:20px;
+        }
+        h1 {
+            margin:0;
+            font-size:28px;
+            letter-spacing:0.15em;
+            text-transform:uppercase;
+        }
+        main {
+            padding:30px;
+            max-width:1200px;
+            margin:0 auto;
+        }
+        .nav {
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+        }
+        .nav a {
+            padding:10px 18px;
+            border-radius:999px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            color:#ff3366;
+            text-decoration:none;
+            transition:0.2s;
+        }
+        .nav a:hover {
+            background:#16213a;
+            box-shadow:0 0 10px #ff3366aa;
+        }
+        .panel {
+            margin-top:20px;
+            padding:20px;
+            border-radius:12px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            box-shadow:0 0 20px rgba(255,51,102,0.2);
+        }
+        .terminal {
+            background:#000;
+            color:#00ff99;
+            padding:20px;
+            border-radius:10px;
+            font-family:monospace;
+            font-size:15px;
+            border:1px solid #003300;
+            box-shadow:0 0 12px #00ff99aa;
+        }
+        .grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+            gap:10px;
+        }
+        .node {
+            padding:10px;
+            border-radius:10px;
+            background:#0b1120;
+            border:1px solid #1f2933;
+            text-align:center;
+            transition:0.2s;
+            font-size:13px;
+        }
+        .node.online { box-shadow:0 0 10px #00ff99aa; border-color:#00ff99; }
+        .node.isolated { box-shadow:0 0 10px #ffcc00aa; border-color:#ffcc00; }
+        .node.error { box-shadow:0 0 10px #ff3366aa; border-color:#ff3366; }
+        .node.secure { box-shadow:0 0 10px #00ccffaa; border-color:#00ccff; }
+        .node span.status {
+            display:block;
+            font-size:11px;
+            margin-top:4px;
+        }
+        pre {
+            background:#020617;
+            padding:16px;
+            border-radius:10px;
+            overflow-x:auto;
+            font-size:14px;
+            border:1px solid #1e293b;
+            box-shadow:0 0 12px #000 inset;
+        }
+        .switch {
+            margin-top:20px;
+            cursor:pointer;
+            padding:10px 16px;
+            border-radius:999px;
+            background:#1f2933;
+            display:inline-block;
+            transition:0.2s;
+        }
+        .switch:hover {
+            background:#334155;
+        }
+        .social a {
+            display:block;
+            margin:6px 0;
+            color:#ff3366;
+            font-size:16px;
+            text-decoration:none;
+        }
+        .social a:hover {
+            text-decoration:underline;
+        }
+        table {
+            width:100%;
+            border-collapse:collapse;
+            margin-top:10px;
+            font-size:13px;
+        }
+        th, td {
+            border:1px solid #1f2933;
+            padding:6px 8px;
+            text-align:left;
+        }
+        th {
+            background:#111827;
+        }
+        .ok { color:#00ff99; }
+        .iso { color:#ffcc00; }
+        .err { color:#ff3366; }
+        .sec { color:#00ccff; }
+
+        /* CODEBLOCK COLORS */
+        .codeblock { font-family:monospace; font-size:14px; }
+        .key { color:#ff66aa; }
+        .num { color:#00ff99; }
+        .bool { color:#00ccff; }
+        .kw { color:#ffcc00; }
+        .fn { color:#ff3366; }
+        .type { color:#66aaff; }
+        .str { color:#00ddff; }
+        .tag { color:#ff6699; }
+        .code-panel { display:none; animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+        .code-tab.active {
+            background:#16213a !important;
+            box-shadow:0 0 10px #ff3366aa;
+        }
+        .code-dark { filter:invert(1) hue-rotate(180deg); }
+
+        /* PRODUCT MATRIX UI */
+        .product-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+            gap:12px;
+            margin-top:10px;
+        }
+        .product-card {
+            padding:12px;
+            border-radius:10px;
+            background:#020617;
+            border:1px solid #1f2933;
+            cursor:pointer;
+            transition:0.2s;
+        }
+        .product-card:hover {
+            background:#111827;
+            box-shadow:0 0 10px #ff3366aa;
+        }
+        .product-card.active {
+            border-color:#ff3366;
+            box-shadow:0 0 12px #ff3366aa;
+        }
+        .product-title {
+            font-weight:bold;
+            letter-spacing:0.08em;
+            text-transform:uppercase;
+            font-size:13px;
+        }
+        .product-layer {
+            font-size:12px;
+            color:#9ca3af;
+        }
+
+        /* SVG LOGO */
+        .logo-svg {
+            width:80px;
+            height:80px;
+        }
+
+        /* YGG SVG */
+        .ygg-svg {
+            width:100%;
+            max-width:500px;
+            height:auto;
+            margin-top:10px;
+        }
+
+        /* TERMINAL INPUT */
+        .terminal-input {
+            margin-top:10px;
+            display:flex;
+            gap:8px;
+        }
+        .terminal-input input {
+            flex:1;
+            background:#020617;
+            border:1px solid #1f2933;
+            border-radius:6px;
+            padding:6px 8px;
+            color:#00ff99;
+            font-family:monospace;
+            font-size:14px;
+        }
+        .terminal-input button {
+            padding:6px 10px;
+            border-radius:6px;
+            border:1px solid #00ff99;
+            background:#000;
+            color:#00ff99;
+            cursor:pointer;
+            font-size:13px;
+        }
+        .terminal-input button:hover {
+            background:#022c22;
+        }
+    </style>
+</head>
+<body>
+
+<div class="matrix" id="matrix"></div>
+
+<header>
+    <!-- Deep Seed Logo (HTML-SVG) -->
+    <svg class="logo-svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="#ff3366" stroke-width="2"/>
+        <polygon points="50,15 70,50 50,85 30,50" fill="none" stroke="#00ff99" stroke-width="2"/>
+        <circle cx="50" cy="50" r="4" fill="#ff3366"/>
+        <line x1="50" y1="15" x2="50" y2="85" stroke="#ff3366" stroke-width="1" stroke-dasharray="2,2"/>
+    </svg>
+
+    <div>
+        <h1 class="neon">BLACK SIX MATRIX® – DEEP SEED</h1>
+        <small>Sovereign Enterprise Platform · Zero‑Trust · Multi‑Cluster · YGGDRASIL</small>
+    </div>
+</header>
+
+<main>
+
+    <div class="switch" id="modeSwitch">Dark Mode wechseln</div>
+
+    <div class="nav">
+        <a href="#boot">Boot</a>
+        <a href="#clusters">Cluster</a>
+        <a href="#code">Code</a>
+        <a href="#ygg">YGGDRASIL</a>
+        <a href="#terminal">Terminal</a>
+        <a href="#products">Produkte</a>
+        <a href="#social">Social</a>
+        <a href="#system">System</a>
+        <a href="#cluster-table">Cluster 01–50</a>
+        <a href="#ygg-map">YGG‑Map</a>
+        <a href="#console">Operator‑Console</a>
+    </div>
+
+    <!-- BOOT -->
+    <div id="boot" class="panel">
+        <h2 class="neon">System Boot</h2>
+        <div class="terminal" id="bootTerminal">
+            $ boot<br>
+            > initializing kernel...<br>
+            > loading YGGDRASIL cognitive engine...<br>
+            > verifying audit-chain...<br>
+            > enabling zero-trust...<br>
+            > scanning clusters...<br>
+            > cluster[01] online<br>
+            > cluster[02] online<br>
+            > cluster[03] secure<br>
+            > cluster[04] isolated<br>
+            > cluster[05] ready<br>
+            <br>
+            $ system ready.
+        </div>
+    </div>
+
+    <!-- CLUSTERS (animated) -->
+    <div id="clusters" class="panel">
+        <h2 class="neon">Cluster Nodes – Live Status</h2>
+        <div class="grid" id="clusterGrid">
+            <!-- Nodes werden per JS befüllt -->
+        </div>
+        <pre>
+Legend:
+ONLINE   → active, routable
+SECURE   → hardened, monitored
+ISOLATED → quarantined, no external routing
+ERROR    → requires operator attention
+        </pre>
+    </div>
+
+    <!-- CODE (Tabs + Syntax + Theme) -->
+    <div id="code" class="panel">
+        <h2 class="neon">Code Chambers — Enhanced</h2>
+
+        <div class="switch" id="codeThemeSwitch">Code Theme wechseln</div>
+
+        <div class="nav" style="margin-top:20px;">
+            <a href="#tab-yaml" class="code-tab active">YAML</a>
+            <a href="#tab-zig" class="code-tab">Zig</a>
+            <a href="#tab-go" class="code-tab">Go</a>
+            <a href="#tab-rust" class="code-tab">Rust</a>
+            <a href="#tab-html" class="code-tab">HTML</a>
+        </div>
+
+        <div id="tab-yaml" class="code-panel" style="display:block;">
+            <pre class="codeblock">
+<span class="key">black-six-matrix:</span>
+  <span class="key">clusters:</span> <span class="num">50</span>
+  <span class="key">zero_trust:</span> <span class="bool">true</span>
+  <span class="key">audit_chain:</span> <span class="bool">true</span>
+            </pre>
+        </div>
+
+        <div id="tab-zig" class="code-panel">
+            <pre class="codeblock">
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">main</span>() !<span class="type">void</span> {
+    std.debug.print(<span class="str">"Zig Kernel\n"</span>, .{});
+}
+            </pre>
+        </div>
+
+        <div id="tab-go" class="code-panel">
+            <pre class="codeblock">
+<span class="kw">package</span> main
+
+<span class="kw">func</span> <span class="fn">main</span>() {
+    println(<span class="str">"Go Cluster"</span>)
+}
+            </pre>
+        </div>
+
+        <div id="tab-rust" class="code-panel">
+            <pre class="codeblock">
+<span class="kw">fn</span> <span class="fn">main</span>() {
+    println!(<span class="str">"Rust Core"</span>);
+}
+            </pre>
+        </div>
+
+        <div id="tab-html" class="code-panel">
+            <pre class="codeblock">
+&lt;<span class="tag">h1</span>&gt;Black Six Matrix&lt;/<span class="tag">h1</span>&gt;
+            </pre>
+        </div>
+    </div>
+
+    <!-- YGGDRASIL -->
+    <div id="ygg" class="panel">
+        <h2 class="neon">YGGDRASIL Core</h2>
+        <div class="terminal" id="yggTerminal">
+            $ yggdrasil<br>
+            > evaluating context...<br>
+            > routing control...<br>
+            > storing archive record...<br>
+            > blocking malicious path...<br>
+            > tracing decision...<br>
+            <br>
+            $ cognitive engine active.
+        </div>
+
+        <!-- SVG Routing Graph -->
+        <svg class="ygg-svg" viewBox="0 0 400 220">
+            <rect x="20" y="20" width="80" height="40" rx="6" fill="none" stroke="#ff3366"/>
+            <text x="60" y="45" fill="#ff3366" font-size="10" text-anchor="middle">FRONTEND</text>
+
+            <rect x="160" y="20" width="80" height="40" rx="6" fill="none" stroke="#ffcc00"/>
+            <text x="200" y="45" fill="#ffcc00" font-size="10" text-anchor="middle">API-GATEWAY</text>
+
+            <rect x="300" y="20" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+            <text x="340" y="45" fill="#00ff99" font-size="10" text-anchor="middle">REGISTRY</text>
+
+            <rect x="200" y="100" width="80" height="40" rx="6" fill="none" stroke="#00ddff"/>
+            <text x="240" y="125" fill="#00ddff" font-size="10" text-anchor="middle">YGGDRASIL</text>
+
+            <rect x="40" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+            <text x="80" y="195" fill="#00ff99" font-size="10" text-anchor="middle">IGNITION / CL-01</text>
+
+            <rect x="200" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+            <text x="240" y="195" fill="#00ff99" font-size="10" text-anchor="middle">MOMENTUM / CL-07</text>
+
+            <rect x="320" y="170" width="80" height="40" rx="6" fill="none" stroke="#00ff99"/>
+            <text x="360" y="195" fill="#00ff99" font-size="10" text-anchor="middle">ASCENT / CL-12</text>
+
+            <line x1="100" y1="40" x2="160" y2="40" stroke="#ff3366" stroke-width="1"/>
+            <line x1="240" y1="40" x2="300" y2="40" stroke="#ffcc00" stroke-width="1"/>
+            <line x1="340" y1="60" x2="240" y2="100" stroke="#00ff99" stroke-width="1"/>
+
+            <line x1="240" y1="140" x2="80" y2="170" stroke="#00ddff" stroke-width="1"/>
+            <line x1="240" y1="140" x2="240" y2="170" stroke="#00ddff" stroke-width="1"/>
+            <line x1="240" y1="140" x2="360" y2="170" stroke="#00ddff" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <!-- TERMINAL mit echtem Input -->
+    <div id="terminal" class="panel">
+        <h2 class="neon">Operator Terminal – Live Input</h2>
+        <div class="terminal" id="liveTerminal">
+            $ matrix-os<br>
+            > welcome, operator.<br>
+            > system integrity: OK<br>
+            > audit-chain: VERIFIED<br>
+            > zero-trust: ENABLED<br>
+            > clusters: ONLINE<br>
+            <br>
+            $ awaiting commands...
+        </div>
+        <div class="terminal-input">
+            <input id="terminalCommand" placeholder="Befehl eingeben, z.B. 'matrix status'">
+            <button id="terminalSend">Enter</button>
+        </div>
+    </div>
+
+    <!-- PRODUCT MATRIX UI -->
+    <div id="products" class="panel">
+        <h2 class="neon">Product Matrix – Interactive</h2>
+        <div class="product-grid" id="productGrid">
+            <div class="product-card" data-product="IGNITION" data-cluster="CL-01">
+                <div class="product-title">IGNITION</div>
+                <div class="product-layer">Entry Layer</div>
+            </div>
+            <div class="product-card" data-product="MOMENTUM" data-cluster="CL-07">
+                <div class="product-title">MOMENTUM</div>
+                <div class="product-layer">Mid-Core Services</div>
+            </div>
+            <div class="product-card" data-product="ASCENT" data-cluster="CL-12">
+                <div class="product-title">ASCENT</div>
+                <div class="product-layer">High-Core Services</div>
+            </div>
+            <div class="product-card" data-product="SOVEREIGN" data-cluster="CL-22">
+                <div class="product-title">SOVEREIGN</div>
+                <div class="product-layer">Enterprise Layer</div>
+            </div>
+            <div class="product-card" data-product="OMEGA" data-cluster="CL-50">
+                <div class="product-title">OMEGA</div>
+                <div class="product-layer">Final Execution Layer</div>
+            </div>
+        </div>
+        <pre id="productInfo">
+Select a product to view routing:
+        </pre>
+    </div>
+
+    <!-- SOCIAL -->
+    <div id="social" class="panel social">
+        <h2 class="neon">Social Media</h2>
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+
+    <!-- SYSTEM MODULES -->
+    <div id="system" class="panel">
+        <h2 class="neon">System Modules – Deep Seed Architecture</h2>
+
+        <h3>Product Matrix</h3>
+        <pre>
+IGNITION   → Entry Layer
+MOMENTUM   → Mid-Core Services
+ASCENT     → High-Core Services
+SOVEREIGN  → Enterprise Layer
+OMEGA      → Final Execution Layer
+        </pre>
+
+        <h3>Registry Mapping</h3>
+        <pre>
+Product → Cluster → Execution Pipeline
+IGNITION  → CL-01 → validate → execute → deliver
+MOMENTUM  → CL-07 → validate → execute → deliver
+ASCENT    → CL-12 → validate → execute → deliver
+SOVEREIGN → CL-22 → validate → execute → deliver
+OMEGA     → CL-50 → validate → execute → deliver
+        </pre>
+
+        <h3>API-Gateway Flow</h3>
+        <pre>
+Frontend → API-Gateway → Registry → YGGDRASIL → Cluster → Delivery
+        </pre>
+
+        <h3>Security Layer (Zero-Trust)</h3>
+        <pre>
+validateToken()
+expireToken()
+applyIsolation()
+recordAuditEvent()
+checkCompliance()
+        </pre>
+
+        <h3>Audit Chain</h3>
+        <pre>
+API → Security.auditChain → YGGDRASIL.archive → Delivery
+        </pre>
+
+        <h3>YGGDRASIL Decision Tree</h3>
+        <pre>
+evaluateContext()
+routeControl()
+storeArchiveRecord()
+blockPath()
+traceDecision()
+        </pre>
+
+        <h3>Cluster Execution Flow</h3>
+        <pre>
+validate → execute → deliver → status: completed
+        </pre>
+
+        <h3>System Status HUD</h3>
+        <pre id="systemHud">
+Kernel: ACTIVE
+YGGDRASIL: ONLINE
+Audit-Chain: VERIFIED
+Zero-Trust: ENABLED
+Clusters: 01–50 ONLINE
+        </pre>
+    </div>
+
+    <!-- CLUSTER TABLE 01–50 -->
+    <div id="cluster-table" class="panel">
+        <h2 class="neon">Cluster Status 01–50</h2>
+        <table>
+            <tr><th>Cluster</th><th>Product</th><th>Status</th></tr>
+            <tr><td>CL-01</td><td>IGNITION</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-07</td><td>MOMENTUM</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-12</td><td>ASCENT</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-22</td><td>SOVEREIGN</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-50</td><td>OMEGA</td><td class="iso">ISOLATED</td></tr>
+            <tr><td>CL-03</td><td>IGNITION</td><td class="sec">SECURE</td></tr>
+            <tr><td>CL-09</td><td>MOMENTUM</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-18</td><td>ASCENT</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-30</td><td>SOVEREIGN</td><td class="ok">ONLINE</td></tr>
+            <tr><td>CL-41</td><td>OMEGA</td><td class="err">ERROR</td></tr>
+        </table>
+    </div>
+
+    <!-- YGGDRASIL ASCII MAP -->
+    <div id="ygg-map" class="panel">
+        <h2 class="neon">YGGDRASIL Decision Map</h2>
+        <pre>
+          [ FRONTEND ]
+               |
+               v
+        [ API-GATEWAY ]
+               |
+               v
+          [ REGISTRY ]
+               |
+               v
+          [ YGGDRASIL ]
+        /       |       \
+       v        v        v
+ [ IGNITION ] [ MOMENTUM ] [ ASCENT ]
+       |           |            |
+       v           v            v
+   [ CL-01 ]   [ CL-07 ]    [ CL-12 ]
+       |           |            |
+       v           v            v
+   validate → execute → deliver → auditChain
+        </pre>
+    </div>
+
+    <!-- OPERATOR CONSOLE -->
+    <div id="console" class="panel">
+        <h2 class="neon">Operator Console – Commands</h2>
+        <pre>
+Available commands:
+matrix status
+matrix cluster &lt;id&gt;
+matrix audit
+matrix yggdrasil
+matrix product &lt;name&gt;
+        </pre>
+    </div>
+
+</main>
+
+<script>
+/* MATRIX RAIN */
+const matrix=document.getElementById("matrix");
+const chars="01";
+let out="";
+for(let i=0;i<4000;i++){
+    out+=chars[Math.floor(Math.random()*chars.length)];
+    if(i%80===0) out+="\n";
+}
+matrix.textContent=out;
+
+/* DARK MODE */
+document.getElementById("modeSwitch").addEventListener("click",()=>{
+    document.body.style.filter=document.body.style.filter==="invert(1)"?"invert(0)":"invert(1)";
+});
+
+/* CODE TABS */
+document.querySelectorAll('.code-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.code-panel').forEach(p => p.style.display='none');
+        tab.classList.add('active');
+        document.querySelector(tab.getAttribute('href')).style.display='block';
+    });
+});
+
+/* CODE THEME SWITCH */
+document.getElementById("codeThemeSwitch").addEventListener("click", () => {
+    document.querySelectorAll('.codeblock').forEach(block => {
+        block.classList.toggle('code-dark');
+    });
+});
+
+/* CLUSTER NODES – dynamic + animation */
+const clusterGrid = document.getElementById('clusterGrid');
+const clusterData = [
+    { id:'CL-01', status:'ONLINE', class:'online' },
+    { id:'CL-02', status:'ONLINE', class:'online' },
+    { id:'CL-03', status:'SECURE', class:'secure' },
+    { id:'CL-04', status:'ISOLATED', class:'isolated' },
+    { id:'CL-05', status:'ONLINE', class:'online' },
+    { id:'CL-07', status:'ONLINE', class:'online' },
+    { id:'CL-09', status:'ONLINE', class:'online' },
+    { id:'CL-12', status:'ONLINE', class:'online' },
+    { id:'CL-22', status:'ONLINE', class:'online' },
+    { id:'CL-30', status:'ONLINE', class:'online' },
+    { id:'CL-41', status:'ERROR', class:'error' },
+    { id:'CL-50', status:'ISOLATED', class:'isolated' }
+];
+
+clusterData.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'node ' + c.class;
+    div.innerHTML = c.id + '<span class="status">' + c.status + '</span>';
+    clusterGrid.appendChild(div);
+});
+
+/* Live status simulation: flip some nodes periodically */
+setInterval(() => {
+    const random = clusterGrid.children[Math.floor(Math.random()*clusterGrid.children.length)];
+    if(!random) return;
+    random.classList.toggle('online');
+    random.classList.toggle('secure');
+}, 4000);
+
+/* PRODUCT MATRIX UI */
+const productGrid = document.getElementById('productGrid');
+const productInfo = document.getElementById('productInfo');
+
+productGrid.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', () => {
+        productGrid.querySelectorAll('.product-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const product = card.dataset.product;
+        const cluster = card.dataset.cluster;
+        productInfo.textContent =
+`Routing:
+Product: ${product}
+Cluster: ${cluster}
+Flow: Frontend → API-Gateway → Registry → YGGDRASIL → ${cluster} → validate → execute → deliver → auditChain`;
+    });
+});
+
+/* Live Terminal Input */
+const liveTerminal = document.getElementById('liveTerminal');
+const terminalInput = document.getElementById('terminalCommand');
+const terminalSend = document.getElementById('terminalSend');
+
+function appendTerminal(line) {
+    liveTerminal.innerHTML += '<br>' + line;
+    liveTerminal.scrollTop = liveTerminal.scrollHeight;
+}
+
+terminalSend.addEventListener('click', () => {
+    const cmd = terminalInput.value.trim();
+    if(!cmd) return;
+    appendTerminal('$ ' + cmd);
+    if(cmd === 'matrix status') {
+        appendTerminal('> system integrity: OK');
+        appendTerminal('> clusters: ONLINE');
+    } else if(cmd.startsWith('matrix cluster')) {
+        const parts = cmd.split(' ');
+        const id = parts[2] || '01';
+        appendTerminal('> inspecting cluster ' + id + '...');
+        appendTerminal('> status: ONLINE');
+    } else if(cmd === 'matrix audit') {
+        appendTerminal('> audit-chain: VERIFIED');
+    } else if(cmd === 'matrix yggdrasil') {
+        appendTerminal('> yggdrasil: ACTIVE, routing decisions logged');
+    } else if(cmd.startsWith('matrix product')) {
+        const p = cmd.split(' ')[2] || 'IGNITION';
+        appendTerminal('> product ' + p + ' routed via registry → YGGDRASIL → cluster');
+    } else {
+        appendTerminal('> unknown command');
+    }
+    terminalInput.value = '';
+});
+
+/* Enter key support */
+terminalInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') terminalSend.click();
+});
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Black Six Matrix® – Deep Seed. Sovereign Enterprise Architecture, Zero-Trust, Multi-Cluster, YGGDRASIL Cognitive Routing.">
+    <meta name="keywords" content="Black Six Matrix, Deep Seed, Zero Trust, Multi Cluster, YGGDRASIL, Sovereign Architecture">
+    <meta name="author" content="Thomas">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="Black Six Matrix® – Deep Seed">
+    <meta property="og:description" content="Sovereign Enterprise Platform mit Multi-Cluster Execution und Cognitive Routing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://black-six-matrix.vercel.app/">
+
+    <title>Black Six Matrix® – Deep Seed</title>
+
+    <style>
+        body {
+            margin:0;
+            background:#01030a;
+            color:#e8e8e8;
+            font-family:system-ui, sans-serif;
+            overflow-x:hidden;
+        }
+        .matrix {
+            position:fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            pointer-events:none;
+            opacity:0.15;
+            z-index:-1;
+            font-family:monospace;
+            color:#00ff99;
+            font-size:14px;
+            line-height:14px;
+            white-space:pre;
+        }
+        .neon {
+            text-shadow:0 0 6px #ff3366, 0 0 12px #ff3366, 0 0 24px #ff3366;
+        }
+        header {
+            padding:30px;
+            background:linear-gradient(to bottom,#0b0d12,#01030a);
+            border-bottom:1px solid #1f2933;
+            position:sticky;
+            top:0;
+            z-index:10;
         }
         h1 {
             margin:0;
