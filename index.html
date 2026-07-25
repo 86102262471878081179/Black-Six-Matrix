@@ -1,5 +1,172 @@
 
-Jetzt die GitHub Pages-kompatible `index.html`:
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr.Black – BLACK_SIX_OMEGA_ROOT</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #12121a;
+      --border: #1e1e2e;
+      --text: #e0e0e0;
+      --muted: #888;
+      --accent: #00f2fe;
+      --gold: #d4af37;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+    .tree {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre;
+      color: #ccc;
+    }
+    .tree .dir { color: var(--accent); }
+    .tree .file { color: #aaa; }
+    .tree .master { color: var(--gold); font-weight: bold; }
+    .section { margin-top: 2.5rem; }
+    .section h2 {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+    code {
+      background: #1a1a25;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+    pre {
+      background: #12121a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.8rem;
+      color: #bbb;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dr.Black – BLACK_SIX_OMEGA_ROOT</h1>
+    <p class="subtitle">Struktur-Übersicht · Master-Orchestrator · GitHub-ready</p>
+
+    <div class="tree">
+BLACK_SIX_OMEGA_ROOT/
+├── <span class="dir">/core</span>
+│   ├── black_six_core_system_v8_2_1.py
+│   ├── BLACK_SIX_OMEGA_NEMESIS_v3.0.go
+│   └── omega_os_v2_final.py
+├── <span class="dir">/federation</span>
+│   ├── ai_federation_gateway.py
+│   └── adapter_v1_3.py
+├── <span class="dir">/persistence</span>
+│   ├── database.py
+│   └── redis_cache.py
+├── <span class="dir">/extensions</span>
+│   ├── dashboard_live.py
+│   ├── api_gateway.py
+│   ├── monitoring.py
+│   └── websocket_bridge.py
+├── <span class="dir">/security</span>
+│   ├── backup_engine.py
+│   └── base64_decoder.py
+├── <span class="dir">/utils</span>
+│   ├── build_gl1000_packet.py
+│   ├── multi_language_bridge.py
+│   ├── black_six_metaprogrammier_complete.py
+│   └── cli.py
+├── <span class="dir">/tests</span>
+│   └── test_system.py
+├── .github/workflows/ci.yml
+├── docker-compose.full.yml
+├── Dockerfile
+├── requirements.txt
+└── <span class="master">main_execution.py</span>  ← MASTER-ORCHESTRATOR
+    </div>
+
+    <div class="section">
+      <h2>Master-Orchestrator (Auszug)</h2>
+      <pre>#!/usr/bin/env python3
+"""
+BLACK SIX – MASTER ORCHESTRATOR
+Koppelt alle Module zur finalen Ausführung.
+"""
+
+import asyncio
+import threading
+import uvicorn
+import subprocess
+from api_gateway import app as api
+from monitoring import MonitoringServer
+
+def start_monitoring():
+    monitor = MonitoringServer(port=9090)
+    monitor.start()
+
+def start_dashboard():
+    subprocess.Popen(["streamlit", "run", "dashboard_live.py"])
+
+async def start_api():
+    config = uvicorn.Config(api, host="0.0.0.0", port=8000)
+    server = uvicorn.Server(config)
+    await server.serve()
+
+async def main():
+    print("BLACK SIX // OMEGA // STARTING...")
+    threading.Thread(target=start_monitoring, daemon=True).start()
+    start_dashboard()
+    await start_api()
+
+if __name__ == "__main__":
+    asyncio.run(main())</pre>
+    </div>
+
+    <div class="section">
+      <h2>Hinweise</h2>
+      <p style="color:var(--muted); font-size:0.9rem;">
+        Dies ist die aktuelle Ordnerstruktur und der Einstiegspunkt (<code>main_execution.py</code>).<br>
+        Die Dateien sind als Platzhalter / Scaffolding zu verstehen und müssen noch mit realem Inhalt gefüllt werden.
+      </p>
+    </div>
+
+    <footer>
+      Dr.Black · BLACK_SIX_OMEGA_ROOT · Struktur-Dokumentation
+    </footer>
+  </div>
+</body>
+</html>
 
 ```html
 <!DOCTYPE html>
