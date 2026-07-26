@@ -1,175 +1,543 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlackGremmel v5 – THE DETERMINISTIC MATRIX</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #00ffc8; /* BlackGremmel Türkis */
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      opacity: 0.25;
+    }
+
+   .overlay {
+      position: relative; z-index: 1;
+      height: 100vh; overflow-y: auto;
+      padding: 2rem 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #00ffc8 #000;
+    }
+   .overlay::-webkit-scrollbar { width: 6px; }
+   .overlay::-webkit-scrollbar-track { background: #000; }
+   .overlay::-webkit-scrollbar-thumb { background: #00ffc8; border-radius: 3px; }
+
+   .container {
+      max-width: 1000px; margin: 0 auto;
+      background: rgba(0, 10, 10, 0.8);
+      border: 1px solid rgba(0, 255, 200, 0.25);
+      border-radius: 12px; padding: 2rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 40px rgba(0, 255, 200, 0.1);
+    }
+
+    h1 {
+      font-size: 2rem; color: #00ffc8;
+      text-align: center;
+      text-shadow: 0 0 20px #00ffc8, 0 0 40px rgba(0,255,200,0.5);
+      margin-bottom: 0.3rem; letter-spacing: 4px;
+    }
+   .subtitle {
+      text-align: center; color: #00a088;
+      margin-bottom: 2rem; font-size: 0.9rem; letter-spacing: 2px;
+    }
+
+   .status-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+   .status-item {
+      flex: 1; min-width: 120px;
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      border-radius: 6px; padding: 0.6rem 1rem;
+      background: rgba(0, 20, 20, 0.5); text-align: center;
+    }
+   .status-item.label { color: #00a088; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+   .status-item.val { font-size: 1rem; font-weight: bold; margin-top: 2px; }
+
+   .tree {
+      background: rgba(0, 10, 10, 0.6);
+      border: 1px solid rgba(0, 255, 200, 0.15);
+      border-radius: 8px; padding: 1.2rem;
+      font-size: 0.8rem; overflow-x: auto; white-space: pre;
+      color: #00a088; line-height: 1.5;
+    }
+   .tree.dir { color: #00ffc8; }
+   .tree.master { color: #fff; font-weight: bold; text-shadow: 0 0 10px #00ffc8; }
+
+   .section { margin-top: 2rem; }
+   .section h2 {
+      font-size: 1.1rem; color: #00ffc8;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(0, 255, 200, 0.15);
+      padding-bottom: 0.3rem; letter-spacing: 2px;
+    }
+
+   .card {
+      border: 1px solid rgba(0, 255, 200, 0.15);
+      border-radius: 6px; padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem; background: rgba(0, 15, 15, 0.4);
+    }
+   .card.label { color: #00a088; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+   .hash {
+      color: #00ffc8; word-break: break-all; font-size: 0.85rem;
+      text-shadow: 0 0 8px rgba(0,255,200,0.3);
+      cursor: pointer; transition: all 0.2s;
+    }
+   .hash:hover { text-shadow: 0 0 15px #00ffc8; }
+
+   .badge {
+      display: inline-block;
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      padding: 0.2rem 0.6rem; border-radius: 4px;
+      font-size: 0.7rem; letter-spacing: 1px;
+    }
+   .badge.gold { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px rgba(255,0,85,0.3); } /* Magenta */
+
+    pre {
+      background: rgba(0, 10, 10, 0.6);
+      border: 1px solid rgba(0, 255, 200, 0.12);
+      border-radius: 6px; padding: 1rem;
+      overflow-x: auto; font-size: 0.78rem;
+      color: #00a088; line-height: 1.5;
+    }
+
+   .grid-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; }
+
+    footer {
+      margin-top: 2rem; padding-top: 1rem;
+      border-top: 1px solid rgba(0, 255, 200, 0.12);
+      text-align: center; color: #005044;
+      font-size: 0.75rem; letter-spacing: 1px;
+    }
+
+   .cursor {
+      display: inline-block; width: 10px; height: 1.1em;
+      background: #00ffc8; margin-left: 4px;
+      animation: blink 1s step-end infinite; vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse { 0%,100%{text-shadow:0 0 15px #00ffc8;} 50%{text-shadow:0 0 30px #00ffc8;} }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+
+  <div class="overlay">
+    <div class="container">
+
+      <h1>BLACKGREMMEL v5</h1>
+      <p class="subtitle">// THE DETERMINISTIC MATRIX // EDGE-CLUSTER OS</p>
+      <p style="text-align:center; color:#005044; font-size:0.8rem; margin-bottom:1.5rem;">
+        <span id="clock">00:00:00</span> UTC · <span id="blockCount">0</span> Blocks ·
+        <span id="nodeCount">3</span> Nodes <span class="cursor"></span>
+      </p>
+
+      <div class="status-row">
+        <div class="status-item"><div class="label">System</div><div class="val" style="color:#00ffc8;">OPERATIONAL</div></div>
+        <div class="status-item"><div class="label">Axiom</div><div class="val" style="color:#00ffc8;">DETERMINISM</div></div>
+        <div class="status-item"><div class="label">Consensus</div><div class="val" id="quorumStatus" style="color:#ff0055;">2/3 QUORUM</div></div>
+        <div class="status-item"><div class="label">Identity</div><div class="val" style="color:#00ffc8;" id="statusIdentity">LOCKED</div></div>
+      </div>
+
+      <div class="section">
+        <h2>$ tree --matrix</h2>
+        <div class="tree">
+blackgremmel/
+├── <span class="dir">src/</span>
+│ ├── <span class="dir">meta/</span> axioms · determinism · consistency
+│ ├── <span class="dir">system/</span> block · chain · node · cluster · identity · graph
+│ ├── <span class="dir">consensus/</span> proposal · accept · commit · recovery
+│ ├── <span class="dir">transport/</span> framing · retry · peer_fsm · heartbeat
+│ ├── <span class="dir">web/</span> server · api
+│ ├── main.rs
+│ └── lib.rs
+├── <span class="dir">configs/</span> node[1-3]_prod.toml
+├── <span class="dir">systemd/</span> blackgremmel@.service
+├── Cargo.toml
+└── <span class="master">Φ LOCKED</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2># IDENTITY :: LIVE PROOF</h2>
+        <div class="card"><div class="label">Global State Hash</div><div class="hash" id="globalHash">loading...</div></div>
+        <div class="card"><div class="label">Graph Digest Hash</div><div class="hash" id="graphDigest">loading...</div></div>
+        <div class="card" style="border-color: rgba(0,255,200,0.4); animation: pulse 2s infinite;">
+          <div class="label" style="color:#00ffc8;">★ Identity Hash ★</div>
+          <div class="hash" id="identityHash" style="color:#fff; font-size:1rem;">loading...</div>
+        </div>
+        <p style="color:#005044; font-size:0.75rem; margin-top:0.4rem;">Klick auf Hash zum Kopieren</p>
+      </div>
+
+      <div class="section">
+        <h2># QUICKSTART</h2>
+        <pre>$ curl localhost:8080/api/v1/identity
+$ cargo run --bin bg -- status</pre>
+      </div>
+
+      <footer>
+        <span style="color:#00ffc8;">BLACKGREMMEL v5.0</span> ·
+        <span style="color:#005044;">Black Six © 2026</span> ·
+        <span class="badge" style="border-color:#00ffc8; color:#00ffc8;">Φ_LOCKED_ABSOLUTE</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // MATRIX RAIN
+    (function() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h, cols, drops, fontSize = 14;
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        cols = Math.floor(w / fontSize);
+        drops = Array(cols).fill(1);
+      }
+      const chars = 'アイウエオカキクケコ0123456789ABCDEFΦλΩ';
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, w, h);
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          const x = i * fontSize; const y = drops[i] * fontSize;
+          ctx.fillStyle = `rgba(0, 255, 200, ${Math.random()*0.6+0.4})`;
+          ctx.fillText(char, x, y);
+          if (y > h && Math.random() > 0.975) drops[i] = 0;
+          drops[i] += 0.8 + Math.random() * 0.5;
+        }
+      }
+      resize(); window.addEventListener('resize', resize); setInterval(draw, 55);
+    })();
+
+    // CLOCK
+    function updateClock() {
+      document.getElementById('clock').textContent = new Date().toUTCString().split(' ')[4];
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // LIVE API DATA - ECHT
+    async function updateLiveData() {
+      try {
+        const res = await fetch('/api/v1/identity');
+        if (!res.ok) throw new Error('API offline');
+        const d = await res.json();
+
+        document.getElementById('identityHash').innerText = d.identity_hash;
+        document.getElementById('globalHash').innerText = d.global_state_hash;
+        document.getElementById('graphDigest').innerText = d.graph_digest_hash;
+        document.getElementById('blockCount').innerText = d.block_height;
+        document.getElementById('nodeCount').innerText = d.total_nodes;
+        document.getElementById('statusIdentity').innerText = d.status;
+
+        const q = document.getElementById('quorumStatus');
+        q.innerText = `${d.votes_yes}/${d.quorum_needed} QUORUM`;
+        q.style.color = d.votes_yes >= d.quorum_needed? '#00ffc8' : '#ff0055';
+      } catch(e) {
+        console.log('API nicht erreichbar, Demo-Modus');
+      }
+    }
+    updateLiveData();
+    setInterval(updateLiveData, 3000);
+
+    // COPY TO CLIPBOARD
+    document.querySelectorAll('.hash').forEach(el => {
+      el.title = 'Klicken zum Kopieren';
+      el.onclick = () => {
+        navigator.clipboard.writeText(el.innerText);
+        el.style.color = '#ff0055';
+        setTimeout(() => el.style.color = '#00ffc8', 300);
+      };
+    });
+  </script>
+</body>
+</html>
 
 <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dr.Black – BLACK_SIX_OMEGA_ROOT</title>
+  <title>BlackGremmel v5 – THE DETERMINISTIC MATRIX</title>
   <style>
-    :root {
-      --bg: #0a0a0f;
-      --card: #12121a;
-      --border: #1e1e2e;
-      --text: #e0e0e0;
-      --muted: #888;
-      --accent: #00f2fe;
-      --gold: #d4af37;
-    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      padding: 2rem 1rem;
-    }
-    .container { max-width: 900px; margin: 0 auto; }
-    h1 {
-      font-size: 1.8rem;
-      color: var(--gold);
-      margin-bottom: 0.3rem;
-    }
-    .subtitle { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
-    .tree {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
+      background: #000;
+      color: #00ffc8; /* BlackGremmel Türkis */
       font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      overflow-x: auto;
-      white-space: pre;
-      color: #ccc;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
     }
-    .tree .dir { color: var(--accent); }
-    .tree .file { color: #aaa; }
-    .tree .master { color: var(--gold); font-weight: bold; }
-    .section { margin-top: 2.5rem; }
-    .section h2 {
-      font-size: 1.2rem;
-      color: var(--accent);
-      margin-bottom: 0.8rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.4rem;
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      opacity: 0.25;
     }
-    code {
-      background: #1a1a25;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.85em;
+
+   .overlay {
+      position: relative; z-index: 1;
+      height: 100vh; overflow-y: auto;
+      padding: 2rem 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #00ffc8 #000;
     }
-    pre {
-      background: #12121a;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-      overflow-x: auto;
-      font-size: 0.8rem;
-      color: #bbb;
+   .overlay::-webkit-scrollbar { width: 6px; }
+   .overlay::-webkit-scrollbar-track { background: #000; }
+   .overlay::-webkit-scrollbar-thumb { background: #00ffc8; border-radius: 3px; }
+
+   .container {
+      max-width: 1000px; margin: 0 auto;
+      background: rgba(0, 10, 10, 0.8);
+      border: 1px solid rgba(0, 255, 200, 0.25);
+      border-radius: 12px; padding: 2rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 40px rgba(0, 255, 200, 0.1);
     }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.8rem;
+
+    h1 {
+      font-size: 2rem; color: #00ffc8;
       text-align: center;
+      text-shadow: 0 0 20px #00ffc8, 0 0 40px rgba(0,255,200,0.5);
+      margin-bottom: 0.3rem; letter-spacing: 4px;
     }
+   .subtitle {
+      text-align: center; color: #00a088;
+      margin-bottom: 2rem; font-size: 0.9rem; letter-spacing: 2px;
+    }
+
+   .status-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+   .status-item {
+      flex: 1; min-width: 120px;
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      border-radius: 6px; padding: 0.6rem 1rem;
+      background: rgba(0, 20, 20, 0.5); text-align: center;
+    }
+   .status-item.label { color: #00a088; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+   .status-item.val { font-size: 1rem; font-weight: bold; margin-top: 2px; }
+
+   .tree {
+      background: rgba(0, 10, 10, 0.6);
+      border: 1px solid rgba(0, 255, 200, 0.15);
+      border-radius: 8px; padding: 1.2rem;
+      font-size: 0.8rem; overflow-x: auto; white-space: pre;
+      color: #00a088; line-height: 1.5;
+    }
+   .tree.dir { color: #00ffc8; }
+   .tree.master { color: #fff; font-weight: bold; text-shadow: 0 0 10px #00ffc8; }
+
+   .section { margin-top: 2rem; }
+   .section h2 {
+      font-size: 1.1rem; color: #00ffc8;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(0, 255, 200, 0.15);
+      padding-bottom: 0.3rem; letter-spacing: 2px;
+    }
+
+   .card {
+      border: 1px solid rgba(0, 255, 200, 0.15);
+      border-radius: 6px; padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem; background: rgba(0, 15, 15, 0.4);
+    }
+   .card.label { color: #00a088; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+   .hash {
+      color: #00ffc8; word-break: break-all; font-size: 0.85rem;
+      text-shadow: 0 0 8px rgba(0,255,200,0.3);
+      cursor: pointer; transition: all 0.2s;
+    }
+   .hash:hover { text-shadow: 0 0 15px #00ffc8; }
+
+   .badge {
+      display: inline-block;
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      padding: 0.2rem 0.6rem; border-radius: 4px;
+      font-size: 0.7rem; letter-spacing: 1px;
+    }
+   .badge.gold { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px rgba(255,0,85,0.3); } /* Magenta */
+
+    pre {
+      background: rgba(0, 10, 10, 0.6);
+      border: 1px solid rgba(0, 255, 200, 0.12);
+      border-radius: 6px; padding: 1rem;
+      overflow-x: auto; font-size: 0.78rem;
+      color: #00a088; line-height: 1.5;
+    }
+
+   .grid-modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; }
+
+    footer {
+      margin-top: 2rem; padding-top: 1rem;
+      border-top: 1px solid rgba(0, 255, 200, 0.12);
+      text-align: center; color: #005044;
+      font-size: 0.75rem; letter-spacing: 1px;
+    }
+
+   .cursor {
+      display: inline-block; width: 10px; height: 1.1em;
+      background: #00ffc8; margin-left: 4px;
+      animation: blink 1s step-end infinite; vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse { 0%,100%{text-shadow:0 0 15px #00ffc8;} 50%{text-shadow:0 0 30px #00ffc8;} }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Dr.Black – BLACK_SIX_OMEGA_ROOT</h1>
-    <p class="subtitle">Struktur-Übersicht · Master-Orchestrator · GitHub-ready</p>
+  <canvas id="matrix-canvas"></canvas>
 
-    <div class="tree">
-BLACK_SIX_OMEGA_ROOT/
-├── <span class="dir">/core</span>
-│   ├── black_six_core_system_v8_2_1.py
-│   ├── BLACK_SIX_OMEGA_NEMESIS_v3.0.go
-│   └── omega_os_v2_final.py
-├── <span class="dir">/federation</span>
-│   ├── ai_federation_gateway.py
-│   └── adapter_v1_3.py
-├── <span class="dir">/persistence</span>
-│   ├── database.py
-│   └── redis_cache.py
-├── <span class="dir">/extensions</span>
-│   ├── dashboard_live.py
-│   ├── api_gateway.py
-│   ├── monitoring.py
-│   └── websocket_bridge.py
-├── <span class="dir">/security</span>
-│   ├── backup_engine.py
-│   └── base64_decoder.py
-├── <span class="dir">/utils</span>
-│   ├── build_gl1000_packet.py
-│   ├── multi_language_bridge.py
-│   ├── black_six_metaprogrammier_complete.py
-│   └── cli.py
-├── <span class="dir">/tests</span>
-│   └── test_system.py
-├── .github/workflows/ci.yml
-├── docker-compose.full.yml
-├── Dockerfile
-├── requirements.txt
-└── <span class="master">main_execution.py</span>  ← MASTER-ORCHESTRATOR
-    </div>
+  <div class="overlay">
+    <div class="container">
 
-    <div class="section">
-      <h2>Master-Orchestrator (Auszug)</h2>
-      <pre>#!/usr/bin/env python3
-"""
-BLACK SIX – MASTER ORCHESTRATOR
-Koppelt alle Module zur finalen Ausführung.
-"""
-
-import asyncio
-import threading
-import uvicorn
-import subprocess
-from api_gateway import app as api
-from monitoring import MonitoringServer
-
-def start_monitoring():
-    monitor = MonitoringServer(port=9090)
-    monitor.start()
-
-def start_dashboard():
-    subprocess.Popen(["streamlit", "run", "dashboard_live.py"])
-
-async def start_api():
-    config = uvicorn.Config(api, host="0.0.0.0", port=8000)
-    server = uvicorn.Server(config)
-    await server.serve()
-
-async def main():
-    print("BLACK SIX // OMEGA // STARTING...")
-    threading.Thread(target=start_monitoring, daemon=True).start()
-    start_dashboard()
-    await start_api()
-
-if __name__ == "__main__":
-    asyncio.run(main())</pre>
-    </div>
-
-    <div class="section">
-      <h2>Hinweise</h2>
-      <p style="color:var(--muted); font-size:0.9rem;">
-        Dies ist die aktuelle Ordnerstruktur und der Einstiegspunkt (<code>main_execution.py</code>).<br>
-        Die Dateien sind als Platzhalter / Scaffolding zu verstehen und müssen noch mit realem Inhalt gefüllt werden.
+      <h1>BLACKGREMMEL v5</h1>
+      <p class="subtitle">// THE DETERMINISTIC MATRIX // EDGE-CLUSTER OS</p>
+      <p style="text-align:center; color:#005044; font-size:0.8rem; margin-bottom:1.5rem;">
+        <span id="clock">00:00:00</span> UTC · <span id="blockCount">0</span> Blocks ·
+        <span id="nodeCount">3</span> Nodes <span class="cursor"></span>
       </p>
+
+      <div class="status-row">
+        <div class="status-item"><div class="label">System</div><div class="val" style="color:#00ffc8;">OPERATIONAL</div></div>
+        <div class="status-item"><div class="label">Axiom</div><div class="val" style="color:#00ffc8;">DETERMINISM</div></div>
+        <div class="status-item"><div class="label">Consensus</div><div class="val" id="quorumStatus" style="color:#ff0055;">2/3 QUORUM</div></div>
+        <div class="status-item"><div class="label">Identity</div><div class="val" style="color:#00ffc8;" id="statusIdentity">LOCKED</div></div>
+      </div>
+
+      <div class="section">
+        <h2>$ tree --matrix</h2>
+        <div class="tree">
+blackgremmel/
+├── <span class="dir">src/</span>
+│ ├── <span class="dir">meta/</span> axioms · determinism · consistency
+│ ├── <span class="dir">system/</span> block · chain · node · cluster · identity · graph
+│ ├── <span class="dir">consensus/</span> proposal · accept · commit · recovery
+│ ├── <span class="dir">transport/</span> framing · retry · peer_fsm · heartbeat
+│ ├── <span class="dir">web/</span> server · api
+│ ├── main.rs
+│ └── lib.rs
+├── <span class="dir">configs/</span> node[1-3]_prod.toml
+├── <span class="dir">systemd/</span> blackgremmel@.service
+├── Cargo.toml
+└── <span class="master">Φ LOCKED</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2># IDENTITY :: LIVE PROOF</h2>
+        <div class="card"><div class="label">Global State Hash</div><div class="hash" id="globalHash">loading...</div></div>
+        <div class="card"><div class="label">Graph Digest Hash</div><div class="hash" id="graphDigest">loading...</div></div>
+        <div class="card" style="border-color: rgba(0,255,200,0.4); animation: pulse 2s infinite;">
+          <div class="label" style="color:#00ffc8;">★ Identity Hash ★</div>
+          <div class="hash" id="identityHash" style="color:#fff; font-size:1rem;">loading...</div>
+        </div>
+        <p style="color:#005044; font-size:0.75rem; margin-top:0.4rem;">Klick auf Hash zum Kopieren</p>
+      </div>
+
+      <div class="section">
+        <h2># QUICKSTART</h2>
+        <pre>$ curl localhost:8080/api/v1/identity
+$ cargo run --bin bg -- status</pre>
+      </div>
+
+      <footer>
+        <span style="color:#00ffc8;">BLACKGREMMEL v5.0</span> ·
+        <span style="color:#005044;">Black Six © 2026</span> ·
+        <span class="badge" style="border-color:#00ffc8; color:#00ffc8;">Φ_LOCKED_ABSOLUTE</span>
+      </footer>
+
     </div>
-
-    <footer>
-      Dr.Black · BLACK_SIX_OMEGA_ROOT · Struktur-Dokumentation
-    </footer>
   </div>
-</body>
-</html>
 
-```html
-<!DOCTYPE html>
+  <script>
+    // MATRIX RAIN
+    (function() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h, cols, drops, fontSize = 14;
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        cols = Math.floor(w / fontSize);
+        drops = Array(cols).fill(1);
+      }
+      const chars = 'アイウエオカキクケコ0123456789ABCDEFΦλΩ';
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, w, h);
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          const x = i * fontSize; const y = drops[i] * fontSize;
+          ctx.fillStyle = `rgba(0, 255, 200, ${Math.random()*0.6+0.4})`;
+          ctx.fillText(char, x, y);
+          if (y > h && Math.random() > 0.975) drops[i] = 0;
+          drops[i] += 0.8 + Math.random() * 0.5;
+        }
+      }
+      resize(); window.addEventListener('resize', resize); setInterval(draw, 55);
+    })();
+
+    // CLOCK
+    function updateClock() {
+      document.getElementById('clock').textContent = new Date().toUTCString().split(' ')[4];
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // LIVE API DATA - ECHT
+    async function updateLiveData() {
+      try {
+        const res = await fetch('/api/v1/identity');
+        if (!res.ok) throw new Error('API offline');
+        const d = await res.json();
+
+        document.getElementById('identityHash').innerText = d.identity_hash;
+        document.getElementById('globalHash').innerText = d.global_state_hash;
+        document.getElementById('graphDigest').innerText = d.graph_digest_hash;
+        document.getElementById('blockCount').innerText = d.block_height;
+        document.getElementById('nodeCount').innerText = d.total_nodes;
+        document.getElementById('statusIdentity').innerText = d.status;
+
+        const q = document.getElementById('quorumStatus');
+        q.innerText = `${d.votes_yes}/${d.quorum_needed} QUORUM`;
+        q.style.color = d.votes_yes >= d.quorum_needed? '#00ffc8' : '#ff0055';
+      } catch(e) {
+        console.log('API nicht erreichbar, Demo-Modus');
+      }
+    }
+    updateLiveData();
+    setInterval(updateLiveData, 3000);
+
+    // COPY TO CLIPBOARD
+    document.querySelectorAll('.hash').forEach(el => {
+      el.title = 'Klicken zum Kopieren';
+      el.onclick = () => {
+        navigator.clipboard.writeText(el.innerText);
+        el.style.color = '#ff0055';
+        setTimeout(() => el.style.color = '#00ffc8', 300);
+      };
+    });
+  </script>
+</body>
+</html>the
+
+
+!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
