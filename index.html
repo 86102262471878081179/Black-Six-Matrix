@@ -1840,6 +1840,620 @@ GPU 00000000:00:04.0   NeuroMatrix v2.1   147/300 epochs    loss: 0.0324
       }, 2000);
     })();
   </script>
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroMatrix v2.1 – SynapseOS</title>
+  <style>
+    /* ===== RESET ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #05050a;
+      color: #aaccff;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* ===== NEURO RAIN CANVAS ===== */
+    #neuro-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.25;
+    }
+
+    /* ===== OVERLAY ===== */
+    .overlay {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #4488ff #05050a;
+    }
+    .overlay::-webkit-scrollbar { width: 6px; }
+    .overlay::-webkit-scrollbar-track { background: #05050a; }
+    .overlay::-webkit-scrollbar-thumb { background: #4488ff; border-radius: 3px; }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(5, 5, 20, 0.85);
+      border: 1px solid rgba(68, 136, 255, 0.2);
+      border-radius: 14px;
+      padding: 2rem;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 60px rgba(68, 136, 255, 0.06);
+    }
+
+    /* ===== TYPO ===== */
+    h1 {
+      font-size: 2rem;
+      color: #88ddff;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(68, 180, 255, 0.4), 0 0 60px rgba(68, 180, 255, 0.1);
+      margin-bottom: 0.2rem;
+      letter-spacing: 3px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #5566aa;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+    }
+    .subtitle span {
+      color: #cc66ff;
+      text-shadow: 0 0 12px rgba(200, 100, 255, 0.3);
+    }
+
+    /* ===== STATUS ROW ===== */
+    .status-row {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .status-item {
+      flex: 1;
+      min-width: 110px;
+      border: 1px solid rgba(68, 136, 255, 0.15);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      background: rgba(10, 10, 30, 0.5);
+      text-align: center;
+    }
+    .status-item .label {
+      color: #5566aa;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .status-item .val {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-top: 2px;
+    }
+
+    /* ===== SECTION ===== */
+    .section { margin-top: 2rem; }
+    .section h2 {
+      font-size: 1.05rem;
+      color: #88ddff;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(68, 136, 255, 0.12);
+      padding-bottom: 0.3rem;
+      letter-spacing: 2px;
+    }
+    .section h2 .pink {
+      color: #cc66ff;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      border: 1px solid rgba(68, 136, 255, 0.12);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem;
+      background: rgba(8, 8, 25, 0.5);
+    }
+    .card .label { color: #5566aa; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+    .val-cyan { color: #88ddff; }
+    .val-pink { color: #cc66ff; }
+    .val-green { color: #66ffaa; }
+    .hash {
+      color: #88ddff;
+      word-break: break-all;
+      font-size: 0.85rem;
+      text-shadow: 0 0 8px rgba(68, 180, 255, 0.15);
+    }
+
+    /* ===== PROGRESS ===== */
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(68, 136, 255, 0.08);
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 0.4rem 0;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4488ff, #cc66ff);
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #5566aa;
+    }
+
+    /* ===== METRIC GRID ===== */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+    }
+    .metric-box {
+      border: 1px solid rgba(68, 136, 255, 0.1);
+      border-radius: 6px;
+      padding: 0.6rem;
+      background: rgba(10, 10, 30, 0.3);
+      text-align: center;
+    }
+    .metric-box .mval {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .metric-box .mlabel {
+      font-size: 0.6rem;
+      color: #5566aa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* ===== INFERENCE TABLE ===== */
+    .inference-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.7rem;
+    }
+    .inference-table th {
+      color: #88ddff;
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid rgba(68, 136, 255, 0.15);
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+    .inference-table td {
+      padding: 0.3rem 0.5rem;
+      border-bottom: 1px solid rgba(68, 136, 255, 0.04);
+      font-family: monospace;
+    }
+    .inference-table .conf-high { color: #66ffaa; }
+    .inference-table .conf-med { color: #ffcc44; }
+    .inference-table .conf-low { color: #ff6644; }
+    .inference-table tr:hover td { background: rgba(68, 136, 255, 0.04); }
+
+    /* ===== DATA STREAM ===== */
+    .stream-line {
+      font-size: 0.7rem;
+      color: #5566aa;
+      font-family: monospace;
+      line-height: 1.6;
+      padding: 0.15rem 0;
+    }
+    .stream-line .ts { color: #445588; }
+    .stream-line .data { color: #88ddff; }
+    .stream-line .pulse {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #66ffaa;
+      margin-right: 6px;
+      animation: blink-pulse 1.2s step-end infinite;
+    }
+    @keyframes blink-pulse { 50% { opacity: 0.2; } }
+
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-block;
+      border: 1px solid rgba(68, 136, 255, 0.2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+    }
+    .badge.pink { border-color: rgba(200, 100, 255, 0.3); color: #cc66ff; }
+    .badge.cyan { border-color: rgba(68, 180, 255, 0.3); color: #88ddff; }
+
+    pre {
+      background: rgba(8, 8, 25, 0.6);
+      border: 1px solid rgba(68, 136, 255, 0.08);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.75rem;
+      color: #7788bb;
+      line-height: 1.5;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(68, 136, 255, 0.08);
+      text-align: center;
+      color: #334466;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+
+    .cursor-neuro {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: #88ddff;
+      margin-left: 3px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ===== ATTENTION VIS ===== */
+    .attention-row {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0.5rem 0;
+    }
+    .attn-cell {
+      width: 18px;
+      height: 18px;
+      border-radius: 2px;
+      background: rgba(68, 136, 255, 0.1);
+      transition: background 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <!-- NEURO RAIN CANVAS -->
+  <canvas id="neuro-canvas"></canvas>
+
+  <!-- OVERLAY -->
+  <div class="overlay">
+    <div class="container">
+
+      <!-- HEADER -->
+      <h1>NEUROMATRIX <span style="color:#cc66ff;">v2.1</span></h1>
+      <p class="subtitle">// <span>SYNAPSE</span>OS // NEURAL ENGINE // INFERENCE CORE</p>
+      <p style="text-align:center; color:#334466; font-size:0.75rem; margin-bottom:1.5rem;">
+        <span id="neuroClock">00:00:00</span> UTC &nbsp;·&nbsp; 
+        <span id="epochCount">147</span> Epochs &nbsp;·&nbsp; 
+        Loss: <span id="lossDisplay">0.0324</span> &nbsp;·&nbsp; 
+        LR: 1e-4<span class="cursor-neuro"></span>
+      </p>
+
+      <!-- STATUS ROW -->
+      <div class="status-row">
+        <div class="status-item">
+          <div class="label">Engine</div>
+          <div class="val val-cyan">ACTIVE</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Task</div>
+          <div class="val val-pink">Image Classification</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Model</div>
+          <div class="val val-cyan">Transformer-4</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Data Pipeline</div>
+          <div class="val val-green">STREAMING</div>
+        </div>
+      </div>
+
+      <!-- ================ MODULE 1: DATA PIPELINE ================ -->
+      <div class="section">
+        <h2>⟐ DATA PIPELINE <span class="pink">[LIVE]</span></h2>
+        <div class="card">
+          <div id="dataStream">
+            <div class="stream-line"><span class="pulse"></span><span class="ts">[12:47:03]</span> <span class="data">IN</span>  batch_147 · 64 samples · 3×224×224</div>
+            <div class="stream-line"><span class="pulse"></span><span class="ts">[12:47:02]</span> <span class="data">AUG</span> random_flip · rotate(15°) · normalize</div>
+            <div class="stream-line"><span class="pulse"></span><span class="ts">[12:47:01]</span> <span class="data">LOAD</span> shard_009.pt · 2048 samples · cache hit</div>
+            <div class="stream-line"><span class="pulse"></span><span class="ts">[12:47:00]</span> <span class="data">QUEUE</span> prefetch=4 · 3200 samples buffered</div>
+            <div class="stream-line"><span class="ts">[12:46:58]</span> <span class="data">SRC</span> sensor_array_3 · 8×8×1 · normalized</div>
+          </div>
+          <div class="progress-label" style="margin-top:0.5rem;">
+            <span>Pipeline Throughput</span>
+            <span>2470 img/s</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:78%;"></div></div>
+        </div>
+      </div>
+
+      <!-- ================ MODULE 2: MODEL INFO ================ -->
+      <div class="section">
+        <h2>⟐ MODEL REGISTRY</h2>
+        <div class="metric-grid">
+          <div class="metric-box">
+            <div class="mval val-cyan">Transformer-4</div>
+            <div class="mlabel">Architecture</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-pink">86.2M</div>
+            <div class="mlabel">Parameters</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-green">12</div>
+            <div class="mlabel">Attention Heads</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval" style="color:#ffcc44;">768</div>
+            <div class="mlabel">Hidden Dim</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-cyan">24</div>
+            <div class="mlabel">Layers</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-pink">1e-4</div>
+            <div class="mlabel">Learning Rate</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:0.5rem;">
+          <div class="label">Checkpoint</div>
+          <div class="hash">ckpt_epoch_147_loss_0.0324.pt · SHA256: a1b2c3d4e5f67890a1b2c3d4e5f67890</div>
+        </div>
+      </div>
+
+      <!-- ================ MODULE 3: TRAINING PROGRESS ================ -->
+      <div class="section">
+        <h2>⟐ TRAINING <span class="pink">[EPOCH 147/300]</span></h2>
+        <div class="card">
+          <div class="progress-label">
+            <span>Training Loss</span>
+            <span id="lossVal">0.0324</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="lossBar" style="width:3.24%;"></div></div>
+          <div style="display:flex; gap:1.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+            <div><span class="label">Accuracy</span><br><span class="val-cyan" style="font-size:1.1rem;">97.23%</span></div>
+            <div><span class="label">Val Loss</span><br><span class="val-pink" style="font-size:1.1rem;">0.0417</span></div>
+            <div><span class="label">Epoch Time</span><br><span style="color:#5566aa; font-size:1.1rem;">143s</span></div>
+            <div><span class="label">Remaining</span><br><span style="color:#5566aa; font-size:1.1rem;">~6.1h</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================ MODULE 4: INFERENCE RESULTS ================ -->
+      <div class="section">
+        <h2>⟐ INFERENCE <span class="pink">[LAST 5 PREDICTIONS]</span></h2>
+        <table class="inference-table">
+          <thead>
+            <tr>
+              <th>Input</th>
+              <th>Prediction</th>
+              <th>Confidence</th>
+              <th>Latency</th>
+              <th>Model</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:#445588;">img_02147.jpg</td>
+              <td class="val-cyan">cat · Felis catus</td>
+              <td class="conf-high">98.41%</td>
+              <td>12ms</td>
+              <td>Transformer-4</td>
+            </tr>
+            <tr>
+              <td style="color:#445588;">img_02148.jpg</td>
+              <td class="val-cyan">dog · Canis lupus</td>
+              <td class="conf-high">96.73%</td>
+              <td>11ms</td>
+              <td>Transformer-4</td>
+            </tr>
+            <tr>
+              <td style="color:#445588;">img_02149.jpg</td>
+              <td class="val-pink">car · sedan</td>
+              <td class="conf-med">82.15%</td>
+              <td>13ms</td>
+              <td>CNN-12</td>
+            </tr>
+            <tr>
+              <td style="color:#445588;">img_02150.jpg</td>
+              <td class="val-cyan">bird · Parus major</td>
+              <td class="conf-high">99.02%</td>
+              <td>10ms</td>
+              <td>Transformer-4</td>
+            </tr>
+            <tr>
+              <td style="color:#445588;">img_02151.jpg</td>
+              <td class="val-pink">bicycle</td>
+              <td class="conf-low">67.34%</td>
+              <td>14ms</td>
+              <td>CNN-12</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ================ MODULE 5: ATTENTION MAP ================ -->
+      <div class="section">
+        <h2>⟐ ATTENTION MAP <span class="pink">[LAYER 7 · HEAD 4]</span></h2>
+        <div class="card">
+          <div class="attention-row" id="attentionRow"></div>
+          <p style="color:#334466; font-size:0.65rem; margin-top:0.4rem;">
+            Visualisierung der Attention-Scores · Token-Positionen 0–63 · Head 4 / Layer 7
+          </p>
+        </div>
+      </div>
+
+      <!-- ================ MODULE 6: SYSTEM METRICS ================ -->
+      <div class="section">
+        <h2>⟐ SYSTEM METRICS</h2>
+        <div class="metric-grid">
+          <div class="metric-box">
+            <div class="mval val-cyan">8/16</div>
+            <div class="mlabel">GPU Util</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-green">34.2 GB</div>
+            <div class="mlabel">VRAM</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval val-pink">64.7%</div>
+            <div class="mlabel">Memory</div>
+          </div>
+          <div class="metric-box">
+            <div class="mval" style="color:#ffcc44;">42°C</div>
+            <div class="mlabel">GPU Temp</div>
+          </div>
+        </div>
+        <pre style="margin-top:0.5rem;">
+nvidia-smi | grep "NeuroMatrix"
+GPU 00000000:00:04.0   NeuroMatrix v2.1   147/300 epochs    loss: 0.0324
+        </pre>
+      </div>
+
+      <!-- ================ FOOTER ================ -->
+      <footer>
+        <span style="color:#88ddff;">NEUROMATRIX v2.1</span> · 
+        <span style="color:#5566aa;">SynapseOS</span> · 
+        <span class="badge cyan">Φ NEURAL</span>
+        <span class="badge pink">v2.1</span>
+        <br>
+        <span style="color:#334466;">© 2026 Black Six · Transformer-4 · Inference Core</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // ==============================
+    // NEURO RAIN CANVAS
+    // ==============================
+    (function() {
+      const canvas = document.getElementById('neuro-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h, cols, drops, fontSize = 16;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        cols = Math.floor(w / fontSize);
+        drops = Array(cols).fill(1);
+      }
+
+      // Binär, griechisch, mathematische Symbole
+      const chars = '01ΦλΩΣΠΨΔ∑∫∞∇αβγδεζηθικμνξπρστυφχψω⊕⊗⊖⊘⊙⊚⊛⊜⊝∏∑∐∞∫∬∮√∛∜∝∞∠∥∧∨∩∪∫∮';
+
+      function draw() {
+        ctx.fillStyle = 'rgba(5, 5, 10, 0.06)';
+        ctx.fillRect(0, 0, w, h);
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+
+          // Cyan/Blau-Verlauf
+          const alpha = Math.random() * 0.5 + 0.2;
+          const hue = 210 + Math.random() * 40; // 210-250 = blau bis lila
+          ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`;
+          ctx.font = fontSize + 'px monospace';
+          ctx.fillText(char, x, y);
+
+          if (y > h && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i] += 0.7 + Math.random() * 0.6;
+        }
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(draw, 60);
+    })();
+
+    // ==============================
+    // CLOCK
+    // ==============================
+    function updateNeuroClock() {
+      const now = new Date();
+      const utc = now.toUTCString().split(' ')[4];
+      document.getElementById('neuroClock').textContent = utc;
+    }
+    setInterval(updateNeuroClock, 1000);
+    updateNeuroClock();
+
+    // ==============================
+    // SIMULATED TRAINING PROGRESS
+    // ==============================
+    let loss = 0.0324;
+    let epoch = 147;
+
+    setInterval(() => {
+      // Loss sinkt langsam
+      loss = Math.max(0.001, loss - (Math.random() * 0.002));
+      epoch += 1;
+      
+      document.getElementById('lossDisplay').textContent = loss.toFixed(4);
+      document.getElementById('epochCount').textContent = epoch;
+      document.getElementById('lossVal').textContent = loss.toFixed(4);
+      
+      // Progress bar mapping: loss 0.1 = 10%, loss 0.001 = 0.1%
+      const pct = Math.min(100, loss * 100);
+      document.getElementById('lossBar').style.width = pct + '%';
+    }, 3000);
+
+    // ==============================
+    // ATTENTION VISUALIZATION
+    // ==============================
+    (function() {
+      const container = document.getElementById('attentionRow');
+      for (let i = 0; i < 64; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'attn-cell';
+        // Zufällige Intensität
+        const intensity = Math.random();
+        const r = Math.round(68 * intensity);
+        const g = Math.round(136 * intensity);
+        const b = Math.round(255 * intensity);
+        cell.style.background = `rgba(${r}, ${g}, ${b}, ${0.2 + intensity * 0.6})`;
+        container.appendChild(cell);
+      }
+      // Regenerate periodically
+      setInterval(() => {
+        const cells = container.querySelectorAll('.attn-cell');
+        cells.forEach(cell => {
+          const intensity = Math.random();
+          const r = Math.round(68 * intensity);
+          const g = Math.round(136 * intensity);
+          const b = Math.round(255 * intensity);
+          cell.style.background = `rgba(${r}, ${g}, ${b}, ${0.2 + intensity * 0.6})`;
+        });
+      }, 2000);
+    })();
+  </script>
+</body>
+</html>
 </body>
 </html>
 </body>
