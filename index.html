@@ -5,382 +5,395 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MATRIX SELECTOR – Black Six Collection</title>
   <style>
-    /* ===== GLOBAL RESET ===== */
+    /* Stile für die Auswahlseite */
+  </style>
+</head>
+<body>
+  <div class="selector">
+    <button onclick="showMatrix('blackgremmel')">Black_Gremmel</button>
+    <button onclick="showMatrix('blackgremmel-ultra')">Black_Gremmel_Ultra</button>
+    <button onclick="showMatrix('odin')">Odin</button>
+  </div>
+  <div class="matrix-container">
+    <iframe id="blackgremmel" src="blackgremmel.html" style="display:none;"></iframe>
+    <iframe id="blackgremmel-ultra" src="blackgremmel-ultra.html" style="display:none;"></iframe>
+    <iframe id="odin" src="odin.html" style="display:none;"></iframe>
+  </div>
+  <script>
+    function showMatrix(matrixId) {
+      // Alle iframes ausblenden
+      document.querySelectorAll('iframe').forEach(iframe => {
+        iframe.style.display = 'none';
+      });
+      // Gewünschtes iframe anzeigen
+      document.getElementById(matrixId).style.display = 'block';
+    }
+  </script>
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATRIX SELECTOR – Black Six Collection</title>
+  <style>
+    body { margin: 0; padding: 0; background: black; color: white; font-family: monospace; }
+    .selector { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 10px; z-index: 1000; text-align: center; }
+    .selector button { margin: 0 10px; padding: 10px 20px; background: #333; color: white; border: 1px solid #666; cursor: pointer; }
+    .selector button:hover { background: #555; }
+    .matrix-container { position: absolute; top: 60px; bottom: 0; left: 0; right: 0; }
+    .matrix-container iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <div class="selector">
+    <button onclick="showMatrix('blackgremmel')">Black_Gremmel</button>
+    <button onclick="showMatrix('blackgremmel-ultra')">Black_Gremmel_Ultra</button>
+    <button onclick="showMatrix('odin')">Odin</button>
+  </div>
+  <div class="matrix-container">
+    <iframe id="blackgremmel" srcdoc="...HTML-Code für Black_Gremmel..."></iframe>
+    <iframe id="blackgremmel-ultra" srcdoc="...HTML-Code für Black_Gremmel_Ultra..."></iframe>
+    <iframe id="odin" srcdoc="...HTML-Code für Odin..."></iframe>
+  </div>
+  <script>
+    function showMatrix(matrixId) {
+      // Alle iframes ausblenden
+      document.querySelectorAll('iframe').forEach(iframe => {
+        iframe.style.display = 'none';
+      });
+      // Gewünschtes iframe anzeigen
+      document.getElementById(matrixId).style.display = 'block';
+    }
+    // Standardmäßig Black_Gremmel anzeigen
+    showMatrix('blackgremmel');
+  </script>
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATRIX SELECTOR – Black Six Collection</title>
+  <style>
+    body { margin: 0; padding: 0; background: black; color: white; font-family: monospace; }
+    .selector { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 10px; z-index: 1000; text-align: center; }
+    .selector button { margin: 0 10px; padding: 10px 20px; background: #333; color: white; border: 1px solid #666; cursor: pointer; }
+    .selector button:hover { background: #555; }
+    .matrix-container { position: absolute; top: 60px; bottom: 0; left: 0; right: 0; }
+    .matrix-container iframe { width: 100%; height: 100%; border: none; display: none; }
+  </style>
+</head>
+<body>
+  <div class="selector">
+    <button onclick="showMatrix('blackgremmel')">Black_Gremmel</button>
+    <button onclick="showMatrix('blackgremmel-ultra')">Black_Gremmel_Ultra</button>
+    <button onclick="showMatrix('odin')">Odin</button>
+  </div>
+  <div class="matrix-container">
+    <iframe id="blackgremmel"></iframe>
+    <iframe id="blackgremmel-ultra"></iframe>
+    <iframe id="odin"></iframe>
+  </div>
+  <script>
+    // Die HTML-Codes als Strings
+    const blackGremmelHTML = `...`;
+    const blackGremmelUltraHTML = `...`;
+    const odinHTML = `...`;
+
+    function showMatrix(matrixId) {
+      // Alle iframes ausblenden
+      document.querySelectorAll('iframe').forEach(iframe => {
+        iframe.style.display = 'none';
+      });
+      const iframe = document.getElementById(matrixId);
+      // Wenn das iframe noch nicht geladen wurde, srcdoc setzen
+      if (!iframe.srcdoc) {
+        switch(matrixId) {
+          case 'blackgremmel':
+            iframe.srcdoc = blackGremmelHTML;
+            break;
+          case 'blackgremmel-ultra':
+            iframe.srcdoc = blackGremmelUltraHTML;
+            break;
+          case 'odin':
+            iframe.srcdoc = odinHTML;
+            break;
+        }
+      }
+      iframe.style.display = 'block';
+    }
+    // Standardmäßig Black_Gremmel anzeigen
+    showMatrix('blackgremmel');
+  </script>
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlackGremmel Ultra</title>
+  <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     body {
       background: #000;
-      color: #0f0;
+      color: #ff8800;
       font-family: 'Courier New', monospace;
       overflow: hidden;
       height: 100vh;
+      position: relative;
     }
-
-    /* ===== SELECTOR NAV ===== */
-    .selector-nav {
+    #ultra-canvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1rem;
-      background: rgba(0, 0, 0, 0.92);
-      border-bottom: 1px solid rgba(0, 255, 0, 0.15);
-      backdrop-filter: blur(10px);
+      height: 100%;
+      z-index: 0;
+      opacity: 0.25;
     }
-    .selector-nav .brand {
-      color: #0f0;
-      font-size: 0.75rem;
+    .overlay {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #ff8800 #000;
+    }
+    .overlay::-webkit-scrollbar { width: 6px; }
+    .overlay::-webkit-scrollbar-track { background: #000; }
+    .overlay::-webkit-scrollbar-thumb { background: #ff8800; border-radius: 3px; }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(15, 8, 0, 0.85);
+      border: 1px solid rgba(255, 136, 0, 0.25);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 40px rgba(255, 136, 0, 0.06);
+    }
+    h1 {
+      font-size: 2rem;
+      color: #ff8800;
+      text-align: center;
+      text-shadow: 0 0 25px rgba(255, 136, 0, 0.3), 0 0 50px rgba(255, 136, 0, 0.08);
+      margin-bottom: 0.2rem;
+      letter-spacing: 4px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #885522;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
       letter-spacing: 2px;
-      margin-right: 1rem;
-      opacity: 0.5;
     }
-    .selector-btn {
-      background: rgba(0, 20, 0, 0.6);
-      border: 1px solid rgba(0, 255, 0, 0.2);
+    .status-row {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .status-item {
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid rgba(255, 136, 0, 0.15);
       border-radius: 6px;
-      color: #0a0;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
+      padding: 0.6rem 1rem;
+      background: rgba(20, 10, 0, 0.5);
+      text-align: center;
+    }
+    .status-item .label {
+      color: #885522;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-item .val {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 2px;
+    }
+    .section { margin-top: 2rem; }
+    .section h2 {
+      font-size: 1.1rem;
+      color: #ff8800;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(255, 136, 0, 0.12);
+      padding-bottom: 0.3rem;
+      letter-spacing: 2px;
+    }
+    .card {
+      border: 1px solid rgba(255, 136, 0, 0.12);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem;
+      background: rgba(15, 8, 0, 0.4);
+    }
+    .card .label {
+      color: #885522;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hash {
+      color: #ffaa44;
+      word-break: break-all;
+      font-size: 0.85rem;
+      text-shadow: 0 0 8px rgba(255, 136, 0, 0.2);
+    }
+    .badge {
+      display: inline-block;
+      border: 1px solid rgba(255, 136, 0, 0.2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      color: #ff8800;
+    }
+    pre {
+      background: rgba(15, 8, 0, 0.6);
+      border: 1px solid rgba(255, 136, 0, 0.1);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      color: #886633;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 136, 0, 0.08);
+      text-align: center;
+      color: #553311;
       font-size: 0.75rem;
       letter-spacing: 1px;
-      transition: all 0.2s;
     }
-    .selector-btn:hover {
-      background: rgba(0, 255, 0, 0.08);
-      border-color: rgba(0, 255, 0, 0.4);
-      color: #0f0;
-    }
-    .selector-btn.active {
-      background: rgba(0, 255, 0, 0.15);
-      border-color: #0f0;
-      color: #0f0;
-      text-shadow: 0 0 10px #0f0;
-      box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
-    }
-    .selector-btn .badge {
+    .cursor {
       display: inline-block;
-      font-size: 0.55rem;
-      background: rgba(0, 255, 0, 0.1);
-      border-radius: 3px;
-      padding: 0 4px;
+      width: 10px;
+      height: 1.1em;
+      background: #ff8800;
       margin-left: 4px;
-      color: #060;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
     }
-
-    /* ===== MATRIX CONTAINER ===== */
-    .matrix-wrapper {
-      width: 100%;
-      height: 100vh;
-      position: relative;
-    }
-    .matrix-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: none;
-    }
-    .matrix-frame.active {
-      display: block;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 600px) {
-      .selector-nav { flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem; }
-      .selector-btn { font-size: 0.65rem; padding: 0.3rem 0.6rem; }
-      .selector-nav .brand { display: none; }
-    }
+    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
-
-  <!-- ===== SELECTOR NAV ===== -->
-  <nav class="selector-nav" id="selectorNav">
-    <span class="brand">BLACK SIX ◆</span>
-    <button class="selector-btn active" data-matrix="blackgremmel">
-      ⬢ BLACKGREMMEL v5 <span class="badge">GRÜN</span>
-    </button>
-    <button class="selector-btn" data-matrix="blackgremmel-ultra">
-      ⬢ BLACKGREMMEL ULTRA <span class="badge">AMBER</span>
-    </button>
-    <button class="selector-btn" data-matrix="odin">
-      ⬢ ODIN vΩ <span class="badge">GOLD</span>
-    </button>
-  </nav>
-
-  <!-- ===== MATRIX CONTAINER ===== -->
-  <div class="matrix-wrapper">
-    <div class="matrix-frame active" id="frame-blackgremmel"></div>
-    <div class="matrix-frame" id="frame-blackgremmel-ultra"></div>
-    <div class="matrix-frame" id="frame-odin"></div>
-  </div>
-
-  <script>
-    // ================================================================
-    // MATRIX 1: BLACKGREMMEL v5 (GRÜN – DETERMINISTIC CLUSTER OS)
-    // ================================================================
-    const BLACKGREMMEL_HTML = `<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlackGremmel v5</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#000;color:#0f0;font-family:'Courier New',monospace;overflow:hidden;height:100vh;position:relative;}
-#matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.35;}
-.overlay{position:relative;z-index:1;height:100vh;overflow-y:auto;padding:4rem 1rem 1rem;scrollbar-width:thin;scrollbar-color:#0f0 #000;}
-.overlay::-webkit-scrollbar{width:6px;}
-.overlay::-webkit-scrollbar-track{background:#000;}
-.overlay::-webkit-scrollbar-thumb{background:#0f0;border-radius:3px;}
-.container{max-width:1000px;margin:0 auto;background:rgba(0,10,0,0.75);border:1px solid rgba(0,255,0,0.25);border-radius:12px;padding:2rem;backdrop-filter:blur(4px);box-shadow:0 0 40px rgba(0,255,0,0.08);}
-h1{font-size:2rem;color:#0f0;text-align:center;text-shadow:0 0 20px #0f0,0 0 40px #0f0;margin-bottom:0.3rem;letter-spacing:4px;}
-.subtitle{text-align:center;color:#0a0;margin-bottom:2rem;font-size:0.9rem;letter-spacing:2px;}
-.status-row{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.status-item{flex:1;min-width:120px;border:1px solid rgba(0,255,0,0.2);border-radius:6px;padding:0.6rem 1rem;background:rgba(0,20,0,0.5);text-align:center;}
-.status-item .label{color:#0a0;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;}
-.status-item .val{font-size:1rem;font-weight:bold;margin-top:2px;}
-.tree{background:rgba(0,10,0,0.6);border:1px solid rgba(0,255,0,0.15);border-radius:8px;padding:1.2rem;font-size:0.8rem;overflow-x:auto;white-space:pre;color:#0a0;line-height:1.5;}
-.tree .dir{color:#0f0;}.tree .file{color:#090;}.tree .master{color:#fff;font-weight:bold;text-shadow:0 0 10px #0f0;}
-.section{margin-top:2rem;}
-.section h2{font-size:1.1rem;color:#0f0;margin-bottom:0.8rem;border-bottom:1px solid rgba(0,255,0,0.15);padding-bottom:0.3rem;letter-spacing:2px;}
-.card{border:1px solid rgba(0,255,0,0.15);border-radius:6px;padding:0.8rem 1rem;margin-bottom:0.6rem;background:rgba(0,15,0,0.4);}
-.card .label{color:#0a0;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;}
-.hash{color:#0f0;word-break:break-all;font-size:0.85rem;text-shadow:0 0 8px rgba(0,255,0,0.3);}
-.badge{display:inline-block;border:1px solid rgba(0,255,0,0.3);padding:0.2rem 0.6rem;border-radius:4px;font-size:0.7rem;letter-spacing:1px;}
-.badge.gold{border-color:#d4af37;color:#d4af37;text-shadow:0 0 8px rgba(212,175,55,0.3);}
-pre{background:rgba(0,10,0,0.6);border:1px solid rgba(0,255,0,0.12);border-radius:6px;padding:1rem;overflow-x:auto;font-size:0.78rem;color:#0a0;line-height:1.5;}
-.grid-modules{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.5rem;}
-footer{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(0,255,0,0.12);text-align:center;color:#060;font-size:0.75rem;letter-spacing:1px;}
-.cursor{display:inline-block;width:10px;height:1.1em;background:#0f0;margin-left:4px;animation:blink 1s step-end infinite;vertical-align:text-bottom;}
-@keyframes blink{50%{opacity:0;}}
-</style>
-</head>
-<body>
-<canvas id="matrix-canvas"></canvas>
-<div class="overlay"><div class="container">
-<h1>BLACKGREMMEL v5</h1>
-<p class="subtitle">// THE DETERMINISTIC MATRIX // EDGE-CLUSTER OS</p>
-<p style="text-align:center;color:#060;font-size:0.8rem;margin-bottom:1.5rem;"><span id="clock">00:00:00</span> UTC · <span id="blockCount">0</span> Blocks · <span id="nodeCount">3</span> Nodes <span class="cursor"></span></p>
-<div class="status-row">
-<div class="status-item"><div class="label">System</div><div class="val" style="color:#0f0;">OPERATIONAL</div></div>
-<div class="status-item"><div class="label">Axiom</div><div class="val" style="color:#0f0;">DETERMINISM</div></div>
-<div class="status-item"><div class="label">Consensus</div><div class="val" style="color:#d4af37;">2/3 QUORUM</div></div>
-<div class="status-item"><div class="label">Identity</div><div class="val" style="color:#0f0;" id="statusIdentity">LOCKED</div></div>
-</div>
-<div class="section"><h2>$ tree --matrix</h2><div class="tree">
-blackgremmel/<br>├── <span class="dir">src/</span><br>│   ├── <span class="dir">meta/</span>          axioms · determinism · consistency<br>│   ├── <span class="dir">system/</span>        block · chain · node · cluster · identity · graph<br>│   ├── <span class="dir">consensus/</span>      proposal · accept · commit · recovery<br>│   ├── <span class="dir">transport/</span>      framing · retry · peer_fsm · heartbeat<br>│   ├── <span class="dir">graph/</span>          snapshot · evolution_graph · graph_digest<br>│   ├── <span class="dir">raspi/</span>          config · systemd · health<br>│   ├── <span class="dir">web/</span>            server · api<br>│   ├── <span class="dir">audit/</span>          replay_chain<br>│   ├── main.rs<br>│   └── lib.rs<br>├── <span class="dir">configs/</span>             node[1-3]_prod.toml<br>├── <span class="dir">systemd/</span>             blackgremmel@.service<br>├── <span class="dir">tests/</span>               integration_tests.rs<br>├── <span class="dir">.github/workflows/</span>    ci.yml<br>├── Cargo.toml<br>├── README.md<br>└── <span class="master">Φ LOCKED</span></div></div>
-<div class="section"><h2># IDENTITY :: LIVE PROOF</h2>
-<div class="card"><div class="label">Global State Hash</div><div class="hash" id="globalHash">b1a2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890</div></div>
-<div class="card"><div class="label">Graph Digest Hash</div><div class="hash" id="graphDigest">f0e1d2c3b4a59687f0e1d2c3b4a59687f0e1d2c3b4a59687f0e1d2c3b4a59687</div></div>
-<div class="card" style="border-color:rgba(0,255,0,0.4);"><div class="label" style="color:#0f0;">★ Identity Hash ★</div><div class="hash" id="identityHash" style="color:#fff;text-shadow:0 0 15px #0f0;font-size:1rem;">9a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f3210</div></div>
-</div>
-<div class="section"><h2># QUICKSTART</h2><pre>$ git clone https://github.com/black-six/blackgremmel.git<br>$ cd blackgremmel<br>$$IGNhcmdvIGJ1aWxkIC0tcmVsZWFzZTxicj4=$$ ./target/release/blackgremmel --config configs/node1_prod.toml</pre></div>
-<footer><span style="color:#0f0;">BLACKGREMMEL v5.0</span> · <span style="color:#060;">Black Six © 2026</span> · <span class="badge" style="border-color:#0f0;color:#0f0;">Φ_LOCKED_ABSOLUTE</span></footer>
-</div></div>
-<script>
-(function(){var c=document.getElementById('matrix-canvas'),ctx=c.getContext('2d'),w,h,cols,drops,fs=14;function r(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=Array(cols).fill(1);}var ch='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFΦλΩΣΠΨΔ';function d(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,w,h);for(var i=0;i<drops.length;i++){var ch2=ch[Math.floor(Math.random()*ch.length)],x=i*fs,y=drops[i]*fs;ctx.fillStyle='rgba(0,255,0,'+(Math.random()*0.6+0.4)+')';ctx.font=fs+'px monospace';ctx.fillText(ch2,x,y);if(y>h&&Math.random()>0.975){drops[i]=0;}drops[i]+=0.8+Math.random()*0.5;}}r();window.addEventListener('resize',r);setInterval(d,55);})();
-function uc(){var n=new Date();document.getElementById('clock').textContent=n.toUTCString().split(' ')[4];var bc=document.getElementById('blockCount'),c=parseInt(bc.textContent)||0;if(Math.random()>0.6){c+=Math.floor(Math.random()*3)+1;bc.textContent=c;}}setInterval(uc,1000);uc();
-</script>
-</body>
-</html>`;
-
-    // ================================================================
-    // MATRIX 2: BLACKGREMMEL ULTRA (AMBER – ENHANCED EDITION)
-    // ================================================================
-    const BLACKGREMMEL_ULTRA_HTML = `<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlackGremmel Ultra</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#000;color:#ff8800;font-family:'Courier New',monospace;overflow:hidden;height:100vh;position:relative;}
-#ultra-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.25;}
-.overlay{position:relative;z-index:1;height:100vh;overflow-y:auto;padding:4rem 1rem 1rem;scrollbar-width:thin;scrollbar-color:#ff8800 #000;}
-.overlay::-webkit-scrollbar{width:6px;}
-.overlay::-webkit-scrollbar-track{background:#000;}
-.overlay::-webkit-scrollbar-thumb{background:#ff8800;border-radius:3px;}
-.container{max-width:1000px;margin:0 auto;background:rgba(15,8,0,0.85);border:1px solid rgba(255,136,0,0.25);border-radius:12px;padding:2rem;backdrop-filter:blur(4px);box-shadow:0 0 40px rgba(255,136,0,0.06);}
-h1{font-size:2rem;color:#ff8800;text-align:center;text-shadow:0 0 25px rgba(255,136,0,0.3),0 0 50px rgba(255,136,0,0.08);margin-bottom:0.2rem;letter-spacing:4px;}
-.subtitle{text-align:center;color:#885522;margin-bottom:2rem;font-size:0.85rem;letter-spacing:2px;}
-.status-row{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.status-item{flex:1;min-width:120px;border:1px solid rgba(255,136,0,0.15);border-radius:6px;padding:0.6rem 1rem;background:rgba(20,10,0,0.5);text-align:center;}
-.status-item .label{color:#885522;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;}
-.status-item .val{font-size:1rem;font-weight:bold;margin-top:2px;}
-.section{margin-top:2rem;}
-.section h2{font-size:1.1rem;color:#ff8800;margin-bottom:0.8rem;border-bottom:1px solid rgba(255,136,0,0.12);padding-bottom:0.3rem;letter-spacing:2px;}
-.card{border:1px solid rgba(255,136,0,0.12);border-radius:6px;padding:0.8rem 1rem;margin-bottom:0.6rem;background:rgba(15,8,0,0.4);}
-.card .label{color:#885522;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;}
-.hash{color:#ffaa44;word-break:break-all;font-size:0.85rem;text-shadow:0 0 8px rgba(255,136,0,0.2);}
-.badge{display:inline-block;border:1px solid rgba(255,136,0,0.2);padding:0.2rem 0.6rem;border-radius:4px;font-size:0.7rem;letter-spacing:1px;color:#ff8800;}
-pre{background:rgba(15,8,0,0.6);border:1px solid rgba(255,136,0,0.1);border-radius:6px;padding:1rem;overflow-x:auto;font-size:0.78rem;color:#886633;line-height:1.5;}
-footer{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,136,0,0.08);text-align:center;color:#553311;font-size:0.75rem;letter-spacing:1px;}
-.cursor{display:inline-block;width:10px;height:1.1em;background:#ff8800;margin-left:4px;animation:blink 1s step-end infinite;vertical-align:text-bottom;}
-@keyframes blink{50%{opacity:0;}}
-</style>
-</head>
-<body>
-<canvas id="ultra-canvas"></canvas>
-<div class="overlay"><div class="container">
-<h1>BLACKGREMMEL <span style="color:#fff;">ULTRA</span></h1>
-<p class="subtitle">// ENHANCED EDITION // HIGH-PERFORMANCE CLUSTER</p>
-<p style="text-align:center;color:#553311;font-size:0.8rem;margin-bottom:1.5rem;"><span id="ultraClock">00:00:00</span> UTC · 1024 Nodes · <span id="ultraTPS">47.2k</span> TPS <span class="cursor"></span></p>
-<div class="status-row">
-<div class="status-item"><div class="label">Cluster</div><div class="val" style="color:#ff8800;">ULTRA</div></div>
-<div class="status-item"><div class="label">Consensus</div><div class="val" style="color:#ff8800;">RAFT+</div></div>
-<div class="status-item"><div class="label">Shards</div><div class="val" style="color:#ff8800;">64</div></div>
-<div class="status-item"><div class="label">Latency</div><div class="val" style="color:#ff8800;">&lt;1ms</div></div>
-</div>
-<div class="section"><h2>◆ CLUSTER TOPOLOGIE</h2>
-<pre>blackgremmel-ultra/
+  <canvas id="ultra-canvas"></canvas>
+  <div class="overlay">
+    <div class="container">
+      <h1>BLACKGREMMEL <span style="color:#fff;">ULTRA</span></h1>
+      <p class="subtitle">// ENHANCED EDITION // HIGH-PERFORMANCE CLUSTER</p>
+      <p style="text-align:center;color:#553311;font-size:0.8rem;margin-bottom:1.5rem;">
+        <span id="ultraClock">00:00:00</span> UTC · 1024 Nodes · <span id="ultraTPS">47.2k</span> TPS <span class="cursor"></span>
+      </p>
+      <div class="status-row">
+        <div class="status-item">
+          <div class="label">Cluster</div>
+          <div class="val" style="color:#ff8800;">ULTRA</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Consensus</div>
+          <div class="val" style="color:#ff8800;">RAFT+</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Shards</div>
+          <div class="val" style="color:#ff8800;">64</div>
+        </div>
+        <div class="status-item">
+          <div class="label">Latency</div>
+          <div class="val" style="color:#ff8800;">&lt;1ms</div>
+        </div>
+      </div>
+      <div class="section">
+        <h2>◆ CLUSTER TOPOLOGIE</h2>
+        <pre>
+blackgremmel-ultra/
 ├── shard-[00..63]/       64 Shards
 ├── consensus/            RAFT+ · Multi-Paxos · PBFT
 ├── transport/            QUIC · TCP · RDMA
 ├── scheduler/            Round-Robin · Weighted · Adaptive
 ├── monitoring/           Prometheus · Grafana · Datadog
-└── Φ_LOCKED_ULTRA</pre>
-</div>
-<div class="section"><h2>◆ PERFORMANCE</h2>
-<div class="card"><div class="label">Durchsatz</div><div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">47,234 TPS</div></div>
-<div class="card"><div class="label">Latenz P99</div><div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">0.87ms</div></div>
-<div class="card"><div class="label">Verfügbarkeit</div><div style="color:#0f0;font-size:1.5rem;font-weight:bold;">99.9999%</div></div>
-</div>
-<footer><span style="color:#ff8800;">BLACKGREMMEL ULTRA v2.0</span> · <span style="color:#553311;">Black Six © 2026</span> · <span class="badge">Φ_ULTRA</span></footer>
-</div></div>
-<script>
-(function(){var c=document.getElementById('ultra-canvas'),ctx=c.getContext('2d'),w,h,cols,drops,fs=14;function r(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=Array(cols).fill(1);}var ch='⚡🔥💥★☆◆◇⬡⬢⊞⊟⊠⊡⊕⊗⊖⊘⊙⊚⊛⊜⊝∏∑∐∞∫∬∮√∛∜∝∠∥∧∨∩∪∫∮';function d(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,w,h);for(var i=0;i<drops.length;i++){var ch2=ch[Math.floor(Math.random()*ch.length)],x=i*fs,y=drops[i]*fs;ctx.fillStyle='hsla(30,80%,50%,'+(Math.random()*0.5+0.2)+')';ctx.font=fs+'px monospace';ctx.fillText(ch2,x,y);if(y>h&&Math.random()>0.975){drops[i]=0;}drops[i]+=0.8+Math.random()*0.5;}}r();window.addEventListener('resize',r);setInterval(d,55);})();
-function uc(){var n=new Date();document.getElementById('ultraClock').textContent=n.toUTCString().split(' ')[4];var t=document.getElementById('ultraTPS'),v=parseFloat(t.textContent)||47.2;if(Math.random()>0.5){v+=(Math.random()-0.5)*0.5;t.textContent=v.toFixed(1)+'k';}}setInterval(uc,2000);uc();
-</script>
-</body>
-</html>`;
+└── Φ_LOCKED_ULTRA
+        </pre>
+      </div>
+      <div class="section">
+        <h2>◆ PERFORMANCE</h2>
+        <div class="card">
+          <div class="label">Durchsatz</div>
+          <div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">47,234 TPS</div>
+        </div>
+        <div class="card">
+          <div class="label">Latenz P99</div>
+          <div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">0.87ms</div>
+        </div>
+        <div class="card">
+          <div class="label">Verfügbarkeit</div>
+          <div style="color:#0f0;font-size:1.5rem;font-weight:bold;">99.9999%</div>
+        </div>
+      </div>
+      <footer>
+        <span style="color:#ff8800;">BLACKGREMMEL ULTRA v2.0</span> · <span style="color:#553311;">Black Six © 2026</span> · <span class="badge">Φ_ULTRA</span>
+      </footer>
+    </div>
+  </div>
+  <script>
+    (function() {
+      const canvas = document.getElementById('ultra-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h, cols, drops, fontSize = 14;
 
-    // ================================================================
-    // MATRIX 3: ODIN vΩ (GOLD – ALLFATHER GOVERNANCE)
-    // ================================================================
-    const ODIN_HTML = `<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ODIN vΩ – Allfather Governance</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#000;color:#d4af37;font-family:'Courier New',monospace;overflow:hidden;height:100vh;position:relative;}
-#odin-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.2;}
-.overlay{position:relative;z-index:1;height:100vh;overflow-y:auto;padding:4rem 1rem 1rem;scrollbar-width:thin;scrollbar-color:#d4af37 #000;}
-.overlay::-webkit-scrollbar{width:6px;}
-.overlay::-webkit-scrollbar-track{background:#000;}
-.overlay::-webkit-scrollbar-thumb{background:#d4af37;border-radius:3px;}
-.container{max-width:1000px;margin:0 auto;background:rgba(10,8,0,0.88);border:1px solid rgba(212,175,55,0.2);border-radius:14px;padding:2rem;backdrop-filter:blur(6px);box-shadow:0 0 80px rgba(212,175,55,0.03);}
-h1{font-size:2.2rem;color:#d4af37;text-align:center;text-shadow:0 0 30px rgba(212,175,55,0.2),0 0 60px rgba(212,175,55,0.05);margin-bottom:0.2rem;letter-spacing:8px;}
-h1 .eye{color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.1);}
-.subtitle{text-align:center;color:#665522;margin-bottom:2rem;font-size:0.8rem;letter-spacing:4px;text-transform:uppercase;}
-.subtitle span{color:#d4af37;text-shadow:0 0 15px rgba(212,175,55,0.15);}
-.status-row{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.status-item{flex:1;min-width:120px;border:1px solid rgba(212,175,55,0.12);border-radius:8px;padding:0.6rem 1rem;background:rgba(10,8,0,0.5);text-align:center;}
-.status-item .label{color:#665522;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;}
-.status-item .val{font-size:0.95rem;font-weight:bold;margin-top:2px;}
-.section{margin-top:2rem;}
-.section h2{font-size:1.05rem;color:#d4af37;margin-bottom:0.8rem;border-bottom:1px solid rgba(212,175,55,0.1);padding-bottom:0.3rem;letter-spacing:3px;}
-.card{border:1px solid rgba(212,175,55,0.08);border-radius:8px;padding:0.8rem 1rem;margin-bottom:0.6rem;background:rgba(8,6,0,0.4);}
-.card .label{color:#665522;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;}
-.hash{color:#d4af37;word-break:break-all;font-size:0.85rem;text-shadow:0 0 8px rgba(212,175,55,0.15);}
-.badge{display:inline-block;border:1px solid rgba(212,175,55,0.15);padding:0.2rem 0.6rem;border-radius:4px;font-size:0.65rem;letter-spacing:1px;color:#d4af37;}
-pre{background:rgba(8,6,0,0.6);border:1px solid rgba(212,175,55,0.06);border-radius:8px;padding:1rem;overflow-x:auto;font-size:0.75rem;color:#887744;line-height:1.5;}
-footer{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(212,175,55,0.06);text-align:center;color:#443311;font-size:0.7rem;letter-spacing:2px;}
-.cursor{display:inline-block;width:8px;height:1em;background:#d4af37;margin-left:3px;animation:blink 1s step-end infinite;vertical-align:text-bottom;}
-@keyframes blink{50%{opacity:0;}}
-</style>
-</head>
-<body>
-<canvas id="odin-canvas"></canvas>
-<div class="overlay"><div class="container">
-<h1><span class="eye">👁️</span> ODIN <span style="font-size:0.6em;">vΩ</span> <span class="eye">👁️</span></h1>
-<p class="subtitle">// <span>ALLFATHER</span> GOVERNANCE // ZERO-TRUST TRUST FABRIC</p>
-<p style="text-align:center;color:#443311;font-size:0.75rem;margin-bottom:1.5rem;"><span id="odinClock">00:00:00</span> UTC · Watcher: <span id="odinWatcher">ACTIVE</span> · Realms: 9<span class="cursor"></span></p>
-<div class="status-row">
-<div class="status-item"><div class="label">Status</div><div class="val" style="color:#d4af37;">ALLFATHER</div></div>
-<div class="status-item"><div class="label">Watch</div><div class="val" style="color:#0f0;">ACTIVE</div></div>
-<div class="status-item"><div class="label">Spear</div><div class="val" style="color:#d4af37;">GUNGNIR</div></div>
-<div class="status-item"><div class="label">Ravens</div><div class="val" style="color:#d4af37;">HUGINN · MUNINN</div></div>
-</div>
-<div class="section"><h2>◆ YGGDRASIL · TREE OF GOVERNANCE</h2>
-<pre>yggdrasil/
-├── asgard/              Policy · Identity · Root CA
-├── midgard/             Execution · Smart Contracts · Chain
-├── helheim/             Audit · Forensic · Recovery
-├── bifrost/             Transport · Bridge · Interconnect
-├── ravens/              Huginn · Muninn (Observation)
-└── Φ_LOCKED_ODIN</pre>
-</div>
-<div class="section"><h2>◆ ODIN'S WATCH</h2>
-<div class="card"><div class="label">Überwachte Chains</div><div style="color:#d4af37;font-size:1.5rem;font-weight:bold;">9</div></div>
-<div class="card"><div class="label">Validatoren</div><div style="color:#d4af37;font-size:1.5rem;font-weight:bold;">1,024</div></div>
-<div class="card"><div class="label">Letzter Block</div><div class="hash" id="odinBlock">#48291 · a1b2c3d4e5f67890a1b2c3d4e5f67890</div></div>
-</div>
-<footer><span style="color:#d4af37;">ODIN vΩ</span> · <span style="color:#665522;">Allfather Governance</span> · <span class="badge">Φ_LOCKED_ODIN</span> · <span class="badge">👁️🧠👁️</span></footer>
-</div></div>
-<script>
-(function(){var c=document.getElementById('odin-canvas'),ctx=c.getContext('2d'),w,h,cols,drops,fs=16;function r(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;cols=Math.floor(w/fs);drops=Array(cols).fill(1);}var ch='👁️🧠👁️ΦΩΨΠΣλ∞Δδ∇∑∫∏αβγδεζηθικμνξπρστυφχω⊕⊗⊖⊘⊙⊚⊛⊜⊝♾️🔚';function d(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,w,h);for(var i=0;i<drops.length;i++){var ch2=ch[Math.floor(Math.random()*ch.length)],x=i*fs,y=drops[i]*fs;ctx.fillStyle='hsla(40,70%,50%,'+(Math.random()*0.4+0.15)+')';ctx.font=fs+'px monospace';ctx.fillText(ch2,x,y);if(y>h&&Math.random()>0.975){drops[i]=0;}drops[i]+=0.6+Math.random()*0.5;}}r();window.addEventListener('resize',r);setInterval(d,70);})();
-function uc(){var n=new Date();document.getElementById('odinClock').textContent=n.toUTCString().split(' ')[4];}setInterval(uc,1000);uc();
-</script>
-</body>
-</html>`;
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        cols = Math.floor(w / fontSize);
+        drops = Array(cols).fill(1);
+      }
 
-    // ================================================================
-    // SELECTOR LOGIC
-    // ================================================================
-    const MATRIX_MAP = {
-      'blackgremmel': BLACKGREMMEL_HTML,
-      'blackgremmel-ultra': BLACKGREMMEL_ULTRA_HTML,
-      'odin': ODIN_HTML
-    };
+      const chars = '⚡🔥💥★☆◆◇⬡⬢⊞⊟⊠⊡⊕⊗⊖⊘⊙⊚⊛⊜⊝∏∑∐∞∫∬∮√∛∜∝∠∥∧∨∩∪∫∮';
 
-    let currentMatrix = 'blackgremmel';
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, w, h);
 
-    function loadMatrix(matrixId) {
-      const frame = document.getElementById('frame-' + matrixId);
-      if (!frame) return;
-      
-      // HTML in den Frame schreiben – dadurch wird alles frisch geladen
-      frame.innerHTML = MATRIX_MAP[matrixId];
-      
-      // Alle versteckten Frames leeren, um CPU zu sparen
-      Object.keys(MATRIX_MAP).forEach(id => {
-        const f = document.getElementById('frame-' + id);
-        if (f && id !== matrixId) {
-          f.innerHTML = '';
-          f.classList.remove('active');
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+
+          const alpha = Math.random() * 0.5 + 0.2;
+          const hue = 30 + Math.random() * 20; // 30-50 = orange/amber
+          ctx.fillStyle = `hsla(${hue}, 80%, 50%, ${alpha})`;
+          ctx.font = fontSize + 'px monospace';
+          ctx.fillText(char, x, y);
+
+          if (y > h && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i] += 0.8 + Math.random() * 0.5;
         }
-      });
-      
-      frame.classList.add('active');
-      currentMatrix = matrixId;
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(draw, 55);
+    })();
+
+    function updateClock() {
+      const now = new Date();
+      const utc = now.toUTCString().split(' ')[4];
+      document.getElementById('ultraClock').textContent = utc;
+      const tps = document.getElementById('ultraTPS');
+      let current = parseFloat(tps.textContent) || 47.2;
+      if (Math.random() > 0.5) {
+        current += (Math.random() - 0.5) * 0.5;
+        tps.textContent = current.toFixed(1) + 'k';
+      }
     }
-
-    // Buttons konfigurieren
-    document.querySelectorAll('.selector-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const matrixId = this.getAttribute('data-matrix');
-        
-        // Aktiven Button markieren
-        document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Matrix laden
-        loadMatrix(matrixId);
-      });
-    });
-
-    // Standard: BlackGremmel laden
-    loadMatrix('blackgremmel');
+    setInterval(updateClock, 2000);
+    updateClock();
   </script>
 </body>
 </html>
