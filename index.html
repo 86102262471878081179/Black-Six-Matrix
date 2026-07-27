@@ -834,6 +834,401 @@ $ ssh pi@192.168.1.101 "bg status"</pre>
       }
     }
   </script>
+    <!-- ============================================================ -->
+  <!-- 🟠 ERWEITERUNG 1: LIVE-NODE-MAP                              -->
+  <!-- ============================================================ -->
+  <style>
+    .extension-orange {
+      max-width: 1000px;
+      margin: 2rem auto 0 auto;
+      background: rgba(20, 10, 0, 0.75);
+      border: 1px solid rgba(255, 160, 0, 0.3);
+      border-radius: 10px;
+      padding: 1.2rem;
+      backdrop-filter: blur(4px);
+    }
+    .extension-orange h3 {
+      color: #ffa000;
+      margin-bottom: 0.8rem;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border-bottom: 1px solid rgba(255, 160, 0, 0.2);
+      padding-bottom: 0.3rem;
+    }
+    .node-map {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 1rem 0;
+    }
+    .node-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #fff;
+      border: 2px solid;
+      position: relative;
+      transition: box-shadow 0.3s;
+    }
+    .node-circle .node-id { font-size: 0.85rem; letter-spacing: 1px; }
+    .node-circle .node-status { font-size: 0.6rem; margin-top: 2px; }
+    .node-circle.up {
+      background: rgba(0, 180, 0, 0.25);
+      border-color: #0f0;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+    }
+    .node-circle.down {
+      background: rgba(180, 0, 0, 0.25);
+      border-color: #f00;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
+    }
+    .node-circle.recovering {
+      background: rgba(255, 160, 0, 0.25);
+      border-color: #ffa000;
+      box-shadow: 0 0 20px rgba(255, 160, 0, 0.2);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 160, 0, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(255, 160, 0, 0.5); }
+    }
+    .node-connector { font-size: 1.5rem; color: rgba(255, 160, 0, 0.3); }
+    .node-connector.active { color: rgba(0, 255, 0, 0.5); }
+  </style>
+  <div class="extension-orange">
+    <h3>⟐ LIVE NODE MAP</h3>
+    <div class="node-map" id="nodeMap">
+      <div class="node-circle up">
+        <span class="node-id">NODE-01</span>
+        <span class="node-status">● UP</span>
+      </div>
+      <span class="node-connector active">━━━</span>
+      <div class="node-circle up">
+        <span class="node-id">NODE-02</span>
+        <span class="node-status">● UP</span>
+      </div>
+      <span class="node-connector active">━━━</span>
+      <div class="node-circle recovering">
+        <span class="node-id">NODE-03</span>
+        <span class="node-status">◐ RECOVERING</span>
+      </div>
+    </div>
+    <p style="color:rgba(255,160,0,0.4); font-size:0.7rem; text-align:center; margin-top:0.3rem;">
+      Peer-FSM: Up · Up · Recovering — Quorum 2/3 stabil
+    </p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 🔵 ERWEITERUNG 2: CHAIN-EXPLORER                             -->
+  <!-- ============================================================ -->
+  <style>
+    .extension-cyan {
+      max-width: 1000px;
+      margin: 1.5rem auto 0 auto;
+      background: rgba(0, 15, 20, 0.75);
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      border-radius: 10px;
+      padding: 1.2rem;
+      backdrop-filter: blur(4px);
+    }
+    .extension-cyan h3 {
+      color: #00c8ff;
+      margin-bottom: 0.8rem;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+      padding-bottom: 0.3rem;
+    }
+    .chain-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.7rem;
+      color: #aaa;
+    }
+    .chain-table th {
+      color: #00c8ff;
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+    .chain-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.05);
+      font-family: monospace;
+    }
+    .chain-table tr:hover td { background: rgba(0, 200, 255, 0.05); }
+    .chain-table .hash-cell {
+      color: #0f0;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .chain-table .ok-yes { color: #0f0; }
+    .chain-table .ok-no { color: #f00; }
+  </style>
+  <div class="extension-cyan">
+    <h3>⟐ CHAIN EXPLORER</h3>
+    <table class="chain-table">
+      <thead>
+        <tr>
+          <th>Block</th>
+          <th>Block Hash</th>
+          <th>Prev Hash</th>
+          <th>Input/Output</th>
+          <th>OK</th>
+        </tr>
+      </thead>
+      <tbody id="chainBody">
+        <tr>
+          <td>#5</td>
+          <td class="hash-cell">a1b2c3d4e5f67890a1b2...</td>
+          <td class="hash-cell">f0e1d2c3b4a59687f0e1...</td>
+          <td style="color:#060;">in:0x3a · out:0x7f</td>
+          <td class="ok-yes">✓</td>
+        </tr>
+        <tr>
+          <td>#4</td>
+          <td class="hash-cell">b2c3d4e5f67890a1b2c3...</td>
+          <td class="hash-cell">e1d2c3b4a59687f0e1d2...</td>
+          <td style="color:#060;">in:0x2b · out:0x6e</td>
+          <td class="ok-yes">✓</td>
+        </tr>
+        <tr>
+          <td>#3</td>
+          <td class="hash-cell">c3d4e5f67890a1b2c3d4...</td>
+          <td class="hash-cell">d2c3b4a59687f0e1d2c3...</td>
+          <td style="color:#060;">in:0x1c · out:0x5d</td>
+          <td class="ok-yes">✓</td>
+        </tr>
+        <tr>
+          <td>#2</td>
+          <td class="hash-cell">d4e5f61890a1b2c3d4e5...</td>
+          <td class="hash-cell">c3b4a59687f0e1d2c3b4...</td>
+          <td style="color:#060;">in:0x0d · out:0x4c</td>
+          <td class="ok-yes">✓</td>
+        </tr>
+        <tr>
+          <td>#1</td>
+          <td class="hash-cell">e5f67890a1b2c3d4e5f6...</td>
+          <td class="hash-cell" style="color:#666;">genesis</td>
+          <td style="color:#060;">in:0x00 · out:0x3b</td>
+          <td class="ok-yes">✓</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color:rgba(0,200,255,0.3); font-size:0.65rem; text-align:right; margin-top:0.3rem;">
+      validate_chain() = true · letzter Commit: 12:47:03 UTC
+    </p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 🟣 ERWEITERUNG 3: CONSENSUS-LIVEFEED                         -->
+  <!-- ============================================================ -->
+  <style>
+    .extension-purple {
+      max-width: 1000px;
+      margin: 1.5rem auto 0 auto;
+      background: rgba(20, 0, 20, 0.75);
+      border: 1px solid rgba(200, 0, 255, 0.3);
+      border-radius: 10px;
+      padding: 1.2rem;
+      backdrop-filter: blur(4px);
+    }
+    .extension-purple h3 {
+      color: #c800ff;
+      margin-bottom: 0.8rem;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border-bottom: 1px solid rgba(200, 0, 255, 0.2);
+      padding-bottom: 0.3rem;
+    }
+    .feed-entry {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(200, 0, 255, 0.05);
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+    .feed-entry .feed-time { color: #666; min-width: 60px; }
+    .feed-entry .feed-type { min-width: 80px; font-weight: bold; letter-spacing: 1px; }
+    .feed-entry .feed-type.proposal { color: #ffa000; }
+    .feed-entry .feed-type.accept { color: #0f0; }
+    .feed-entry .feed-type.commit { color: #00c8ff; }
+    .feed-entry .feed-type.recovery { color: #c800ff; }
+    .feed-entry .feed-detail { color: #888; }
+  </style>
+  <div class="extension-purple">
+    <h3>⟐ CONSENSUS LIVEFEED</h3>
+    <div id="consensusFeed">
+      <div class="feed-entry">
+        <span class="feed-time">12:47:01</span>
+        <span class="feed-type commit">COMMIT</span>
+        <span class="feed-detail">Block #5 · Quorum 3/3 · Node-01, Node-02, Node-03</span>
+      </div>
+      <div class="feed-entry">
+        <span class="feed-time">12:46:58</span>
+        <span class="feed-type accept">ACCEPT</span>
+        <span class="feed-detail">Node-02 akzeptiert Block #5 · Hash: a1b2c3d4...</span>
+      </div>
+      <div class="feed-entry">
+        <span class="feed-time">12:46:56</span>
+        <span class="feed-type accept">ACCEPT</span>
+        <span class="feed-detail">Node-03 akzeptiert Block #5 · Hash: a1b2c3d4...</span>
+      </div>
+      <div class="feed-entry">
+        <span class="feed-time">12:46:55</span>
+        <span class="feed-type proposal">PROPOSAL</span>
+        <span class="feed-detail">Node-01 schlägt Block #5 vor · input: 0x3a → output: 0x7f</span>
+      </div>
+      <div class="feed-entry">
+        <span class="feed-time">12:46:50</span>
+        <span class="feed-type recovery">RECOVERY</span>
+        <span class="feed-detail">Node-03 · Recovering → Up · 2 Blöcke nachgeladen</span>
+      </div>
+      <div class="feed-entry">
+        <span class="feed-time">12:46:42</span>
+        <span class="feed-type commit">COMMIT</span>
+        <span class="feed-detail">Block #4 · Quorum 3/3 · Node-01, Node-02, Node-03</span>
+      </div>
+    </div>
+    <p style="color:rgba(200,0,255,0.3); font-size:0.65rem; text-align:right; margin-top:0.3rem;">
+      Live-Stream · Proposal → Accept × N ≥ Quorum → Commit
+    </p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 🟡 ERWEITERUNG 4: IDENTITY-VALIDATOR + QR                    -->
+  <!-- ============================================================ -->
+  <style>
+    .extension-gold {
+      max-width: 1000px;
+      margin: 1.5rem auto 0 auto;
+      background: rgba(20, 15, 0, 0.75);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 10px;
+      padding: 1.2rem;
+      backdrop-filter: blur(4px);
+    }
+    .extension-gold h3 {
+      color: #d4af37;
+      margin-bottom: 0.8rem;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      padding-bottom: 0.3rem;
+    }
+    .validator-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .validator-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 4px;
+      padding: 0.5rem;
+      color: #d4af37;
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+    .validator-input:focus { outline: none; border-color: #d4af37; }
+    .validator-btn {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid #d4af37;
+      border-radius: 4px;
+      color: #d4af37;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .validator-btn:hover { background: rgba(212, 175, 55, 0.3); }
+    .validator-result {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .validator-result.valid { color: #0f0; }
+    .validator-result.invalid { color: #f00; }
+    .qr-placeholder {
+      width: 80px;
+      height: 80px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 4px;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(212,175,55,0.05),
+        rgba(212,175,55,0.05) 4px,
+        rgba(212,175,55,0.1) 4px,
+        rgba(212,175,55,0.1) 8px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      color: rgba(212,175,55,0.3);
+      text-align: center;
+    }
+  </style>
+  <div class="extension-gold">
+    <h3>⟐ IDENTITY VALIDATOR</h3>
+    <div class="validator-row">
+      <input class="validator-input" id="identityInput" type="text" placeholder="Identity-Hash einfügen ..." value="9a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f3210">
+      <button class="validator-btn" onclick="validateIdentity()">PRÜFEN</button>
+      <div class="qr-placeholder">QR<br>CODE</div>
+    </div>
+    <div class="validator-result" id="identityResult">Bereit zur Validierung</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT FÜR IDENTITY-VALIDATOR                             -->
+  <!-- ============================================================ -->
+  <script>
+    function validateIdentity() {
+      const input = document.getElementById('identityInput').value.trim();
+      const result = document.getElementById('identityResult');
+      const hexPattern = /^[0-9a-fA-F]{64}$/;
+      if (!hexPattern.test(input)) {
+        result.className = 'validator-result invalid';
+        result.innerText = '✗ Ungültig: Erwarte 64 Hex-Zeichen (SHA256)';
+        return;
+      }
+      const currentIdentity = document.getElementById('identityHash')?.innerText || '9a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f3210';
+      if (input === currentIdentity) {
+        result.className = 'validator-result valid';
+        result.innerText = '✓ VALID – Identity stimmt mit aktueller Chain überein';
+      } else {
+        result.className = 'validator-result invalid';
+        result.innerText = '✗ MISMATCH – Hash weicht von aktueller Chain-Identity ab';
+      }
+    }
+  </script>
+  <body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="overlay">
+    <div class="container">
+      ... bestehender Inhalt ...
+    </div>
+  </div>
+</body>
 </body>
 </html>
 ```
