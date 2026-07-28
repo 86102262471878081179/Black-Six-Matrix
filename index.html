@@ -1,6 +1,437 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Six · Matrix Selector</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:#000;
+  color:#0f0;
+  font-family:'Courier New',monospace;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== TABS ===== */
+.tab-bar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  background:rgba(0,0,0,0.95);
+  border-bottom:2px solid rgba(0,255,0,0.15);
+  padding:0;
+  width:100%;
+  backdrop-filter:blur(10px);
+}
+.tab-btn{
+  flex:1;
+  background:transparent;
+  border:none;
+  border-bottom:2px solid transparent;
+  color:#0a0;
+  padding:14px 10px;
+  cursor:pointer;
+  font-family:'Courier New',monospace;
+  font-size:0.75rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  transition:all 0.2s;
+  position:relative;
+}
+.tab-btn:hover{
+  color:#0f0;
+  background:rgba(0,255,0,0.03);
+}
+.tab-btn.active{
+  color:#0f0;
+  border-bottom-color:#0f0;
+  text-shadow:0 0 20px rgba(0,255,0,0.3);
+  background:rgba(0,255,0,0.04);
+}
+.tab-btn .dot{
+  display:inline-block;
+  width:6px;height:6px;
+  border-radius:50%;
+  margin-right:6px;
+  vertical-align:middle;
+}
+.dot-green{background:#0f0;box-shadow:0 0 8px #0f0;}
+.dot-amber{background:#ff8800;box-shadow:0 0 8px #ff8800;}
+.dot-gold{background:#d4af37;box-shadow:0 0 8px #d4af37;}
+.tab-btn .badge{
+  font-size:0.5rem;
+  opacity:0.4;
+  margin-left:4px;
+}
+
+/* ===== PANELS ===== */
+.panel-container{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+}
+.matrix-panel{
+  display:none;
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0;left:0;
+  overflow-y:auto;
+}
+.matrix-panel.active{
+  display:block;
+}
+
+/* ===== MATRIX CONTENT (GLOBAL) ===== */
+.matrix-panel .content{
+  max-width:900px;
+  margin:0 auto;
+  padding:1.5rem 1rem;
+}
+.matrix-panel h1{
+  font-size:1.8rem;
+  letter-spacing:4px;
+  text-align:center;
+  margin-bottom:0.2rem;
+}
+.matrix-panel .sub{
+  text-align:center;
+  letter-spacing:2px;
+  font-size:0.8rem;
+  margin-bottom:1.5rem;
+  opacity:0.6;
+}
+.matrix-panel .top-row{
+  display:flex;
+  gap:0.5rem;
+  flex-wrap:wrap;
+  margin-bottom:1.2rem;
+}
+.matrix-panel .stat-box{
+  flex:1;
+  min-width:100px;
+  border:1px solid;
+  border-radius:6px;
+  padding:0.5rem 0.8rem;
+  background:rgba(0,0,0,0.4);
+  text-align:center;
+}
+.matrix-panel .stat-box .lbl{
+  font-size:0.6rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  opacity:0.5;
+}
+.matrix-panel .stat-box .val{
+  font-size:0.95rem;
+  font-weight:bold;
+  margin-top:2px;
+}
+.matrix-panel .tree-pre{
+  padding:0.8rem;
+  border-radius:6px;
+  line-height:1.5;
+  font-size:0.75rem;
+  overflow-x:auto;
+  white-space:pre;
+  margin-top:0.3rem;
+}
+.matrix-panel .section-title{
+  font-size:0.95rem;
+  letter-spacing:2px;
+  padding-bottom:0.3rem;
+  margin-top:1.2rem;
+  margin-bottom:0.6rem;
+  border-bottom:1px solid;
+}
+.matrix-panel .info-card{
+  border:1px solid;
+  border-radius:6px;
+  padding:0.6rem 0.8rem;
+  margin-bottom:0.4rem;
+  background:rgba(0,0,0,0.3);
+}
+.matrix-panel .info-card .lbl{
+  font-size:0.65rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  opacity:0.5;
+}
+.matrix-panel .hash-line{
+  word-break:break-all;
+  font-size:0.8rem;
+  margin-top:2px;
+}
+.matrix-panel .footer{
+  text-align:center;
+  padding:1rem 0;
+  margin-top:1.5rem;
+  border-top:1px solid;
+  font-size:0.7rem;
+  letter-spacing:1px;
+  opacity:0.4;
+}
+.matrix-panel pre{
+  border-radius:6px;
+  padding:0.8rem;
+  font-size:0.75rem;
+  line-height:1.5;
+  overflow-x:auto;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TABS ===== -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-panel="blackgremmel">
+    <span class="dot dot-green"></span>Black_Gremmel <span class="badge">v5</span>
+  </button>
+  <button class="tab-btn" data-panel="ultra">
+    <span class="dot dot-amber"></span>Black_Gremmel_Ultra <span class="badge">v2</span>
+  </button>
+  <button class="tab-btn" data-panel="odin">
+    <span class="dot dot-gold"></span>Odin <span class="badge">vΩ</span>
+  </button>
+</div>
+
+<!-- ===== PANELS ===== -->
+<div class="panel-container">
+
+  <!-- ============================================================ -->
+  <!-- PANEL 1: BLACK GREMMEL v5 (GRÜN) -->
+  <!-- ============================================================ -->
+  <div class="matrix-panel active" id="panel-blackgremmel" style="color:#0f0;">
+    <div class="content">
+      <h1 style="color:#0f0;text-shadow:0 0 20px rgba(0,255,0,0.3);">BLACKGREMMEL v5</h1>
+      <div class="sub" style="color:#0a0;">// DETERMINISTIC CLUSTER OS // EDGE-COMPUTING</div>
+
+      <div class="top-row">
+        <div class="stat-box" style="border-color:rgba(0,255,0,0.2);">
+          <div class="lbl" style="color:#0a0;">System</div>
+          <div class="val" style="color:#0f0;">OPERATIONAL</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(0,255,0,0.2);">
+          <div class="lbl" style="color:#0a0;">Axiom</div>
+          <div class="val" style="color:#0f0;">DETERMINISM</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(0,255,0,0.2);">
+          <div class="lbl" style="color:#0a0;">Consensus</div>
+          <div class="val" style="color:#d4af37;">2/3 QUORUM</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(0,255,0,0.2);">
+          <div class="lbl" style="color:#0a0;">Identity</div>
+          <div class="val" style="color:#0f0;">LOCKED</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="border-color:rgba(0,255,0,0.15);color:#0f0;">◆ TREE</div>
+      <div class="tree-pre" style="background:rgba(0,10,0,0.6);border:1px solid rgba(0,255,0,0.12);color:#0a0;">
+blackgremmel/
+├── src/
+│   ├── meta/          axioms · determinism · consistency
+│   ├── system/        block · chain · node · cluster · identity · graph
+│   ├── consensus/     proposal · accept · commit · recovery
+│   ├── transport/     framing · retry · peer_fsm · heartbeat
+│   ├── graph/         snapshot · evolution_graph · graph_digest
+│   ├── raspi/         config · systemd · health
+│   ├── web/           server · api
+│   ├── audit/         replay_chain
+│   ├── main.rs
+│   └── lib.rs
+├── configs/           node[1-3]_prod.toml
+├── systemd/           blackgremmel@.service
+├── tests/             integration_tests.rs
+├── Cargo.toml
+├── README.md
+└── <span style="color:#0f0;font-weight:bold;">Φ LOCKED</span></div>
+
+      <div class="section-title" style="border-color:rgba(0,255,0,0.15);color:#0f0;">◆ IDENTITY</div>
+      <div class="info-card" style="border-color:rgba(0,255,0,0.12);">
+        <div class="lbl" style="color:#0a0;">Global State Hash</div>
+        <div class="hash-line" style="color:#0f0;text-shadow:0 0 6px rgba(0,255,0,0.2);">b1a2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(0,255,0,0.12);">
+        <div class="lbl" style="color:#0a0;">Graph Digest</div>
+        <div class="hash-line" style="color:#0f0;">f0e1d2c3b4a59687f0e1d2c3b4a59687f0e1d2c3b4a59687f0e1d2c3b4a59687</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(0,255,0,0.3);">
+        <div class="lbl" style="color:#0f0;">★ Identity Hash ★</div>
+        <div class="hash-line" style="color:#fff;text-shadow:0 0 12px #0f0;font-size:0.95rem;">9a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f32109a8b7c6d5e4f3210</div>
+      </div>
+
+      <div class="section-title" style="border-color:rgba(0,255,0,0.15);color:#0f0;">◆ QUICKSTART</div>
+      <pre style="background:rgba(0,10,0,0.6);border:1px solid rgba(0,255,0,0.1);color:#0a0;">$ git clone https://github.com/black-six/blackgremmel.git
+$ cd blackgremmel
+$ cargo build --release
+$ ./target/release/blackgremmel --config configs/node1_prod.toml</pre>
+
+      <div class="footer" style="border-color:rgba(0,255,0,0.1);">
+        <span style="color:#0f0;">BLACKGREMMEL v5.0</span> · Black Six © 2026 · <span style="color:#0f0;">Φ_LOCKED_ABSOLUTE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 2: BLACK GREMMEL ULTRA (AMBER) -->
+  <!-- ============================================================ -->
+  <div class="matrix-panel" id="panel-ultra" style="color:#ff8800;">
+    <div class="content">
+      <h1 style="color:#ff8800;text-shadow:0 0 20px rgba(255,136,0,0.3);">BLACKGREMMEL <span style="color:#fff;">ULTRA</span></h1>
+      <div class="sub" style="color:#885522;">// ENHANCED EDITION // HIGH-PERFORMANCE CLUSTER</div>
+
+      <div class="top-row">
+        <div class="stat-box" style="border-color:rgba(255,136,0,0.15);">
+          <div class="lbl" style="color:#885522;">Cluster</div>
+          <div class="val" style="color:#ff8800;">ULTRA</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(255,136,0,0.15);">
+          <div class="lbl" style="color:#885522;">Consensus</div>
+          <div class="val" style="color:#ff8800;">RAFT+</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(255,136,0,0.15);">
+          <div class="lbl" style="color:#885522;">Shards</div>
+          <div class="val" style="color:#ff8800;">64</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(255,136,0,0.15);">
+          <div class="lbl" style="color:#885522;">Latency</div>
+          <div class="val" style="color:#ff8800;">&lt;1ms</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="border-color:rgba(255,136,0,0.12);color:#ff8800;">◆ CLUSTER TOPOLOGIE</div>
+      <pre style="background:rgba(15,8,0,0.6);border:1px solid rgba(255,136,0,0.1);color:#886633;">blackgremmel-ultra/
+├── shard-[00..63]/       64 Shards
+├── consensus/            RAFT+ · Multi-Paxos · PBFT
+├── transport/            QUIC · TCP · RDMA
+├── scheduler/            Round-Robin · Weighted · Adaptive
+├── monitoring/           Prometheus · Grafana · Datadog
+└── Φ_LOCKED_ULTRA</pre>
+
+      <div class="section-title" style="border-color:rgba(255,136,0,0.12);color:#ff8800;">◆ PERFORMANCE</div>
+      <div class="info-card" style="border-color:rgba(255,136,0,0.1);">
+        <div class="lbl" style="color:#885522;">Durchsatz</div>
+        <div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">47,234 TPS</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(255,136,0,0.1);">
+        <div class="lbl" style="color:#885522;">Latenz P99</div>
+        <div style="color:#ff8800;font-size:1.5rem;font-weight:bold;">0.87ms</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(255,136,0,0.1);">
+        <div class="lbl" style="color:#885522;">Verfügbarkeit</div>
+        <div style="color:#0f0;font-size:1.5rem;font-weight:bold;">99.9999%</div>
+      </div>
+
+      <div class="footer" style="border-color:rgba(255,136,0,0.08);">
+        <span style="color:#ff8800;">BLACKGREMMEL ULTRA v2.0</span> · Black Six © 2026 · <span style="color:#ff8800;">Φ_ULTRA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PANEL 3: ODIN vΩ (GOLD) -->
+  <!-- ============================================================ -->
+  <div class="matrix-panel" id="panel-odin" style="color:#d4af37;">
+    <div class="content">
+      <h1 style="color:#d4af37;text-shadow:0 0 20px rgba(212,175,55,0.2);font-size:2rem;letter-spacing:8px;">👁️ ODIN vΩ 👁️</h1>
+      <div class="sub" style="color:#665522;">// ALLFATHER GOVERNANCE // ZERO-TRUST TRUST FABRIC</div>
+
+      <div class="top-row">
+        <div class="stat-box" style="border-color:rgba(212,175,55,0.12);">
+          <div class="lbl" style="color:#665522;">Status</div>
+          <div class="val" style="color:#d4af37;">ALLFATHER</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(212,175,55,0.12);">
+          <div class="lbl" style="color:#665522;">Watch</div>
+          <div class="val" style="color:#0f0;">ACTIVE</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(212,175,55,0.12);">
+          <div class="lbl" style="color:#665522;">Spear</div>
+          <div class="val" style="color:#d4af37;">GUNGNIR</div>
+        </div>
+        <div class="stat-box" style="border-color:rgba(212,175,55,0.12);">
+          <div class="lbl" style="color:#665522;">Ravens</div>
+          <div class="val" style="color:#d4af37;">HUGINN · MUNINN</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="border-color:rgba(212,175,55,0.1);color:#d4af37;">◆ YGGDRASIL · TREE OF GOVERNANCE</div>
+      <pre style="background:rgba(8,6,0,0.6);border:1px solid rgba(212,175,55,0.06);color:#887744;">yggdrasil/
+├── asgard/              Policy · Identity · Root CA
+├── midgard/             Execution · Smart Contracts · Chain
+├── helheim/             Audit · Forensic · Recovery
+├── bifrost/             Transport · Bridge · Interconnect
+├── ravens/              Huginn · Muninn (Observation)
+└── Φ_LOCKED_ODIN</pre>
+
+      <div class="section-title" style="border-color:rgba(212,175,55,0.1);color:#d4af37;">◆ ODIN'S WATCH</div>
+      <div class="info-card" style="border-color:rgba(212,175,55,0.08);">
+        <div class="lbl" style="color:#665522;">Überwachte Chains</div>
+        <div style="color:#d4af37;font-size:1.5rem;font-weight:bold;">9</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(212,175,55,0.08);">
+        <div class="lbl" style="color:#665522;">Validatoren</div>
+        <div style="color:#d4af37;font-size:1.5rem;font-weight:bold;">1,024</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(212,175,55,0.08);">
+        <div class="lbl" style="color:#665522;">Letzter Block</div>
+        <div class="hash-line" style="color:#d4af37;">#48291 · a1b2c3d4e5f67890a1b2c3d4e5f67890</div>
+      </div>
+
+      <div class="footer" style="border-color:rgba(212,175,55,0.06);">
+        <span style="color:#d4af37;">ODIN vΩ</span> · Allfather Governance · <span style="color:#d4af37;">Φ_LOCKED_ODIN</span> · 👁️🧠👁️
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== TAB LOGIC ===== -->
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = {
+    blackgremmel: document.getElementById('panel-blackgremmel'),
+    ultra: document.getElementById('panel-ultra'),
+    odin: document.getElementById('panel-odin')
+  };
+
+  function switchTo(panelId) {
+    // Alle Tabs deaktivieren
+    tabs.forEach(t => t.classList.remove('active'));
+    // Alle Panels verstecken
+    Object.values(panels).forEach(p => p.classList.remove('active'));
+    // Gewähltes Panel aktivieren
+    const panel = panels[panelId];
+    if (panel) {
+      panel.classList.add('active');
+      panel.scrollTop = 0;
+    }
+    // Gewählten Tab markieren
+    document.querySelector(`.tab-btn[data-panel="${panelId}"]`)?.classList.add('active');
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const panelId = this.getAttribute('data-panel');
+      switchTo(panelId);
+    });
+  });
+
+  // Nichts weiter – keine Canvas, keine Animation, keine CPU-Last
+  // Sauber, einfach, übersichtlich.
+})();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MATRIX SELECTOR – Black Six Collection</title>
