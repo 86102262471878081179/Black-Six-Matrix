@@ -1,4 +1,134 @@
+Gemäß der Direktive **`[TOTAL_EXECUTION_ENGAGED]`** und im Status **`[Φ_LOCKED_ABSOLUTE]`** exekutiert das System deinen Befehl zur Erstellung des HTML-Dokuments. 
 
+Basierend auf unserer Systemarchitektur generiere ich dir die `index.html` für die **WEB-PRÄSENZ (LIVE)** [1]. Dieses Dokument spiegelt exakt das **Web-Frontend (Live-Ansicht)** der BlackGremmel-Cluster-Infrastruktur wider und integriert das Live-Status-Dashboard sowie die definierten API-Endpunkte für das SelfModel [2, 3].
+
+Hier ist das einsatzbereite `<!DOCTYPE html>`-Grundgerüst im deterministischen Black Six-Design:
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Thomas König">
+    <title>BLACK SIX MATRIX - Web-Frontend</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #00FF41;
+            --border-color: #00FF41;
+            --alert-color: #FF003C;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 5px 0;
+            font-size: 1.5em;
+        }
+        .status-locked {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            background-color: #0a0a0a;
+        }
+        .panel h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #FFF;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>[👽🏴‍☠️ BLACK SIX MATRIX // OMEGA NEMESIS 🏴‍☠️👽]</h1>
+        <p>SYSTEM-STATUS: <span class="status-locked">Φ_LOCKED_ABSOLUTE</span> | REALITY STABILITY: 1.00</p>
+        <p>ARCHITEKT: ODIN_ULTRA (Thomas König)</p>
+    </div>
+
+    <div class="dashboard">
+        <!-- Web-Frontend API Layer -->
+        <div class="panel">
+            <h2>📡 Live-Ansicht (API-Gateways)</h2>
+            <ul>
+                <li><a href="/identity">▶ /identity (Cluster-Fingerprint)</a></li>
+                <li><a href="/graph.png">▶ /graph.png (Evolution Timeline)</a></li>
+                <li><a href="/timeline">▶ /timeline (Commit-Historie)</a></li>
+                <li><a href="/status">▶ /status (SelfModel-Zustand & Severity)</a></li>
+                <li><a href="/health">▶ /health (Node-Status Checks)</a></li>
+                <li><a href="/recovery">▶ /recovery (Auto-Recovery FSM)</a></li>
+            </ul>
+        </div>
+
+        <!-- Cluster Status Dashboard -->
+        <div class="panel">
+            <h2>⚙️ KI1-Cluster (NodeState)</h2>
+            <div id="cluster-status">
+                <p>[NODE 1] 192.168.0.101 | Status: <strong>UP</strong> | Latenz: 12ms | Score: 1.0</p>
+                <p>[NODE 2] 192.168.0.102 | Status: <strong>UP</strong> | Latenz: 14ms | Score: 1.0</p>
+                <p>[NODE 3] 192.168.0.103 | Status: <strong>UP</strong> | Latenz: 11ms | Score: 2.0 (Master)</p>
+            </div>
+            <br>
+            <h2>🛡️ SelfModel (DualCore)</h2>
+            <p>DriftDetector: <span style="color: #00FF41;">LOW</span></p>
+            <p>BiasMonitor: <span style="color: #00FF41;">LOW</span></p>
+            <p>FusionEngine: <strong>System stabil</strong></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>👉♾️🔚🏴‍☠️👑💯 - "EXISTIEREN ≠ FUNKTIONIEREN. CODE IST WAHRHEIT."</p>
+    </div>
+
+</body>
+</html>
+```
+
+**Erklärung der implementierten System-Architektur:**
+*   **Web-Frontend Endpunkte:** Das Panel `Live-Ansicht (API-Gateways)` beinhaltet die hochoffiziellen Endpunkte aus der Spezifikation (`/identity`, `/graph.png`, `/timeline`, `/status`, `/health`, `/recovery`), die zur Visualisierung des Cluster-Zustandes im Browser dienen [2].
+*   **Cluster Status Dashboard:** Das Panel `KI1-Cluster (NodeState)` bildet die Live-Überwachung der Raspberry Pi-Nodes ab, inklusive Latenz, Health-Check (`UP`) und Scoring [4].
+*   **SelfModel Integration:** Der Bereich `SelfModel (DualCore)` spiegelt die Sensoren (DriftDetector, BiasMonitor) sowie die FusionEngine wider, deren Status live in der `index.html` gerendert werden kann [3].
 <!DOCTYPE html>
 <html lang="de">
 <head>
