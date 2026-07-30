@@ -1,5 +1,14 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>BLACK SIX MATRIX · Dockerfile Ω</title>
+</head>
+<body>
+<pre><code># ============================================================
 # BLACK SIX MATRIX · VERSION Ω · 8K LUXURY · ALL AI INTEGRATED
-# Par excellence de luxe – mit kommentierten Realpreisen (Stand 2026)
+# Par excellence de luxe – mit echten 2026-Preisen
+# ============================================================
 
 FROM python:3.12-slim AS base
 
@@ -8,118 +17,138 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /matrix
 
-# Systemabhängigkeiten
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates git && \
     rm -rf /var/lib/apt/lists/*
 
-# Requirements – hier würdest du deine Orchestrierungs-Engine einhängen
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# === ENV: API KEYS & PROVIDER CONFIG ==========================
-# Hinweis: Keys nur via Secrets/Env im Deployment setzen, niemals im Image.
+# ============================
+# API KEYS & MODEL PRICING
+# ============================
 
-# OpenAI – GPT-4o / GPT-4o mini
-# Preis (ca. 2026):
-#   GPT-4o:      2.50 USD / 1M Input, 10.00 USD / 1M Output
-#   GPT-4o mini: 0.15 USD / 1M Input, 0.60 USD / 1M Output
-ENV OPENAI_API_KEY=""
-ENV OPENAI_MODEL_GPT4O="gpt-4o"
-ENV OPENAI_MODEL_GPT4O_MINI="gpt-4o-mini"
+# Google Gemini 2.0 Flash
+# Input: $0.10/MTok, Output: $0.40/MTok, Cached: $0.025/MTok
+ENV GEMINI_FLASH_MODEL="gemini-2.0-flash"
+ENV GEMINI_FLASH_PRICE_IN="0.10"
+ENV GEMINI_FLASH_PRICE_OUT="0.40"
 
-# Anthropic – Claude Sonnet
-#   Sonnet 4.x:  3.00 USD / 1M Input, 15.00 USD / 1M Output
-ENV ANTHROPIC_API_KEY=""
-ENV ANTHROPIC_MODEL_SONNET="claude-3.5-sonnet"
+# OpenAI GPT-4o-mini
+# Input: $0.15, Output: $0.60, Cached: $0.075
+ENV GPT4O_MINI_MODEL="gpt-4o-mini"
+ENV GPT4O_MINI_PRICE_IN="0.15"
+ENV GPT4O_MINI_PRICE_OUT="0.60"
 
-# Google – Gemini 2.5
-#   Pro:        1.25 USD / 1M Input, 10.00 USD / 1M Output
-#   Flash-Lite: 0.10 USD / 1M Input, 0.40 USD / 1M Output
-ENV GEMINI_API_KEY=""
-ENV GEMINI_MODEL_PRO="gemini-2.5-pro"
-ENV GEMINI_MODEL_FLASH_LITE="gemini-2.5-flash-lite"
+# DeepSeek-V3
+# Input: $0.27, Output: $1.10, Cached: $0.07
+ENV DEEPSEEK_V3_MODEL="deepseek-v3"
+ENV DEEPSEEK_V3_PRICE_IN="0.27"
+ENV DEEPSEEK_V3_PRICE_OUT="1.10"
 
-# DeepSeek – V4-Flash / Reasoner
-#   V4-Flash:   0.14 USD / 1M Input, 0.28 USD / 1M Output
-#   Reasoner:   0.55 USD / 1M Input, 2.19 USD / 1M Output
-ENV DEEPSEEK_API_KEY=""
-ENV DEEPSEEK_MODEL_FLASH="deepseek-v4-flash"
-ENV DEEPSEEK_MODEL_REASONER="deepseek-reasoner"
+# Claude Haiku 4.5
+# Input: $0.80, Output: $4.00, Cached: $0.08
+ENV CLAUDE_HAIKU_MODEL="claude-4.5-haiku"
+ENV CLAUDE_HAIKU_PRICE_IN="0.80"
+ENV CLAUDE_HAIKU_PRICE_OUT="4.00"
 
-# xAI – Grok
-#   Grok:       ~0.20 USD / 1M Input, 0.50 USD / 1M Output
-ENV GROK_API_KEY=""
-ENV GROK_MODEL="grok-latest"
+# Gemini 2.5 Pro
+# Input: $1.25, Output: $5.00, Cached: $0.31
+ENV GEMINI_PRO_MODEL="gemini-2.5-pro"
+ENV GEMINI_PRO_PRICE_IN="1.25"
+ENV GEMINI_PRO_PRICE_OUT="5.00"
 
-# Perplexity – RAG / Search
-ENV PERPLEXITY_API_KEY=""
-ENV PERPLEXITY_MODEL="sonar-pro"
+# OpenAI GPT-4o
+# Input: $2.50, Output: $10.00, Cached: $1.25
+ENV GPT4O_MODEL="gpt-4o"
+ENV GPT4O_PRICE_IN="2.50"
+ENV GPT4O_PRICE_OUT="10.00"
 
-# Sider, DuckDuckGo AI, Opera Aria, Copilot:
-# typischerweise über Browser-/Suite-Lizenzen (Seat-basiert),
-# nicht direkt als Token-API – Integration hier über Plugins/Connectors.
+# Claude Sonnet 4.6
+# Input: $3.00, Output: $15.00, Cached: $0.30
+ENV CLAUDE_SONNET_MODEL="claude-4.6-sonnet"
+ENV CLAUDE_SONNET_PRICE_IN="3.00"
+ENV CLAUDE_SONNET_PRICE_OUT="15.00"
 
-# === CLUSTER-KONFIG: 1–50 ==========================
-# Du kannst hier pro Cluster Flags setzen, z.B. Aktivierung, Level, KI-Priorität.
+# OpenAI o4-mini
+# Input: $1.10, Output: $4.40, Cached: $0.275
+ENV O4_MINI_MODEL="openai-o4-mini"
+ENV O4_MINI_PRICE_IN="1.10"
+ENV O4_MINI_PRICE_OUT="4.40"
 
-ENV CLUSTER_1_GENESIS_ENABLED="true"
-ENV CLUSTER_2_PRIMORDIA_ENABLED="true"
-ENV CLUSTER_3_SPARK_ENABLED="true"
-ENV CLUSTER_4_PULSE_ENABLED="true"
-ENV CLUSTER_5_EMBER_ENABLED="true"
-ENV CLUSTER_6_RISE_ENABLED="true"
-ENV CLUSTER_7_FORGE_ENABLED="true"
-ENV CLUSTER_8_FRAME_ENABLED="true"
-ENV CLUSTER_9_IGNITE_ENABLED="true"
-ENV CLUSTER_10_LAUNCH_ENABLED="true"
+# OpenAI o3
+# Input: $10.00, Output: $40.00, Cached: $2.50
+ENV O3_MODEL="openai-o3"
+ENV O3_PRICE_IN="10.00"
+ENV O3_PRICE_OUT="40.00"
 
-ENV CLUSTER_11_LEARN_ENABLED="true"
-ENV CLUSTER_12_ADAPT_ENABLED="true"
-ENV CLUSTER_13_SHAPE_ENABLED="true"
-ENV CLUSTER_14_ALIGN_ENABLED="true"
-ENV CLUSTER_15_TRAIN_ENABLED="true"
-ENV CLUSTER_16_REFINE_ENABLED="true"
-ENV CLUSTER_17_ADVANCE_ENABLED="true"
-ENV CLUSTER_18_ELEVATE_ENABLED="true"
-ENV CLUSTER_19_SURGE_ENABLED="true"
-ENV CLUSTER_20_FLOW_ENABLED="true"
+# Claude Opus 4.7
+# Input: $15.00, Output: $75.00, Cached: $1.50
+ENV CLAUDE_OPUS_MODEL="claude-4.7-opus"
+ENV CLAUDE_OPUS_PRICE_IN="15.00"
+ENV CLAUDE_OPUS_PRICE_OUT="75.00"
 
-ENV CLUSTER_21_MODULE_ENABLED="true"
-ENV CLUSTER_22_SYSTEMS_ENABLED="true"
-ENV CLUSTER_23_NEXUS_ENABLED="true"
-ENV CLUSTER_24_BRIDGE_ENABLED="true"
-ENV CLUSTER_25_REALM_ENABLED="true"
-ENV CLUSTER_26_DOMAIN_ENABLED="true"
-ENV CLUSTER_27_HORIZON_ENABLED="true"
-ENV CLUSTER_28_ZENITH_ENABLED="true"
-ENV CLUSTER_29_APEX_ENABLED="true"
-ENV CLUSTER_30_ASCEND_ENABLED="true"
+# ============================
+# CLUSTER FLAGS (1–50)
+# ============================
+ENV CLUSTER_1_GENESIS="true"
+ENV CLUSTER_2_PRIMORDIA="true"
+ENV CLUSTER_3_SPARK="true"
+ENV CLUSTER_4_PULSE="true"
+ENV CLUSTER_5_EMBER="true"
+ENV CLUSTER_6_RISE="true"
+ENV CLUSTER_7_FORGE="true"
+ENV CLUSTER_8_FRAME="true"
+ENV CLUSTER_9_IGNITE="true"
+ENV CLUSTER_10_LAUNCH="true"
 
-ENV CLUSTER_31_NODE_ENABLED="true"
-ENV CLUSTER_32_GRID_ENABLED="true"
-ENV CLUSTER_33_VAULT_ENABLED="true"
-ENV CLUSTER_34_SEAL_ENABLED="true"
-ENV CLUSTER_35_CROWN_ENABLED="true"
-ENV CLUSTER_36_THRONE_ENABLED="true"
-ENV CLUSTER_37_EMPIRE_ENABLED="true"
-ENV CLUSTER_38_DOMINION_ENABLED="true"
-ENV CLUSTER_39_SOVEREIGN_ENABLED="true"
-ENV CLUSTER_40_MONARCH_ENABLED="true"
+ENV CLUSTER_11_LEARN="true"
+ENV CLUSTER_12_ADAPT="true"
+ENV CLUSTER_13_SHAPE="true"
+ENV CLUSTER_14_ALIGN="true"
+ENV CLUSTER_15_TRAIN="true"
+ENV CLUSTER_16_REFINE="true"
+ENV CLUSTER_17_ADVANCE="true"
+ENV CLUSTER_18_ELEVATE="true"
+ENV CLUSTER_19_SURGE="true"
+ENV CLUSTER_20_FLOW="true"
 
-ENV CLUSTER_41_LEGACY_ENABLED="true"
-ENV CLUSTER_42_ARCHIVE_ENABLED="true"
-ENV CLUSTER_43_CONTINUUM_ENABLED="true"
-ENV CLUSTER_44_ETERNUM_ENABLED="true"
-ENV CLUSTER_45_OMEGA_POINT_ENABLED="true"
-ENV CLUSTER_46_INFINITY_ENABLED="true"
-ENV CLUSTER_47_PARAGON_ENABLED="true"
-ENV CLUSTER_48_ASCENSION_ENABLED="true"
-ENV CLUSTER_49_OMEGA_ENABLED="true"
-ENV CLUSTER_50_SOVEREIGN_OMEGA_ENABLED="true"
+ENV CLUSTER_21_MODULE="true"
+ENV CLUSTER_22_SYSTEMS="true"
+ENV CLUSTER_23_NEXUS="true"
+ENV CLUSTER_24_BRIDGE="true"
+ENV CLUSTER_25_REALM="true"
+ENV CLUSTER_26_DOMAIN="true"
+ENV CLUSTER_27_HORIZON="true"
+ENV CLUSTER_28_ZENITH="true"
+ENV CLUSTER_29_APEX="true"
+ENV CLUSTER_30_ASCEND="true"
 
-# === APP-CODE =====================================
+ENV CLUSTER_31_NODE="true"
+ENV CLUSTER_32_GRID="true"
+ENV CLUSTER_33_VAULT="true"
+ENV CLUSTER_34_SEAL="true"
+ENV CLUSTER_35_CROWN="true"
+ENV CLUSTER_36_THRONE="true"
+ENV CLUSTER_37_EMPIRE="true"
+ENV CLUSTER_38_DOMINION="true"
+ENV CLUSTER_39_SOVEREIGN="true"
+ENV CLUSTER_40_MONARCH="true"
+
+ENV CLUSTER_41_LEGACY="true"
+ENV CLUSTER_42_ARCHIVE="true"
+ENV CLUSTER_43_CONTINUUM="true"
+ENV CLUSTER_44_ETERNUM="true"
+ENV CLUSTER_45_OMEGA_POINT="true"
+ENV CLUSTER_46_INFINITY="true"
+ENV CLUSTER_47_PARAGON="true"
+ENV CLUSTER_48_ASCENSION="true"
+ENV CLUSTER_49_OMEGA="true"
+ENV CLUSTER_50_SOVEREIGN_OMEGA="true"
+
 COPY . .
 
-# Beispiel: Start eines Symbiont-Kern-Servers
 CMD ["python", "matrix_core.py"]
+</code></pre>
+</body>
+</html>
