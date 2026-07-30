@@ -1,3 +1,372 @@
+Thomas — alles, aber diesmal SOVEREIGN‑LEVEL, vollfarbig, grafisch, edel, Omega‑Luxus, ohne Konsole, mit 3D‑Map, mit Farbcodierung für jede Sparte, mit farbiger Dockerfile‑Syntax, mit Cluster‑Glow‑Effekten, mit Sovereign‑Aura.
+
+Ich entscheide komplett für dich und gebe dir die ULTIMATIVE HTML‑VERSION, die ALLES vereint:
+
+• Farbiges Dockerfile (Ignition/Momentum/Ascent/Sovereign/Omega in eigenen Farben)
+• 3D‑Cluster‑Map (Neon‑Glow, Sovereign‑Orbit, Layer‑Depth)
+• Vollständige Syntax‑Highlighting
+• Omega‑UI
+• Keine Konsole
+• Nur Grafik
+• Alles in einer Datei
+
+
+Das ist die BLACK SIX MATRIX · VERSION Ω · SOVEREIGN GRAPHIC MASTERFILE.
+
+---
+
+🔥 SOVEREIGN GRAPHIC MASTERFILE (HTML) — Copy & Save als `black_six_matrix_omega.html`
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BLACK SIX MATRIX · Ω · Sovereign Graphic Masterfile</title>
+
+<style>
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #00111a, #000000 70%);
+    color: #e6e6e6;
+    font-family: Consolas, monospace;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient(90deg, #00eaff33, #00446633, #00eaff33);
+    border-bottom: 1px solid #003344;
+    box-shadow: 0 0 25px #003344;
+  }
+  .header h1 {
+    font-size: 36px;
+    color: #00eaff;
+    text-shadow: 0 0 18px #00eaff;
+    margin: 0;
+  }
+  .header p {
+    color: #88cce0;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  /* SECTION TITLES */
+  h2 {
+    color: #00c8ff;
+    text-shadow: 0 0 10px #00c8ff;
+    margin: 30px 0 15px 0;
+    text-align: center;
+  }
+
+  /* DOCKERFILE BLOCK */
+  .docker-block {
+    margin: 20px auto;
+    width: 90%;
+    background: #050b12;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #123;
+    box-shadow: 0 0 25px #001822 inset;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Syntax Highlighting */
+  .kw   { color:#ffcc66; }
+  .env  { color:#66ffcc; }
+  .val  { color:#99ccff; }
+  .com  { color:#888; }
+
+  /* Sparte Colors */
+  .ignition  { color:#ff6b6b; }
+  .momentum  { color:#ffd56b; }
+  .ascent    { color:#6bff95; }
+  .sovereign { color:#6bb6ff; }
+  .omega     { color:#d06bff; }
+
+  /* 3D MAP */
+  #map {
+    width: 100vw;
+    height: 60vh;
+    margin-top: 40px;
+  }
+
+  .cluster-node circle {
+    stroke-width: 2;
+    transition: 0.25s;
+  }
+
+  .cluster-node text {
+    font-size: 10px;
+    pointer-events: none;
+  }
+
+  .cluster-node:hover circle {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px #00ffff);
+  }
+
+  .cluster-link {
+    stroke: #004466;
+    stroke-width: 1;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>BLACK SIX MATRIX · VERSION Ω</h1>
+  <p>SOVEREIGN GRAPHIC MASTERFILE · 50 Cluster · 5 Sparten · 12 KIs</p>
+</div>
+
+<h2>🔥 Farbiges Dockerfile (Ignition → Momentum → Ascent → Sovereign → Omega)</h2>
+
+<div class="docker-block">
+<pre><code>
+<span class="kw">FROM</span> python:3.12-slim <span class="kw">AS</span> base
+
+<span class="kw">ENV</span> <span class="env">PYTHONUNBUFFERED</span>=<span class="val">1</span> \
+    <span class="env">PIP_NO_CACHE_DIR</span>=<span class="val">1</span>
+
+<span class="kw">WORKDIR</span> /matrix
+
+<span class="kw">RUN</span> apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates git && \
+    rm -rf /var/lib/apt/lists/*
+
+<span class="kw">COPY</span> requirements.txt .
+<span class="kw">RUN</span> pip install --no-cache-dir -r requirements.txt
+
+<span class="com"># MODEL PRICING (2026)</span>
+<span class="env">GEMINI_FLASH_MODEL</span>=<span class="val">"gemini-2.0-flash"</span>
+<span class="env">GEMINI_FLASH_PRICE_IN</span>=<span class="val">"0.10"</span>
+<span class="env">GEMINI_FLASH_PRICE_OUT</span>=<span class="val">"0.40"</span>
+
+<span class="env">GPT4O_MINI_MODEL</span>=<span class="val">"gpt-4o-mini"</span>
+<span class="env">GPT4O_MINI_PRICE_IN</span>=<span class="val">"0.15"</span>
+<span class="env">GPT4O_MINI_PRICE_OUT</span>=<span class="val">"0.60"</span>
+
+<span class="env">DEEPSEEK_V3_MODEL</span>=<span class="val">"deepseek-v3"</span>
+<span class="env">DEEPSEEK_V3_PRICE_IN</span>=<span class="val">"0.27"</span>
+<span class="env">DEEPSEEK_V3_PRICE_OUT</span>=<span class="val">"1.10"</span>
+
+<span class="env">CLAUDE_HAIKU_MODEL</span>=<span class="val">"claude-4.5-haiku"</span>
+<span class="env">CLAUDE_HAIKU_PRICE_IN</span>=<span class="val">"0.80"</span>
+<span class="env">CLAUDE_HAIKU_PRICE_OUT</span>=<span class="val">"4.00"</span>
+
+<span class="env">GEMINI_PRO_MODEL</span>=<span class="val">"gemini-2.5-pro"</span>
+<span class="env">GEMINI_PRO_PRICE_IN</span>=<span class="val">"1.25"</span>
+<span class="env">GEMINI_PRO_PRICE_OUT</span>=<span class="val">"5.00"</span>
+
+<span class="env">GPT4O_MODEL</span>=<span class="val">"gpt-4o"</span>
+<span class="env">GPT4O_PRICE_IN</span>=<span class="val">"2.50"</span>
+<span class="env">GPT4O_PRICE_OUT</span>=<span class="val">"10.00"</span>
+
+<span class="env">CLAUDE_SONNET_MODEL</span>=<span class="val">"claude-4.6-sonnet"</span>
+<span class="env">CLAUDE_SONNET_PRICE_IN</span>=<span class="val">"3.00"</span>
+<span class="env">CLAUDE_SONNET_PRICE_OUT</span>=<span class="val">"15.00"</span>
+
+<span class="env">O4_MINI_MODEL</span>=<span class="val">"openai-o4-mini"</span>
+<span class="env">O4_MINI_PRICE_IN</span>=<span class="val">"1.10"</span>
+<span class="env">O4_MINI_PRICE_OUT</span>=<span class="val">"4.40"</span>
+
+<span class="env">O3_MODEL</span>=<span class="val">"openai-o3"</span>
+<span class="env">O3_PRICE_IN</span>=<span class="val">"10.00"</span>
+<span class="env">O3_PRICE_OUT</span>=<span class="val">"40.00"</span>
+
+<span class="env">CLAUDE_OPUS_MODEL</span>=<span class="val">"claude-4.7-opus"</span>
+<span class="env">CLAUDE_OPUS_PRICE_IN</span>=<span class="val">"15.00"</span>
+<span class="env">CLAUDE_OPUS_PRICE_OUT</span>=<span class="val">"75.00"</span>
+
+<span class="com"># CLUSTER FLAGS (1–50)</span>
+
+<!-- IGNITION -->
+<span class="ignition">ENV CLUSTER_1_GENESIS="true"</span>
+<span class="ignition">ENV CLUSTER_2_PRIMORDIA="true"</span>
+<span class="ignition">ENV CLUSTER_3_SPARK="true"</span>
+<span class="ignition">ENV CLUSTER_4_PULSE="true"</span>
+<span class="ignition">ENV CLUSTER_5_EMBER="true"</span>
+<span class="ignition">ENV CLUSTER_6_RISE="true"</span>
+<span class="ignition">ENV CLUSTER_7_FORGE="true"</span>
+<span class="ignition">ENV CLUSTER_8_FRAME="true"</span>
+<span class="ignition">ENV CLUSTER_9_IGNITE="true"</span>
+<span class="ignition">ENV CLUSTER_10_LAUNCH="true"</span>
+
+<!-- MOMENTUM -->
+<span class="momentum">ENV CLUSTER_11_LEARN="true"</span>
+<span class="momentum">ENV CLUSTER_12_ADAPT="true"</span>
+<span class="momentum">ENV CLUSTER_13_SHAPE="true"</span>
+<span class="momentum">ENV CLUSTER_14_ALIGN="true"</span>
+<span class="momentum">ENV CLUSTER_15_TRAIN="true"</span>
+<span class="momentum">ENV CLUSTER_16_REFINE="true"</span>
+<span class="momentum">ENV CLUSTER_17_ADVANCE="true"</span>
+<span class="momentum">ENV CLUSTER_18_ELEVATE="true"</span>
+<span class="momentum">ENV CLUSTER_19_SURGE="true"</span>
+<span class="momentum">ENV CLUSTER_20_FLOW="true"</span>
+
+<!-- ASCENT -->
+<span class="ascent">ENV CLUSTER_21_MODULE="true"</span>
+<span class="ascent">ENV CLUSTER_22_SYSTEMS="true"</span>
+<span class="ascent">ENV CLUSTER_23_NEXUS="true"</span>
+<span class="ascent">ENV CLUSTER_24_BRIDGE="true"</span>
+<span class="ascent">ENV CLUSTER_25_REALM="true"</span>
+<span class="ascent">ENV CLUSTER_26_DOMAIN="true"</span>
+<span class="ascent">ENV CLUSTER_27_HORIZON="true"</span>
+<span class="ascent">ENV CLUSTER_28_ZENITH="true"</span>
+<span class="ascent">ENV CLUSTER_29_APEX="true"</span>
+<span class="ascent">ENV CLUSTER_30_ASCEND="true"</span>
+
+<!-- SOVEREIGN -->
+<span class="sovereign">ENV CLUSTER_31_NODE="true"</span>
+<span class="sovereign">ENV CLUSTER_32_GRID="true"</span>
+<span class="sovereign">ENV CLUSTER_33_VAULT="true"</span>
+<span class="sovereign">ENV CLUSTER_34_SEAL="true"</span>
+<span class="sovereign">ENV CLUSTER_35_CROWN="true"</span>
+<span class="sovereign">ENV CLUSTER_36_THRONE="true"</span>
+<span class="sovereign">ENV CLUSTER_37_EMPIRE="true"</span>
+<span class="sovereign">ENV CLUSTER_38_DOMINION="true"</span>
+<span class="sovereign">ENV CLUSTER_39_SOVEREIGN="true"</span>
+<span class="sovereign">ENV CLUSTER_40_MONARCH="true"</span>
+
+<!-- OMEGA -->
+<span class="omega">ENV CLUSTER_41_LEGACY="true"</span>
+<span class="omega">ENV CLUSTER_42_ARCHIVE="true"</span>
+<span class="omega">ENV CLUSTER_43_CONTINUUM="true"</span>
+<span class="omega">ENV CLUSTER_44_ETERNUM="true"</span>
+<span class="omega">ENV CLUSTER_45_OMEGA_POINT="true"</span>
+<span class="omega">ENV CLUSTER_46_INFINITY="true"</span>
+<span class="omega">ENV CLUSTER_47_PARAGON="true"</span>
+<span class="omega">ENV CLUSTER_48_ASCENSION="true"</span>
+<span class="omega">ENV CLUSTER_49_OMEGA="true"</span>
+<span class="omega">ENV CLUSTER_50_SOVEREIGN_OMEGA="true"</span>
+
+<span class="kw">COPY</span> . .
+
+<span class="kw">CMD</span> [<span class="val">"python"</span>, <span class="val">"matrix_core.py"</span>]
+</code></pre>
+</div>
+
+<h2>🌌 Sovereign 3D Cluster Map (Neon Orbit)</h2>
+
+<svg id="map"></svg>
+
+<script>
+const svg = document.getElementById("map");
+const width = window.innerWidth;
+const height = window.innerHeight * 0.6;
+svg.setAttribute("width", width);
+svg.setAttribute("height", height);
+
+const clusters = [
+  "GENESIS","PRIMORDIA","SPARK","PULSE","EMBER","RISE","FORGE","FRAME","IGNITE","LAUNCH",
+  "LEARN","ADAPT","SHAPE","ALIGN","TRAIN","REFINE","ADVANCE","ELEVATE","SURGE","FLOW",
+  "MODULE","SYSTEMS","NEXUS","BRIDGE","REALM","DOMAIN","HORIZON","ZENITH","APEX","ASCEND",
+  "NODE","GRID","VAULT","SEAL","CROWN","THRONE","EMPIRE","DOMINION","SOVEREIGN","MONARCH",
+  "LEGACY","ARCHIVE","CONTINUUM","ETERNUM","OMEGA_POINT","INFINITY","PARAGON","ASCENSION","OMEGA","SOVEREIGN_OMEGA"
+];
+
+const layers = 5;
+const radiusBase = Math.min(width, height) * 0.12;
+const centerX = width * 0.5;
+const centerY = height * 0.52;
+
+function polar(layer, index, total) {
+  const r = radiusBase + layer * (radiusBase * 0.35);
+  const angle = (Math.PI * 2) * (index / total);
+  const x = centerX + r * Math.cos(angle);
+  const y = centerY + r * Math.sin(angle) * 0.6;
+  return { x, y };
+}
+
+const layerDist = [10,10,10,10,10];
+let idx = 0;
+const nodes = [];
+
+for (let layer = 0; layer < layers; layer++) {
+  const count = layerDist[layer];
+  for (let i = 0; i < count; i++) {
+    const pos = polar(layer, i, count);
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "cluster-node");
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", pos.x);
+    circle.setAttribute("cy", pos.y);
+    circle.setAttribute("r", 16);
+    circle.setAttribute("fill", `rgba(${40+layer*40}, ${80+layer*30}, ${120+layer*20}, 0.9)`);
+    circle.setAttribute("stroke", "#00ffff");
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", pos.x);
+    text.setAttribute("y", pos.y + 4);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("fill", "#fff");
+    text.textContent = clusters[idx];
+
+    g.appendChild(circle);
+    g.appendChild(text);
+    svg.appendChild(g);
+
+    nodes.push({ x: pos.x, y: pos.y, g });
+    idx++;
+  }
+}
+
+nodes.forEach(n => {
+  nodes.forEach(m => {
+    if (Math.random() < 0.03) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", n.x);
+      line.setAttribute("y1", n.y);
+      line.setAttribute("x2", m.x);
+      line.setAttribute("y2", m.y);
+      line.setAttribute("class", "cluster-link");
+      svg.insertBefore(line, svg.firstChild);
+    }
+  });
+});
+
+let angle = 0;
+function animate() {
+  angle += 0.0008;
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+
+  nodes.forEach(n => {
+    const dx = n.x - centerX;
+    const dy = n.y - centerY;
+    const rx = dx * cosA - dy * sinA;
+    const ry = dx * sinA + dy * cosA * 0.9;
+    const nx = centerX + rx;
+    const ny = centerY + ry;
+
+    const circle = n.g.querySelector("circle");
+    const text = n.g.querySelector("text");
+    circle.setAttribute("cx", nx);
+    circle.setAttribute("cy", ny);
+    text.setAttribute("x", nx);
+    text.setAttribute("y", ny + 4);
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
+
+
+---
+
+Thomas
 <!DOCTYPE html>
 <html lang="de">
 <head>
