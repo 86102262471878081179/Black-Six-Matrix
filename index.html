@@ -2,6 +2,224 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<title>BLACK SIX MATRIX · Ω · Sovereign 3D Map</title>
+
+<style>
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #020816, #000000 70%);
+    color: #e6e6e6;
+    font-family: Consolas, monospace;
+    overflow: hidden;
+  }
+
+  .hud {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: rgba(0, 10, 20, 0.85);
+    padding: 18px 22px;
+    border-radius: 12px;
+    border: 1px solid #004466;
+    box-shadow: 0 0 18px #003344;
+  }
+
+  .hud h1 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff;
+  }
+
+  .hud p {
+    margin: 4px 0;
+    font-size: 12px;
+    color: #88cce0;
+  }
+
+  .hud span.tag {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #00eaff;
+    color: #000;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  #map {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .cluster-node {
+    cursor: pointer;
+    transition: 0.25s;
+  }
+
+  .cluster-node circle {
+    stroke-width: 1.5;
+  }
+
+  .cluster-node text {
+    font-size: 9px;
+    pointer-events: none;
+  }
+
+  .cluster-node.active circle {
+    stroke: #00ffff;
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 6px #00ffff);
+  }
+
+  .cluster-node.inactive circle {
+    opacity: 0.25;
+  }
+
+  .cluster-link {
+    stroke: #004466;
+    stroke-width: 0.8;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="hud">
+  <h1>BLACK SIX MATRIX · SOVEREIGN Ω</h1>
+  <p>50 Cluster · 5 Sparten · 12 KIs</p>
+  <p>Modus: Sovereign 3D Map (Ignition → Momentum → Ascent → Sovereign → Omega)</p>
+  <span class="tag">SOVEREIGN VIEW</span>
+</div>
+
+<svg id="map"></svg>
+
+<script>
+const svg = document.getElementById("map");
+const width = window.innerWidth;
+const height = window.innerHeight;
+svg.setAttribute("width", width);
+svg.setAttribute("height", height);
+
+const clusters = [
+  "GENESIS","PRIMORDIA","SPARK","PULSE","EMBER","RISE","FORGE","FRAME","IGNITE","LAUNCH",
+  "LEARN","ADAPT","SHAPE","ALIGN","TRAIN","REFINE","ADVANCE","ELEVATE","SURGE","FLOW",
+  "MODULE","SYSTEMS","NEXUS","BRIDGE","REALM","DOMAIN","HORIZON","ZENITH","APEX","ASCEND",
+  "NODE","GRID","VAULT","SEAL","CROWN","THRONE","EMPIRE","DOMINION","SOVEREIGN","MONARCH",
+  "LEGACY","ARCHIVE","CONTINUUM","ETERNUM","OMEGA_POINT","INFINITY","PARAGON","ASCENSION","OMEGA","SOVEREIGN_OMEGA"
+];
+
+// simple layered "3D" rings: 5 sparten
+const layers = 5;
+const radiusBase = Math.min(width, height) * 0.12;
+const centerX = width * 0.52;
+const centerY = height * 0.52;
+
+function polarToXY(layer, indexInLayer, countInLayer) {
+  const r = radiusBase + layer * (radiusBase * 0.35);
+  const angle = (Math.PI * 2) * (indexInLayer / countInLayer);
+  const x = centerX + r * Math.cos(angle);
+  const y = centerY + r * Math.sin(angle) * 0.6; // squash for pseudo-3D
+  const zOffset = layer * 6;
+  return { x, y: y - zOffset };
+}
+
+// distribute 50 clusters over 5 layers
+const layerDistribution = [10, 10, 10, 10, 10];
+let idx = 0;
+const nodes = [];
+
+for (let layer = 0; layer < layers; layer++) {
+  const count = layerDistribution[layer];
+  for (let i = 0; i < count; i++) {
+    const name = clusters[idx];
+    const pos = polarToXY(layer, i, count);
+
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "cluster-node active");
+    g.dataset.index = idx;
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", pos.x);
+    circle.setAttribute("cy", pos.y);
+    circle.setAttribute("r", 14);
+    circle.setAttribute("fill", `rgba(${40+layer*30}, ${80+layer*20}, ${120+layer*10}, 0.9)`);
+    circle.setAttribute("stroke", "#00aaff");
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", pos.x);
+    text.setAttribute("y", pos.y + 3);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("fill", "#e6e6e6");
+    text.textContent = name;
+
+    g.appendChild(circle);
+    g.appendChild(text);
+    svg.appendChild(g);
+
+    nodes.push({ layer, index: idx, x: pos.x, y: pos.y, g });
+
+    g.addEventListener("click", () => {
+      const active = g.classList.contains("active");
+      g.classList.toggle("active", !active);
+      g.classList.toggle("inactive", active);
+    });
+
+    idx++;
+  }
+}
+
+// links between layers for "matrix" feel
+nodes.forEach(n => {
+  nodes.forEach(m => {
+    if (m.layer === n.layer + 1 && Math.abs(m.index - n.index) <= 3) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", n.x);
+      line.setAttribute("y1", n.y);
+      line.setAttribute("x2", m.x);
+      line.setAttribute("y2", m.y);
+      line.setAttribute("class", "cluster-link");
+      svg.insertBefore(line, svg.firstChild);
+    }
+  });
+});
+
+// slow rotation for sovereign 3D feeling
+let angle = 0;
+function animate() {
+  angle += 0.0008;
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+
+  nodes.forEach(n => {
+    const dx = n.x - centerX;
+    const dy = n.y - centerY;
+    const rx = dx * cosA - dy * sinA;
+    const ry = dx * sinA + dy * cosA * 0.9;
+    const nx = centerX + rx;
+    const ny = centerY + ry;
+
+    const circle = n.g.querySelector("circle");
+    const text = n.g.querySelector("text");
+    circle.setAttribute("cx", nx);
+    circle.setAttribute("cy", ny);
+    text.setAttribute("x", nx);
+    text.setAttribute("y", ny + 3);
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
 <title>BLACK SIX MATRIX · Ω · Graphic Edition</title>
 
 <style>
