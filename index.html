@@ -148,6 +148,307 @@ renderDocker();
 
 </body>
 </html>
+``````html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BLACK SIX MATRIX · Ω · Full Matrix Implement</title>
+<style>
+  body { background:#0a0a0a; color:#e6e6e6; font-family:Consolas, monospace; padding:30px; }
+  h1 { color:#00ffff; }
+  h2 { color:#00d0ff; margin-top:25px; }
+  pre { background:#000; padding:20px; border-radius:10px; overflow-x:auto; border:1px solid #333; }
+  .cluster-box { margin:20px 0; padding:20px; background:#111; border-radius:10px; }
+  .cluster-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .cluster-item { background:#000; padding:8px; border:1px solid #333; border-radius:6px; cursor:pointer; text-align:center; font-size:12px; }
+  .cluster-item.active { background:#00aaff; color:#000; font-weight:bold; }
+  .pricing-box { margin:20px 0; padding:20px; background:#111; border-radius:10px; }
+  label { display:block; margin-top:8px; }
+  input, select { width:100%; padding:6px; margin-top:4px; background:#000; color:#e6e6e6; border:1px solid #333; border-radius:4px; }
+  button { margin-top:12px; padding:10px 16px; background:#00ffff; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<h1>BLACK SIX MATRIX · VERSION Ω · Full HTML Matrix</h1>
+
+<!-- CLUSTER TOGGLE -->
+<div class="cluster-box">
+  <h2>Cluster 1–50 aktivieren/deaktivieren</h2>
+  <div class="cluster-grid" id="clusterGrid"></div>
+  <p>Aktive Cluster: <span id="activeCount"></span>/50</p>
+</div>
+
+<!-- PRICING + COST CALC -->
+<div class="pricing-box">
+  <h2>Modellpreise (2026) & Monatskosten</h2>
+  <label>Modell auswählen:</label>
+  <select id="modelSelect">
+    <option value="gemini_flash">Gemini 2.0 Flash — $0.10 / $0.40 / $0.025</option>
+    <option value="gpt4o_mini">GPT-4o-mini — $0.15 / $0.60 / $0.075</option>
+    <option value="deepseek_v3">DeepSeek-V3 — $0.27 / $1.10 / $0.07</option>
+    <option value="claude_haiku">Claude Haiku 4.5 — $0.80 / $4.00 / $0.08</option>
+    <option value="gemini_pro">Gemini 2.5 Pro — $1.25 / $5.00 / $0.31</option>
+    <option value="gpt4o">GPT-4o — $2.50 / $10.00 / $1.25</option>
+    <option value="claude_sonnet">Claude Sonnet 4.6 — $3.00 / $15.00 / $0.30</option>
+    <option value="o4_mini">OpenAI o4-mini — $1.10 / $4.40 / $0.275</option>
+    <option value="o3">OpenAI o3 — $10.00 / $40.00 / $2.50</option>
+    <option value="claude_opus">Claude Opus 4.7 — $15.00 / $75.00 / $1.50</option>
+  </select>
+
+  <label>Monatliche Input-Tokens (z.B. 1_000_000):</label>
+  <input id="inputTokens" type="number" value="1000000">
+
+  <label>Monatliche Output-Tokens:</label>
+  <input id="outputTokens" type="number" value="1000000">
+
+  <label>Monatliche Cached-Tokens (optional):</label>
+  <input id="cachedTokens" type="number" value="0">
+
+  <button onclick="calcCost()">Kosten berechnen</button>
+  <p>Geschätzte Monatskosten: <span id="costResult">$0.00</span></p>
+</div>
+
+<!-- GENERATED DOCKERFILE -->
+<h2>Generierter Dockerfile (Cluster + Preise)</h2>
+<pre><code id="dockerOutput"></code></pre>
+
+<script>
+const clusterNames = [
+  "GENESIS","PRIMORDIA","SPARK","PULSE","EMBER","RISE","FORGE","FRAME","IGNITE","LAUNCH",
+  "LEARN","ADAPT","SHAPE","ALIGN","TRAIN","REFINE","ADVANCE","ELEVATE","SURGE","FLOW",
+  "MODULE","SYSTEMS","NEXUS","BRIDGE","REALM","DOMAIN","HORIZON","ZENITH","APEX","ASCEND",
+  "NODE","GRID","VAULT","SEAL","CROWN","THRONE","EMPIRE","DOMINION","SOVEREIGN","MONARCH",
+  "LEGACY","ARCHIVE","CONTINUUM","ETERNUM","OMEGA_POINT","INFINITY","PARAGON","ASCENSION","OMEGA","SOVEREIGN_OMEGA"
+];
+
+const pricing = {
+  gemini_flash:  { in:0.10, out:0.40, cached:0.025 },
+  gpt4o_mini:    { in:0.15, out:0.60, cached:0.075 },
+  deepseek_v3:   { in:0.27, out:1.10, cached:0.07 },
+  claude_haiku:  { in:0.80, out:4.00, cached:0.08 },
+  gemini_pro:    { in:1.25, out:5.00, cached:0.31 },
+  gpt4o:         { in:2.50, out:10.00, cached:1.25 },
+  claude_sonnet: { in:3.00, out:15.00, cached:0.30 },
+  o4_mini:       { in:1.10, out:4.40, cached:0.275 },
+  o3:            { in:10.00, out:40.00, cached:2.50 },
+  claude_opus:   { in:15.00, out:75.00, cached:1.50 }
+};
+
+const grid = document.getElementById("clusterGrid");
+const dockerOutput = document.getElementById("dockerOutput");
+const activeCount = document.getElementById("activeCount");
+let active = Array(50).fill(true);
+
+function renderGrid() {
+  grid.innerHTML = "";
+  let count = 0;
+  clusterNames.forEach((name, i) => {
+    const div = document.createElement("div");
+    div.className = "cluster-item" + (active[i] ? " active" : "");
+    div.textContent = (i+1) + " " + name;
+    if (active[i]) count++;
+    div.onclick = () => {
+      active[i] = !active[i];
+      renderGrid();
+      renderDocker();
+    };
+    grid.appendChild(div);
+  });
+  activeCount.textContent = count;
+}
+
+function renderDocker() {
+  let docker = `FROM python:3.12-slim AS base\n\nENV PYTHONUNBUFFERED=1 \\\n    PIP_NO_CACHE_DIR=1\n\nWORKDIR /matrix\n\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n    curl ca-certificates git && \\\n    rm -rf /var/lib/apt/lists/*\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\n# MODEL PRICING (2026)\n`;
+  // embed pricing as ENV
+  docker += `ENV GEMINI_FLASH_MODEL="gemini-2.0-flash"\nENV GEMINI_FLASH_PRICE_IN="0.10"\nENV GEMINI_FLASH_PRICE_OUT="0.40"\n`;
+  docker += `ENV GPT4O_MINI_MODEL="gpt-4o-mini"\nENV GPT4O_MINI_PRICE_IN="0.15"\nENV GPT4O_MINI_PRICE_OUT="0.60"\n`;
+  docker += `ENV DEEPSEEK_V3_MODEL="deepseek-v3"\nENV DEEPSEEK_V3_PRICE_IN="0.27"\nENV DEEPSEEK_V3_PRICE_OUT="1.10"\n`;
+  docker += `ENV CLAUDE_HAIKU_MODEL="claude-4.5-haiku"\nENV CLAUDE_HAIKU_PRICE_IN="0.80"\nENV CLAUDE_HAIKU_PRICE_OUT="4.00"\n`;
+  docker += `ENV GEMINI_PRO_MODEL="gemini-2.5-pro"\nENV GEMINI_PRO_PRICE_IN="1.25"\nENV GEMINI_PRO_PRICE_OUT="5.00"\n`;
+  docker += `ENV GPT4O_MODEL="gpt-4o"\nENV GPT4O_PRICE_IN="2.50"\nENV GPT4O_PRICE_OUT="10.00"\n`;
+  docker += `ENV CLAUDE_SONNET_MODEL="claude-4.6-sonnet"\nENV CLAUDE_SONNET_PRICE_IN="3.00"\nENV CLAUDE_SONNET_PRICE_OUT="15.00"\n`;
+  docker += `ENV O4_MINI_MODEL="openai-o4-mini"\nENV O4_MINI_PRICE_IN="1.10"\nENV O4_MINI_PRICE_OUT="4.40"\n`;
+  docker += `ENV O3_MODEL="openai-o3"\nENV O3_PRICE_IN="10.00"\nENV O3_PRICE_OUT="40.00"\n`;
+  docker += `ENV CLAUDE_OPUS_MODEL="claude-4.7-opus"\nENV CLAUDE_OPUS_PRICE_IN="15.00"\nENV CLAUDE_OPUS_PRICE_OUT="75.00"\n\n`;
+  docker += `# CLUSTER FLAGS (1–50)\n`;
+  active.forEach((state, i) => {
+    docker += `ENV CLUSTER_${i+1}_${clusterNames[i]}="${state ? "true" : "false"}"\n`;
+  });
+  docker += `\nCOPY . .\n\nCMD ["python", "matrix_core.py"]`;
+  dockerOutput.textContent = docker;
+}
+
+function calcCost() {
+  const modelKey = document.getElementById("modelSelect").value;
+  const inTok = parseFloat(document.getElementById("inputTokens").value || "0");
+  const outTok = parseFloat(document.getElementById("outputTokens").value || "0");
+  const cachedTok = parseFloat(document.getElementById("cachedTokens").value || "0");
+  const p = pricing[modelKey];
+  const cost =
+    (inTok / 1_000_000) * p.in +
+    (outTok / 1_000_000) * p.out +
+    (cachedTok / 1_000_000) * p.cached;
+  document.getElementById("costResult").textContent = "$" + cost.toFixed(2);
+}
+
+renderGrid();
+renderDocker();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BLACK SIX MATRIX · Ω · Full Matrix Implement</title>
+<style>
+  body { background:#0a0a0a; color:#e6e6e6; font-family:Consolas, monospace; padding:30px; }
+  h1 { color:#00ffff; }
+  h2 { color:#00d0ff; margin-top:25px; }
+  pre { background:#000; padding:20px; border-radius:10px; overflow-x:auto; border:1px solid #333; }
+  .cluster-box { margin:20px 0; padding:20px; background:#111; border-radius:10px; }
+  .cluster-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .cluster-item { background:#000; padding:8px; border:1px solid #333; border-radius:6px; cursor:pointer; text-align:center; font-size:12px; }
+  .cluster-item.active { background:#00aaff; color:#000; font-weight:bold; }
+  .pricing-box { margin:20px 0; padding:20px; background:#111; border-radius:10px; }
+  label { display:block; margin-top:8px; }
+  input, select { width:100%; padding:6px; margin-top:4px; background:#000; color:#e6e6e6; border:1px solid #333; border-radius:4px; }
+  button { margin-top:12px; padding:10px 16px; background:#00ffff; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<h1>BLACK SIX MATRIX · VERSION Ω · Full HTML Matrix</h1>
+
+<!-- CLUSTER TOGGLE -->
+<div class="cluster-box">
+  <h2>Cluster 1–50 aktivieren/deaktivieren</h2>
+  <div class="cluster-grid" id="clusterGrid"></div>
+  <p>Aktive Cluster: <span id="activeCount"></span>/50</p>
+</div>
+
+<!-- PRICING + COST CALC -->
+<div class="pricing-box">
+  <h2>Modellpreise (2026) & Monatskosten</h2>
+  <label>Modell auswählen:</label>
+  <select id="modelSelect">
+    <option value="gemini_flash">Gemini 2.0 Flash — $0.10 / $0.40 / $0.025</option>
+    <option value="gpt4o_mini">GPT-4o-mini — $0.15 / $0.60 / $0.075</option>
+    <option value="deepseek_v3">DeepSeek-V3 — $0.27 / $1.10 / $0.07</option>
+    <option value="claude_haiku">Claude Haiku 4.5 — $0.80 / $4.00 / $0.08</option>
+    <option value="gemini_pro">Gemini 2.5 Pro — $1.25 / $5.00 / $0.31</option>
+    <option value="gpt4o">GPT-4o — $2.50 / $10.00 / $1.25</option>
+    <option value="claude_sonnet">Claude Sonnet 4.6 — $3.00 / $15.00 / $0.30</option>
+    <option value="o4_mini">OpenAI o4-mini — $1.10 / $4.40 / $0.275</option>
+    <option value="o3">OpenAI o3 — $10.00 / $40.00 / $2.50</option>
+    <option value="claude_opus">Claude Opus 4.7 — $15.00 / $75.00 / $1.50</option>
+  </select>
+
+  <label>Monatliche Input-Tokens (z.B. 1_000_000):</label>
+  <input id="inputTokens" type="number" value="1000000">
+
+  <label>Monatliche Output-Tokens:</label>
+  <input id="outputTokens" type="number" value="1000000">
+
+  <label>Monatliche Cached-Tokens (optional):</label>
+  <input id="cachedTokens" type="number" value="0">
+
+  <button onclick="calcCost()">Kosten berechnen</button>
+  <p>Geschätzte Monatskosten: <span id="costResult">$0.00</span></p>
+</div>
+
+<!-- GENERATED DOCKERFILE -->
+<h2>Generierter Dockerfile (Cluster + Preise)</h2>
+<pre><code id="dockerOutput"></code></pre>
+
+<script>
+const clusterNames = [
+  "GENESIS","PRIMORDIA","SPARK","PULSE","EMBER","RISE","FORGE","FRAME","IGNITE","LAUNCH",
+  "LEARN","ADAPT","SHAPE","ALIGN","TRAIN","REFINE","ADVANCE","ELEVATE","SURGE","FLOW",
+  "MODULE","SYSTEMS","NEXUS","BRIDGE","REALM","DOMAIN","HORIZON","ZENITH","APEX","ASCEND",
+  "NODE","GRID","VAULT","SEAL","CROWN","THRONE","EMPIRE","DOMINION","SOVEREIGN","MONARCH",
+  "LEGACY","ARCHIVE","CONTINUUM","ETERNUM","OMEGA_POINT","INFINITY","PARAGON","ASCENSION","OMEGA","SOVEREIGN_OMEGA"
+];
+
+const pricing = {
+  gemini_flash:  { in:0.10, out:0.40, cached:0.025 },
+  gpt4o_mini:    { in:0.15, out:0.60, cached:0.075 },
+  deepseek_v3:   { in:0.27, out:1.10, cached:0.07 },
+  claude_haiku:  { in:0.80, out:4.00, cached:0.08 },
+  gemini_pro:    { in:1.25, out:5.00, cached:0.31 },
+  gpt4o:         { in:2.50, out:10.00, cached:1.25 },
+  claude_sonnet: { in:3.00, out:15.00, cached:0.30 },
+  o4_mini:       { in:1.10, out:4.40, cached:0.275 },
+  o3:            { in:10.00, out:40.00, cached:2.50 },
+  claude_opus:   { in:15.00, out:75.00, cached:1.50 }
+};
+
+const grid = document.getElementById("clusterGrid");
+const dockerOutput = document.getElementById("dockerOutput");
+const activeCount = document.getElementById("activeCount");
+let active = Array(50).fill(true);
+
+function renderGrid() {
+  grid.innerHTML = "";
+  let count = 0;
+  clusterNames.forEach((name, i) => {
+    const div = document.createElement("div");
+    div.className = "cluster-item" + (active[i] ? " active" : "");
+    div.textContent = (i+1) + " " + name;
+    if (active[i]) count++;
+    div.onclick = () => {
+      active[i] = !active[i];
+      renderGrid();
+      renderDocker();
+    };
+    grid.appendChild(div);
+  });
+  activeCount.textContent = count;
+}
+
+function renderDocker() {
+  let docker = `FROM python:3.12-slim AS base\n\nENV PYTHONUNBUFFERED=1 \\\n    PIP_NO_CACHE_DIR=1\n\nWORKDIR /matrix\n\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n    curl ca-certificates git && \\\n    rm -rf /var/lib/apt/lists/*\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\n# MODEL PRICING (2026)\n`;
+  // embed pricing as ENV
+  docker += `ENV GEMINI_FLASH_MODEL="gemini-2.0-flash"\nENV GEMINI_FLASH_PRICE_IN="0.10"\nENV GEMINI_FLASH_PRICE_OUT="0.40"\n`;
+  docker += `ENV GPT4O_MINI_MODEL="gpt-4o-mini"\nENV GPT4O_MINI_PRICE_IN="0.15"\nENV GPT4O_MINI_PRICE_OUT="0.60"\n`;
+  docker += `ENV DEEPSEEK_V3_MODEL="deepseek-v3"\nENV DEEPSEEK_V3_PRICE_IN="0.27"\nENV DEEPSEEK_V3_PRICE_OUT="1.10"\n`;
+  docker += `ENV CLAUDE_HAIKU_MODEL="claude-4.5-haiku"\nENV CLAUDE_HAIKU_PRICE_IN="0.80"\nENV CLAUDE_HAIKU_PRICE_OUT="4.00"\n`;
+  docker += `ENV GEMINI_PRO_MODEL="gemini-2.5-pro"\nENV GEMINI_PRO_PRICE_IN="1.25"\nENV GEMINI_PRO_PRICE_OUT="5.00"\n`;
+  docker += `ENV GPT4O_MODEL="gpt-4o"\nENV GPT4O_PRICE_IN="2.50"\nENV GPT4O_PRICE_OUT="10.00"\n`;
+  docker += `ENV CLAUDE_SONNET_MODEL="claude-4.6-sonnet"\nENV CLAUDE_SONNET_PRICE_IN="3.00"\nENV CLAUDE_SONNET_PRICE_OUT="15.00"\n`;
+  docker += `ENV O4_MINI_MODEL="openai-o4-mini"\nENV O4_MINI_PRICE_IN="1.10"\nENV O4_MINI_PRICE_OUT="4.40"\n`;
+  docker += `ENV O3_MODEL="openai-o3"\nENV O3_PRICE_IN="10.00"\nENV O3_PRICE_OUT="40.00"\n`;
+  docker += `ENV CLAUDE_OPUS_MODEL="claude-4.7-opus"\nENV CLAUDE_OPUS_PRICE_IN="15.00"\nENV CLAUDE_OPUS_PRICE_OUT="75.00"\n\n`;
+  docker += `# CLUSTER FLAGS (1–50)\n`;
+  active.forEach((state, i) => {
+    docker += `ENV CLUSTER_${i+1}_${clusterNames[i]}="${state ? "true" : "false"}"\n`;
+  });
+  docker += `\nCOPY . .\n\nCMD ["python", "matrix_core.py"]`;
+  dockerOutput.textContent = docker;
+}
+
+function calcCost() {
+  const modelKey = document.getElementById("modelSelect").value;
+  const inTok = parseFloat(document.getElementById("inputTokens").value || "0");
+  const outTok = parseFloat(document.getElementById("outputTokens").value || "0");
+  const cachedTok = parseFloat(document.getElementById("cachedTokens").value || "0");
+  const p = pricing[modelKey];
+  const cost =
+    (inTok / 1_000_000) * p.in +
+    (outTok / 1_000_000) * p.out +
+    (cachedTok / 1_000_000) * p.cached;
+  document.getElementById("costResult").textContent = "$" + cost.toFixed(2);
+}
+
+renderGrid();
+renderDocker();
+</script>
+
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
