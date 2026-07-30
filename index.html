@@ -2,35 +2,23 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>BLACK SIX MATRIX · Dockerfile Ω</title>
+<title>BLACK SIX MATRIX · Dockerfile Ω · Download Edition</title>
 <style>
-  body {
-    background: #0a0a0a;
-    color: #e6e6e6;
-    font-family: Consolas, monospace;
-    padding: 30px;
-  }
-  h1 {
-    color: #00ffff;
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
-  pre {
-    background: #000;
-    padding: 25px;
-    border-radius: 12px;
-    overflow-x: auto;
-    border: 1px solid #333;
-    font-size: 14px;
-    line-height: 1.5;
+  body { background:#0a0a0a; color:#e6e6e6; font-family:Consolas, monospace; padding:30px; }
+  h1 { color:#00ffff; }
+  pre { background:#000; padding:25px; border-radius:12px; overflow-x:auto; border:1px solid #333; }
+  button {
+    background:#00ffff; color:#000; padding:12px 20px;
+    border:none; border-radius:8px; font-weight:bold; cursor:pointer;
+    margin-top:20px;
   }
 </style>
 </head>
 <body>
 
-<h1>BLACK SIX MATRIX · VERSION Ω · Dockerfile</h1>
+<h1>BLACK SIX MATRIX · Dockerfile Ω</h1>
 
-<pre><code>
+<pre><code id="dockerfile">
 FROM python:3.12-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
@@ -45,10 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ============================
 # MODEL PRICING (2026)
-# ============================
-
 ENV GEMINI_FLASH_MODEL="gemini-2.0-flash"
 ENV GEMINI_FLASH_PRICE_IN="0.10"
 ENV GEMINI_FLASH_PRICE_OUT="0.40"
@@ -89,10 +74,7 @@ ENV CLAUDE_OPUS_MODEL="claude-4.7-opus"
 ENV CLAUDE_OPUS_PRICE_IN="15.00"
 ENV CLAUDE_OPUS_PRICE_OUT="75.00"
 
-# ============================
 # CLUSTER FLAGS (1–50)
-# ============================
-
 ENV CLUSTER_1_GENESIS="true"
 ENV CLUSTER_2_PRIMORDIA="true"
 ENV CLUSTER_3_SPARK="true"
@@ -152,6 +134,21 @@ COPY . .
 
 CMD ["python", "matrix_core.py"]
 </code></pre>
+
+<button onclick="downloadDocker()">Dockerfile herunterladen</button>
+
+<script>
+function downloadDocker() {
+  const content = document.getElementById("dockerfile").textContent;
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Dockerfile";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 
 </body>
 </html>
