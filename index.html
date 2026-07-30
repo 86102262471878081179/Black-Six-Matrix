@@ -2,6 +2,151 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<title>BLACK SIX MATRIX · Dockerfile Ω · Color View</title>
+<style>
+  body {
+    background: radial-gradient(circle at top, #020816, #000000 70%);
+    color: #e6e6e6;
+    font-family: Consolas, monospace;
+    padding: 40px;
+  }
+  h1 {
+    color: #00eaff;
+    font-size: 28px;
+    text-shadow: 0 0 12px #00eaff;
+    margin-bottom: 20px;
+  }
+  pre {
+    background: #050b12;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #123;
+    box-shadow: 0 0 18px #001822;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .kw   { color:#ffcc66; }   /* Keywords */
+  .env  { color:#66ffcc; }   /* ENV names */
+  .val  { color:#99ccff; }   /* Values */
+  .com  { color:#888888; }   /* Comments */
+</style>
+</head>
+<body>
+
+<h1>BLACK SIX MATRIX · Dockerfile Ω</h1>
+
+<pre><code>
+<span class="kw">FROM</span> python:3.12-slim <span class="kw">AS</span> base
+
+<span class="kw">ENV</span> <span class="env">PYTHONUNBUFFERED</span>=<span class="val">1</span> \
+    <span class="env">PIP_NO_CACHE_DIR</span>=<span class="val">1</span>
+
+<span class="kw">WORKDIR</span> /matrix
+
+<span class="kw">RUN</span> apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates git && \
+    rm -rf /var/lib/apt/lists/*
+
+<span class="kw">COPY</span> requirements.txt .
+<span class="kw">RUN</span> pip install --no-cache-dir -r requirements.txt
+
+<span class="com"># MODEL PRICING (2026)</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_FLASH_MODEL</span>=<span class="val">"gemini-2.0-flash"</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_FLASH_PRICE_IN</span>=<span class="val">"0.10"</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_FLASH_PRICE_OUT</span>=<span class="val">"0.40"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_MINI_MODEL</span>=<span class="val">"gpt-4o-mini"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_MINI_PRICE_IN</span>=<span class="val">"0.15"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_MINI_PRICE_OUT</span>=<span class="val">"0.60"</span>
+<span class="kw">ENV</span> <span class="env">DEEPSEEK_V3_MODEL</span>=<span class="val">"deepseek-v3"</span>
+<span class="kw">ENV</span> <span class="env">DEEPSEEK_V3_PRICE_IN</span>=<span class="val">"0.27"</span>
+<span class="kw">ENV</span> <span class="env">DEEPSEEK_V3_PRICE_OUT</span>=<span class="val">"1.10"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_HAIKU_MODEL</span>=<span class="val">"claude-4.5-haiku"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_HAIKU_PRICE_IN</span>=<span class="val">"0.80"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_HAIKU_PRICE_OUT</span>=<span class="val">"4.00"</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_PRO_MODEL</span>=<span class="val">"gemini-2.5-pro"</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_PRO_PRICE_IN</span>=<span class="val">"1.25"</span>
+<span class="kw">ENV</span> <span class="env">GEMINI_PRO_PRICE_OUT</span>=<span class="val">"5.00"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_MODEL</span>=<span class="val">"gpt-4o"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_PRICE_IN</span>=<span class="val">"2.50"</span>
+<span class="kw">ENV</span> <span class="env">GPT4O_PRICE_OUT</span>=<span class="val">"10.00"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_SONNET_MODEL</span>=<span class="val">"claude-4.6-sonnet"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_SONNET_PRICE_IN</span>=<span class="val">"3.00"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_SONNET_PRICE_OUT</span>=<span class="val">"15.00"</span>
+<span class="kw">ENV</span> <span class="env">O4_MINI_MODEL</span>=<span class="val">"openai-o4-mini"</span>
+<span class="kw">ENV</span> <span class="env">O4_MINI_PRICE_IN</span>=<span class="val">"1.10"</span>
+<span class="kw">ENV</span> <span class="env">O4_MINI_PRICE_OUT</span>=<span class="val">"4.40"</span>
+<span class="kw">ENV</span> <span class="env">O3_MODEL</span>=<span class="val">"openai-o3"</span>
+<span class="kw">ENV</span> <span class="env">O3_PRICE_IN</span>=<span class="val">"10.00"</span>
+<span class="kw">ENV</span> <span class="env">O3_PRICE_OUT</span>=<span class="val">"40.00"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_OPUS_MODEL</span>=<span class="val">"claude-4.7-opus"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_OPUS_PRICE_IN</span>=<span class="val">"15.00"</span>
+<span class="kw">ENV</span> <span class="env">CLAUDE_OPUS_PRICE_OUT</span>=<span class="val">"75.00"</span>
+
+<span class="com"># CLUSTER FLAGS (1–50)</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_1_GENESIS</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_2_PRIMORDIA</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_3_SPARK</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_4_PULSE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_5_EMBER</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_6_RISE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_7_FORGE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_8_FRAME</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_9_IGNITE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_10_LAUNCH</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_11_LEARN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_12_ADAPT</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_13_SHAPE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_14_ALIGN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_15_TRAIN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_16_REFINE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_17_ADVANCE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_18_ELEVATE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_19_SURGE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_20_FLOW</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_21_MODULE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_22_SYSTEMS</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_23_NEXUS</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_24_BRIDGE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_25_REALM</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_26_DOMAIN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_27_HORIZON</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_28_ZENITH</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_29_APEX</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_30_ASCEND</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_31_NODE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_32_GRID</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_33_VAULT</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_34_SEAL</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_35_CROWN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_36_THRONE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_37_EMPIRE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_38_DOMINION</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_39_SOVEREIGN</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_40_MONARCH</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_41_LEGACY</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_42_ARCHIVE</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_43_CONTINUUM</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_44_ETERNUM</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_45_OMEGA_POINT</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_46_INFINITY</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_47_PARAGON</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_48_ASCENSION</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_49_OMEGA</span>=<span class="val">"true"</span>
+<span class="kw">ENV</span> <span class="env">CLUSTER_50_SOVEREIGN_OMEGA</span>=<span class="val">"true"</span>
+
+<span class="kw">COPY</span> . .
+
+<span class="kw">CMD</span> [<span class="val">"python"</span>, <span class="val">"matrix_core.py"</span>]
+</code></pre>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
 <title>BLACK SIX MATRIX · Ω · Sovereign 3D Map</title>
 
 <style>
