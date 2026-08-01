@@ -1,3 +1,86 @@
+<script>
+const omegaCtx = document.getElementById("omegaCanvas").getContext("2d");
+const fieldCtx = document.getElementById("fieldCanvas").getContext("2d");
+const gravityCtx = document.getElementById("gravityCanvas").getContext("2d");
+const vectorCtx = document.getElementById("vectorCanvas").getContext("2d");
+
+const GL_FIELDS = [1.0,1.2,1.5,1.3,1.1,0.9,1.4,1.6,1.8,2.0];
+const SOV_CONST = 2.5;
+
+function simulateOmega() {
+    let omega = 0;
+    for (let f of GL_FIELDS) {
+        const v = Math.random()*2 - 1;
+        const h = 0.8 + Math.random()*0.4;
+        omega += f * v * h * SOV_CONST;
+    }
+    return omega;
+}
+
+function drawOmega() {
+    const omega = simulateOmega();
+    omegaCtx.clearRect(0,0,400,100);
+    omegaCtx.fillStyle = "#00eaff";
+    omegaCtx.fillRect(0,50 - omega*10,400,5);
+}
+
+function drawFields() {
+    for (let y=0; y<400; y++) {
+        for (let x=0; x<400; x++) {
+            const idx = Math.floor(x/40);
+            const intensity = GL_FIELDS[idx]/2.0;
+            const c = Math.floor(50 + intensity*100);
+            fieldCtx.fillStyle = `rgb(${c},0,${150+c})`;
+            fieldCtx.fillRect(x,y,1,1);
+        }
+    }
+}
+
+function sovGravity(r) {
+    return SOV_CONST / (r*r + 1);
+}
+
+function drawGravity() {
+    gravityCtx.clearRect(0,0,400,100);
+    for (let x=0; x<400; x++) {
+        const r = x/40;
+        const g = sovGravity(r);
+        const c = Math.floor(g*200);
+        gravityCtx.fillStyle = `rgb(${c},${c},0)`;
+        gravityCtx.fillRect(x,50,1,10);
+    }
+}
+
+function drawVectors() {
+    vectorCtx.clearRect(0,0,400,400);
+    for (let i=0; i<20; i++) {
+        const intel = Math.random();
+        const gov = 0.5 + Math.random();
+        const sec = Math.random();
+        const angle = intel * Math.PI;
+        const mag = Math.max(0, gov - sec);
+        const vx = mag * Math.cos(angle);
+        const vy = mag * Math.sin(angle);
+
+        const x = Math.random()*400;
+        const y = Math.random()*400;
+
+        vectorCtx.strokeStyle = "#00ff88";
+        vectorCtx.beginPath();
+        vectorCtx.moveTo(x,y);
+        vectorCtx.lineTo(x+vx*40, y+vy*40);
+        vectorCtx.stroke();
+    }
+}
+
+setInterval(() => {
+    drawOmega();
+    drawFields();
+    drawGravity();
+    drawVectors();
+}, 300);
+</script>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
