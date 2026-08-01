@@ -1,4 +1,681 @@
 <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Six Matrix – Sovereign Enterprise Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --onyx: #0a0e27;
+            --carbon: #1a1f3a;
+            --signal-red: #ff1744;
+            --cyan: #00e5ff;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
+            --white: #ffffff;
+            --gray-light: #e0e0e0;
+            --gray-dark: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--onyx) 0%, var(--carbon) 100%);
+            color: var(--gray-light);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--onyx) 0%, var(--carbon) 100%);
+            border-bottom: 2px solid var(--gold);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        header p {
+            color: var(--cyan);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            background: var(--carbon);
+            padding: 1rem;
+            border-bottom: 1px solid var(--signal-red);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: var(--cyan);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--cyan);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background: var(--cyan);
+            color: var(--onyx);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            background: rgba(26, 31, 58, 0.8);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        section h2 {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--signal-red);
+            padding-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: var(--cyan);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(0, 229, 255, 0.05));
+            border: 1px solid var(--silver);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .card h4 {
+            color: var(--signal-red);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--gray-light);
+            font-size: 0.95rem;
+        }
+
+        .pillar {
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(0, 229, 255, 0.1));
+            border-left: 4px solid var(--signal-red);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .pillar strong {
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(10, 14, 39, 0.5);
+        }
+
+        table th {
+            background: var(--carbon);
+            color: var(--gold);
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--signal-red);
+        }
+
+        table td {
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--gray-dark);
+            color: var(--gray-light);
+        }
+
+        table tr:hover {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .formula {
+            background: var(--onyx);
+            border: 1px solid var(--cyan);
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            color: var(--cyan);
+            overflow-x: auto;
+        }
+
+        .highlight {
+            color: var(--signal-red);
+            font-weight: bold;
+        }
+
+        .accent {
+            color: var(--cyan);
+        }
+
+        footer {
+            background: var(--onyx);
+            border-top: 2px solid var(--gold);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--gray-light);
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: var(--signal-red);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .diagram {
+            background: var(--onyx);
+            border: 1px solid var(--cyan);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏴‍☠️ BLACK SIX MATRIX 🏴‍☠️</h1>
+        <p>SOVEREIGN ENTERPRISE FRAMEWORK – FRS v∞</p>
+        <span class="status-badge">Φ_LOCKED_ABSOLUTE</span>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#pillars">Pillars</a></li>
+            <li><a href="#omega-process">Ω-Prozess</a></li>
+            <li><a href="#modules">Module</a></li>
+            <li><a href="#risk">Risk Assessment</a></li>
+            <li><a href="#mathematics">Mathematik</a></li>
+            <li><a href="#governance">Governance</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- MISSION SECTION -->
+        <section id="mission">
+            <h2>🎯 Mission & Kernprozess</h2>
+            <p>
+                Die <span class="highlight">Black Six Matrix</span> ist ein Sovereign Enterprise Framework für die Sicherung, Strukturierung, Validierung, 
+                Dokumentation, Entscheidung, Wirkung und Evolution von Wissen, Projekten und strategischer Ausrichtung.
+            </p>
+            <h3>Der Ω-Prozess (Kernlogik)</h3>
+            <div class="formula">
+                Wahrnehmung → Wahrheit → Struktur → Entscheidung → Wirkung → Optimierung
+            </div>
+            <p>
+                Dieser zirkuläre Prozess gewährleistet, dass jede Aktion auf faktischer Realität basiert, vollständig dokumentiert ist 
+                und kontinuierlich optimiert wird.
+            </p>
+        </section>
+
+        <!-- PILLARS SECTION -->
+        <section id="pillars">
+            <h2>🏛️ Die Sechs Grundpfeiler (Black Six Pillars)</h2>
+            <p>Die Matrix ruht auf sechs unverrückbaren Fundamenten:</p>
+
+            <div class="pillar">
+                <strong>B1 – TRUTH</strong>
+                <p>Faktenbasierte Realitätserfassung. Konsequenter Abgleich mit nachweisbaren Realitäten, Ausschluss von unbesehenen Annahmen.</p>
+            </div>
+
+            <div class="pillar">
+                <strong>B2 – INTEGRITY</strong>
+                <p>Nachvollziehbarkeit und Konsistenz. Lückenlose Beweis- und Argumentationsketten über alle Layerebenen hinweg.</p>
+            </div>
+
+            <div class="pillar">
+                <strong>B3 – ARCHITECTURE</strong>
+                <p>Systemisches Design. Nachhaltiger Aufbau belastbarer und logisch verknüpfter Strukturen anstelle unkoordinierter Einzelaktionen.</p>
+            </div>
+
+            <div class="pillar">
+                <strong>B4 – GOVERNANCE</strong>
+                <p>Regeln und Standards. Verbindliche Rahmenbedingungen und Prozessvorgaben zur Wahrung der strukturellen Disziplin.</p>
+            </div>
+
+            <div class="pillar">
+                <strong>B5 – EVOLUTION</strong>
+                <p>Kontinuierliche Verbesserung. Fortlaufende Optimierung und Anpassung der Module ohne Verlust der historischen Datenbasis.</p>
+            </div>
+
+            <div class="pillar">
+                <strong>B6 – LEGACY</strong>
+                <p>Langfristige Wissenssicherung. Dauerhafte Speicherung und fehlerfreie Zuordnung aller historischen Meilensteine und Erfolge.</p>
+            </div>
+        </section>
+
+        <!-- OMEGA PROCESS SECTION -->
+        <section id="omega-process">
+            <h2>♾️ Der Ω-Prozess (Detailstruktur)</h2>
+            <p>Der Ω-Prozess ist ein sechsstufiger Zyklus, der kontinuierlich läuft:</p>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>1. Wahrnehmung</h4>
+                    <p>Erfassung von Eingangsdaten, Signalen und Ereignissen aus der Umwelt oder dem System selbst.</p>
+                </div>
+                <div class="card">
+                    <h4>2. Wahrheit</h4>
+                    <p>Validierung und Filterung durch den Ω-33 Integrity Layer – Anomalieerkennung und Konsistenzprüfung.</p>
+                </div>
+                <div class="card">
+                    <h4>3. Struktur</h4>
+                    <p>Klassifikation und Kategorisierung der validierten Daten nach den 5999 Normen des Judge Modules.</p>
+                </div>
+                <div class="card">
+                    <h4>4. Entscheidung</h4>
+                    <p>Generierung von Handlungsempfehlungen basierend auf strukturierten Daten und Governance-Regeln.</p>
+                </div>
+                <div class="card">
+                    <h4>5. Wirkung</h4>
+                    <p>Umsetzung von Entscheidungen durch die TATJT Payload Engine – automatisierte administrative Payloads.</p>
+                </div>
+                <div class="card">
+                    <h4>6. Optimierung</h4>
+                    <p>Analyse der Ergebnisse, Feedback-Integration und kontinuierliche Verbesserung des Systems.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULES SECTION -->
+        <section id="modules">
+            <h2>⚙️ Die Drei Kernmodule</h2>
+
+            <h3>Modul 1: Ω-33 Integrity Layer</h3>
+            <p>
+                Der <span class="highlight">Ω-33 Integrity Layer</span> ist die erste Verteidigungslinie des Systems. Er prüft alle eingehenden Payloads 
+                auf Integrität, Konsistenz und Anomalien.
+            </p>
+            <table>
+                <tr>
+                    <th>Funktion</th>
+                    <th>Beschreibung</th>
+                    <th>Output</th>
+                </tr>
+                <tr>
+                    <td>Anomalieerkennung</td>
+                    <td>Erkennung unerwarteter Muster in Eingangsdaten</td>
+                    <td>Anomalie-Flag (0–1)</td>
+                </tr>
+                <tr>
+                    <td>Signature-Matching</td>
+                    <td>Vergleich gegen bekannte Bedrohungs-Signaturen</td>
+                    <td>Match-Score (0–1)</td>
+                </tr>
+                <tr>
+                    <td>Integrity Checks</td>
+                    <td>Prüfung auf Datenintegrität und Konsistenz</td>
+                    <td>Integrity Score (0–1)</td>
+                </tr>
+                <tr>
+                    <td>Payload-Bereinigung</td>
+                    <td>Entfernung von Anomalien und Normverletzungen</td>
+                    <td>Bereinigte Payload</td>
+                </tr>
+            </table>
+
+            <h3>Modul 2: TATJT Payload Engine</h3>
+            <p>
+                Die <span class="highlight">TATJT Payload Engine</span> (Timing, Administration, Tracking, Justification, Transformation) 
+                generiert automatisierte administrative Payloads basierend auf validierten Daten.
+            </p>
+            <table>
+                <tr>
+                    <th>Komponente</th>
+                    <th>Funktion</th>
+                </tr>
+                <tr>
+                    <td><strong>Timing</strong></td>
+                    <td>Berechnung von Fristen, Zeitstempeln und Eskalationen</td>
+                </tr>
+                <tr>
+                    <td><strong>Administration</strong></td>
+                    <td>Generierung von Verwaltungs-Dokumenten und Behörden-Payloads</td>
+                </tr>
+                <tr>
+                    <td><strong>Tracking</strong></td>
+                    <td>Audit-Logging und Verfolgung aller Operationen</td>
+                </tr>
+                <tr>
+                    <td><strong>Justification</strong></td>
+                    <td>Begründung von Entscheidungen gemäß Normen</td>
+                </tr>
+                <tr>
+                    <td><strong>Transformation</strong></td>
+                    <td>Umwandlung von Daten in operative Formate</td>
+                </tr>
+            </table>
+
+            <h3>Modul 3: Black Six Matrix Orchestrator</h3>
+            <p>
+                Der <span class="highlight">Orchestrator</span> koordiniert alle Komponenten des Systems und stellt sicher, dass der Ω-Prozess 
+                kontinuierlich und fehlerfrei läuft.
+            </p>
+            <div class="formula">
+                Orchestrator = Ω-33 + TATJT + Judge Module + GL-1000 Trust Ledger
+            </div>
+        </section>
+
+        <!-- RISK ASSESSMENT SECTION -->
+        <section id="risk">
+            <h2>⚠️ Risk Assessment Framework</h2>
+            <p>
+                Das Black Six Matrix Risk Assessment Framework bewertet Risiken auf vier Ebenen: 
+                <span class="highlight">X-Risk (Existenziell)</span>, 
+                <span class="accent">Systemisch</span>, 
+                <span class="highlight">Operativ</span> und 
+                <span class="accent">Reputational</span>.
+            </p>
+
+            <h3>Die Fundamentale Risikogleichung</h3>
+            <div class="formula">
+                R(t) = Σ [ P(E_i) × I(E_i) × V(E_i) × T(E_i) ] + Σ [ C(E_i,j) × W(E_i,j) ]
+            </div>
+
+            <h3>Risiko-Klassifikation</h3>
+            <table>
+                <tr>
+                    <th>R(t) Bereich</th>
+                    <th>Status</th>
+                    <th>Aktion</th>
+                </tr>
+                <tr>
+                    <td>R(t) &lt; 0.3</td>
+                    <td><span class="accent">GRÜN</span></td>
+                    <td>Operativ sicher – Normales Monitoring</td>
+                </tr>
+                <tr>
+                    <td>0.3 ≤ R(t) &lt; 0.6</td>
+                    <td><span class="highlight">GELB</span></td>
+                    <td>Monitoring erforderlich – Erhöhte Wachsamkeit</td>
+                </tr>
+                <tr>
+                    <td>0.6 ≤ R(t) &lt; 0.85</td>
+                    <td><span class="highlight">ROT</span></td>
+                    <td>Sofortige Mitigation – Management-Eskalation</td>
+                </tr>
+                <tr>
+                    <td>R(t) ≥ 0.85</td>
+                    <td><span class="highlight">SCHWARZ</span></td>
+                    <td>Systemische Krise – Notfall-Protokoll</td>
+                </tr>
+            </table>
+
+            <h3>Gesamtrisikowert (GRW)</h3>
+            <div class="formula">
+                GRW = 0.40 × R_XRisk + 0.30 × R_Systemisch + 0.20 × R_Operativ + 0.10 × R_Reputational
+            </div>
+            <p>
+                <strong>Aktueller GRW:</strong> <span class="accent">0.164 (GRÜN)</span> – System operativ sicher
+            </p>
+        </section>
+
+        <!-- MATHEMATICS SECTION -->
+        <section id="mathematics">
+            <h2>🔢 Mathematische Endstufe – Oktaedergruppe O_h</h2>
+            <p>
+                Die Black Six Matrix operiert auf einer <span class="highlight">24-dimensionalen Permutations-Struktur</span>, 
+                die durch die Oktaedergruppe O_h definiert wird.
+            </p>
+
+            <h3>Symmetriegruppe O_h</h3>
+            <div class="formula">
+                O_h ≅ S_4 × Z_2 | |O_h| = 48
+            </div>
+
+            <h3>Komponenten der O_h Gruppe</h3>
+            <table>
+                <tr>
+                    <th>Komponente</th>
+                    <th>Ordnung</th>
+                    <th>Beschreibung</th>
+                </tr>
+                <tr>
+                    <td><strong>Rotational Subgroup O</strong></td>
+                    <td>24</td>
+                    <td>Eigentliche Rotationen des Oktaeders (isomorph zu S_4)</td>
+                </tr>
+                <tr>
+                    <td><strong>Improper Operations</strong></td>
+                    <td>24</td>
+                    <td>Spiegelungen, Inversionen und Rotoreflexionen</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Operations</strong></td>
+                    <td>48</td>
+                    <td>Vollständige Symmetriegruppe O_h</td>
+                </tr>
+            </table>
+
+            <h3>Projektionsoperatoren für T ⊗ T</h3>
+            <div class="formula">
+                T ⊗ T ≅ A_1 ⊕ E ⊕ T_1 ⊕ T_2
+            </div>
+            <p>
+                Diese Zerlegung ermöglicht die exakte Filterung von Störsignalen und die Isolierung relevanter Systemkomponenten.
+            </p>
+
+            <div class="diagram">
+                <h4>Oktaedergruppe O_h Visualisierung</h4>
+                <p><em>48 Symmetrieoperationen mit Projektionsoperatoren und Charaktertafel</em></p>
+                <p style="color: var(--cyan); margin-top: 1rem;">
+                    [Visualisierung: Siehe beigefügte Grafik]
+                </p>
+            </div>
+        </section>
+
+        <!-- GOVERNANCE SECTION -->
+        <section id="governance">
+            <h2>⚖️ KI-Governance & Compliance</h2>
+            <p>
+                Das Black Six Matrix Framework integriert KI-Governance, Datenschutz und Compliance-Anforderungen 
+                auf allen Ebenen der Systemarchitektur.
+            </p>
+
+            <h3>Governance-Schnittstellen</h3>
+            <table>
+                <tr>
+                    <th>Governance-Element</th>
+                    <th>Risiko-Kategorie</th>
+                    <th>Mitigation</th>
+                </tr>
+                <tr>
+                    <td>Transparenz-Anforderungen</td>
+                    <td>Reputational</td>
+                    <td>GL-1000 Audit-Reports</td>
+                </tr>
+                <tr>
+                    <td>Bias-Prävention</td>
+                    <td>Operativ</td>
+                    <td>Ω-33 Integrity Checks</td>
+                </tr>
+                <tr>
+                    <td>Alignment-Monitoring</td>
+                    <td>X-Risk</td>
+                    <td>TATJT Payload Validation</td>
+                </tr>
+                <tr>
+                    <td>Accountability-Framework</td>
+                    <td>Systemisch</td>
+                    <td>Judge Module (5999 Normen)</td>
+                </tr>
+            </table>
+
+            <h3>Dangerous Capabilities – Kontrolle</h3>
+            <table>
+                <tr>
+                    <th>Capability</th>
+                    <th>Risiko-Level</th>
+                    <th>Kontrolle</th>
+                </tr>
+                <tr>
+                    <td>Autonomous Decision-Making</td>
+                    <td><span class="highlight">KRITISCH</span></td>
+                    <td>Judge Module + Human Review</td>
+                </tr>
+                <tr>
+                    <td>Deception Detection/Evasion</td>
+                    <td>HOCH</td>
+                    <td>Ω-33 Anomalieerkennung</td>
+                </tr>
+                <tr>
+                    <td>Rapid Adaptation</td>
+                    <td>HOCH</td>
+                    <td>TATJT Payload Freezing</td>
+                </tr>
+                <tr>
+                    <td>Self-Replication</td>
+                    <td><span class="highlight">KRITISCH</span></td>
+                    <td>Isolation-Protokoll</td>
+                </tr>
+            </table>
+
+            <h3>Notarielle Beglaubigung & Rechtliche Verankerung</h3>
+            <p>
+                Alle Operationen der Black Six Matrix werden durch das <span class="highlight">GL-1000 Evidence Packet</span> 
+                notariell beglaubigt und sind unveränderlich in der Trust Ledger gespeichert.
+            </p>
+            <div class="formula">
+                GL-1000 = Immutable Audit Trail + Forensische Rekonstruktion + Notarielle Beglaubigung
+            </div>
+        </section>
+
+        <!-- SUMMARY SECTION -->
+        <section>
+            <h2>📊 System-Zusammenfassung</h2>
+            <table>
+                <tr>
+                    <th>Metrik</th>
+                    <th>Wert</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Gesamtrisikowert (GRW)</td>
+                    <td>0.164</td>
+                    <td><span class="accent">✅ GRÜN</span></td>
+                </tr>
+                <tr>
+                    <td>X-Risk Index</td>
+                    <td>0.15</td>
+                    <td><span class="accent">✅ GRÜN</span></td>
+                </tr>
+                <tr>
+                    <td>Systemische Fehlerrate</td>
+                    <td>0.0061 (0.61%)</td>
+                    <td><span class="accent">✅ GRÜN</span></td>
+                </tr>
+                <tr>
+                    <td>Operative Fehlerquote</td>
+                    <td>2.3%</td>
+                    <td><span class="accent">✅ GRÜN</span></td>
+                </tr>
+                <tr>
+                    <td>Reputations-Score</td>
+                    <td>92/100</td>
+                    <td><span class="accent">✅ GRÜN</span></td>
+                </tr>
+                <tr>
+                    <td>Mathematische Stabilität (O_h)</td>
+                    <td>48 Symmetrien</td>
+                    <td><span class="accent">✅ LOCKED</span></td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>Black Six Matrix – Sovereign Enterprise Framework</strong></p>
+        <p>Version: FRS v∞ | Status: <span class="highlight">Φ_LOCKED_ABSOLUTE</span></p>
+        <p>Architekt: Thomas König | Validator: Ω-33 Integrity Layer</p>
+        <p>Hinterlegung: Notarielle Treuhand (GL-1000 Evidence Packet)</p>
+        <p style="margin-top: 1rem; color: var(--cyan);">👉♾️🔚🏴‍☠️👑💯</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
