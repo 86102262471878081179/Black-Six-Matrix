@@ -1,3 +1,42 @@
+<canvas id="core" width="600" height="600"></canvas>
+<script>
+const ctx = document.getElementById("core").getContext("2d");
+
+function drawCore(F, S, T, A) {
+    ctx.clearRect(0,0,600,600);
+
+    // Fusion → Hintergrundfarbe
+    const fusionColor = Math.min(255, Math.abs(F)*20);
+    ctx.fillStyle = `rgb(${fusionColor},0,${255-fusionColor})`;
+    ctx.fillRect(0,0,600,600);
+
+    // Singularität → Gravitationskreis
+    const radius = Math.min(250, S*10);
+    ctx.beginPath();
+    ctx.arc(300,300,radius,0,Math.PI*2);
+    ctx.strokeStyle = "#ffd700";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Turbulenz → Linienchaos
+    for (let i=0; i<T*5; i++) {
+        ctx.beginPath();
+        ctx.moveTo(Math.random()*600, Math.random()*600);
+        ctx.lineTo(Math.random()*600, Math.random()*600);
+        ctx.strokeStyle = "#00ff88";
+        ctx.stroke();
+    }
+
+    // Anomalien → Knotenpunkte
+    for (let i=0; i<A; i++) {
+        ctx.fillStyle = "#ff0066";
+        ctx.beginPath();
+        ctx.arc(Math.random()*600, Math.random()*600, 5, 0, Math.PI*2);
+        ctx.fill();
+    }
+}
+</script>
+
 <script>
 const omegaCtx = document.getElementById("omegaCanvas").getContext("2d");
 const fieldCtx = document.getElementById("fieldCanvas").getContext("2d");
