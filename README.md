@@ -1,3 +1,10 @@
+# BLACK SIX OMEGA NEMESIS v3.4-DSB
+ISO 42001 + TLA + Gated Modules
+
+Run: go build black_six_v3_4_dsb.go -o black_six
+
+
+
 [🏴‍☠️Blach_Six_Cube_System🏴‍☠️]   [🏴‍☠️König_König_Legal_Technologie🏴‍☠️]
 README.md
 
