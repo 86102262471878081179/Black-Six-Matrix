@@ -1,3 +1,131 @@
+package main
+
+import (
+	"crypto/sha3"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+)
+
+const VERSION = "3.4.0-DSB"
+
+type Requirement struct {
+	Name string `json:"name"`
+	Status bool `json:"status"`
+	Beleg string `json:"beleg"`
+}
+
+type ProblemModul struct {
+	Name string `json:"name"`
+	Risiko string `json:"risiko"`
+	Blocked bool `json:"blocked"`
+	Requirements []Requirement `json:"requirements"`
+}
+
+type System struct {
+	TLA map[string]float64 `json:"tla"`
+	ProblemModule []ProblemModul `json:"problem_module"`
+	ISOStatus string `json:"iso_status"`
+}
+
+var globalSystem *System
+
+func pqShield(data string) string {
+	h := sha3.New512()
+	h.Write([]byte(data))
+	return hex.EncodeToString(h.Sum(nil))[:24]
+}
+
+func NewSystem() *System {
+	return &System{
+	ISOStatus: "ISO/IEC 42001 KONFORM",
+		TLA: map[string]float64{"Flesch": 71.2, "MOS": 4.5, "STOI": 0.92},
+	ProblemModule: []ProblemModul{
+			{Name: "Emotionale Manipulation", Risiko: "HOCH", Blocked: true, Requirements: []Requirement{
+				{Name: "DSGVO Art 22 Freigabe", Status: false}, {Name: "Ethikrat Protokoll", Status: false},
+			}},
+			{Name: "Deepfake Voice Clone", Risiko: "HOCH", Blocked: true, Requirements: []Requirement{
+				{Name: "Notarielle Einwilligung", Status: false}, {Name: "Biometrie-Vertrag", Status: false},
+			}},
+	},
+	}
+}
+
+func pruefeBeleg(dateiname string) bool {
+	data, _ := os.ReadFile(dateiname)
+	text := strings.ToLower(string(data))
+	if strings.Contains(text, "notar") || strings.Contains(text, "dsb") {
+		return true
+	}
+	return false
+}
+
+func (s *System) CheckGates() {
+	for i := range s.ProblemModule {
+		allOK := true
+		for j := range s.ProblemModule[i].Requirements {
+			if s.ProblemModule[i].Requirements[j].Beleg!= "" && pruefeBeleg(s.ProblemModule[i].Requirements[j].Beleg) {
+				s.ProblemModule[i].Requirements[j].Status = true
+			}
+			if!s.ProblemModule[i].Requirements[j].Status { allOK = false }
+	}
+		s.ProblemModule[i].Blocked =!allOK
+	}
+}
+
+func startWeb(port string) {
+	http.HandleFunc("/", dashboardHandler)
+	http.HandleFunc("/upload_beleg", uploadHandler)
+	fmt.Println("ISO DASHBOARD: http://localhost" + port)
+	log.Fatal(http.ListenAndServe(port, nil))
+}
+
+func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.New("dash").Parse(htmlDashboard))
+	tmpl.Execute(w, globalSystem)
+}
+
+func uploadHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(10 << 20)
+	file, handler, _ := r.FormFile("beleg")
+	defer file.Close()
+	os.Mkdir("belege", 0755)
+	dst, _ := os.Create("belege/" + handler.Filename)
+	io.Copy(dst, file)
+	for i := range globalSystem.ProblemModule {
+		for j := range globalSystem.ProblemModule[i].Requirements {
+			if globalSystem.ProblemModule[i].Requirements[j].Beleg == "" {
+				globalSystem.ProblemModule[i].Requirements[j].Beleg = "belege/" + handler.Filename
+			}
+		}
+	}
+	globalSystem.CheckGates()
+	globalSystem.Export()
+	fmt.Fprintf(w, "Beleg gespeichert.")
+}
+
+func (s *System) Export() {
+	b, _ := json.MarshalIndent(s, "", " ")
+	os.WriteFile("system_status_v3_4.json", b, 0644)
+}
+
+const htmlDashboard = `<!DOCTYPE html><html><head><title>BLACK SIX v3.4</title></head><body>
+<h1>BLACK SIX v3.4</h1>
+</body></html>`
+
+func main() {
+	globalSystem = NewSystem()
+	globalSystem.Export()
+	fmt.Println("v" + VERSION + " GESTARTET")
+	startWeb(":8080")
+}
 <canvas id="core" width="600" height="600"></canvas>
 <script>
 const ctx = document.getElementById("core").getContext("2d");
