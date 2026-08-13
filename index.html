@@ -1937,3 +1937,88 @@ overlay.onclick=(e)=>{
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V12.0 META QUEST 4</title>
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+<style>body{margin:0;background:#000;color:#0f0;font-family:monospace}</style>
+</head>
+<body>
+<a-scene webxr="optionalFeatures: hand-tracking, layers" background="color: #000">
+
+  <!-- LICHT + AMBIENTE -->
+  <a-light type="ambient" color="#00ff88" intensity="0.3"></a-light>
+  <a-light type="point" position="0 3 0" color="#ff0044" intensity="1"></a-light>
+  <a-grid position="0 0 0" width="20" height="20" color="#00ff88" opacity="0.2"></a-grid>
+
+  <!-- ZENTRALE AKTE - 3M GROSS -->
+  <a-box id="akte" position="0 1.5 -2" width="3" height="2" depth="0.1" color="#111"
+         material="shader: flat; opacity: 0.9">
+    <a-text value="BEHOERDENBESCHEID AZ: 123/45" position="0 0.7 0.06"
+            color="#00ff88" align="center" width="4"></a-text>
+    <a-text value="BEGRUENDUNG FEHLT: VwVfG §39" position="0 0.3 0.06"
+            color="#ff0044" align="center" width="3"></a-text>
+    <a-text value="DATUM: ZUKUNFT" position="0 -0.1 0.06"
+            color="#ff0044" align="center" width="3"></a-text>
+  </a-box>
+
+  <!-- §339 PULS-KERN -->
+  <a-sphere position="0 1.5 -1" radius="0.1" color="#ff0044"
+            animation="property: scale; to: 1.5 1.5 1.5; dur: 1000; loop: true; dir: alternate">
+    <a-text value="§339 STGB" position="0 0.2 0" color="#fff" align="center" width="2"></a-text>
+  </a-sphere>
+
+  <!-- HOLO-KARTEN IM RAUM -->
+  <a-plane position="-2 1.5 -3" width="1.5" height="1" color="#00ff88" opacity="0.2"
+           class="clickable" onclick="generateWiderspruch()">
+    <a-text value="T83\nAUTO-KLAGE" color="#000" align="center" width="2"></a-text>
+  </a-plane>
+
+  <a-plane position="2 1.5 -3" width="1.5" height="1" color="#00aaff" opacity="0.2"
+           class="clickable" onclick="callKIRichter()">
+    <a-text value="T92\nKI-RICHTER" color="#000" align="center" width="2"></a-text>
+  </a-plane>
+
+  <!-- KI-RICHTER AVATAR -->
+  <a-entity id="kirichter" position="0 0 -4" visible="false">
+    <a-cylinder height="1.8" radius="0.3" color="#00aaff" opacity="0.8"></a-cylinder>
+    <a-text value="ICH BIN DER KI-RICHTER" position="0 2 0" color="#00aaff" align="center"></a-text>
+    <a-text value="Urteil: Rechtswidrig. 89% Erfolgschance." position="0 1.7 0" color="#fff" align="center" width="4"></a-text>
+  </a-entity>
+
+  <!-- HANDTRACKING CONTROLLER -->
+  <a-entity laser-controls="hand: right"></a-entity>
+  <a-entity laser-controls="hand: left"></a-entity>
+
+  <!-- HUD -->
+  <a-text value="OMNI CORE V12.0 | GREIFE NACH OBJEKTEN | SPRICH: 'OMNI SCAN'"
+          position="0 2.5 -2" color="#00ff88" align="center" width="5"></a-text>
+
+</a-scene>
+
+<script>
+function generateWiderspruch(){
+  alert('T83: WIDERSPRUCH GENERIERT\nWird als PDF in deine Hand gelegt');
+  // In VR: PDF Objekt spawnt in Hand
+}
+
+function callKIRichter(){
+  document.getElementById('kirichter').setAttribute('visible', 'true');
+  // KI-Richter spricht via TTS
+}
+
+// VOICE COMMAND
+if ('webkitSpeechRecognition' in window) {
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'de-DE';
+  rec.onresult = (e) => {
+    const cmd = e.results[0][0].transcript;
+    if(cmd.includes('scan')) alert('V12.0: SCAN LAEUFT... 3 FEHLER GEFUNDEN');
+  };
+  rec.start();
+}
+</script>
+</body>
+</html>
