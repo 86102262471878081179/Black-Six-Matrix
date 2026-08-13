@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>OMNI CORE V6.13.4 ENTERPRISE</title>
+<title>OMNI CORE V6.13.5 MIT BÜRGER PORTAL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -18,11 +18,10 @@
 h1{color:var(--brand)} .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .price-card{background:#111;border:1px solid #333;padding:24px;border-radius:12px} .price{font-size:2.5rem;color:var(--brand)}
 .btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold}
-.btn-ok{background:var(--ok)} .btn-danger{background:var(--danger);color:#fff}
-.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4} .modul.active{border-color:var(--ok);opacity:1;background:#0f2f0f}
+.btn-ok{background:var(--ok)} .modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4} .modul.active{border-color:var(--ok);opacity:1;background:#0f2f0f}
 .terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
 input,textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
-.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px} .ai-output{background:#111;padding:15px;border-left:3px solid var(--brand);white-space:pre-wrap}
+.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px} .upload-box{border:2px dashed #333;padding:40px;text-align:center;border-radius:12px}
 </style>
 </head>
 <body>
@@ -31,665 +30,70 @@ input,textarea{width:100%;padding:12px;background:#111;color:var(--text);border:
   <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
   <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
   <button class="nav-btn" onclick="showView('admin',event)">ADMIN</button>
+  <button class="nav-btn" onclick="showView('buerger',event)">BÜRGER PORTAL</button>
   <button class="nav-btn" onclick="showView('api',event)">KI</button>
-  <button class="nav-btn" onclick="showView('batch',event)">BATCH</button>
-</div>
-
-<div class="view active" id="sales">
-  <h1>OMNI CORE V6.13.4</h1>
-  <div class="price-grid">
-    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><button class="btn" onclick="checkout('price_pro_299')">KAUFEN</button></div>
-    <div class="price-card" style="border-color:var(--brand)"><h3>BUSINESS</h3><div class="price">999€</div><button class="btn" onclick="checkout('price_business_999')">KAUFEN</button></div>
-    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><button class="btn" onclick="alert('Kontakt')">DEMO</button></div>
-  </div>
-</div>
-
-<div class="view" id="installer"><h1>INSTALLER</h1><input id="lizenzKey"><button class="btn btn-ok" onclick="aktivieren()">AKTIVIEREN</button><div id="modulGrid"></div></div>
-
-<div class="view" id="admin"><h1>ADMIN</h1><input id="adminPw" type="password" placeholder="Passwort: Odin2026!"><button class="btn" onclick="adminLogin()">LOGIN</button><div id="adminPanel" style="display:none"><div id="kundenTabelle"></div></div></div>
-
-<div class="view" id="api"><h1>KI ANALYSE</h1><textarea id="apiInput" style="height:150px"></textarea><button class="btn" onclick="testAPI()">ANALYSE</button><div id="aiResult" style="display:none"><div class="ai-output" id="aiOutputText"></div><button class="btn" onclick="exportPDF()">PDF</button></div><div class="terminal" id="apiLog"></div></div>
-
-<div class="view" id="batch"><h1>BATCH</h1><input type="file" id="batchFiles" multiple><button class="btn" onclick="startBatch()">START</button><button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">ZIP</button><div class="terminal" id="batchLog"></div></div>
-
-<script>
-const { jsPDF } = window.jspdf; const JSZip = window.JSZip;
-// === HIER DEINE KEYS EINTRAGEN ===
-const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
-const supabase = window.supabase.createClient('https://xxxx.supabase.co','eyJhbG...');
-// ==================================
-let currentLicense=null, batchFiles=[], zip=new JSZip();
-const MODULE=[{id:"v62",name:"WHITE"},{id:"v63",name:"TEAM"},{id:"v64",name:"PORTAL"},{id:"v65",name:"BGH"},{id:"v66",name:"BATCH"},{id:"v67",name:"API"},{id:"v68",name:"KI"}];
-function showView(id,e){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');}
-function checkout(id){stripe.redirectToCheckout({lineItems:[{price:id,quantity:1}],mode:'subscription',successUrl:window.location.href,cancelUrl:window.location.href});}
-async function aktivieren(){const {data}=await supabase.from('licenses').select('*').eq('key',document.getElementById('lizenzKey').value).single();if(data){currentLicense=data;document.getElementById('modulGrid').innerHTML=MODULE.map(m=>`<div class="modul active"><b>${m.name}</b></div>`).join('');}}
-async function adminLogin(){if(document.getElementById('adminPw').value!=='Odin2026!')return alert('FALSCH');document.getElementById('adminPanel').style.display='block';const {data}=await supabase.from('licenses').select('*');document.getElementById('kundenTabelle').innerHTML=`<table>${data.map(l=>`<tr><td>${l.email}</td><td>${l.plan}</td></tr>`).join('')}</table>`;}
-function log(id,m){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
-async function testAPI(){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:document.getElementById('apiInput').value})});const data=await res.json();document.getElementById('aiOutputText').innerText=data.analysis;document.getElementById('aiResult').style.display='block';}
-function exportPDF(){const doc=new jsPDF();doc.text(document.getElementById('aiOutputText').innerText,20,20);doc.save('test.pdf');}
-document.getElementById('batchFiles').onchange=e=>batchFiles=Array.from(e.target.files);
-async function startBatch(){zip=new JSZip();for(let f of batchFiles){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:await f.text()})});const data=await res.json();const pdf=new jsPDF();pdf.text(data.analysis,20,20);zip.file(f.name+'.pdf',pdf.output('blob'));log('batchLog','OK '+f.name)}document.getElementById('downloadZipBtn').style.display='block';}
-async function downloadZip(){const c=await zip.generateAsync({type:"blob"});const a=document.createElement('a');a.href=URL.createObjectURL(c);a.download='batch.zip';a.click();}
-</script>
-</body>
-</html>
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-export default async function handler(req, res) {
-  const { license_key, document_data } = req.body;
-  const { data: license } = await supabase.from('licenses').select('*').eq('key', license_key).single();
-  if(!license) return res.status(403).json({error:'Lizenz ungültig'});
-  const aiText = `WIDERSPRUCH\nZu: ${document_data}\nFehler: §58 VwGO fehlt.\nAntrag: Aufhebung.`;
-  await supabase.from('licenses').update({ credits: license.credits - 1 }).eq('key', license_key);
-  res.status(200).json({ analysis: aiText, credits_remaining: license.credits - 1 });
-}
-import Stripe from 'stripe'; import { createClient } from '@supabase/supabase-js';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-export const config = { api: { bodyParser: false } };
-export default async function handler(req, res) {
-  const buf = await buffer(req); const event = stripe.webhooks.constructEvent(buf, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    await supabase.from('licenses').insert({ key: 'OMNI-BIZ-'+Date.now(), email: session.customer_details.email, plan: 'BUSINESS', modules: ["v62","v63","v64","v65","v66","v67"], credits: 5000, status: 'active' });
-  }
-  res.status(200).json({received:true});
-}
-async function buffer(req){const c=[];for await(const chunk of req){c.push(chunk)}return Buffer.concat(c)}
-import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-export default async function handler(req, res) {
-  await supabase.from('licenses').update({ status: 'cancelled' }).eq('key', req.body.licenseKey);
-  res.status(200).json({ ok: true });
-}
-CREATE TABLE licenses (id uuid primary key default gen_random_uuid(), key text, email text, plan text, modules text[], credits int, status text);
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V6.13.3</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
-*{box-sizing:border-box;font-family:system-ui}
-body{background:#0a0a0a;color:var(--text);margin:0}
-.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
-.nav{display:flex;gap:8px;padding:12px;background:#111;border-bottom:2px solid var(--brand);overflow-x:auto}
-.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px}
-.nav-btn.active{background:var(--brand);color:#000}
-.view{display:none;padding:16px;max-width:1400px;margin:0 auto}
-.view.active{display:block}
-h1{color:var(--brand)} .btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold}
-.terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
-input{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
-table{width:100%;border-collapse:collapse;font-size:12px} th,td{padding:10px;border-bottom:1px solid #222}
-.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px}
-</style>
-</head>
-<body>
-<div class="legal">TEST MODUS | Admin PW: Odin2026!</div>
-
-<div class="nav">
-  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
-  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
-  <button class="nav-btn" onclick="showView('admin',event)">ADMIN</button>
-  <button class="nav-btn" onclick="showView('api',event)">KI</button>
-</div>
-
-<div class="view active" id="sales"><h1>SHOP</h1><p>Test Lizenz: <b>OMNI-TEST-1234-5678</b></p></div>
-
-<div class="view" id="installer">
-  <h1>INSTALLER</h1>
-  <input id="lizenzKey" value="OMNI-TEST-1234-5678">
-  <button class="btn" onclick="aktivieren()">AKTIVIEREN</button>
-  <p id="lizenzStatus"></p>
-</div>
-
-<div class="view" id="admin">
-  <h1>ADMIN DASHBOARD</h1>
-  <input id="adminPw" type="password" placeholder="Passwort: Odin2026!">
-  <button class="btn" onclick="adminLogin()">LOGIN</button>
-  <div id="adminPanel" style="display:none;margin-top:20px">
-    <h3>KUNDEN SIMULATION</h3>
-    <table><tr><th>Email</th><th>Plan</th><th>Credits</th><th>Status</th></tr>
-    <tr><td>test@kanzlei.de</td><td>ENTERPRISE</td><td>99999</td><td><span class="badge">active</span></td></tr>
-    </table>
-    <div class="terminal" id="adminLog">[ADMIN] Eingeloggt<br></div>
-  </div>
-</div>
-
-<div class="view" id="api">
-  <h1>KI ANALYSE</h1>
-  <textarea id="apiInput" style="height:150px"></textarea>
-  <button class="btn" onclick="testAPI()">ANALYSE</button>
-  <div class="terminal" id="apiLog"></div>
-</div>
-
-<script>
-const TEST_LICENSE = {key:"OMNI-TEST-1234-5678",plan:"ENTERPRISE",credits:99999,status:"active"};
-let currentLicense = null;
-
-function showView(id,event){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active'); event.target.classList.add('active');
-}
-function aktivieren(){
-  if(document.getElementById('lizenzKey').value.toUpperCase() === TEST_LICENSE.key){
-    currentLicense = TEST_LICENSE;
-    document.getElementById('lizenzStatus').innerHTML = `<span class="badge">AKTIV: ${currentLicense.plan}</span>`;
-  }
-}
-function adminLogin(){
-  if(document.getElementById('adminPw').value === 'Odin2026!'){
-    document.getElementById('adminPanel').style.display='block';
-    document.getElementById('adminLog').innerHTML += '[OK] Admin Zugriff gewährt<br>';
-  } else { alert('FALSCHES PASSWORT'); }
-}
-function testAPI(){
-  if(!currentLicense) return alert('Erst Lizenz aktivieren');
-  document.getElementById('apiLog').innerHTML += '[KI] Test-Analyse: Alles OK<br>';
-}
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V6.13.1 ENTERPRISE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- CDN MIT INTEGRITY + FALLBACK -->
-<script src="https://js.stripe.com/v3/"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" integrity="sha512-..."></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
-*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto}
-body{background:#0a0a0a;color:var(--text);margin:0}
-.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold;position:sticky;top:0;z-index:100}
-.nav{display:flex;gap:8px;padding:12px;background:#0a0a0a;border-bottom:2px solid var(--brand);overflow-x:auto}
-.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px;white-space:nowrap}
-.nav-btn.active{background:var(--brand);color:#000}
-.view{display:none;padding:16px;max-width:1400px;margin:0 auto}
-.view.active{display:block}
-h1{color:var(--brand);font-size:22px}
-.price-grid{display:grid;grid-template-columns:1fr;gap:16px}
-@media(min-width:768px){.price-grid{grid-template-columns:repeat(3,1fr)}}
-.price-card{background:#111;border:1px solid #333;padding:24px;text-align:center;border-radius:12px}
-.price{font-size:2.5rem;color:var(--brand);font-weight:bold}
-.btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0;font-size:16px}
-.btn:disabled{opacity:0.4;cursor:not-allowed}
-.terminal{background:#000;border:1px solid #333;height:250px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
-input, textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px;font-size:16px}
-</style>
-</head>
-<body>
-<div class="legal">HINWEIS: Software-Tool zur Dokumentenanalyse. Keine Rechtsberatung.</div>
-
-<div class="nav">
-  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
-  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
-  <button class="nav-btn" onclick="showView('admin',event)">ADMIN</button>
-  <button class="nav-btn" onclick="showView('api',event)">KI ANALYSE</button>
-  <button class="nav-btn" onclick="showView('batch',event)">BATCH</button>
-  <button class="nav-btn" onclick="showView('ramicro',event)">RA-MICRO</button>
-</div>
-
-<div class="view active" id="sales">
-  <h1>OMNI CORE V6.13.1</h1>
-  <p>Die KI die 1000 Behörden-Bescheide auf einmal prüft. Mit RA-MICRO Direktimport.</p>
-  <div class="price-grid">
-    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><p>/Monat</p><button class="btn" onclick="alert('Bitte zuerst Keys in index.html eintragen')">LIZENZ KAUFEN</button></div>
-    <div class="price-card" style="border-color:var(--brand)"><h3>BUSINESS</h3><div class="price">999€</div><p>/Monat</p><button class="btn" onclick="alert('Bitte zuerst Keys in index.html eintragen')">LIZENZ KAUFEN</button></div>
-    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Einmalig</p><button class="btn" onclick="alert('Kontakt aufnehmen')">DEMO</button></div>
-  </div>
-  <div id="debugStatus" style="margin-top:20px;padding:15px;background:#111;border-radius:8px"></div>
-</div>
-
-<div class="view" id="installer"><h1>INSTALLER</h1><input id="lizenzKey" placeholder="Lizenzschlüssel"><button class="btn" onclick="aktivieren()">AKTIVIEREN</button><div id="modulGrid"></div></div>
-<div class="view" id="admin"><h1>ADMIN</h1><input id="adminPw" type="password" placeholder="Passwort"><button class="btn" onclick="adminLogin()">LOGIN</button><div id="adminPanel" style="display:none"></div></div>
-<div class="view" id="api"><h1>KI ANALYSE</h1><textarea id="apiInput" style="height:150px"></textarea><button class="btn" onclick="testAPI()">ANALYSE</button><div class="terminal" id="apiLog"></div></div>
-<div class="view" id="batch"><h1>BATCH</h1><div class="terminal" id="batchLog"></div></div>
-<div class="view" id="ramicro"><h1>RA-MICRO</h1><div class="terminal" id="raLog"></div></div>
-
-<script>
-// === 1. CONFIG HIER EINTRAGEN ===
-const CONFIG = {
-  stripe_key: 'pk_test_51OMNI_DEIN_TEST_KEY',
-  supabase_url: 'https://xxxx.supabase.co',
-  supabase_key: 'eyJhbG...'
-};
-// =============================
-
-let stripe, supabaseClient;
-let debug = [];
-
-// SYSTEM CHECK BEIM START
-window.onload = function(){
-  checkSystem();
-}
-
-function checkSystem(){
-  const status = document.getElementById('debugStatus');
-  let html = '<b>SYSTEM CHECK:</b><br>';
-  
-  if(typeof Stripe === 'undefined') html += '❌ Stripe fehlt<br>'; else {html += '✅ Stripe OK<br>'; stripe = Stripe(CONFIG.stripe_key);}
-  if(typeof window.jspdf === 'undefined') html += '❌ jsPDF fehlt<br>'; else html += '✅ jsPDF OK<br>';
-  if(typeof window.supabase === 'undefined') html += '❌ Supabase fehlt<br>'; else {html += '✅ Supabase OK<br>'; supabaseClient = window.supabase.createClient(CONFIG.supabase_url, CONFIG.supabase_key);}
-  if(typeof JSZip === 'undefined') html += '❌ JSZip fehlt<br>'; else html += '✅ JSZip OK<br>';
-  
-  if(CONFIG.stripe_key.includes('DEIN_TEST_KEY')) html += '⚠️ Stripe Key nicht gesetzt!<br>';
-  if(CONFIG.supabase_url.includes('xxxx')) html += '⚠️ Supabase URL nicht gesetzt!<br>';
-  
-  status.innerHTML = html;
-}
-
-function showView(id,event){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// DUMMY FUNKTIONEN DAMIT ES NICHT CRASHT
-function aktivieren(){log('apiLog','Bitte zuerst Supabase Key setzen')}
-function adminLogin(){log('apiLog','Bitte zuerst Supabase Key setzen')}
-function testAPI(){log('apiLog','Backend /api/v6/analyse fehlt noch')}
-function log(id,msg){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+msg+'<br>'}
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V6.13.2 TEST MODE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
-*{box-sizing:border-box;font-family:system-ui}
-body{background:#0a0a0a;color:var(--text);margin:0}
-.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
-.nav{display:flex;gap:8px;padding:12px;background:#111;border-bottom:2px solid var(--brand);overflow-x:auto}
-.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px;white-space:nowrap}
-.nav-btn.active{background:var(--brand);color:#000}
-.view{display:none;padding:16px;max-width:1400px;margin:0 auto}
-.view.active{display:block}
-h1{color:var(--brand);font-size:22px}
-.price-grid{display:grid;grid-template-columns:1fr;gap:16px}
-@media(min-width:768px){.price-grid{grid-template-columns:repeat(3,1fr)}}
-.price-card{background:#111;border:1px solid #333;padding:24px;text-align:center;border-radius:12px}
-.price{font-size:2.5rem;color:var(--brand);font-weight:bold}
-.btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0}
-.btn-ok{background:var(--ok);color:#000}
-.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4}
-.modul.active{border-color:var(--ok);opacity:1;background:#0f2f0f}
-.terminal{background:#000;border:1px solid #333;height:250px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
-input, textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
-.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px;font-size:12px}
-</style>
-</head>
-<body>
-<div class="legal">TEST MODUS AKTIV | HINWEIS: Software-Tool zur Dokumentenanalyse. Keine Rechtsberatung.</div>
-
-<div class="nav">
-  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
-  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
-  <button class="nav-btn" onclick="showView('api',event)">KI ANALYSE</button>
   <button class="nav-btn" onclick="showView('batch',event)">BATCH</button>
 </div>
 
 <!-- SHOP -->
 <div class="view active" id="sales">
-  <h1>OMNI CORE V6.13.2 - TEST MODE</h1>
-  <p style="color:var(--ok)">TEST LIZENZ BEREIT: <b>OMNI-TEST-1234-5678</b> | Credits: 99999</p>
+  <h1>OMNI CORE V6.13.5</h1>
   <div class="price-grid">
-    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><p>Test: OMNI-TEST-1234-5678</p></div>
-    <div class="price-card" style="border-color:var(--brand)"><h3>BUSINESS</h3><div class="price">999€</div><p>Hat Batch + API</p></div>
-    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Hat alles</p></div>
+    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><p>Einzelanalyse</p><button class="btn" onclick="checkout('price_pro_299')">KAUFEN</button></div>
+    <div class="price-card" style="border-color:var(--brand)"><h3>BUSINESS</h3><div class="price">999€</div><p>+ BÜRGER PORTAL</p><button class="btn" onclick="checkout('price_business_999')">KAUFEN</button></div>
+    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Alles + On-Premise</p></div>
   </div>
 </div>
 
 <!-- INSTALLER -->
-<div class="view" id="installer">
-  <h1>LIZENZ AKTIVIERUNG</h1>
-  <input id="lizenzKey" placeholder="Gib ein: OMNI-TEST-1234-5678" value="OMNI-TEST-1234-5678">
-  <button class="btn btn-ok" onclick="aktivieren()">LIZENZ AKTIVIEREN</button>
-  <p id="lizenzStatus"></p>
-  <div id="modulGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px"></div>
+<div class="view" id="installer"><h1>INSTALLER</h1><input id="lizenzKey" placeholder="Lizenzschlüssel"><button class="btn btn-ok" onclick="aktivieren()">AKTIVIEREN</button><p id="lizenzStatus"></p><div id="modulGrid"></div></div>
+
+<!-- ADMIN -->
+<div class="view" id="admin"><h1>ADMIN DASHBOARD</h1><input id="adminPw" type="password" placeholder="Passwort: Odin2026!"><button class="btn" onclick="adminLogin()">LOGIN</button><div id="adminPanel" style="display:none"><h3>Eingehende Bürger-Dokumente</h3><div id="buergerDocs"></div></div></div>
+
+<!-- BÜRGER INFO PLATTFORM V6.5 NEU -->
+<div class="view" id="buerger">
+  <h1>BÜRGER INFO PLATTFORM</h1>
+  <p style="color:#999">Mandanten laden hier ihren Behördenbescheid hoch. Kommt direkt in Ihr Admin.</p>
+  <div class="upload-box">
+    <h3>Dokument hochladen</h3>
+    <input type="file" id="buergerUpload" accept=".pdf,.jpg,.png,.txt">
+    <input id="buergerEmail" placeholder="Ihre E-Mail">
+    <button class="btn" onclick="buergerUpload()">AN KANZLEI SENDEN</button>
+  </div>
+  <div class="terminal" id="buergerLog">[SYSTEM] Portal bereit<br></div>
 </div>
 
-<!-- KI ANALYSE -->
-<div class="view" id="api">
-  <h1>KI ANALYSE - LOKALER TEST</h1>
-  <textarea id="apiInput" placeholder="Behördenbescheid hier rein kopieren..." style="height:150px"></textarea>
-  <button class="btn" onclick="testAPI()">⚡ ANALYSE STARTEN</button>
-  <div id="aiResult" style="display:none">
-    <h3>ERGEBNIS</h3>
-    <div style="background:#111;padding:15px;border-left:3px solid var(--brand);white-space:pre-wrap" id="aiOutputText"></div>
-    <button class="btn" onclick="exportPDF()">📄 ALS PDF EXPORTIEREN</button>
-  </div>
-  <div class="terminal" id="apiLog">[SYSTEM] TEST MODE AKTIV<br>[SYSTEM] Keine Credits werden abgezogen<br></div>
-</div>
+<!-- KI -->
+<div class="view" id="api"><h1>KI ANALYSE</h1><textarea id="apiInput" style="height:150px"></textarea><button class="btn" onclick="testAPI()">ANALYSE</button><div id="aiResult" style="display:none"><div style="background:#111;padding:15px" id="aiOutputText"></div><button class="btn" onclick="exportPDF()">PDF</button></div><div class="terminal" id="apiLog"></div></div>
 
 <!-- BATCH -->
-<div class="view" id="batch">
-  <h1>BATCH VERARBEITUNG TEST</h1>
-  <input type="file" id="batchFiles" multiple accept=".txt">
-  <button class="btn" onclick="startBatch()">BATCH STARTEN</button>
-  <button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">ZIP DOWNLOADEN</button>
-  <div class="terminal" id="batchLog">[SYSTEM] BEREIT<br></div>
-</div>
+<div class="view" id="batch"><h1>BATCH</h1><input type="file" id="batchFiles" multiple><button class="btn" onclick="startBatch()">START</button><button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">ZIP</button><div class="terminal" id="batchLog"></div></div>
 
 <script>
-const { jsPDF } = window.jspdf;
-const JSZip = window.JSZip;
-
-const TEST_LICENSE = {
-  key: "OMNI-TEST-1234-5678",
-  plan: "ENTERPRISE",
-  credits: 99999,
-  modules: ["v62","v63","v64","v65","v66","v67","v68","v691"],
-  status: "active"
-};
-let currentLicense = null;
-let batchFiles = [], zip = new JSZip();
-
-function showView(id,event){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// INSTALLER
-function aktivieren(){
-  const key = document.getElementById('lizenzKey').value.toUpperCase();
-  if(key === TEST_LICENSE.key){
-    currentLicense = TEST_LICENSE;
-    document.getElementById('lizenzStatus').innerHTML = `<span class="badge">LIZENZ AKTIV: ENTERPRISE | Credits: 99999</span>`;
-    renderModule();
-    log('apiLog','[OK] Test-Lizenz aktiviert. Alle Module frei.');
-  } else {
-    document.getElementById('lizenzStatus').innerHTML = `<span style="color:var(--danger)">LIZENZ UNGÜLTIG</span>`;
-  }
-}
-function renderModule(){
-  const MODULE = [
-    {id:"v62", name:"WHITE LABEL"},{id:"v63", name:"TEAM"},{id:"v64", name:"PORTAL"},
-    {id:"v65", name:"BGH DATENBANK"},{id:"v66", name:"BATCH"},{id:"v67", name:"API"},
-    {id:"v68", name:"KI GUTACHTEN"},{id:"v691", name:"BLOCKCHAIN"}
-  ];
-  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`<div class="modul active"><b>${m.name}</b></div>`).join('');
-}
-
-// KI ANALYSE - LOKAL OHNE BACKEND
-function log(id,msg){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+msg+'<br>';document.getElementById(id).scrollTop=9999}
-function testAPI(){
-  if(!currentLicense) return log('apiLog','[FEHLER] Erst Lizenz aktivieren!');
-  const input = document.getElementById('apiInput').value;
-  if(!input) return log('apiLog','[FEHLER] Text eingeben');
-
-  log('apiLog','[KI] Analysiere Dokument...');
-  // MOCK ANTWORT DAMIT ES SOFORT GEHT
-  setTimeout(()=>{
-    const result = `WIDERSPRUCH
-1. FORMELLER FEHLER: Keine Rechtsbehelfsbelehrung gem. §58 VwGO
-2. BEGRÜNDUNG: Bescheid ist unbestimmt §37 VwVfG
-3. ANTRAG: Aufhebung des Bescheids vom 01.08.2026
-
-HINWEIS: Dies ist ein KI-Entwurf. Bitte von Anwalt prüfen lassen.`;
-    document.getElementById('aiOutputText').innerText = result;
-    document.getElementById('aiResult').style.display = 'block';
-    log('apiLog','[OK] Analyse fertig. Credits: 99998');
-  },1000);
-}
-
-async function exportPDF(){
-  const doc = new jsPDF();
-  const text = document.getElementById('aiOutputText').innerText;
-  doc.text(doc.splitTextToSize(text, 170), 20, 20);
-  doc.save('Widerspruch_TEST.pdf');
-  log('apiLog','[EXPORT] PDF heruntergeladen');
-}
-
-// BATCH TEST
-document.getElementById('batchFiles').onchange = e => {batchFiles = Array.from(e.target.files); log('batchLog',`${batchFiles.length} Dateien geladen`)}
-async function startBatch(){
-  if(!currentLicense) return log('batchLog','[FEHLER] Erst Lizenz aktivieren!');
-  zip = new JSZip();
-  for(let i=0; i<batchFiles.length; i++){
-    const file = batchFiles[i];
-    log('batchLog',`[BATCH] Verarbeite ${file.name}...`);
-    const pdfDoc = new jsPDF(); pdfDoc.text('TEST WIDERSPRUCH FÜR '+file.name, 20, 20);
-    zip.file(`Widerspruch_${file.name}.pdf`, pdfDoc.output('blob'));
-  }
-  document.getElementById('downloadZipBtn').style.display='block';
-  log('batchLog','[FERTIG] ZIP bereit');
-}
-async function downloadZip(){
-  const content = await zip.generateAsync({type:"blob"});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(content); a.download = `OMNI_TEST_BATCH.zip`; a.click();
-}
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V6.13.2 ENTERPRISE - TEST MODE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
-*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto}
-body{background:#0a0a0a;color:var(--text);margin:0}
-.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold;position:sticky;top:0;z-index:100}
-.nav{display:flex;gap:8px;padding:12px;background:#111;border-bottom:2px solid var(--brand);overflow-x:auto}
-.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px;white-space:nowrap;font-size:14px}
-.nav-btn.active{background:var(--brand);color:#000}
-.view{display:none;padding:16px;max-width:1400px;margin:0 auto}
-.view.active{display:block;animation:fadeIn 0.3s}
-@keyframes fadeIn {from {opacity: 0;} to {opacity: 1;}}
-h1{color:var(--brand);font-size:22px;margin:10px 0}
-.price-grid{display:grid;grid-template-columns:1fr;gap:16px}
-@media(min-width:768px){.price-grid{grid-template-columns:repeat(3,1fr)}}
-.price-card{background:#111;border:1px solid #333;padding:24px;text-align:center;border-radius:12px}
-.price-card.popular{border-color:var(--brand)}
-.price{font-size:2.5rem;color:var(--brand);font-weight:bold}
-.btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0;font-size:16px}
-.btn:hover{opacity:0.8}
-.btn-ok{background:var(--ok);color:#000}
-.btn-danger{background:var(--danger);color:#fff}
-.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4}
-.modul.active{border-color:var(--ok);opacity:1;background:#0f2f0f}
-.terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:11px;padding:12px;font-family:'Courier New', monospace;color:var(--ok)}
-input, textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px;font-size:16px}
-.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold}
-.ai-output{background:#111;border-left:3px solid var(--brand);padding:15px;margin:15px 0;white-space:pre-wrap;font-size:12px;max-height:400px;overflow-y:auto}
-</style>
-</head>
-<body>
-<div class="legal">TEST MODUS AKTIV | Software-Tool zur Dokumentenanalyse. Keine Rechtsberatung im Sinne RDG.</div>
-
-<div class="nav">
-  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
-  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
-  <button class="nav-btn" onclick="showView('api',event)">KI ANALYSE</button>
-  <button class="nav-btn" onclick="showView('batch',event)">BATCH</button>
-</div>
-
-<!-- VIEW 1: SHOP -->
-<div class="view active" id="sales">
-  <h1>OMNI CORE V6.13.2</h1>
-  <p>Die KI die 1000 Behörden-Bescheide prüft. Exportiert fertige Widersprüche.</p>
-  <p><span class="badge">TEST LIZENZ:</span> <b>OMNI-TEST-1234-5678</b> | Credits: 99999 | Alle Module frei</p>
-  <div class="price-grid">
-    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><p>/Monat</p><ul style="text-align:left;list-style:none;font-size:12px"><li>✓ Einzelanalyse</li><li>✓ 500 Credits</li></ul></div>
-    <div class="price-card popular"><h3>BUSINESS</h3><div class="price">999€</div><p>/Monat</p><ul style="text-align:left;list-style:none;font-size:12px"><li>✓ Batch Verarbeitung</li><li>✓ 5000 Credits</li></ul></div>
-    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Einmalig</p><ul style="text-align:left;list-style:none;font-size:12px"><li>✓ Alles + On-Premise</li><li>✓ Unlimitiert</li></ul></div>
-  </div>
-</div>
-
-<!-- VIEW 2: INSTALLER -->
-<div class="view" id="installer">
-  <h1>LIZENZ AKTIVIERUNG</h1>
-  <input id="lizenzKey" placeholder="Lizenzschlüssel: OMNI-TEST-1234-5678" value="OMNI-TEST-1234-5678">
-  <button class="btn btn-ok" onclick="aktivieren()">LIZENZ AKTIVIEREN</button>
-  <p id="lizenzStatus" style="margin-top:10px"></p>
-  <h3 style="margin-top:20px">AKTIVE MODULE</h3>
-  <div id="modulGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px"></div>
-</div>
-
-<!-- VIEW 3: KI ANALYSE -->
-<div class="view" id="api">
-  <h1>KI DOKUMENTEN ANALYSE</h1>
-  <textarea id="apiInput" placeholder="Fügen Sie hier den Text des Behördenbescheids ein..." style="height:180px"></textarea>
-  <button class="btn" onclick="testAPI()">⚡ ANALYSE STARTEN</button>
-  <div id="aiResult" style="display:none">
-    <h3>ANALYSE ERGEBNIS</h3>
-    <div class="ai-output" id="aiOutputText"></div>
-    <button class="btn" onclick="exportPDF()">📄 ALS PDF EXPORTIEREN</button>
-  </div>
-  <div class="terminal" id="apiLog">[SYSTEM] OMNI CORE V6.13.2 READY<br>[SYSTEM] TEST MODUS: Keine Credits werden abgezogen<br></div>
-</div>
-
-<!-- VIEW 4: BATCH -->
-<div class="view" id="batch">
-  <h1>BATCH VERARBEITUNG</h1>
-  <p style="color:#999;font-size:12px">Lade mehrere.txt Dateien hoch. Jeder Export = 1 PDF</p>
-  <input type="file" id="batchFiles" multiple accept=".txt">
-  <button class="btn" onclick="startBatch()">BATCH STARTEN</button>
-  <button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">📦 ZIP DOWNLOADEN</button>
-  <div class="terminal" id="batchLog">[SYSTEM] BEREIT<br></div>
-</div>
-
-<script>
-const { jsPDF } = window.jspdf;
-const JSZip = window.JSZip;
-
-// TEST LIZENZ - FÜR SOFORT TEST
-const TEST_LICENSE = {
-  key: "OMNI-TEST-1234-5678",
-  plan: "ENTERPRISE",
-  credits: 99999,
-  modules: ["v62","v63","v64","v65","v66","v67","v68","v691"],
-  status: "active"
-};
-let currentLicense = null;
-let batchFiles = [], zip = new JSZip();
-const MODULE_LIST = [
-  {id:"v62", name:"WHITE LABEL"},{id:"v63", name:"TEAM VERWALTUNG"},{id:"v64", name:"MANDANTEN PORTAL"},
-  {id:"v65", name:"BGH DATENBANK"},{id:"v66", name:"BATCH VERARBEITUNG"},{id:"v67", name:"API SCHNITTSTELLE"},
-  {id:"v68", name:"KI GUTACHTEN"},{id:"v691", name:"BLOCKCHAIN SIEGEL"}
+const { jsPDF } = window.jspdf; const JSZip = window.JSZip;
+// === HIER DEINE KEYS EINTRAGEN ===
+const stripe = Stripe('pk_test_DEIN_ECHTER_KEY');
+const supabase = window.supabase.createClient('https://DEINE.supabase.co','DEIN_SERVICE_KEY');
+// ==================================
+let currentLicense=null, batchFiles=[], zip=new JSZip();
+const MODULE=[
+  {id:"v62",name:"WHITE LABEL"},{id:"v63",name:"TEAM"},{id:"v64",name:"BÜRGER PORTAL V6.5"},
+  {id:"v65",name:"BGH"},{id:"v66",name:"BATCH"},{id:"v67",name:"API"},{id:"v68",name:"KI"}
 ];
-
-function showView(id,event){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// INSTALLER
-function aktivieren(){
-  const key = document.getElementById('lizenzKey').value.toUpperCase();
-  if(key === TEST_LICENSE.key){
-    currentLicense = TEST_LICENSE;
-    document.getElementById('lizenzStatus').innerHTML = `<span class="badge">LIZENZ AKTIV: ${currentLicense.plan} | Credits: ${currentLicense.credits}</span>`;
-    renderModule();
-    log('apiLog','[OK] Test-Lizenz aktiviert. Alle Module freigeschaltet.');
-  } else {
-    document.getElementById('lizenzStatus').innerHTML = `<span style="color:var(--danger)">LIZENZSCHLÜSSEL UNGÜLTIG</span>`;
-  }
-}
-function renderModule(){
-  document.getElementById('modulGrid').innerHTML = MODULE_LIST.map(m=>`<div class="modul active"><b>${m.name}</b></div>`).join('');
-}
-
-// KI ANALYSE
-function log(id,msg){
-  const el = document.getElementById(id);
-  el.innerHTML += new Date().toLocaleTimeString() + ' ' + msg + '<br>';
-  el.scrollTop = el.scrollHeight;
-}
-function testAPI(){
-  if(!currentLicense) return log('apiLog','[FEHLER] Bitte zuerst Lizenz aktivieren!');
-  const input = document.getElementById('apiInput').value;
-  if(!input) return log('apiLog','[FEHLER] Bitte Text eingeben');
-
-  log('apiLog','[KI] Analysiere Dokument...');
-  document.getElementById('aiResult').style.display='none';
-
-  // MOCK KI ANTWORT - DAMIT ES OHNE BACKEND LÄUFT
-  setTimeout(()=>{
-    const result = `WIDERSPRUCH GEGEN BEHÖRDENBESCHEID
-
-1. FORMELLER MANGEL §58 VwGO
-Dem Bescheid fehlt die erforderliche Rechtsbehelfsbelehrung.
-
-2. BESTIMMTHEITSMANGEL §37 VwVfG
-Die Begründung ist nicht ausreichend und nicht nachvollziehbar.
-
-3. ANTRAG
-Ich lege Widerspruch ein und beantrage die Aufhebung des Bescheids vom [DATUM].
-
-Mit freundlichen Grüßen
-[NAME]
-
-HINWEIS: Dies ist ein KI-generierter Entwurf. Prüfung durch Rechtsanwalt erforderlich.`;
-
-    document.getElementById('aiOutputText').innerText = result;
-    document.getElementById('aiResult').style.display = 'block';
-    log('apiLog','[OK] Analyse abgeschlossen. Verbleibende Credits: 99998');
-  },1200);
-}
-
-async function exportPDF(){
-  const doc = new jsPDF();
-  const text = document.getElementById('aiOutputText').innerText;
-  doc.setFontSize(12);
-  doc.text(doc.splitTextToSize(text, 170), 20, 20);
-  doc.save('Widerspruch_OMNI_TEST.pdf');
-  log('apiLog','[EXPORT] PDF erfolgreich erstellt');
-}
-
-// BATCH
-document.getElementById('batchFiles').onchange = e => {
-  batchFiles = Array.from(e.target.files);
-  log('batchLog',`${batchFiles.length} Datei(en) geladen`);
-}
-async function startBatch(){
-  if(!currentLicense) return log('batchLog','[FEHLER] Erst Lizenz aktivieren!');
-  if(batchFiles.length === 0) return log('batchLog','[FEHLER] Keine Dateien ausgewählt');
-
-  zip = new JSZip();
-  for(let i=0; i<batchFiles.length; i++){
-    const file = batchFiles[i];
-    log('batchLog',`[BATCH ${i+1}/${batchFiles.length}] Verarbeite ${file.name}...`);
-    const pdfDoc = new jsPDF();
-    pdfDoc.text(`TEST WIDERSPRUCH FÜR: ${file.name}`, 20, 20);
-    pdfDoc.text('Dies ist eine Test-Ausgabe aus OMNI CORE V6.13.2', 20, 30);
-    zip.file(`Widerspruch_${file.name}.pdf`, pdfDoc.output('blob'));
-  }
-  document.getElementById('downloadZipBtn').style.display='block';
-  log('batchLog','[FERTIG] ZIP mit allen PDFs bereit zum Download');
-}
-async function downloadZip(){
-  const content = await zip.generateAsync({type:"blob"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(content);
-  a.download = `OMNI_BATCH_TEST_${Date.now()}.zip`;
-  a.click();
-  log('batchLog','[EXPORT] ZIP heruntergeladen');
-}
+function showView(id,e){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');}
+function checkout(id){stripe.redirectToCheckout({lineItems:[{price:id,quantity:1}],mode:'subscription',successUrl:window.location.href,cancelUrl:window.location.href});}
+async function aktivieren(){const {data}=await supabase.from('licenses').select('*').eq('key',document.getElementById('lizenzKey').value).single();if(data){currentLicense=data;document.getElementById('lizenzStatus').innerHTML=`<span class="badge">AKTIV: ${data.plan}</span>`;document.getElementById('modulGrid').innerHTML=MODULE.map(m=>`<div class="modul ${data.modules.includes(m.id)?'active':''}"><b>${m.name}</b></div>`).join('');}}
+async function adminLogin(){if(document.getElementById('adminPw').value!=='Odin2026!')return alert('FALSCH');document.getElementById('adminPanel').style.display='block';loadBuergerDocs();}
+async function loadBuergerDocs(){const {data}=await supabase.from('buerger_uploads').select('*').order('created_at',{ascending:false});document.getElementById('buergerDocs').innerHTML=data.map(d=>`<div style="background:#111;padding:10px;margin:5px"><b>${d.email}</b><br>${d.filename}</div>`).join('');}
+function log(id,m){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+// BÜRGER UPLOAD V6.5
+async function buergerUpload(){const file=document.getElementById('buergerUpload').files[0];const email=document.getElementById('buergerEmail').value;if(!file||!email)return alert('Datei + Email');await supabase.from('buerger_uploads').insert({email:email,filename:file.name});log('buergerLog',`[OK] ${file.name} an Kanzlei gesendet`);alert('Dokument wurde an Ihre Kanzlei übermittelt');}
+async function testAPI(){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:document.getElementById('apiInput').value})});const data=await res.json();document.getElementById('aiOutputText').innerText=data.analysis;document.getElementById('aiResult').style.display='block';}
+function exportPDF(){const doc=new jsPDF();doc.text(document.getElementById('aiOutputText').innerText,20,20);doc.save('test.pdf');}
+document.getElementById('batchFiles').onchange=e=>batchFiles=Array.from(e.target.files);
+async function startBatch(){zip=new JSZip();for(let f of batchFiles){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:await f.text()})});const data=await res.json();const pdf=new jsPDF();pdf.text(data.analysis,20,20);zip.file(f.name+'.pdf',pdf.output('blob'));log('batchLog','OK '+f.name)}document.getElementById('downloadZipBtn').style.display='block';}
+async function downloadZip(){const c=await zip.generateAsync({type:"blob"});const a=document.createElement('a');a.href=URL.createObjectURL(c);a.download='batch.zip';a.click();}
 </script>
 </body>
 </html>
