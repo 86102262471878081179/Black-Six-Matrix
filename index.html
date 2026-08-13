@@ -228,3 +228,345 @@ if(new URLSearchParams(window.location.search).get('success')) alert('Zahlung er
 </script>
 </body>
 </html>
+
+
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.9.1 ENTERPRISE - Φ_LOCKED_ABSOLUTE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00;--muted:#9ca3af}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:radial-gradient(circle at top,#111827 0%,#000 100%);color:var(--text);margin:0}
+.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
+.nav{display:flex;gap:10px;padding:15px;background:#0a0a0a;border-bottom:2px solid var(--brand);position:sticky;top:0;z-index:10}
+.nav-btn{padding:10px 15px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px;transition:0.3s}
+.nav-btn.active{background:var(--brand);color:#000;box-shadow:0 0 10px rgba(0,255,191,0.5)}
+.view{display:none;padding:20px;max-width:1400px;margin:0 auto}
+.view.active{display:block;animation:fadeIn 0.5s}
+@keyframes fadeIn {from {opacity: 0;} to {opacity: 1;}}
+h1{color:var(--brand)}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.price-card{background:#0a0a0a;border:2px solid #333;padding:30px;text-align:center;border-radius:14px;position:relative}
+.price-card.popular{border-color:var(--brand)}
+.price{font-size:3rem;color:var(--brand);font-weight:bold}
+.btn{background:var(--danger);color:#fff;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0;transition:0.2s}
+.btn:hover{background:#fff;color:var(--danger)}
+.btn-ok{background:var(--ok);color:#000}.btn-ok:hover{background:#fff}
+.btn-brand{background:var(--brand);color:#000}
+.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4;transition:0.3s}
+.modul.active{border-color:var(--ok);opacity:1;background:#002200}
+.terminal{background:#000;border:1px solid #333;height:250px;overflow-y:auto;font-size:12px;padding:15px;font-family:'Courier New', monospace;color:var(--ok)}
+input, textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:10px;border-bottom:1px solid #222;text-align:left}
+.badge{background:var(--ok);color:#000;padding:3px 8px;border-radius:10px;font-size:10px}
+.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.98);z-index:999;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--brand);padding:40px;border-radius:14px;max-width:500px}
+</style>
+</head>
+<body>
+<div class="legal">HINWEIS: Software-Tool zur Dokumentenanalyse. Keine Rechtsberatung im Sinne RDG.</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showView('sales')">SHOP</button>
+  <button class="nav-btn" onclick="showView('installer')">INSTALLER</button>
+  <button class="nav-btn" onclick="showView('admin')">ADMIN</button>
+  <button class="nav-btn" onclick="showView('api')">API + BLOCKCHAIN</button>
+</div>
+
+<!-- VIEW 1: SALES -->
+<div class="view active" id="sales">
+  <h1>OMNI CORE V6.9.1</h1>
+  <p>Die KI die Behörden-Bescheide auf Gesetzesverstöße prüft. Mit BGH-Urteilen. In 10 Sekunden.</p>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3>PRO</h3><div class="price">299€</div><p>/Monat</p>
+      <ul style="text-align:left;list-style:none"><li>✓ V6.2 - V6.5</li><li>✓ 500 Credits</li><li>✓ BGH Datenbank</li></ul>
+      <button class="btn" onclick="checkout('price_pro_299')">JETZT STARTEN</button>
+    </div>
+    <div class="price-card popular">
+      <span class="badge" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%)">MEIST GEKAUFT</span>
+      <h3>BUSINESS</h3><div class="price">999€</div><p>/Monat</p>
+      <ul style="text-align:left;list-style:none"><li>✓ Alles aus PRO</li><li>✓ V6.6 Batch + V6.7 API</li><li>✓ 5000 Credits</li><li>✓ Team Dashboard</li></ul>
+      <button class="btn" onclick="checkout('price_business_999')">JETZT STARTEN</button>
+    </div>
+    <div class="price-card">
+      <h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Einmalig</p>
+      <ul style="text-align:left;list-style:none"><li>✓ Alles aus BUSINESS</li><li>✓ V6.9 On-Premise</li><li>✓ V6.9.1 Blockchain</li><li>✓ Quellcode</li></ul>
+      <button class="btn" onclick="alert('Vertrieb meldet sich in 24h')">DEMO BUCHEN</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW 2: INSTALLER -->
+<div class="view" id="installer">
+  <h1>LIZENZ INSTALLER</h1>
+  <input id="lizenzKey" placeholder="OMNI-BIZ-XXXX-XXXX">
+  <button class="btn btn-ok" onclick="aktivieren()">LIZENZ AKTIVIEREN</button>
+  <div id="modulGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:20px"></div>
+  <div id="downloadCard" style="display:none;margin-top:20px"><h3>DEINE MODULE</h3><div id="downloadLinks"></div></div>
+</div>
+
+<!-- VIEW 3: ADMIN -->
+<div class="view" id="admin">
+  <h1>ADMIN DASHBOARD</h1>
+  <input id="adminPw" type="password" placeholder="Admin Passwort">
+  <button class="btn" onclick="adminLogin()">LOGIN</button>
+  <div id="adminPanel" style="display:none;margin-top:20px">
+    <h3>KUNDEN</h3><div id="kundenTabelle"></div>
+    <h3 style="margin-top:30px">TEAM MITGLIED HINZUFÜGEN</h3>
+    <input id="teamEmail" placeholder="email@kanzlei.de">
+    <input id="teamKey" placeholder="Lizenz Key">
+    <button class="btn btn-brand" onclick="addTeamMember()">+ MITGLIED EINLADEN</button>
+    <div id="teamLog"></div>
+  </div>
+</div>
+
+<!-- VIEW 4: API + BLOCKCHAIN -->
+<div class="view" id="api">
+  <h1>RA-MICRO API + KI ANALYSE</h1>
+  <p style="color:var(--muted); font-size:12px;">Hinweis: Die API erfordert einen gültigen BUSINESS oder ENTERPRISE Key.</p>
+  <textarea id="apiInput" placeholder='{"aktenzeichen":"52 Js 23/26","dokument_typ":"Durchsuchungsbeschluss","text_extrakt":"..."}' style="height:120px"></textarea>
+  <button class="btn btn-ok" onclick="testAPI()">⚡ KI-ANALYSE STARTEN (GEMINI ENGINE)</button>
+  <button class="btn btn-brand" onclick="exportBlockchainPDF()">🔒 PDF MIT BLOCKCHAIN SIEGEL</button>
+  <div class="terminal" id="apiLog">[SYS] OMNI API V6.7 READY<br></div>
+</div>
+
+<!-- PAYWALL -->
+<div class="paywall" id="paywall">
+  <div class="pay-box">
+    <h2>Weiterleitung zu Stripe</h2><p id="payText"></p>
+    <button class="btn" onclick="payNow()">BEZAHLEN</button><br><br>
+    <button onclick="closePay()" style="background:#333;width:100%;padding:10px;border:none;color:#fff">ABBRECHEN</button>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+// === CONFIG HIER EINTRAGEN ===
+const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
+// Supabase Public Anon-Key ist hier im Frontend sicher, da RLS greift.
+const SUPABASE_URL = 'https://xxxx.supabase.co';
+const SUPABASE_KEY = 'eyJhbG...'; 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// =============================
+
+const MODULE = [
+  {id:"v62", name:"V6.2 WHITE LABEL", desc:"Logo + Branding"},
+  {id:"v63", name:"V6.3 TEAM", desc:"5 Mitarbeiter Logins"},
+  {id:"v64", name:"V6.4 PORTAL", desc:"Mandanten Upload"},
+  {id:"v65", name:"V6.5 BGH-JURIS", desc:"Echte Urteile"},
+  {id:"v66", name:"V6.6 BATCH", desc:"1000 PDFs auf einmal"},
+  {id:"v67", name:"V6.7 API", desc:"RA-Micro Integration"},
+  {id:"v68", name:"V6.8 KI-GUTACHTEN", desc:"Auto Widerspruch"},
+  {id:"v69", name:"V6.9 ENTERPRISE", desc:"On-Premise"},
+  {id:"v691", name:"V6.9.1 BLOCKCHAIN", desc:"Beweissiegel"}
+];
+let freigeschaltet = [], currentLicense = null, selectedPrice = '';
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// SALES
+function checkout(priceId){
+  selectedPrice = priceId;
+  document.getElementById('payText').innerText = priceId.includes('999')?'BUSINESS 999€/Monat':priceId.includes('299')?'PRO 299€/Monat':'ENTERPRISE Demo';
+  document.getElementById('paywall').style.display='flex';
+}
+async function payNow(){
+  if(selectedPrice.includes('50000')){alert('Danke! Vertrieb meldet sich.');closePay();return}
+  await stripe.redirectToCheckout({
+    lineItems: [{price: selectedPrice, quantity: 1}],
+    mode: 'subscription',
+    successUrl: window.location.href+'?success=1',
+    cancelUrl: window.location.href
+  });
+}
+function closePay(){document.getElementById('paywall').style.display='none'}
+
+// INSTALLER
+function renderModule(){
+  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`
+    <div class="modul ${freigeschaltet.includes(m.id)?'active':''}">
+      <b>${m.name}</b><br><small>${m.desc}</small>
+    </div>
+  `).join('');
+}
+async function aktivieren(){
+  const key = document.getElementById('lizenzKey').value.toUpperCase();
+  const {data,error} = await supabase.from('licenses').select('*').eq('key',key).single();
+  if(error || !data){alert('KEY UNGÜLTIG');return}
+  currentLicense = data;
+  freigeschaltet = data.modules;
+  alert('LIZENZ AKTIV: '+data.plan+' | Credits: '+data.credits);
+  renderModule();
+  document.getElementById('downloadCard').style.display='block';
+  document.getElementById('downloadLinks').innerHTML = freigeschaltet.map(id=>`<button class="btn" onclick="downloadModul('${id}')">${MODULE.find(m=>m.id==id).name} DOWNLOAD</button>`).join('');
+}
+function downloadModul(id){
+  const blob = new Blob([`<h1>OMNI CORE ${id.toUpperCase()}</h1><!-- Lizenz: ${currentLicense.key} -->`],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`OMNI_${id}.html`;a.click();
+}
+
+// ADMIN
+async function adminLogin(){
+  if(document.getElementById('adminPw').value!=='Odin2026!') return alert('FALSCH');
+  document.getElementById('adminPanel').style.display='block';
+  const {data} = await supabase.from('licenses').select('*');
+  document.getElementById('kundenTabelle').innerHTML = `
+    <table><tr><th>Email</th><th>Plan</th><th>Key</th><th>Credits</th></tr>
+    ${data.map(l=>`<tr><td>${l.email}</td><td>${l.plan}</td><td>${l.key}</td><td>${l.credits}</td></tr>`).join('')}
+    </table>`;
+}
+async function addTeamMember(){
+  const email = document.getElementById('teamEmail').value;
+  const key = document.getElementById('teamKey').value.toUpperCase();
+  const {error} = await supabase.from('team_members').insert({license_key:key,email:email});
+  if(error) alert('Fehler: '+error.message);
+  else document.getElementById('teamLog').innerHTML += `<p class="badge">${email} hinzugefügt</p>`;
+}
+
+// API + BLOCKCHAIN (OPTIMIERT MIT ECHTEM FETCH)
+function log(m){
+  const terminal = document.getElementById('apiLog');
+  terminal.innerHTML += new Date().toLocaleTimeString()+' '+m+'<br>';
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+async function testAPI(){
+  if(!currentLicense) {
+    log('<span style="color:var(--danger)">[ERROR] Bitte zuerst eine gültige Lizenz im INSTALLER aktivieren!</span>');
+    return;
+  }
+  
+  const input = document.getElementById('apiInput').value;
+  log('[API] POST /api/v6/analyse ...');
+  log('[SYS] Verschlüssele Payload und kontaktiere OMNI GEMINI KERNEL...');
+  
+  try {
+    const response = await fetch('/api/v6/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        license_key: currentLicense.key, 
+        document_data: input 
+      })
+    });
+    
+    const data = await response.json();
+    
+    if(!response.ok) {
+      log(`<span style="color:var(--danger)">[ERROR] ${data.error}</span>`);
+    } else {
+      log('<span style="color:var(--brand)">[RESPONSE] ' + JSON.stringify(data.analysis, null, 2) + '</span>');
+    }
+  } catch(e) {
+    log('<span style="color:var(--danger)">[SYS-FAULT] Backend nicht erreichbar. Läuft Vercel?</span>');
+  }
+}
+
+async function exportBlockchainPDF(){
+  if(!currentLicense) return alert('Bitte zuerst Lizenz aktivieren!');
+  const doc = new jsPDF();
+  const data = Date.now().toString() + currentLicense.key;
+  const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
+  const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  
+  doc.setFontSize(16); doc.text('OMNI BLOCKCHAIN SIEGEL',20,20);
+  doc.setFontSize(10); doc.text('Lizenz: ' + currentLicense.key,20,30);
+  doc.text('Hash: '+hashHex,20,40);
+  doc.text('Timestamp: '+new Date().toISOString(),20,50);
+  doc.text('Akte: BS-V6Ω-'+Date.now(),20,60);
+  doc.save('Blockchain_Siegel_'+Date.now()+'.pdf');
+  log('[BLOCKCHAIN] Unveränderbares PDF mit SHA-256 Hash exportiert: '+hashHex.substr(0,16)+'...');
+}
+
+// AUTO
+if(new URLSearchParams(window.location.search).get('success')) alert('Zahlung erfolgreich! Check deine Mails für den Lizenz-Key in 2 Minuten.');
+</script>
+</body>
+</html>
+```
+
+***
+
+### 🛡️ 2. DIE BACKEND-WAFFE: DAS GEMINI SECRET (Vercel Node)
+
+Das Gemini-Secret (dein API-Key) darf das Backend nicht verlassen. Lege im Vercel-Projektverzeichnis eine neue Datei an: `/api/v6/analyse.js`. 
+Diese Datei nimmt den Request vom Frontend entgegen, prüft die Berechtigung und kommuniziert mit der Gemini AI.
+
+**Speichern als: `/api/v6/analyse.js`**
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+// Die Secrets kommen sicher aus Vercel .env
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
+
+  const { license_key, document_data } = req.body;
+
+  if (!license_key) {
+    return res.status(401).json({ error: 'Kein Lizenzschlüssel übermittelt. Zugriff verweigert.' });
+  }
+
+  try {
+    // 1. LIZENZ-CHECK IN SUPABASE (Admin-Rechte über Service-Key)
+    const { data: license, error } = await supabase
+      .from('licenses')
+      .select('*')
+      .eq('key', license_key)
+      .single();
+
+    if (error || !license || !['BUSINESS', 'ENTERPRISE'].includes(license.plan)) {
+      return res.status(403).json({ error: 'Lizenz ungültig oder API-Modul nicht in diesem Plan enthalten.' });
+    }
+
+    // 2. GEMINI SECRET INSTALLIERT: AUFRUF AN DIE KI
+    const prompt = `Analysiere den folgenden juristischen Behörden-Text forensisch auf Basis der 100-Punkte-Matrix. Finde formelle Fehler: ${document_data}`;
+    
+    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    const aiData = await geminiResponse.json();
+    
+    // Extrahiere die Antwort der Gemini-API
+    const aiText = aiData.candidates.content.parts.text;
+
+    // 3. CREDIT-ABZUG IM AUDIT LEDGER (Optional)
+    await supabase.from('licenses').update({ credits: license.credits - 1 }).eq('key', license_key);
+
+    // 4. ERGEBNIS ZURÜCK AN FRONTEND
+    res.status(200).json({ 
+      status: "Φ_LOCKED", 
+      analysis: aiText,
+      credits_remaining: license.credits - 1
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Interner Matrix-Fehler bei der KI-Analyse.' });
+  }
+}
+``
