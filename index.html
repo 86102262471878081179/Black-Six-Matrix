@@ -2,6 +2,202 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<title>OMNI CORE V6.13.4 ENTERPRISE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui} body{background:#0a0a0a;color:var(--text);margin:0}
+.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
+.nav{display:flex;gap:8px;padding:12px;background:#111;border-bottom:2px solid var(--brand);overflow-x:auto}
+.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px}
+.nav-btn.active{background:var(--brand);color:#000} .view{display:none;padding:16px} .view.active{display:block}
+h1{color:var(--brand)} .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.price-card{background:#111;border:1px solid #333;padding:24px;border-radius:12px} .price{font-size:2.5rem;color:var(--brand)}
+.btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold}
+.btn-ok{background:var(--ok)} .btn-danger{background:var(--danger);color:#fff}
+.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4} .modul.active{border-color:var(--ok);opacity:1;background:#0f2f0f}
+.terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
+input,textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
+.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px} .ai-output{background:#111;padding:15px;border-left:3px solid var(--brand);white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="legal">Software-Tool zur Dokumentenanalyse. Keine Rechtsberatung.</div>
+<div class="nav">
+  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
+  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
+  <button class="nav-btn" onclick="showView('admin',event)">ADMIN</button>
+  <button class="nav-btn" onclick="showView('api',event)">KI</button>
+  <button class="nav-btn" onclick="showView('batch',event)">BATCH</button>
+</div>
+
+<div class="view active" id="sales">
+  <h1>OMNI CORE V6.13.4</h1>
+  <div class="price-grid">
+    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><button class="btn" onclick="checkout('price_pro_299')">KAUFEN</button></div>
+    <div class="price-card" style="border-color:var(--brand)"><h3>BUSINESS</h3><div class="price">999€</div><button class="btn" onclick="checkout('price_business_999')">KAUFEN</button></div>
+    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><button class="btn" onclick="alert('Kontakt')">DEMO</button></div>
+  </div>
+</div>
+
+<div class="view" id="installer"><h1>INSTALLER</h1><input id="lizenzKey"><button class="btn btn-ok" onclick="aktivieren()">AKTIVIEREN</button><div id="modulGrid"></div></div>
+
+<div class="view" id="admin"><h1>ADMIN</h1><input id="adminPw" type="password" placeholder="Passwort: Odin2026!"><button class="btn" onclick="adminLogin()">LOGIN</button><div id="adminPanel" style="display:none"><div id="kundenTabelle"></div></div></div>
+
+<div class="view" id="api"><h1>KI ANALYSE</h1><textarea id="apiInput" style="height:150px"></textarea><button class="btn" onclick="testAPI()">ANALYSE</button><div id="aiResult" style="display:none"><div class="ai-output" id="aiOutputText"></div><button class="btn" onclick="exportPDF()">PDF</button></div><div class="terminal" id="apiLog"></div></div>
+
+<div class="view" id="batch"><h1>BATCH</h1><input type="file" id="batchFiles" multiple><button class="btn" onclick="startBatch()">START</button><button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">ZIP</button><div class="terminal" id="batchLog"></div></div>
+
+<script>
+const { jsPDF } = window.jspdf; const JSZip = window.JSZip;
+// === HIER DEINE KEYS EINTRAGEN ===
+const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
+const supabase = window.supabase.createClient('https://xxxx.supabase.co','eyJhbG...');
+// ==================================
+let currentLicense=null, batchFiles=[], zip=new JSZip();
+const MODULE=[{id:"v62",name:"WHITE"},{id:"v63",name:"TEAM"},{id:"v64",name:"PORTAL"},{id:"v65",name:"BGH"},{id:"v66",name:"BATCH"},{id:"v67",name:"API"},{id:"v68",name:"KI"}];
+function showView(id,e){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');}
+function checkout(id){stripe.redirectToCheckout({lineItems:[{price:id,quantity:1}],mode:'subscription',successUrl:window.location.href,cancelUrl:window.location.href});}
+async function aktivieren(){const {data}=await supabase.from('licenses').select('*').eq('key',document.getElementById('lizenzKey').value).single();if(data){currentLicense=data;document.getElementById('modulGrid').innerHTML=MODULE.map(m=>`<div class="modul active"><b>${m.name}</b></div>`).join('');}}
+async function adminLogin(){if(document.getElementById('adminPw').value!=='Odin2026!')return alert('FALSCH');document.getElementById('adminPanel').style.display='block';const {data}=await supabase.from('licenses').select('*');document.getElementById('kundenTabelle').innerHTML=`<table>${data.map(l=>`<tr><td>${l.email}</td><td>${l.plan}</td></tr>`).join('')}</table>`;}
+function log(id,m){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+async function testAPI(){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:document.getElementById('apiInput').value})});const data=await res.json();document.getElementById('aiOutputText').innerText=data.analysis;document.getElementById('aiResult').style.display='block';}
+function exportPDF(){const doc=new jsPDF();doc.text(document.getElementById('aiOutputText').innerText,20,20);doc.save('test.pdf');}
+document.getElementById('batchFiles').onchange=e=>batchFiles=Array.from(e.target.files);
+async function startBatch(){zip=new JSZip();for(let f of batchFiles){const res=await fetch('/api/v6/analyse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:currentLicense.key,document_data:await f.text()})});const data=await res.json();const pdf=new jsPDF();pdf.text(data.analysis,20,20);zip.file(f.name+'.pdf',pdf.output('blob'));log('batchLog','OK '+f.name)}document.getElementById('downloadZipBtn').style.display='block';}
+async function downloadZip(){const c=await zip.generateAsync({type:"blob"});const a=document.createElement('a');a.href=URL.createObjectURL(c);a.download='batch.zip';a.click();}
+</script>
+</body>
+</html>
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+export default async function handler(req, res) {
+  const { license_key, document_data } = req.body;
+  const { data: license } = await supabase.from('licenses').select('*').eq('key', license_key).single();
+  if(!license) return res.status(403).json({error:'Lizenz ungültig'});
+  const aiText = `WIDERSPRUCH\nZu: ${document_data}\nFehler: §58 VwGO fehlt.\nAntrag: Aufhebung.`;
+  await supabase.from('licenses').update({ credits: license.credits - 1 }).eq('key', license_key);
+  res.status(200).json({ analysis: aiText, credits_remaining: license.credits - 1 });
+}
+import Stripe from 'stripe'; import { createClient } from '@supabase/supabase-js';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+export const config = { api: { bodyParser: false } };
+export default async function handler(req, res) {
+  const buf = await buffer(req); const event = stripe.webhooks.constructEvent(buf, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    await supabase.from('licenses').insert({ key: 'OMNI-BIZ-'+Date.now(), email: session.customer_details.email, plan: 'BUSINESS', modules: ["v62","v63","v64","v65","v66","v67"], credits: 5000, status: 'active' });
+  }
+  res.status(200).json({received:true});
+}
+async function buffer(req){const c=[];for await(const chunk of req){c.push(chunk)}return Buffer.concat(c)}
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+export default async function handler(req, res) {
+  await supabase.from('licenses').update({ status: 'cancelled' }).eq('key', req.body.licenseKey);
+  res.status(200).json({ ok: true });
+}
+CREATE TABLE licenses (id uuid primary key default gen_random_uuid(), key text, email text, plan text, modules text[], credits int, status text);
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.13.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:#0a0a0a;color:var(--text);margin:0}
+.legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
+.nav{display:flex;gap:8px;padding:12px;background:#111;border-bottom:2px solid var(--brand);overflow-x:auto}
+.nav-btn{padding:10px 16px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px}
+.nav-btn.active{background:var(--brand);color:#000}
+.view{display:none;padding:16px;max-width:1400px;margin:0 auto}
+.view.active{display:block}
+h1{color:var(--brand)} .btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold}
+.terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:11px;padding:12px;font-family:monospace;color:var(--ok)}
+input{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12px} th,td{padding:10px;border-bottom:1px solid #222}
+.badge{background:var(--ok);color:#000;padding:4px 8px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="legal">TEST MODUS | Admin PW: Odin2026!</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showView('sales',event)">SHOP</button>
+  <button class="nav-btn" onclick="showView('installer',event)">INSTALLER</button>
+  <button class="nav-btn" onclick="showView('admin',event)">ADMIN</button>
+  <button class="nav-btn" onclick="showView('api',event)">KI</button>
+</div>
+
+<div class="view active" id="sales"><h1>SHOP</h1><p>Test Lizenz: <b>OMNI-TEST-1234-5678</b></p></div>
+
+<div class="view" id="installer">
+  <h1>INSTALLER</h1>
+  <input id="lizenzKey" value="OMNI-TEST-1234-5678">
+  <button class="btn" onclick="aktivieren()">AKTIVIEREN</button>
+  <p id="lizenzStatus"></p>
+</div>
+
+<div class="view" id="admin">
+  <h1>ADMIN DASHBOARD</h1>
+  <input id="adminPw" type="password" placeholder="Passwort: Odin2026!">
+  <button class="btn" onclick="adminLogin()">LOGIN</button>
+  <div id="adminPanel" style="display:none;margin-top:20px">
+    <h3>KUNDEN SIMULATION</h3>
+    <table><tr><th>Email</th><th>Plan</th><th>Credits</th><th>Status</th></tr>
+    <tr><td>test@kanzlei.de</td><td>ENTERPRISE</td><td>99999</td><td><span class="badge">active</span></td></tr>
+    </table>
+    <div class="terminal" id="adminLog">[ADMIN] Eingeloggt<br></div>
+  </div>
+</div>
+
+<div class="view" id="api">
+  <h1>KI ANALYSE</h1>
+  <textarea id="apiInput" style="height:150px"></textarea>
+  <button class="btn" onclick="testAPI()">ANALYSE</button>
+  <div class="terminal" id="apiLog"></div>
+</div>
+
+<script>
+const TEST_LICENSE = {key:"OMNI-TEST-1234-5678",plan:"ENTERPRISE",credits:99999,status:"active"};
+let currentLicense = null;
+
+function showView(id,event){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); event.target.classList.add('active');
+}
+function aktivieren(){
+  if(document.getElementById('lizenzKey').value.toUpperCase() === TEST_LICENSE.key){
+    currentLicense = TEST_LICENSE;
+    document.getElementById('lizenzStatus').innerHTML = `<span class="badge">AKTIV: ${currentLicense.plan}</span>`;
+  }
+}
+function adminLogin(){
+  if(document.getElementById('adminPw').value === 'Odin2026!'){
+    document.getElementById('adminPanel').style.display='block';
+    document.getElementById('adminLog').innerHTML += '[OK] Admin Zugriff gewährt<br>';
+  } else { alert('FALSCHES PASSWORT'); }
+}
+function testAPI(){
+  if(!currentLicense) return alert('Erst Lizenz aktivieren');
+  document.getElementById('apiLog').innerHTML += '[KI] Test-Analyse: Alles OK<br>';
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
 <title>OMNI CORE V6.13.1 ENTERPRISE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- CDN MIT INTEGRITY + FALLBACK -->
