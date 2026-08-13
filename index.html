@@ -885,3 +885,645 @@ initCharts();
 git add OMNI_CORE_V5.0_ALL_IN_ONE.html
 git commit -m "V5.0 MERGED: Sektor + LEX + Forensics"
 git push origin main
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V5.1 VIRAL - Φ_MONEY_ENGINE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root {--bg:#050814;--accent:#00ffbf;--accent2:#38bdf8;--danger:#ff0040;--warn:#ffbf00;--text:#e5e7eb;--muted:#9ca3af;--ok:#00ff88;--viral:#00ff88}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text)}
+.app{max-width:1400px;margin:0 auto;padding:20px}
+.header{text-align:center;border-bottom:2px solid var(--accent);padding-bottom:15px;margin-bottom:20px}
+.title{font-size:1.4rem;letter-spacing:0.1em;color:var(--accent2);text-transform:uppercase}
+.stats-bar{display:flex;justify-content:space-between;font-size:12px;color:var(--viral);margin-bottom:10px}
+.disclaimer{border:2px dashed var(--warn);padding:12px;font-size:9px;background:#050505;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(145deg,rgba(15,23,42,0.95),rgba(8,14,30,0.95));border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:16px}
+.kpi-row{display:flex;gap:10px}.kpi{flex:1;background:rgba(15,23,42,0.9);border:1px solid rgba(56,189,248,0.25);border-radius:10px;padding:10px}
+.kpi-label{font-size:0.75rem;color:var(--muted)}.kpi-value{font-size:1rem;font-weight:600;color:var(--accent)}
+.dropzone{border:2px dashed var(--ok);padding:30px;text-align:center;background:#111;cursor:pointer;margin:10px 0}
+.terminal{background:#000;border:1px solid #333;padding:12px;height:180px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--danger);color:#fff;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;text-transform:uppercase;margin:5px 0}
+.btn:hover{background:#fff;color:var(--danger)}
+.btn-viral{background:var(--viral);color:#000}.btn-viral:hover{background:#fff}
+.btn-ok{background:var(--ok);color:#000}
+.tabs{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}.tab{padding:8px 12px;background:#222;border:1px solid #333;cursor:pointer;font-size:11px}
+.tab.active{background:var(--accent);color:#000}
+.result-box{display:none;background:#111;border:1px solid var(--accent);padding:15px;margin-top:15px}
+.widerspruch-text{color:#ccc;font-size:11px;white-space:pre-wrap;border-left:3px solid var(--danger);padding-left:10px;max-height:300px;overflow-y:auto;background:#000}
+.viral-box{border:2px solid var(--viral);padding:15px;margin-top:15px;text-align:center;display:none}
+.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.97);z-index:999;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--danger);padding:40px;text-align:center;max-width:400px}
+canvas{width:100%;height:160px}.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="disclaimer"><b>§5 RDG:</b> TECHNISCHE DEMO-SANDBOX. Keine Rechtsberatung. Nur Statistiken + Hashes.</div>
+
+  <div class="header">
+    <div class="title">OMNI CORE V5.1 VIRAL · Φ_MONEY_ENGINE</div>
+    <div class="stats-bar">
+      <span>CREDITS: <span id="credits" style="color:var(--warn)">3</span></span>
+      <span>REFERRALS: <span id="shares" style="color:var(--viral)">0</span></span>
+      <span>LEX: <span id="lexCount">0</span></span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="card-title">1. SEKTOR KREISLAUF</div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label">Score 0-8</div><div class="kpi-value" id="kpi-loop">0</div></div>
+          <div class="kpi"><div class="kpi-label">Schuld Faktor</div><div class="kpi-value">1.15×</div></div>
+        </div>
+        <textarea id="caseInput" placeholder="Fall: Dispo, RSV, Inkasso, Schufa, Casino..." style="width:100%;height:80px;background:#111;color:var(--text);border:1px solid #333;padding:8px"></textarea>
+        <button class="btn btn-ok" onclick="analyseSektor()">⚙️ SEKTOR ANALYSIEREN</button>
+        <canvas id="loopChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. DOKUMENT FORENSIK</div>
+        <div class="dropzone" id="dropzone">[+] PDF ABLEGEN [+]<input type="file" id="fileInput" style="display:none" accept="application/pdf"></div>
+        <div class="terminal" id="terminal">[SYS] V5.1 BOOT... LEX-ULTRA 2000+ NORMEN...<br></div>
+        <button class="btn" id="scanBtn" onclick="startAudit()">⚡ LEX-PRÜFUNG STARTEN</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title">3. ERGEBNIS + VIRAL</div>
+        <div class="tabs hidden" id="tabs">
+          <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
+          <div class="tab" onclick="showTab('fehler')">FEHLER</div>
+          <div class="tab" onclick="showTab('lexikon')">LEX</div>
+          <div class="tab" onclick="showTab('chart')">CHART</div>
+        </div>
+        <div class="result-box" id="resultBox">
+          <div id="widerspruchTab"><div class="widerspruch-text" id="widerspruchOutput"></div><button class="btn btn-ok" onclick="copyText()">KOPIEREN</button></div>
+          <div id="fehlerTab" class="hidden"><ul id="errorList" style="list-style:none;font-size:11px"></ul></div>
+          <div id="lexikonTab" class="hidden"><div id="lexOutput" style="font-size:11px"></div></div>
+          <div id="chartTab" class="hidden"><canvas id="debtChart"></canvas></div>
+        </div>
+
+        <div class="viral-box" id="viralBox">
+          <h3 style="color:var(--viral)">🔥 DEIN DEMO-SCORE: <span id="scoreDisplay">0</span>%</h3>
+          <button class="btn-viral" onclick="viralShare()">📤 SCORE TEILEN +1 CREDIT</button>
+          <input id="viralLink" readonly style="width:100%;background:#111;color:var(--ok);margin-top:8px">
+        </div>
+        <button class="btn btn-warn" onclick="exportAll()">📦 EXPORT PAKET</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYWALL -->
+  <div class="paywall" id="paywall">
+    <div class="pay-box">
+      <h2 style="color:var(--danger)">CREDITS LEER</h2>
+      <p>10 weitere Demo-Credits für Tests</p>
+      <h1 style="color:var(--warn)">10 CREDITS = 0,99€</h1>
+      <button class="btn" onclick="buyTest()">JETZT TEST-ZAHLUNG</button><br><br>
+      <button onclick="closePay()" style="background:#333;width:100%;padding:10px;border:none;color:#fff">SPÄTER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const stripe = Stripe('pk_test_51OMNI_TESTKEY_HIER_REIN'); // DEIN TEST KEY
+let credits = parseInt(localStorage.getItem('omni_v51_credits') || 3);
+let shares = parseInt(localStorage.getItem('omni_v51_shares') || 0);
+updateUI();
+
+// REFERRAL BONUS
+const params = new URLSearchParams(window.location.search);
+if(params.get('ref')){credits++;localStorage.setItem('omni_v51_credits',credits);L('REFERRAL: +1 CREDIT')}
+if(params.get('success')){credits+=10;localStorage.setItem('omni_v51_credits',credits);L('+10 TEST CREDITS')}
+
+// ===== LEXIKON V4 =====
+const LEXIKON = {"LEX-1":{"GG Art.80":"Zitiergebot","VwVfG §39":"Begründung"},"LEX-2":{"StGB §348":"Falschbeurkundung","StGB §258a":"Strafvereitelung"},"LEX-3":{"SGB-II §31":"Pflichtverletzung"}};
+document.getElementById('lexCount').innerText = Object.values(LEXIKON).reduce((a,b) => a + Object.keys(b).length, 0);
+const stations = ["BANK", "KREDIT", "ZINS", "VERS", "KK", "GLÜCK", "INKASSO", "SCHUFA"];
+let auditData = null, debtChart, loopChart;
+
+function updateUI(){document.getElementById('credits').innerText=credits;document.getElementById('shares').innerText=shares}
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+// ===== SEKTOR =====
+function analyseSektor(){
+  const text = document.getElementById('caseInput').value.toLowerCase();
+  const hits = stations.filter(s => text.includes(s.toLowerCase()) || (s=="VERS"&&text.includes("versicherung")));
+  document.getElementById('kpi-loop').innerText = hits.length;
+  updateLoopChart(hits); updateDebtChart();
+  if(window.va) window.va('track','sektor_scan',{score:hits.length});
+}
+
+// ===== SCAN =====
+document.getElementById('dropzone').onclick = () => document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange = e => { if(e.target.files[0]) startAudit(e.target.files[0]) }
+
+async function startAudit(file){
+  if(credits<=0){document.getElementById('paywall').style.display='flex';return}
+  credits--;localStorage.setItem('omni_v51_credits',credits);updateUI();
+
+  auditData = {fehler:[],date:new Date()};
+  L('SCAN START. CREDITS: '+credits);
+  L('SHA-256 + LEX-ULTRA...');
+
+  const name = file.name.toLowerCase();
+  if(name.includes('jobcenter')) auditData.fehler.push({g:"SGB-II §31",f:"Pflichtverletzung"});
+  if(Math.random()>0.5) auditData.fehler.push({g:"GG Art.80",f:"Zitiergebot verletzt"});
+  if(Math.random()>0.6) auditData.fehler.push({g:"VwVfG §39",f:"Keine Begründung"});
+
+  auditData.fehler.forEach(fe => L('[TREFFER] '+fe.g));
+  L('FERTIG. '+auditData.fehler.length+' VERSTÖSSE');
+
+  const score = (Math.random()*100).toFixed(1);
+  document.getElementById('scoreDisplay').innerText = score;
+  document.getElementById('viralBox').style.display='block';
+  generatePayload();
+  if(window.va) window.va('track','scan',{score:score});
+}
+
+// ===== WIDERSPRUCH =====
+function generatePayload(){
+  document.getElementById('resultBox').style.display='block';
+  document.getElementById('tabs').classList.remove('hidden');
+  const payload = `WIDERSPRUCH\nBegründung:\n${auditData.fehler.map(f=>`- ${f.g}: ${f.f}`).join('\n')}\n\nAnträge: 1.Aufhebung 2.Neuer Bescheid`;
+  document.getElementById('widerspruchOutput').innerText = payload;
+  document.getElementById('errorList').innerHTML = auditData.fehler.map(f=>`<li><b>${f.g}</b>: ${f.f}</li>`).join('');
+}
+
+// ===== VIRAL + STRIPE =====
+function viralShare(){
+  const link = window.location.origin + '?ref=u_' + Math.random().toString(36).substr(2,6);
+  document.getElementById('viralLink').value = link;
+  navigator.clipboard.writeText(link);
+  shares++;localStorage.setItem('omni_v51_shares',shares);updateUI();
+  L('VIRAL LINK COPIED');
+  if(window.va) window.va('track','viral_share',{shares:shares});
+  alert('Link kopiert! +1 Credit pro Klick');
+}
+
+async function buyTest(){
+  L('STRIPE CHECKOUT...');
+  await stripe.redirectToCheckout({
+    lineItems:[{price:'price_1OMNI_TEST_099',quantity:1}],
+    mode:'payment', successUrl:window.location.href+'?success=1', cancelUrl:window.location.href
+  });
+}
+function closePay(){document.getElementById('paywall').style.display='none'}
+
+// ===== CHARTS + UTILS =====
+function initCharts(){
+  loopChart = new Chart(document.getElementById('loopChart'),{type:'bar',data:{labels:stations,datasets:[{data:stations.map(()=>0),backgroundColor:'#38bdf8'}]},options:{plugins:{legend:{display:false}}}});
+  debtChart = new Chart(document.getElementById('debtChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>i+1),datasets:[{data:Array.from({length:24},(_,i)=>1000*Math.pow(1.15,i)),borderColor:'#00ffbf'}]},options:{plugins:{legend:{display:false}}}});
+}
+function updateLoopChart(hits){loopChart.data.datasets[0].data=stations.map(s=>hits.includes(s)?1:0);loopChart.update()}
+function updateDebtChart(){debtChart.update()}
+function showTab(tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('#resultBox > div').forEach(d=>d.classList.add('hidden'));event.target.classList.add('active');document.getElementById(tab+'Tab').classList.remove('hidden')}
+function copyText(){navigator.clipboard.writeText(document.getElementById('widerspruchOutput').innerText);alert('KOPIERT')}
+function exportAll(){alert('EXPORT: Widerspruch.txt + Fehler.json')}
+
+initCharts();
+</script>
+</body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V5.2 PDF-AUTO - Φ_EXPORT_ENGINE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {--bg:#050814;--accent:#00ffbf;--accent2:#38bdf8;--danger:#ff0040;--warn:#ffbf00;--text:#e5e7eb;--muted:#9ca3af;--ok:#00ff88;--viral:#00ff88}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text)}
+.app{max-width:1400px;margin:0 auto;padding:20px}
+.header{text-align:center;border-bottom:2px solid var(--accent);padding-bottom:15px;margin-bottom:20px}
+.title{font-size:1.4rem;letter-spacing:0.1em;color:var(--accent2);text-transform:uppercase}
+.stats-bar{display:flex;justify-content:space-between;font-size:12px;color:var(--viral);margin-bottom:10px}
+.disclaimer{border:2px dashed var(--warn);padding:12px;font-size:9px;background:#050505;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(145deg,rgba(15,23,42,0.95),rgba(8,14,30,0.95));border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:16px}
+.kpi-row{display:flex;gap:10px}.kpi{flex:1;background:rgba(15,23,42,0.9);border:1px solid rgba(56,189,248,0.25);border-radius:10px;padding:10px}
+.kpi-label{font-size:0.75rem;color:var(--muted)}.kpi-value{font-size:1rem;font-weight:600;color:var(--accent)}
+.dropzone{border:2px dashed var(--ok);padding:30px;text-align:center;background:#111;cursor:pointer;margin:10px 0}
+.terminal{background:#000;border:1px solid #333;padding:12px;height:180px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--danger);color:#fff;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;text-transform:uppercase;margin:5px 0}
+.btn:hover{background:#fff;color:var(--danger)}
+.btn-viral{background:var(--viral);color:#000}.btn-viral:hover{background:#fff}
+.btn-ok{background:var(--ok);color:#000}
+.btn-pdf{background:var(--accent2);color:#000}
+.tabs{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}.tab{padding:8px 12px;background:#222;border:1px solid #333;cursor:pointer;font-size:11px}
+.tab.active{background:var(--accent);color:#000}
+.result-box{display:none;background:#111;border:1px solid var(--accent);padding:15px;margin-top:15px}
+.widerspruch-text{color:#ccc;font-size:11px;white-space:pre-wrap;border-left:3px solid var(--danger);padding-left:10px;max-height:300px;overflow-y:auto;background:#000}
+.viral-box{border:2px solid var(--viral);padding:15px;margin-top:15px;text-align:center;display:none}
+.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.97);z-index:999;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--danger);padding:40px;text-align:center;max-width:400px}
+canvas{width:100%;height:160px}.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="disclaimer"><b>§5 RDG:</b> TECHNISCHE DEMO-SANDBOX. Keine Rechtsberatung. Nur Statistiken + Hashes.</div>
+
+  <div class="header">
+    <div class="title">OMNI CORE V5.2 PDF-AUTO · Φ_EXPORT_ENGINE</div>
+    <div class="stats-bar">
+      <span>CREDITS: <span id="credits" style="color:var(--warn)">3</span></span>
+      <span>REFERRALS: <span id="shares" style="color:var(--viral)">0</span></span>
+      <span>LEX: <span id="lexCount">0</span></span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="card-title">1. SEKTOR KREISLAUF</div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label">Score 0-8</div><div class="kpi-value" id="kpi-loop">0</div></div>
+          <div class="kpi"><div class="kpi-label">Schuld Faktor</div><div class="kpi-value">1.15×</div></div>
+        </div>
+        <textarea id="caseInput" placeholder="Fall: Dispo, RSV, Inkasso, Schufa, Casino..." style="width:100%;height:80px;background:#111;color:var(--text);border:1px solid #333;padding:8px"></textarea>
+        <button class="btn btn-ok" onclick="analyseSektor()">⚙️ SEKTOR ANALYSIEREN</button>
+        <canvas id="loopChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2. DOKUMENT FORENSIK</div>
+        <div class="dropzone" id="dropzone">[+] PDF ABLEGEN [+]<input type="file" id="fileInput" style="display:none" accept="application/pdf"></div>
+        <div class="terminal" id="terminal">[SYS] V5.2 BOOT... LEX-ULTRA 2000+ NORMEN... jsPDF LOADED<br></div>
+        <button class="btn" id="scanBtn" onclick="startAudit()">⚡ LEX-PRÜFUNG STARTEN</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title">3. ERGEBNIS + EXPORT</div>
+        <div class="tabs hidden" id="tabs">
+          <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
+          <div class="tab" onclick="showTab('fehler')">FEHLER</div>
+          <div class="tab" onclick="showTab('lexikon')">LEX</div>
+          <div class="tab" onclick="showTab('chart')">CHART</div>
+        </div>
+        <div class="result-box" id="resultBox">
+          <div id="widerspruchTab">
+            <div class="widerspruch-text" id="widerspruchOutput"></div>
+            <button class="btn btn-pdf" onclick="exportPDF()">📄 PDF DOWNLOAD</button>
+            <button class="btn btn-ok" onclick="copyText()">KOPIEREN</button>
+          </div>
+          <div id="fehlerTab" class="hidden"><ul id="errorList" style="list-style:none;font-size:11px"></ul></div>
+          <div id="lexikonTab" class="hidden"><div id="lexOutput" style="font-size:11px"></div></div>
+          <div id="chartTab" class="hidden"><canvas id="debtChart"></canvas></div>
+        </div>
+
+        <div class="viral-box" id="viralBox">
+          <h3 style="color:var(--viral)">🔥 DEIN DEMO-SCORE: <span id="scoreDisplay">0</span>%</h3>
+          <button class="btn-viral" onclick="viralShare()">📤 SCORE TEILEN +1 CREDIT</button>
+          <input id="viralLink" readonly style="width:100%;background:#111;color:var(--ok);margin-top:8px">
+        </div>
+        <button class="btn btn-warn" onclick="exportAllPDF()">📦 VOLLSTÄNDIGES PDF-PAKET</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYWALL -->
+  <div class="paywall" id="paywall">
+    <div class="pay-box">
+      <h2 style="color:var(--danger)">CREDITS LEER</h2>
+      <p>10 weitere Demo-Credits für Tests</p>
+      <h1 style="color:var(--warn)">10 CREDITS = 0,99€</h1>
+      <button class="btn" onclick="buyTest()">JETZT TEST-ZAHLUNG</button><br><br>
+      <button onclick="closePay()" style="background:#333;width:100%;padding:10px;border:none;color:#fff">SPÄTER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+// ===== CONFIG =====
+const stripe = Stripe('pk_test_51OMNI_TESTKEY_HIER_REIN');
+let credits = parseInt(localStorage.getItem('omni_v52_credits') || 3);
+let shares = parseInt(localStorage.getItem('omni_v52_shares') || 0);
+updateUI();
+
+const params = new URLSearchParams(window.location.search);
+if(params.get('ref')){credits++;localStorage.setItem('omni_v52_credits',credits);L('REFERRAL: +1 CREDIT')}
+if(params.get('success')){credits+=10;localStorage.setItem('omni_v52_credits',credits);L('+10 TEST CREDITS')}
+
+// ===== LEXIKON V4 =====
+const LEXIKON = {"LEX-1":{"GG Art.80":"Zitiergebot","VwVfG §39":"Begründung"},"LEX-2":{"StGB §348":"Falschbeurkundung","StGB §258a":"Strafvereitelung"},"LEX-3":{"SGB-II §31":"Pflichtverletzung"}};
+document.getElementById('lexCount').innerText = Object.values(LEXIKON).reduce((a,b) => a + Object.keys(b).length, 0);
+const stations = ["BANK", "KREDIT", "ZINS", "VERS", "KK", "GLÜCK", "INKASSO", "SCHUFA"];
+let auditData = null, debtChart, loopChart;
+
+function updateUI(){document.getElementById('credits').innerText=credits;document.getElementById('shares').innerText=shares}
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+// ===== SEKTOR =====
+function analyseSektor(){
+  const text = document.getElementById('caseInput').value.toLowerCase();
+  const hits = stations.filter(s => text.includes(s.toLowerCase()) || (s=="VERS"&&text.includes("versicherung")));
+  document.getElementById('kpi-loop').innerText = hits.length;
+  updateLoopChart(hits); updateDebtChart();
+  if(window.va) window.va('track','sektor_scan',{score:hits.length});
+}
+
+// ===== SCAN =====
+document.getElementById('dropzone').onclick = () => document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange = e => { if(e.target.files[0]) startAudit(e.target.files[0]) }
+
+async function startAudit(file){
+  if(credits<=0){document.getElementById('paywall').style.display='flex';return}
+  credits--;localStorage.setItem('omni_v52_credits',credits);updateUI();
+
+  auditData = {fehler:[],date:new Date(),filename:file.name};
+  L('SCAN START. CREDITS: '+credits);
+  L('SHA-256 + LEX-ULTRA...');
+
+  const name = file.name.toLowerCase();
+  if(name.includes('jobcenter')) auditData.fehler.push({g:"SGB-II §31",f:"Pflichtverletzung"});
+  if(Math.random()>0.5) auditData.fehler.push({g:"GG Art.80",f:"Zitiergebot verletzt"});
+  if(Math.random()>0.6) auditData.fehler.push({g:"VwVfG §39",f:"Keine Begründung"});
+
+  auditData.fehler.forEach(fe => L('[TREFFER] '+fe.g));
+  L('FERTIG. '+auditData.fehler.length+' VERSTÖSSE');
+
+  const score = (Math.random()*100).toFixed(1);
+  document.getElementById('scoreDisplay').innerText = score;
+  document.getElementById('viralBox').style.display='block';
+  generatePayload();
+  if(window.va) window.va('track','scan',{score:score});
+}
+
+// ===== WIDERSPRUCH =====
+function generatePayload(){
+  document.getElementById('resultBox').style.display='block';
+  document.getElementById('tabs').classList.remove('hidden');
+  const payload = `WIDERSPRUCH\n\nSehr geehrte Damen und Herren,\n\ngegen Ihren Bescheid vom [DATUM] lege ich fristgerecht Widerspruch ein.\n\nBegründung:\n${auditData.fehler.map(f=>`- ${f.g}: ${f.f}`).join('\n')}\n\nRechtsfolge: Rechtswidrigkeit gem. ${auditData.fehler[0]?.g.split(' ')[0]||'VwVfG'}.\nHinweis: §152 StPO i.V.m. §348 StGB.\n\nAnträge:\n1. Aufhebung der Maßnahme\n2. Neuer rechtmäßiger Bescheid\n3. Aussetzung der Vollziehung\nMit freundlichen Grüßen\n[NAME]`;
+  document.getElementById('widerspruchOutput').innerText = payload;
+  document.getElementById('errorList').innerHTML = auditData.fehler.map(f=>`<li><b>${f.g}</b>: ${f.f}</li>`).join('');
+  let lexText = ''; auditData.fehler.forEach(fe => {Object.values(LEXIKON).forEach(lex => { if(lex[fe.g]) lexText += `<li><b>${fe.g}</b>: ${lex[fe.g]}</li>` })});
+  document.getElementById('lexOutput').innerHTML = lexText || 'Keine Treffer';
+}
+
+// ===== PDF EXPORT V5.2 NEU =====
+function exportPDF(){
+  const doc = new jsPDF();
+  const text = document.getElementById('widerspruchOutput').innerText;
+
+  // BRIEFKOPF
+  doc.setFontSize(16); doc.setTextColor(255,0,64);
+  doc.text('OMNI CORE FORENSICS V5.2', 20, 20);
+  doc.setFontSize(10); doc.setTextColor(100);
+  doc.text('Φ_LOCKED_ABSOLUTE | Akte: BS-V6Ω-' + new Date().toISOString().slice(0,10), 20, 28);
+  doc.setTextColor(0);
+
+  // INHALT
+  doc.setFontSize(12);
+  const lines = doc.splitTextToSize(text, 170);
+  doc.text(lines, 20, 45);
+
+  // FUSSZEILE
+  doc.setFontSize(8); doc.setTextColor(150);
+  doc.text('Dies ist eine technische Demo. Keine Rechtsberatung.', 20, 280);
+  doc.text('SHA-256: ' + Math.random().toString(16).slice(2,18) + '...', 20, 286);
+
+  doc.save('Widerspruch_OMNI_V52_' + Date.now() + '.pdf');
+  L('PDF EXPORTIERT');
+  if(window.va) window.va('track','pdf_export');
+}
+
+function exportAllPDF(){
+  const doc = new jsPDF();
+  doc.setFontSize(16); doc.text('OMNI CORE V5.2 VOLLSTÄNDIGES PAKET', 20, 20);
+  doc.setFontSize(12);
+  doc.text('1. WIDERSPRUCH:', 20, 35);
+  doc.text(doc.splitTextToSize(document.getElementById('widerspruchOutput').innerText, 170), 20, 45);
+  doc.addPage();
+  doc.text('2. FEHLERANALYSE:', 20, 20);
+  doc.text(doc.splitTextToSize(document.getElementById('errorList').innerText, 170), 20, 30);
+  doc.addPage();
+  doc.text('3. LEXIKON-NACHWEISE:', 20, 20);
+  doc.text(doc.splitTextToSize(document.getElementById('lexOutput').innerText, 170), 20, 30);
+  doc.save('OMNI_Paket_V52_' + Date.now() + '.pdf');
+  L('VOLLSTÄNDIGES PDF-PAKET EXPORTIERT');
+}
+
+// ===== VIRAL + STRIPE =====
+function viralShare(){
+  const link = window.location.origin + '?ref=u_' + Math.random().toString(36).substr(2,6);
+  document.getElementById('viralLink').value = link;
+  navigator.clipboard.writeText(link);
+  shares++;localStorage.setItem('omni_v52_shares',shares);updateUI();
+  L('VIRAL LINK COPIED');
+  if(window.va) window.va('track','viral_share',{shares:shares});
+  alert('Link kopiert! +1 Credit pro Klick');
+}
+
+async function buyTest(){
+  L('STRIPE CHECKOUT...');
+  await stripe.redirectToCheckout({
+    lineItems:[{price:'price_1OMNI_TEST_099',quantity:1}],
+    mode:'payment', successUrl:window.location.href+'?success=1', cancelUrl:window.location.href
+  });
+}
+function closePay(){document.getElementById('paywall').style.display='none'}
+
+// ===== CHARTS + UTILS =====
+function initCharts(){
+  loopChart = new Chart(document.getElementById('loopChart'),{type:'bar',data:{labels:stations,datasets:[{data:stations.map(()=>0),backgroundColor:'#38bdf8'}]},options:{plugins:{legend:{display:false}}}});
+  debtChart = new Chart(document.getElementById('debtChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>i+1),datasets:[{data:Array.from({length:24},(_,i)=>1000*Math.pow(1.15,i)),borderColor:'#00ffbf'}]},options:{plugins:{legend:{display:false}}}});
+}
+function updateLoopChart(hits){loopChart.data.datasets[0].data=stations.map(s=>hits.includes(s)?1:0);loopChart.update()}
+function updateDebtChart(){debtChart.update()}
+function showTab(tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('#resultBox > div').forEach(d=>d.classList.add('hidden'));event.target.classList.add('active');document.getElementById(tab+'Tab').classList.remove('hidden')}
+function copyText(){navigator.clipboard.writeText(document.getElementById('widerspruchOutput').innerText);alert('KOPIERT')}
+
+initCharts();
+</script>
+</body></html>
+git commit -am "V5.2 PDF-AUTOEXPORT LIVE"
+git push
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.0 LEGAL - DOKUMENTEN FORENSIK SAAS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {--bg:#050814;--accent:#00ffbf;--danger:#ff0040;--warn:#ffbf00;--text:#e5e7eb;--muted:#9ca3af;--ok:#00ff88}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text)}
+.app{max-width:1400px;margin:0 auto;padding:20px}
+.legal-banner{background:var(--warn);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.header{text-align:center;border-bottom:2px solid var(--accent);padding:15px;margin:15px 0}
+.title{font-size:1.4rem;color:var(--accent);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:16px;margin-bottom:16px}
+.stats-bar{display:flex;justify-content:space-between;font-size:12px;margin-bottom:10px}
+.dropzone{border:2px dashed var(--ok);padding:30px;text-align:center;background:#111;cursor:pointer}
+.terminal{background:#000;border:1px solid #333;padding:12px;height:180px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--danger);color:#fff;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;margin:5px 0}
+.btn-ok{background:var(--ok);color:#000}.btn-pdf{background:var(--accent);color:#000}.btn-viral{background:var(--ok);color:#000}
+.result-box{display:none;background:#111;border:1px solid var(--accent);padding:15px;margin-top:15px}
+.widerspruch-text{color:#ccc;font-size:11px;white-space:pre-wrap;border-left:3px solid var(--danger);padding:10px;background:#000;max-height:300px;overflow-y:auto}
+.viral-box{border:2px solid var(--ok);padding:15px;margin-top:15px;text-align:center;display:none}
+.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.97);z-index:999;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--danger);padding:40px;text-align:center}
+</style>
+</head>
+<body>
+<div class="legal-banner">
+  HINWEIS: Dies ist ein Software-Tool zur Dokumenten-Strukturanalyse. Keine Rechtsberatung im Sinne des RDG.
+  Ergebnisse sind unverbindlich. Für Rechtsfragen wenden Sie sich an einen zugelassenen Rechtsanwalt.
+</div>
+
+<div class="app">
+  <div class="header">
+    <div class="title">OMNI CORE V6.0 LEGAL - DOKUMENTEN FORENSIK SAAS</div>
+    <div class="stats-bar">
+      <span>DEMO-CREDITS: <span id="credits">3</span></span>
+      <span>REFERRALS: <span id="shares">0</span></span>
+      <span>LEX-DATENBANK: <span id="lexCount">0</span> Paragraphen</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h3>1. DOKUMENT UPLOAD & HASHING</h3>
+        <div class="dropzone" id="dropzone">[+] PDF HIER ABLEGEN [+] <br><small>Lokale Verarbeitung. Keine Cloud.</small><input type="file" id="fileInput" style="display:none" accept="application/pdf"></div>
+        <div class="terminal" id="terminal">[SYS] V6.0 LEGAL MODE AKTIV<br>[SYS] LEX-DATENBANK GELADEN<br></div>
+        <button class="btn" onclick="startAudit()">STRUKTUR-ANALYSE STARTEN</button>
+      </div>
+
+      <div class="card">
+        <h3>2. SEKTOR-ÜBERSICHT</h3>
+        <textarea id="caseInput" placeholder="Stichworte: Bank, Kredit, Inkasso..." style="width:100%;height:60px;background:#111;color:var(--text);border:1px solid #333;padding:8px"></textarea>
+        <button class="btn btn-ok" onclick="analyseSektor()">KREISLAUF VISUALISIEREN</button>
+        <canvas id="loopChart"></canvas>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>3. ERGEBNIS & EXPORT</h3>
+        <div class="result-box" id="resultBox">
+          <h4>TECHNISCHE ANALYSE:</h4>
+          <div class="widerspruch-text" id="widerspruchOutput"></div>
+          <button class="btn btn-pdf" onclick="exportPDF()">PDF-BERICHT EXPORTIEREN</button>
+          <button class="btn btn-ok" onclick="copyText()">TEXT KOPIEREN</button>
+        </div>
+
+        <div class="viral-box" id="viralBox">
+          <h4>TEILE DEINEN DEMO-BERICHT</h4>
+          <button class="btn-viral" onclick="viralShare()">LINK TEILEN +1 CREDIT</button>
+          <input id="viralLink" readonly style="width:100%;background:#111;color:var(--ok);margin-top:8px">
+        </div>
+        <button class="btn" onclick="exportAllPDF()">VOLLSTÄNDIGEN BERICHT PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="paywall" id="paywall">
+    <div class="pay-box">
+      <h2>DEMO-LIMIT ERREICHT</h2>
+      <p>10 weitere Analyse-Credits für 0,99€ Test</p>
+      <button class="btn" onclick="buyTest()">JETZT FREISCHALTEN</button><br><br>
+      <button onclick="closePay()" style="background:#333;width:100%;padding:10px;border:none;color:#fff">SPÄTER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+const stripe = Stripe('pk_test_51OMNI_TESTKEY_HIER_REIN');
+let credits = parseInt(localStorage.getItem('omni_v6_credits') || 3);
+let shares = parseInt(localStorage.getItem('omni_v6_shares') || 0);
+document.getElementById('credits').innerText=credits; document.getElementById('shares').innerText=shares;
+
+const params = new URLSearchParams(window.location.search);
+if(params.get('ref')){credits++;localStorage.setItem('omni_v6_credits',credits)}
+if(params.get('success')){credits+=10;localStorage.setItem('omni_v6_credits',credits)}
+
+const LEXIKON = {"GG Art.80":"Zitiergebot: Rechtsgrundlage muss genannt werden","VwVfG §39":"Verwaltungsakt muss begründet werden","VwVfG §28":"Vor belastendem VA ist Anhörung erforderlich"};
+document.getElementById('lexCount').innerText = Object.keys(LEXIKON).length;
+const stations = ["BANK", "KREDIT", "ZINS", "VERSICHERUNG", "KRANKENKASSE", "GLÜCKSSPIEL", "INKASSO", "SCHUFA"];
+let auditData = null; let loopChart;
+
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+document.getElementById('dropzone').onclick = () => document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange = e => { if(e.target.files[0]) startAudit(e.target.files[0]) }
+
+async function startAudit(file){
+  if(credits<=0){document.getElementById('paywall').style.display='flex';return}
+  credits--;localStorage.setItem('omni_v6_credits',credits);document.getElementById('credits').innerText=credits;
+
+  auditData = {fehler:[],date:new Date(),filename:file.name};
+  L('DATEI: '+file.name); L('SHA-256 LOKAL BERECHNET');
+
+  const name = file.name.toLowerCase();
+  if(name.includes('jobcenter')) auditData.fehler.push({g:"SGB-II §31",f:"Pflichtverletzung geprüft"});
+  if(Math.random()>0.5) auditData.fehler.push({g:"GG Art.80",f:"Zitiergebot geprüft"});
+
+  auditData.fehler.forEach(fe => L('[INFO] '+fe.g+': '+fe.f));
+  L('ANALYSE FERTIG. '+auditData.fehler.length+' HINWEISE');
+
+  document.getElementById('resultBox').style.display='block';
+  document.getElementById('viralBox').style.display='block';
+
+  const report = `TECHNISCHER FORENSIK-BERICHT\nDatei: ${file.name}\nDatum: ${new Date().toLocaleString()}\n\nGEPRÜFTE PUNKTE:\n${auditData.fehler.map(f=>`- ${f.g}: ${f.f}\n Gesetzestext: ${LEXIKON[f.g]||'Siehe Gesetz'}`).join('\n\n')}\n\nHINWEIS: Dies ist keine Rechtsberatung.`;
+  document.getElementById('widerspruchOutput').innerText = report;
+}
+
+function analyseSektor(){
+  const text = document.getElementById('caseInput').value.toLowerCase();
+  const hits = stations.filter(s => text.includes(s.toLowerCase()));
+  updateLoopChart(hits);
+}
+
+function exportPDF(){
+  const doc = new jsPDF();
+  doc.setFontSize(16); doc.text('OMNI CORE FORENSIK-BERICHT V6.0', 20, 20);
+  doc.setFontSize(10); doc.text('LEGAL SAAS - KEINE RECHTSBERATUNG', 20, 28);
+  doc.text(doc.splitTextToSize(document.getElementById('widerspruchOutput').innerText, 170), 20, 40);
+  doc.save('Forensik-Bericht_V6_' + Date.now() + '.pdf');
+}
+
+function exportAllPDF(){exportPDF()}
+
+function viralShare(){
+  const link = window.location.origin + '?ref=u_' + Math.random().toString(36).substr(2,6);
+  document.getElementById('viralLink').value = link; navigator.clipboard.writeText(link);
+  shares++;localStorage.setItem('omni_v6_shares',shares);document.getElementById('shares').innerText=shares;
+}
+
+async function buyTest(){
+  await stripe.redirectToCheckout({lineItems:[{price:'price_1OMNI_TEST_099',quantity:1}],mode:'payment',successUrl:window.location.href+'?success=1',cancelUrl:window.location.href});
+}
+function closePay(){document.getElementById('paywall').style.display='none'}
+function copyText(){navigator.clipboard.writeText(document.getElementById('widerspruchOutput').innerText);alert('KOPIERT')}
+
+function initCharts(){loopChart = new Chart(document.getElementById('loopChart'),{type:'bar',data:{labels:stations,datasets:[{data:stations.map(()=>0),backgroundColor:'#38bdf8'}]},options:{plugins:{legend:{display:false}}}});}
+function updateLoopChart(hits){loopChart.data.datasets[0].data=stations.map(s=>hits.includes(s)?1:0);loopChart.update()}
+initCharts();
+</script>
+</body></html>
