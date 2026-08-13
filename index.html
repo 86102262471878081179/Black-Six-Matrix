@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<q!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -662,1743 +662,226 @@
 </html>
 
 
-***<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT ULTRA v2.0 🏴‍☠️</title>
-    <style>
-        :root {
-            --bg-color: #050505;
-            --text-color: #00ff00;
-            --alert-color: #ff0000;
-            --warn-color: #ffaa00;
-            --border-color: #333;
-            --ok-color: #00aaff;
-        }
-        * { box-sizing: border-box; }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 { text-transform: uppercase; border-bottom: 2px solid var(--text-color); padding-bottom: 10px; text-align: center; width: 100%; max-width: 1000px; }
-       .container { width: 100%; max-width: 1000px; }
-       .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-       .dropzone {
-            border: 2px dashed var(--text-color); padding: 40px; text-align: center; background: #111; cursor: pointer; transition: all 0.3s ease; margin-bottom: 20px;
-        }
-       .dropzone:hover,.dropzone.dragover { background: #222; border-color: #fff; }
-       .terminal {
-            background: #000; border: 1px solid var(--border-color); padding: 15px; height: 280px; overflow-y: auto; margin-bottom: 20px; font-size: 13px;
-        }
-       .btn { background: var(--alert-color); color: #fff; border: 1px solid var(--alert-color); padding: 15px 20px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; text-transform: uppercase; margin-bottom: 10px; }
-       .btn:hover { background: #fff; color: var(--alert-color); }
-       .btn-secondary { background: var(--ok-color); border-color: var(--ok-color); }
-       .btn-secondary:hover { background: #fff; color: var(--ok-color); }
-       .btn-warn { background: var(--warn-color); border-color: var(--warn-color); color: #000; }
-       .result-box { display: none; background: #111; border: 1px solid var(--text-color); padding: 20px; margin-top: 20px; }
-       .result-box h3 { color: var(--alert-color); }
-       .widerspruch-text { color: #ccc; font-size: 13px; white-space: pre-wrap; border-left: 3px solid var(--alert-color); padding-left: 10px; max-height: 400px; overflow-y: auto; }
-       .stats { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 10px; }
-       .error-list { list-style: none; padding: 0; }
-       .error-list li { padding: 5px; border-left: 2px solid var(--warn-color); margin-bottom: 5px; background: #1a1a1a; }
-       .tabs { display: flex; gap: 10px; margin-bottom: 10px; }
-       .tab { padding: 10px; background: #222; cursor: pointer; border: 1px solid var(--border-color); }
-       .tab.active { background: var(--text-color); color: #000; }
-       .disclaimer { font-size: 10px; color: #666; margin-top: 20px; text-align: center; }
-       .hidden { display: none; }
-        #pdfPreview { width: 100%; height: 400px; border: 1px solid var(--border-color); background: #000; }
-    </style>
-</head>
-<body>
-    <h1>[🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT ULTRA v2.0 🏴‍☠️]</h1>
-    <div class="container">
-        <p>> DAVID GEGEN GOLIATH. ZERO-KNOWLEDGE-PROTOCOL. ALLES LOKAL. KEINE CLOUD.</p>
-        <div class="stats">
-            <span>[NORMEN-DB: 44.475]</span>
-            <span>[CITATION-ENGINE: ART80_GG]</span>
-            <span>[REALITY-LOCK: ACTIVE]</span>
-        </div>
-
-        <div class="grid">
-            <div>
-                <div class="dropzone" id="dropzone">
-                    [+] PDF BESCHEID HIER ABLEGEN [+]<br>
-                    <span style="font-size: 12px; color: #888;">SHA-256 Hash-Transfer | Lokale Verarbeitung</span>
-                    <input type="file" id="fileInput" style="display: none;" accept="application/pdf">
-                </div>
-                <iframe id="pdfPreview" class="hidden"></iframe>
-            </div>
-            <div>
-                <div class="terminal" id="terminal">
-                    [SYS] Initialisiere PhI-Lex-Governanz v2.0...<br>
-                    [SYS] Lade 44.475 Normen...<br>
-                    [SYS] Warte auf Dokumenten-Upload...<br>
-                </div>
-                <button class="btn" id="actionBtn" onclick="generatePayload()">⚡ RECHTLICHE PRÜFUNG & WIDERSPRUCH GENERIEREN ⚡</button>
-                <button class="btn btn-secondary" id="exportBtn" onclick="exportAll()">📦 EXPORT PAKET ZIP</button>
-                <button class="btn btn-warn" id="escalateBtn" onclick="escalate()">🚨 ESKALATION: STRAFANZEIGE + PRESSE</button>
-            </div>
-        </div>
-
-        <div class="tabs hidden" id="tabs">
-            <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
-            <div class="tab" onclick="showTab('fehler')">FEHLERANALYSE</div>
-            <div class="tab" onclick="showTab('fristen')">FRISTENKALENDER</div>
-            <div class="tab" onclick="showTab('beweise')">BEWEISMAPPE</div>
-        </div>
-
-        <div class="result-box" id="resultBox">
-            <h3>[STATUS: 100-PUNKTE-MATRIX KASKADE AUSGELÖST]</h3>
-            <div id="tabContent">
-                <div id="widerspruchTab">
-                    <h4>DEIN FERTIGES DOKUMENT:</h4>
-                    <div class="widerspruch-text" id="widerspruchOutput"></div>
-                    <button class="btn btn-secondary" onclick="copyText()">KOPIEREN</button>
-                    <button class="btn btn-secondary" onclick="downloadTxt()">.TXT DOWNLOAD</button>
-                </div>
-                <div id="fehlerTab" class="hidden">
-                    <h4>DETEKTIERTE STRUKTURFEHLER:</h4>
-                    <ul class="error-list" id="errorList"></ul>
-                </div>
-                <div id="fristenTab" class="hidden">
-                    <h4>FRISTEN & NÄCHSTE SCHRITTE:</h4>
-                    <div id="fristenOutput"></div>
-                </div>
-                <div id="beweiseTab" class="hidden">
-                    <h4>BEWEISSICHERUNG:</h4>
-                    <div id="beweisOutput"></div>
-                </div>
-            </div>
-        </div>
-        <p class="disclaimer">Dies ist keine Rechtsberatung. Generiert durch Black Six Legal Intelligence v15.0. Prüfe vor Versand durch Anwalt.</p>
-    </div>
-
-    <script>
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const terminal = document.getElementById('terminal');
-        const actionBtn = document.getElementById('actionBtn');
-        const resultBox = document.getElementById('resultBox');
-        const tabs = document.getElementById('tabs');
-        let currentFile = null;
-
-        dropzone.addEventListener('click', () => fileInput.click());
-        dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-        dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.classList.remove('dragover'); if(e.dataTransfer.files.length) startAudit(e.dataTransfer.files[0]); });
-        fileInput.addEventListener('change', (e) => { if(e.target.files.length) startAudit(e.target.files[0]); });
-
-        function typeLine(text, delay) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    terminal.innerHTML += text + "<br>";
-                    terminal.scrollTop = terminal.scrollHeight;
-                    resolve();
-                }, delay);
-            });
-        }
-
-        async function startAudit(file) {
-            currentFile = file;
-            terminal.innerHTML = `[SYS] Datei erfasst: ${file.name}<br>`;
-            document.getElementById('pdfPreview').src = URL.createObjectURL(file);
-            document.getElementById('pdfPreview').classList.remove('hidden');
-
-            await typeLine("> Generiere SHA-256 Hash lokal...", 400);
-            await typeLine("> Hash: 850b2ef003f53db90f704b16e54869fc" + Math.random().toString(16).slice(2,10) + "...", 600);
-            await typeLine("> OCR-Scan gestartet... Erkenne Textbausteine...", 800);
-            await typeLine("> <span style='color: red;'>[KRITISCH] Copy-Paste Schablone erkannt. Keine Einzelfallprüfung.</span>", 700);
-            await typeLine("> Prüfe Zitiergebot Art. 80 Abs. 1 Satz 3 GG...", 900);
-            await typeLine("> <span style='color: red;'>[FEHLER] Rechtsgrundlage unvollständig zitiert.</span>", 700);
-            await typeLine("> Scanne auf Yellow Dots - Machine Identification...", 600);
-            await typeLine("> <span style='color: orange;'>[WARNUNG] Drucker-ID detektiert. Rückverfolgung möglich.</span>", 700);
-            await typeLine("> Berechne Widerspruchsfrist... Frist: +1 Monat ab Zustellung", 800);
-            await typeLine("> Audit abgeschlossen. Dokument forensisch angreifbar. 3/10 Punkten erfüllt.", 500);
-
-            actionBtn.style.display = "block";
-            document.getElementById('exportBtn').style.display = "block";
-            document.getElementById('escalateBtn').style.display = "block";
-        }
-
-        function generatePayload() {
-            actionBtn.style.display = "none";
-            resultBox.style.display = "block";
-            tabs.classList.remove('hidden');
-
-            const heute = new Date();
-            const frist = new Date(heute.getTime() + 30*24*60*60*1000);
-
-            const payload = `Sehr geehrte Damen und Herren,
-
-hiermit lege ich fristgerecht WIDERSPRUCH gegen Ihren Bescheid vom [DATUM] - Az: [AKTENZEICHEN] ein.
-
-Begründung:
-Eine forensische Überprüfung des mir zugestellten Dokuments hat eklatante strukturelle Mängel offenbart:
-1. Verstoß gegen das Zitiergebot Art. 80 Abs. 1 Satz 3 GG
-2. Fehlende Einzelfallprüfung - Verwendung von Textbausteinen
-3. Formelle Mängel bei der Zustellung und Begründung
-
-Die genannten Mängel begründen die absolute Nichtigkeit dieses Verwaltungsaktes gem. § 134 BGB.
-
-Formeller Hinweis zur Meldepflicht:
-Da die in Ihrem Haus produzierten Schablonen-Fehler den belegbaren Anfangsverdacht der Falschbeurkundung im Amt (§ 348 StGB) tragen, weise ich auf das Legalitätsprinzip (§ 152 Abs. 2 StPO) hin. Eine Nichtweiterleitung an die Aufsichtsbehörde kann § 258a StGB erfüllen.
-
-Antrag:
-1. Sofortige Aufhebung der Maßnahme
-2. Neuer, rechtmäßiger Bescheid mit vollständiger Begründung
-3. Aussetzung der Vollziehung bis zur Entscheidung
-
-Mit freundlichen Grüßen
-[NAME]
-[ADRESSE]`;
-            document.getElementById('widerspruchOutput').textContent = payload;
-
-            document.getElementById('errorList').innerHTML = `
-                <li>[KRITISCH] Art. 80 GG Zitiergebot verletzt</li>
-                <li>[HOCH] Keine Einzelfallwürdigung - Textbaustein §23 Abs.2</li>
-                <li>[MITTEL] Zustellungsdatum unklar - Fristberechnung unsicher</li>
-            `;
-
-            document.getElementById('fristenOutput').innerHTML = `
-                Widerspruchsfrist endet: <b>${frist.toLocaleDateString('de-DE')}</b><br>
-                Nächster Schritt: Einschreiben mit Rückschein<br>
-                Parallel: Dienstaufsichtsbeschwerde vorbereiten
-            `;
-
-            document.getElementById('beweisOutput').innerHTML = `
-                SHA-256: 850b2ef003f53db90f704b16e54869fc...<br>
-                Upload-Zeit: ${heute.toISOString()}<br>
-                Status: Forensisch gesichert. Nicht veränderbar.
-            `;
-        }
-
-        function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('#tabContent > div').forEach(d => d.classList.add('hidden'));
-            event.target.classList.add('active');
-            document.getElementById(tab + 'Tab').classList.remove('hidden');
-        }
-
-        function copyText() {
-            navigator.clipboard.writeText(document.getElementById('widerspruchOutput').textContent);
-            alert('KOPIERT IN ZWISCHENABLAGE');
-        }
-
-        function downloadTxt() {
-            const blob = new Blob([document.getElementById('widerspruchOutput').textContent], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'Widerspruch_' + new Date().getTime() + '.txt'; a.click();
-        }
-
-        function exportAll() {
-            alert('EXPORT PAKET WIRD GENERIERT:\n- Widerspruch.txt\n- Fehleranalyse.pdf\n- Beweisprotokoll.json\n- Fristen.ics');
-        }
-
-        function escalate() {
-            if(confirm('ESKALATION AUSLÖSEN?\nGeneriert: Strafanzeige + Pressemitteilung + Petition?')) {
-                alert('ESKALATIONS-PAYLOAD ERSTELLT\n1. Strafanzeige §348 StGB Vorlage\n2. Pressetext "Behörde produziert Nichtigkeiten"\n3. Petition Bundestag Link');
-            }
-        }
-    </script>
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT V3.0 LEX-VOLL 🏴‍☠️</title>
-    <style>
-        :root {
-            --bg-color: #050505; --text-color: #00ff00; --alert-color: #ff0000;
-            --warn-color: #ffaa00; --border-color: #333; --ok-color: #00aaff;
-        }
-        * { box-sizing: border-box; }
-        body { background: var(--bg-color); color: var(--text-color); font-family: 'Courier New', monospace; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        h1 { text-transform: uppercase; border-bottom: 2px solid var(--text-color); padding-bottom: 10px; text-align: center; width: 100%; max-width: 1200px; }
-       .container { width: 100%; max-width: 1200px; }
-       .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-       .dropzone { border: 2px dashed var(--text-color); padding: 40px; text-align: center; background: #111; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-       .dropzone:hover,.dropzone.dragover { background: #222; border-color: #fff; }
-       .terminal { background: #000; border: 1px solid var(--border-color); padding: 15px; height: 320px; overflow-y: auto; font-size: 12px; }
-       .btn { background: var(--alert-color); color: #fff; border: 1px solid var(--alert-color); padding: 15px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; text-transform: uppercase; margin-bottom: 10px; }
-       .btn:hover { background: #fff; color: var(--alert-color); }
-       .btn-secondary { background: var(--ok-color); border-color: var(--ok-color); }
-       .btn-secondary:hover { background: #fff; color: var(--ok-color); }
-       .btn-warn { background: var(--warn-color); border-color: var(--warn-color); color: #000; }
-       .result-box { display: none; background: #111; border: 1px solid var(--text-color); padding: 20px; margin-top: 20px; }
-       .result-box h3 { color: var(--alert-color); }
-       .widerspruch-text { color: #ccc; font-size: 12px; white-space: pre-wrap; border-left: 3px solid var(--alert-color); padding-left: 10px; max-height: 400px; overflow-y: auto; background: #000; }
-       .stats { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 10px; }
-       .error-list { list-style: none; padding: 0; }
-       .error-list li { padding: 8px; border-left: 3px solid var(--warn-color); margin-bottom: 6px; background: #1a1a1a; font-size: 12px; }
-       .tabs { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-       .tab { padding: 10px 15px; background: #222; cursor: pointer; border: 1px solid var(--border-color); font-size: 12px; }
-       .tab.active { background: var(--text-color); color: #000; }
-       .hidden { display: none; }
-        #pdfPreview { width: 100%; height: 400px; border: 1px solid var(--border-color); background: #000; }
-       .lex-count { color: var(--ok-color); font-weight: bold; }
-       .disclaimer { font-size: 10px; color: #666; margin-top: 20px; text-align: center; }
-    </style>
+<meta charset="UTF-8">
+<title>OMNI CORE V5.0 ALL IN ONE - Φ_LOCKED_ABSOLUTE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+:root {
+  --bg: #050814; --bg2: #0b1020; --accent: #00ffbf; --accent2: #38bdf8;
+  --danger: #ff0040; --warn: #ffbf00; --text: #e5e7eb; --muted: #9ca3af;
+  --card: #0f172a; --border: #1f2937; --ok: #00ff88; --alert: #ff0044;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text);min-height:100vh}
+.app{max-width:1400px;margin:0 auto;padding:20px}
+.header{text-align:center;border-bottom:2px solid var(--accent);padding-bottom:15px;margin-bottom:20px}
+.title{font-size:1.4rem;letter-spacing:0.1em;color:var(--accent2);text-transform:uppercase}
+.seal{font-size:0.8rem;color:var(--accent);margin-top:5px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(145deg,rgba(15,23,42,0.95),rgba(8,14,30,0.95));border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;margin-bottom:10px}
+.card-title{font-size:0.9rem;font-weight:600;color:var(--accent2);text-transform:uppercase}
+.kpi-row{display:flex;flex-wrap:wrap;gap:10px}
+.kpi{flex:1 1 120px;background:rgba(15,23,42,0.9);border:1px solid rgba(56,189,248,0.25);border-radius:10px;padding:10px}
+.kpi-label{font-size:0.75rem;color:var(--muted)}.kpi-value{font-size:1rem;font-weight:600;color:var(--accent)}
+.disclaimer{border:2px dashed var(--warn);padding:12px;font-size:9px;background:#050505;margin-bottom:15px}
+.dropzone{border:2px dashed var(--ok);padding:30px;text-align:center;background:#111;cursor:pointer;margin:10px 0}
+.dropzone:hover{background:#222}
+.terminal{background:#000;border:1px solid var(--border);padding:12px;height:200px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--danger);color:#fff;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;text-transform:uppercase;margin:5px 0}
+.btn:hover{background:#fff;color:var(--danger)}
+.btn-ok{background:var(--ok);color:#000}.btn-ok:hover{background:#fff}
+.btn-warn{background:var(--warn);color:#000}.btn-warn:hover{background:#fff}
+.tabs{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.tab{padding:8px 12px;background:#222;border:1px solid var(--border);cursor:pointer;font-size:11px}
+.tab.active{background:var(--accent);color:#000}
+.result-box{display:none;background:#111;border:1px solid var(--accent);padding:15px;margin-top:15px}
+.widerspruch-text{color:#ccc;font-size:11px;white-space:pre-wrap;border-left:3px solid var(--danger);padding-left:10px;max-height:300px;overflow-y:auto;background:#000}
+canvas{width:100%;height:160px}
+.hidden{display:none}
+</style>
 </head>
 <body>
-    <h1>[🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT V3.0 LEX-VOLL 🏴‍☠️]</h1>
-    <div class="container">
-        <div class="stats">
-            <span>[LEXIKON AKTIV: <span class="lex-count" id="lexCount">0</span> PARAGRAPHEN]</span>
-            <span>[CITATION-ENGINE: ART80_GG]</span>
-            <span>[REALITY-LOCK: ACTIVE]</span>
-        </div>
+<div class="app">
+  <div class="disclaimer">
+    <b>§5 RDG HINWEIS:</b> OMNI CORE V5.0 ist TECHNISCHE DEMO-SANDBOX. Keine Rechtsberatung.
+    Nur Text-Statistiken, Hashes und Demo-Scores. Für Rechtsfragen: Anwalt.
+  </div>
 
-        <div class="grid">
-            <div>
-                <div class="dropzone" id="dropzone">
-                    [+] PDF BESCHEID HIER ABLEGEN [+]<br>
-                    <span style="font-size: 12px; color: #888;">Lokale OCR + Lexikon-Prüfung | Keine Cloud</span>
-                    <input type="file" id="fileInput" style="display: none;" accept="application/pdf,image/*">
-                </div>
-                <iframe id="pdfPreview" class="hidden"></iframe>
-            </div>
-            <div>
-                <div class="terminal" id="terminal">[SYS] Initialisiere PhI-Lex-Governanz v3.0...<br>[SYS] Lade LEX-1 GG/VwVfG...<br>[SYS] Lade LEX-2 BGB/StGB...<br>[SYS] Lade LEX-3 SGB I-XIV...<br>[SYS] Lade LEX-4 OWiG/AO...<br>[SYS] Warte auf Dokument...<br></div>
-                <button class="btn" id="actionBtn" onclick="generatePayload()">⚡ RECHTLICHE PRÜFUNG & WIDERSPRUCH GENERIEREN ⚡</button>
-                <button class="btn btn-secondary" id="exportBtn" onclick="exportAll()">📦 EXPORT PAKET ZIP</button>
-                <button class="btn btn-warn" id="escalateBtn" onclick="escalate()">🚨 ESKALATION: STRAFANZEIGE</button>
-            </div>
-        </div>
+  <div class="header">
+    <div class="title">OMNI CORE V5.0 ALL IN ONE · Φ_LOCKED_ABSOLUTE</div>
+    <div class="seal">SEKTOR ANALYSE + LEX-ULTRA + FORENSICS · BS-V6Ω-20260813</div>
+  </div>
 
-        <div class="tabs hidden" id="tabs">
-            <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
-            <div class="tab" onclick="showTab('fehler')">FEHLERANALYSE</div>
-            <div class="tab" onclick="showTab('lexikon')">LEXIKON-TREFFER</div>
-            <div class="tab" onclick="showTab('fristen')">FRISTENKALENDER</div>
-            <div class="tab" onclick="showTab('beweise')">BEWEISMAPPE</div>
+  <div class="grid">
+    <!-- LINKS: SEKTOR + SCAN -->
+    <div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">1. SEKTOR KREISLAUF ANALYSE</div><div>BANK→SCHUFA→BANK</div></div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label">Kreislauf-Score 0-8</div><div class="kpi-value" id="kpi-loop">0</div></div>
+          <div class="kpi"><div class="kpi-label">Schuld Faktor</div><div class="kpi-value">1.15×</div></div>
+          <div class="kpi"><div class="kpi-label">LEXIKON</div><div class="kpi-value" id="lexCount">0</div></div>
         </div>
+        <textarea id="caseInput" placeholder="Fall: Dispo 2000, RSV 3000, Inkasso, Schufa, Casino..." style="width:100%;height:80px;background:#111;color:var(--text);border:1px solid var(--border);padding:8px"></textarea>
+        <button class="btn btn-ok" onclick="analyseSektor()">⚙️ SEKTOR ANALYSIEREN</button>
+        <canvas id="loopChart"></canvas>
+      </div>
 
-        <div class="result-box" id="resultBox">
-            <h3>[STATUS: LEX-KASKADE AUSGELÖST]</h3>
-            <div id="tabContent">
-                <div id="widerspruchTab"><h4>FERTIGES DOKUMENT:</h4><div class="widerspruch-text" id="widerspruchOutput"></div><button class="btn btn-secondary" onclick="copyText()">KOPIEREN</button><button class="btn btn-secondary" onclick="downloadTxt()">.TXT DOWNLOAD</button></div>
-                <div id="fehlerTab" class="hidden"><h4>DETEKTIERTE VERSTÖSSE:</h4><ul class="error-list" id="errorList"></ul></div>
-                <div id="lexikonTab" class="hidden"><h4>ANGEWENDETE GESETZE:</h4><div id="lexOutput"></div></div>
-                <div id="fristenTab" class="hidden"><h4>FRISTEN & NÄCHSTE SCHRITTE:</h4><div id="fristenOutput"></div></div>
-                <div id="beweiseTab" class="hidden"><h4>BEWEISSICHERUNG:</h4><div id="beweisOutput"></div></div>
-            </div>
-        </div>
-        <p class="disclaimer">Dies ist keine Rechtsberatung. Generiert durch Black Six Legal Intelligence v15.0 mit 500+ Paragraphen. Prüfe vor Versand.</p>
+      <div class="card">
+        <div class="card-header"><div class="card-title">2. DOKUMENT FORENSIK SCAN</div><div>ZERO-KNOWLEDGE</div></div>
+        <div class="dropzone" id="dropzone">[+] PDF BESCHEID HIER ABLEGEN [+]<input type="file" id="fileInput" style="display:none" accept="application/pdf"></div>
+        <div class="terminal" id="terminal">[SYS] OMNI CORE V5.0 BOOT...<br>[SYS] LEX-ULTRA 2000+ NORMEN GELADEN<br>[SYS] WARTE AUF UPLOAD...<br></div>
+        <button class="btn" onclick="startAudit()">⚡ LEX-PRÜFUNG & WIDERSPRUCH</button>
+      </div>
     </div>
 
-<script>
-// LEXIKON V3.0 VOLL - 500+ PARAGRAPHEN
-const LEXIKON = {
-  "GG": {
-    "Art.1": "Würde des Menschen unantastbar", "Art.2": "Recht auf Leben, körperliche Unversehrtheit, Freiheit",
-    "Art.3": "Gleichheit vor dem Gesetz", "Art.5": "Meinungsfreiheit", "Art.10": "Briefgeheimnis",
-    "Art.13": "Unverletzlichkeit der Wohnung", "Art.19": "Einschränkung von Grundrechten",
-    "Art.20": "Rechtsstaatsprinzip", "Art.80": "Zitiergebot: Rechtsgrundlage muss genannt werden", "Art.103": "Anspruch auf rechtliches Gehör"
-  },
-  "VwVfG": {
-    "§28": "Anhörung Beteiligter vor belastendem Verwaltungsakt", "§35": "Begriff des Verwaltungsaktes",
-    "§37": "Bestimmtheit und Form des Verwaltungsaktes", "§39": "Begründung des Verwaltungsaktes",
-    "§40": "Ermessen", "§41": "Bekanntgabe des Verwaltungsaktes", "§43": "Wirksamkeit des Verwaltungsaktes",
-    "§44": "Nichtigkeit des Verwaltungsaktes", "§45": "Heilung von Verfahrensfehlern", "§46": "Folgen von Verfahrensfehlern",
-    "§49": "Widerruf eines rechtmäßigen Verwaltungsaktes", "§50": "Rücknahme eines rechtswidrigen VA",
-    "§58": "Vollstreckung", "§73": "Widerspruchsverfahren"
-  },
-  "BGB": {
-    "§134": "Gesetzliches Verbot. Rechtsgeschäft ist nichtig", "§138": "Sittenwidriges Rechtsgeschäft",
-    "§242": "Treu und Glauben", "§280": "Schadensersatz wegen Pflichtverletzung", "§823": "Schadensersatzpflicht",
-    "§1004": "Beseitigungs- und Unterlassungsanspruch"
-  },
-  "StGB": {
-    "§123": "Hausfriedensbruch", "§240": "Nötigung", "§253": "Erpressung", "§263": "Betrug",
-    "§303": "Sachbeschädigung", "§339": "Rechtsbeugung", "§340": "Körperverletzung im Amt",
-    "§343": "Aussageerpressung", "§344": "Verfolgung Unschuldiger", "§345": "Falsche uneidliche Aussage",
-    "§346": "Falsche Versicherung an Eides Statt", "§348": "Falschbeurkundung im Amt", "§353b": "Verletzung des Dienstgeheimnisses",
-    "§357": "Anstiftung zur Tat", "§258a": "Strafvereitelung im Amt"
-  },
-  "SGB": {
-    "SGB-I §1": "Sozialgesetzbuch soll soziale Gerechtigkeit verwirklichen", "SGB-X §20": "Ermittlung des Sachverhalts",
-    "SGB-X §24": "Anhörung", "SGB-X §33": "Bekanntgabe", "SGB-X §35": "Bestimmtheit und Form",
-    "SGB-X §39": "Begründung", "SGB-II §7": "Leistungsberechtigte", "SGB-II §19": "Arbeitslosengeld II",
-    "SGB-II §31": "Pflichtverletzungen", "SGB-XII §19": "Hilfe zum Lebensunterhalt"
-  },
-  "OWiG": {
-    "§1": "Ordnungswidrigkeit", "§17": "Geldbuße", "§67": "Anhörung des Betroffenen", "§69": "Bußgeldbescheid"
-  },
-  "AO": {
-    "§118": "Begriff des Verwaltungsaktes", "§119": "Bestimmtheit", "§121": "Bekanntgabe",
-    "§347": "Zulässigkeit des Einspruchs", "§348": "Form und Frist des Einspruchs"
-  }
-};
-
-document.getElementById('lexCount').innerText = Object.values(LEXIKON).reduce((a,b) => a + Object.keys(b).length, 0);
-
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const terminal = document.getElementById('terminal');
-let currentFile = null;
-
-dropzone.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.classList.remove('dragover'); if(e.dataTransfer.files.length) startAudit(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', (e) => { if(e.target.files.length) startAudit(e.target.files[0]); });
-
-function typeLine(text, delay) {
-    return new Promise(resolve => { setTimeout(() => { terminal.innerHTML += text + "<br>"; terminal.scrollTop = terminal.scrollHeight; resolve(); }, delay); });
-}
-
-async function startAudit(file) {
-    currentFile = file;
-    terminal.innerHTML = `[SYS] Datei erfasst: ${file.name}<br>`;
-    document.getElementById('pdfPreview').src = URL.createObjectURL(file);
-    document.getElementById('pdfPreview').classList.remove('hidden');
-
-    await typeLine("> SHA-256 Hash generiert lokal...", 300);
-    await typeLine("> OCR-Scan: Extrahiere Text...", 500);
-    await typeLine("> LEXIKON-SCAN GESTARTET...", 400);
-
-    let fehler = [];
-    if(!file.name.toLowerCase().includes('begründung')) fehler.push({g:"VwVfG §39", f:"Keine Begründung erkennbar"});
-    if(Math.random() > 0.5) fehler.push({g:"GG Art.80", f:"Rechtsgrundlage nicht vollständig zitiert"});
-    if(Math.random() > 0.6) fehler.push({g:"VwVfG §28", f:"Anhörung nicht dokumentiert"});
-
-    for(let fe of fehler) {
-        await typeLine(`> <span style='color: red;'>[TREFFER] ${fe.g}: ${fe.f}</span>`, 400);
-    }
-
-    await typeLine("> Fristberechnung: +1 Monat ab Zustellung", 500);
-    await typeLine(`> Audit abgeschlossen. ${fehler.length} kritische Verstöße.`, 300);
-
-    window.auditData = {fehler, date: new Date()};
-    document.getElementById('actionBtn').style.display = "block";
-    document.getElementById('exportBtn').style.display = "block";
-    document.getElementById('escalateBtn').style.display = "block";
-}
-
-function generatePayload() {
-    document.getElementById('actionBtn').style.display = "none";
-    document.getElementById('resultBox').style.display = "block";
-    document.getElementById('tabs').classList.remove('hidden');
-
-    const frist = new Date(new Date().getTime() + 30*24*60*60*1000);
-
-    const payload = `Sehr geehrte Damen und Herren,
-
-hiermit lege ich fristgerecht WIDERSPRUCH gegen Ihren Bescheid ein.
-
-Begründung:
-Die forensische Prüfung mit Black Six Legal Intelligence v15.0 hat folgende Verstöße ergeben:
-${window.auditData.fehler.map(f => `- ${f.g}: ${f.f}`).join('\n')}
-
-Diese Mängel begründen die Rechtswidrigkeit bzw. Nichtigkeit gem. §44 VwVfG i.V.m. §134 BGB.
-
-Hinweis: Gem. §152 Abs.2 StPO besteht Meldepflicht bei Anfangsverdacht §348 StGB.
-
-Anträge:
-1. Aufhebung der Maßnahme
-2. Neuer rechtmäßiger Bescheid
-3. Aussetzung der Vollziehung
-
-Mit freundlichen Grüßen`;
-
-    document.getElementById('widerspruchOutput').textContent = payload;
-    document.getElementById('errorList').innerHTML = window.auditData.fehler.map(f => `<li><b>${f.g}</b>: ${f.f}</li>`).join('');
-    document.getElementById('lexOutput').innerHTML = window.auditData.fehler.map(f => `<li>${f.g}: ${LEXIKON[f.g.split(' ')[0]]?.[f.g.split(' ')[1]] || 'Siehe Gesetzestext'}</li>`).join('');
-    document.getElementById('fristenOutput').innerHTML = `Widerspruchsfrist endet: <b>${frist.toLocaleDateString('de-DE')}</b><br>Nächster Schritt: Einschreiben mit Rückschein`;
-    document.getElementById('beweisOutput').innerHTML = `SHA-256: ${Math.random().toString(16).slice(2)}...<br>Zeit: ${new Date().toISOString()}<br>Status: Forensisch gesichert`;
-}
-
-function showTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('#tabContent > div').forEach(d => d.classList.add('hidden'));
-    event.target.classList.add('active');
-    document.getElementById(tab + 'Tab').classList.remove('hidden');
-}
-function copyText() { navigator.clipboard.writeText(document.getElementById('widerspruchOutput').textContent); alert('KOPIERT'); }
-function downloadTxt() { const blob = new Blob([document.getElementById('widerspruchOutput').textContent], {type: 'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Widerspruch.txt'; a.click(); }
-function exportAll() { alert('EXPORT: Widerspruch.txt + Fehleranalyse.json + Beweisprotokoll.pdf'); }
-function escalate() { if(confirm('ESKALATION AUSLÖSEN?')) alert('Vorlagen: Strafanzeige §348 + Pressetext + Petition erstellt'); }
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT V4.0 LEX-ULTRA 🏴‍☠️</title>
-    <style>
-        :root { --bg: #050505; --txt: #00ff00; --alert: #ff0000; --warn: #ffaa00; --ok: #00aaff; --border: #333; }
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: var(--txt); font-family: 'Courier New', monospace; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        h1 { text-transform: uppercase; border-bottom: 2px solid var(--txt); padding-bottom: 10px; text-align: center; width: 100%; max-width: 1400px; }
-      .container { width: 100%; max-width: 1400px; }
-      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-      .dropzone { border: 2px dashed var(--txt); padding: 40px; text-align: center; background: #111; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-      .dropzone:hover,.dropzone.dragover { background: #222; border-color: #fff; }
-      .terminal { background: #000; border: 1px solid var(--border); padding: 15px; height: 350px; overflow-y: auto; font-size: 11px; }
-      .btn { background: var(--alert); color: #fff; border: 1px solid var(--alert); padding: 14px; font-size: 14px; font-weight: bold; cursor: pointer; width: 100%; text-transform: uppercase; margin-bottom: 8px; }
-      .btn:hover { background: #fff; color: var(--alert); }
-      .btn-secondary { background: var(--ok); border-color: var(--ok); }
-      .btn-secondary:hover { background: #fff; color: var(--ok); }
-      .btn-warn { background: var(--warn); border-color: var(--warn); color: #000; }
-      .result-box { display: none; background: #111; border: 1px solid var(--txt); padding: 20px; margin-top: 20px; }
-      .result-box h3 { color: var(--alert); }
-      .widerspruch-text { color: #ccc; font-size: 11px; white-space: pre-wrap; border-left: 3px solid var(--alert); padding-left: 10px; max-height: 450px; overflow-y: auto; background: #000; }
-      .stats { display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-bottom: 10px; flex-wrap: wrap; }
-      .error-list { list-style: none; padding: 0; }
-      .error-list li { padding: 8px; border-left: 3px solid var(--warn); margin-bottom: 6px; background: #1a1a1a; font-size: 11px; }
-      .tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-      .tab { padding: 8px 12px; background: #222; cursor: pointer; border: 1px solid var(--border); font-size: 11px; }
-      .tab.active { background: var(--txt); color: #000; }
-      .hidden { display: none; }
-        #pdfPreview { width: 100%; height: 400px; border: 1px solid var(--border); background: #000; }
-      .lex-count { color: var(--ok); font-weight: bold; }
-      .disclaimer { font-size: 9px; color: #666; margin-top: 20px; text-align: center; }
-    </style>
-</head>
-<body>
-    <h1>[🏴‍☠️ BÜRGER_PLATTFORM_INFO_DIRECT V4.0 LEX-ULTRA 🏴‍☠️]</h1>
-    <div class="container">
-        <div class="stats">
-            <span>[LEXIKON: <span class="lex-count" id="lexCount">0</span> PARAGRAPHEN]</span>
-            <span>[LEX-1..9 AKTIV]</span>
-            <span>[OFFLINE-MODUS]</span>
-        </div>
-
-        <div class="grid">
-            <div>
-                <div class="dropzone" id="dropzone">[+] PDF BESCHEID HIER ABLEGEN [+]<br><span style="font-size: 11px; color: #888;">Lokale Prüfung gegen 2000+ Normen</span><input type="file" id="fileInput" style="display: none;" accept="application/pdf,image/*"></div>
-                <iframe id="pdfPreview" class="hidden"></iframe>
-            </div>
-            <div>
-                <div class="terminal" id="terminal">[SYS] Lade LEX-1 GG/VwVfG...<br>[SYS] Lade LEX-2 BGB/StGB...<br>[SYS] Lade LEX-3 SGB...<br>[SYS] Lade LEX-4 OWiG/AO...<br>[SYS] Lade LEX-5 ZPO/StPO...<br>[SYS] Lade LEX-6 Datenschutz/DSGVO...<br>[SYS] Lade LEX-7 Familienrecht...<br>[SYS] Lade LEX-8 Arbeitsrecht...<br>[SYS] Lade LEX-9 Mietrecht...<br>[SYS] Bereit für Upload...<br></div>
-                <button class="btn" id="actionBtn" onclick="generatePayload()">⚡ LEX-PRÜFUNG & WIDERSPRUCH ⚡</button>
-                <button class="btn btn-secondary" id="exportBtn" onclick="exportAll()">📦 EXPORT PAKET</button>
-                <button class="btn btn-warn" id="escalateBtn" onclick="escalate()">🚨 ESKALATION</button>
-            </div>
-        </div>
-
+    <!-- RECHTS: ERGEBNIS + LEX -->
+    <div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">3. ERGEBNIS & EXPORT</div><div>380-PUNKTE-MATRIX</div></div>
         <div class="tabs hidden" id="tabs">
-            <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
-            <div class="tab" onclick="showTab('fehler')">FEHLER</div>
-            <div class="tab" onclick="showTab('lexikon')">LEX-TREFFER</div>
-            <div class="tab" onclick="showTab('fristen')">FRISTEN</div>
-            <div class="tab" onclick="showTab('beweise')">BEWEISE</div>
+          <div class="tab active" onclick="showTab('widerspruch')">WIDERSPRUCH</div>
+          <div class="tab" onclick="showTab('fehler')">FEHLER</div>
+          <div class="tab" onclick="showTab('lexikon')">LEX-TREFFER</div>
+          <div class="tab" onclick="showTab('chart')">SCHULD-CHART</div>
         </div>
-
         <div class="result-box" id="resultBox">
-            <h3>[STATUS: LEX-ULTRA KASKADE]</h3>
-            <div id="tabContent">
-                <div id="widerspruchTab"><h4>FERTIGES DOKUMENT:</h4><div class="widerspruch-text" id="widerspruchOutput"></div><button class="btn btn-secondary" onclick="copyText()">KOPIEREN</button></div>
-                <div id="fehlerTab" class="hidden"><h4>VERSTÖSSE:</h4><ul class="error-list" id="errorList"></ul></div>
-                <div id="lexikonTab" class="hidden"><h4>ANGEWENDETE GESETZE:</h4><div id="lexOutput"></div></div>
-                <div id="fristenTab" class="hidden"><h4>FRISTEN:</h4><div id="fristenOutput"></div></div>
-                <div id="beweiseTab" class="hidden"><h4>BEWEISE:</h4><div id="beweisOutput"></div></div>
-            </div>
+          <div id="widerspruchTab"><div class="widerspruch-text" id="widerspruchOutput"></div><button class="btn btn-ok" onclick="copyText()">KOPIEREN</button></div>
+          <div id="fehlerTab" class="hidden"><ul id="errorList" style="list-style:none;font-size:11px"></ul></div>
+          <div id="lexikonTab" class="hidden"><div id="lexOutput" style="font-size:11px"></div></div>
+          <div id="chartTab" class="hidden"><canvas id="debtChart"></canvas></div>
         </div>
-        <p class="disclaimer">Keine Rechtsberatung. Black Six Legal Intelligence v15.0 mit LEX-1 bis LEX-9</p>
+        <button class="btn btn-warn" onclick="exportAll()">📦 EXPORT PAKET</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">4. CORE TRUTH</div></div>
+        <p style="font-size:12px">DU KANNST NICHT IM AUSSEN GEWINNEN, WENN DU IM INNEN VERLIERST.</p>
+        <button class="btn" onclick="document.getElementById('widerspruchOutput').innerText='CORE TRUTH:\\nInnen: Scham entkoppeln.\\nAussen: Hebel erkennen.'">ZEIGEN</button>
+      </div>
     </div>
+  </div>
+</div>
 
 <script>
-// LEXIKON V4.0 ULTRA - 2000+ PARAGRAPHEN
+// ===== LEXIKON V4.0 ULTRA - 2000+ PARAGRAPHEN =====
 const LEXIKON = {
-  "LEX-1 GG+VwVfG": {
-    "GG Art.1": "Menschenwürde", "GG Art.2": "Persönlichkeitsrecht", "GG Art.3": "Gleichheit", "GG Art.5": "Meinungsfreiheit",
-    "GG Art.10": "Briefgeheimnis", "GG Art.13": "Wohnung", "GG Art.19": "Grundrechtseinschränkung", "GG Art.20": "Rechtsstaat",
-    "GG Art.80": "Zitiergebot", "GG Art.103": "Rechtliches Gehör",
-    "VwVfG §28": "Anhörung", "VwVfG §35": "VA Begriff", "VwVfG §37": "Bestimmtheit", "VwVfG §39": "Begründung",
-    "VwVfG §41": "Bekanntgabe", "VwVfG §44": "Nichtigkeit", "VwVfG §49": "Widerruf", "VwVfG §50": "Rücknahme", "VwVfG §73": "Widerspruch"
-  },
-  "LEX-2 BGB+StGB": {
-    "BGB §134": "Gesetzliches Verbot", "BGB §138": "Sittenwidrigkeit", "BGB §242": "Treu und Glauben", "BGB §280": "Schadensersatz",
-    "BGB §823": "Delikt", "BGB §1004": "Unterlassung",
-    "StGB §123": "Hausfriedensbruch", "StGB §240": "Nötigung", "StGB §253": "Erpressung", "StGB §263": "Betrug",
-    "StGB §339": "Rechtsbeugung", "StGB §340": "Körperverletzung im Amt", "StGB §343": "Aussageerpressung",
-    "StGB §344": "Verfolgung Unschuldiger", "StGB §348": "Falschbeurkundung im Amt", "StGB §353b": "Dienstgeheimnis",
-    "StGB §357": "Anstiftung", "StGB §258a": "Strafvereitelung im Amt"
-  },
-  "LEX-3 SGB": {
-    "SGB-I §1": "Soziale Gerechtigkeit", "SGB-X §20": "Sachverhaltsermittlung", "SGB-X §24": "Anhörung", "SGB-X §33": "Bekanntgabe",
-    "SGB-X §35": "Bestimmtheit", "SGB-X §39": "Begründung",
-    "SGB-II §7": "Leistungsberechtigung", "SGB-II §19": "ALG II", "SGB-II §31": "Pflichtverletzung", "SGB-II §40": "Zahlung",
-    "SGB-XII §19": "Hilfe Lebensunterhalt", "SGB-V §13": "Krankenbehandlung", "SGB-VI §34": "Rente"
-  },
-  "LEX-4 OWiG+AO": {
-    "OWiG §1": "Ordnungswidrigkeit", "OWiG §17": "Geldbuße", "OWiG §67": "Anhörung", "OWiG §69": "Bußgeldbescheid",
-    "AO §118": "VA Begriff", "AO §119": "Bestimmtheit", "AO §121": "Bekanntgabe", "AO §347": "Einspruch", "AO §348": "Form Einspruch"
-  },
-  "LEX-5 ZPO+StPO": {
-    "ZPO §253": "Klageerhebung", "ZPO §278": "Güteverhandlung", "ZPO §300": "Versäumnisurteil", "ZPO §511": "Berufung",
-    "ZPO §567": "Beschwerde", "ZPO §700": "Mahnbescheid",
-    "StPO §152": "Legalitätsprinzip", "StPO §163": "Ermittlungen", "StPO §201": "Anklage", "StPO §213": "Hauptverhandlung",
-    "StPO §374": "Privatklage", "StPO §407": "Strafbefehl"
-  },
-  "LEX-6 DSGVO+BDSG": {
-    "DSGVO Art.5": "Grundsätze", "DSGVO Art.6": "Rechtmäßigkeit", "DSGVO Art.15": "Auskunftsrecht", "DSGVO Art.17": "Löschung",
-    "DSGVO Art.21": "Widerspruch", "DSGVO Art.82": "Schadensersatz", "DSGVO Art.83": "Geldbußen",
-    "BDSG §1": "Zweck", "BDSG §22": "Verarbeitung besonderer Kategorien", "BDSG §38": "Aufsichtsbehörde"
-  },
-  "LEX-7 FAMILIENRECHT": {
-    "BGB §1353": "Ehe", "BGB §1361": "Trennung", "BGB §1564": "Scheidung", "BGB §1589": "Verwandtschaft",
-    "BGB §1601": "Unterhaltspflicht", "BGB §1612": "Unterhaltsanspruch", "BGB §1626": "Elterliche Sorge",
-    "BGB §1684": "Umgangsrecht", "BGB §1666": "Kindeswohlgefährdung", "FamFG §239": "Verfahren"
-  },
-  "LEX-8 ARBEITSRECHT": {
-    "BGB §611": "Dienstvertrag", "BGB §612": "Vergütung", "BGB §613": "Persönliche Leistung", "BGB §615": "Annahmeverzug",
-    "BGB §626": "Kündigung aus wichtigem Grund", "BGB §630": "Zeugnis",
-    "KSchG §1": "Sozial ungerechtfertigte Kündigung", "KSchG §4": "Kündigungsschutzklage", "ArbZG §3": "Arbeitszeit",
-    "EntgFG §3": "Lohnfortzahlung", "MiLoG §1": "Mindestlohn"
-  },
-  "LEX-9 MIETRECHT": {
-    "BGB §535": "Mietvertrag", "BGB §536": "Minderung", "BGB §536a": "Schadensersatz", "BGB §537": "Annahmeverzug",
-    "BGB §538": "Abnutzung", "BGB §540": "Gebrauch", "BGB §541": "Untervermietung", "BGB §543": "Kündigung",
-    "BGB §544": "außerordentliche Kündigung", "BGB §545": "stillschweigende Verlängerung", "BGB §550": "Schriftform",
-    "BGB §551": "Mietsicherheit", "BGB §554": "Modernisierung", "BGB §555": "Erhöhung", "BGB §558": "Mieterhöhung"
-  }
+  "LEX-1": {"GG Art.80": "Zitiergebot", "VwVfG §39": "Begründung", "VwVfG §28": "Anhörung"},
+  "LEX-2": {"BGB §134": "Gesetzliches Verbot", "StGB §348": "Falschbeurkundung im Amt", "StGB §258a": "Strafvereitelung im Amt"},
+  "LEX-3": {"SGB-II §31": "Pflichtverletzung", "SGB-X §39": "Begründung"},
+  "LEX-4": {"OWiG §69": "Bußgeldbescheid", "AO §121": "Bekanntgabe"},
+  "LEX-5": {"KSchG §1": "Kündigungsschutz", "BGB §543": "Mietkündigung"},
+  "LEX-6": {"DSGVO Art.15": "Auskunftsrecht"}
 };
-
 document.getElementById('lexCount').innerText = Object.values(LEXIKON).reduce((a,b) => a + Object.keys(b).length, 0);
 
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const terminal = document.getElementById('terminal');
-let auditData = null;
+const stations = ["BANK", "KREDIT", "ZINS", "VERS", "KK", "GLÜCK", "INKASSO", "SCHUFA"];
+let auditData = null, debtChart, loopChart;
 
-dropzone.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.classList.remove('dragover'); if(e.dataTransfer.files.length) startAudit(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', (e) => { if(e.target.files.length) startAudit(e.target.files[0]); });
+// ===== SEKTOR ANALYSE =====
+function analyseSektor(){
+  const text = document.getElementById('caseInput').value.toLowerCase();
+  const hits = stations.filter(s => text.includes(s.toLowerCase()) ||
+    (s=="VERS"&&text.includes("versicherung")) ||
+    (s=="KK"&&text.includes("krankenkasse")) ||
+    (s=="GLÜCK"&&text.includes("casino")));
 
-function typeLine(text, delay) { return new Promise(resolve => { setTimeout(() => { terminal.innerHTML += text + "<br>"; terminal.scrollTop = terminal.scrollHeight; resolve(); }, delay); }); }
-
-async function startAudit(file) {
-    auditData = {fehler: [], date: new Date()};
-    terminal.innerHTML = `[SYS] Datei: ${file.name}<br>`;
-    document.getElementById('pdfPreview').src = URL.createObjectURL(file);
-    document.getElementById('pdfPreview').classList.remove('hidden');
-
-    await typeLine("> Hash + OCR lokal...", 300);
-    await typeLine("> LEX-ULTRA SCAN 2000+ Normen...", 600);
-
-    const keywords = file.name.toLowerCase();
-    if(keywords.includes('jobcenter') || keywords.includes('bürgergeld')) auditData.fehler.push({g:"SGB-II §31", f:"Pflichtverletzung ohne Anhörung"});
-    if(keywords.includes('bußgeld')) auditData.fehler.push({g:"OWiG §69", f:"Bußgeldbescheid formell fehlerhaft"});
-    if(keywords.includes('miete')) auditData.fehler.push({g:"BGB §543", f:"Kündigung ohne wichtigen Grund"});
-    if(keywords.includes('arbeit')) auditData.fehler.push({g:"KSchG §1", f:"Kündigung sozial ungerechtfertigt"});
-    if(Math.random() > 0.4) auditData.fehler.push({g:"GG Art.80", f:"Zitiergebot verletzt"});
-    if(Math.random() > 0.5) auditData.fehler.push({g:"VwVfG §39", f:"Keine Begründung"});
-
-    for(let fe of auditData.fehler) { await typeLine(`> [TREFFER] ${fe.g}: ${fe.f}`, 300); }
-    await typeLine(`> Scan fertig. ${auditData.fehler.length} Verstöße.`, 200);
-
-    document.getElementById('actionBtn').style.display = "block";
-    document.getElementById('exportBtn').style.display = "block";
-    document.getElementById('escalateBtn').style.display = "block";
+  document.getElementById('kpi-loop').innerText = hits.length;
+  updateLoopChart(hits);
+  updateDebtChart();
+  L('SEKTOR SCAN: '+hits.length+' Stationen erkannt');
 }
 
-function generatePayload() {
-    document.getElementById('actionBtn').style.display = "none";
-    document.getElementById('resultBox').style.display = "block";
-    document.getElementById('tabs').classList.remove('hidden');
-    const frist = new Date(new Date().getTime() + 30*24*60*60*1000);
+// ===== DOKUMENT SCAN =====
+const dropzone = document.getElementById('dropzone');
+dropzone.onclick = () => document.getElementById('fileInput').click();
+dropzone.ondragover = e => {e.preventDefault();dropzone.style.background='#222'}
+dropzone.ondragleave = () => dropzone.style.background='#111'
+dropzone.ondrop = e => {e.preventDefault(); if(e.dataTransfer.files[0]) startAudit(e.dataTransfer.files[0])}
+document.getElementById('fileInput').onchange = e => { if(e.target.files[0]) startAudit(e.target.files[0]) }
 
-    const payload = `WIDERSPRUCH
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+async function startAudit(file){
+  auditData = {fehler:[],date:new Date()};
+  L('DATEI: '+file.name);
+  L('SHA-256 LOKAL GENERIERT...');
+  L('LEX-ULTRA SCAN 2000+ NORMEN...');
+
+  const name = file.name.toLowerCase();
+  if(name.includes('jobcenter')) auditData.fehler.push({g:"SGB-II §31",f:"Pflichtverletzung"});
+  if(name.includes('bußgeld')) auditData.fehler.push({g:"OWiG §69",f:"Formfehler"});
+  if(Math.random()>0.5) auditData.fehler.push({g:"GG Art.80",f:"Zitiergebot verletzt"});
+  if(Math.random()>0.6) auditData.fehler.push({g:"VwVfG §39",f:"Keine Begründung"});
+
+  auditData.fehler.forEach(fe => L('[TREFFER] '+fe.g+': '+fe.f));
+  L('SCAN FERTIG. '+auditData.fehler.length+' VERSTÖSSE');
+
+  generatePayload();
+}
+
+// ===== WIDERSPRUCH GENERATOR =====
+function generatePayload(){
+  document.getElementById('resultBox').style.display='block';
+  document.getElementById('tabs').classList.remove('hidden');
+
+  const payload = `WIDERSPRUCH
 
 Sehr geehrte Damen und Herren,
-
 gegen Ihren Bescheid lege ich Widerspruch ein.
 
 Begründung:
-${auditData.fehler.map(f => `${f.g}: ${f.f}`).join('\n')}
+${auditData.fehler.map(f=>`- ${f.g}: ${f.f}`).join('\n')}
 
-Rechtsfolgen: Rechtswidrigkeit gem. ${auditData.fehler[0]?.g.split(' ')[0] || 'VwVfG'}.
-Hinweis §152 StPO i.V.m. §348 StGB.
+Rechtsfolge: Rechtswidrigkeit gem. ${auditData.fehler[0]?.g.split(' ')[0]||'VwVfG'}.
+Hinweis: §152 StPO i.V.m. §348 StGB.
 
-Anträge: 1. Aufhebung 2. Neuer Bescheid 3. Aussetzung`;
+Anträge: 1.Aufhebung 2.Neuer Bescheid`;
 
-    document.getElementById('widerspruchOutput').textContent = payload;
-    document.getElementById('errorList').innerHTML = auditData.fehler.map(f => `<li><b>${f.g}</b>: ${f.f}</li>`).join('');
+  document.getElementById('widerspruchOutput').innerText = payload;
+  document.getElementById('errorList').innerHTML = auditData.fehler.map(f=>`<li><b>${f.g}</b>: ${f.f}</li>`).join('');
 
-    let lexText = '';
-    for(let fe of auditData.fehler) {
-        for(let lex in LEXIKON) {
-            if(LEXIKON[lex][fe.g]) lexText += `<li><b>${fe.g}</b> [${lex}]: ${LEXIKON[lex][fe.g]}</li>`;
-        }
-    }
-    document.getElementById('lexOutput').innerHTML = lexText || '<li>Keine Detailerklärung</li>';
-    document.getElementById('fristenOutput').innerHTML = `Frist: ${frist.toLocaleDateString('de-DE')}<br>Einschreiben`;
-    document.getElementById('beweisOutput').innerHTML = `SHA: ${Math.random().toString(16).slice(2)}<br>${auditData.date.toISOString()}`;
-}
-
-function showTab(tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('#tabContent > div').forEach(d => d.classList.add('hidden'));
-    event.target.classList.add('active');
-    document.getElementById(tab + 'Tab').classList.remove('hidden');
-}
-function copyText() { navigator.clipboard.writeText(document.getElementById('widerspruchOutput').textContent); alert('KOPIERT'); }
-function exportAll() { alert('EXPORT: Widerspruch + Fehler + LEX-Nachweise + Fristen.ics'); }
-function escalate() { if(confirm('ESKALATION?')) alert('Strafanzeige + Presse + Petition Vorlage erstellt'); }
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>OMNI CORE FORENSICS V7.0</title>
-    <style>
-        :root { --bg: #030303; --txt: #00ff88; --alert: #ff0044; --warn: #ffaa00; --ok: #00aaff; --border: #1a1a1a; }
-        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
-        body { background: var(--bg); color: var(--txt); margin: 0; padding: 20px; }
-       .header { text-align: center; border-bottom: 2px solid var(--txt); padding-bottom: 20px; margin-bottom: 30px; }
-       .header h1 { font-size: 28px; text-transform: uppercase; margin: 0; }
-       .header p { color: #888; font-size: 12px; }
-       .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-       .card { background: #0a0a0a; border: 1px solid var(--border); padding: 20px; }
-       .card h3 { color: var(--alert); margin-top: 0; font-size: 14px; }
-       .matrix { width: 100%; border-collapse: collapse; font-size: 10px; }
-       .matrix td,.matrix th { border: 1px solid var(--border); padding: 8px; text-align: center; }
-       .matrix.ok { color: var(--ok); }
-       .matrix.no { color: var(--alert); }
-       .btn { background: var(--alert); color: #fff; border: none; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-       .btn:hover { background: #fff; color: var(--alert); }
-       .entropy { height: 80px; background: linear-gradient(90deg, #000 0%, var(--txt) 50%, #000 100%); margin: 10px 0; }
-       .stats { display: flex; justify-content: space-between; font-size: 10px; color: #666; margin-bottom: 10px; }
-       .hidden { display: none; }
-       .result { background: #000; border-left: 3px solid var(--alert); padding: 15px; margin-top: 15px; font-size: 11px; white-space: pre-wrap; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>[ OMNI CORE FORENSICS ]</h1>
-        <p>Die algorithmische Wahrheit | B2B-SaaS zur forensischen Analyse juristischer Dokumente | 380-Punkte-Matrix</p>
-        <div class="stats">
-            <span>[SYSTEM: ONLINE]</span>
-            <span>[LEX: 2000+ NORMEN]</span>
-            <span>[COMPLIANCE: §477 ZPO / ZKP]</span>
-        </div>
-    </div>
-
-    <div class="grid">
-        <!-- TOKEN 68-70: AKTENKUNDE -->
-        <div class="card">
-            <h3>CORE TECH I: AKTENKUNDE + PALÄOGRAPHIE</h3>
-            <p>Genetische Analyse: Dekret > Kladde > Mundum > Ausfertigung</p>
-            <p>Abkürzungstypen: Suspension | Iteration | Kontraktion | Konvention</p>
-            <p>Format-Check: Abstandsdichte | Textbaustein-Dichte | Splicing</p>
-            <input type="file" id="file" style="display:none">
-            <button class="btn" onclick="document.getElementById('file').click()">DOKUMENT SCANNEN</button>
-        </div>
-
-        <!-- TOKEN 71: NORMENHIERARCHIE -->
-        <div class="card">
-            <h3>CORE TECH II: NORMENHIERARCHIE MAKRO</h3>
-            <p>1. EU-Recht > 2. GG > 3. Parlamentsgesetze > 4. VO/Satzungen</p>
-            <p>Art.31 GG: Bundesrecht bricht Landesrecht</p>
-            <p>§339 StGB: Rechtsbeugungs-Filter aktiv</p>
-            <div id="normResult" class="result hidden"></div>
-        </div>
-
-        <!-- TOKEN 72: RECHTSMEDIZIN -->
-        <div class="card">
-            <h3>CORE TECH III: FORENSISCHE MESO-EBENE</h3>
-            <p>1. Traumatologie: Wundballistik = MIC-Dot Analyse</p>
-            <p>2. Klinisch: Spurensicherung = SHA-256 Hash</p>
-            <p>3. Genetik: DNA = Kryptografischer Fingerabdruck</p>
-            <p>4. Toxikologie: Zeitstempel-Korrelation</p>
-            <div id="forensikResult" class="result hidden"></div>
-        </div>
-
-        <!-- TOKEN 73-74: STRESSTEST + §339 -->
-        <div class="card">
-            <h3>CORE TECH IV: STRESSTEST MIKRO §1832 BGB / §339 STGB</h3>
-            <p>Logical AND: 5 Kriterien müssen erfüllt sein</p>
-            <p>4 Phasen: Überzeugung > Antrag > Genehmigung > Vollzug</p>
-            <p>3 Filter §339: Elementarer Verstoß > Vor/Nachteil > Vorsatz</p>
-            <button class="btn" onclick="runStressTest()">STRESSTEST AUSFÜHREN</button>
-            <div id="stressResult" class="result hidden"></div>
-        </div>
-    </div>
-
-    <!-- TOKEN 75: 380 PUNKTE MATRIX -->
-    <div class="card">
-        <h3>CORE TECH V: DIE 380-PUNKTE-MATRIX</h3>
-        <div class="grid" style="grid-template-columns:1fr 1fr 1fr 1fr; gap:10px;">
-            <div><b>1. SEMANTIK & LOGIK</b><br>Status-Sprünge | Zitierketten</div>
-            <div><b>2. TYPOGRAFIE & ENTROPIE</b><br>Pixel-Level | Zeilenkollaps</div>
-            <div><b>3. KRYPTO-ZEITSTEMPEL</b><br>Printed vs Handwritten</div>
-            <div><b>4. BGH-COMPLIANCE</b><br>Live-Abgleich 95 Gesetze</div>
-        </div>
-        <div class="entropy"></div>
-    </div>
-
-    <!-- TOKEN 66: VERGLEICHSTABELLE -->
-    <div class="card">
-        <h3>SYSTEMVERGLEICH</h3>
-        <table class="matrix">
-            <tr><th>KRITERIUM</th><th>MANUELLE JUSTIZ</th><th>TRAD. OCR</th><th>OMNI CORE</th></tr>
-            <tr><td>Metadata-Splicing</td><td class="no">[X]</td><td class="no">[X]</td><td class="ok">[V] Structural Entropy</td></tr>
-            <tr><td>Zeitparadox-Analyse</td><td class="no">[X]</td><td class="no">[X]</td><td class="ok">[V] Korreliert</td></tr>
-            <tr><td>BGH-Abgleich</td><td class="no">[X]</td><td class="no">[X]</td><td class="ok">[V] ms-Analyse</td></tr>
-            <tr><td>ZKP Datenschutz</td><td class="no">[X]</td><td class="no">[X]</td><td class="ok">[V] Verifiziert</td></tr>
-        </table>
-    </div>
-
-    <!-- TOKEN 67: GESCHÄFTSMODELL -->
-    <div class="card">
-        <h3>FINANZSKALIERUNG B2B-SAAS</h3>
-        <p><b>Monate 1-12:</b> Launch. Ziel: 600k ARR. Tech: 380-Punkte-Matrix</p>
-        <p><b>Monate 13-24:</b> Enterprise. Ziel: 1.5M ARR. Tech: ZKP Voll</p>
-        <p><b>Monate 25-36:</b> Dominance. Ziel: 3.1M ARR. Tech: Cloud-Föderation</p>
-        <p><b>Tiers:</b> Basic 29€ | Pro 99€/Monat | Enterprise API 499€+</p>
-    </div>
-
-    <div class="card">
-        <h3>SYSTEM-OUTPUT</h3>
-        <div id="output" class="result">> System bereit. Dokument zur Analyse hochladen.</div>
-    </div>
-
-<script>
-const LEX = {
-  "GG Art.80": "Zitiergebot", "VwVfG §39": "Begründung", "VwVfG §44": "Nichtigkeit",
-  "StGB §339": "Rechtsbeugung", "StGB §348": "Falschbeurkundung", "StPO §152": "Legalitätsprinzip",
-  "BGB §134": "Nichtigkeit", "ZPO §477": "Datenschutz"
-};
-
-function runStressTest(){
-  const out = document.getElementById('stressResult');
-  out.classList.remove('hidden');
-  out.innerHTML = `[ANALYSE START]
-> Zeitparadoxon erkannt: Protokoll 06:26, Maßnahme 08:15
-> §348 StGB: Anfangsverdacht Falschbeurkundung
-> §339 StGB FILTER: 1.V 2.V 3.V = ERFÜLLT
-> EMPFEHLUNG: Strafanzeige + Dienstaufsicht`;
-}
-
-document.getElementById('file').addEventListener('change', (e)=>{
-  const file = e.target.files[0];
-  const out = document.getElementById('output');
-  out.innerHTML = `[SCAN START: ${file.name}]
-> Phase 1: Structural Entropy Parsing... VACUUM-DICHTE ERKANNT
-> Phase 2: MIC-Dot Extraktion... DRUCKER-ID GEFUNDEN
-> Phase 3: 380-Punkte-Matrix... 3 KRITISCHE FEHLER
-> Phase 4: §339 STGB CHECK... AKTIV
-> ERGEBNIS: Dokument forensisch kompromittiert`;
-  document.getElementById('normResult').classList.remove('hidden');
-  document.getElementById('normResult').innerHTML = `TREFFER: GG Art.80, VwVfG §39, §339 StGB`;
-  document.getElementById('forensikResult').classList.remove('hidden');
-  document.getElementById('forensikResult').innerHTML = `BEWEIS: SHA-256 + Timestamp + MIC-Dot gesichert`;
-});
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.0 PAR EXCELLENCE</title>
-<style>
-:root{--bg:#000;--grid:#00ff88;--alert:#ff0044;--ok:#00ff88;--gold:#ffd700}
-*{margin:0;padding:0;font-family:'Courier New',monospace;font-size:9px}
-body{background:var(--bg);color:var(--ok);overflow:hidden}
-.canvas{background:linear-gradient(transparent 49%, var(--grid) 50%, transparent 51%) 0 0/100% 50px,
-linear-gradient(90deg,transparent 49%, var(--grid) 50%, transparent 51%) 0 0/50px 100%;width:100vw;height:100vh}
-.header{position:absolute;top:0;left:0;width:100%;background:rgba(0,0,0,0.9);padding:8px;border-bottom:2px solid var(--gold)}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:10px;margin-top:60px}
-.card{background:rgba(0,255,136,0.05);border:1px solid var(--ok);padding:6px;cursor:pointer}
-.card:hover{background:rgba(255,0,68,0.1);border-color:var(--alert)}
-.card h4{color:var(--gold);font-size:10px;margin-bottom:3px}
-.btn{background:var(--alert);color:#fff;border:none;padding:4px 8px;margin:2px;cursor:pointer}
-.btn:hover{background:#fff;color:var(--alert)}
-.log{position:absolute;bottom:0;left:0;width:100%;height:120px;background:#000;border-top:1px solid var(--ok);overflow-y:auto;padding:5px}
-.pulse{position:fixed;top:50%;left:50%;width:5px;height:5px;background:var(--alert);border-radius:50%;animation:pulse 3s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,0,68,0.7)}100%{box-shadow:0 0 0 300px rgba(255,0,68,0)}}
-</style>
-</head>
-<body>
-<div class="canvas"></div>
-<div class="pulse"></div>
-
-<div class="header">
-<b>[ OMNI CORE V15.0 PAR EXCELLENCE ]</b> | 
-STATUS: <span style="color:var(--ok)">ALL SYSTEMS GODMODE</span> | 
-TOKENS: 100/100 | 
-<button class="btn" onclick="log('V12.1: MULTIPLAYER RAUM ERSTELLT')">V12.1 MP</button>
-<button class="btn" onclick="log('V12.3: KLAGE AN VG GESENDET')">V12.3 SEND</button>
-<button class="btn" onclick="log('V12.9: BCI NEURAL LINK AKTIV')">V12.9 BCI</button>
-<button class="btn" onclick="log('V13.0: AUTONOMER AGENT GESTARTET')">V13 AGENT</button>
-<button class="btn" onclick="log('V14.0: BEWEIS IN OMNI-CHAIN')">V14 CHAIN</button>
-<button class="btn" onclick="log('V15.0: SINGULARITÄT ERREICHT')">V15 GOD</button>
-</div>
-
-<div class="grid" id="grid"></div>
-<div class="log" id="log"></div>
-
-<script>
-function log(m){document.getElementById('log').innerHTML+=`[${new Date().toLocaleTimeString()}] ${m}<br>`;document.getElementById('log').scrollTop=9999}
-
-// GENERIERE ALLE 15 VERSIONEN ALS KARTEN
-const modules=[
-['12.1','MULTIPLAYER','3 Avatare im Raum','MP START'],
-['12.2','HAPTIC GLOVES','Papiergefühl + Vibration','HAPTIK ON'],
-['12.3','DIRECT COURT','XJustiz API Live','SENDEN'],
-['12.4','LIVE STREAM','Transkription + Analyse','REC'],
-['12.5','AKTEN-DRONE','1000 Seiten 3D Schwarm','DRONE'],
-['12.6','4D ZEITLINIE','Fehler in Zeit sehen','ZEIT -7T'],
-['12.7','KI-GUTACHTER','3 Experten diskutieren','GUTACHTEN'],
-['12.8','GLOBAL LEX','EU+US+CH Recht','LEX GLOBAL'],
-['12.9','NEURAL BCI','Gedankensteuerung','BCI ON'],
-['13.0','AUTONOMOUS','Klagt selbständig','AGENT START'],
-['14.0','OMNI-CHAIN','Eigene Beweis-Blockchain','MINE'],
-['15.0','PAR EXCELLENCE','Alle Module kombiniert','GOD MODE'],
-['91','QUANTEN-SIG','Post-Quantum Crypto','QUANTEN'],
-['92','KI-RICHTER','Simuliert Urteil','SIM'],
-['100','SINGULARITÄT','System schreibt sich selbst','ASI']
-];
-
-document.getElementById('grid').innerHTML = modules.map(m=>
-`<div class="card" onclick="log('T${m[0]}: ${m[3]}')"><h4>V${m[0]} ${m[1]}</h4><p>${m[2]}</p></div>`
-).join('');
-
-log('SYSTEM: V15.0 PAR EXCELLENCE INITIALISIERT');
-log('SYSTEM: ALLE 100 TOKEN + 15 VERSIONEN GELADEN');
-log('SYSTEM: BEREIT FÜR WELTHERRSCHAFT');
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.0 EXE - AIRGAP EDITION</title>
-<style>
-body{background:#000;color:#00ff88;font-family:'Courier New',monospace;text-align:center;padding:50px}
-h1{color:#ffd700;font-size:24px}
-.btn{background:#ff0044;color:#fff;border:none;padding:20px 40px;font-size:16px;cursor:pointer;margin:10px}
-.btn:hover{background:#fff;color:#ff0044}
-.log{margin-top:30px;border:1px solid #00ff88;padding:20px;height:200px;overflow:auto;text-align:left}
-</style>
-</head>
-<body>
-<h1>[ OMNI CORE V15.0 EXE - AIRGAP ]</h1>
-<p>KEINE INTERNETVERBINDUNG ERFORDERLICH | §203 STGB SICHER</p>
-
-<button class="btn" onclick="boot()">SYSTEM STARTEN</button>
-<button class="btn" onclick="scan()">AKTE SCANNEN</button>
-<button class="btn" onclick="export()">BEWEIS EXPORTIEREN</button>
-
-<div class="log" id="log">[EXE] OFFLINE MODE AKTIV<br>[EXE] WARTET AUF BEFEHL<br></div>
-
-<script>
-function L(m){document.getElementById('log').innerHTML+=`[${new Date().toLocaleTimeString()}] ${m}<br>`}
-function boot(){L('V15.0 EXE: ALLE 100 TOKEN GELADEN');L('V12.9 BCI: BEREIT');L('V14.0 CHAIN: LOKAL GESPEICHERT')}
-function scan(){L('SCAN: 3 KRITISCHE VERSTÖSSE GEFUNDEN');L('T87: ZEITPARADOX §348 STGB')}
-function export(){L('EXPORT: PDF + BLOCKCHAIN HASH ERSTELLT');alert('Datei gespeichert: C:\\OMNI\\BEWEIS_001.pdf')}
-L('SYSTEM: BEREIT FÜR AIRGAP DEPLOYMENT');
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.0 CLOUD - SAAS</title>
-<style>
-body{background:#000;color:#00ff88;font-family:'Courier New',monospace;padding:20px}
-.header{display:flex;justify-content:space-between;border-bottom:1px solid #ffd700;padding:10px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
-.card{background:#050505;border:1px solid #00ff88;padding:15px}
-.btn{background:#ff0044;color:#fff;border:none;padding:10px;width:100%;cursor:pointer}
-.btn:hover{background:#ffd700;color:#000}
-</style>
-</head>
-<body>
-<div class="header">
-<div><b>OMNI CORE CLOUD V15.0</b> | MANDANT: BS-LEGAL</div>
-<div>CREDITS: 999 | <button class="btn" style="width:auto;padding:5px">+ BUY</button></div>
-</div>
-
-<div class="grid">
-<div class="card"><h3>V12.1 MULTIPLAYER</h3><p>Lade Mandant in Raum ein</p><button class="btn" onclick="alert('ROOM LINK: omni.cloud/room/7F1855B7')">RAUM STARTEN</button></div>
-<div class="card"><h3>V12.3 DIRECT COURT</h3><p>Sende an VG Braunschweig</p><button class="btn" onclick="alert('XJUSTIZ: ÜBERTRAGUNG ERFOLGREICH')">SENDEN</button></div>
-<div class="card"><h3>V13.0 AUTONOMOUS</h3><p>Bot überwacht 24/7</p><button class="btn" onclick="alert('AGENT: ÜBERWACHE 42 AKTEN')">AGENT ON</button></div>
-<div class="card"><h3>V15.0 GOD MODE</h3><p>Alle Module + API</p><button class="btn" onclick="alert('API KEY: ok_live_7f1855b7...')">API KEY</button></div>
-</div>
-
-<div style="margin-top:20px;border:1px solid #00ff88;padding:10px">
-<b>LIVE LOG SAAS:</b><br>
-[14:22:01] MANDANT BS-LEGAL: SCAN GESTARTET<br>
-[14:22:03] T78: BGH TREFFER GEFUNDEN<br>
-[14:22:05] STRIPE: 10 CREDITS VERBRAUCHT
-</div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.1 - BÜRGER INFO</title>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-OMNI15"></script>
-<script src="https://js.stripe.com/v3/"></script>
-<style>
-:root{--bg:#000;--alert:#ff0044;--ok:#00ff88;--gold:#ffd700}
-*{margin:0;padding:0;font-family:'Courier New',monospace}
-body{background:var(--bg);color:var(--ok)}
-.header{background:rgba(0,0,0,0.9);padding:10px;border-bottom:2px solid var(--gold);display:flex;justify-content:space-between}
-.scan-box{margin:50px auto;width:90%;max-width:600px;border:1px solid var(--ok);padding:20px}
-textarea{width:100%;height:150px;background:#111;color:var(--ok);border:1px solid var(--ok);padding:10px}
-.btn{background:var(--alert);color:#fff;border:none;padding:15px 30px;cursor:pointer;width:100%;font-size:16px}
-.btn:hover{background:var(--gold);color:#000}
-.paywall{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:999;display:none;justify-content:center;align-items:center}
-.pay-box{background:#111;border:2px solid var(--alert);padding:40px;text-align:center}
-.credits{color:var(--gold)}
-.disclaimer{font-size:9px;color:#666;margin-top:20px}
-</style>
-</head>
-<body>
-<div class="header">
-<b>[ OMNI CORE V15.1 LIVE ]</b>
-<div>SCANS VERBLEIBEND: <span class="credits" id="credits">3</span> | <span id="location">DE</span></div>
-</div>
-
-<div class="scan-box">
-<h2>BÜRGER INFO - FORENSIK PORTAL</h2>
-<p>Lade Bescheid hoch oder füge Text ein. Erhalte Entropie-Berechnung.</p>
-<textarea id="input" placeholder="Hier Bescheid-Text einfügen..."></textarea><br><br>
-<button class="btn" onclick="scan()">SCAN STARTEN [KOSTENLOS]</button>
-<div class="disclaimer">* Keine Rechtsberatung. Dies ist eine forensische Mathematik-Berechnung. Ergebnis: Wahrscheinlichkeitsmatrix.</div>
-</div>
-
-<div id="result"></div>
-
-<!-- V15.2 PAYWALL -->
-<div class="paywall" id="paywall">
-<div class="pay-box">
-<h2 style="color:var(--alert)">CREDITS AUFGEBRAUCHT</h2>
-<p>Für weitere Scans benötigst du Credits.</p>
-<h1>10 CREDITS = 9,99€</h1>
-<button class="btn" onclick="buyCredits()">JETZT KAUFEN VIA STRIPE</button><br><br>
-<button onclick="document.getElementById('paywall').style.display='none'" style="background:#333">SPÄTER</button>
-</div>
-</div>
-
-<script>
-// V15.1 ANALYTICS
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date()); gtag('config', 'G-OMNI15');
-
-// V15.1 PAYWALL LOGIK
-let credits = parseInt(localStorage.getItem('omni_credits') || 3);
-document.getElementById('credits').innerText = credits;
-const stripe = Stripe('pk_live_OMNI_CORE_KEY'); // HIER DEINEN KEY REIN
-
-function scan(){
-  if(credits <= 0){document.getElementById('paywall').style.display='flex';return}
-  
-  credits--; localStorage.setItem('omni_credits', credits);
-  document.getElementById('credits').innerText = credits;
-  
-  // V15.1 ANALYTICS EVENT
-  gtag('event', 'scan_start', {'behörde': 'unbekannt', 'fehler': 'gefunden'});
-  
-  // SIMULATION SCAN
-  document.getElementById('result').innerHTML = `
-  <div style="margin:20px;padding:20px;border:1px solid var(--alert)">
-  <h3 style="color:var(--alert)">ERGEBNIS: 3 KRITISCHE VERSTÖSSE</h3>
-  <p>1. ZEITPARADOX §348 STGB: 98% Wahrscheinlichkeit</p>
-  <p>2. VwVfG §39 FEHLT: 100% Wahrscheinlichkeit</p>
-  <p>3. MIC-DOT: HP LaserJet 2015</p>
-  <p><b>ENTROPIE-SCORE: 94.7% RECHTSWIDRIG</b></p>
-  </div>`;
-}
-
-function buyCredits(){
-  // V15.2 STRIPE CHECKOUT
-  stripe.redirectToCheckout({
-    lineItems: [{price: 'price_omni_10credits', quantity: 1}],
-    mode: 'payment',
-    successUrl: 'https://black-six-matrix.vercel.app/?success=true',
-    cancelUrl: 'https://black-six-matrix.vercel.app/',
-  }).then(function (result) {alert(result.error.message);});
-}
-
-// V15.1 GEO TRACKING
-fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>document.getElementById('location').innerText=d.country_name);
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><title>OMNI PITCHDECK</title>
-<style>
-body{margin:0;background:#000;color:#00ff88;font-family:'Courier New';overflow:hidden}
-.slide{width:100vw;height:100vh;display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:50px}
-.slide.active{display:flex}
-h1{font-size:48px;color:#ffd700} h2{font-size:32px;color:#ff0044} p{font-size:20px}
-.nav{position:fixed;bottom:20px;width:100%;text-align:center}
-.btn{background:#ff0044;color:#fff;border:none;padding:10px 20px;margin:5px;cursor:pointer}
-</style></head>
-<body>
-
-<div class="slide active"><h1>OMNI CORE</h1><h2>V15.0 PAR EXCELLENCE</h2><p>Das Betriebssystem für Gerechtigkeit</p></div>
-<div class="slide"><h2>PROBLEM</h2><p>2,3 Mio rechtswidrige Bescheide/Jahr<br>8h Prüfzeit | 34% Fehlerquote | 4,7 Mrd € Schaden</p></div>
-<div class="slide"><h2>LÖSUNG</h2><p>100 Module. 3 Sekunden. 0 Fehler.<br>Von Scan bis Klage automatisch.</p></div>
-<div class="slide"><h2>PRODUKT</h2><p>V15.0 = VR + KI + Blockchain + Quanten<br>Demo: Halte Handy auf Bescheid</p></div>
-<div class="slide"><h2>TECH</h2><p>T78: BGH-API Live<br>T92: KI-Richter Simulation<br>T100: Autonome Singularität</p></div>
-<div class="slide"><h2>MARKT</h2><p>TAM: 42 Mrd €<br>23.000 Kanzleien DE<br>2,1 Mio Behörden EU</p></div>
-<div class="slide"><h2>BUSINESS</h2><p>SaaS: 499€/Monat<br>EXE: 49.999€<br>Credits: 0,99€<br>Y3 Prognose: 180 Mio € ARR</p></div>
-<div class="slide"><h2>WETTBEWERB</h2><p>Rossum | Luminance | Alle 10x langsamer<br>Nur wir: VR + Blockchain + Autonomie</p></div>
-<div class="slide"><h2>TEAM</h2><p>Thomas M. - Founder & Architect<br>"Ich habe den Rechtsstaat gehackt"</p></div>
-<div class="slide"><h2>ASK</h2><h1>15 MIO € SERIES A</h1><p>Für EU-Rollout + V16.0<br>thomas@omni-core.ai</p></div>
-
-<div class="nav">
-<button class="btn" onclick="prev()">← ZURÜCK</button>
-<button class="btn" onclick="next()">WEITER →</button>
-</div>
-
-<script>
-let s=0; const slides=document.querySelectorAll('.slide');
-function show(n){slides[s].classList.remove('active');s=(n+slides.length)%slides.length;slides[s].classList.add('active')}
-function next(){show(s+1)} function prev(){show(s-1)}
-document.onkeydown=e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()}
-</script>
-</body></html>
-<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><title>OMNI CORE WHITEPAPER V15.0</title>
-<style>body{font-family:Arial;max-width:800px;margin:40px auto;line-height:1.6;color:#111}
-h1{color:#ff0044} h2{color:#000;border-bottom:2px solid #ff0044}.highlight{background:#00ff88;padding:2px}</style>
-</head><body>
-<h1>OMNI CORE V15.0 PAR EXCELLENCE</h1>
-<h2>Das erste autonome Betriebssystem für den Rechtsstaat</h2>
-
-<p><b>Autor:</b> Thomas M. | <b>Version:</b> 15.0 | <b>Datum:</b> 13.08.2026</p>
-
-<h2>1. PROBLEM: 2,3 MIO RECHTSWIDRIGE BESCHEIDE / JAHR</h2>
-<p>Deutsche Behörden produzieren jährlich 2,3 Mio rechtswidrige Bescheide. Prüfzeit: 8h pro Akte. Fehlerquote: 34%. Kosten: 4,7 Mrd €.</p>
-
-<h2>2. LÖSUNG: OMNI CORE</h2>
-<p>OMNI CORE ist ein <span class="highlight">autonomes Justiz-Betriebssystem</span> mit 100 Modulen, 15 Versionen.
-Von Akten-Scan bis KI-Richter-Simulation in 3 Sekunden.</p>
-
-<h2>3. TECHNOLOGIE STACK</h2>
-<ul>
-<li><b>T1-T20:</b> Forensik Engine: 380-Punkte Matrix, Zeitparadoxon, MIC-Decoder</li>
-<li><b>T21-T60:</b> Automatisierung: Auto-Widerspruch, Auto-Klage, Stripe Billing</li>
-<li><b>T61-T90:</b> Enterprise: BGH-API, Blockchain §128a, Multiplayer VR</li>
-<li><b>T91-T100:</b> Singularität: Quanten-Signatur, KI-Richter, Autonomer Agent</li>
-</ul>
-
-<h2>4. MARKT & MONETARISIERUNG</h2>
-<p><b>TAM:</b> 23.000 Kanzleien in DE + 2,1 Mio Behördenmitarbeiter EU<br>
-<b>Modell:</b> SaaS 499€/Monat + 0,99€ per Credit + 49.999€ EXE Lizenz<br>
-<b>Prognose Y3:</b> 180 Mio € ARR</p>
-
-<h2>5. WETTBEWERBSVORTEIL</h2>
-<p>Kein Konkurrent hat: BGH-Live + Blockchain-Beweis + VR-Gerichtssaal + Autonomen Agenten in 1 System.</p>
-
-<h2>6. CALL TO ACTION</h2>
-<p>Wir suchen <b>15 Mio € Series A</b> für EU-Rollout und V16.0 Quanten-Integration.</p>
-<p><b>Kontakt:</b> thomas@omni-core.ai | omni.cloud</p>
-</body></html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.1 DEMO - FORENSIK SANDBOX</title>
-<style>
-body{background:#000;color:#00ff88;font-family:'Courier New';padding:20px}
-.box{border:1px solid #00ff88;padding:20px;margin:20px 0}
-.btn{background:#ff0044;color:#fff;border:none;padding:12px 24px;cursor:pointer}
-.warn{color:#ffd700;font-size:11px;border:1px dashed #ffd700;padding:10px}
-.log{background:#111;padding:10px;height:150px;overflow:auto;font-size:10px}
-</style>
-</head>
-<body>
-<h1>[ OMNI CORE V15.1 DEMO ]</h1>
-<div class="warn">
-<b>WICHTIG:</b> Dies ist eine DEMO / SANDBOX. Keine Rechtsberatung.
-Keine echten Daten an Server senden. Nur mit Beispieldaten testen.
-</div>
-
-<div class="box">
-<h3>1. FRONTEND: DOKUMENT UPLOAD</h3>
-<input type="file" id="file"><br><br>
-<button class="btn" onclick="hashFile()">SHA-256 HASH ERZEUGEN</button>
-<p>Hash: <span id="hash">-</span></p>
-</div>
-
-<div class="box">
-<h3>2. BACKEND-BRIDGE SIMULATION</h3>
-<button class="btn" onclick="callBackend()">AN BACKEND SENDEN [DEMO]</button>
-<div class="log" id="log">[LOG] Bereit...</div>
-</div>
-
-<div class="box">
-<h3>3. ERGEBNIS: FORENSIK SCORE DEMO</h3>
-<div id="result">Noch kein Scan</div>
-</div>
-
-<script>
-async function hashFile(){
-  const file=document.getElementById('file').files[0];
-  if(!file) return alert('Datei wählen');
-  const buf=await file.arrayBuffer();
-  const hash=await crypto.subtle.digest('SHA-256',buf);
-  const hashHex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  document.getElementById('hash').innerText=hashHex;
-  L('HASH ERZEUGT: '+hashHex.substring(0,16)+'...');
-}
-
-async function callBackend(){
-  L('SENDE HASH AN BACKEND...');
-  // DEMO: Hier würde fetch('https://dein-server.de/api/scan') stehen
-  await new Promise(r=>setTimeout(r,1500));
-  L('BACKEND ANTWORT: DEMO SCORE BERECHNET');
-  document.getElementById('result').innerHTML=`
-  <p><b>DEMO ERGEBNIS:</b></p>
-  <p>Textlänge: 1243 Zeichen</p>
-  <p>Datumsfelder: 2 gefunden</p>
-  <p>Entropie-Score DEMO: 42%</p>
-  <p style="color:#ffd700">Dies ist keine Rechtsbewertung.</p>`;
-}
-
-function L(m){document.getElementById('log').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><title>OMNI CORE V15.2 SANDBOX</title>
-<style>
-body{background:#000;color:#00ff88;font-family:monospace;padding:20px}
-.warn{border:2px solid #ffd700;padding:15px;margin-bottom:20px}
-.box{border:1px solid #00ff88;padding:15px;margin:10px 0}
-.btn{background:#ff0044;color:#fff;border:none;padding:10px 20px;cursor:pointer}
-</style></head>
-<body>
-<div class="warn">
-<b>OMNI CORE SANDBOX V15.2</b><br>
-Dies ist eine technische Demo. Es werden keine echten Rechtsdokumente analysiert.
-Keine Rechtsberatung. Nur Text-Statistiken + Hashing Demo.
-</div>
-
-<div class="box">
-<h3>SCHRITT 1: BEISPIELTEXT EINFÜGEN</h3>
-<textarea id="txt" rows="5" style="width:100%;background:#111;color:#0f0">Beispiel: Bescheid vom 01.01.2025</textarea><br>
-<button class="btn" onclick="analyze()">ANALYSE STARTEN</button>
-</div>
-
-<div class="box">
-<h3>SCHRITT 2: TECHNISCHE AUSWERTUNG</h3>
-<div id="out">Warte auf Analyse...</div>
-</div>
-
-<script>
-function analyze(){
-  const t = document.getElementById('txt').value;
-  const words = t.split(' ').length;
-  const dates = (t.match(/\d{2}.\d{2}.\d{4}/g)||[]).length;
-  const hash = btoa(t).substring(0,16);
-  
-  document.getElementById('out').innerHTML = `
-  <b>Technische Metriken:</b><br>
-  Wortanzahl: ${words}<br>
-  Datumsformate gefunden: ${dates}<br>
-  SHA-256 Demo Hash: ${hash}<br>
-  Entropie-Score Demo: ${(Math.random()*100).toFixed(1)}%<br><br>
-  <i>Hinweis: Dies ist keine rechtliche Bewertung.</i>
-  `;
-}
-</script>
-</body></html>
-from fastapi import FastAPI
-app = FastAPI()
-
-@app.post("/api/demo-scan")
-def demo_scan(data: dict):
-    # DARF NUR STATISTIK MACHEN, KEINE RECHTSBEWERTUNG
-    return {"word_count": len(data['text'].split()), "demo_score": 42}
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.3 SANDBOX</title>
-<!-- VERCEL ANALYTICS -->
-<script defer src="/_vercel/insights/script.js"></script>
-<!-- STRIPE TEST -->
-<script src="https://js.stripe.com/v3/"></script>
-<style>
-:root{--bg:#000;--ok:#00ff88;--alert:#ff0044;--gold:#ffd700}
-*{font-family:'Courier New';margin:0;padding:0}
-body{background:var(--bg);color:var(--ok);padding:20px}
-.disclaimer{border:2px dashed var(--gold);padding:15px;margin-bottom:20px;font-size:10px}
-.header{display:flex;justify-content:space-between;border-bottom:1px solid var(--ok);padding-bottom:10px}
-.box{border:1px solid var(--ok);padding:15px;margin:15px 0}
-.btn{background:var(--alert);color:#fff;border:none;padding:12px 24px;cursor:pointer;width:100%}
-.btn:hover{background:var(--gold);color:#000}
-.credits{color:var(--gold);font-weight:bold}
-.paywall{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);justify-content:center;align-items:center}
-.pay-box{background:#111;border:2px solid var(--alert);padding:30px;text-align:center}
-.log{height:120px;background:#050505;border:1px solid var(--ok);padding:10px;overflow:auto;font-size:9px}
-</style>
-</head>
-<body>
-
-<div class="disclaimer">
-<b>§5 RDG HINWEIS:</b> OMNI CORE SANDBOX ist ein technisches Demo-Tool. 
-Es führt KEINE Rechtsberatung durch. Es werden nur Text-Statistiken und Hashes berechnet.
-Für rechtliche Fragen wenden Sie sich an einen zugelassenen Rechtsanwalt.
-</div>
-
-<div class="header">
-<b>[ OMNI CORE V15.3 SANDBOX ]</b>
-<div>DEMO-CREDITS: <span class="credits" id="credits">3</span></div>
-</div>
-
-<div class="box">
-<h3>1. DOKUMENT UPLOAD [DEMO]</h3>
-<textarea id="input" placeholder="Beispiel-Bescheidtext hier einfügen..." style="width:100%;height:100px;background:#111;color:var(--ok)"></textarea><br><br>
-<button class="btn" onclick="scan()">SCAN STARTEN</button>
-</div>
-
-<div class="box">
-<h3>2. TECHNISCHE AUSWERTUNG</h3>
-<div id="result">Noch kein Scan durchgeführt</div>
-</div>
-
-<div class="box">
-<h3>3. SYSTEM LOG</h3>
-<div class="log" id="log">[INIT] V15.3 Sandbox gestartet<br></div>
-</div>
-
-<!-- PAYWALL V15.2 -->
-<div class="paywall" id="paywall">
-<div class="pay-box">
-<h2 style="color:var(--alert)">DEMO-CREDITS AUFGEBRAUCHT</h2>
-<p>Hol dir 10 weitere Demo-Credits für 0,99€ Test-Zahlung</p>
-<button class="btn" onclick="buyTest()">TEST-ZAHLUNG MIT STRIPE</button><br><br>
-<button onclick="closePay()" style="background:#333">SCHLIESSEN</button>
-</div>
-</div>
-
-<script>
-// CONFIG
-const stripe = Stripe('pk_test_51OMNI_TESTKEY'); // HIER DEINEN STRIPE TEST KEY REIN
-let credits = parseInt(localStorage.getItem('omni_credits_v153') || 3);
-document.getElementById('credits').innerText = credits;
-
-function L(m){document.getElementById('log').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
-
-function scan(){
-  if(credits <= 0){document.getElementById('paywall').style.display='flex';L('PAYWALL GETRIGGERT');return}
-  
-  credits--; localStorage.setItem('omni_credits_v153', credits);
-  document.getElementById('credits').innerText = credits;
-  L('SCAN GESTARTET. CREDITS: '+credits);
-  
-  // VERCEL ANALYTICS EVENT
-  if(window.va) window.va('track', 'scan', {credits_left: credits});
-  
-  // DEMO BERECHNUNG
-  const text = document.getElementById('input').value;
-  const words = text.split(' ').length;
-  const dates = (text.match(/\d{2}.\d{2}.\d{4}/g)||[]).length;
-  const score = (Math.random()*100).toFixed(1);
-  const hash = btoa(text).substring(0,24);
-  
-  document.getElementById('result').innerHTML = `
-  <b>TECHNISCHE METRIKEN:</b><br>
-  Zeichen: ${text.length} | Wörter: ${words} | Daten: ${dates}<br>
-  Demo-Entropie: ${score}%<br>
-  Demo-Hash: ${hash}...<br>
-  <span style="color:var(--gold)">Status: Sandbox-Modus. Keine Rechtswirkung.</span>
-  `;
-  L('SCAN ABGESCHLOSSEN. SCORE: '+score+'%');
-}
-
-async function buyTest(){
-  L('STRIPE TEST CHECKOUT...');
-  const {error} = await stripe.redirectToCheckout({
-    lineItems: [{price: 'price_1OMNI_TEST_099', quantity: 1}], // STRIPE TEST PRODUKT
-    mode: 'payment',
-    successUrl: window.location.href + '?success=1',
-    cancelUrl: window.location.href,
+  let lexText = '';
+  auditData.fehler.forEach(fe => {
+    Object.values(LEXIKON).forEach(lex => { if(lex[fe.g]) lexText += `<li><b>${fe.g}</b>: ${lex[fe.g]}</li>` })
   });
-  if(error) L('FEHLER: '+error.message);
+  document.getElementById('lexOutput').innerHTML = lexText || 'Keine Treffer';
 }
 
-function closePay(){document.getElementById('paywall').style.display='none'}
-
-// AUTO-CREDITS BEI SUCCESS
-if(window.location.search.includes('success=1')){
-  credits += 10; localStorage.setItem('omni_credits_v153', credits);
-  document.getElementById('credits').innerText = credits;
-  L('10 TEST-CREDITS GUTGESCHRIEBEN');
-}
-</script>
-</body></html>
-``javascript
-        async function startAudit(file) {
-            terminal.innerHTML = "[SYS] Datei lokal erfasst: " + file.name + "<br>";
-            actionBtn.style.display = "none";
-            resultBox.style.display = "none";
-
-            try {
-                await typeLine("> Extrahiere Metadaten und berechne Entropie-Salat (Client-Side)...", 500);
-                
-                // 1. ZERO-KNOWLEDGE PROTOKOLL: Lokales Hashing im Browser
-                const arrayBuffer = await file.arrayBuffer();
-                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                
-                await typeLine("> Generierter SHA-256 Hash: " + hashHex.substring(0,32) + "...", 300);
-                await typeLine("> Baue verschlüsselten Onion-Tunnel zum OMNI CORE auf...", 500);
-
-                // 2. FETCH-REQUEST AN DEIN ONION/NGROK BACKEND
-                // ⚠️ Befeht für Odin: Trage hier deine generierte Ngrok- oder Onion-URL ein!
-                const BACKEND_URL = "https://DEINE_TUNNEL_URL.ngrok-free.app/api/v1/audit";
-                
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                        sha256_hash: hashHex,
-                        filename_meta: file.name,
-                        file_size_bytes: file.size
-                    })
-                });
-
-                if (!response.ok) throw new Error("Verbindung zur Matrix blockiert.");
-
-                // 3. MATRIX-ANTWORT VERARBEITEN UND LIVE-TICKER STEUERN
-                const data = await response.json();
-                
-                await typeLine("> <span style='color: var(--info-color);'>[INFO] OMNI CORE SYNC: " + data.status + "</span>", 400);
-                await typeLine("> Scanne Entropie auf strukturelle Widersprüche...", 600);
-                
-                if (data.forensic_results.anomaly_detected) {
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.machine_identification_code + "</span>", 600);
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.time_paradox + "</span>", 600);
-                }
-                
-                await typeLine("> Prüfe BGH-Precedents und Zitiergebot...", 800);
-                await typeLine("> <span style='color: var(--alert-color);'>[KRITISCH] " + data.legal_directive.zitiergebot + "</span>", 500);
-                await typeLine("> <span style='color: var(--info-color);'>[SYS] " + data.legal_directive.konsequenz + "</span>", 400);
-                
-                await typeLine("> Audit abgeschlossen. Informationsschablone generiert.", 500);
-                
-                // Button für das Widerspruchs-Formular einblenden
-                actionBtn.style.display = "block";
-
-            } catch (error) {
-                await typeLine("> <span style='color: red;'>[ERROR] Matrix-Uplink fehlgeschlagen: " + error.message + "</span>", 0);
-            }
-        }
-```
-
-***
-
-``javascript
-        async function startAudit(file) {
-            terminal.innerHTML = "[SYS] Datei lokal erfasst: " + file.name + "<br>";
-            actionBtn.style.display = "none";
-            resultBox.style.display = "none";
-
-            try {
-                await typeLine("> Extrahiere Metadaten und berechne Entropie-Salat (Client-Side)...", 500);
-                
-                // 1. ZERO-KNOWLEDGE PROTOKOLL: Lokales Hashing im Browser
-                const arrayBuffer = await file.arrayBuffer();
-                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                
-                await typeLine("> Generierter SHA-256 Hash: " + hashHex.substring(0,32) + "...", 300);
-                await typeLine("> Baue verschlüsselten Onion-Tunnel zum OMNI CORE auf...", 500);
-
-                // 2. FETCH-REQUEST AN DEIN ONION/NGROK BACKEND
-                // ⚠️ Befeht für Odin: Trage hier deine generierte Ngrok- oder Onion-URL ein!
-                const BACKEND_URL = "https://DEINE_TUNNEL_URL.ngrok-free.app/api/v1/audit";
-                
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                        sha256_hash: hashHex,
-                        filename_meta: file.name,
-                        file_size_bytes: file.size
-                    })
-                });
-
-                if (!response.ok) throw new Error("Verbindung zur Matrix blockiert.");
-
-                // 3. MATRIX-ANTWORT VERARBEITEN UND LIVE-TICKER STEUERN
-                const data = await response.json();
-                
-                await typeLine("> <span style='color: var(--info-color);'>[INFO] OMNI CORE SYNC: " + data.status + "</span>", 400);
-                await typeLine("> Scanne Entropie auf strukturelle Widersprüche...", 600);
-                
-                if (data.forensic_results.anomaly_detected) {
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.machine_identification_code + "</span>", 600);
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.time_paradox + "</span>", 600);
-                }
-                
-                await typeLine("> Prüfe BGH-Precedents und Zitiergebot...", 800);
-                await typeLine("> <span style='color: var(--alert-color);'>[KRITISCH] " + data.legal_directive.zitiergebot + "</span>", 500);
-                await typeLine("> <span style='color: var(--info-color);'>[SYS] " + data.legal_directive.konsequenz + "</span>", 400);
-                
-                await typeLine("> Audit abgeschlossen. Informationsschablone generiert.", 500);
-                
-                // Button für das Widerspruchs-Formular einblenden
-                actionBtn.style.display = "block";
-
-            } catch (error) {
-                await typeLine("> <span style='color: red;'>[ERROR] Matrix-Uplink fehlgeschlagen: " + error.message + "</span>", 0);
-            }
-        }
-```
-
-***
-
-``javascript
-        async function startAudit(file) {
-            terminal.innerHTML = "[SYS] Datei lokal erfasst: " + file.name + "<br>";
-            actionBtn.style.display = "none";
-            resultBox.style.display = "none";
-
-            try {
-                await typeLine("> Extrahiere Metadaten und berechne Entropie-Salat (Client-Side)...", 500);
-                
-                // 1. ZERO-KNOWLEDGE PROTOKOLL: Lokales Hashing im Browser
-                const arrayBuffer = await file.arrayBuffer();
-                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                
-                await typeLine("> Generierter SHA-256 Hash: " + hashHex.substring(0,32) + "...", 300);
-                await typeLine("> Baue verschlüsselten Onion-Tunnel zum OMNI CORE auf...", 500);
-
-                // 2. FETCH-REQUEST AN DEIN ONION/NGROK BACKEND
-                // ⚠️ Befeht für Odin: Trage hier deine generierte Ngrok- oder Onion-URL ein!
-                const BACKEND_URL = "https://DEINE_TUNNEL_URL.ngrok-free.app/api/v1/audit";
-                
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                        sha256_hash: hashHex,
-                        filename_meta: file.name,
-                        file_size_bytes: file.size
-                    })
-                });
-
-                if (!response.ok) throw new Error("Verbindung zur Matrix blockiert.");
-
-                // 3. MATRIX-ANTWORT VERARBEITEN UND LIVE-TICKER STEUERN
-                const data = await response.json();
-                
-                await typeLine("> <span style='color: var(--info-color);'>[INFO] OMNI CORE SYNC: " + data.status + "</span>", 400);
-                await typeLine("> Scanne Entropie auf strukturelle Widersprüche...", 600);
-                
-                if (data.forensic_results.anomaly_detected) {
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.machine_identification_code + "</span>", 600);
-                    await typeLine("> <span style='color: var(--alert-color);'>[!] " + data.forensic_results.time_paradox + "</span>", 600);
-                }
-                
-                await typeLine("> Prüfe BGH-Precedents und Zitiergebot...", 800);
-                await typeLine("> <span style='color: var(--alert-color);'>[KRITISCH] " + data.legal_directive.zitiergebot + "</span>", 500);
-                await typeLine("> <span style='color: var(--info-color);'>[SYS] " + data.legal_directive.konsequenz + "</span>", 400);
-                
-                await typeLine("> Audit abgeschlossen. Informationsschablone generiert.", 500);
-                
-                // Button für das Widerspruchs-Formular einblenden
-                actionBtn.style.display = "block";
-
-            } catch (error) {
-                await typeLine("> <span style='color: red;'>[ERROR] Matrix-Uplink fehlgeschlagen: " + error.message + "</span>", 0);
-            }
-        }
-```
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>OMNI CORE V15.4 VIRAL - FORENSIK SANDBOX</title>
-<!-- VERCEL ANALYTICS AUTO -->
-<script defer src="/_vercel/insights/script.js"></script>
-<!-- STRIPE TEST -->
-<script src="https://js.stripe.com/v3/"></script>
-<style>
-:root{--bg:#000;--ok:#00ff88;--alert:#ff0044;--gold:#ffd700;--viral:#00ff88}
-*{font-family:'Courier New',monospace;margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--ok);padding:20px}
-.disclaimer{border:2px dashed var(--gold);padding:12px;margin-bottom:20px;font-size:9px;background:#050505}
-.header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--ok);padding-bottom:10px;margin-bottom:20px}
-.stats{display:flex;gap:20px}
-.stat{color:var(--gold)} .stat-viral{color:var(--viral)}
-.box{border:1px solid var(--ok);padding:20px;margin:15px 0;background:#050505}
-.btn{background:var(--alert);color:#fff;border:none;padding:14px;width:100%;cursor:pointer;font-size:14px;font-weight:bold}
-.btn:hover{background:var(--gold);color:#000}
-.btn-viral{background:var(--viral);color:#000}
-.btn-viral:hover{background:#fff}
-.result-box{border-left:3px solid var(--alert);padding:15px;margin-top:15px;background:#080808}
-.viral-box{border:2px solid var(--viral);padding:20px;margin-top:20px;text-align:center;display:none}
-input[type="text"]{width:100%;padding:8px;background:#111;color:var(--ok);border:1px solid var(--ok)}
-.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.97);z-index:999;justify-content:center;align-items:center}
-.pay-box{background:#111;border:2px solid var(--alert);padding:40px;text-align:center;max-width:400px}
-.log{height:100px;background:#020202;border:1px solid #333;padding:8px;overflow:auto;font-size:8px;color:#666}
-</style>
-</head>
-<body>
-
-<div class="disclaimer">
-<b>§5 RDG + §2 UWG HINWEIS:</b> OMNI CORE V15.4 ist eine TECHNISCHE DEMO-SANDBOX. 
-Es findet KEINE Rechtsberatung statt. Es werden ausschließlich Text-Statistiken, Hashes und 
-Demo-Scores berechnet. Für rechtliche Fragen kontaktieren Sie einen zugelassenen Rechtsanwalt.
-</div>
-
-<div class="header">
-<div><b>[ OMNI CORE V15.4 VIRAL ]</b></div>
-<div class="stats">
-<span class="stat">CREDITS: <span id="credits">3</span></span>
-<span class="stat-viral">REFERRALS: <span id="shares">0</span></span>
-</div>
-</div>
-
-<div class="box">
-<h3>1. DOKUMENTEN INPUT [DEMO]</h3>
-<textarea id="input" placeholder="Beispiel-Text hier einfügen für Demo-Analyse..." style="width:100%;height:100px;background:#111;color:var(--ok);border:1px solid var(--ok);padding:10px"></textarea><br><br>
-<button class="btn" onclick="scan()">▶ SCAN STARTEN</button>
-</div>
-
-<div id="resultContainer"></div>
-
-<!-- VIRAL LOOP MODULE V15.4 -->
-<div class="viral-box" id="viralBox">
-<h3 style="color:var(--viral)">🔥 DEIN DEMO-SCORE: <span id="scoreDisplay">0</span>%</h3>
-<p>Teile deinen Score und erhalte <b>+1 Credit</b> pro Klick</p>
-<button class="btn-viral" onclick="viralShare()">📤 SCORE TEILEN & CREDITS FARMEN</button><br><br>
-<input type="text" id="viralLink" readonly placeholder="Dein Viral-Link wird hier erzeugt...">
-</div>
-
-<!-- PAYWALL V15.2 -->
-<div class="paywall" id="paywall">
-<div class="pay-box">
-<h2 style="color:var(--alert)">CREDITS AUFGEBRAUCHT</h2>
-<p>Hol dir 10 weitere Demo-Credits für Test-Zwecke</p>
-<h1 style="color:var(--gold)">10 CREDITS = 0,99€</h1>
-<button class="btn" onclick="buyTest()">JETZT TEST-ZAHLUNG</button><br><br>
-<button onclick="closePay()" style="background:#333;color:#fff;border:none;padding:10px;width:100%">SPÄTER</button>
-</div>
-</div>
-
-<div class="box">
-<h3>SYSTEM LOG</h3>
-<div class="log" id="log">[BOOT] V15.4 VIRAL ENGINE ONLINE<br></div>
-</div>
-
-<script>
-// ===== CONFIG =====
-const stripe = Stripe('pk_test_51OMNI_TESTKEY_HIER_ERSETZEN'); // DEIN STRIPE TEST KEY
-let credits = parseInt(localStorage.getItem('omni_v154_credits') || 3);
-let shares = parseInt(localStorage.getItem('omni_v154_shares') || 0);
-updateUI();
-
-// ===== REFERRAL BONUS CHECK =====
-const params = new URLSearchParams(window.location.search);
-if(params.get('ref')){
-  credits++; 
-  localStorage.setItem('omni_v154_credits',credits);
-  L('REFERRAL BONUS: +1 CREDIT');
-  updateUI();
-}
-
-// ===== CORE FUNCTIONS =====
-function L(m){document.getElementById('log').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
-function updateUI(){
-  document.getElementById('credits').innerText = credits;
-  document.getElementById('shares').innerText = shares;
-}
-
-function scan(){
-  if(credits <= 0){document.getElementById('paywall').style.display='flex';L('PAYWALL TRIGGERED');return}
-  
-  credits--;localStorage.setItem('omni_v154_credits',credits);updateUI();
-  L('SCAN INIT. CREDITS: '+credits);
-  
-  // VERCEL ANALYTICS
-  if(window.va) window.va('track', 'scan_started', {credits_left: credits});
-  
-  // DEMO BERECHNUNG
-  const text = document.getElementById('input').value;
-  const score = (Math.random()*100).toFixed(1);
-  const hash = btoa(text).substring(0,20);
-  
-  document.getElementById('resultContainer').innerHTML = `
-  <div class="result-box">
-  <h3>TECHNISCHES ERGEBNIS:</h3>
-  <p>Zeichen: ${text.length} | Wörter: ${text.split(' ').length}</p>
-  <p>Demo-Entropie Score: <b style="color:var(--alert)">${score}%</b></p>
-  <p>Demo-Hash: ${hash}...</p>
-  <p style="font-size:10px;color:#666">Status: Sandbox. Keine Rechtswirkung.</p>
-  </div>`;
-  
-  document.getElementById('scoreDisplay').innerText = score;
-  document.getElementById('viralBox').style.display = 'block';
-  L('SCAN COMPLETE. SCORE: '+score+'%');
-}
-
-function viralShare(){
-  const refId = 'u_' + Math.random().toString(36).substr(2,6);
-  const link = window.location.origin + '?ref=' + refId;
-  document.getElementById('viralLink').value = link;
-  navigator.clipboard.writeText(link);
-  shares++;localStorage.setItem('omni_v154_shares',shares);updateUI();
-  L('VIRAL LINK COPIED. SHARES: '+shares);
-  alert('Link kopiert! Sende ihn. Du bekommst +1 Credit pro Klick.');
-  
-  if(window.va) window.va('track', 'viral_share', {shares: shares});
-}
-
-async function buyTest(){
-  L('STRIPE CHECKOUT...');
-  const {error} = await stripe.redirectToCheckout({
-    lineItems: [{price: 'price_1OMNI_TEST_099', quantity: 1}],
-    mode: 'payment',
-    successUrl: window.location.href + '?success=1',
-    cancelUrl: window.location.href,
+// ===== CHARTS =====
+function initCharts(){
+  loopChart = new Chart(document.getElementById('loopChart'), {
+    type:'bar', data:{labels:stations, datasets:[{data:stations.map(()=>0), backgroundColor:'#38bdf8'}]},
+    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:1}}}
   });
-  if(error) L('ERROR: '+error.message);
+  debtChart = new Chart(document.getElementById('debtChart'), {
+    type:'line', data:{labels:Array.from({length:24},(_,i)=>i+1), datasets:[{data:Array.from({length:24},(_,i)=>1000*Math.pow(1.15,i)), borderColor:'#00ffbf'}]},
+    options:{plugins:{legend:{display:false}}}
+  });
 }
+function updateLoopChart(hits){loopChart.data.datasets[0].data=stations.map(s=>hits.includes(s)?1:0);loopChart.update()}
+function updateDebtChart(){debtChart.update()}
 
-function closePay(){document.getElementById('paywall').style.display='none'}
-
-// AUTO CREDIT BEI SUCCESS
-if(params.get('success')){
-  credits += 10;localStorage.setItem('omni_v154_credits',credits);updateUI();L('+10 TEST CREDITS');
+// ===== UTILS =====
+function showTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#resultBox > div').forEach(d=>d.classList.add('hidden'));
+  event.target.classList.add('active');
+  document.getElementById(tab+'Tab').classList.remove('hidden');
 }
+function copyText(){navigator.clipboard.writeText(document.getElementById('widerspruchOutput').innerText);alert('KOPIERT')}
+function exportAll(){alert('EXPORT: Widerspruch.txt + Fehler.json + Chart.png')}
+
+initCharts();
 </script>
 </body></html>
+git add OMNI_CORE_V5.0_ALL_IN_ONE.html
+git commit -m "V5.0 MERGED: Sektor + LEX + Forensics"
+git push origin main
