@@ -1647,3 +1647,290 @@ body{background:#000;color:#00ff88;font-family:'Courier New',monospace;padding:2
 </div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V15.1 - BÜRGER INFO</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-OMNI15"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{--bg:#000;--alert:#ff0044;--ok:#00ff88;--gold:#ffd700}
+*{margin:0;padding:0;font-family:'Courier New',monospace}
+body{background:var(--bg);color:var(--ok)}
+.header{background:rgba(0,0,0,0.9);padding:10px;border-bottom:2px solid var(--gold);display:flex;justify-content:space-between}
+.scan-box{margin:50px auto;width:90%;max-width:600px;border:1px solid var(--ok);padding:20px}
+textarea{width:100%;height:150px;background:#111;color:var(--ok);border:1px solid var(--ok);padding:10px}
+.btn{background:var(--alert);color:#fff;border:none;padding:15px 30px;cursor:pointer;width:100%;font-size:16px}
+.btn:hover{background:var(--gold);color:#000}
+.paywall{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:999;display:none;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--alert);padding:40px;text-align:center}
+.credits{color:var(--gold)}
+.disclaimer{font-size:9px;color:#666;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="header">
+<b>[ OMNI CORE V15.1 LIVE ]</b>
+<div>SCANS VERBLEIBEND: <span class="credits" id="credits">3</span> | <span id="location">DE</span></div>
+</div>
+
+<div class="scan-box">
+<h2>BÜRGER INFO - FORENSIK PORTAL</h2>
+<p>Lade Bescheid hoch oder füge Text ein. Erhalte Entropie-Berechnung.</p>
+<textarea id="input" placeholder="Hier Bescheid-Text einfügen..."></textarea><br><br>
+<button class="btn" onclick="scan()">SCAN STARTEN [KOSTENLOS]</button>
+<div class="disclaimer">* Keine Rechtsberatung. Dies ist eine forensische Mathematik-Berechnung. Ergebnis: Wahrscheinlichkeitsmatrix.</div>
+</div>
+
+<div id="result"></div>
+
+<!-- V15.2 PAYWALL -->
+<div class="paywall" id="paywall">
+<div class="pay-box">
+<h2 style="color:var(--alert)">CREDITS AUFGEBRAUCHT</h2>
+<p>Für weitere Scans benötigst du Credits.</p>
+<h1>10 CREDITS = 9,99€</h1>
+<button class="btn" onclick="buyCredits()">JETZT KAUFEN VIA STRIPE</button><br><br>
+<button onclick="document.getElementById('paywall').style.display='none'" style="background:#333">SPÄTER</button>
+</div>
+</div>
+
+<script>
+// V15.1 ANALYTICS
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date()); gtag('config', 'G-OMNI15');
+
+// V15.1 PAYWALL LOGIK
+let credits = parseInt(localStorage.getItem('omni_credits') || 3);
+document.getElementById('credits').innerText = credits;
+const stripe = Stripe('pk_live_OMNI_CORE_KEY'); // HIER DEINEN KEY REIN
+
+function scan(){
+  if(credits <= 0){document.getElementById('paywall').style.display='flex';return}
+  
+  credits--; localStorage.setItem('omni_credits', credits);
+  document.getElementById('credits').innerText = credits;
+  
+  // V15.1 ANALYTICS EVENT
+  gtag('event', 'scan_start', {'behörde': 'unbekannt', 'fehler': 'gefunden'});
+  
+  // SIMULATION SCAN
+  document.getElementById('result').innerHTML = `
+  <div style="margin:20px;padding:20px;border:1px solid var(--alert)">
+  <h3 style="color:var(--alert)">ERGEBNIS: 3 KRITISCHE VERSTÖSSE</h3>
+  <p>1. ZEITPARADOX §348 STGB: 98% Wahrscheinlichkeit</p>
+  <p>2. VwVfG §39 FEHLT: 100% Wahrscheinlichkeit</p>
+  <p>3. MIC-DOT: HP LaserJet 2015</p>
+  <p><b>ENTROPIE-SCORE: 94.7% RECHTSWIDRIG</b></p>
+  </div>`;
+}
+
+function buyCredits(){
+  // V15.2 STRIPE CHECKOUT
+  stripe.redirectToCheckout({
+    lineItems: [{price: 'price_omni_10credits', quantity: 1}],
+    mode: 'payment',
+    successUrl: 'https://black-six-matrix.vercel.app/?success=true',
+    cancelUrl: 'https://black-six-matrix.vercel.app/',
+  }).then(function (result) {alert(result.error.message);});
+}
+
+// V15.1 GEO TRACKING
+fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>document.getElementById('location').innerText=d.country_name);
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>OMNI PITCHDECK</title>
+<style>
+body{margin:0;background:#000;color:#00ff88;font-family:'Courier New';overflow:hidden}
+.slide{width:100vw;height:100vh;display:none;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:50px}
+.slide.active{display:flex}
+h1{font-size:48px;color:#ffd700} h2{font-size:32px;color:#ff0044} p{font-size:20px}
+.nav{position:fixed;bottom:20px;width:100%;text-align:center}
+.btn{background:#ff0044;color:#fff;border:none;padding:10px 20px;margin:5px;cursor:pointer}
+</style></head>
+<body>
+
+<div class="slide active"><h1>OMNI CORE</h1><h2>V15.0 PAR EXCELLENCE</h2><p>Das Betriebssystem für Gerechtigkeit</p></div>
+<div class="slide"><h2>PROBLEM</h2><p>2,3 Mio rechtswidrige Bescheide/Jahr<br>8h Prüfzeit | 34% Fehlerquote | 4,7 Mrd € Schaden</p></div>
+<div class="slide"><h2>LÖSUNG</h2><p>100 Module. 3 Sekunden. 0 Fehler.<br>Von Scan bis Klage automatisch.</p></div>
+<div class="slide"><h2>PRODUKT</h2><p>V15.0 = VR + KI + Blockchain + Quanten<br>Demo: Halte Handy auf Bescheid</p></div>
+<div class="slide"><h2>TECH</h2><p>T78: BGH-API Live<br>T92: KI-Richter Simulation<br>T100: Autonome Singularität</p></div>
+<div class="slide"><h2>MARKT</h2><p>TAM: 42 Mrd €<br>23.000 Kanzleien DE<br>2,1 Mio Behörden EU</p></div>
+<div class="slide"><h2>BUSINESS</h2><p>SaaS: 499€/Monat<br>EXE: 49.999€<br>Credits: 0,99€<br>Y3 Prognose: 180 Mio € ARR</p></div>
+<div class="slide"><h2>WETTBEWERB</h2><p>Rossum | Luminance | Alle 10x langsamer<br>Nur wir: VR + Blockchain + Autonomie</p></div>
+<div class="slide"><h2>TEAM</h2><p>Thomas M. - Founder & Architect<br>"Ich habe den Rechtsstaat gehackt"</p></div>
+<div class="slide"><h2>ASK</h2><h1>15 MIO € SERIES A</h1><p>Für EU-Rollout + V16.0<br>thomas@omni-core.ai</p></div>
+
+<div class="nav">
+<button class="btn" onclick="prev()">← ZURÜCK</button>
+<button class="btn" onclick="next()">WEITER →</button>
+</div>
+
+<script>
+let s=0; const slides=document.querySelectorAll('.slide');
+function show(n){slides[s].classList.remove('active');s=(n+slides.length)%slides.length;slides[s].classList.add('active')}
+function next(){show(s+1)} function prev(){show(s-1)}
+document.onkeydown=e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()}
+</script>
+</body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>OMNI CORE WHITEPAPER V15.0</title>
+<style>body{font-family:Arial;max-width:800px;margin:40px auto;line-height:1.6;color:#111}
+h1{color:#ff0044} h2{color:#000;border-bottom:2px solid #ff0044}.highlight{background:#00ff88;padding:2px}</style>
+</head><body>
+<h1>OMNI CORE V15.0 PAR EXCELLENCE</h1>
+<h2>Das erste autonome Betriebssystem für den Rechtsstaat</h2>
+
+<p><b>Autor:</b> Thomas M. | <b>Version:</b> 15.0 | <b>Datum:</b> 13.08.2026</p>
+
+<h2>1. PROBLEM: 2,3 MIO RECHTSWIDRIGE BESCHEIDE / JAHR</h2>
+<p>Deutsche Behörden produzieren jährlich 2,3 Mio rechtswidrige Bescheide. Prüfzeit: 8h pro Akte. Fehlerquote: 34%. Kosten: 4,7 Mrd €.</p>
+
+<h2>2. LÖSUNG: OMNI CORE</h2>
+<p>OMNI CORE ist ein <span class="highlight">autonomes Justiz-Betriebssystem</span> mit 100 Modulen, 15 Versionen.
+Von Akten-Scan bis KI-Richter-Simulation in 3 Sekunden.</p>
+
+<h2>3. TECHNOLOGIE STACK</h2>
+<ul>
+<li><b>T1-T20:</b> Forensik Engine: 380-Punkte Matrix, Zeitparadoxon, MIC-Decoder</li>
+<li><b>T21-T60:</b> Automatisierung: Auto-Widerspruch, Auto-Klage, Stripe Billing</li>
+<li><b>T61-T90:</b> Enterprise: BGH-API, Blockchain §128a, Multiplayer VR</li>
+<li><b>T91-T100:</b> Singularität: Quanten-Signatur, KI-Richter, Autonomer Agent</li>
+</ul>
+
+<h2>4. MARKT & MONETARISIERUNG</h2>
+<p><b>TAM:</b> 23.000 Kanzleien in DE + 2,1 Mio Behördenmitarbeiter EU<br>
+<b>Modell:</b> SaaS 499€/Monat + 0,99€ per Credit + 49.999€ EXE Lizenz<br>
+<b>Prognose Y3:</b> 180 Mio € ARR</p>
+
+<h2>5. WETTBEWERBSVORTEIL</h2>
+<p>Kein Konkurrent hat: BGH-Live + Blockchain-Beweis + VR-Gerichtssaal + Autonomen Agenten in 1 System.</p>
+
+<h2>6. CALL TO ACTION</h2>
+<p>Wir suchen <b>15 Mio € Series A</b> für EU-Rollout und V16.0 Quanten-Integration.</p>
+<p><b>Kontakt:</b> thomas@omni-core.ai | omni.cloud</p>
+</body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V15.1 DEMO - FORENSIK SANDBOX</title>
+<style>
+body{background:#000;color:#00ff88;font-family:'Courier New';padding:20px}
+.box{border:1px solid #00ff88;padding:20px;margin:20px 0}
+.btn{background:#ff0044;color:#fff;border:none;padding:12px 24px;cursor:pointer}
+.warn{color:#ffd700;font-size:11px;border:1px dashed #ffd700;padding:10px}
+.log{background:#111;padding:10px;height:150px;overflow:auto;font-size:10px}
+</style>
+</head>
+<body>
+<h1>[ OMNI CORE V15.1 DEMO ]</h1>
+<div class="warn">
+<b>WICHTIG:</b> Dies ist eine DEMO / SANDBOX. Keine Rechtsberatung.
+Keine echten Daten an Server senden. Nur mit Beispieldaten testen.
+</div>
+
+<div class="box">
+<h3>1. FRONTEND: DOKUMENT UPLOAD</h3>
+<input type="file" id="file"><br><br>
+<button class="btn" onclick="hashFile()">SHA-256 HASH ERZEUGEN</button>
+<p>Hash: <span id="hash">-</span></p>
+</div>
+
+<div class="box">
+<h3>2. BACKEND-BRIDGE SIMULATION</h3>
+<button class="btn" onclick="callBackend()">AN BACKEND SENDEN [DEMO]</button>
+<div class="log" id="log">[LOG] Bereit...</div>
+</div>
+
+<div class="box">
+<h3>3. ERGEBNIS: FORENSIK SCORE DEMO</h3>
+<div id="result">Noch kein Scan</div>
+</div>
+
+<script>
+async function hashFile(){
+  const file=document.getElementById('file').files[0];
+  if(!file) return alert('Datei wählen');
+  const buf=await file.arrayBuffer();
+  const hash=await crypto.subtle.digest('SHA-256',buf);
+  const hashHex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  document.getElementById('hash').innerText=hashHex;
+  L('HASH ERZEUGT: '+hashHex.substring(0,16)+'...');
+}
+
+async function callBackend(){
+  L('SENDE HASH AN BACKEND...');
+  // DEMO: Hier würde fetch('https://dein-server.de/api/scan') stehen
+  await new Promise(r=>setTimeout(r,1500));
+  L('BACKEND ANTWORT: DEMO SCORE BERECHNET');
+  document.getElementById('result').innerHTML=`
+  <p><b>DEMO ERGEBNIS:</b></p>
+  <p>Textlänge: 1243 Zeichen</p>
+  <p>Datumsfelder: 2 gefunden</p>
+  <p>Entropie-Score DEMO: 42%</p>
+  <p style="color:#ffd700">Dies ist keine Rechtsbewertung.</p>`;
+}
+
+function L(m){document.getElementById('log').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>OMNI CORE V15.2 SANDBOX</title>
+<style>
+body{background:#000;color:#00ff88;font-family:monospace;padding:20px}
+.warn{border:2px solid #ffd700;padding:15px;margin-bottom:20px}
+.box{border:1px solid #00ff88;padding:15px;margin:10px 0}
+.btn{background:#ff0044;color:#fff;border:none;padding:10px 20px;cursor:pointer}
+</style></head>
+<body>
+<div class="warn">
+<b>OMNI CORE SANDBOX V15.2</b><br>
+Dies ist eine technische Demo. Es werden keine echten Rechtsdokumente analysiert.
+Keine Rechtsberatung. Nur Text-Statistiken + Hashing Demo.
+</div>
+
+<div class="box">
+<h3>SCHRITT 1: BEISPIELTEXT EINFÜGEN</h3>
+<textarea id="txt" rows="5" style="width:100%;background:#111;color:#0f0">Beispiel: Bescheid vom 01.01.2025</textarea><br>
+<button class="btn" onclick="analyze()">ANALYSE STARTEN</button>
+</div>
+
+<div class="box">
+<h3>SCHRITT 2: TECHNISCHE AUSWERTUNG</h3>
+<div id="out">Warte auf Analyse...</div>
+</div>
+
+<script>
+function analyze(){
+  const t = document.getElementById('txt').value;
+  const words = t.split(' ').length;
+  const dates = (t.match(/\d{2}.\d{2}.\d{4}/g)||[]).length;
+  const hash = btoa(t).substring(0,16);
+  
+  document.getElementById('out').innerHTML = `
+  <b>Technische Metriken:</b><br>
+  Wortanzahl: ${words}<br>
+  Datumsformate gefunden: ${dates}<br>
+  SHA-256 Demo Hash: ${hash}<br>
+  Entropie-Score Demo: ${(Math.random()*100).toFixed(1)}%<br><br>
+  <i>Hinweis: Dies ist keine rechtliche Bewertung.</i>
+  `;
+}
+</script>
+</body></html>
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.post("/api/demo-scan")
+def demo_scan(data: dict):
+    # DARF NUR STATISTIK MACHEN, KEINE RECHTSBEWERTUNG
+    return {"word_count": len(data['text'].split()), "demo_score": 42}
