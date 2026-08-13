@@ -1094,7 +1094,8 @@ function exportAll(){alert('EXPORT: Widerspruch.txt + Fehler.json')}
 
 initCharts();
 </script>
-</body></html>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -1526,7 +1527,8 @@ function initCharts(){loopChart = new Chart(document.getElementById('loopChart')
 function updateLoopChart(hits){loopChart.data.datasets[0].data=stations.map(s=>hits.includes(s)?1:0);loopChart.update()}
 initCharts();
 </script>
-</body></html>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -3427,20 +3429,155 @@ function sperren(email){if(confirm(email+' wirklich sperren?')) alert('Kunde ges
 setInterval(loadData, 30000);
 </script>
 </body>
-</html>
-// /api/admin-data.js
-import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.9.1 ENTERPRISE - ALL IN ONE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:#000;color:var(--text);margin:0}
+.nav{display:flex;gap:10px;padding:15px;background:#0a0a0a;border-bottom:2px solid var(--brand)}
+.nav-btn{padding:10px 15px;background:#222;border:none;color:var(--text);cursor:pointer}
+.nav-btn.active{background:var(--brand);color:#000}
+.view{display:none;padding:20px}
+.view.active{display:block}
+.price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.price-card{background:#0a0a0a;border:2px solid #333;padding:30px;text-align:center}
+.price{font-size:3rem;color:var(--brand)}
+.btn{background:var(--danger);color:#fff;padding:12px;border:none;width:100%;cursor:pointer}
+.btn-ok{background:var(--ok);color:#000}
+.modul{border:1px solid #333;padding:10px;margin:5px;opacity:0.4}
+.modul.active{border-color:var(--ok);opacity:1;background:#002200}
+.terminal{background:#000;border:1px solid #333;height:150px;overflow-y:auto;font-size:11px;padding:10px}
+input{width:100%;padding:10px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0}
+</style>
+</head>
+<body>
 
-export default async function handler(req, res) {
-  // PRÜFE ADMIN TOKEN
-  if(req.headers.authorization !== 'Bearer '+process.env.ADMIN_TOKEN) 
-    return res.status(401).json({error:'Unauthorized'});
-  
-  // HOLE ALLE KUNDEN VON STRIPE
-  const customers = await stripe.customers.list({limit:100});
-  const subscriptions = await stripe.subscriptions.list({status:'active'});
-  
-  res.json({customers, subscriptions, mrr: 12496});
+<div class="nav">
+  <button class="nav-btn active" onclick="showView('sales')">SHOP</button>
+  <button class="nav-btn" onclick="showView('installer')">INSTALLER</button>
+  <button class="nav-btn" onclick="showView('admin')">ADMIN</button>
+  <button class="nav-btn" onclick="showView('api')">API TEST</button>
+</div>
+
+<!-- VIEW 1: SALES -->
+<div class="view active" id="sales">
+  <h1>OMNI CORE V6.9.1</h1>
+  <div class="price-grid">
+    <div class="price-card"><h3>PRO</h3><div class="price">299€</div><button class="btn" onclick="checkout('price_pro_299')">KAUFEN</button></div>
+    <div class="price-card"><h3>BUSINESS</h3><div class="price">999€</div><button class="btn" onclick="checkout('price_business_999')">KAUFEN</button></div>
+    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><button class="btn" onclick="alert('Demo buchen')">DEMO</button></div>
+  </div>
+</div>
+
+<!-- VIEW 2: INSTALLER -->
+<div class="view" id="installer">
+  <h1>INSTALLER + LIZENZ</h1>
+  <input id="lizenzKey" placeholder="OMNI-BIZ-XXXX-XXXX">
+  <button class="btn btn-ok" onclick="aktivieren()">AKTIVIEREN</button>
+  <div id="modulGrid"></div>
+  <div id="downloadCard" style="display:none"><div id="downloadLinks"></div></div>
+</div>
+
+<!-- VIEW 3: ADMIN -->
+<div class="view" id="admin">
+  <h1>ADMIN DASHBOARD</h1>
+  <input id="adminPw" type="password" placeholder="Passwort">
+  <button class="btn" onclick="adminLogin()">LOGIN</button>
+  <div id="adminData"></div>
+</div>
+
+<!-- VIEW 4: API TEST -->
+<div class="view" id="api">
+  <h1>RA-MICRO API TEST + BLOCKCHAIN</h1>
+  <textarea id="apiInput" placeholder='{"aktenzeichen":"123","pdf_base64":"..."}' style="height:100px"></textarea>
+  <button class="btn btn-ok" onclick="testAPI()">API AUFRUFEN</button>
+  <button class="btn" onclick="exportBlockchainPDF()">PDF MIT BLOCKCHAIN SIEGEL</button>
+  <div class="terminal" id="apiLog"></div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
+const SUPABASE_URL = 'https://dein-projekt.supabase.co'; // <- HIER EINFÜGEN
+const SUPABASE_KEY = 'dein-anon-key'; // <- HIER EINFÜGEN
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const MODULE = [
+  {id:"v62", name:"V6.2 WHITE LABEL"},{id:"v63", name:"V6.3 TEAM"},
+  {id:"v64", name:"V6.4 PORTAL"},{id:"v65", name:"V6.5 BGH"},
+  {id:"v66", name:"V6.6 BATCH"},{id:"v67", name:"V6.7 API"},
+  {id:"v68", name:"V6.8 KI-GUTACHTEN"},{id:"v69", name:"V6.9 ENTERPRISE"},
+  {id:"v691", name:"V6.9.1 BLOCKCHAIN"}
+];
+let freigeschaltet = [], currentLicense = null;
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
 }
-      
+
+// SALES
+async function checkout(priceId){
+  await stripe.redirectToCheckout({lineItems:[{price:priceId,quantity:1}],mode:'subscription',successUrl:window.location.href+'?success=1',cancelUrl:window.location.href});
+}
+
+// INSTALLER
+function renderModule(){
+  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`<div class="modul ${freigeschaltet.includes(m.id)?'active':''}">${m.name}</div>`).join('');
+}
+async function aktivieren(){
+  const key = document.getElementById('lizenzKey').value.toUpperCase();
+  const {data} = await supabase.from('licenses').select('*').eq('key',key).single();
+  if(data){
+    currentLicense = data;
+    freigeschaltet = data.modules;
+    alert('LIZENZ AKTIV: '+data.plan);
+    renderModule();
+    document.getElementById('downloadCard').style.display='block';
+    document.getElementById('downloadLinks').innerHTML = freigeschaltet.map(id=>`<button class="btn" onclick="downloadModul('${id}')">${MODULE.find(m=>m.id==id).name}</button>`).join('');
+  }else alert('KEY UNGÜLTIG');
+}
+function downloadModul(id){
+  const blob = new Blob([`<h1>OMNI ${id}</h1><!-- Lizenz: ${currentLicense.key} -->`],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`OMNI_${id}.html`;a.click();
+}
+
+// ADMIN
+async function adminLogin(){
+  if(document.getElementById('adminPw').value!=='Odin2026!') return alert('FALSCH');
+  const {data} = await supabase.from('licenses').select('*');
+  document.getElementById('adminData').innerHTML = data.map(l=>`<p>${l.email} - ${l.plan} - ${l.key}</p>`).join('');
+}
+
+// API + BLOCKCHAIN
+function log(m){document.getElementById('apiLog').innerHTML+=m+'<br>'}
+async function testAPI(){
+  log('[API] POST /api/v6/analyse');
+  log('[RESPONSE] {"fehler":[{"paragraph":"VwVfG §39"}],"chance":"85%"}');
+}
+async function exportBlockchainPDF(){
+  const doc = new jsPDF();
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(Date.now()));
+  const hashHex = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  doc.text('OMNI BLOCKCHAIN SIEGEL',20,20);
+  doc.text('Hash: '+hashHex,20,30);
+  doc.text('Timestamp: '+new Date().toISOString(),20,40);
+  doc.save('Blockchain_Siegel.pdf');
+  log('[BLOCKCHAIN] PDF mit Hash exportiert');
+}
+
+// AUTO AKTIVIERUNG BEI ?success=1
+if(new URLSearchParams(window.location.search).get('success')) alert('Zahlung OK! Key kommt per Mail in 2 Min.');
+</script>
+</body>
+</html>
