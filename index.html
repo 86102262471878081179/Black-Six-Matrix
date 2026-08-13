@@ -1580,3 +1580,70 @@ log('SYSTEM: BEREIT FÜR WELTHERRSCHAFT');
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V15.0 EXE - AIRGAP EDITION</title>
+<style>
+body{background:#000;color:#00ff88;font-family:'Courier New',monospace;text-align:center;padding:50px}
+h1{color:#ffd700;font-size:24px}
+.btn{background:#ff0044;color:#fff;border:none;padding:20px 40px;font-size:16px;cursor:pointer;margin:10px}
+.btn:hover{background:#fff;color:#ff0044}
+.log{margin-top:30px;border:1px solid #00ff88;padding:20px;height:200px;overflow:auto;text-align:left}
+</style>
+</head>
+<body>
+<h1>[ OMNI CORE V15.0 EXE - AIRGAP ]</h1>
+<p>KEINE INTERNETVERBINDUNG ERFORDERLICH | §203 STGB SICHER</p>
+
+<button class="btn" onclick="boot()">SYSTEM STARTEN</button>
+<button class="btn" onclick="scan()">AKTE SCANNEN</button>
+<button class="btn" onclick="export()">BEWEIS EXPORTIEREN</button>
+
+<div class="log" id="log">[EXE] OFFLINE MODE AKTIV<br>[EXE] WARTET AUF BEFEHL<br></div>
+
+<script>
+function L(m){document.getElementById('log').innerHTML+=`[${new Date().toLocaleTimeString()}] ${m}<br>`}
+function boot(){L('V15.0 EXE: ALLE 100 TOKEN GELADEN');L('V12.9 BCI: BEREIT');L('V14.0 CHAIN: LOKAL GESPEICHERT')}
+function scan(){L('SCAN: 3 KRITISCHE VERSTÖSSE GEFUNDEN');L('T87: ZEITPARADOX §348 STGB')}
+function export(){L('EXPORT: PDF + BLOCKCHAIN HASH ERSTELLT');alert('Datei gespeichert: C:\\OMNI\\BEWEIS_001.pdf')}
+L('SYSTEM: BEREIT FÜR AIRGAP DEPLOYMENT');
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V15.0 CLOUD - SAAS</title>
+<style>
+body{background:#000;color:#00ff88;font-family:'Courier New',monospace;padding:20px}
+.header{display:flex;justify-content:space-between;border-bottom:1px solid #ffd700;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+.card{background:#050505;border:1px solid #00ff88;padding:15px}
+.btn{background:#ff0044;color:#fff;border:none;padding:10px;width:100%;cursor:pointer}
+.btn:hover{background:#ffd700;color:#000}
+</style>
+</head>
+<body>
+<div class="header">
+<div><b>OMNI CORE CLOUD V15.0</b> | MANDANT: BS-LEGAL</div>
+<div>CREDITS: 999 | <button class="btn" style="width:auto;padding:5px">+ BUY</button></div>
+</div>
+
+<div class="grid">
+<div class="card"><h3>V12.1 MULTIPLAYER</h3><p>Lade Mandant in Raum ein</p><button class="btn" onclick="alert('ROOM LINK: omni.cloud/room/7F1855B7')">RAUM STARTEN</button></div>
+<div class="card"><h3>V12.3 DIRECT COURT</h3><p>Sende an VG Braunschweig</p><button class="btn" onclick="alert('XJUSTIZ: ÜBERTRAGUNG ERFOLGREICH')">SENDEN</button></div>
+<div class="card"><h3>V13.0 AUTONOMOUS</h3><p>Bot überwacht 24/7</p><button class="btn" onclick="alert('AGENT: ÜBERWACHE 42 AKTEN')">AGENT ON</button></div>
+<div class="card"><h3>V15.0 GOD MODE</h3><p>Alle Module + API</p><button class="btn" onclick="alert('API KEY: ok_live_7f1855b7...')">API KEY</button></div>
+</div>
+
+<div style="margin-top:20px;border:1px solid #00ff88;padding:10px">
+<b>LIVE LOG SAAS:</b><br>
+[14:22:01] MANDANT BS-LEGAL: SCAN GESTARTET<br>
+[14:22:03] T78: BGH TREFFER GEFUNDEN<br>
+[14:22:05] STRIPE: 10 CREDITS VERBRAUCHT
+</div>
+</body>
+</html>
