@@ -1934,3 +1934,122 @@ app = FastAPI()
 def demo_scan(data: dict):
     # DARF NUR STATISTIK MACHEN, KEINE RECHTSBEWERTUNG
     return {"word_count": len(data['text'].split()), "demo_score": 42}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V15.3 SANDBOX</title>
+<!-- VERCEL ANALYTICS -->
+<script defer src="/_vercel/insights/script.js"></script>
+<!-- STRIPE TEST -->
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{--bg:#000;--ok:#00ff88;--alert:#ff0044;--gold:#ffd700}
+*{font-family:'Courier New';margin:0;padding:0}
+body{background:var(--bg);color:var(--ok);padding:20px}
+.disclaimer{border:2px dashed var(--gold);padding:15px;margin-bottom:20px;font-size:10px}
+.header{display:flex;justify-content:space-between;border-bottom:1px solid var(--ok);padding-bottom:10px}
+.box{border:1px solid var(--ok);padding:15px;margin:15px 0}
+.btn{background:var(--alert);color:#fff;border:none;padding:12px 24px;cursor:pointer;width:100%}
+.btn:hover{background:var(--gold);color:#000}
+.credits{color:var(--gold);font-weight:bold}
+.paywall{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--alert);padding:30px;text-align:center}
+.log{height:120px;background:#050505;border:1px solid var(--ok);padding:10px;overflow:auto;font-size:9px}
+</style>
+</head>
+<body>
+
+<div class="disclaimer">
+<b>§5 RDG HINWEIS:</b> OMNI CORE SANDBOX ist ein technisches Demo-Tool. 
+Es führt KEINE Rechtsberatung durch. Es werden nur Text-Statistiken und Hashes berechnet.
+Für rechtliche Fragen wenden Sie sich an einen zugelassenen Rechtsanwalt.
+</div>
+
+<div class="header">
+<b>[ OMNI CORE V15.3 SANDBOX ]</b>
+<div>DEMO-CREDITS: <span class="credits" id="credits">3</span></div>
+</div>
+
+<div class="box">
+<h3>1. DOKUMENT UPLOAD [DEMO]</h3>
+<textarea id="input" placeholder="Beispiel-Bescheidtext hier einfügen..." style="width:100%;height:100px;background:#111;color:var(--ok)"></textarea><br><br>
+<button class="btn" onclick="scan()">SCAN STARTEN</button>
+</div>
+
+<div class="box">
+<h3>2. TECHNISCHE AUSWERTUNG</h3>
+<div id="result">Noch kein Scan durchgeführt</div>
+</div>
+
+<div class="box">
+<h3>3. SYSTEM LOG</h3>
+<div class="log" id="log">[INIT] V15.3 Sandbox gestartet<br></div>
+</div>
+
+<!-- PAYWALL V15.2 -->
+<div class="paywall" id="paywall">
+<div class="pay-box">
+<h2 style="color:var(--alert)">DEMO-CREDITS AUFGEBRAUCHT</h2>
+<p>Hol dir 10 weitere Demo-Credits für 0,99€ Test-Zahlung</p>
+<button class="btn" onclick="buyTest()">TEST-ZAHLUNG MIT STRIPE</button><br><br>
+<button onclick="closePay()" style="background:#333">SCHLIESSEN</button>
+</div>
+</div>
+
+<script>
+// CONFIG
+const stripe = Stripe('pk_test_51OMNI_TESTKEY'); // HIER DEINEN STRIPE TEST KEY REIN
+let credits = parseInt(localStorage.getItem('omni_credits_v153') || 3);
+document.getElementById('credits').innerText = credits;
+
+function L(m){document.getElementById('log').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+function scan(){
+  if(credits <= 0){document.getElementById('paywall').style.display='flex';L('PAYWALL GETRIGGERT');return}
+  
+  credits--; localStorage.setItem('omni_credits_v153', credits);
+  document.getElementById('credits').innerText = credits;
+  L('SCAN GESTARTET. CREDITS: '+credits);
+  
+  // VERCEL ANALYTICS EVENT
+  if(window.va) window.va('track', 'scan', {credits_left: credits});
+  
+  // DEMO BERECHNUNG
+  const text = document.getElementById('input').value;
+  const words = text.split(' ').length;
+  const dates = (text.match(/\d{2}.\d{2}.\d{4}/g)||[]).length;
+  const score = (Math.random()*100).toFixed(1);
+  const hash = btoa(text).substring(0,24);
+  
+  document.getElementById('result').innerHTML = `
+  <b>TECHNISCHE METRIKEN:</b><br>
+  Zeichen: ${text.length} | Wörter: ${words} | Daten: ${dates}<br>
+  Demo-Entropie: ${score}%<br>
+  Demo-Hash: ${hash}...<br>
+  <span style="color:var(--gold)">Status: Sandbox-Modus. Keine Rechtswirkung.</span>
+  `;
+  L('SCAN ABGESCHLOSSEN. SCORE: '+score+'%');
+}
+
+async function buyTest(){
+  L('STRIPE TEST CHECKOUT...');
+  const {error} = await stripe.redirectToCheckout({
+    lineItems: [{price: 'price_1OMNI_TEST_099', quantity: 1}], // STRIPE TEST PRODUKT
+    mode: 'payment',
+    successUrl: window.location.href + '?success=1',
+    cancelUrl: window.location.href,
+  });
+  if(error) L('FEHLER: '+error.message);
+}
+
+function closePay(){document.getElementById('paywall').style.display='none'}
+
+// AUTO-CREDITS BEI SUCCESS
+if(window.location.search.includes('success=1')){
+  credits += 10; localStorage.setItem('omni_credits_v153', credits);
+  document.getElementById('credits').innerText = credits;
+  L('10 TEST-CREDITS GUTGESCHRIEBEN');
+}
+</script>
+</body></html>
