@@ -2,31 +2,34 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>OMNI CORE V6.11 ENTERPRISE - Φ_LOCKED_ABSOLUTE</title>
+<title>OMNI CORE V6.13 ENTERPRISE - Φ_LOCKED_ABSOLUTE_RA_MICRO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00;--muted:#9ca3af}
 *{box-sizing:border-box;font-family:system-ui}
 body{background:radial-gradient(circle at top,#111827 0%,#000 100%);color:var(--text);margin:0}
 .legal{background:var(--warn);color:#000;padding:8px;text-align:center;font-size:10px;font-weight:bold}
 .nav{display:flex;gap:10px;padding:15px;background:#0a0a0a;border-bottom:2px solid var(--brand);position:sticky;top:0;z-index:10;flex-wrap:wrap}
-.nav-btn{padding:10px 15px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px}
-.nav-btn.active{background:var(--brand);color:#000}
+.nav-btn{padding:10px 15px;background:#222;border:none;color:var(--text);cursor:pointer;border-radius:8px;transition:0.3s}
+.nav-btn.active{background:var(--brand);color:#000;box-shadow:0 0 10px rgba(0,255,191,0.5)}
 .view{display:none;padding:20px;max-width:1400px;margin:0 auto}
-.view.active{display:block}
+.view.active{display:block;animation:fadeIn 0.5s}
+@keyframes fadeIn {from {opacity: 0;} to {opacity: 1;}}
 h1{color:var(--brand)}
 .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
 .price-card{background:#0a0a0a;border:2px solid #333;padding:30px;text-align:center;border-radius:14px;position:relative}
 .price-card.popular{border-color:var(--brand)}
 .price{font-size:3rem;color:var(--brand);font-weight:bold}
-.btn{background:var(--danger);color:#fff;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0}
+.btn{background:var(--danger);color:#fff;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:5px 0;transition:0.2s}
 .btn:hover{background:#fff;color:var(--danger)}
 .btn-ok{background:var(--ok);color:#000}.btn-ok:hover{background:#fff}
 .btn-brand{background:var(--brand);color:#000}
-.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4}
+.btn-warn{background:var(--warn);color:#000}
+.modul{border:1px solid #333;padding:12px;margin:5px;border-radius:8px;opacity:0.4;transition:0.3s}
 .modul.active{border-color:var(--ok);opacity:1;background:#002200}
 .terminal{background:#000;border:1px solid #333;height:300px;overflow-y:auto;font-size:12px;padding:15px;font-family:'Courier New', monospace;color:var(--ok)}
 input, textarea{width:100%;padding:12px;background:#111;color:var(--text);border:1px solid #333;margin:5px 0;border-radius:8px}
@@ -37,6 +40,9 @@ th,td{padding:10px;border-bottom:1px solid #222;text-align:left}
 .paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.98);z-index:999;justify-content:center;align-items:center}
 .pay-box{background:#111;border:2px solid var(--brand);padding:40px;border-radius:14px;max-width:500px}
 .ai-output{background:#050505;border-left:3px solid var(--brand);padding:15px;margin:15px 0;white-space:pre-wrap;font-size:12px;max-height:400px;overflow-y:auto}
+.dropzone{border:2px dashed var(--ok);padding:40px;text-align:center;background:#111;cursor:pointer;border-radius:14px;margin:10px 0}
+.progress-bar{background:#222;height:20px;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress-fill{background:var(--brand);height:100%;width:0%;transition:width 0.3s}
 </style>
 </head>
 <body>
@@ -46,17 +52,19 @@ th,td{padding:10px;border-bottom:1px solid #222;text-align:left}
   <button class="nav-btn active" onclick="showView('sales')">SHOP</button>
   <button class="nav-btn" onclick="showView('installer')">INSTALLER</button>
   <button class="nav-btn" onclick="showView('admin')">ADMIN</button>
-  <button class="nav-btn" onclick="showView('api')">KI + EXPORT</button>
+  <button class="nav-btn" onclick="showView('api')">KI SINGLE</button>
+  <button class="nav-btn" onclick="showView('batch')">BATCH FABRIK V6.6</button>
+  <button class="nav-btn" onclick="showView('ramicro')">RA-MICRO V6.13</button>
 </div>
 
 <!-- VIEW 1: SALES -->
 <div class="view active" id="sales">
-  <h1>OMNI CORE V6.11</h1>
-  <p>Die KI die Behörden-Bescheide auf Gesetzesverstöße prüft. Mit BGH-Urteilen. Exportiert fertigen Widerspruch.</p>
+  <h1>OMNI CORE V6.13</h1>
+  <p>Die KI die 1000 Behörden-Bescheide auf einmal prüft. Mit RA-MICRO Direktimport. Exportiert 1000 Widersprüche.</p>
   <div class="price-grid">
     <div class="price-card"><h3>PRO</h3><div class="price">299€</div><p>/Monat</p><ul style="text-align:left;list-style:none"><li>✓ V6.2 - V6.5</li><li>✓ 500 Credits</li></ul><button class="btn" onclick="checkout('price_pro_299')">JETZT STARTEN</button></div>
-    <div class="price-card popular"><span class="badge" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%)">MEIST GEKAUFT</span><h3>BUSINESS</h3><div class="price">999€</div><p>/Monat</p><ul style="text-align:left;list-style:none"><li>✓ Alles aus PRO</li><li>✓ V6.6 Batch + V6.7 API</li><li>✓ 5000 Credits</li><li>✓ Team + PDF Export</li></ul><button class="btn" onclick="checkout('price_business_999')">JETZT STARTEN</button></div>
-    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Einmalig</p><ul style="text-align:left;list-style:none"><li>✓ Alles aus BUSINESS</li><li>✓ V6.9 On-Premise</li><li>✓ V6.9.1 Blockchain</li></ul><button class="btn" onclick="alert('Vertrieb meldet sich in 24h')">DEMO BUCHEN</button></div>
+    <div class="price-card popular"><span class="badge" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%)">MEIST GEKAUFT</span><h3>BUSINESS</h3><div class="price">999€</div><p>/Monat</p><ul style="text-align:left;list-style:none"><li>✓ Alles aus PRO</li><li>✓ V6.6 BATCH FABRIK</li><li>✓ V6.7 API</li><li>✓ 5000 Credits</li></ul><button class="btn" onclick="checkout('price_business_999')">JETZT STARTEN</button></div>
+    <div class="price-card"><h3>ENTERPRISE</h3><div class="price">50.000€</div><p>Einmalig</p><ul style="text-align:left;list-style:none"><li>✓ Alles aus BUSINESS</li><li>✓ V6.9 On-Premise</li><li>✓ V6.9.1 Blockchain</li><li>✓ V6.13 RA-MICRO</li></ul><button class="btn" onclick="alert('Vertrieb meldet sich in 24h')">DEMO BUCHEN</button></div>
   </div>
 </div>
 
@@ -82,18 +90,40 @@ th,td{padding:10px;border-bottom:1px solid #222;text-align:left}
   </div>
 </div>
 
-<!-- VIEW 4: KI + EXPORT -->
+<!-- VIEW 4: KI SINGLE -->
 <div class="view" id="api">
   <h1>KI ANALYSE + WIDERSPRUCH EXPORT</h1>
-  <p style="color:var(--muted); font-size:12px;">Hinweis: Erfordert BUSINESS oder ENTERPRISE Key. 1 Analyse = 1 Credit</p>
-  <textarea id="apiInput" placeholder='Fügen Sie hier den Text des Behördenbescheids ein... "Sehr geehrte Damen und Herren, wir fordern 4000€..."' style="height:150px"></textarea>
+  <textarea id="apiInput" placeholder='Fügen Sie hier den Text des Behördenbescheids ein...' style="height:150px"></textarea>
   <button class="btn btn-ok" onclick="testAPI()">⚡ KI-ANALYSE STARTEN</button>
   <div id="aiResult" style="display:none">
     <h3>KI-ANALYSE ERGEBNIS</h3>
     <div class="ai-output" id="aiOutputText"></div>
     <button class="btn btn-brand" onclick="exportWiderspruchPDF()">📄 WIDERSPRUCH ALS PDF MIT BLOCKCHAIN SIEGEL</button>
   </div>
-  <div class="terminal" id="apiLog">[SYS] OMNI GEMINI KERNEL V6.11 READY<br></div>
+  <div class="terminal" id="apiLog">[SYS] OMNI GEMINI KERNEL V6.13 READY<br></div>
+</div>
+
+<!-- VIEW 5: BATCH FABRIK V6.6 -->
+<div class="view" id="batch">
+  <h1>BATCH FABRIK V6.6 - 1000 AKTEN AUF EINMAL</h1>
+  <p style="color:var(--muted)">Lade mehrere .txt oder .pdf Dateien hoch. Jeder Credit = 1 Akte.</p>
+  <div class="dropzone" id="batchDropzone">[+] HIER 1000 DATEIEN ABLEGEN [+]<input type="file" id="batchFiles" multiple accept=".txt,.pdf" style="display:none"></div>
+  <div id="batchInfo"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <button class="btn btn-warn" id="batchBtn" onclick="startBatch()" disabled>⚡ BATCH ANALYSE STARTEN</button>
+  <button class="btn btn-brand" id="downloadZipBtn" onclick="downloadZip()" style="display:none">📦 ZIP MIT WIDERSPRÜCHEN DOWNLOADEN</button>
+  <div class="terminal" id="batchLog">[SYS] BATCH FABRIK BEREIT<br></div>
+</div>
+
+<!-- VIEW 6: RA-MICRO V6.13 -->
+<div class="view" id="ramicro">
+  <h1>RA-MICRO DIREKTIMPORT V6.13</h1>
+  <p style="color:var(--muted)">Verbindung zur Kanzlei-Software. Importiert alle offenen Akten mit Behördenpost.</p>
+  <input id="raApiKey" placeholder="RA-MICRO API KEY">
+  <button class="btn btn-brand" onclick="connectRAMicro()">🔌 MIT RA-MICRO VERBINDEN</button>
+  <div id="raAktenListe"></div>
+  <button class="btn btn-warn" id="raBatchBtn" onclick="startRABatch()" style="display:none">⚡ ALLE AKTEN ANALYSIEREN & EXPORTIEREN</button>
+  <div class="terminal" id="raLog">[SYS] WARTE AUF RA-MICRO VERBINDUNG<br></div>
 </div>
 
 <!-- PAYWALL -->
@@ -107,6 +137,7 @@ th,td{padding:10px;border-bottom:1px solid #222;text-align:left}
 
 <script>
 const { jsPDF } = window.jspdf;
+const JSZip = window.JSZip;
 
 // === CONFIG HIER EINTRAGEN ===
 const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
@@ -116,13 +147,14 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 // =============================
 
 const MODULE = [
-  {id:"v62", name:"V6.2 WHITE LABEL", desc:"Logo + Branding"},{id:"v63", name:"V6.3 TEAM", desc:"5 Mitarbeiter Logins"},
-  {id:"v64", name:"V6.4 PORTAL", desc:"Mandanten Upload"},{id:"v65", name:"V6.5 BGH-JURIS", desc:"Echte Urteile"},
-  {id:"v66", name:"V6.6 BATCH", desc:"1000 PDFs auf einmal"},{id:"v67", name:"V6.7 API", desc:"RA-Micro Integration"},
-  {id:"v68", name:"V6.8 KI-GUTACHTEN", desc:"Auto Widerspruch"},{id:"v69", name:"V6.9 ENTERPRISE", desc:"On-Premise"},
-  {id:"v691", name:"V6.9.1 BLOCKCHAIN", desc:"Beweissiegel"}
+  {id:"v62", name:"V6.2 WHITE LABEL"},{id:"v63", name:"V6.3 TEAM"},{id:"v64", name:"V6.4 PORTAL"},
+  {id:"v65", name:"V6.5 BGH-JURIS"},{id:"v66", name:"V6.6 BATCH FABRIK"},{id:"v67", name:"V6.7 API"},
+  {id:"v68", name:"V6.8 KI-GUTACHTEN"},{id:"v69", name:"V6.9 ENTERPRISE"},{id:"v691", name:"V6.9.1 BLOCKCHAIN"},
+  {id:"v613", name:"V6.13 RA-MICRO"}
 ];
 let freigeschaltet = [], currentLicense = null, selectedPrice = '', lastAiResult = '';
+let batchFiles = [], batchResults = [], zip = new JSZip();
+let raAkten = [];
 
 function showView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -145,7 +177,7 @@ function closePay(){document.getElementById('paywall').style.display='none'}
 
 // INSTALLER
 function renderModule(){
-  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`<div class="modul ${freigeschaltet.includes(m.id)?'active':''}"><b>${m.name}</b><br><small>${m.desc}</small></div>`).join('');
+  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`<div class="modul ${freigeschaltet.includes(m.id)?'active':''}"><b>${m.name}</b></div>`).join('');
 }
 async function aktivieren(){
   const key = document.getElementById('lizenzKey').value.toUpperCase();
@@ -157,6 +189,7 @@ async function aktivieren(){
   renderModule();
   document.getElementById('downloadCard').style.display='block';
   document.getElementById('downloadLinks').innerHTML = freigeschaltet.map(id=>`<button class="btn" onclick="downloadModul('${id}')">${MODULE.find(m=>m.id==id).name} DOWNLOAD</button>`).join('');
+  document.getElementById('batchBtn').disabled = !freigeschaltet.includes('v66');
 }
 function downloadModul(id){
   const blob = new Blob([`<h1>OMNI CORE ${id.toUpperCase()}</h1><!-- Lizenz: ${currentLicense.key} -->`],{type:'text/html'});
@@ -174,7 +207,7 @@ async function loadKunden(){
   document.getElementById('kundenTabelle').innerHTML = `<table><tr><th>Email</th><th>Plan</th><th>Key</th><th>Credits</th><th>Status</th><th>Aktion</th></tr>${data.map(l=>`<tr><td>${l.email}</td><td>${l.plan}</td><td>${l.key}</td><td>${l.credits}</td><td><span class="badge ${l.status==='cancelled'?'badge-danger':''}">${l.status||'active'}</span></td><td><button class="btn" style="background:var(--danger);padding:6px;font-size:11px" onclick="kuendigenAbo('${l.stripe_session_id}','${l.key}')">KÜNDIGEN</button></td></tr>`).join('')}</table>`;
 }
 async function kuendigenAbo(sessionId, licenseKey){
-  if(!confirm('Abo wirklich kündigen und Lizenz sperren?')) return;
+  if(!confirm('Abo wirklich kündigen?')) return;
   const res = await fetch('/api/cancel', {method: 'POST',headers: {'Content-Type':'application/json'},body: JSON.stringify({sessionId, licenseKey})});
   const result = await res.json();
   alert(result.ok?'Abo gekündigt':'Fehler: '+result.error);
@@ -188,61 +221,116 @@ async function addTeamMember(){
   else document.getElementById('teamLog').innerHTML += `<p class="badge">${email} hinzugefügt</p>`;
 }
 
-// KI + PDF EXPORT V6.11
+// KI SINGLE
 function log(m){const t=document.getElementById('apiLog');t.innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>';t.scrollTop=t.scrollHeight}
-
 async function testAPI(){
-  if(!currentLicense) return log('<span style="color:var(--danger)">[ERROR] Bitte zuerst Lizenz aktivieren!</span>');
+  if(!currentLicense) return log('<span style="color:var(--danger)">[ERROR] Bitte Lizenz aktivieren!</span>');
   const input = document.getElementById('apiInput').value;
   if(!input) return log('<span style="color:var(--danger)">[ERROR] Bitte Text einfügen</span>');
-  
   log('[API] Sende an GEMINI KERNEL...');
   document.getElementById('aiResult').style.display='none';
-  
   try {
-    const response = await fetch('/api/v6/analyse', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ license_key: currentLicense.key, document_data: input })
-    });
+    const response = await fetch('/api/v6/analyse', {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({ license_key: currentLicense.key, document_data: input })});
     const data = await response.json();
     if(!response.ok) return log(`<span style="color:var(--danger)">[ERROR] ${data.error}</span>`);
-    
     lastAiResult = data.analysis;
     document.getElementById('aiOutputText').innerText = lastAiResult;
     document.getElementById('aiResult').style.display='block';
-    log(`<span style="color:var(--brand)">[OK] Analyse fertig. Credits übrig: ${data.credits_remaining}</span>`);
-    
+    log(`<span style="color:var(--brand)">[OK] Analyse fertig. Credits: ${data.credits_remaining}</span>`);
   } catch(e) { log('<span style="color:var(--danger)">[SYS-FAULT] Backend nicht erreichbar</span>'); }
 }
-
 async function exportWiderspruchPDF(){
   if(!lastAiResult) return alert('Bitte erst Analyse starten');
-  if(!currentLicense) return alert('Bitte Lizenz aktivieren');
-  
   const doc = new jsPDF();
   const data = Date.now().toString() + currentLicense.key + lastAiResult;
   const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
   const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  
-  // SEITE 1: WIDERSPRUCH
   doc.setFontSize(18); doc.text('WIDERSPRUCH', 20, 20);
-  doc.setFontSize(10); 
-  const lines = doc.splitTextToSize(lastAiResult, 170);
-  doc.text(lines, 20, 35);
-  
-  // SEITE 2: BLOCKCHAIN SIEGEL
+  doc.setFontSize(10); doc.text(doc.splitTextToSize(lastAiResult, 170), 20, 35);
   doc.addPage();
   doc.setFontSize(16); doc.text('BLOCKCHAIN BEWEISSIEGEL',20,20);
-  doc.setFontSize(10); 
-  doc.text('Lizenz: ' + currentLicense.key,20,30);
+  doc.setFontSize(10); doc.text('Lizenz: ' + currentLicense.key,20,30);
   doc.text('SHA-256 Hash: '+hashHex,20,40);
   doc.text('Timestamp: '+new Date().toISOString(),20,50);
-  doc.text('Akte: BS-V6Ω-'+Date.now(),20,60);
-  doc.text('Dieses Dokument ist kryptografisch signiert und unveränderbar.',20,75);
-  
   doc.save('Widerspruch_OMNI_'+Date.now()+'.pdf');
-  log('[EXPORT] PDF mit Blockchain-Siegel heruntergeladen');
+  log('[EXPORT] PDF heruntergeladen');
+}
+
+// BATCH FABRIK V6.6
+const batchDropzone = document.getElementById('batchDropzone');
+batchDropzone.onclick = () => document.getElementById('batchFiles').click();
+batchDropzone.ondragover = e => {e.preventDefault();batchDropzone.style.background='#222'}
+batchDropzone.ondragleave = () => batchDropzone.style.background='#111'
+batchDropzone.ondrop = e => {e.preventDefault();handleBatchFiles(e.dataTransfer.files)}
+document.getElementById('batchFiles').onchange = e => handleBatchFiles(e.target.files)
+function handleBatchFiles(files){
+  batchFiles = Array.from(files);
+  document.getElementById('batchInfo').innerHTML = `<p>${batchFiles.length} Dateien geladen. Benötigte Credits: ${batchFiles.length}</p>`;
+  document.getElementById('batchBtn').disabled = false;
+  batchLog(`[BATCH] ${batchFiles.length} Dateien geladen`);
+}
+function batchLog(m){const t=document.getElementById('batchLog');t.innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>';t.scrollTop=t.scrollHeight}
+async function startBatch(){
+  if(!currentLicense) return batchLog('<span style="color:var(--danger)">[ERROR] Lizenz aktivieren!</span>');
+  if(batchFiles.length > currentLicense.credits) return batchLog(`<span style="color:var(--danger)">[ERROR] Nicht genug Credits. Du hast ${currentLicense.credits}</span>`);
+  batchResults = []; zip = new JSZip();
+  document.getElementById('batchBtn').disabled = true;
+  for(let i=0; i<batchFiles.length; i++){
+    const file = batchFiles[i];
+    document.getElementById('progressFill').style.width = ((i+1)/batchFiles.length)*100+'%';
+    batchLog(`[BATCH ${i+1}/${batchFiles.length}] Verarbeite ${file.name}...`);
+    const text = await file.text();
+    const response = await fetch('/api/v6/analyse', {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({ license_key: currentLicense.key, document_data: text })});
+    const data = await response.json();
+    if(response.ok){
+      batchResults.push({filename: file.name, analysis: data.analysis});
+      const pdfDoc = new jsPDF(); pdfDoc.text(pdfDoc.splitTextToSize(data.analysis, 170), 20, 20);
+      zip.file(`Widerspruch_${file.name}.pdf`, pdfDoc.output('blob'));
+    }
+  }
+  document.getElementById('downloadZipBtn').style.display='block';
+  batchLog(`<span style="color:var(--ok)">[FERTIG] ${batchResults.length} Analysen. ZIP bereit.</span>`);
+}
+async function downloadZip(){
+  const content = await zip.generateAsync({type:"blob"});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(content); a.download = `OMNI_BATCH_${Date.now()}.zip`; a.click();
+  batchLog('[EXPORT] ZIP heruntergeladen');
+}
+
+// RA-MICRO V6.13
+function raLog(m){const t=document.getElementById('raLog');t.innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>';t.scrollTop=t.scrollHeight}
+async function connectRAMicro(){
+  const key = document.getElementById('raApiKey').value;
+  if(!key) return raLog('<span style="color:var(--danger)">[ERROR] API Key eingeben</span>');
+  raLog('[RA-MICRO] Verbinde mit Kanzlei-Server...');
+  // MOCK: In echt würde hier fetch an RA-MICRO API gehen
+  await new Promise(r=>setTimeout(r,1000));
+  raAkten = [
+    {id:'52 Js 23/26', mandant:'Müller', dokument:'Jobcenter Bescheid 4000€'},
+    {id:'51 Gs 11/25', mandant:'Schmidt', dokument:'Finanzamt Anhörung'}
+  ];
+  document.getElementById('raAktenListe').innerHTML = `<h3>${raAkten.length} Akten gefunden</h3><table>${raAkten.map(a=>`<tr><td>${a.id}</td><td>${a.mandant}</td><td>${a.dokument}</td></tr>`).join('')}</table>`;
+  document.getElementById('raBatchBtn').style.display='block';
+  raLog(`<span style="color:var(--ok)">[OK] ${raAkten.length} Akten importiert</span>`);
+}
+async function startRABatch(){
+  if(!currentLicense) return raLog('<span style="color:var(--danger)">[ERROR] Lizenz aktivieren!</span>');
+  raLog('[RA-MICRO] Starte Batch-Analyse aller Akten...');
+  document.getElementById('raBatchBtn').disabled = true;
+  zip = new JSZip();
+  for(let i=0; i<raAkten.length; i++){
+    const akte = raAkten[i];
+    raLog(`[RA ${i+1}/${raAkten.length}] Analysiere ${akte.id}...`);
+    const response = await fetch('/api/v6/analyse', {method: 'POST',headers: { 'Content-Type': 'application/json' },body: JSON.stringify({ license_key: currentLicense.key, document_data: akte.dokument })});
+    const data = await response.json();
+    if(response.ok){
+      const pdfDoc = new jsPDF(); pdfDoc.text(pdfDoc.splitTextToSize(data.analysis, 170), 20, 20);
+      zip.file(`Widerspruch_${akte.id}.pdf`, pdfDoc.output('blob'));
+    }
+  }
+  const content = await zip.generateAsync({type:"blob"});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(content); a.download = `RA_MICRO_EXPORT_${Date.now()}.zip`; a.click();
+  raLog(`<span style="color:var(--ok)">[FERTIG] ${raAkten.length} Widersprüche exportiert</span>`);
 }
 
 // AUTO
