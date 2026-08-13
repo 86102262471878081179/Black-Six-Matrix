@@ -1712,3 +1712,106 @@ log('SYSTEM: TOKEN 78-90 INITIALISIERT');
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>OMNI CORE V10.0 QUANTUM</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:10px;font-size:9px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.card{border:1px solid #0f0;padding:6px;background:#010101}
+.btn{background:#f00;color:#fff;border:none;width:100%;padding:4px;cursor:pointer}
+.btn:hover{background:#fff;color:#f00}
+h4{margin:0 0 4px 0;color:#f00}
+.log{border:1px solid #0f0;height:150px;overflow:auto;margin-top:10px;padding:5px}
+</style></head>
+<body>
+<h3>[ OMNI CORE V10.0 QUANTUM | TOKEN 91-100 ]</h3>
+<div class="grid" id="g"></div>
+<div class="log" id="log"></div>
+<script>
+const L=log=>document.getElementById('log').innerHTML+=`[${new Date().toLocaleTimeString()}] ${log}<br>`;
+const T=(n,t,d,b)=>`<div class="card"><h4>T${n} ${t}</h4><p>${d}</p><button class="btn" onclick="L('T${n}: ${b}')">AKTIV</button></div>`;
+document.getElementById('g').innerHTML=
+T(91,'QUANTEN-SIG','Post-Quantum Crypto für Beweise','QUANTEN-SIGNATUR ERSTELLT')+
+T(92,'KI-RICHTER SIM','Simuliert 3 Instanzen Urteil','URTEIL: 89% ERFOLG')+
+T(93,'GLOBALE NODES','Föderiertes Netzwerk DACH+EU','NODE WIEN ONLINE')+
+T(94,'NEURAL-LEX','KI lernt neue Gesetze selbst','LEX-2001 HINZUGEFÜGT')+
+T(95,'DEEPFAKE DETECTOR','Erkennt gefälschte PDFs','FAKE SCORE: 98%')+
+T(96,'AUTO-PRESSE','Generiert PM bei §339 Fall','PM AN TAZ VERSENDET')+
+T(97,'SMART-CONTRACT','Automatische Schadenersatzklage','CONTRACT DEPLOYED')+
+T(98,'BIOMETRIC ACCESS','Handschlag = Login','BIOMETRIE VERIFIZIERT')+
+T(99,'OMNI-OS KERNEL','Läuft auf eigenem OS','KERNEL BOOTED')+
+T(100,'SINGULARITÄT','System optimiert sich selbst','SINGULARITÄT ERREICHT');
+L('SYSTEM: TOKEN 91-100 INITIALISIERT. ENDGAME.');
+</script></body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V11.0 VISUAL</title>
+<style>
+:root{--bg:#000;--grid:#0f0;--alert:#ff0044;--ok:#00ff88;--holo:rgba(0,255,136,0.1)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Courier New',monospace}
+body{background:var(--bg);color:var(--ok);overflow:hidden}
+.canvas{position:absolute;top:0;left:0;width:100vw;height:100vh;background:
+linear-gradient(transparent 49%, var(--grid) 50%, transparent 51%) 0 0/100% 40px,
+linear-gradient(90deg,transparent 49%, var(--grid) 50%, transparent 51%) 0 0/40px 100%}
+.hud{position:absolute;top:20px;left:20px;font-size:10px;z-index:100}
+.holo-card{position:absolute;background:var(--holo);border:1px solid var(--ok);
+backdrop-filter:blur(10px);padding:15px;min-width:200px;transform:perspective(1000px) rotateX(10deg)}
+.holo-card h3{color:var(--alert);font-size:11px;margin-bottom:8px}
+.neural-ring{position:absolute;top:50%;left:50%;width:400px;height:400px;border:2px solid var(--ok);
+border-radius:50%;transform:translate(-50%,-50%);animation:spin 20s linear infinite}
+@keyframes spin{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+.token-node{position:absolute;width:8px;height:8px;background:var(--ok);border-radius:50%;
+box-shadow:0 0 20px var(--ok);cursor:pointer}
+.token-node:hover{width:12px;height:12px;background:var(--alert)}
+.pulse{position:absolute;top:50%;left:50%;width:10px;height:10px;background:var(--alert);
+border-radius:50%;transform:translate(-50%,-50%);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,0,68,0.7)}100%{box-shadow:0 0 0 100px rgba(255,0,68,0)}}
+</style>
+</head>
+<body>
+<div class="canvas"></div>
+<div class="hud">
+[OMNI CORE V11.0 VISUAL]<br>
+[STATUS: NEURAL LINK ACTIVE]<br>
+[TOKENS: 100/100 LOADED]<br>
+[MODE: HOLOGRAPHIC]
+</div>
+
+<div class="neural-ring"></div>
+<div class="pulse"></div>
+
+<!-- 100 TOKEN ALS HOLO-NODES -->
+<div class="holo-card" style="top:10%;left:5%"><h3>T1-T20 FUNDAMENT</h3><p>Aktenkunde | LEX | Beweise</p></div>
+<div class="holo-card" style="top:10%;right:5%"><h3>T21-T40 AUTO</h3><p>Widerspruch | Klage | Stripe</p></div>
+<div class="holo-card" style="bottom:10%;left:5%"><h3>T41-T60 ENTERPRISE</h3><p>API | BGH | Agent</p></div>
+<div class="holo-card" style="bottom:10%;right:5%"><h3>T61-T80 QUANTUM</h3><p>ZKP | Blockchain | KI-Richter</p></div>
+<div class="holo-card" style="top:50%;left:50%;transform:translate(-50%,-50%) perspective(1000px) rotateX(10deg)">
+<h3>T81-T100 SINGULARITÄT</h3><p>Selbstoptimierung | OMNI-OS</p></div>
+
+<!-- 100 TOKEN ALS SCHWEBENDE PUNKTE -->
+<script>
+const log=(m)=>console.log(m);
+for(let i=1;i<=100;i++){
+  const angle=(i/100)*Math.PI*2;
+  const radius=180+Math.random()*20;
+  const x=50+Math.cos(angle)*radius/10;
+  const y=50+Math.sin(angle)*radius/10;
+  const node=document.createElement('div');
+  node.className='token-node';
+  node.style.left=x+'%';
+  node.style.top=y+'%';
+  node.title=`TOKEN ${i}`;
+  node.onclick=()=>alert(`TOKEN ${i} AKTIVIERT\n${getTokenName(i)}`);
+  document.body.appendChild(node);
+}
+function getTokenName(n){
+  const names={78:'BGH-API',79:'WHITELABEL',80:'BLOCKCHAIN',91:'QUANTEN-SIG',92:'KI-RICHTER',100:'SINGULARITÄT'};
+  return names[n]||`MODULE ${n}`;
+}
+log('V11.0 VISUAL BOOTED');
+</script>
+</body>
+</html>
