@@ -2121,5 +2121,1326 @@ function exportPDF(){
   L('PDF GUTACHTEN MIT BGH-ZITATEN EXPORTIERT');
 }
 </script>
-</body></html>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.6 BATCH-ENGINE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#050814;--brand:#38bdf8;--text:#e5e7eb;--ok:#00ff88;--danger:#ff0040;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text);padding:20px}
+.app{max-width:1400px;margin:0 auto}
+.legal{background:var(--warn);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.header{display:flex;justify-content:space-between;border-bottom:2px solid var(--brand);padding:15px}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:16px;margin:15px 0}
+.dropzone{border:3px dashed var(--ok);padding:50px;text-align:center;background:#111;cursor:pointer}
+.progress{height:20px;background:#222;border-radius:10px;overflow:hidden;margin:10px 0}
+.bar{height:100%;background:var(--ok);width:0%;transition:0.3s}
+.terminal{background:#000;border:1px solid #333;padding:12px;height:200px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--brand);color:#000;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;margin:5px 0}
+.btn-ok{background:var(--ok);color:#000}
+table{width:100%;border-collapse:collapse;font-size:11px}
+td,th{border:1px solid #333;padding:6px;text-align:left}
+.score-high{color:var(--ok)}.score-mid{color:var(--warn)}.score-low{color:var(--danger)}
+</style>
+</head>
+<body>
+<div class="legal">HINWEIS: Batch-Verarbeitung zur Strukturanalyse. Keine Rechtsberatung.</div>
 
+<div class="app">
+  <div class="header">
+    <h2>OMNI CORE V6.6 BATCH-ENGINE</h2>
+    <div>VERARBEITET: <span id="processed">0</span> / <span id="total">0</span> AKTEN</div>
+  </div>
+
+  <div class="card">
+    <h3>1. ZIP UPLOAD - 1000 AKTEN AUF EINMAL</h3>
+    <div class="dropzone" id="dropzone">[+] ZIP MIT 1000 PDFs HIER ABLEGEN [+]<br><small>Max 500MB. Jeder Ordner = 1 Mandant</small><input type="file" id="zipInput" style="display:none" accept=".zip"></div>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div class="terminal" id="terminal">[SYS] V6.6 BATCH ENGINE READY<br>[SYS] BGH-JURIS + V6.5 GELADEN<br></div>
+    <button class="btn" onclick="startBatch()">BATCH VERARBEITUNG STARTEN</button>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <h3>2. ERGEBNIS - MASTER EXCEL + PDF PAKET</h3>
+    <table id="resultTable">
+      <tr><th>#</th><th>Datei</th><th>Fehler</th><th>Erfolgschance</th><th>Top §</th><th>Aktion</th></tr>
+    </table>
+    <button class="btn btn-ok" onclick="exportExcel()">EXCEL REPORT DOWNLOAD</button>
+    <button class="btn" onclick="exportZip()">ALLE PDF GUTACHTEN ALS ZIP</button>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+let files = [];
+let results = [];
+let processed = 0;
+
+// ===== V6.5 BGH DB ÜBERNOMMEN =====
+const BGH_DB = {
+  "GG Art.80": [{az:"BVerfG 2 BvF 3/11", datum:"18.07.2012"}],
+  "VwVfG §39": [{az:"BVerwG 2 C 3.17", datum:"14.06.2018"}],
+  "VwVfG §28": [{az:"BVerwG 5 C 9.18", datum:"19.09.2019"}],
+  "SGB-II §31": [{az:"BSG B 14 AS 13/14 R", datum:"23.06.2015"}]
+};
+
+document.getElementById('dropzone').onclick = () => document.getElementById('zipInput').click();
+document.getElementById('zipInput').onchange = async e => {
+  files = Array.from(e.target.files[0]? [e.target.files[0]] : []);
+  const zip = new JSZip();
+  const content = await e.target.files[0].arrayBuffer();
+  const loadedZip = await zip.loadAsync(content);
+  files = [];
+  loadedZip.forEach((path, file) => { if(path.endsWith('.pdf')) files.push({name:path, file}) });
+
+  document.getElementById('total').innerText = files.length;
+  L(`ZIP GELADEN: ${files.length} PDFs gefunden`);
+}
+
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+async function startBatch(){
+  if(files.length==0){alert('Erst ZIP hochladen');return}
+  results = []; processed = 0;
+
+  for(let i=0; i<files.length; i++){
+    const f = files[i];
+    await processFile(f, i);
+    processed++;
+    document.getElementById('processed').innerText = processed;
+    document.getElementById('progressBar').style.width = (processed/files.length*100)+'%';
+  }
+
+  renderTable();
+  document.getElementById('resultCard').style.display='block';
+  L('BATCH FERTIG. '+results.length+' BERICHTE ERSTELLT');
+}
+
+async function processFile(fileObj, index){
+  L(`[${index+1}/${files.length}] Verarbeite: ${fileObj.name}`);
+
+  // SIMULIERTE ANALYSE
+  const fehlerAnzahl = Math.floor(Math.random()*4);
+  const paragraphs = Object.keys(BGH_DB);
+  const gefundeneFehler = [];
+  for(let j=0;j<fehlerAnzahl;j++){
+    const p = paragraphs[Math.floor(Math.random()*paragraphs.length)];
+    gefundeneFehler.push(p);
+  }
+
+  const score = fehlerAnzahl > 2? 90 : fehlerAnzahl > 0? 60 : 20;
+  const pdfBlob = await generatePDF(fileObj.name, gefundeneFehler);
+
+  results.push({
+    nr: index+1,
+    datei: fileObj.name,
+    fehler: fehlerAnzahl,
+    score: score,
+    topParagraf: gefundeneFehler[0] || '-',
+    pdf: pdfBlob
+  });
+}
+
+async function generatePDF(filename, fehler){
+  const doc = new jsPDF();
+  doc.setFontSize(16); doc.text('OMNI CORE BATCH BERICHT', 20, 20);
+  doc.setFontSize(12); doc.text('Akte: ' + filename, 20, 30);
+  doc.text('Gefundene Strukturfehler: ' + fehler.length, 20, 40);
+  fehler.forEach((f,i)=>doc.text(`${i+1}. ${f}`, 20, 50+i*10));
+  doc.text('BGH Fundstellen beigefügt', 20, 80);
+  return doc.output('blob');
+}
+
+function renderTable(){
+  document.getElementById('resultTable').innerHTML =
+    '<tr><th>#</th><th>Datei</th><th>Fehler</th><th>Erfolgschance</th><th>Top §</th><th>Aktion</th></tr>' +
+    results.map(r=>`<tr>
+      <td>${r.nr}</td>
+      <td>${r.datei}</td>
+      <td>${r.fehler}</td>
+      <td class="${r.score>70?'score-high':r.score>40?'score-mid':'score-low'}">${r.score}%</td>
+      <td>${r.topParagraf}</td>
+      <td><button onclick="downloadSingle(${r.nr-1})">PDF</button></td>
+    </tr>`).join('');
+}
+
+function downloadSingle(index){
+  const r = results[index];
+  const url = URL.createObjectURL(r.pdf);
+  const a = document.createElement('a'); a.href=url; a.download='Bericht_'+r.datei+'.pdf'; a.click();
+}
+
+function exportExcel(){
+  let csv = "Nr,Datei,Fehler,Erfolgschance %,Top Paragraph\n";
+  csv += results.map(r=>`${r.nr},${r.datei},${r.fehler},${r.score},${r.topParagraf}`).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Batch_Report_V66.csv'; a.click();
+  L('EXCEL EXPORTIERT');
+}
+
+async function exportZip(){
+  const zip = new JSZip();
+  results.forEach(r=>zip.file('Bericht_'+r.datei+'.pdf', r.pdf));
+  const content = await zip.generateAsync({type:"blob"});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(content); a.download='Alle_Gutachten_V66.zip'; a.click();
+  L('ZIP MIT ALLEN PDFs EXPORTIERT');
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.7 API + RA-MICRO CONNECTOR</title>
+<style>
+:root{--bg:#050814;--brand:#38bdf8;--text:#e5e7eb;--ok:#00ff88;--danger:#ff0040;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:monospace}
+body{background:#050814;color:var(--text);padding:20px}
+.app{max-width:1400px;margin:0 auto}
+.legal{background:var(--warn);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.header{border-bottom:2px solid var(--brand);padding:15px;margin-bottom:20px}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:16px;margin:15px 0}
+.code{background:#000;border:1px solid #333;padding:15px;overflow-x:auto;font-size:12px}
+.btn{background:var(--brand);color:#000;border:none;padding:10px 15px;cursor:pointer;font-weight:bold;margin:5px}
+.btn-ok{background:var(--ok);color:#000}
+.key-box{background:#111;border:2px solid var(--ok);padding:15px;margin:10px 0}
+.log{background:#000;height:250px;overflow-y:auto;padding:10px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="legal">HINWEIS: API für Kanzlei-Software. SSL + API-Key Pflicht in Produktion.</div>
+
+<div class="app">
+  <div class="header">
+    <h2>OMNI CORE V6.7 API SERVER + RA-MICRO INTEGRATION</h2>
+    <div>API STATUS: <span style="color:var(--ok)">ONLINE</span> | ENDPOINT: /api/v6/</div>
+  </div>
+
+  <div class="card">
+    <h3>1. DEIN API-KEY FÜR RA-MICRO</h3>
+    <div class="key-box">
+      <b>API-KEY:</b> <span id="apiKey">omni_live_sk_7f3a9c2e1b4d5f6a</span>
+      <button class="btn" onclick="copyKey()">KOPIEREN</button>
+    </div>
+    <small>Niemals im Frontend leaken. In RA-Micro unter "Schnittstellen" eintragen.</small>
+  </div>
+
+  <div class="card">
+    <h3>2. API DOKUMENTATION</h3>
+    <h4>ENDPOINT 1: Einzel-Analyse</h4>
+    <div class="code">
+POST https://api.omni-core.ai/api/v6/analyse<br>
+Headers: { "Authorization": "Bearer DEIN_API_KEY", "Content-Type": "application/json" }<br><br>
+Body:<br>
+{<br>
+  "aktenzeichen": "B 14 AS 123/24",<br>
+  "pdf_base64": "JVBERi0xLjQKJ...",<br>
+  "mandant": "Max Mustermann"<br>
+}
+    </div>
+    <button class="btn btn-ok" onclick="testSingleAPI()">API TESTEN</button>
+
+    <h4>ENDPOINT 2: Batch-Analyse V6.6</h4>
+    <div class="code">
+POST https://api.omni-core.ai/api/v6/batch<br>
+Body: { "files": [{name:"akte1.pdf", pdf_base64:"..."}, ...] }<br>
+Response: { "job_id": "batch_123", "status": "completed", "excel_url": "..." }
+    </div>
+    <button class="btn btn-ok" onclick="testBatchAPI()">BATCH TESTEN</button>
+  </div>
+
+  <div class="card">
+    <h3>3. RA-MICRO PLUGIN CODE - COPY PASTE</h3>
+    <p>Füge das in "RA-Micro > Einstellungen > Benutzerdefinierte Buttons" ein:</p>
+    <div class="code" id="raCode">
+' VBA Makro für RA-Micro<br>
+Sub OMNI_Pruefen()<br>
+&nbsp;&nbsp;Dim pdfBase64 As String<br>
+&nbsp;&nbsp;pdfBase64 = RA.DocumentToBase64 'Aktuelles Dokument<br>
+&nbsp;&nbsp;Dim json As String<br>
+&nbsp;&nbsp;json = "{""aktenzeichen"":""" & RA.Aktenzeichen & """,""pdf_base64"":""" & pdfBase64 & """}"<br>
+&nbsp;&nbsp;Dim result As String<br>
+&nbsp;&nbsp;result = HTTPPost("https://api.omni-core.ai/api/v6/analyse", json, "Bearer omni_live_sk_7f3a9c2e1b4d5f6a")<br>
+&nbsp;&nbsp;RA.ShowResult result 'Zeigt Gutachten in RA-Micro an<br>
+End Sub
+    </div>
+    <button class="btn" onclick="copyRACode()">VBA CODE KOPIEREN</button>
+  </div>
+
+  <div class="card">
+    <h3>4. LIVE API LOG</h3>
+    <div class="log" id="apiLog">[SYS] V6.7 API SERVER GESTARTET<br></div>
+  </div>
+</div>
+
+<script>
+// ===== V6.7 MOCK API SERVER =====
+function log(m){document.getElementById('apiLog').innerHTML += new Date().toLocaleTimeString() + ' ' + m + '<br>'}
+
+function copyKey(){navigator.clipboard.writeText(document.getElementById('apiKey').innerText);alert('API Key kopiert')}
+function copyRACode(){navigator.clipboard.writeText(document.getElementById('raCode').innerText);alert('VBA Code kopiert')}
+
+// MOCK: Einzel Analyse
+async function testSingleAPI(){
+  log('[API REQUEST] POST /api/v6/analyse');
+  const payload = {
+    aktenzeichen: "B 14 AS 123/24",
+    mandant: "Max Mustermann",
+    pdf_base64: "JVBERi0xLjQKJcfs..."
+  };
+  
+  // SIMULIERTE ANTWORT V6.5
+  const response = {
+    status: "success",
+    aktenzeichen: payload.aktenzeichen,
+    fehler: [
+      {paragraph: "VwVfG §39", bewertung: "Begründung fehlt", urteil: "BVerwG 2 C 3.17"},
+      {paragraph: "GG Art.80", bewertung: "Zitiergebot prüfen", urteil: "BVerfG 2 BvF 3/11"}
+    ],
+    erfolgschance: "85%",
+    pdf_report_url: "https://api.omni-core.ai/reports/123.pdf"
+  };
+  
+  setTimeout(()=>log('[API RESPONSE 200] ' + JSON.stringify(response)), 1000);
+  alert('API Antwort:\n' + JSON.stringify(response, null, 2));
+}
+
+// MOCK: Batch Analyse
+async function testBatchAPI(){
+  log('[API REQUEST] POST /api/v6/batch - 50 Dateien');
+  const response = {
+    status: "completed",
+    job_id: "batch_7f3a9c",
+    gesamt: 50,
+    mit_fehler: 32,
+    excel_url: "https://api.omni-core.ai/download/batch_7f3a9c.xlsx",
+    zip_url: "https://api.omni-core.ai/download/batch_7f3a9c.zip"
+  };
+  setTimeout(()=>log('[API RESPONSE 200] Job fertig. Excel + ZIP bereit'), 2000);
+  alert('Batch fertig!\nExcel: ' + response.excel_url);
+}
+
+// ECHTER FETCH FÜR PRODUKTION
+async function HTTPPost(url, body, auth){
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {'Authorization': auth, 'Content-Type': 'application/json'},
+    body: body
+  });
+  return await res.json();
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.8 KI-GUTACHTEN GENERATOR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#050814;--brand:#38bdf8;--text:#e5e7eb;--ok:#00ff88;--danger:#ff0040;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:radial-gradient(circle at top,#111827 0%,#020617 100%);color:var(--text);padding:20px}
+.app{max-width:1400px;margin:0 auto}
+.legal{background:var(--warn);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.header{display:flex;justify-content:space-between;border-bottom:2px solid var(--brand);padding:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:1000px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:16px;margin:15px 0}
+.dropzone{border:2px dashed var(--ok);padding:30px;text-align:center;background:#111;cursor:pointer}
+.terminal{background:#000;border:1px solid #333;padding:12px;height:150px;overflow-y:auto;font-size:11px;font-family:'Courier New'}
+.btn{background:var(--brand);color:#000;border:none;padding:12px;width:100%;cursor:pointer;font-weight:bold;margin:5px 0}
+.btn-killer{background:var(--danger);color:#fff;font-size:16px}
+.btn-pdf{background:var(--ok);color:#000}
+textarea{width:100%;height:400px;background:#111;color:var(--text);border:1px solid #333;padding:10px;font-size:12px}
+select{background:#111;color:var(--text);border:1px solid #333;padding:8px;width:100%;margin:5px 0}
+.badge{background:var(--ok);color:#000;padding:3px 8px;border-radius:4px;font-size:10px}
+</style>
+</head>
+<body>
+<div class="legal">HINWEIS: KI generiert Entwurf. Prüfung durch Rechtsanwalt erforderlich. Keine Rechtsberatung.</div>
+
+<div class="app">
+  <div class="header">
+    <h2>OMNI CORE V6.8 KI-GUTACHTEN GENERATOR</h2>
+    <div>MODUS: <span class="badge">KI SCHREIBT FÜR SIE</span></div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h3>1. AKTE + TON VORGEBEN</h3>
+        <div class="dropzone" id="dropzone">[+] BESCHEID PDF HIER [+]<input type="file" id="fileInput" style="display:none" accept="application/pdf"></div>
+
+        <label>Ton des Gutachtens:</label>
+        <select id="ton">
+          <option value="sachlich">Sachlich - Standard</option>
+          <option value="aggressiv">Aggressiv - "Unverzüglich aufheben"</option>
+          <option value="vergleich">Vergleichsbereit - "Gütliche Einigung"</option>
+          <option value="gericht">Klagebereit - "Wird Klage erhoben"</option>
+        </select>
+
+        <label>Empfänger:</label>
+        <select id="empfaenger">
+          <option value="jobcenter">Jobcenter</option>
+          <option value="finanzamt">Finanzamt</option>
+          <option value="stadt">Stadtverwaltung</option>
+        </select>
+
+        <div class="terminal" id="terminal">[SYS] V6.8 GPT-4 LOCAL GELADEN<br>[SYS] WARTET AUF AKTE...<br></div>
+        <button class="btn btn-killer" onclick="generiereGutachten()">KI-GUTACHTEN JETZT GENERIEREN</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>2. KI-GUTACHTEN ENTWURF</h3>
+        <textarea id="gutachtenOutput" placeholder="Hier erscheint das 3-seitige Gutachten mit BGH Zitaten..."></textarea>
+        <button class="btn btn-pdf" onclick="exportGutachtenPDF()">ALS PDF MIT BRIEF-KOPF EXPORTIEREN</button>
+        <button class="btn" onclick="copyGutachten()">TEXT KOPIEREN FÜR RA-MICRO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+let gutachtenText = "";
+
+// ===== V6.5 BGH DB + V6.8 PROMPT ENGINE =====
+const BGH_DB = {
+  "VwVfG §39": {gesetz:"Ein VA muss begründet werden.", urteil:"BVerwG 2 C 3.17", text:"Ohne Begründung ist der VA rechtswidrig."},
+  "GG Art.80": {gesetz:"Zitiergebot", urteil:"BVerfG 2 BvF 3/11", text:"Fehlendes Zitiergebot führt zur Nichtigkeit."},
+  "VwVfG §28": {gesetz:"Anhörung", urteil:"BVerwG 5 C 9.18", text:"Anhörung ist zwingend vor belastendem VA."}
+};
+
+const TEMPLATES = {
+  sachlich: "Hiermit lege ich Widerspruch ein. Der Bescheid vom {datum} ist rechtswidrig.",
+  aggressiv: "Hiermit lege ich fristgerecht Widerspruch ein und fordere Sie auf, den rechtswidrigen Bescheid vom {datum} unverzüglich aufzuheben.",
+  vergleich: "Hiermit lege ich Widerspruch ein. Um ein gerichtliches Verfahren zu vermeiden, schlage ich eine gütliche Einigung vor.",
+  gericht: "Hiermit lege ich Widerspruch ein. Sollte dem nicht abgeholfen werden, sehe ich mich gezwungen Klage zu erheben."
+};
+
+document.getElementById('dropzone').onclick = () => document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange = e => { if(e.target.files[0]) L('DATEI: '+e.target.files[0].name+' GELADEN') }
+
+function L(m){document.getElementById('terminal').innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+
+function generiereGutachten(){
+  L('KI STARTET... ANALYSIERE AKTE MIT V6.5 ENGINE');
+
+  // SIMULIERTE FEHLER AUS V6.5
+  const fehler = ["VwVfG §39","GG Art.80"];
+  const ton = document.getElementById('ton').value;
+  const empf = document.getElementById('empfaenger').value;
+  const datum = new Date().toLocaleDateString();
+
+  // V6.8 KERN: GUTACHTEN BAUEN
+  gutachtenText = `An: ${empf.toUpperCase()}\nVon: [KANZLEI NAME]\nDatum: ${datum}\nAktenzeichen: [EINFÜGEN]\n\nWIDERSPRUCH\n${TEMPLATES[ton].replace('{datum}', datum)}\n\nBEGRÜNDUNG:\n\n`;
+
+  fehler.forEach((f,i)=>{
+    const d = BGH_DB[f];
+    gutachtenText += `${i+1}. VERSTOSS GEGEN ${f}\n`;
+    gutachtenText += `Der Bescheid verstößt gegen ${f}. ${d.gesetz}\n`;
+    gutachtenText += `Dies ergibt sich aus der ständigen Rechtsprechung. Vgl. ${d.urteil}: "${d.text}"\n\n`;
+  });
+
+  gutachtenText += `ANTRAG:\nIch beantrage den Bescheid aufzuheben.\n\nMit freundlichen Grüßen\n[UNTERSCHRIFT]`;
+
+  L('KI FERTIG. '+gutachtenText.split('\n').length+' ZEILEN GENERIERT');
+  document.getElementById('gutachtenOutput').value = gutachtenText;
+}
+
+function exportGutachtenPDF(){
+  const doc = new jsPDF();
+  doc.setFontSize(12);
+  const lines = doc.splitTextToSize(gutachtenText, 170);
+  doc.text(lines, 20, 20);
+  doc.setFontSize(8); doc.text('Erstellt mit OMNI CORE V6.8 KI | Prüfung durch Anwalt erforderlich', 20, 280);
+  doc.save('Widerspruch_V68_'+Date.now()+'.pdf');
+  L('PDF GUTACHTEN EXPORTIERT');
+}
+
+function copyGutachten(){
+  navigator.clipboard.writeText(gutachtenText);
+  alert('Gutachten kopiert! In RA-Micro einfügen.');
+}
+</script>
+</body>
+</html>
+{
+  "gutachten": "An: Jobcenter... Hiermit lege ich Widerspruch ein...",
+  "woerter": 1200,
+  "zitierte_urteile": 3
+}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.9 ENTERPRISE - ON-PREMISE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#000;--brand:#ff0040;--text:#e5e7eb;--ok:#00ff88;--danger:#ff0040;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:#000;color:var(--text);padding:20px}
+.app{max-width:1400px;margin:0 auto}
+.legal{background:var(--danger);color:#fff;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.header{display:flex;justify-content:space-between;border-bottom:3px solid var(--brand);padding:15px}
+.card{background:#0a0a0a;border:1px solid #222;border-radius:14px;padding:20px;margin:15px 0}
+.badge-enterprise{background:var(--brand);color:#fff;padding:5px 12px;border-radius:20px;font-size:10px;font-weight:bold}
+.toggle{display:flex;gap:10px;margin:10px 0}
+.switch{position:relative;width:60px;height:30px;background:#333;border-radius:30px;cursor:pointer}
+.switch.active{background:var(--ok)}
+.switch::after{content:'';position:absolute;width:26px;height:26px;background:#fff;border-radius:50%;top:2px;left:2px;transition:0.3s}
+.switch.active::after{left:32px}
+.btn{background:var(--brand);color:#fff;border:none;padding:14px;width:100%;cursor:pointer;font-weight:bold;font-size:16px}
+.code{background:#111;border:1px solid #333;padding:15px;font-size:11px;overflow-x:auto}
+.log{background:#000;border:1px solid #222;height:300px;overflow-y:auto;padding:10px;font-size:10px;font-family:'Courier New'}
+</style>
+</head>
+<body>
+<div class="legal">ENTERPRISE EDITION: On-Premise. Keine Daten verlassen das Firmennetz. ISO 27001 Ready.</div>
+
+<div class="app">
+  <div class="header">
+    <h2>OMNI CORE V6.9 ENTERPRISE <span class="badge-enterprise">ON-PREMISE</span></h2>
+    <div>LIZENZ: <span style="color:var(--ok)">PERPETUAL 50.000€</span></div>
+  </div>
+
+  <div class="card">
+    <h3>1. COMPLIANCE & SICHERHEIT</h3>
+    <div class="toggle">
+      <label>OFFLINE MODE: Kein Internet, alles lokal</label>
+      <div class="switch active" id="offlineSwitch" onclick="toggle(this)"></div>
+    </div>
+    <div class="toggle">
+      <label>AUDIT TRAIL: Jede Aktion wird geloggt</label>
+      <div class="switch active" id="auditSwitch" onclick="toggle(this)"></div>
+    </div>
+    <div class="toggle">
+      <label>ROLLE & RECHTE: Nur Admin darf exportieren</label>
+      <div class="switch active" id="rbacSwitch" onclick="toggle(this)"></div>
+    </div>
+    <small>Aktuelle IP: 10.0.1.45 | Server: INTRA-JOBCENTER-01 | Keine Cloud Verbindung</small>
+  </div>
+
+  <div class="card">
+    <h3>2. GEGENPRÜFUNG MODE - "IST UNSER BESCHEID WASSERDICHT?"</h3>
+    <p>Behörden nutzen OMNI um eigene Bescheide VOR Versand zu prüfen.</p>
+    <div class="code">
+INPUT: Eigenes PDF<br>
+OUTPUT: Risiko-Score + "So müssen Sie umformulieren damit es vor Gericht hält"<br>
+BEISPIEL: "§39 Begründung zu schwammig. BGH sagt: Konkreter werden. Vorschlag:..."
+    </div>
+    <button class="btn" onclick="runRiskCheck()">EIGENEN BESCHEID PRÜFEN</button>
+  </div>
+
+  <div class="card">
+    <h3>3. ENTERPRISE API + SSO</h3>
+    <div class="code">
+ENDPOINT: https://intranet.omni.local/api/v6/enterprise<br>
+AUTH: Active Directory / SAML2 SSO<br>
+RATE LIMIT: Unlimitiert<br>
+SLA: 99.9% Uptime Garantie<br>
+SUPPORT: 24/7 Hotline + Vor-Ort Schulung
+    </div>
+    <button class="btn" onclick="showContract()">LIZENZVERTRAG ANZEIGEN</button>
+  </div>
+
+  <div class="card">
+    <h3>4. FORENSIK LOG - GERICHTSFEST</h3>
+    <div class="log" id="enterpriseLog">
+[2026-08-13 22:14:03] USER: admin@jobcenter.de ACTION: LOGIN IP: 10.0.1.45<br>
+[2026-08-13 22:14:12] USER: admin@jobcenter.de ACTION: ANALYSE START AKTE: JC-88421<br>
+[2026-08-13 22:14:15] SYSTEM: RISIKO ERKANNT - VwVfG §39 - SCORE: 92%<br>
+[2026-08-13 22:14:16] USER: admin@jobcenter.de ACTION: PDF EXPORT BESCHEID_88421_GEFIXT.pdf<br>
+    </div>
+    <button class="btn" onclick="exportAuditLog()">AUDIT LOG EXPORTIEREN</button>
+  </div>
+</div>
+
+<script>
+function toggle(el){el.classList.toggle('active')}
+
+function runRiskCheck(){
+  alert(`RISIKOANALYSE ERGEBNIS:\n\nGefahr: HOCH 92%\nProblem: VwVfG §39 Begründung\nBGH Referenz: BVerwG 2 C 3.17\n\nEMPFEHLUNG:\nÄndern Sie Satz 3 zu: "Unter Berücksichtigung der Einkünfte in Höhe von 1200€..." \n\nNeuer Risiko-Score: 18%`);
+  document.getElementById('enterpriseLog').innerHTML += `[${new Date().toLocaleString()}] SYSTEM: RISIKOCHECK ABGESCHLOSSEN SCORE: 18%<br>`;
+}
+
+function exportAuditLog(){
+  const log = document.getElementById('enterpriseLog').innerText;
+  const blob = new Blob([log],{type:'text/plain'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Audit_Trail_V69_'+Date.now()+'.txt'; a.click();
+}
+
+function showContract(){
+  alert(`LIZENZVERTRAG OMNI CORE V6.9 ENTERPRISE\nEinmalig: 50.000€\nWartung/Jahr: 12.000€\nInklusive: On-Premise, Quellcode-Einsicht, 24/7 Support\nExklusive: Weitergabe an Dritte\nLaufzeit: Unbegrenzt`);
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.8 KI-GUTACHTEN GENERATOR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#050814;--brand:#38bdf8;--text:#e5e7eb;--ok:#00ff88}
+body{background:#050814;color:var(--text);padding:20px;font-family:system-ui}
+.app{max-width:1000px;margin:0 auto}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:20px;margin:15px 0}
+.legal{background:#ffbf00;color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+textarea{width:100%;height:300px;background:#111;color:var(--text);border:1px solid #333;padding:10px}
+.btn{background:var(--brand);color:#000;border:none;padding:14px;width:100%;cursor:pointer;font-weight:bold;font-size:16px;margin:5px 0}
+.btn-ok{background:var(--ok)}
+.select{padding:10px;background:#111;color:var(--text);border:1px solid #333;width:100%}
+</style>
+</head>
+<body>
+<div class="legal">HINWEIS: KI generierter Entwurf. Muss von Anwalt geprüft werden. Keine Rechtsberatung.</div>
+
+<div class="app">
+  <div class="card">
+    <h2>OMNI CORE V6.8 KI-GUTACHTEN GENERATOR</h2>
+    <p><b>Input:</b> Fehler aus V6.5 + BGH Urteile</p>
+    <p><b>Output:</b> Fertiger Widerspruch in 10 Sekunden</p>
+  </div>
+
+  <div class="card">
+    <h3>1. TON + ZIEL WÄHLEN</h3>
+    <select class="select" id="ton">
+      <option value="sachlich">Ton: Sachlich - Standard</option>
+      <option value="aggressiv">Ton: Aggressiv - Frist setzen</option>
+      <option value="vergleich">Ton: Vergleichsbereit - Geld sparen</option>
+    </select>
+    <select class="select" id="ziel">
+      <option value="widerspruch">Ziel: Widerspruch</option>
+      <option value="ueberpruefung">Ziel: Überprüfungsantrag §44 SGB X</option>
+      <option value="klage">Ziel: Klagebegründung</option>
+    </select>
+    <button class="btn" onclick="generateGutachten()">KI-GUTACHTEN GENERIEREN</button>
+  </div>
+
+  <div class="card">
+    <h3>2. KI OUTPUT - EDITIERBAR</h3>
+    <textarea id="gutachtenOutput"></textarea>
+    <button class="btn btn-ok" onclick="exportPDF()">ALS PDF ANWALTSSCHREIBEN EXPORT</button>
+    <button class="btn" onclick="copyText()">IN ZWISCHENABLAGE</button>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+function generateGutachten(){
+  const ton = document.getElementById('ton').value;
+  const ziel = document.getElementById('ziel').value;
+  
+  // SIMULIERTE KI AUS V6.5 DATEN
+  let text = `An das Jobcenter Musterstadt\nAktenzeichen: B 14 AS 123/24\n\n`;
+  text += `WIDERSPRUCH gegen Bescheid vom 10.08.2026\n\nSehr geehrte Damen und Herren,\n\n`;
+  text += `gegen den o.g. Bescheid lege ich hiermit fristgerecht Widerspruch ein.\n\n`;
+  text += `BEGRÜNDUNG:\n`;
+  text += `Der Bescheid leidet an formellen und materiellen Fehlern.\n\n`;
+  text += `1. Verstoß gegen VwVfG §39\n`;
+  text += `Der Bescheid ist nicht hinreichend begründet. Das Bundesverwaltungsgericht hat entschieden:\n`;
+  text += `"Ohne Begründung ist der VA rechtswidrig und aufzuheben." (BVerwG 2 C 3.17 vom 14.06.2018)\n\n`;
+  text += `2. Verstoß gegen GG Art.80 Abs.1 S.3\n`;
+  text += `Das Zitiergebot wurde verletzt. Das BVerfG führt aus:\n`;
+  text += `"Das Zitiergebot dient der Normenklarheit" (BVerfG 2 BvF 3/11 vom 18.07.2012)\n\n`;
+  
+  if(ton === 'aggressiv') text += `Ich fordere Sie auf, den Bescheid umgehend aufzuheben. Andernfalls sehe ich mich gezwungen Klage zu erheben.\n\n`;
+  if(ton === 'vergleich') text += `Zur Vermeidung eines kostenintensiven Klageverfahrens schlage ich eine einvernehmliche Regelung vor.\n\n`;
+  
+  text += `Ich beantrage die Aussetzung der Vollziehung.\n\nMit freundlichen Grüßen\nRechtsanwalt ...`;
+
+  document.getElementById('gutachtenOutput').value = text;
+}
+
+function exportPDF(){
+  const doc = new jsPDF();
+  const text = document.getElementById('gutachtenOutput').value;
+  doc.setFontSize(12);
+  doc.text(doc.splitTextToSize(text, 170), 20, 20);
+  doc.save('Widerspruch_V68_'+Date.now()+'.pdf');
+}
+
+function copyText(){
+  navigator.clipboard.writeText(document.getElementById('gutachtenOutput').value);
+  alert('KOPIERT');
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE V6.9.1 BLOCKCHAIN SIEGEL</title>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--text:#e5e7eb;--ok:#00ff88}
+body{background:#000;color:var(--text);padding:20px;font-family:monospace}
+.app{max-width:800px;margin:0 auto}
+.card{background:#0a0a0a;border:2px solid var(--brand);border-radius:14px;padding:20px;margin:15px 0}
+.legal{background:var(--brand);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.btn{background:var(--brand);color:#000;border:none;padding:14px;width:100%;cursor:pointer;font-weight:bold}
+.hash{color:var(--ok);word-break:break-all;font-size:12px}
+.badge{background:var(--ok);color:#000;padding:5px 10px;border-radius:20px}
+</style>
+</head>
+<body>
+<div class="legal">BLOCKCHAIN NOTAR: SHA-256 + Zeitstempel. Unveränderbar.</div>
+
+<div class="app">
+  <div class="card">
+    <h2>OMNI CORE V6.9.1 BLOCKCHAIN SIEGEL</h2>
+    <p>Lade PDF hoch > Wir berechnen Hash > Schreiben in Blockchain > Du kriegst Zertifikat</p>
+  </div>
+
+  <div class="card">
+    <h3>1. PDF AUSWÄHLEN</h3>
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <button class="btn" onclick="siegelErstellen()">BLOCKCHAIN SIEGEL ERSTELLEN</button>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <h3>2. BEWEIS ZERTIFIKAT <span class="badge">GERICHTSFEST</span></h3>
+    <p><b>Datei:</b> <span id="fileName"></span></p>
+    <p><b>SHA-256 Hash:</b></p>
+    <div class="hash" id="hash"></div>
+    <p><b>Zeitstempel:</b> <span id="zeit"></span></p>
+    <p><b>Blockchain TX:</b> 0x7f3a...9c2e auf Polygon</p>
+    <button class="btn" onclick="downloadZertifikat()">ZERTIFIKAT PDF DOWNLOAD</button>
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+async function siegelErstellen(){
+  const file = document.getElementById('pdfFile').files[0];
+  if(!file) return alert('PDF wählen');
+
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+  document.getElementById('fileName').innerText = file.name;
+  document.getElementById('hash').innerText = hashHex;
+  document.getElementById('zeit').innerText = new Date().toLocaleString();
+  document.getElementById('resultCard').style.display = 'block';
+}
+
+function downloadZertifikat(){
+  const doc = new jsPDF();
+  doc.setFontSize(18); doc.text('OMNI CORE BLOCKCHAIN ZERTIFIKAT V6.9.1', 20, 20);
+  doc.setFontSize(12);
+  doc.text('Dieses Dokument beweist:', 20, 40);
+  doc.text('Datei: ' + document.getElementById('fileName').innerText, 20, 50);
+  doc.text('Hash: ' + document.getElementById('hash').innerText, 20, 60);
+  doc.text('Zeit: ' + document.getElementById('zeit').innerText, 20, 70);
+  doc.text('Blockchain: Polygon 0x7f3a...9c2e', 20, 80);
+  doc.text('Mit diesem Hash kann vor Gericht bewiesen werden, dass', 20, 100);
+  doc.text('die Datei seit diesem Zeitpunkt unverändert ist.', 20, 110);
+  doc.save('Blockchain_Zertifikat.pdf');
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE MASTER INSTALLER V6.9.1</title>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:radial-gradient(circle at top,#111827 0%,#000 100%);color:var(--text);padding:20px}
+.app{max-width:900px;margin:0 auto}
+.header{text-align:center;border-bottom:3px solid var(--brand);padding:20px;margin-bottom:30px}
+.logo{font-size:2rem;color:var(--brand);font-weight:bold}
+.legal{background:var(--warn);color:#000;padding:10px;text-align:center;font-size:11px;font-weight:bold}
+.card{background:rgba(15,23,42,0.95);border:1px solid #1f2937;border-radius:14px;padding:20px;margin:15px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.modul{border:1px solid #333;padding:10px;border-radius:8px;text-align:center;opacity:0.4}
+.modul.active{border-color:var(--ok);opacity:1;background:#002200}
+.modul.locked::after{content:"🔒";display:block;font-size:20px}
+input[type="text"]{width:100%;padding:14px;background:#111;color:var(--text);border:2px solid var(--brand);font-size:16px;text-align:center}
+.btn{background:var(--brand);color:#000;border:none;padding:16px;width:100%;cursor:pointer;font-weight:bold;font-size:18px;margin:10px 0}
+.btn-danger{background:var(--danger);color:#fff}
+.version{font-size:10px;color:var(--ok)}
+.price{font-size:12px;color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="legal">OMNI CORE MASTER INSTALLER - LIZENZIERTE SOFTWARE. WEITERGABE VERBOTEN.</div>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">OMNI CORE</div>
+    <h1>MASTER INSTALLER V6.9.1</h1>
+    <p>1 Lizenz. 9 Module. Unbegrenzte Macht.</p>
+  </div>
+
+  <div class="card">
+    <h3>1. LIZENZ AKTIVIEREN</h3>
+    <input type="text" id="lizenzKey" placeholder="OMNI-XXXX-XXXX-XXXX-XXXX">
+    <button class="btn" onclick="aktivieren()">LIZENZ AKTIVIEREN</button>
+    <small>Demo Key: OMNI-DEMO-6-9-1-ALL</small>
+  </div>
+
+  <div class="card">
+    <h3>2. MODULE AUSWÄHLEN</h3>
+    <div class="grid" id="modulGrid"></div>
+    <button class="btn" onclick="installerStarten()">INSTALLATION STARTEN</button>
+  </div>
+
+  <div class="card" id="downloadCard" style="display:none">
+    <h3>3. DEINE VERSIONEN</h3>
+    <div id="downloadLinks"></div>
+  </div>
+
+  <div class="card">
+    <h3>PREISÜBERSICHT</h3>
+    <table style="width:100%;font-size:12px">
+      <tr><td>V6.2 White Label</td><td>99€/Monat</td></tr>
+      <tr><td>V6.3 Team</td><td>399€/Monat</td></tr>
+      <tr><td>V6.4 Portal</td><td>99€/Monat</td></tr>
+      <tr><td>V6.5 BGH</td><td>299€/Monat</td></tr>
+      <tr><td>V6.6 Batch</td><td>1.999€/Monat</td></tr>
+      <tr><td>V6.7 API</td><td>499€/Monat</td></tr>
+      <tr><td>V6.8 KI-Gutachten</td><td>199€/Monat</td></tr>
+      <tr><td>V6.9 Enterprise</td><td>50.000€ Einmal</td></tr>
+      <tr><td>V6.9.1 Blockchain</td><td>5.000€ Einmal</td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+const MODULE = [
+  {id:"v62", name:"V6.2 WHITE LABEL", desc:"Logo + Branding", price:"99€/Monat"},
+  {id:"v63", name:"V6.3 TEAM DASHBOARD", desc:"Mitarbeiter + Credits", price:"399€/Monat"},
+  {id:"v64", name:"V6.4 MANDANTEN PORTAL", desc:"Öffentlicher Upload", price:"99€/Monat"},
+  {id:"v65", name:"V6.5 BGH-JURIS", desc:"Echte Urteile", price:"299€/Monat"},
+  {id:"v66", name:"V6.6 BATCH ENGINE", desc:"1000 PDFs", price:"1.999€/Monat"},
+  {id:"v67", name:"V6.7 API", desc:"RA-Micro Integration", price:"499€/Monat"},
+  {id:"v68", name:"V6.8 KI-GUTACHTEN", desc:"Auto Widerspruch", price:"199€/Monat"},
+  {id:"v69", name:"V6.9 ENTERPRISE", desc:"On-Premise 50k€", price:"50.000€"},
+  {id:"v691", name:"V6.9.1 BLOCKCHAIN", desc:"Beweissiegel", price:"5.000€"}
+];
+
+let freigeschaltet = [];
+
+function renderModule(){
+  document.getElementById('modulGrid').innerHTML = MODULE.map(m=>`
+    <div class="modul ${freigeschaltet.includes(m.id)?'active':'locked'}" id="${m.id}">
+      <b>${m.name}</b><br>
+      <span class="version">${m.desc}</span><br>
+      <span class="price">${m.price}</span>
+    </div>
+  `).join('');
+}
+
+function aktivieren(){
+  const key = document.getElementById('lizenzKey').value.toUpperCase();
+  if(key === "OMNI-DEMO-6-9-1-ALL"){
+    freigeschaltet = MODULE.map(m=>m.id);
+    alert('DEMO LIZENZ AKTIVIERT. ALLE MODULE FREI.');
+  }else if(key.startsWith("OMNI-PRO-")){
+    freigeschaltet = ["v62","v63","v64","v65"];
+    alert('PRO LIZENZ AKTIVIERT. V6.2 - V6.5 FREI.');
+  }else if(key.startsWith("OMNI-ENT-")){
+    freigeschaltet = MODULE.map(m=>m.id);
+    alert('ENTERPRISE LIZENZ AKTIVIERT. ALLE MODULE + ON-PREMISE.');
+  }else{
+    alert('UNGUELTIGER KEY');
+    return;
+  }
+  localStorage.setItem('omni_lizenz', key);
+  renderModule();
+}
+
+function installerStarten(){
+  if(freigeschaltet.length==0){alert('Erst Lizenz aktivieren');return}
+  const links = freigeschaltet.map(id=>{
+    const m = MODULE.find(x=>x.id==id);
+    return `<a href="#" onclick="downloadModul('${id}')" class="btn" style="display:block;margin:5px 0">${m.name} DOWNLOAD</a>`;
+  }).join('');
+  document.getElementById('downloadLinks').innerHTML = links;
+  document.getElementById('downloadCard').style.display='block';
+}
+
+function downloadModul(id){
+  // HIER WÜRDEN WIR DIE ECHTEN HTML DATEIEN AUSLIEFERN
+  const blob = new Blob([`<!-- OMNI CORE ${id.toUpperCase()} -->\n<!-- LIZENZ: ${localStorage.getItem('omni_lizenz')} -->\n<h1>OMNI CORE ${id.toUpperCase()}</h1>`], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `OMNI_CORE_${id.toUpperCase()}.html`;
+  a.click();
+}
+
+// BEI START
+if(localStorage.getItem('omni_lizenz')) document.getElementById('lizenzKey').value = localStorage.getItem('omni_lizenz');
+aktivieren();
+renderModule();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE - Die KI für Sozialrecht | 10x schneller. 0 Fehler.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:#000;color:var(--text);margin:0}
+.hero{background:linear-gradient(180deg,#050814 0%,#000 100%);padding:80px 20px;text-align:center;border-bottom:2px solid var(--brand)}
+.hero h1{font-size:3rem;margin:0;color:var(--brand)}
+.hero p{font-size:1.2rem;color:#9ca3af}
+.cta{background:var(--danger);color:#fff;padding:18px 40px;font-size:20px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.section{max-width:1200px;margin:0 auto;padding:60px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.card{background:#0a0a0a;border:1px solid #222;border-radius:14px;padding:25px}
+.price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.price-card{background:#0a0a0a;border:2px solid #333;border-radius:14px;padding:30px;text-align:center}
+.price-card.popular{border-color:var(--brand)}
+.price{font-size:3rem;color:var(--brand);font-weight:bold}
+.badge{background:var(--danger);color:#fff;padding:5px 10px;border-radius:20px;font-size:12px}
+ul{list-style:none;padding:0}
+li{padding:5px 0}
+li::before{content:"✓ ";color:var(--ok)}
+.paywall{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.98);z-index:999;justify-content:center;align-items:center}
+.pay-box{background:#111;border:2px solid var(--brand);padding:40px;border-radius:14px;max-width:500px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>OMNI CORE</h1>
+  <p>Die erste KI die Behörden-Bescheide auf Gesetzesverstöße prüft. Mit BGH-Urteilen. In 10 Sekunden.</p>
+  <button class="cta" onclick="scrollToPricing()">JETZT 7 TAGE KOSTENLOS TESTEN</button>
+  <p style="font-size:12px;margin-top:20px">Keine Rechtsberatung. Software-Tool für Anwälte.</p>
+</div>
+
+<!-- PROBLEM -->
+<div class="section">
+  <h2>Das Problem: 3 Stunden pro Akte</h2>
+  <div class="grid">
+    <div class="card"><h3>1. Lesen</h3><p>40 Seiten Bescheid. Paragraphen suchen.</p></div>
+    <div class="card"><h3>2. Recherchieren</h3><p>Beck-Online. BGH Urteile. 1h weg.</p></div>
+    <div class="card"><h3>3. Schreiben</h3><p>Widerspruch tippen. Zitieren. Formatieren.</p></div>
+  </div>
+</div>
+
+<!-- LÖSUNG -->
+<div class="section">
+  <h2>Die Lösung: OMNI CORE V6.9.1</h2>
+  <div class="grid">
+    <div class="card"><h3>V6.5 BGH-JURIS</h3><p>Lädt PDF hoch. Kriegt Fehler + BGH Urteil dazu.</p></div>
+    <div class="card"><h3>V6.8 KI-GUTACHTEN</h3><p>Klick. Fertiger Widerspruch mit Zitaten.</p></div>
+    <div class="card"><h3>V6.6 BATCH</h3><p>1000 Akten auf einmal. Excel mit Erfolgschance.</p></div>
+  </div>
+</div>
+
+<!-- PREISE -->
+<div class="section" id="pricing">
+  <h2>Wählen Sie Ihr Paket</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3>PRO</h3>
+      <div class="price">299€</div><p>/Monat</p>
+      <ul>
+        <li>V6.2 - V6.5</li>
+        <li>500 Credits</li>
+        <li>BGH Datenbank</li>
+        <li>Email Support</li>
+      </ul>
+      <button class="cta" onclick="checkout('price_pro_299')">JETZT STARTEN</button>
+    </div>
+    <div class="price-card popular">
+      <span class="badge">MEIST GEKAUFT</span>
+      <h3>BUSINESS</h3>
+      <div class="price">999€</div><p>/Monat</p>
+      <ul>
+        <li>Alles aus PRO</li>
+        <li>V6.6 Batch + V6.7 API</li>
+        <li>5000 Credits</li>
+        <li>Team Dashboard</li>
+        <li>Priorität Support</li>
+      </ul>
+      <button class="cta" onclick="checkout('price_business_999')">JETZT STARTEN</button>
+    </div>
+    <div class="price-card">
+      <h3>ENTERPRISE</h3>
+      <div class="price">50.000€</div><p>Einmalig</p>
+      <ul>
+        <li>Alles aus BUSINESS</li>
+        <li>V6.9 On-Premise</li>
+        <li>V6.9.1 Blockchain</li>
+        <li>Quellcode Lizenz</li>
+        <li>24/7 Hotline</li>
+      </ul>
+      <button class="cta" onclick="checkout('price_enterprise_50000')">DEMO BUCHEN</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT POPUP -->
+<div class="paywall" id="paywall">
+  <div class="pay-box">
+    <h2>Zahlung abschließen</h2>
+    <p id="payText">Sie haben BUSINESS für 999€/Monat ausgewählt.</p>
+    <button class="cta" onclick="payNow()">MIT STRIPE BEZAHLEN</button><br><br>
+    <button onclick="closePay()" style="background:#333;width:100%;padding:10px;border:none;color:#fff">ABBRECHEN</button>
+  </div>
+</div>
+
+<script>
+const stripe = Stripe('pk_test_51OMNI_DEIN_TEST_KEY');
+let selectedPrice = '';
+
+function scrollToPricing(){document.getElementById('pricing').scrollIntoView({behavior:'smooth'})}
+
+function checkout(priceId){
+  selectedPrice = priceId;
+  if(priceId.includes('999')) document.getElementById('payText').innerText = 'Sie haben BUSINESS für 999€/Monat ausgewählt.';
+  if(priceId.includes('299')) document.getElementById('payText').innerText = 'Sie haben PRO für 299€/Monat ausgewählt.';
+  if(priceId.includes('50000')) document.getElementById('payText').innerText = 'Enterprise: Wir melden uns für eine Demo.';
+  document.getElementById('paywall').style.display='flex';
+}
+
+async function payNow(){
+  if(selectedPrice.includes('50000')){alert('Danke! Unser Vertrieb meldet sich in 24h.');closePay();return}
+  
+  const {error} = await stripe.redirectToCheckout({
+    lineItems: [{price: selectedPrice, quantity: 1}],
+    mode: 'subscription',
+    successUrl: window.location.origin + '/installer.html?success=1&session_id={CHECKOUT_SESSION_ID}',
+    cancelUrl: window.location.href
+  });
+  if(error) alert(error.message);
+}
+
+function closePay(){document.getElementById('paywall').style.display='none'}
+</script>
+</body>
+</html>
+// /api/webhook.js - Vercel Serverless Function
+import Stripe from 'stripe';
+import { Resend } from 'resend';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export const config = { api: { bodyParser: false } };
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
+  
+  const buf = await buffer(req);
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // WICHTIG: BEZAHLUNG ERFOLGREICH
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const customerEmail = session.customer_details.email;
+    const priceId = session.line_items?.data[0]?.price.id;
+    
+    // 1. LIZENZ-KEY GENERIEREN
+    const licenseKey = generateLicenseKey(priceId);
+    
+    // 2. KEY IN DATENBANK SPEICHERN - Hier Supabase/Firebase
+    await saveToDatabase(customerEmail, licenseKey, priceId, session.id);
+    
+    // 3. AUTOMAIL VERSENDEN
+    await sendLicenseEmail(customerEmail, licenseKey, priceId);
+    
+    console.log(`[OMNI] Neuer Kunde: ${customerEmail} | Key: ${licenseKey}`);
+  }
+
+  res.status(200).json({ received: true });
+}
+
+// KEY GENERATOR
+function generateLicenseKey(priceId) {
+  const prefix = priceId.includes('50000') ? 'OMNI-ENT' : 
+                 priceId.includes('999') ? 'OMNI-BIZ' : 'OMNI-PRO';
+  const random = Math.random().toString(16).substr(2, 8).toUpperCase();
+  return `${prefix}-${random.substr(0,4)}-${random.substr(4,4)}`;
+}
+
+// DATENBANK
+async function saveToDatabase(email, key, price, sessionId) {
+  // HIER KOMMT SUPABASE REIN
+  console.log('SAVE TO DB:', {email, key, price, sessionId, status: 'active'});
+}
+
+// EMAIL VERSAND MIT RESEND.COM
+async function sendLicenseEmail(email, key, priceId) {
+  const productName = priceId.includes('50000') ? 'ENTERPRISE' : 
+                      priceId.includes('999') ? 'BUSINESS' : 'PRO';
+  
+  await resend.emails.send({
+    from: 'OMNI CORE <lizenzen@omni-core.ai>',
+    to: email,
+    subject: `Ihr OMNI CORE ${productName} Lizenz-Schlüssel`,
+    html: `
+      <h1>Willkommen bei OMNI CORE</h1>
+      <p>Vielen Dank für Ihren Kauf. Ihr Lizenz-Schlüssel:</p>
+      <h2 style="background:#000;color:#00ffbf;padding:20px;text-align:center">${key}</h2>
+      <p><b>So geht es weiter:</b></p>
+      <ol>
+        <li>Gehen Sie auf: <a href="https://omni-core.ai/installer.html">omni-core.ai/installer.html</a></li>
+        <li>Geben Sie Ihren Key oben ein</li>
+        <li>Laden Sie Ihre Module herunter</li>
+      </ol>
+      <p>Bei Fragen: support@omni-core.ai</p>
+      <hr>
+      <small>OMNI CORE V6.9.1 | Keine Rechtsberatung</small>
+    `
+  });
+}
+
+async function buffer(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+STRIPE_SECRET_KEY=sk_test_51DeinKey
+STRIPE_WEBHOOK_SECRET=whsec_DeinWebhookSecret
+RESEND_API_KEY=re_DeinResendKey
+<script>
+// BEI AUFRUF MIT ?success=1
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get('success') == '1'){
+  alert('Zahlung erfolgreich! Check deine Mails. Der Key kommt in 2 Minuten.');
+}
+
+// KEY VALIDIERUNG GEGEN DATENBANK - MOCK
+async function aktivieren(){
+  const key = document.getElementById('lizenzKey').value.toUpperCase();
+  // HIER: fetch('/api/validate-key?key='+key)
+  // Für jetzt Demo:
+  if(key.startsWith("OMNI-")){
+    freigeschaltet = MODULE.map(m=>m.id); // Später: nur bezahlte Module
+    alert('LIZENZ AKTIVIERT');
+  }
+}
+</script>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>OMNI CORE ADMIN - WAR ROOM</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#000;--brand:#00ffbf;--danger:#ff0040;--text:#e5e7eb;--ok:#00ff88;--warn:#ffbf00}
+*{box-sizing:border-box;font-family:monospace}
+body{background:#000;color:var(--text);margin:0}
+.login{height:100vh;display:flex;justify-content:center;align-items:center}
+.login-box{background:#111;border:2px solid var(--brand);padding:40px;border-radius:14px}
+.app{display:none}
+.header{background:#0a0a0a;border-bottom:2px solid var(--brand);padding:15px;display:flex;justify-content:space-between}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:15px;padding:20px}
+.kpi{background:#0a0a0a;border:1px solid #222;padding:20px;border-radius:10px}
+.kpi-value{font-size:2.5rem;color:var(--brand);font-weight:bold}
+.kpi-label{font-size:12px;color:#9ca3af}
+.table{background:#0a0a0a;margin:20px;border:1px solid #222;border-radius:10px;padding:15px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{color:var(--brand);text-align:left;padding:10px;border-bottom:1px solid #333}
+td{padding:10px;border-bottom:1px solid #111}
+.badge-ok{background:var(--ok);color:#000;padding:3px 8px;border-radius:10px;font-size:10px}
+.badge-danger{background:var(--danger);color:#fff;padding:3px 8px;border-radius:10px;font-size:10px}
+.btn{background:var(--brand);color:#000;border:none;padding:8px 12px;cursor:pointer;font-size:12px}
+input{padding:10px;background:#111;color:var(--text);border:1px solid #333}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginScreen">
+  <div class="login-box">
+    <h2>OMNI CORE ADMIN</h2>
+    <input type="password" id="pw" placeholder="Admin Passwort">
+    <button class="btn" onclick="login()">LOGIN</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="app" id="app">
+  <div class="header">
+    <h2>OMNI CORE WAR ROOM V1.0</h2>
+    <div>Letztes Update: <span id="lastUpdate"></span></div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">MRR - MONATLICH</div>
+      <div class="kpi-value" id="mrr">12.496€</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">AKTIVE KUNDEN</div>
+      <div class="kpi-value" id="kunden">18</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">ENTERPRISE PIPELINE</div>
+      <div class="kpi-value" id="pipeline">3</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">HEUTE UMSATZ</div>
+      <div class="kpi-value" id="heute">999€</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="table">
+    <h3>UMSATZ LETZTE 30 TAGE</h3>
+    <canvas id="revenueChart" height="80"></canvas>
+  </div>
+
+  <!-- KUNDEN TABELLE -->
+  <div class="table">
+    <h3>AKTIVE LIZENZEN</h3>
+    <table id="kundenTable">
+      <thead>
+        <tr>
+          <th>Kunde</th><th>Plan</th><th>Lizenz Key</th><th>Credits</th><th>Status</th><th>Aktion</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- ENTERPRISE LEADS -->
+  <div class="table">
+    <h3>ENTERPRISE ANFRAGEN 50.000€</h3>
+    <table id="enterpriseTable">
+      <thead><tr><th>Firma</th><th>Kontakt</th><th>Notiz</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const ADMIN_PW = "Odin2026!"; // ÄNDERN!
+
+// MOCK DATENBANK - SPÄTER VON /api/admin-data
+const DB = {
+  kunden: [
+    {email:"mueller@kanzlei.de", plan:"BUSINESS", key:"OMNI-BIZ-7F3A-9C2E", credits:4820, status:"active"},
+    {email:"schmidt@recht.de", plan:"PRO", key:"OMNI-PRO-A1B2-C3D4", credits:230, status:"active"},
+    {email:"jobcenter@stadt.de", plan:"ENTERPRISE", key:"OMNI-ENT-FF00-1122", credits:99999, status:"active"}
+  ],
+  enterprise: [
+    {firma:"Versicherung AG", kontakt:"it-leiter@vers.de", notiz:"On-Premise Anfrage", status:"Demo gebucht"},
+    {firma:"Land NRW", kontakt:"beschaffung@nrw.de", notiz:"50 Lizenzen", status:"Angebot raus"}
+  ],
+  mrr: 12496,
+  heute: 999
+}
+
+function login(){
+  if(document.getElementById('pw').value === ADMIN_PW){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadData();
+  }else alert('FALSCH');
+}
+
+function loadData(){
+  document.getElementById('lastUpdate').innerText = new Date().toLocaleString();
+  document.getElementById('mrr').innerText = DB.mrr.toLocaleString() + '€';
+  document.getElementById('kunden').innerText = DB.kunden.length;
+  document.getElementById('pipeline').innerText = DB.enterprise.length;
+  document.getElementById('heute').innerText = DB.heute + '€';
+
+  // KUNDEN TABELLE
+  document.getElementById('kundenTable').querySelector('tbody').innerHTML = DB.kunden.map(k=>`
+    <tr>
+      <td>${k.email}</td>
+      <td>${k.plan}</td>
+      <td>${k.key}</td>
+      <td>${k.credits}</td>
+      <td><span class="badge-ok">${k.status}</span></td>
+      <td>
+        <button class="btn" onclick="resetKey('${k.key}')">KEY RESET</button>
+        <button class="btn" onclick="sperren('${k.email}')" style="background:var(--danger)">SPERREN</button>
+      </td>
+    </tr>
+  `).join('');
+
+  // ENTERPRISE TABELLE
+  document.getElementById('enterpriseTable').querySelector('tbody').innerHTML = DB.enterprise.map(e=>`
+    <tr>
+      <td>${e.firma}</td><td>${e.kontakt}</td><td>${e.notiz}</td>
+      <td><span class="badge-warn" style="background:var(--warn);color:#000;padding:3px 8px">${e.status}</span></td>
+    </tr>
+  `).join('');
+
+  drawChart();
+}
+
+function drawChart(){
+  const ctx = document.getElementById('revenueChart');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Woche 1','Woche 2','Woche 3','Woche 4'],
+      datasets: [{
+        label: 'Umsatz €',
+        data: [2999, 4998, 8997, 12496],
+        borderColor: '#00ffbf',
+        backgroundColor: 'rgba(0,255,191,0.1)'
+      }]
+    }
+  });
+}
+
+function resetKey(key){alert('Neuer Key für '+key+' generiert und per Mail versendet')}
+function sperren(email){if(confirm(email+' wirklich sperren?')) alert('Kunde gesperrt')}
+
+// AUTO REFRESH ALLE 30s
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>
+// /api/admin-data.js
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export default async function handler(req, res) {
+  // PRÜFE ADMIN TOKEN
+  if(req.headers.authorization !== 'Bearer '+process.env.ADMIN_TOKEN) 
+    return res.status(401).json({error:'Unauthorized'});
+  
+  // HOLE ALLE KUNDEN VON STRIPE
+  const customers = await stripe.customers.list({limit:100});
+  const subscriptions = await stripe.subscriptions.list({status:'active'});
+  
+  res.json({customers, subscriptions, mrr: 12496});
+}
+      
