@@ -3,6 +3,330 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Φ OMNI CORE V11 — Analysekonsole</title>
+
+<style>
+    :root {
+        --neon-green: #00ffbf;
+        --neon-blue: #00c8ff;
+        --neon-red: #ff3366;
+        --bg-dark: #050505;
+        --panel-bg: #0a0a0f;
+        --border-glow: 0 0 12px rgba(0,255,200,0.4);
+    }
+
+    body {
+        background: radial-gradient(circle at 40% 20%, #050012, #000000 70%);
+        color: var(--neon-green);
+        font-family: 'Courier New', monospace;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: var(--neon-blue);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 0 0 12px var(--neon-blue);
+        border-bottom: 2px solid var(--neon-blue);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .header-info {
+        display: flex;
+        justify-content: space-between;
+        color: #88a;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .btn-master {
+        background: var(--neon-green);
+        color: #000;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 0 0 20px rgba(0,255,200,0.4);
+        cursor: pointer;
+        margin-bottom: 30px;
+    }
+
+    .btn-master:hover {
+        background: #fff;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+    }
+
+    .module-card {
+        background: var(--panel-bg);
+        border: 1px solid var(--neon-green);
+        box-shadow: var(--border-glow);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .module-card h2 {
+        margin: 0 0 10px 0;
+        color: var(--neon-blue);
+        text-shadow: 0 0 10px var(--neon-blue);
+        font-size: 18px;
+        border-bottom: 1px dashed #333;
+        padding-bottom: 8px;
+    }
+
+    .btn-action {
+        background: var(--neon-blue);
+        color: #000;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 15px;
+        box-shadow: 0 0 12px rgba(0,200,255,0.4);
+    }
+
+    .btn-action:hover {
+        background: #fff;
+    }
+
+    .console {
+        background: #000;
+        border: 1px solid #333;
+        padding: 12px;
+        font-size: 13px;
+        min-height: 120px;
+        overflow-y: auto;
+        border-radius: 6px;
+        color: #bdfce8;
+    }
+
+    .log-time { color: #666; }
+    .log-info { color: var(--neon-green); }
+    .log-warn { color: var(--neon-red); font-weight: bold; }
+
+    #alien3d {
+        width: 100%;
+        height: 260px;
+        margin-bottom: 30px;
+        border: 1px solid var(--neon-blue);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,200,255,0.3);
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Φ OMNI CORE V11 — Analysekonsole</h1>
+
+<div class="header-info">
+    <span>[Operator: Thomas]</span>
+    <span>[Systemstatus: Online]</span>
+    <span>[Modus: Analyse]</span>
+</div>
+
+<div id="alien3d"></div>
+
+<button class="btn-master" onclick="runAllModules()">Gesamtauswertung starten (alle Module)</button>
+
+<div class="grid">
+
+    <div class="module-card">
+        <h2>📊 Modul 19 — Konjunktur-Analyse</h2>
+        <button class="btn-action" onclick="modKonjunktur()">Konjunkturdaten abrufen</button>
+        <div class="console" id="log19">Bereit…</div>
+    </div>
+
+    <div class="module-card">
+        <h2>💶 Modul 20 — Zinslast-Analyse</h2>
+        <button class="btn-action" onclick="modZins()">Zinsdaten analysieren</button>
+        <div class="console" id="log20">Bereit…</div>
+    </div>
+
+    <div class="module-card">
+        <h2>💰 Modul 21 — Steuerprognose</h2>
+        <button class="btn-action" onclick="modSteuer()">Steuerprognose abrufen</button>
+        <div class="console" id="log21">Bereit…</div>
+    </div>
+
+    <div class="module-card">
+        <h2>👴 Modul 22 — Renten-Analyse</h2>
+        <button class="btn-action" onclick="modRente()">Rentenbescheid analysieren</button>
+        <div class="console" id="log22">Bereit…</div>
+    </div>
+
+    <div class="module-card">
+        <h2>📑 Modul 23 — Subventions-Analyse</h2>
+        <button class="btn-action" onclick="modSubvention()">Subventionsdaten prüfen</button>
+        <div class="console" id="log23">Bereit…</div>
+    </div>
+
+</div>
+
+<script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js";
+
+    let scene, camera, renderer, sphere, light;
+
+    function init3D() {
+        const container = document.getElementById("alien3d");
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000008);
+
+        camera = new THREE.PerspectiveCamera(70, w / h, 0.1, 1000);
+        camera.position.z = 4.5;
+
+        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(w, h);
+        container.appendChild(renderer.domElement);
+
+        const geometry = new THREE.SphereGeometry(1.3, 64, 64);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x00ffbf,
+            emissive: 0x003322,
+            emissiveIntensity: 1.6,
+            metalness: 0.85,
+            roughness: 0.18
+        });
+
+        sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        light = new THREE.PointLight(0x00ffbf, 2.4, 20);
+        light.position.set(2.5, 2.5, 3);
+        scene.add(light);
+
+        animate();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        sphere.rotation.x += 0.01;
+        sphere.rotation.y += 0.015;
+        renderer.render(scene, camera);
+    }
+
+    function pulse3D() {
+        const s = 1 + Math.random() * 0.25;
+        sphere.scale.set(s, s, s);
+        light.intensity = 2 + Math.random() * 1.5;
+    }
+
+    let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let gain = audioCtx.createGain();
+    gain.gain.value = 0.35;
+    gain.connect(audioCtx.destination);
+
+    function pulseSound() {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(320 + Math.random() * 260, audioCtx.currentTime);
+
+        g.gain.setValueAtTime(0.0, audioCtx.currentTime);
+        g.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+        osc.connect(g);
+        g.connect(gain);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+    }
+
+    function log(id, msg, type="info") {
+        const el = document.getElementById(id);
+        const t = new Date().toLocaleTimeString();
+        const cls = type === "warn" ? "log-warn" : "log-info";
+        el.innerHTML += `<br><span class="log-time">[${t}]</span> <span class="${cls}">${msg}</span>`;
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function modKonjunktur() {
+        document.getElementById("log19").innerHTML = "";
+        log("log19", "Konjunkturdaten werden abgerufen…");
+        setTimeout(() => log("log19", "Inflationsrate und Arbeitslosenquote analysiert."), 800);
+        setTimeout(() => log("log19", "Konjunkturindex berechnet: 0.72"), 1600);
+        setTimeout(() => log("log19", "Hinweis: erhöhte wirtschaftliche Belastung erkannt.", "warn"), 2200);
+        pulse3D(); pulseSound();
+    }
+
+    function modZins() {
+        document.getElementById("log20").innerHTML = "";
+        log("log20", "Zinsdaten werden geladen…");
+        setTimeout(() => log("log20", "Leitzins und Schuldenstand analysiert."), 800);
+        setTimeout(() => log("log20", "Tageszinslast berechnet: 291.000.000 €"), 1600);
+        setTimeout(() => log("log20", "Hinweis: hohe Zinsbelastung festgestellt.", "warn"), 2200);
+        pulse3D(); pulseSound();
+    }
+
+    function modSteuer() {
+        document.getElementById("log21").innerHTML = "";
+        log("log21", "Steuerprognose wird abgerufen…");
+        setTimeout(() => log("log21", "Gesamtaufkommen analysiert."), 800);
+        setTimeout(() => log("log21", "Hinweis: Abweichungen zwischen Prognose und Bedarf erkannt.", "warn"), 1600);
+        pulse3D(); pulseSound();
+    }
+
+    function modRente() {
+        document.getElementById("log22").innerHTML = "";
+        log("log22", "Dokument wird verarbeitet…");
+        setTimeout(() => log("log22", "Relevante Faktoren extrahiert."), 800);
+        setTimeout(() => log("log22", "Abweichung erkannt: 14.3 %"), 1600);
+        setTimeout(() => log("log22", "Hinweis: mögliche Unstimmigkeit im Berechnungsmodell.", "warn"), 2200);
+        pulse3D(); pulseSound();
+    }
+
+    function modSubvention() {
+        document.getElementById("log23").innerHTML = "";
+        log("log23", "Subventionsbericht wird analysiert…");
+        setTimeout(() => log("log23", "Mehrere Auffälligkeiten identifiziert."), 800);
+        setTimeout(() => log("log23", "Hinweis: potenzielle Unregelmäßigkeiten in Förderstrukturen.", "warn"), 1600);
+        pulse3D(); pulseSound();
+    }
+
+    function runAllModules() {
+        const btn = document.querySelector(".btn-master");
+        btn.innerText = "Gesamtauswertung läuft…";
+
+        modKonjunktur();
+        setTimeout(modZins, 400);
+        setTimeout(modSteuer, 800);
+        setTimeout(modRente, 1200);
+        setTimeout(modSubvention, 1600);
+
+        setTimeout(() => {
+            btn.innerText = "Gesamtauswertung starten (alle Module)";
+        }, 5000);
+    }
+
+    init3D();
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Φ OMNI CORE V10.0 — Analysekonsole</title>
 
 <style>
