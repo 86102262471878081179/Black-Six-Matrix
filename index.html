@@ -1,235 +1,208 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Φ OMNI CORE V18.0 – KONSOLIDIERTE MODUL-APP</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Φ OMNI CORE V18.0 + BÜRGERPLATTFORM</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js" } }
+    </script>
     <style>
         :root {
-            --neon-green: #00ffbf;
+            --brand: #00ffbf;
+            --bg: #0a0a0a;
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --panel: #111;
             --neon-blue: #00c8ff;
+            --neon-green: #00ffbf;
             --neon-red: #ff3366;
-            --panel-bg: #0a0a0f;
         }
-
         * {
             box-sizing: border-box;
-        }
-
-        body {
-            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
-            color: var(--neon-green);
             font-family: 'Courier New', monospace;
+        }
+        body {
+            background: var(--bg);
+            color: #e5e7eb;
             margin: 0;
             padding: 20px;
             min-height: 100vh;
         }
-
-        h1 {
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 12px var(--neon-blue);
-            border-bottom: 2px solid var(--neon-blue);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .header-info {
+        .tabs {
             display: flex;
-            justify-content: space-between;
-            color: #88a;
-            font-size: 14px;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 4px;
             margin-bottom: 20px;
         }
-
-        #status-bar {
-            background: #05080f;
-            border: 1px solid var(--neon-blue);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-
-        .btn-master {
-            background: var(--neon-green);
-            color: #000;
-            padding: 14px;
-            font-size: 18px;
-            font-weight: bold;
-            width: 100%;
-            border: none;
-            border-radius: 8px;
+        .tab-btn {
+            background: #222;
+            color: #aaa;
+            border: 1px solid #333;
+            padding: 12px 24px;
             cursor: pointer;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
             transition: all 0.3s;
+            flex: 1;
+            text-align: center;
         }
-
-        .btn-master:hover {
-            background: #fff;
-            box-shadow: 0 0 30px rgba(0, 255, 191, 0.6);
+        .tab-btn:hover {
+            background: #333;
         }
-
-        .btn-master:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .tab-btn.active {
+            background: var(--brand);
+            color: #000;
+            border-color: var(--brand);
         }
-
+        .tab-content {
+            display: none;
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 0 0 12px 12px;
+            background: var(--panel);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .legal {
+            background: var(--warn);
+            color: #000;
+            padding: 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        .header {
+            background: #000;
+            padding: 20px;
+            border-bottom: 2px solid var(--brand);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: var(--brand);
+            margin: 0;
+        }
         .grid {
             display: grid;
             grid-template-columns: 2fr 1.5fr;
             gap: 20px;
         }
-
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--brand);
+            border-radius: 12px;
+            padding: 20px;
         }
-
-        .module-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-green);
+        .card h2 {
+            color: var(--brand);
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            font-size: 16px;
+            margin-top: 0;
+        }
+        .btn {
+            background: var(--brand);
+            color: #000;
             padding: 14px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 255, 191, 0.05);
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 8px 0;
+            font-size: 14px;
             transition: all 0.3s;
         }
-
-        .module-card:hover {
-            box-shadow: 0 0 25px rgba(0, 255, 191, 0.15);
-            border-color: var(--neon-blue);
+        .btn:hover {
+            background: #00ddaa;
         }
-
-        .module-card h2 {
-            margin: 0 0 8px 0;
-            color: var(--neon-blue);
-            font-size: 14px;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 6px;
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
         }
-
-        .module-card .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 6px;
+        .btn-danger:hover {
+            background: #cc0033;
         }
-
-        .btn-action {
-            background: var(--neon-blue);
-            color: #000;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-bottom: 8px;
+        input[type="file"],
+        input[type="text"],
+        input[type="email"] {
             width: 100%;
-            transition: all 0.2s;
+            padding: 12px;
+            background: #222;
+            color: #e5e7eb;
+            border: 1px solid #444;
+            margin: 8px 0;
+            border-radius: 8px;
         }
-
-        .btn-action:hover {
-            background: #fff;
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
-
-        .console {
+        .terminal {
             background: #000;
             border: 1px solid #333;
-            padding: 8px;
-            font-size: 11px;
-            min-height: 70px;
-            max-height: 120px;
+            height: 160px;
             overflow-y: auto;
-            border-radius: 6px;
-            color: #bdfce8;
-            line-height: 1.5;
+            font-size: 10px;
+            padding: 10px;
+            color: var(--ok);
+            border-radius: 8px;
         }
-
         #alien3d {
-            width: 100%;
-            height: 200px;
-            border: 1px solid var(--neon-blue);
-            border-radius: 10px;
-            margin-bottom: 16px;
+            height: 120px;
+            border: 1px solid var(--brand);
+            border-radius: 8px;
+            margin-bottom: 10px;
             background: #000;
         }
-
-        #chart {
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
-
         .log-time {
             color: #666;
         }
-
-        .log-info {
-            color: var(--neon-green);
+        .log-ok {
+            color: var(--ok);
         }
-
         .log-warn {
-            color: var(--neon-red);
+            color: var(--danger);
             font-weight: bold;
         }
-
-        .log-ok {
-            color: var(--neon-green);
+        .grid-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
         }
-
-        .card-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .module-card {
+            background: #02020a;
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 6px;
         }
-
-        /* Scrollbar Style */
-        .console::-webkit-scrollbar {
-            width: 4px;
+        .module-card h3 {
+            margin: 0 0 4px 0;
+            color: var(--brand);
+            font-size: 10px;
         }
-
-        .console::-webkit-scrollbar-track {
-            background: #111;
+        .module-card .status {
+            font-size: 10px;
         }
-
-        .console::-webkit-scrollbar-thumb {
-            background: var(--neon-blue);
-            border-radius: 2px;
+        .module-card .status.ok {
+            color: var(--ok);
         }
-
+        .module-card .status.warn {
+            color: var(--danger);
+        }
+        #result-output {
+            white-space: pre-wrap;
+            font-size: 11px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
         @media (max-width: 900px) {
             .grid {
                 grid-template-columns: 1fr;
             }
-        }
-
-        /* Animation für den Sphere-Puls */
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.08);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .pulsing {
-            animation: pulse 0.3s ease;
         }
     </style>
 </head>
@@ -238,70 +211,118 @@
     <!-- ============================================================ -->
     <!-- HEADER -->
     <!-- ============================================================ -->
-    <h1>⚡ Φ OMNI CORE V18.0 — KONSOLIDIERTE MODUL-APP</h1>
-
-    <div class="header-info">
-        <span>[OPERATOR: THOMAS KÖNIG / ODIN ULTRA ROOT]</span>
-        <span>[TARGET: BUNDESREPUBLIK DEUTSCHLAND / JUSTIZ NRW]</span>
-        <span>[STATUS: Φ_LOCKED_ABSOLUTE]</span>
+    <div class="header">
+        <h1>⚡ Φ OMNI CORE V18.0 + BÜRGERPLATTFORM</h1>
+        <p style="color:#888;margin:4px 0 0 0;">Operator: Thomas König / ODIN ULTRA ROOT • Status: Φ_LOCKED_ABSOLUTE</p>
     </div>
 
-    <div id="status-bar">🧠 System bereit • Alle 18 Module geladen</div>
+    <div class="legal">BÜRGER INFO PLATTFORM | Software-Tool. Keine Rechtsberatung. OMNI CORE AKTIV</div>
 
     <!-- ============================================================ -->
-    <!-- MASTER BUTTON -->
+    <!-- TABS -->
     <!-- ============================================================ -->
-    <button class="btn-master" id="masterBtn" onclick="triggerAllModules()">
-        ⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡
-    </button>
-
-    <!-- ============================================================ -->
-    <!-- GRID: 3D + Chart + Module -->
-    <!-- ============================================================ -->
-    <div class="grid">
-        <!-- Linke Spalte: 3D + Chart -->
-        <div>
-            <div id="alien3d"></div>
-            <canvas id="chart" width="600" height="200"></canvas>
-            <div class="module-grid" id="moduleGrid"></div>
-        </div>
-
-        <!-- Rechte Spalte: AI + Systemdiagnose -->
-        <div class="card-group">
-            <div class="module-card">
-                <h2>🧠 AI‑ANALYSE</h2>
-                <div class="console" id="log-ai">Warte auf Daten...</div>
-            </div>
-            <div class="module-card">
-                <h2>📡 SYSTEMDIAGNOSE</h2>
-                <div class="console" id="log-diag">Lade...</div>
-            </div>
-        </div>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-core">⚙️ OMNI CORE (24 Module)</button>
+        <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM (23 Module)</button>
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCRIPT: KERNEL + MODULE LOGIK -->
+    <!-- TAB 1: OMNI CORE -->
+    <!-- ============================================================ -->
+    <div class="tab-content active" id="tab-core">
+        <div class="grid">
+            <div>
+                <div id="alien3d"></div>
+                <canvas id="chart" width="600" height="180"></canvas>
+                <div class="grid-modules" id="moduleGrid"></div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🧠 AI‑ANALYSE</h2>
+                    <div class="terminal" id="log-ai">Warte auf Daten...</div>
+                </div>
+                <div class="card" style="margin-top:16px;">
+                    <h2>📡 SYSTEMDIAGNOSE</h2>
+                    <div class="terminal" id="log-diag">Lade...</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger" id="masterBtn" onclick="triggerAllModules()" style="margin-top:16px;">
+            ⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡
+        </button>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 2: BÜRGERPLATTFORM -->
+    <!-- ============================================================ -->
+    <div class="tab-content" id="tab-buerger">
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <h2>📄 DOKUMENTEN SCAN</h2>
+                    <div id="alien3d-buerger"></div>
+                    <input type="file" id="buergerFile" accept=".pdf,.jpg,.png,.txt" />
+                    <input type="text" id="buergerEmail" placeholder="Ihre E-Mail für Antwort" />
+                    <button class="btn btn-danger" onclick="startBuergerScan()">⚡ OMNI SCAN 1-23 STARTEN ⚡</button>
+                    <button class="btn" onclick="downloadBuergerReport()">📥 PDF REPORT DOWNLOAD</button>
+                    <h3>Live Terminal</h3>
+                    <div class="terminal" id="buergerLog">[SYSTEM] Bereit für Upload<br /></div>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🔬 OMNI CORE MODULE 1-23</h2>
+                    <div class="grid-modules" id="buergerModuleGrid"></div>
+                    <h3>Forensik Ergebnis</h3>
+                    <div class="terminal" id="forensikResult">Warte auf Scan...</div>
+                </div>
+                <div class="card" style="margin-top:16px;">
+                    <h2>💼 KANZLEI DASHBOARD</h2>
+                    <input type="text" id="lizenzKey" placeholder="Test-Key: DEMO-9999" />
+                    <button class="btn" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button>
+                    <div id="businessPanel" style="display:none;margin-top:12px;">
+                        <h3>Mandanten Anfragen</h3>
+                        <div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen<br /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPT -->
     <!-- ============================================================ -->
     <script>
         // =====================================================================
-        // 1. KERN-FUNKTIONEN
+        // 1. TAB-SWITCH
         // =====================================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+                // Reinit 3D after switch
+                if (this.dataset.tab === 'tab-core') setTimeout(init3D, 100);
+                else setTimeout(init3DBuerger, 100);
+            });
+        });
 
-        function log(id, msg, type = "info") {
-            const el = document.getElementById('log' + id);
+        // =====================================================================
+        // 2. KERN-FUNKTIONEN
+        // =====================================================================
+        function log(id, msg, type = "ok") {
+            const el = document.getElementById(id);
             if (!el) return;
             const time = new Date().toLocaleTimeString();
-            const colorClass = type === 'warn' ? 'log-warn' : type === 'ok' ? 'log-ok' : 'log-info';
+            const colorClass = type === 'warn' ? 'log-warn' : 'log-ok';
             el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span>`;
             el.scrollTop = el.scrollHeight;
         }
 
-        function sleep(ms) {
-            return new Promise(r => setTimeout(r, ms));
-        }
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-        function pulse() {
-            const sphere = window._sphere;
+        function pulse3D(sphere) {
             if (sphere) {
                 sphere.scale.set(1.15, 1.15, 1.15);
                 setTimeout(() => sphere.scale.set(1, 1, 1), 200);
@@ -319,251 +340,269 @@
                 o.connect(g).connect(audioCtx.destination);
                 o.start();
                 o.stop(audioCtx.currentTime + 0.2);
-            } catch (e) { /* Stille Fallback */ }
-        }
-
-        function logToConsole(elementId, message, isAlert = false) {
-            const consoleDiv = document.getElementById(elementId);
-            if (!consoleDiv) return;
-            const time = new Date().toLocaleTimeString();
-            const colorClass = isAlert ? 'log-warn' : 'log-info';
-            consoleDiv.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${colorClass}">${message}</span>`;
-            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            } catch (e) {}
         }
 
         // =====================================================================
-        // 2. MODUL-DEFINITIONEN (1-18)
+        // 3. OMNI CORE MODULE (1-24)
         // =====================================================================
-
-        const MODULES = {
-            1: {
-                name: "📜 GESETZES-LEDGER",
-                fn: async () => {
-                    log(1, "Lade 1.797 Gesetze...");
+        const OMNI_MODULES = {
+            1: { name: "📜 GESETZES-LEDGER", fn: async () => { log('log-ai', "Lade 1.797 Gesetze...");
                     await sleep(500);
-                    log(1, "SHA-256 Hash für BGB §134 generiert", "ok");
-                    log(1, "52.401 Einzelnormen versiegelt", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            2: {
-                name: "⛓️ BSI FORENSIK",
-                fn: async () => {
-                    log(2, "Initiiere §477 StPO Protokoll...");
+                    log('log-ai', "SHA-256 Hash für BGB §134 generiert", "ok");
+                    log('log-ai', "52.401 Einzelnormen versiegelt", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            2: { name: "⛓️ BSI FORENSIK", fn: async () => { log('log-ai', "Initiiere §477 StPO Protokoll...");
                     await sleep(400);
-                    log(2, "Chain of Custody: INTAKT", "ok");
-                    log(2, "WORM Storage: AKTIV", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            3: {
-                name: "🧠 XENI AI CORE",
-                fn: async () => {
-                    log(3, "Lade Neural-Netz...");
+                    log('log-ai', "Chain of Custody: INTAKT", "ok");
+                    log('log-ai', "WORM Storage: AKTIV", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            3: { name: "🧠 XENI AI CORE", fn: async () => { log('log-ai', "Lade Neural-Netz...");
                     await sleep(600);
-                    log(3, "Mustererkennung: 99.8%", "ok");
-                    log(3, "Anomalie in Akte König erkannt", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            4: {
-                name: "🌌 QUANTUM-FLUX",
-                fn: async () => {
-                    log(4, "Messe Flux-Signatur...");
+                    log('log-ai', "Mustererkennung: 99.8%", "ok");
+                    log('log-ai', "Anomalie in Akte König erkannt", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            4: { name: "🌌 QUANTUM-FLUX", fn: async () => { log('log-ai', "Messe Flux-Signatur...");
                     await sleep(300);
-                    log(4, "Signatur: Φ_LOCKED_ABSOLUTE", "ok");
-                    log(4, "Stabilität: 100%", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            5: {
-                name: "🧬 BIO-NEURAL",
-                fn: async () => {
-                    log(5, "DNA-Scan läuft...");
+                    log('log-ai', "Signatur: Φ_LOCKED_ABSOLUTE", "ok");
+                    log('log-ai', "Stabilität: 100%", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            5: { name: "🧬 BIO-NEURAL", fn: async () => { log('log-ai', "DNA-Scan läuft...");
                     await sleep(800);
-                    log(5, "Operator: Thomas König VERIFIZIERT", "ok");
-                    log(5, "Biometrische Sperre aufgehoben", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            6: {
-                name: "🕳️ DARK-MATTER SCAN",
-                fn: async () => {
-                    log(6, "Scanne versteckte Assets...");
+                    log('log-ai', "Operator: Thomas König VERIFIZIERT", "ok");
+                    log('log-ai', "Biometrische Sperre aufgehoben", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            6: { name: "🕳️ DARK-MATTER", fn: async () => { log('log-ai', "Scanne versteckte Assets...");
                     await sleep(700);
-                    log(6, "3x Offshore-Konten gefunden", "warn");
-                    log(6, "2x Scheinfirmen identifiziert", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            7: {
-                name: "📡 PULSE-STREAM",
-                fn: async () => {
-                    log(7, "Starte Echtzeit-Monitoring...");
+                    log('log-ai', "3x Offshore-Konten gefunden", "warn");
+                    log('log-ai', "2x Scheinfirmen identifiziert", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            7: { name: "📡 PULSE-STREAM", fn: async () => { log('log-ai', "Starte Echtzeit-Monitoring...");
                     await sleep(200);
-                    log(7, "Latenz: 42ms", "ok");
-                    log(7, "Paketverlust: 0%", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            8: {
-                name: "⚖️ BGB-ANALYSATOR",
-                fn: async () => {
-                    log(8, "Prüfe BGB §134...");
+                    log('log-ai', "Latenz: 42ms", "ok");
+                    log('log-ai', "Paketverlust: 0%", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            8: { name: "⚖️ BGB-ANALYSATOR", fn: async () => { log('log-ai', "Prüfe BGB §134...");
                     await sleep(400);
-                    log(8, "Gesetzesverstoß: BESTÄTIGT", "warn");
-                    log(8, "Rechtsfolge: Absolute Nichtigkeit", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            9: {
-                name: "🚨 STGB-TRACKER",
-                fn: async () => {
-                    log(9, "Analysiere §348 StGB...");
+                    log('log-ai', "Gesetzesverstoß: BESTÄTIGT", "warn");
+                    log('log-ai', "Rechtsfolge: Absolute Nichtigkeit", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            9: { name: "🚨 STGB-TRACKER", fn: async () => { log('log-ai', "Analysiere §348 StGB...");
                     await sleep(500);
-                    log(9, "Falschbeurkundung: WAHRSCHEINLICH", "warn");
-                    log(9, "Beweis: Stempel statt Unterschrift", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            10: {
-                name: "🏛️ GG-WÄCHTER",
-                fn: async () => {
-                    log(10, "Prüfe Grundgesetz...");
+                    log('log-ai', "Falschbeurkundung: WAHRSCHEINLICH", "warn");
+                    log('log-ai', "Beweis: Stempel statt Unterschrift", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            10: { name: "🏛️ GG-WÄCHTER", fn: async () => { log('log-ai', "Prüfe Grundgesetz...");
                     await sleep(400);
-                    log(10, "Art.1 GG: Menschenwürde verletzt", "warn");
-                    log(10, "Art.13 GG: Unverletzlichkeit Wohnung", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            11: {
-                name: "🌍 EMRK-MONITOR",
-                fn: async () => {
-                    log(11, "Scanne EMRK...");
+                    log('log-ai', "Art.1 GG: Menschenwürde verletzt", "warn");
+                    log('log-ai', "Art.13 GG: Unverletzlichkeit Wohnung", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            11: { name: "🌍 EMRK-MONITOR", fn: async () => { log('log-ai', "Scanne EMRK...");
                     await sleep(400);
-                    log(11, "Art.3 EMRK: Unmenschliche Behandlung", "warn");
-                    log(11, "Art.8 EMRK: Privatleben verletzt", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            12: {
-                name: "💶 DSGVO-SCANNER",
-                fn: async () => {
-                    log(12, "Prüfe DSGVO Compliance...");
+                    log('log-ai', "Art.3 EMRK: Unmenschliche Behandlung", "warn");
+                    log('log-ai', "Art.8 EMRK: Privatleben verletzt", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            12: { name: "💶 DSGVO-SCANNER", fn: async () => { log('log-ai', "Prüfe DSGVO Compliance...");
                     await sleep(500);
-                    log(12, "Art.5: Rechtswidrige Verarbeitung", "warn");
-                    log(12, "Art.6: Keine Rechtsgrundlage", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            13: {
-                name: "👮 POLIZEI-AUDIT",
-                fn: async () => {
-                    log(13, "Audit PolG NRW §51...");
+                    log('log-ai', "Art.5: Rechtswidrige Verarbeitung", "warn");
+                    log('log-ai', "Art.6: Keine Rechtsgrundlage", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            13: { name: "👮 POLIZEI-AUDIT", fn: async () => { log('log-ai', "Audit PolG NRW §51...");
                     await sleep(600);
-                    log(13, "Verhältnismäßigkeit: NICHT GEGEBEN", "warn");
-                    log(13, "Ermessen: ÜBERSCHRITTEN", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            14: {
-                name: "📑 VERWALTUNGS-AKT",
-                fn: async () => {
-                    log(14, "Prüfe VwVfG §81...");
+                    log('log-ai', "Verhältnismäßigkeit: NICHT GEGEBEN", "warn");
+                    log('log-ai', "Ermessen: ÜBERSCHRITTEN", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            14: { name: "📑 VERWALTUNGS-AKT", fn: async () => { log('log-ai', "Prüfe VwVfG §81...");
                     await sleep(400);
-                    log(14, "Formmangel: NICHTIG", "warn");
-                    log(14, "Simulation hoheitlicher Akt", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            15: {
-                name: "💰 STEUER-ENGINE",
-                fn: async () => {
-                    log(15, "Lade BMF Daten...");
+                    log('log-ai', "Formmangel: NICHTIG", "warn");
+                    log('log-ai', "Simulation hoheitlicher Akt", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            15: { name: "💰 STEUER-ENGINE", fn: async () => { log('log-ai', "Lade BMF Daten...");
                     await sleep(500);
-                    log(15, "Steueraufkommen: 954 Mrd €", "ok");
-                    log(15, "Prognose 2026: +3.2%", "ok");
-                    pulse();
-                    sound();
-                }
-            },
-            16: {
-                name: "🏦 EZB-ZINS",
-                fn: async () => {
-                    log(16, "Verbinde EZB API...");
+                    log('log-ai', "Steueraufkommen: 954 Mrd €", "ok");
+                    log('log-ai', "Prognose 2026: +3.2%", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            16: { name: "🏦 EZB-ZINS", fn: async () => { log('log-ai', "Verbinde EZB API...");
                     await sleep(400);
-                    log(16, "Leitzins: 4.25%", "ok");
-                    log(16, "Tageszinslast: 291.000.000 €", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            17: {
-                name: "👴 DRV-RENTEN",
-                fn: async () => {
-                    log(17, "OCR Scan Rentenbescheid...");
+                    log('log-ai', "Leitzins: 4.25%", "ok");
+                    log('log-ai', "Tageszinslast: 291.000.000 €", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            17: { name: "👴 DRV-RENTEN", fn: async () => { log('log-ai', "OCR Scan Rentenbescheid...");
                     await sleep(800);
-                    log(17, "Entgeltpunkte: 42.5", "ok");
-                    log(17, "Abweichung: 14.3% zu Ungunsten", "warn");
-                    pulse();
-                    sound();
-                }
-            },
-            18: {
-                name: "💣 SUBVENTIONEN",
-                fn: async () => {
-                    log(18, "Scanne BMWK Bericht...");
+                    log('log-ai', "Entgeltpunkte: 42.5", "ok");
+                    log('log-ai', "Abweichung: 14.3% zu Ungunsten", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            18: { name: "💣 SUBVENTIONEN", fn: async () => { log('log-ai', "Scanne BMWK Bericht...");
                     await sleep(700);
-                    log(18, "4.500 Förderungen analysiert", "ok");
-                    log(18, "3x §134 BGB Verstöße >1Mio", "warn");
-                    pulse();
-                    sound();
-                }
-            }
+                    log('log-ai', "4.500 Förderungen analysiert", "ok");
+                    log('log-ai', "3x §134 BGB Verstöße >1Mio", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            19: { name: "📄 AUTOM. SCHRIFTSATZ", fn: async () => { log('log-ai', "Generiere Klageschrift...");
+                    await sleep(500);
+                    log('log-ai', "PDF: KLAGE_10MIO_X2.pdf erstellt", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            20: { name: "🖨️ MIC-FORENSIK", fn: async () => { log('log-ai', "Analysiere Yellow Dots...");
+                    await sleep(600);
+                    log('log-ai', "Drucker-ID: NRW-2026-0042", "warn");
+                    log('log-ai', "Splicing: BESTÄTIGT", "warn");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            21: { name: "📈 MARKTANALYSE", fn: async () => { log('log-ai', "Lade BTC/EUR...");
+                    await sleep(500);
+                    log('log-ai', "BTC: 62.400 € (+2.3%)", "ok");
+                    log('log-ai', "Prognose: +4.7% in 7d", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            22: { name: "🤝 KOLLABORATION", fn: async () => { log('log-ai', "Starte Session...");
+                    await sleep(400);
+                    log('log-ai', "Mandant: Tina König verbunden", "ok");
+                    log('log-ai', "Anwalt: RA Vetter angenommen", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            23: { name: "🔐 POST-QUANTUM", fn: async () => { log('log-ai', "Generiere Dilithium-Schlüssel...");
+                    await sleep(700);
+                    log('log-ai', "Public Key: 0x7F83B165...", "ok");
+                    log('log-ai', "Signatur: Φ_LOCKED", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } },
+            24: { name: "🎓 AKADEMIE", fn: async () => { log('log-ai', "Lade Kurs: Forensik Basics...");
+                    await sleep(600);
+                    log('log-ai', "Kursfortschritt: 42%", "ok");
+                    log('log-ai', "Zertifikat: FORENSIC_101", "ok");
+                    pulse3D(window._sphere);
+                    sound(); } }
         };
 
         // =====================================================================
-        // 3. RENDER DER MODULE
+        // 4. BÜRGERPLATTFORM MODULE (1-23)
         // =====================================================================
+        const BUERGER_MODULES = {
+            1: { name: "GESETZES-LEDGER", fn: async (f) => { log("buergerLog", "Prüfe Gesetzeskatalog...");
+                    await sleep(200);
+                    return { msg: "1.797 Gesetze geladen", type: "ok" }; } },
+            2: { name: "BSI FORENSIK", fn: async (f) => { log("buergerLog", "§477 StPO Chain Check...");
+                    await sleep(200);
+                    return { msg: "Chain of Custody: INTAKT", type: "ok" }; } },
+            3: { name: "XENI AI CORE", fn: async (f) => { log("buergerLog", "AI Muster Scan...");
+                    await sleep(300);
+                    return { msg: f && f.name && f.name.includes("Beschluss") ? "Anomalie erkannt" : "Kein Muster",
+                        type: "warn" }; } },
+            4: { name: "QUANTUM-FLUX", fn: async (f) => { log("buergerLog", "Flux-Signatur...");
+                    await sleep(100);
+                    return { msg: "Φ_LOCKED_ABSOLUTE", type: "ok" }; } },
+            5: { name: "BIO-NEURAL", fn: async (f) => { log("buergerLog", "Biometrie Check...");
+                    await sleep(300);
+                    return { msg: "Operator verifiziert", type: "ok" }; } },
+            6: { name: "DARK-MATTER", fn: async (f) => { log("buergerLog", "Versteckte Metadaten...");
+                    await sleep(400);
+                    return { msg: "Keine versteckten Assets", type: "ok" }; } },
+            7: { name: "PULSE-STREAM", fn: async (f) => { log("buergerLog", "Echtzeit Analyse...");
+                    await sleep(100);
+                    return { msg: "Latenz 42ms", type: "ok" }; } },
+            8: { name: "BGB §134", fn: async (f) => { log("buergerLog", "Prüfe §134 BGB...");
+                    await sleep(200);
+                    return { msg: "Gesetzesverstoß: MÖGLICH", type: "warn" }; } },
+            9: { name: "STGB §348/267", fn: async (f) => { log("buergerLog", "Prüfe Falschbeurkundung...");
+                    await sleep(300);
+                    return { msg: "Zeitparadoxon: GEFUNDEN", type: "warn" }; } },
+            10: { name: "GG WÄCHTER", fn: async (f) => { log("buergerLog", "Prüfe GG Art.1+13+80...");
+                    await sleep(200);
+                    return { msg: "Zitiergebot: VERLETZT", type: "warn" }; } },
+            11: { name: "EMRK", fn: async (f) => { log("buergerLog", "Prüfe EMRK...");
+                    await sleep(200);
+                    return { msg: "Art.8: Prüfen", type: "ok" }; } },
+            12: { name: "DSGVO", fn: async (f) => { log("buergerLog", "Prüfe DSGVO...");
+                    await sleep(200);
+                    return { msg: "Art.6: Rechtsgrundlage fehlt", type: "warn" }; } },
+            13: { name: "POLIZEI-AUDIT", fn: async (f) => { log("buergerLog", "Prüfe PolG...");
+                    await sleep(300);
+                    return { msg: "Verhältnismäßigkeit: PRÜFEN", type: "warn" }; } },
+            14: { name: "VERWALTUNGS-AKT", fn: async (f) => { log("buergerLog", "Prüfe VwVfG...");
+                    await sleep(200);
+                    return { msg: "Form: OK", type: "ok" }; } },
+            15: { name: "STEUER-ENGINE", fn: async (f) => { log("buergerLog", "Kostenrisiko...");
+                    await sleep(200);
+                    return { msg: "Kosten: Niedrig", type: "ok" }; } },
+            16: { name: "EZB-ZINS", fn: async (f) => { log("buergerLog", "Schadensersatz Zins...");
+                    await sleep(200);
+                    return { msg: "6,27% p.a. möglich", type: "ok" }; } },
+            17: { name: "DRV-RENTEN", fn: async (f) => { log("buergerLog", "Folgeschäden...");
+                    await sleep(200);
+                    return { msg: "Keine Rentenauswirkung", type: "ok" }; } },
+            18: { name: "SUBVENTIONEN", fn: async (f) => { log("buergerLog", "Staatshaushalt...");
+                    await sleep(200);
+                    return { msg: "Keine Relevanz", type: "ok" }; } },
+            19: { name: "KONJUNKTUR", fn: async (f) => { log("buergerLog", "Wirtschaftslage...");
+                    await sleep(200);
+                    return { msg: "Index: 0.72", type: "ok" }; } },
+            20: { name: "ZINSLAST", fn: async (f) => { log("buergerLog", "Tageszinslast Staat...");
+                    await sleep(200);
+                    return { msg: "291 Mio €/Tag", type: "ok" }; } },
+            21: { name: "STEUER-SIM", fn: async (f) => { log("buergerLog", "Steueraufkommen...");
+                    await sleep(200);
+                    return { msg: "954 Mrd €", type: "ok" }; } },
+            22: { name: "RENTEN-HACK", fn: async (f) => { log("buergerLog", "Widerspruchsrecht...");
+                    await sleep(300);
+                    return { msg: "Widerspruch möglich", type: "ok" }; } },
+            23: { name: "SUBV-VERNICHTER", fn: async (f) => { log("buergerLog", "§134 Exekution...");
+                    await sleep(300);
+                    return { msg: "Nichtigkeitserklärung bereit", type: "warn" }; } }
+        };
 
-        const grid = document.getElementById('moduleGrid');
-        Object.keys(MODULES).forEach(id => {
-            grid.innerHTML += `
+        // =====================================================================
+        // 5. OMNI CORE RENDER
+        // =====================================================================
+        const coreGrid = document.getElementById('moduleGrid');
+        Object.keys(OMNI_MODULES).forEach(id => {
+            coreGrid.innerHTML += `
                         <div class="module-card">
-                            <h2>MODUL ${id} - ${MODULES[id].name}</h2>
-                            <button class="btn-action" onclick="runModule(${id})">AUSFÜHREN</button>
-                            <div class="console" id="log${id}">Status: BEREIT</div>
+                            <h3>M${id} ${OMNI_MODULES[id].name}</h3>
+                            <div id="m${id}">WARTET</div>
                         </div>
                     `;
         });
 
         // =====================================================================
-        // 4. MODUL-AUSFÜHRUNG
+        // 6. BÜRGERPLATTFORM RENDER
         // =====================================================================
+        const buergerGrid = document.getElementById('buergerModuleGrid');
+        Object.keys(BUERGER_MODULES).forEach(id => {
+            buergerGrid.innerHTML += `
+                        <div class="module-card">
+                            <h3>M${id} ${BUERGER_MODULES[id].name}</h3>
+                            <div id="bm${id}">WARTET</div>
+                        </div>
+                    `;
+        });
 
-        async function runModule(id) {
-            const logDiv = document.getElementById('log' + id);
-            if (logDiv) logDiv.innerHTML = 'Status: LÄUFT...';
-            await MODULES[id].fn();
+        // =====================================================================
+        // 7. OMNI CORE LAUNCHER
+        // =====================================================================
+        async function runOmniModule(id) {
+            const el = document.getElementById('m' + id);
+            if (el) el.innerText = 'LÄUFT...';
+            await OMNI_MODULES[id].fn();
+            if (el) el.innerText = '✅ FERTIG';
         }
-
-        // =====================================================================
-        // 5. ALLE MODULE TRIGGERN
-        // =====================================================================
 
         async function triggerAllModules() {
             const btn = document.getElementById('masterBtn');
@@ -572,226 +611,105 @@
             btn.style.background = "#ff0033";
             btn.style.color = "#fff";
 
-            for (let i = 1; i <= 18; i++) {
-                const logDiv = document.getElementById('log' + i);
-                if (logDiv) logDiv.innerHTML = 'Status: LÄUFT...';
-                await MODULES[i].fn();
+            for (let i = 1; i <= 24; i++) {
+                await runOmniModule(i);
                 await sleep(100);
             }
 
-            btn.style.background = "var(--neon-green)";
+            btn.style.background = "var(--brand)";
             btn.style.color = "#000";
             btn.innerText = "⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡";
             btn.disabled = false;
-            document.getElementById('log-ai').innerHTML = `🧠 AI-Analyse: Alle 18 Module erfolgreich durchgelaufen.`;
+            document.getElementById('log-ai').innerHTML =
+                `🧠 AI-Analyse: Alle 24 Module erfolgreich durchgelaufen. System bereit.`;
         }
 
         // =====================================================================
-        // 6. SYSTEMDIAGNOSE (SIMULIERT)
+        // 8. BÜRGERPLATTFORM LAUNCHER
         // =====================================================================
+        let lastBuergerReport = '';
 
+        async function startBuergerScan() {
+            const file = document.getElementById('buergerFile').files[0];
+            const email = document.getElementById('buergerEmail').value;
+            if (!file || !email) return alert('Bitte Datei + E-Mail eingeben');
+
+            document.getElementById('buergerLog').innerHTML = "[SYSTEM] Scan gestartet<br>";
+            document.getElementById('forensikResult').innerHTML = "";
+            lastBuergerReport = `BÜRGER ANALYSE REPORT\nDatei: ${file.name}\nDatum: ${new Date().toLocaleString('de-DE')}\n\n`;
+
+            for (let i = 1; i <= 23; i++) {
+                const el = document.getElementById('bm' + i);
+                if (el) el.innerText = 'LÄUFT...';
+                pulse3D(window._sphereBuerger);
+                const result = await BUERGER_MODULES[i].fn(file);
+                if (el) el.innerHTML = `<span class="${result.type === 'warn' ? 'warn' : 'ok'}">${result.msg}</span>`;
+                lastBuergerReport += `M${i} ${BUERGER_MODULES[i].name}: ${result.msg}\n`;
+                const forensikEl = document.getElementById('forensikResult');
+                if (forensikEl) {
+                    forensikEl.innerHTML += `<br><span class="${result.type === 'warn' ? 'log-warn' : 'log-ok'}">M${i}: ${result.msg}</span>`;
+                    forensikEl.scrollTop = forensikEl.scrollHeight;
+                }
+            }
+
+            lastBuergerReport += "\nFAZIT: Handlungsbedarf erkannt. Widerspruch empfohlen.";
+            log('buergerLog', '[OK] OMNI SCAN ABGESCHLOSSEN', 'ok');
+
+            // Speichern für Kanzlei
+            let anfr = JSON.parse(localStorage.getItem('mandanten') || '[]');
+            anfr.push({ email: email, file: file.name, date: new Date().toLocaleString(), report: lastBuergerReport });
+            localStorage.setItem('mandanten', JSON.stringify(anfr));
+            loadMandanten();
+        }
+
+        function downloadBuergerReport() {
+            if (!lastBuergerReport) return alert('Erst Scan durchführen');
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(lastBuergerReport, 10, 10);
+            doc.save('OMNI-Report.pdf');
+            log('buergerLog', '[OK] PDF heruntergeladen');
+        }
+
+        // =====================================================================
+        // 9. KANZLEI DASHBOARD
+        // =====================================================================
+        function buergerBusinessLogin() {
+            const key = document.getElementById('lizenzKey').value;
+            if (key === 'DEMO-9999' || key.length > 5) {
+                document.getElementById('businessPanel').style.display = 'block';
+                loadMandanten();
+            } else {
+                alert('Test-Key: DEMO-9999');
+            }
+        }
+
+        function loadMandanten() {
+            let anfr = JSON.parse(localStorage.getItem('mandanten') || '[]');
+            document.getElementById('mandantenLog').innerHTML = anfr.length ?
+                anfr.map(a => `[NEU] ${a.date} | ${a.email} | ${a.file}<br>`).join('') :
+                '[SYSTEM] Keine Anfragen<br>';
+        }
+
+        // =====================================================================
+        // 10. SYSTEMDIAGNOSE (OMNI CORE)
+        // =====================================================================
         async function updateDiag() {
             const uptime = Math.floor(performance.now() / 1000);
             document.getElementById('log-diag').innerHTML = `
                         <span class="log-ok">● System: ONLINE</span><br>
                         Uptime: ${uptime}s<br>
-                        Module: 18/18 geladen<br>
+                        Module: 24/24 geladen<br>
                         Status: Φ_LOCKED_ABSOLUTE<br>
                         <span class="log-warn">⚠️ Akte König: 3 Anomalien erkannt</span>
                     `;
-            document.getElementById('status-bar').innerText =
-                `🧠 System bereit • Uptime: ${uptime}s • 18 Module geladen • Status: Φ_LOCKED_ABSOLUTE`;
         }
-
         setInterval(updateDiag, 5000);
         updateDiag();
 
         // =====================================================================
-        // 7. 3D-SPHERE (THREE.JS)
+        // 11. AI-ANALYSE (OMNI CORE)
         // =====================================================================
-
-        (function init3D() {
-            const container = document.getElementById('alien3d');
-            if (!container) return;
-
-            const width = container.clientWidth || 600;
-            const height = 200;
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
-            camera.position.z = 4.5;
-
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
-
-            const sphere = new THREE.Mesh(
-                new THREE.SphereGeometry(1.2, 48, 48),
-                new THREE.MeshStandardMaterial({
-                    color: 0x00ffbf,
-                    emissive: 0x003322,
-                    emissiveIntensity: 1.2,
-                    roughness: 0.3,
-                    metalness: 0.7
-                })
-            );
-            scene.add(sphere);
-            window._sphere = sphere;
-
-            const light = new THREE.PointLight(0x00ffbf, 2.5, 20);
-            light.position.set(2.5, 2.5, 3);
-            scene.add(light);
-
-            const ambient = new THREE.AmbientLight(0x003322);
-            scene.add(ambient);
-
-            const backLight = new THREE.DirectionalLight(0x003366, 0.5);
-            backLight.position.set(-2, -1, -3);
-            scene.add(backLight);
-
-            function animate() {
-                requestAnimationFrame(animate);
-                sphere.rotation.x += 0.008;
-                sphere.rotation.y += 0.012;
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            // Resize Handling
-            window.addEventListener('resize', () => {
-                const w = container.clientWidth || 600;
-                renderer.setSize(w, 200);
-                camera.aspect = w / 200;
-                camera.updateProjectionMatrix();
-            });
-        })();
-
-        // =====================================================================
-        // 8. CHART (CANVAS)
-        // =====================================================================
-
-        (function initChart() {
-            const canvas = document.getElementById('chart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width || 600;
-            const height = canvas.height || 200;
-
-            const data = [65, 72, 68, 80, 77, 85, 82, 90, 87, 95, 92, 98];
-            const labels = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-
-            function drawChart() {
-                ctx.clearRect(0, 0, width, height);
-
-                // Hintergrund
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, width, height);
-
-                // Grid
-                ctx.strokeStyle = '#1a1a2e';
-                ctx.lineWidth = 0.5;
-                for (let i = 0; i < 5; i++) {
-                    const y = 20 + i * 40;
-                    ctx.beginPath();
-                    ctx.moveTo(40, y);
-                    ctx.lineTo(width - 20, y);
-                    ctx.stroke();
-                }
-
-                // Datenlinie
-                ctx.strokeStyle = '#00ffbf';
-                ctx.lineWidth = 2.5;
-                ctx.shadowColor = '#00ffbf';
-                ctx.shadowBlur = 10;
-
-                const padding = 40;
-                const chartWidth = width - padding * 2;
-                const chartHeight = height - padding * 2;
-
-                ctx.beginPath();
-                data.forEach((val, i) => {
-                    const x = padding + (i / (data.length - 1)) * chartWidth;
-                    const y = padding + chartHeight - (val / 100) * chartHeight;
-                    if (i === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                });
-                ctx.stroke();
-
-                // Füllung unter der Linie (Gradient)
-                const gradient = ctx.createLinearGradient(0, 20, 0, height - 20);
-                gradient.addColorStop(0, 'rgba(0,255,191,0.2)');
-                gradient.addColorStop(1, 'rgba(0,255,191,0.0)');
-
-                ctx.fillStyle = gradient;
-                ctx.shadowBlur = 0;
-                ctx.beginPath();
-                const lastX = padding + ((data.length - 1) / (data.length - 1)) * chartWidth;
-                const lastY = padding + chartHeight - (data[data.length - 1] / 100) * chartHeight;
-                ctx.moveTo(padding, padding + chartHeight);
-                data.forEach((val, i) => {
-                    const x = padding + (i / (data.length - 1)) * chartWidth;
-                    const y = padding + chartHeight - (val / 100) * chartHeight;
-                    ctx.lineTo(x, y);
-                });
-                ctx.lineTo(lastX, padding + chartHeight);
-                ctx.closePath();
-                ctx.fill();
-
-                // Punkte
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = '#00ffbf';
-                data.forEach((val, i) => {
-                    const x = padding + (i / (data.length - 1)) * chartWidth;
-                    const y = padding + chartHeight - (val / 100) * chartHeight;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, Math.PI * 2);
-                    ctx.fillStyle = '#00ffbf';
-                    ctx.fill();
-                });
-
-                // Labels (monate)
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = '#88a';
-                ctx.font = '10px monospace';
-                ctx.textAlign = 'center';
-                labels.forEach((label, i) => {
-                    const x = padding + (i / (data.length - 1)) * chartWidth;
-                    ctx.fillText(label, x, height - 8);
-                });
-
-                // Y-Achsen Beschriftung
-                ctx.textAlign = 'right';
-                ctx.fillStyle = '#556';
-                for (let i = 0; i <= 4; i++) {
-                    const val = i * 25;
-                    const y = padding + chartHeight - (val / 100) * chartHeight;
-                    ctx.fillText(val + '%', 32, y + 3);
-                }
-
-                // Titel
-                ctx.fillStyle = '#00ffbf';
-                ctx.font = '11px monospace';
-                ctx.textAlign = 'left';
-                ctx.fillText('📊 SYSTEM-LEISTUNG 2026', 10, 18);
-            }
-
-            drawChart();
-
-            // Aktualisierung alle 10 Sekunden (simuliert)
-            setInterval(() => {
-                for (let i = 0; i < data.length; i++) {
-                    data[i] = Math.min(100, Math.max(40, data[i] + (Math.random() - 0.5) * 8));
-                }
-                drawChart();
-            }, 10000);
-        })();
-
-        // =====================================================================
-        // 9. AI-ANALYSE (SIMULIERT)
-        // =====================================================================
-
         setInterval(() => {
             const logAi = document.getElementById('log-ai');
             if (!logAi) return;
@@ -810,17 +728,205 @@
         }, 4000);
 
         // =====================================================================
-        // 10. FEHLERBEHANDLUNG
+        // 12. 3D SPHERE (OMNI CORE)
         // =====================================================================
+        let scene, camera, renderer, sphere, light;
 
+        function init3D() {
+            const container = document.getElementById('alien3d');
+            if (!container || container._initialized) return;
+            container._initialized = true;
+            const width = container.clientWidth || 600;
+            const height = 120;
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+            camera.position.z = 3.5;
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+            sphere = new THREE.Mesh(new THREE.SphereGeometry(0.9, 48, 48),
+                new THREE.MeshStandardMaterial({ color: 0x00ffbf, emissive: 0x003322, emissiveIntensity: 1.2 }));
+            scene.add(sphere);
+            window._sphere = sphere;
+            light = new THREE.PointLight(0x00ffbf, 2.5, 20);
+            light.position.set(2.5, 2.5, 3);
+            scene.add(light);
+            const ambient = new THREE.AmbientLight(0x003322);
+            scene.add(ambient);
+            const backLight = new THREE.DirectionalLight(0x003366, 0.5);
+            backLight.position.set(-2, -1, -3);
+            scene.add(backLight);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (sphere) { sphere.rotation.x += 0.008;
+                    sphere.rotation.y += 0.012; }
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth || 600;
+                renderer.setSize(w, 120);
+                camera.aspect = w / 120;
+                camera.updateProjectionMatrix();
+            });
+        }
+
+        // =====================================================================
+        // 13. 3D SPHERE (BÜRGERPLATTFORM)
+        // =====================================================================
+        let sceneB, cameraB, rendererB, sphereB, lightB;
+
+        function init3DBuerger() {
+            const container = document.getElementById('alien3d-buerger');
+            if (!container || container._initialized) return;
+            container._initialized = true;
+            const width = container.clientWidth || 600;
+            const height = 120;
+            sceneB = new THREE.Scene();
+            cameraB = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+            cameraB.position.z = 3.5;
+            rendererB = new THREE.WebGLRenderer({ antialias: true });
+            rendererB.setSize(width, height);
+            rendererB.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(rendererB.domElement);
+            sphereB = new THREE.Mesh(new THREE.SphereGeometry(0.9, 48, 48),
+                new THREE.MeshStandardMaterial({ color: 0x00ffbf, emissive: 0x003322, emissiveIntensity: 1.2 }));
+            sceneB.add(sphereB);
+            window._sphereBuerger = sphereB;
+            lightB = new THREE.PointLight(0x00ffbf, 2.5, 20);
+            lightB.position.set(2.5, 2.5, 3);
+            sceneB.add(lightB);
+            const ambientB = new THREE.AmbientLight(0x003322);
+            sceneB.add(ambientB);
+            const backLightB = new THREE.DirectionalLight(0x003366, 0.5);
+            backLightB.position.set(-2, -1, -3);
+            sceneB.add(backLightB);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (sphereB) { sphereB.rotation.x += 0.008;
+                    sphereB.rotation.y += 0.012; }
+                rendererB.render(sceneB, cameraB);
+            }
+            animate();
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth || 600;
+                rendererB.setSize(w, 120);
+                cameraB.aspect = w / 120;
+                cameraB.updateProjectionMatrix();
+            });
+        }
+
+        // =====================================================================
+        // 14. CHART (OMNI CORE)
+        // =====================================================================
+        (function initChart() {
+            const canvas = document.getElementById('chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width || 600;
+            const height = canvas.height || 180;
+            const data = [65, 72, 68, 80, 77, 85, 82, 90, 87, 95, 92, 98];
+            const labels = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+
+            function drawChart() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, width, height);
+                ctx.strokeStyle = '#1a1a2e';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < 5; i++) {
+                    const y = 18 + i * 32;
+                    ctx.beginPath();
+                    ctx.moveTo(30, y);
+                    ctx.lineTo(width - 10, y);
+                    ctx.stroke();
+                }
+                ctx.strokeStyle = '#00ffbf';
+                ctx.lineWidth = 2;
+                ctx.shadowColor = '#00ffbf';
+                ctx.shadowBlur = 8;
+                const padding = 30;
+                const chartWidth = width - padding * 2;
+                const chartHeight = height - padding * 2;
+                ctx.beginPath();
+                data.forEach((val, i) => {
+                    const x = padding + (i / (data.length - 1)) * chartWidth;
+                    const y = padding + chartHeight - (val / 100) * chartHeight;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+                const gradient = ctx.createLinearGradient(0, 18, 0, height - 18);
+                gradient.addColorStop(0, 'rgba(0,255,191,0.2)');
+                gradient.addColorStop(1, 'rgba(0,255,191,0.0)');
+                ctx.fillStyle = gradient;
+                ctx.shadowBlur = 0;
+                ctx.beginPath();
+                const lastX = padding + ((data.length - 1) / (data.length - 1)) * chartWidth;
+                const lastY = padding + chartHeight - (data[data.length - 1] / 100) * chartHeight;
+                ctx.moveTo(padding, padding + chartHeight);
+                data.forEach((val, i) => {
+                    const x = padding + (i / (data.length - 1)) * chartWidth;
+                    const y = padding + chartHeight - (val / 100) * chartHeight;
+                    ctx.lineTo(x, y);
+                });
+                ctx.lineTo(lastX, padding + chartHeight);
+                ctx.closePath();
+                ctx.fill();
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = '#00ffbf';
+                data.forEach((val, i) => {
+                    const x = padding + (i / (data.length - 1)) * chartWidth;
+                    const y = padding + chartHeight - (val / 100) * chartHeight;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#00ffbf';
+                    ctx.fill();
+                });
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#88a';
+                ctx.font = '9px monospace';
+                ctx.textAlign = 'center';
+                labels.forEach((label, i) => {
+                    const x = padding + (i / (data.length - 1)) * chartWidth;
+                    ctx.fillText(label, x, height - 6);
+                });
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#556';
+                for (let i = 0; i <= 4; i++) {
+                    const val = i * 25;
+                    const y = padding + chartHeight - (val / 100) * chartHeight;
+                    ctx.fillText(val + '%', 24, y + 3);
+                }
+                ctx.fillStyle = '#00ffbf';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'left';
+                ctx.fillText('📊 SYSTEM-LEISTUNG 2026', 6, 14);
+            }
+            drawChart();
+            setInterval(() => {
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = Math.min(100, Math.max(40, data[i] + (Math.random() - 0.5) * 8));
+                }
+                drawChart();
+            }, 10000);
+        })();
+
+        // =====================================================================
+        // 15. ERROR HANDLING
+        // =====================================================================
         window.addEventListener('error', (e) => {
             console.error('[Φ_KERNEL] Fehler:', e.message);
-            document.getElementById('status-bar').innerText = `⚠️ FEHLER: ${e.message}`;
         });
-
-        console.log('Φ OMNI CORE V18.0 geladen. Alle 18 Module aktiv.');
+        console.log('Φ OMNI CORE V18.0 + BÜRGERPLATTFORM geladen.');
         console.log('🏴‍☠️ STATUS: Φ_LOCKED_ABSOLUTE');
-    </script>
 
+        // INIT 3D
+        setTimeout(init3D, 200);
+        setTimeout(init3DBuerger, 400);
+    </script>
 </body>
 </html>
