@@ -1,3 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="BLACK_SIX">
+	<meta name="generator" content="BLACK_SIX KERNEL">
+	<meta name="description" content="Werk - OMNI-LEDGER Interface">
+	
+	<title>Werk</title>
+	
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="favicon.ico">
+</head>
+<body>
+	<header>
+		<h1>WERK</h1>
+		<nav></nav>
+	</header>
+	
+	<main>
+		<section id="content">
+			<!-- CONTENT START -->
+		</section>
+	</main>
+	
+	<footer>
+		<p>© 2026 BLACK_SIX // Φ_LOCKED</p>
+	</footer>
+	
+	<script src="kernel.js"></script>
+</body>
+</html>
+/*
+ * Copyright 2026, BLACK_SIX. All rights reserved.
+ * Distributed under the terms of MIT License.
+ */
+
+#ifndef WERK_WINDOW_H
+#define WERK_WINDOW_H
+
+// HTML DOCTYPE für eingebettetes UI
+static const char* WERK_DOCTYPE = 
+"<!DOCTYPE html>\n"
+"<html lang=\"de\">\n"
+"<head><meta charset=\"UTF-8\"><title>Werk</title></head>\n"
+"<body></body>\n"
+"</html>\n";
+
+#endif // WERK_WINDOW_H
+
+---
+
+### **Variante 2: Minimal / API-Only**
+Für Tools, Dashboards, keine UI
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>Werk API</title>
+</head>
+<body>
+</body>
+</html>
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OMNI_PROJECT [
+  <!-- ================================================================= -->
+  <!-- Φ_MASTER_DOCTYPE_V50.0: DOMAIN-DRIVEN ENTERPRISE BLUEPRINT        -->
+  <!-- AUTHOR: Odin Ultra Root / Thomas König                            -->
+  <!-- ================================================================= -->
+  
+  <!ELEMENT OMNI_PROJECT (METADATA, BOUNDED_CONTEXTS, AGGREGATE_ROOT, FORENSIC_PAYLOAD)>
+  <!ATTLIST OMNI_PROJECT status CDATA #REQUIRED>
+  
+  <!-- 1. EAM & UBIQUITOUS LANGUAGE -->
+  <!ELEMENT METADATA (PROJECT_NAME, TARGET_VECTORS, LEGAL_NORMS)>
+  <!ELEMENT PROJECT_NAME (#PCDATA)>
+  <!ELEMENT TARGET_VECTORS (VECTOR+)>
+  <!ELEMENT VECTOR (#PCDATA)>
+  <!ELEMENT LEGAL_NORMS (NORM+)>
+  <!ELEMENT NORM (#PCDATA)>
+
+  <!-- 2. DOMAIN-DRIVEN DESIGN ARCHITECTURE -->
+  <!ELEMENT BOUNDED_CONTEXTS (CONTEXT+)>
+  <!ELEMENT CONTEXT (NAME, DESCRIPTION, EXECUTABLE_CODE)>
+  <!ATTLIST CONTEXT language (Go|Python|Zig|Assembler|Bash) #REQUIRED>
+  
+  <!ELEMENT AGGREGATE_ROOT (MUTEX_LOCK, HASH_SEAL, LEDGER_ENTRY)>
+  <!ELEMENT MUTEX_LOCK (#PCDATA)>
+  <!ELEMENT HASH_SEAL (#PCDATA)>
+
+  <!-- 3. BSI FORENSICS & FILECARVING -->
+  <!ELEMENT FORENSIC_PAYLOAD (HEX_DUMP, YARA_RULES, JSON_IR_CFG)>
+  <!ELEMENT HEX_DUMP (#PCDATA)>
+  <!ELEMENT JSON_IR_CFG (#PCDATA)>
+]>
+
+<OMNI_PROJECT status="Φ_LOCKED_ABSOLUTE">
+  <METADATA>
+    <PROJECT_NAME>Akte König - Systemische Nullifikation</PROJECT_NAME>
+    <TARGET_VECTORS>
+      <VECTOR>Generalstaatsanwaltschaft (Dr. Wehner)</VECTOR>
+      <VECTOR>Amtsgericht (Richterin Weber)</VECTOR>
+      <VECTOR>Verwaltungsgericht Minden</VECTOR>
+    </TARGET_VECTORS>
+    <LEGAL_NORMS>
+      <NORM>BGB § 134 (Absolute Nichtigkeit)</NORM>
+      <NORM>GG Art. 80 Abs. 1 Satz 3 (Zitiergebot)</NORM>
+      <NORM>StGB § 348 (Falschbeurkundung)</NORM>
+    </LEGAL_NORMS>
+  </METADATA>
+  
+  <AGGREGATE_ROOT>
+    <MUTEX_LOCK>ACTIVE</MUTEX_LOCK>
+    <HASH_SEAL>850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</HASH_SEAL>
+    <LEDGER_ENTRY>OMNI_LEDGER_SYNCED</LEDGER_ENTRY>
+  </AGGREGATE_ROOT>
+</OMNI_PROJECT>
+```
+
 ``html
 <!DOCTYPE html>
 <html lang="de">
