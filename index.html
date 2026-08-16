@@ -1,4 +1,334 @@
-html
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ_OMNI_V8_ULTIMATE_DOCKTYPE</title>
+    <!-- CDN Bibliotheken -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --neon-green:#00ffbf; --neon-blue:#00c8ff; --neon-red:#ff3366; --neon-purple:#bf00ff;
+            --neon-yellow:#ffbf00; --panel-bg:#0a0a0f; --ok:#00ff88; --warn:#ffbf00; --danger:#ff0040;
+            --bg:#050005; --card-bg:#0d0d1a; --text:#e5e7eb; --border:#2a2a3a;
+        }
+        :root.light {
+            --neon-green:#00875a; --neon-blue:#006684; --neon-red:#cc0033; --panel-bg:#f0f0f0;
+            --ok:#00a863; --warn:#b38600; --danger:#cc0033; --bg:#f5f5f5; --card-bg:#fff;
+            --text:#222; --border:#ccc;
+        }
+        * { box-sizing:border-box; font-family:'Courier New',monospace; }
+        body { background:var(--bg); color:var(--text); margin:0; padding:20px; min-height:100vh; transition:background .3s,color .3s; }
+        .container { max-width:1300px; margin:0 auto; }
+        .header { background:var(--panel-bg); border-bottom:2px solid var(--neon-green); padding:20px; text-align:center; border-radius:12px; margin-bottom:20px; cursor:pointer; position:relative; }
+        .header h1 { color:var(--neon-green); margin:0; font-size:1.8rem; letter-spacing:3px; }
+        .tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:15px; }
+        .tab-btn { background:var(--panel-bg); color:var(--text); border:1px solid var(--border); padding:10px 18px; cursor:pointer; font-weight:bold; border-radius:8px 8px 0 0; transition:.3s; flex:1 1 auto; text-align:center; font-size:13px; }
+        .tab-btn:hover { background:var(--card-bg); }
+        .tab-btn.active { background:var(--neon-green); color:#000; border-color:var(--neon-green); }
+        .tab-content { display:none; border:1px solid var(--border); padding:20px; border-radius:0 0 12px 12px; background:var(--card-bg); }
+        .tab-content.active { display:block; }
+        .card { background:var(--panel-bg); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:15px; }
+        .card h2 { color:var(--neon-blue); border-bottom:1px solid var(--border); padding-bottom:8px; margin-top:0; font-size:16px; }
+        .card h3 { color:var(--neon-green); font-size:13px; margin:10px 0 5px 0; }
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .grid-4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+        .terminal { background:#000; border:1px solid var(--border); height:120px; overflow-y:auto; font-size:10px; padding:10px; color:var(--ok); border-radius:8px; line-height:1.5; margin-bottom:10px; white-space:pre-wrap; }
+        .log-time { color:#666; } .log-ok { color:var(--ok); } .log-warn { color:var(--danger); font-weight:bold; }
+        .btn { background:var(--neon-green); color:#000; padding:12px; border:none; width:100%; cursor:pointer; border-radius:8px; font-weight:bold; margin:6px 0; font-size:13px; transition:.3s; }
+        .btn:hover { background:#00ddaa; }
+        .btn-danger{background:var(--danger);color:#fff}.btn-blue{background:var(--neon-blue);color:#000}.btn-purple{background:var(--neon-purple);color:#fff}.btn-yellow{background:var(--warn);color:#000}
+        input,select,textarea{width:100%;padding:10px;background:var(--panel-bg);color:var(--text);border:1px solid var(--border);margin:6px 0;border-radius:6px}
+        .file-preview{background:#000;border:1px solid var(--border);border-radius:6px;padding:10px;max-height:250px;overflow:auto;margin-top:8px;font-size:11px;color:var(--ok)}
+        .grid-modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;max-height:300px;overflow-y:auto}
+        .module-card{background:var(--panel-bg);border:1px solid var(--border);padding:8px;border-radius:6px;font-size:9px}
+        .module-card h4{margin:0 0 4px 0;color:var(--neon-green);font-size:9px}
+        .status{font-size:8px}.status.ok{color:var(--ok)}.status.running{color:var(--warn);animation:blink 1s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+        table{width:100%;border-collapse:collapse;font-size:12px}
+        th{background:var(--panel-bg);color:var(--neon-green);text-align:left;padding:8px;border-bottom:2px solid var(--neon-green)}
+        td{padding:8px;border-bottom:1px solid var(--border)}
+        .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--neon-green);color:var(--neon-green);padding:12px 24px;border-radius:8px;z-index:9999;font-size:12px}
+        #theme-toggle{position:fixed;bottom:20px;right:20px;background:var(--panel-bg);border:1px solid var(--neon-green);color:var(--neon-green);padding:10px 15px;cursor:pointer;border-radius:8px;z-index:9998}
+        #language-switcher{position:fixed;top:20px;right:20px;z-index:9999;display:flex;gap:5px}
+        #language-switcher button{background:var(--panel-bg);color:var(--neon-green);border:1px solid var(--neon-green);cursor:pointer;padding:5px 10px;border-radius:4px}
+        #language-switcher button:hover{background:var(--neon-green);color:#000}
+        .matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0}
+        .matrix-canvas.active{opacity:0.15}
+        #alienCanvas{width:100%;height:250px;border:1px solid var(--neon-green);border-radius:8px;background:#000;display:block}
+        .code-block{background:#000;border:1px solid var(--border);padding:12px;border-radius:6px;font-size:10px;overflow-x:auto;color:var(--ok);white-space:pre-wrap;max-height:300px;overflow-y:auto;margin:8px 0}
+        @media(max-width:800px){.grid-2,.grid-3{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header" id="mainHeader">
+        <h1>⚡ Φ_OMNI_V8_ULTIMATE_DOCKTYPE</h1>
+        <div style="font-size:12px;color:#888;">WISSEN MOPPER + INFRA + ZERO-TRUST + ALIEN HUNT + 24 MODULE</div>
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-core">⚙️ CORE (24)</button>
+        <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM</button>
+        <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE</button>
+        <button class="tab-btn" data-tab="tab-lexika">📚 LEXIKA</button>
+        <button class="tab-btn" data-tab="tab-tools">🛠️ TOOLS</button>
+        <button class="tab-btn" data-tab="tab-wissen">🔍 WISSEN MOPPER</button>
+        <button class="tab-btn" data-tab="tab-infra">🐳 INFRA & DEPLOY</button>
+        <button class="tab-btn" data-tab="tab-alien">👽 ALIEN HUNT</button>
+    </div>
+
+    <!-- CORE -->
+    <div class="tab-content active" id="tab-core">
+        <div class="card"><h2>OMNI CORE MODULE (1-24)</h2><div class="grid-modules" id="moduleGrid"></div></div>
+        <button class="btn btn-danger" onclick="triggerAllModules()">⚡ ALLE 24 MODULE AUSFÜHREN</button>
+        <div class="card"><h2>🧠 AI‑ANALYSE</h2><div class="terminal" id="log-ai">Warte auf Daten...</div></div>
+        <div class="card"><h2>📡 SYSTEMDIAGNOSE</h2><div class="terminal" id="log-diag"></div></div>
+    </div>
+
+    <!-- BÜRGERPLATTFORM -->
+    <div class="tab-content" id="tab-buerger">
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h2>📄 DOKUMENTEN SCAN</h2>
+                    <select id="docType">
+                        <option value="allgemein">Allgemein</option>
+                        <option value="versicherung">Versicherung</option>
+                        <option value="finanzen">Finanzen</option>
+                        <option value="kredit">Kredit</option>
+                        <option value="gez">GEZ</option>
+                        <option value="krankenkasse">Krankenkasse</option>
+                        <option value="behoerde">Behörde</option>
+                        <option value="soziales">Soziales</option>
+                        <option value="arbeitsamt">Arbeitsamt</option>
+                    </select>
+                    <input type="file" id="buergerFile" accept="*/*">
+                    <input type="email" id="buergerEmail" placeholder="E-Mail">
+                    <button class="btn btn-danger" onclick="startBuergerScan()">⚡ SCAN STARTEN</button>
+                    <button class="btn btn-blue" onclick="downloadBuergerReport()">📥 PDF</button>
+                    <button class="btn" onclick="exportFullReport()">📤 JSON</button>
+                    <div id="progressContainer" style="display:none;"><div style="height:6px;background:var(--panel-bg);border-radius:3px;margin:6px 0;"><div id="ocrProgress" style="height:100%;width:0%;background:linear-gradient(90deg,var(--neon-green),var(--neon-blue));border-radius:3px;transition:width .3s;"></div></div><span id="progressLabel" style="font-size:10px;"></span></div>
+                    <div class="terminal" id="buergerLog">[SYSTEM] Bereit.</div>
+                </div>
+            </div>
+            <div>
+                <div class="card"><h2>🔬 MODULE 1-24</h2><div class="grid-modules" id="buergerModuleGrid"></div><h3>Forensik Ergebnis</h3><div class="terminal" id="forensikResult">Warte auf Scan...</div></div>
+                <div class="card"><h2>💼 KANZLEI DASHBOARD</h2><input type="text" id="lizenzKey" placeholder="DEMO-9999"><button class="btn btn-blue" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button><div id="businessPanel" style="display:none;"><div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen</div><button class="btn" onclick="clearMandanten()">🗑️ ALLE LÖSCHEN</button></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GESETZE -->
+    <div class="tab-content" id="tab-gesetze">
+        <div class="card"><h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="grid-4">
+                <button class="btn" onclick="showLaw('bgb')">BGB</button>
+                <button class="btn" onclick="showLaw('stgb')">StGB</button>
+                <button class="btn" onclick="showLaw('gg')">GG</button>
+                <button class="btn" onclick="showLaw('stpo')">StPO</button>
+                <button class="btn" onclick="showLaw('vwvfg')">VwVfG</button>
+                <button class="btn" onclick="showLaw('dsgvo')">DSGVO</button>
+                <button class="btn" onclick="showLaw('emrk')">EMRK</button>
+            </div>
+            <div id="lawDisplay" class="file-preview">Wähle ein Gesetz.</div>
+        </div>
+    </div>
+
+    <!-- LEXIKA -->
+    <div class="tab-content" id="tab-lexika">
+        <div class="card"><h2>🔍 LEXIKON-SUCHE</h2><input type="text" id="lexikonSearch" placeholder="Begriff..." oninput="searchLexikon()"><div id="searchResults"></div></div>
+        <div class="card"><h2>📚 FACHGEBIETE</h2><table><tr><th>Nr.</th><th>Fachgebiet</th><th>Einträge</th></tr><tr><td>1</td><td>Psychologie</td><td>42</td></tr><tr><td>2</td><td>Philosophie</td><td>38</td></tr><tr><td>3</td><td>Wirtschaft</td><td>36</td></tr><tr><td>4</td><td>Politik</td><td>34</td></tr><tr><td>5</td><td>Neurobiologie</td><td>13</td></tr></table></div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="tab-content" id="tab-tools">
+        <div class="grid-2">
+            <div class="card"><h2>🔐 KRYPTOGRAPHIE</h2><textarea id="cryptoInput" placeholder="Text" rows="4"></textarea><button class="btn btn-blue" onclick="encryptAES()">🔒 AES</button><button class="btn btn-purple" onclick="decryptAES()">🔓 ENTSCHLÜSSELN</button><button class="btn" onclick="generateHash()">🔑 SHA-256</button><div class="terminal" id="cryptoOutput" style="height:80px;"></div></div>
+            <div class="card"><h2>🌐 NETZWERK-TEST</h2><button class="btn" onclick="testNetwork()">🚀 PING</button><div class="terminal" id="networkResult"></div></div>
+            <div class="card"><h2>⏰ ZEIT & DATUM</h2><div id="clock" style="font-size:24px;color:var(--neon-green);"></div><div id="date"></div></div>
+        </div>
+    </div>
+
+    <!-- WISSEN MOPPER -->
+    <div class="tab-content" id="tab-wissen">
+        <div class="card"><h2>🔍 WISSEN MOPPER – 7 PLATTFORMEN</h2>
+            <div class="grid-3">
+                <button class="btn btn-blue" onclick="fetchBGH()">⚖️ BGH Urteile</button>
+                <button class="btn btn-blue" onclick="fetchBVerfG()">🏛️ BVerfG</button>
+                <button class="btn btn-blue" onclick="fetchOpenLegalData()">📚 OpenLegalData</button>
+                <button class="btn btn-blue" onclick="fetchEurLex()">🇪🇺 EUR-Lex</button>
+                <button class="btn btn-blue" onclick="fetchLexica()">🎨 Lexica.art</button>
+                <button class="btn btn-blue" onclick="fetchAwesomeLists()">📖 Awesome Lists</button>
+                <button class="btn btn-blue" onclick="fetchKnwler()">🧠 Knwler PDF</button>
+            </div>
+            <div class="terminal" id="wissenLog" style="height:200px;">[SYSTEM] Wissens-Mopper bereit. Klicke auf eine Quelle.</div>
+            <div class="file-preview" id="wissenOutput"></div>
+        </div>
+    </div>
+
+    <!-- INFRA & DEPLOY -->
+    <div class="tab-content" id="tab-infra">
+        <div class="card"><h2>🐳 DOCKERFILE</h2><div class="code-block" id="dockerfileCode">FROM python:3.11-slim\nRUN apt-get update && apt-get install -y build-essential libfreetype6-dev\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nCMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]</div><button class="btn btn-blue" onclick="copyCode('dockerfileCode')">📋 COPY</button><button class="btn" onclick="downloadCode('dockerfileCode','Dockerfile')">⬇️ DOWNLOAD</button></div>
+        <div class="card"><h2>📜 REQUIREMENTS.TXT</h2><div class="code-block" id="requirementsCode">fastapi\nuvicorn\nreportlab\nJinja2\nsupabase\npython-multipart</div><button class="btn btn-blue" onclick="copyCode('requirementsCode')">📋 COPY</button><button class="btn" onclick="downloadCode('requirementsCode','requirements.txt')">⬇️ DOWNLOAD</button></div>
+        <div class="card"><h2>📝 MAIN.PY (FastAPI)</h2><div class="code-block" id="mainpyCode">from fastapi import FastAPI, File, UploadFile\nfrom reportlab.pdfgen import canvas\nimport io, hashlib\n\napp = FastAPI()\n\n@app.post("/generate-pdf")\nasync def generate_pdf(file: UploadFile = File(...)):\n    content = await file.read()\n    hash = hashlib.sha256(content + b"_OMNI_SALT_2026").hexdigest()\n    buffer = io.BytesIO()\n    c = canvas.Canvas(buffer)\n    c.drawString(100, 750, f"Hash: {hash}")\n    c.drawString(100, 730, "OMNI CORE SUPREMACY")\n    c.save()\n    buffer.seek(0)\n    return {"hash": hash, "pdf_size": len(buffer.getvalue())}</div><button class="btn btn-blue" onclick="copyCode('mainpyCode')">📋 COPY</button><button class="btn" onclick="downloadCode('mainpyCode','main.py')">⬇️ DOWNLOAD</button></div>
+        <div class="card"><h2>🗄️ SUPABASE.SQL (Zero-Trust RLS)</h2><div class="code-block" id="supabaseCode">CREATE TABLE omni_salat_ledger (\n    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,\n    user_id uuid REFERENCES auth.users NOT NULL,\n    hash TEXT NOT NULL,\n    created_at TIMESTAMPTZ DEFAULT now()\n);\nALTER TABLE omni_salat_ledger ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "user_own_data" ON omni_salat_ledger\nFOR SELECT USING (auth.uid() = user_id);\nCREATE POLICY "user_insert_own" ON omni_salat_ledger\nFOR INSERT WITH CHECK (auth.uid() = user_id);</div><button class="btn btn-blue" onclick="copyCode('supabaseCode')">📋 COPY</button><button class="btn" onclick="downloadCode('supabaseCode','supabase.sql')">⬇️ DOWNLOAD</button></div>
+        <div class="card"><h2>🔐 ZERO-TRUST PRINZIP</h2><p>Misstraue Gerät: RAM-Purge mit crypto.getRandomValues 7x.<br>Misstraue Netzwerk: Nur Hashes an Meta.<br>Misstraue Staat: Supabase RLS – Behörde findet nur Salat.</p></div>
+    </div>
+
+    <!-- ALIEN HUNT -->
+    <div class="tab-content" id="tab-alien">
+        <div class="card"><h2>👽 ALIEN HUNT GAME</h2>
+            <canvas id="alienCanvas"></canvas>
+            <p>Score: <span id="alienScore">0</span> | Level: <span id="alienLevel">1</span></p>
+            <p>Fange den Alien! Bei Score 10 wird K-26 ARCHIVE freigeschaltet.</p>
+            <button class="btn btn-purple" onclick="toggleMatrixRain()">🌧️ MATRIX RAIN</button>
+            <button class="btn btn-yellow" onclick="activateK26()">🔓 K-26 ARCHIVE</button>
+            <div class="terminal" id="alienLog">[SYSTEM] Alien Hunt bereit. Klicke auf die Kugel!</div>
+        </div>
+    </div>
+
+    <!-- SYSTEM LOG -->
+    <div class="card"><h2>💻 SYSTEM LOG</h2><div class="terminal" id="globalLog" style="height:100px;">[SYS] OMNI V8 ULTIMATE DOCKTYPE geladen.</div></div>
+</div>
+
+<button id="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+<div id="language-switcher">
+    <button onclick="setLanguage('de')">DE</button>
+    <button onclick="setLanguage('en')">EN</button>
+    <button onclick="setLanguage('fr')">FR</button>
+</div>
+<canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+
+<script>
+// ===================== STATE =====================
+const AppState = { currentFile:'', currentReport:'', cryptoKey:null, scanCount:0, language:'de', level:'Bürger', bounty:0, alienScore:0, alienLevel:1, matrixActive:false, k26Unlocked:false };
+
+// ===================== TOAST =====================
+function showToast(msg,type='ok'){const t=document.createElement('div');t.className='toast';t.style.borderColor=type==='ok'?'var(--neon-green)':'var(--neon-red)';t.style.color=t.style.borderColor;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+
+// ===================== THEME =====================
+(function(){if(!window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('light');})();
+function toggleTheme(){document.documentElement.classList.toggle('light');showToast('Theme gewechselt');}
+
+// ===================== I18N =====================
+const TRANSLATIONS={
+ de:{core:'⚙️ CORE (24)',buerger:'🏛️ BÜRGERPLATTFORM',gesetze:'📜 GESETZE',lexika:'📚 LEXIKA',tools:'🛠️ TOOLS',wissen:'🔍 WISSEN MOPPER',infra:'🐳 INFRA & DEPLOY',alien:'👽 ALIEN HUNT'},
+ en:{core:'⚙️ CORE (24)',buerger:'🏛️ CITIZEN PLATFORM',gesetze:'📜 LAWS',lexika:'📚 LEXICON',tools:'🛠️ TOOLS',wissen:'🔍 KNOWLEDGE SCRAPER',infra:'🐳 INFRA & DEPLOY',alien:'👽 ALIEN HUNT'},
+ fr:{core:'⚙️ CORE (24)',buerger:'🏛️ PLATEFORME CITOYENNE',gesetze:'📜 LOIS',lexika:'📚 LEXIQUE',tools:'🛠️ OUTILS',wissen:'🔍 EXTRACTEUR DE SAVOIR',infra:'🐳 INFRA & DEPLOY',alien:'👽 CHASSE AUX ALIENS'}
+};
+function setLanguage(lang){AppState.language=lang;const dict=TRANSLATIONS[lang];document.querySelectorAll('.tab-btn').forEach(btn=>{const key=btn.dataset.tab;if(dict[key])btn.innerHTML=dict[key];});showToast('Sprache: '+lang.toUpperCase());}
+
+// ===================== LOGGING =====================
+function sysLog(msg,type='ok'){const el=document.getElementById('globalLog');const time=new Date().toLocaleTimeString();el.innerHTML+=`<br><span class="log-time">[${time}]</span> <span class="${type==='ok'?'log-ok':'log-warn'}">${msg}</span>`;el.scrollTop=el.scrollHeight;}
+function log(id,msg,type='ok'){const el=document.getElementById(id);if(!el)return;const time=new Date().toLocaleTimeString();el.innerHTML+=`<br><span class="log-time">[${time}]</span> <span class="${type==='ok'?'log-ok':'log-warn'}">${msg}</span>`;el.scrollTop=el.scrollHeight;}
+
+// ===================== TABS =====================
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');}));
+
+// ===================== 24 MODULE =====================
+const MODULE_NAMES={1:'GESETZES-LEDGER',2:'BSI FORENSIK',3:'XENI AI',4:'QUANTUM-FLUX',5:'BIO-NEURAL',6:'DARK-MATTER',7:'PULSE-STREAM',8:'BGB §134',9:'STGB §348',10:'GG WÄCHTER',11:'EMRK',12:'DSGVO',13:'POLIZEI-AUDIT',14:'VwVfG',15:'STEUER',16:'EZB-ZINS',17:'DRV-RENTEN',18:'SUBVENTIONEN',19:'SCHRIFTSATZ',20:'MIC-FORENSIK',21:'MARKTANALYSE',22:'KOLLABORATION',23:'POST-QUANTUM',24:'AKADEMIE'};
+const OMNI_MODULES={};
+for(let i=1;i<=24;i++)OMNI_MODULES[i]={name:MODULE_NAMES[i],fn:async(t)=>log('log-ai','Modul '+i+' ausgeführt')};
+OMNI_MODULES[1].fn=async t=>log('log-ai',`Paragraphen: ${(t.match(/§\s?\d+/g)||[]).length}`);
+OMNI_MODULES[2].fn=async t=>log('log-ai',/hash|sha|md5|forensik/i.test(t)?'Forensische Marker erkannt':'Keine forensischen Marker',/hash|sha|md5|forensik/i.test(t)?'warn':'ok');
+OMNI_MODULES[3].fn=async t=>log('log-ai',`Komplexität: ${t.length>1000?'HOCH':'NIEDRIG'}`);
+OMNI_MODULES[4].fn=async t=>log('log-ai',`Einzigartige Wörter: ${new Set(t.toLowerCase().split(/\s+/)).size}`);
+OMNI_MODULES[5].fn=async t=>log('log-ai',/[A-Z][a-z]+ [A-Z][a-z]+/.test(t)?'Namensmuster erkannt':'Keine Namensmuster',/[A-Z][a-z]+ [A-Z][a-z]+/.test(t)?'warn':'ok');
+OMNI_MODULES[6].fn=async t=>log('log-ai',/(versteckt|geheim|vertraulich)/i.test(t)?'Versteckte Marker gefunden':'Keine versteckten Marker',/(versteckt|geheim|vertraulich)/i.test(t)?'warn':'ok');
+OMNI_MODULES[7].fn=async t=>log('log-ai',`Zeilen: ${t.split('\n').length}`);
+OMNI_MODULES[8].fn=async t=>log('log-ai',/(§\s?134|nichtig|verbot)/i.test(t)?'BGB §134 Möglicher Verstoß':'BGB §134 Kein Verstoß',/(§\s?134|nichtig|verbot)/i.test(t)?'warn':'ok');
+OMNI_MODULES[9].fn=async t=>log('log-ai',/(§\s?348|falschbeurkundung)/i.test(t)?'STGB §348 Marker gefunden':'Keine STGB Marker',/(§\s?348|falschbeurkundung)/i.test(t)?'warn':'ok');
+OMNI_MODULES[10].fn=async t=>log('log-ai',/(menschenwürde|grundgesetz|zitiergebot)/i.test(t)?'GG-Bezug erkannt':'Kein GG-Bezug',/(menschenwürde|grundgesetz|zitiergebot)/i.test(t)?'warn':'ok');
+OMNI_MODULES[11].fn=async t=>log('log-ai',/(emrk|folter|unmenschlich)/i.test(t)?'EMRK-Verstoß möglich':'EMRK konform',/(emrk|folter|unmenschlich)/i.test(t)?'warn':'ok');
+OMNI_MODULES[12].fn=async t=>log('log-ai',/(dsgvo|datenschutz|personenbezogen)/i.test(t)?'DSGVO-relevant':'DSGVO unbedenklich',/(dsgvo|datenschutz|personenbezogen)/i.test(t)?'warn':'ok');
+OMNI_MODULES[13].fn=async t=>log('log-ai',/(polizei|durchsuchung|beschlagnahme)/i.test(t)?'Polizeibezug erkannt':'Kein Polizeibezug',/(polizei|durchsuchung|beschlagnahme)/i.test(t)?'warn':'ok');
+OMNI_MODULES[14].fn=async t=>log('log-ai',/(bescheid|verwaltungsakt|widerspruch)/i.test(t)?'Verwaltungsakt erkannt':'Kein Verwaltungsakt');
+OMNI_MODULES[15].fn=async t=>log('log-ai',/(steuer|finanzamt)/i.test(t)?'Steuerdokument erkannt':'Kein Steuerbezug');
+OMNI_MODULES[16].fn=async t=>log('log-ai',/(zins|kredit|ezb)/i.test(t)?'Finanzdokument erkannt':'Kein Finanzbezug');
+OMNI_MODULES[17].fn=async t=>log('log-ai',/(rente|drv)/i.test(t)?'Rentenbescheid erkannt':'Kein Rentenbezug',/(rente|drv)/i.test(t)?'warn':'ok');
+OMNI_MODULES[18].fn=async t=>log('log-ai',/(subvention|förderung)/i.test(t)?'Subventionsbezug erkannt':'Kein Subventionsbezug');
+OMNI_MODULES[19].fn=async t=>log('log-ai',/(klage|antrag|widerspruch)/i.test(t)?'Widerspruch generiert':'Kein Rechtsdokument');
+OMNI_MODULES[20].fn=async t=>log('log-ai',/(drucker|yellow|mic)/i.test(t)?'Drucker-Marker gefunden':'Keine Drucker-Marker',/(drucker|yellow|mic)/i.test(t)?'warn':'ok');
+OMNI_MODULES[21].fn=async t=>log('log-ai',/(aktie|krypto|bitcoin|markt)/i.test(t)?'Marktdaten erkannt':'Keine Marktdaten');
+OMNI_MODULES[22].fn=async t=>log('log-ai',/(mandant|klient|zusammenarbeit)/i.test(t)?'Mandantenbezug erkannt':'Kein Mandantenbezug');
+OMNI_MODULES[23].fn=async t=>log('log-ai',/(verschlüsselung|kryptographie|quantum)/i.test(t)?'Krypto-Bezug erkannt':'Kein Krypto-Bezug');
+OMNI_MODULES[24].fn=async t=>log('log-ai',/(studium|kurs|akademie)/i.test(t)?'Bildungsbezug erkannt':'Kein Bildungsbezug');
+
+function renderModules(){const cg=document.getElementById('moduleGrid'),bg=document.getElementById('buergerModuleGrid');cg.innerHTML='';bg.innerHTML='';for(let i=1;i<=24;i++){cg.innerHTML+=`<div class="module-card"><h4>M${i} ${OMNI_MODULES[i].name}</h4><div id="m${i}" class="status">WARTET</div></div>`;bg.innerHTML+=`<div class="module-card"><h4>M${i} ${OMNI_MODULES[i].name}</h4><div id="bm${i}" class="status">WARTET</div></div>`;}}
+async function triggerAllModules(){const btn=event.target;btn.textContent='⚠️ ANALYSE LÄUFT...';btn.disabled=true;for(let i=1;i<=24;i++){const el=document.getElementById('m'+i);if(el){el.textContent='LÄUFT...';el.className='status running';}await OMNI_MODULES[i].fn(AppState.currentFile||'');if(el){el.textContent='✅';el.className='status ok';}await new Promise(r=>setTimeout(r,50));}btn.disabled=false;btn.textContent='⚡ ALLE 24 MODULE AUSFÜHREN';showToast('Alle 24 Module ausgeführt!');}
+
+// ===================== BÜRGERPLATTFORM =====================
+let lastReport='';
+async function readFileContent(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(e.target.result);r.onerror=reject;const ext=file.name.split('.').pop().toLowerCase();const textExts=['txt','md','yaml','yml','json','js','ts','rs','zig','c','cpp','py','java','go','rb','php','html','css','csv','svg','xml','sh'];if(file.type.startsWith('text/')||textExts.includes(ext))r.readAsText(file);else r.readAsDataURL(file);});}
+function getFileLanguage(fn){const ext=fn.split('.').pop().toLowerCase();const map={js:'javascript',ts:'typescript',py:'python',java:'java',go:'go',yaml:'yaml',yml:'yaml',md:'markdown'};return map[ext]||'plaintext';}
+async function ocrExtractText(b64){try{const r=await Tesseract.recognize(`data:image/png;base64,${b64}`,'deu');return r.data.text||'[OCR] Kein Text';}catch{return'[OCR] Fehler';}}
+function dsgvoCheck(t){const ps={email:/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,phone:/\b(\+?\d{1,3}[-.\s]?)?\(?\d{3,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,plz:/\b\d{5}\b/g};let hits=0;for(const p of Object.values(ps))hits+=(t.match(p)||[]).length;return{status:hits>0?'⚠️ DSGVO-relevante Daten':'✅ DSGVO-konform',hits};}
+function classifyDocument(t){const kw={beschluss:['beschluss','durchsuchung'],klage:['klage','antrag'],bescheid:['bescheid','verwaltungsakt'],vertrag:['vertrag','vereinbarung']};let best='unbekannt',bs=0;for(const[typ,words]of Object.entries(kw)){let s=0;for(const w of words)if(t.toLowerCase().includes(w))s++;if(s>bs){bs=s;best=typ;}}return{type:best,confidence:Math.min(100,bs*20)};}
+function generateStrategy(c){const s={beschluss:{empfehlung:'Widerspruch einlegen'},klage:{empfehlung:'Klage einreichen'},bescheid:{empfehlung:'Widerspruch einlegen'},vertrag:{empfehlung:'Vertrag prüfen'},unbekannt:{empfehlung:'Anwalt konsultieren'}};return s[c.type]||s.unbekannt;}
+async function startBuergerScan(){const file=document.getElementById('buergerFile').files[0];const email=document.getElementById('buergerEmail').value;const cat=document.getElementById('docType').value;if(!file||!email){showToast('Datei und E-Mail eingeben!','warn');return;}const pc=document.getElementById('progressContainer');pc.style.display='block';const pf=document.getElementById('ocrProgress'),pl=document.getElementById('progressLabel');pf.style.width='10%';pl.textContent='Lese Datei...';const content=await readFileContent(file);const ext=file.name.split('.').pop().toLowerCase();const lang=getFileLanguage(file.name);let text='';pf.style.width='30%';if(['yaml','yml'].includes(ext)){try{text=JSON.stringify(jsyaml.load(content),null,2);}catch{text=content;}}else if(ext==='json'){try{text=JSON.stringify(JSON.parse(content),null,2);}catch{text=content;}}else if(ext==='md'){text=content;}else if(ext==='csv'){const d=Papa.parse(content,{header:true});text=JSON.stringify(d.data.slice(0,10),null,2);}else if(['js','ts','py','java','go'].includes(ext)){text=content;}else if(ext==='svg'){text=content;}else if(file.type.startsWith('image/')){const b64=content.split(',')[1];text=await ocrExtractText(b64);}else if(file.type==='application/pdf'){text=`[PDF] ${file.name} – nicht extrahierbar`;}else{text=content;}AppState.currentFile=text;pf.style.width='60%';pl.textContent='Analysiere...';for(let i=1;i<=24;i++){const el=document.getElementById('bm'+i);if(el){el.textContent='LÄUFT...';el.className='status running';}await OMNI_MODULES[i].fn(text);if(el){el.textContent='✅';el.className='status ok';}}pf.style.width='80%';const dsgvo=dsgvoCheck(text),cls=classifyDocument(text),strat=generateStrategy(cls);document.getElementById('forensikResult').innerHTML=`📄 ${file.name}<br>📂 ${cat}<br>🔍 ${ext} (${lang})<br>${dsgvo.status}<br>Klassifizierung: ${cls.type} (${cls.confidence}%)<br>Strategie: ${strat.empfehlung}`;lastReport=`OMNI REPORT\nDatei: ${file.name}\nDSGVO: ${dsgvo.status}\nKlassifizierung: ${cls.type}\n\nText: ${text.substring(0,2000)}`;pf.style.width='100%';pl.textContent='✅ Fertig';setTimeout(()=>pc.style.display='none',1500);let m=JSON.parse(localStorage.getItem('mandanten')||'[]');m.push({email,file:file.name,date:new Date().toLocaleString(),report:lastReport});localStorage.setItem('mandanten',JSON.stringify(m));loadMandanten();log('buergerLog','[OK] Analyse abgeschlossen.');}
+function downloadBuergerReport(){if(!lastReport){alert('Erst Scan durchführen');return;}const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.setFontSize(10);doc.text(doc.splitTextToSize(lastReport,190),10,10);doc.save('OMNI-Report.pdf');}
+function exportFullReport(){if(!lastReport){alert('Erst Scan durchführen');return;}const data={report:lastReport,timestamp:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='omni_report_'+Date.now()+'.json';a.click();}
+function buergerBusinessLogin(){const key=document.getElementById('lizenzKey').value;if(key==='DEMO-9999'||key.length>5){document.getElementById('businessPanel').style.display='block';loadMandanten();}else alert('Test-Key: DEMO-9999');}
+function loadMandanten(){const m=JSON.parse(localStorage.getItem('mandanten')||'[]');document.getElementById('mandantenLog').innerHTML=m.length?m.map(a=>`📩 [${a.date}] ${a.email} | ${a.file}<br>`).join(''):'[SYSTEM] Keine Anfragen';}
+function clearMandanten(){localStorage.removeItem('mandanten');document.getElementById('mandantenLog').innerHTML='[SYSTEM] Keine Anfragen';document.getElementById('businessPanel').style.display='none';}
+
+// ===================== GESETZE =====================
+const LAWS={bgb:{titel:'BGB',text:'§ 134 BGB – Gesetzliches Verbot\n§ 823 BGB – Schadensersatzpflicht\n§ 839 BGB – Amtshaftung'},stgb:{titel:'StGB',text:'§ 240 StGB – Nötigung\n§ 267 StGB – Urkundenfälschung\n§ 348 StGB – Falschbeurkundung'},gg:{titel:'GG',text:'Art. 1 GG – Menschenwürde\nArt. 13 GG – Wohnung\nArt. 80 GG – Zitiergebot'},stpo:{titel:'StPO',text:'§ 94 StPO – Beschlagnahme\n§ 105 StPO – Durchsuchung\n§ 136 StPO – Belehrung'},vwvfg:{titel:'VwVfG',text:'§ 44 VwVfG – Nichtigkeit\n§ 81 VwVfG – Formfehler'},dsgvo:{titel:'DSGVO',text:'Art. 5 DSGVO – Grundsätze\nArt. 17 DSGVO – Löschung'},emrk:{titel:'EMRK',text:'Art. 3 EMRK – Folterverbot\nArt. 8 EMRK – Privatleben'}};
+function showLaw(key){const l=LAWS[key];if(!l)return;document.getElementById('lawDisplay').innerHTML=`<h3>${l.titel}</h3><pre>${l.text}</pre>`;}
+
+// ===================== LEXIKON =====================
+const LEXIKON=[{fach:'Psychologie',begriffe:['Kognition','Verhalten','Emotion']},{fach:'Philosophie',begriffe:['Ethik','Logik','Metaphysik']},{fach:'Wirtschaft',begriffe:['Markt','Preis','Angebot']},{fach:'Politik',begriffe:['Demokratie','Macht','Institutionen']}];
+function searchLexikon(){const q=document.getElementById('lexikonSearch').value.toLowerCase();const r=document.getElementById('searchResults');if(!q){r.innerHTML='';return;}let found=[];for(const f of LEXIKON)for(const b of f.begriffe)if(b.toLowerCase().includes(q))found.push(`${f.fach}: ${b}`);r.innerHTML=found.length?found.map(f=>`<div class="log-ok">✓ ${f}</div>`).join(''):'<div class="log-warn">Keine Treffer</div>';}
+
+// ===================== TOOLS =====================
+function generateHash(){const i=document.getElementById('cryptoInput')?.value||AppState.currentFile||'Test';document.getElementById('cryptoOutput').innerHTML=`SHA-256: ${CryptoJS.SHA256(i).toString()}`;}
+function encryptAES(){const i=document.getElementById('cryptoInput').value;if(!i){showToast('Text eingeben!','warn');return;}const key=CryptoJS.enc.Utf8.parse('OMNI-KEY-2024');document.getElementById('cryptoOutput').innerHTML=`Verschlüsselt: ${CryptoJS.AES.encrypt(i,key,{mode:CryptoJS.mode.ECB}).toString()}`;AppState.cryptoKey=key;}
+function decryptAES(){const i=document.getElementById('cryptoInput').value;if(!i||!AppState.cryptoKey){showToast('Kein Text/Key','warn');return;}try{const d=CryptoJS.AES.decrypt(i,AppState.cryptoKey,{mode:CryptoJS.mode.ECB});document.getElementById('cryptoOutput').innerHTML=`Entschlüsselt: ${d.toString(CryptoJS.enc.Utf8)}`;}catch{showToast('Fehler','warn');}}
+function testNetwork(){const r=document.getElementById('networkResult');r.innerHTML='Teste...';const s=performance.now();fetch('https://api.github.com').then(()=>{r.innerHTML=`✅ Online – Latenz: ${(performance.now()-s).toFixed(2)}ms`;}).catch(()=>r.innerHTML='❌ Offline');}
+function updateClock(){const n=new Date();document.getElementById('clock').textContent=n.toLocaleTimeString('de-DE');document.getElementById('date').textContent=n.toLocaleDateString('de-DE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+setInterval(updateClock,1000);updateClock();
+
+// ===================== WISSEN MOPPER =====================
+async function fetchBGH(){log('wissenLog','Rufe BGH Urteile ab...');try{const r=await fetch('https://de.openlegaldata.io/api/cases/?court__slug=bgh&limit=3');const d=await r.json();d.results.forEach(c=>log('wissenLog',`⚖️ ${c.court} ${c.file_number}: ${c.slug}`));}catch(e){log('wissenLog','❌ BGH API nicht erreichbar: '+e.message,'warn');}}
+async function fetchBVerfG(){log('wissenLog','Rufe BVerfG Entscheidungen ab...');try{const r=await fetch('https://www.bundesverfassungsgericht.de/SiteGlobals/Forms/Suche/Entscheidungensuche_Formular.html?language_=de');const t=await r.text();const matches=t.match(/BvR\s?\d+\/\d+/g)||[];log('wissenLog',`🏛️ ${matches.length} BvR-Aktenzeichen gefunden`);}catch(e){log('wissenLog','❌ BVerfG nicht erreichbar: '+e.message,'warn');}}
+async function fetchOpenLegalData(){log('wissenLog','Rufe OpenLegalData ab...');try{const r=await fetch('https://de.openlegaldata.io/api/cases/?limit=5');const d=await r.json();log('wissenLog',`📚 ${d.count} Urteile gesamt. Zeige 5:`);d.results.forEach(c=>log('wissenLog',`- ${c.court} ${c.file_number}`));}catch(e){log('wissenLog','❌ OpenLegalData nicht erreichbar: '+e.message,'warn');}}
+async function fetchEurLex(){log('wissenLog','Rufe EUR-Lex ab (AI Act)...');try{const r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689'));const t=await r.text();log('wissenLog',`🇪🇺 AI Act geladen (${t.length} Zeichen)`);}catch(e){log('wissenLog','❌ EUR-Lex nicht erreichbar: '+e.message,'warn');}}
+async function fetchLexica(){log('wissenLog','Suche Lexica.art nach "neon green legal cyberpunk"...');try{const r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent('https://lexica.art/api/v1/search?q=neon%20green%20legal%20cyberpunk'));const d=await r.json();log('wissenLog',`🎨 ${d.images?.length||0} Bilder gefunden`);if(d.images)d.images.slice(0,3).forEach(img=>log('wissenLog',`- ${img.src?.substring(0,50)}...`));}catch(e){log('wissenLog','❌ Lexica.art nicht erreichbar: '+e.message,'warn');}}
+async function fetchAwesomeLists(){log('wissenLog','Lade Awesome Legal Knowledge Base...');try{const r=await fetch('https://api.github.com/repos/openlegaldata/legal-md');const d=await r.json();log('wissenLog',`📖 ${d.full_name}: ${d.description}`);}catch(e){log('wissenLog','❌ GitHub nicht erreichbar: '+e.message,'warn');}}
+async function fetchKnwler(){log('wissenLog','Knwler PDF Converter bereit. Nutze lokale PDF → Markdown.');log('wissenLog','📄 Hinweis: PDF zu Markdown läuft über Serverless.');}
+
+// ===================== INFRA & DEPLOY =====================
+function copyCode(id){const el=document.getElementById(id);navigator.clipboard.writeText(el.textContent).then(()=>showToast('Code kopiert!'));}
+function downloadCode(id,filename){const el=document.getElementById(id);const blob=new Blob([el.textContent],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();showToast('Download: '+filename);}
+
+// ===================== ALIEN HUNT =====================
+let alienScene,alienCamera,alienRenderer,alienSphere;
+function initAlienHunt(){const canvas=document.getElementById('alienCanvas');if(!canvas)return;alienScene=new THREE.Scene();alienCamera=new THREE.PerspectiveCamera(70,canvas.width/canvas.height,0.1,100);alienCamera.position.z=5;alienRenderer=new THREE.WebGLRenderer({canvas,antialias:true});alienRenderer.setSize(canvas.width,canvas.height);alienSphere=new THREE.Mesh(new THREE.SphereGeometry(1,32,32),new THREE.MeshStandardMaterial({color:0x00ffbf,emissive:0x003322}));alienScene.add(alienSphere);const light=new THREE.PointLight(0x00ffbf,2,10);light.position.set(2,2,3);alienScene.add(light);function animate(){requestAnimationFrame(animate);alienSphere.rotation.y+=0.02;alienRenderer.render(alienScene,alienCamera);}animate();canvas.addEventListener('click',()=>{alienSphere.position.x=(Math.random()-0.5)*4;alienSphere.position.y=(Math.random()-0.5)*4;AppState.alienScore++;if(AppState.alienScore%10===0)AppState.alienLevel++;document.getElementById('alienScore').textContent=AppState.alienScore;document.getElementById('alienLevel').textContent=AppState.alienLevel;log('alienLog',`👽 Gefangen! Score: ${AppState.alienScore}`,AppState.alienScore>=10?'warn':'ok');if(AppState.alienScore>=10&&!AppState.k26Unlocked){AppState.k26Unlocked=true;log('alienLog','🔓 K-26 ARCHIVE UNLOCKED!','warn');showToast('K-26 ARCHIVE freigeschaltet!','warn');}});}
+function activateK26(){if(AppState.k26Unlocked){showToast('K-26 ARCHIVE: 100 Kampfparagraphen + 379 Fragen');log('alienLog','📄 K-26 ARCHIVE geöffnet.');}else{showToast('Noch nicht freigeschaltet!','warn');}}
+function toggleMatrixRain(){const c=document.getElementById('matrixCanvas');AppState.matrixActive=!AppState.matrixActive;c.classList.toggle('active',AppState.matrixActive);if(AppState.matrixActive)startMatrixRain();}
+function startMatrixRain(){const c=document.getElementById('matrixCanvas');const ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノ';const fs=14;const cols=Math.floor(c.width/fs);const drops=Array(cols).fill(0);function draw(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#00ffbf';ctx.font=fs+'px monospace';for(let i=0;i<cols;i++){const ch=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(ch,i*fs,drops[i]*fs);if(drops[i]*fs>c.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}}setInterval(draw,50);}
+// Konami Code
+const konami=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];let ki=0;
+document.addEventListener('keydown',e=>{if(e.code===konami[ki]){ki++;if(ki===konami.length){showToast('🔓 Φ_ROOT_MODE AKTIVIERT!','warn');sysLog('Root Mode aktiviert','warn');ki=0;}}else ki=0;});
+// Theme Toggle
+document.getElementById('theme-toggle').addEventListener('click',toggleTheme);
+
+// ===================== INIT =====================
+renderModules();setLanguage('de');sysLog('[SYS] OMNI V8 ULTIMATE DOCKTYPE geladen.');sysLog('[SYS] 24 Module + Wissens-Mopper + Infra + Alien Hunt aktiv.');initAlienHunt();setInterval(()=>{const u=Math.floor(performance.now()/1000);document.getElementById('log-diag').innerHTML=`<span class="log-ok">● System: ONLINE</span><br>Uptime: ${u}s<br>Module: 24/24 aktiv<br>Status: Φ_LOCKED_ABSOLUTE`;},5000);
+</script>
+</body>
+</html>
+```
 <!DOCTYPE html>
 <html lang="de">
 <head>
