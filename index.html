@@ -1,210 +1,288 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Φ OMNI CORE V18.0 + BÜRGERPLATTFORM</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="importmap">
-        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js" } }
-    </script>
-    <style>
-        :root {
-            --brand: #00ffbf;
-            --bg: #0a0a0a;
-            --ok: #00ff88;
-            --warn: #ffbf00;
-            --danger: #ff0040;
-            --panel: #111;
-            --neon-blue: #00c8ff;
-            --neon-green: #00ffbf;
-            --neon-red: #ff3366;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Φ OMNI CORE V18.5 – BÜRGERPLATTFORM INTEGRIERT</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js" } }
+</script>
+<style>
+    :root {
+        --neon-green: #00ffbf;
+        --neon-blue: #00c8ff;
+        --neon-red: #ff3366;
+        --panel-bg: #0a0a0f;
+        --ok: #00ff88;
+        --warn: #ffbf00;
+        --danger: #ff0040;
+        --brand: #00ffbf;
+        --bg: #0a0a0a;
+    }
+    * {
+        box-sizing: border-box;
+        font-family: 'Courier New', monospace;
+    }
+    body {
+        background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+        color: #e5e7eb;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+    .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .tab-btn {
+        background: #222;
+        color: #aaa;
+        border: 1px solid #333;
+        padding: 12px 24px;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 8px 8px 0 0;
+        transition: all 0.3s;
+        flex: 1;
+        text-align: center;
+        font-size: 14px;
+    }
+    .tab-btn:hover {
+        background: #333;
+    }
+    .tab-btn.active {
+        background: var(--neon-green);
+        color: #000;
+        border-color: var(--neon-green);
+    }
+    .tab-content {
+        display: none;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 0 0 12px 12px;
+        background: var(--panel-bg);
+    }
+    .tab-content.active {
+        display: block;
+    }
+    .legal {
+        background: var(--warn);
+        color: #000;
+        padding: 6px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        border-radius: 4px;
+        margin-bottom: 16px;
+    }
+    .header {
+        background: #000;
+        padding: 20px;
+        border-bottom: 2px solid var(--neon-green);
+        text-align: center;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+    .header h1 {
+        color: var(--neon-green);
+        margin: 0;
+        text-shadow: 0 0 20px var(--neon-green);
+    }
+    .header p {
+        color: #888;
+        margin: 4px 0 0 0;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr;
+        gap: 20px;
+    }
+    .card {
+        background: var(--panel-bg);
+        border: 1px solid var(--neon-green);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 255, 191, 0.05);
+    }
+    .card h2 {
+        color: var(--neon-green);
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+        font-size: 16px;
+        margin-top: 0;
+    }
+    .card h3 {
+        color: var(--neon-blue);
+        font-size: 13px;
+        margin: 12px 0 6px 0;
+    }
+    .btn {
+        background: var(--neon-green);
+        color: #000;
+        padding: 14px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        border-radius: 8px;
+        font-weight: bold;
+        margin: 8px 0;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+    .btn:hover {
+        background: #00ddaa;
+        transform: scale(1.02);
+    }
+    .btn-danger {
+        background: var(--danger);
+        color: #fff;
+    }
+    .btn-danger:hover {
+        background: #cc0033;
+    }
+    .btn-blue {
+        background: var(--neon-blue);
+        color: #000;
+    }
+    .btn-blue:hover {
+        background: #00aadd;
+    }
+    input[type="file"],
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        background: #222;
+        color: #e5e7eb;
+        border: 1px solid #444;
+        margin: 8px 0;
+        border-radius: 8px;
+    }
+    .terminal {
+        background: #000;
+        border: 1px solid #333;
+        height: 160px;
+        overflow-y: auto;
+        font-size: 10px;
+        padding: 10px;
+        color: var(--ok);
+        border-radius: 8px;
+        line-height: 1.6;
+    }
+    .terminal-sm {
+        height: 120px;
+    }
+    #alien3d {
+        height: 120px;
+        border: 1px solid var(--neon-green);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background: #000;
+    }
+    .log-time {
+        color: #666;
+    }
+    .log-ok {
+        color: var(--ok);
+    }
+    .log-warn {
+        color: var(--danger);
+        font-weight: bold;
+    }
+    .grid-modules {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 8px;
+        max-height: 280px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    .module-card {
+        background: #02020a;
+        border: 1px solid #333;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+    .module-card h4 {
+        margin: 0 0 4px 0;
+        color: var(--neon-green);
+        font-size: 10px;
+    }
+    .module-card .status {
+        font-size: 9px;
+    }
+    .module-card .status.ok {
+        color: var(--ok);
+    }
+    .module-card .status.warn {
+        color: var(--danger);
+    }
+    .module-card .status.running {
+        color: var(--warn);
+        animation: blink 1s infinite;
+    }
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
         }
-        * {
-            box-sizing: border-box;
-            font-family: 'Courier New', monospace;
+        50% {
+            opacity: 0.3;
         }
-        body {
-            background: var(--bg);
-            color: #e5e7eb;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+    }
+    .flex-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .flex-row .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    #result-output {
+        white-space: pre-wrap;
+        font-size: 11px;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #000;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        margin-top: 10px;
+    }
+    @media (max-width: 900px) {
+        .grid {
+            grid-template-columns: 1fr;
         }
-        .tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 20px;
-        }
+    }
+    @media (max-width: 600px) {
         .tab-btn {
-            background: #222;
-            color: #aaa;
-            border: 1px solid #333;
-            padding: 12px 24px;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 8px 8px 0 0;
-            transition: all 0.3s;
-            flex: 1;
-            text-align: center;
-        }
-        .tab-btn:hover {
-            background: #333;
-        }
-        .tab-btn.active {
-            background: var(--brand);
-            color: #000;
-            border-color: var(--brand);
-        }
-        .tab-content {
-            display: none;
-            border: 1px solid #333;
-            padding: 20px;
-            border-radius: 0 0 12px 12px;
-            background: var(--panel);
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .legal {
-            background: var(--warn);
-            color: #000;
-            padding: 6px;
-            text-align: center;
             font-size: 11px;
-            font-weight: bold;
-            border-radius: 4px;
-            margin-bottom: 16px;
-        }
-        .header {
-            background: #000;
-            padding: 20px;
-            border-bottom: 2px solid var(--brand);
-            text-align: center;
-            margin-bottom: 20px;
+            padding: 8px 12px;
         }
         .header h1 {
-            color: var(--brand);
-            margin: 0;
+            font-size: 20px;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr;
-            gap: 20px;
-        }
-        .card {
-            background: var(--panel);
-            border: 1px solid var(--brand);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .card h2 {
-            color: var(--brand);
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            font-size: 16px;
-            margin-top: 0;
-        }
-        .btn {
-            background: var(--brand);
-            color: #000;
-            padding: 14px;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-            margin: 8px 0;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background: #00ddaa;
-        }
-        .btn-danger {
-            background: var(--danger);
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #cc0033;
-        }
-        input[type="file"],
-        input[type="text"],
-        input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            background: #222;
-            color: #e5e7eb;
-            border: 1px solid #444;
-            margin: 8px 0;
-            border-radius: 8px;
-        }
-        .terminal {
-            background: #000;
-            border: 1px solid #333;
-            height: 160px;
-            overflow-y: auto;
-            font-size: 10px;
-            padding: 10px;
-            color: var(--ok);
-            border-radius: 8px;
-        }
-        #alien3d {
-            height: 120px;
-            border: 1px solid var(--brand);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background: #000;
-        }
-        .log-time {
-            color: #666;
-        }
-        .log-ok {
-            color: var(--ok);
-        }
-        .log-warn {
-            color: var(--danger);
-            font-weight: bold;
-        }
-        .grid-modules {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px;
-            max-height: 280px;
-            overflow-y: auto;
-        }
-        .module-card {
-            background: #02020a;
-            border: 1px solid #333;
-            padding: 8px;
-            border-radius: 6px;
-        }
-        .module-card h3 {
-            margin: 0 0 4px 0;
-            color: var(--brand);
-            font-size: 10px;
-        }
-        .module-card .status {
-            font-size: 10px;
-        }
-        .module-card .status.ok {
-            color: var(--ok);
-        }
-        .module-card .status.warn {
-            color: var(--danger);
-        }
-        #result-output {
-            white-space: pre-wrap;
-            font-size: 11px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    }
+    /* Scrollbar */
+    .terminal::-webkit-scrollbar,
+    .grid-modules::-webkit-scrollbar {
+        width: 4px;
+    }
+    .terminal::-webkit-scrollbar-track,
+    .grid-modules::-webkit-scrollbar-track {
+        background: #111;
+    }
+    .terminal::-webkit-scrollbar-thumb,
+    .grid-modules::-webkit-scrollbar-thumb {
+        background: var(--neon-blue);
+        border-radius: 2px;
+    }
+</style>
 </head>
 <body>
 
@@ -212,11 +290,11 @@
     <!-- HEADER -->
     <!-- ============================================================ -->
     <div class="header">
-        <h1>⚡ Φ OMNI CORE V18.0 + BÜRGERPLATTFORM</h1>
-        <p style="color:#888;margin:4px 0 0 0;">Operator: Thomas König / ODIN ULTRA ROOT • Status: Φ_LOCKED_ABSOLUTE</p>
+        <h1>⚡ Φ OMNI CORE V18.5 — BÜRGERPLATTFORM INTEGRIERT</h1>
+        <p>Operator: Thomas König / ODIN ULTRA ROOT • Status: Φ_LOCKED_ABSOLUTE</p>
     </div>
 
-    <div class="legal">BÜRGER INFO PLATTFORM | Software-Tool. Keine Rechtsberatung. OMNI CORE AKTIV</div>
+    <div class="legal">🏛️ BÜRGERPLATTFORM | Software-Tool. Keine Rechtsberatung. OMNI CORE AKTIV</div>
 
     <!-- ============================================================ -->
     <!-- TABS -->
@@ -263,8 +341,10 @@
                     <div id="alien3d-buerger"></div>
                     <input type="file" id="buergerFile" accept=".pdf,.jpg,.png,.txt" />
                     <input type="text" id="buergerEmail" placeholder="Ihre E-Mail für Antwort" />
-                    <button class="btn btn-danger" onclick="startBuergerScan()">⚡ OMNI SCAN 1-23 STARTEN ⚡</button>
-                    <button class="btn" onclick="downloadBuergerReport()">📥 PDF REPORT DOWNLOAD</button>
+                    <div class="flex-row">
+                        <button class="btn btn-danger" onclick="startBuergerScan()">⚡ OMNI SCAN 1-23</button>
+                        <button class="btn btn-blue" onclick="downloadBuergerReport()">📥 PDF REPORT</button>
+                    </div>
                     <h3>Live Terminal</h3>
                     <div class="terminal" id="buergerLog">[SYSTEM] Bereit für Upload<br /></div>
                 </div>
@@ -279,10 +359,11 @@
                 <div class="card" style="margin-top:16px;">
                     <h2>💼 KANZLEI DASHBOARD</h2>
                     <input type="text" id="lizenzKey" placeholder="Test-Key: DEMO-9999" />
-                    <button class="btn" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button>
+                    <button class="btn btn-blue" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button>
                     <div id="businessPanel" style="display:none;margin-top:12px;">
                         <h3>Mandanten Anfragen</h3>
-                        <div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen<br /></div>
+                        <div class="terminal terminal-sm" id="mandantenLog">[SYSTEM] Keine Anfragen<br /></div>
+                        <button class="btn" onclick="clearMandanten()" style="margin-top:8px;background:#444;color:#fff;">🗑️ ALLE LÖSCHEN</button>
                     </div>
                 </div>
             </div>
@@ -290,7 +371,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCRIPT -->
+    <!-- SCRIPT – KERNEL + MODULE + BÜRGERLOGIK -->
     <!-- ============================================================ -->
     <script>
         // =====================================================================
@@ -302,7 +383,6 @@
                 document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 document.getElementById(this.dataset.tab).classList.add('active');
-                // Reinit 3D after switch
                 if (this.dataset.tab === 'tab-core') setTimeout(init3D, 100);
                 else setTimeout(init3DBuerger, 100);
             });
@@ -575,8 +655,8 @@
         Object.keys(OMNI_MODULES).forEach(id => {
             coreGrid.innerHTML += `
                         <div class="module-card">
-                            <h3>M${id} ${OMNI_MODULES[id].name}</h3>
-                            <div id="m${id}">WARTET</div>
+                            <h4>M${id} ${OMNI_MODULES[id].name}</h4>
+                            <div id="m${id}" class="status">WARTET</div>
                         </div>
                     `;
         });
@@ -588,8 +668,8 @@
         Object.keys(BUERGER_MODULES).forEach(id => {
             buergerGrid.innerHTML += `
                         <div class="module-card">
-                            <h3>M${id} ${BUERGER_MODULES[id].name}</h3>
-                            <div id="bm${id}">WARTET</div>
+                            <h4>M${id} ${BUERGER_MODULES[id].name}</h4>
+                            <div id="bm${id}" class="status">WARTET</div>
                         </div>
                     `;
         });
@@ -599,9 +679,11 @@
         // =====================================================================
         async function runOmniModule(id) {
             const el = document.getElementById('m' + id);
-            if (el) el.innerText = 'LÄUFT...';
+            if (el) { el.innerText = 'LÄUFT...';
+                el.className = 'status running'; }
             await OMNI_MODULES[id].fn();
-            if (el) el.innerText = '✅ FERTIG';
+            if (el) { el.innerText = '✅ FERTIG';
+                el.className = 'status ok'; }
         }
 
         async function triggerAllModules() {
@@ -613,10 +695,10 @@
 
             for (let i = 1; i <= 24; i++) {
                 await runOmniModule(i);
-                await sleep(100);
+                await sleep(80);
             }
 
-            btn.style.background = "var(--brand)";
+            btn.style.background = "var(--neon-green)";
             btn.style.color = "#000";
             btn.innerText = "⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡";
             btn.disabled = false;
@@ -640,10 +722,12 @@
 
             for (let i = 1; i <= 23; i++) {
                 const el = document.getElementById('bm' + i);
-                if (el) el.innerText = 'LÄUFT...';
+                if (el) { el.innerText = 'LÄUFT...';
+                    el.className = 'status running'; }
                 pulse3D(window._sphereBuerger);
                 const result = await BUERGER_MODULES[i].fn(file);
-                if (el) el.innerHTML = `<span class="${result.type === 'warn' ? 'warn' : 'ok'}">${result.msg}</span>`;
+                if (el) { el.innerHTML = `<span class="${result.type === 'warn' ? 'warn' : 'ok'}">${result.msg}</span>`;
+                    el.className = 'status'; }
                 lastBuergerReport += `M${i} ${BUERGER_MODULES[i].name}: ${result.msg}\n`;
                 const forensikEl = document.getElementById('forensikResult');
                 if (forensikEl) {
@@ -666,7 +750,9 @@
             if (!lastBuergerReport) return alert('Erst Scan durchführen');
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text(lastBuergerReport, 10, 10);
+            doc.setFontSize(10);
+            const lines = doc.splitTextToSize(lastBuergerReport, 190);
+            doc.text(lines, 10, 10);
             doc.save('OMNI-Report.pdf');
             log('buergerLog', '[OK] PDF heruntergeladen');
         }
@@ -687,8 +773,15 @@
         function loadMandanten() {
             let anfr = JSON.parse(localStorage.getItem('mandanten') || '[]');
             document.getElementById('mandantenLog').innerHTML = anfr.length ?
-                anfr.map(a => `[NEU] ${a.date} | ${a.email} | ${a.file}<br>`).join('') :
+                anfr.map(a => `📩 [${a.date}] ${a.email} | ${a.file}<br>`).join('') :
                 '[SYSTEM] Keine Anfragen<br>';
+        }
+
+        function clearMandanten() {
+            localStorage.removeItem('mandanten');
+            document.getElementById('mandantenLog').innerHTML = '[SYSTEM] Keine Anfragen<br>';
+            document.getElementById('businessPanel').style.display = 'none';
+            document.getElementById('lizenzKey').value = '';
         }
 
         // =====================================================================
@@ -921,7 +1014,7 @@
         window.addEventListener('error', (e) => {
             console.error('[Φ_KERNEL] Fehler:', e.message);
         });
-        console.log('Φ OMNI CORE V18.0 + BÜRGERPLATTFORM geladen.');
+        console.log('Φ OMNI CORE V18.5 + BÜRGERPLATTFORM geladen.');
         console.log('🏴‍☠️ STATUS: Φ_LOCKED_ABSOLUTE');
 
         // INIT 3D
