@@ -536,3 +536,151 @@ btn.style.background = 'var(--neon-blue)'; // mit '' als String
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Φ OMNI CORE V11 — Analysekonsole</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js"}}</script>
+<style>
+    :root {--neon-green:#00ffbf;--neon-blue:#00c8ff;--neon-red:#ff3366;--panel-bg:#0a0a0f;}
+    body{background:radial-gradient(circle at 40% 20%, #050012, #000 70%);color:var(--neon-green);font-family:'Courier New',monospace;margin:0;padding:20px}
+    h1{color:var(--neon-blue);text-transform:uppercase;letter-spacing:3px;text-shadow:0 0 12px var(--neon-blue);border-bottom:2px solid var(--neon-blue)}
+   .header-info{display:flex;justify-content:space-between;color:#88a;font-size:14px;margin-bottom:20px}
+    #status-bar{background:#05080f;border:1px solid var(--neon-blue);padding:8px 12px;border-radius:8px;margin-bottom:20px}
+   .btn-master{background:var(--neon-green);color:#000;padding:12px;font-size:16px;font-weight:bold;width:100%;border:none;border-radius:6px;cursor:pointer;margin-bottom:20px}
+   .grid{display:grid;grid-template-columns:2fr 1.5fr;gap:20px}
+   .module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+   .module-card{background:var(--panel-bg);border:1px solid var(--neon-green);padding:14px;border-radius:10px}
+   .module-card h2{margin:0 0 8px 0;color:var(--neon-blue);font-size:15px;border-bottom:1px dashed #333;padding-bottom:6px}
+   .btn-action{background:var(--neon-blue);color:#000;padding:8px;font-size:12px;font-weight:bold;text-transform:uppercase;border:none;border-radius:6px;cursor:pointer;margin-bottom:8px}
+   .console{background:#000;border:1px solid #333;padding:8px;font-size:11px;min-height:80px;overflow-y:auto;border-radius:6px;color:#bdfce8}
+    #alien3d{width:100%;height:220px;border:1px solid var(--neon-blue);border-radius:10px;margin-bottom:16px}
+    #chart{width:100%;height:220px;background:#000;border-radius:10px;border:1px solid #333}
+   .log-time{color:#666}.log-info{color:var(--neon-green)}.log-warn{color:var(--neon-red);font-weight:bold}
+</style>
+</head>
+<body>
+<h1>Φ OMNI CORE V11 — Analysekonsole</h1>
+<div class="header-info"><span>[Operator: Thomas]</span><span>[Systemstatus: Online]</span><span>[Modus: Analyse]</span></div>
+<div id="status-bar">Status: bereit</div>
+<div class="grid">
+    <div>
+        <div id="alien3d"></div>
+        <canvas id="chart" width="600" height="220"></canvas>
+        <button class="btn-master" onclick="runAllModules()">Gesamtauswertung starten</button>
+        <div class="module-grid">
+            <div class="module-card"><h2>📊 Konjunktur</h2><button class="btn-action" onclick="modKonjunktur()">abrufen</button><div class="console" id="log19">Bereit…</div></div>
+            <div class="module-card"><h2>💶 Zinslast</h2><button class="btn-action" onclick="modZins()">analysieren</button><div class="console" id="log20">Bereit…</div></div>
+            <div class="module-card"><h2>💰 Steuer</h2><button class="btn-action" onclick="modSteuer()">abrufen</button><div class="console" id="log21">Bereit…</div></div>
+            <div class="module-card"><h2>👴 Rente</h2><button class="btn-action" onclick="modRente()">analysieren</button><div class="console" id="log22">Bereit…</div></div>
+            <div class="module-card"><h2>📑 Subvention</h2><button class="btn-action" onclick="modSubvention()">prüfen</button><div class="console" id="log23">Bereit…</div></div>
+        </div>
+    </div>
+    <div>
+        <div class="module-card"><h2>🧠 AI‑Analyse</h2><div class="console" id="log-ai">Warte auf Daten...</div></div>
+        <div class="module-card"><h2>📡 Systemdiagnose</h2><div class="console" id="log-diag">Lade...</div></div>
+    </div>
+</div>
+<script type="module">
+import * as THREE from "three";
+let scene,camera,renderer,sphere,light,audioCtx,gain;
+function init3D(){const c=document.getElementById("alien3d");scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(70,c.clientWidth/c.clientHeight,0.1,1000);camera.position.z=4.5;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(c.clientWidth,220);c.appendChild(renderer.domElement);sphere=new THREE.Mesh(new THREE.SphereGeometry(1.3,64,64),new THREE.MeshStandardMaterial({color:0x00ffbf,emissive:0x003322,emissiveIntensity:1.6}));scene.add(sphere);light=new THREE.PointLight(0x00ffbf,2.4,20);light.position.set(2.5,2.5,3);scene.add(light);animate()}
+function animate(){requestAnimationFrame(animate);sphere.rotation.x+=0.01;sphere.rotation.y+=0.015;renderer.render(scene,camera)}
+function pulse(){sphere.scale.set(1+Math.random()*0.25,1+Math.random()*0.25,1+Math.random()*0.25);light.intensity=2+Math.random()*1.5}
+function sound(){if(!audioCtx)audioCtx=new AudioContext();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=320+Math.random()*260;g.gain.setValueAtTime(0,audioCtx.currentTime);g.gain.linearRampToValueAtTime(0.7,audioCtx.currentTime+0.04);g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.35);o.connect(g).connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+0.4)}
+function log(id,msg,type="info"){const el=document.getElementById(id);el.innerHTML+=`<br><span class="log-time">[${new Date().toLocaleTimeString()}]</span> <span class="${type==='warn'?'log-warn':'log-info'}">${msg}</span>`;el.scrollTop=el.scrollHeight}
+
+// FAKE API STUB - LÄUFT OHNE SERVER
+async function api(path){
+    const data={
+        "/api/konjunktur":{inflation:3.2,arbeitslosigkeit:5.8,index:0.72},
+        "/api/zins":{leitzins:4.25,tageszinslast:291000000},
+        "/api/steuer":{prognose_mrd:954},
+        "/api/rente":{abweichung_prozent:14.3},
+        "/api/subvention":{auffaelligkeiten:3},
+        "/api/diag":{runtime:{status:"online",uptime_sec:Math.floor(performance.now()/1000)},metrics:{konjunktur:[{value:0.7},{value:0.72}],zinslast:[{value:290000000},{value:291000}],steuer:[{value:950},{value:954}],rente_abw:[{value:14.3}],subvention_flags:[{value:3}]}}
+    };
+    await new Promise(r=>setTimeout(r,400));
+    return data[path] || {};
+}
+
+async function modKonjunktur(){document.getElementById("log19").innerHTML="";log("log19","Lade...");const d=await api("/api/konjunktur");log("log19",`Inflation: ${d.inflation}%`);log("log19",`Index: ${d.index}`,"warn");pulse();sound();updateChart()}
+async function modZins(){document.getElementById("log20").innerHTML="";log("log20","Lade...");const d=await api("/api/zins");log("log20",`Leitzins: ${d.leitzins}%`);log("log20",`Tageslast: ${d.tageszinslast.toLocaleString("de-DE")}€`,"warn");pulse();sound();updateChart()}
+async function modSteuer(){document.getElementById("log21").innerHTML="";log("log21","Lade...");const d=await api("/api/steuer");log("log21",`Prognose: ${d.prognose_mrd} Mrd€`,"warn");pulse();sound();updateChart()}
+async function modRente(){document.getElementById("log22").innerHTML="";log("log22","Lade...");const d=await api("/api/rente");log("log22",`Abweichung: ${d.abweichung_prozent}%`,"warn");pulse();sound();updateChart()}
+async function modSubvention(){document.getElementById("log23").innerHTML="";log("log23","Lade...");const d=await api("/api/subvention");log("log23",`Auffälligkeiten: ${d.auffaelligkeiten}`,"warn");pulse();sound();updateChart()}
+async function runAllModules(){const btn=document.querySelector(".btn-master");btn.innerText="läuft...";await modKonjunktur();await modZins();await modSteuer();await modRente();await modSubvention();btn.innerText="Gesamtauswertung starten"}
+async function updateDiag(){const d=await api("/api/diag");document.getElementById("log-diag").innerHTML=`Status: ${d.runtime.status}<br>Uptime: ${d.runtime.uptime_sec}s`;document.getElementById("status-bar").innerText=`Status: ${d.runtime.status} · Uptime: ${d.runtime.uptime_sec}s`}
+function updateChart(){/* Chart logik hier */}
+init3D();updateDiag();setInterval(updateDiag,10000);
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BÜRGER INFO PLATTFORM V6.14</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--brand:#00ffbf;--bg:#0a0a0a;--ok:#00ff88;--danger:#ff0040}
+*{box-sizing:border-box;font-family:system-ui}
+body{background:var(--bg);color:#e5e7eb;margin:0}
+.header{background:#000;padding:20px;border-bottom:2px solid var(--brand);text-align:center}
+.legal{background:#ffbf00;color:#000;padding:6px;text-align:center;font-size:11px;font-weight:bold}
+.sparte{display:flex;gap:20px;padding:30px;max-width:1400px;margin:0 auto;flex-wrap:wrap}
+.card{background:#111;border:1px solid #333;border-radius:12px;padding:25px;flex:1;min-width:400px}
+h1,h2{color:var(--brand)} h2{border-bottom:1px solid #333;padding-bottom:10px}
+.btn{background:var(--brand);color:#000;padding:14px;border:none;width:100%;cursor:pointer;border-radius:8px;font-weight:bold;margin:8px 0;font-size:16px}
+.btn:hover{background:#00ddaa}.btn-ok{background:var(--ok)}.btn-danger{background:var(--danger);color:#fff}
+input{width:100%;padding:12px;background:#222;color:#e5e7eb;border:1px solid #444;margin:8px 0;border-radius:8px}
+.terminal{background:#000;border:1px solid #333;height:150px;overflow-y:auto;font-size:11px;padding:10px;font-family:monospace;color:var(--ok)}
+.ai-output{background:#111;padding:15px;border-left:3px solid var(--brand);white-space:pre-wrap;margin:10px 0}
+.badge{background:var(--ok);color:#000;padding:5px 10px;border-radius:5px;display:inline-block}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="legal">BÜRGER INFO PLATTFORM | Software-Tool. Keine Rechtsberatung.</div>
+<div class="header"><h1>BÜRGER INFO PLATTFORM</h1><p>KI-gestützte Widerspruchshilfe</p></div>
+<div class="sparte">
+  <div class="card">
+    <h2>🏛️ SPARTE BÜRGER</h2>
+    <input type="file" id="buergerFile" accept=".pdf,.jpg,.png,.txt">
+    <input id="buergerEmail" placeholder="Ihre E-Mail">
+    <button class="btn" onclick="buergerCheck()">KOSTENLOS PRÜFEN</button>
+    <div id="buergerResult" class="hidden"><div class="ai-output" id="buergerOutput"></div><button class="btn btn-ok" onclick="buergerPDF()">PDF Download</button></div>
+    <div class="terminal" id="buergerLog">[SYSTEM] Bereit<br></div>
+  </div>
+  <div class="card">
+    <h2>💼 SPARTE BUSINESS</h2>
+    <input id="lizenzKey" placeholder="Test-Key: DEMO-9999">
+    <button class="btn btn-ok" onclick="businessLogin()">AKTIVIEREN</button><p id="lizenzStatus"></p>
+    <div id="businessPanel" class="hidden">
+      <input type="file" id="batchFiles" multiple>
+      <button class="btn" onclick="startBatch()">BATCH ANALYSIEREN</button>
+      <button class="btn" id="downloadZipBtn" onclick="downloadZip()" style="display:none">ZIP DOWNLOAD</button>
+      <h3>Mandanten Anfragen</h3><div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen<br></div>
+    </div>
+    <div class="terminal" id="businessLog">[SYSTEM] Bereit<br></div>
+  </div>
+</div>
+<script>
+const { jsPDF } = window.jspdf;let batchFiles=[],zip=new JSZip();
+function demoKI(text){return `WIDERSPRUCHSANALYSE\n\nEingang: ${text.substring(0,100)}...\n\nGEFUNDENE FEHLER:\n1. §58 VwGO Fristbelehrung fehlt\n2. Anhörungsrüge §24 VwVfG nicht erfolgt\nEMPFEHLUNG: Widerspruch einlegen. Erfolgschance: 78%\n\nGENERIERT AM: ${new Date().toLocaleDateString('de-DE')}`}
+async function buergerCheck(){const f=document.getElementById('buergerFile').files[0],e=document.getElementById('buergerEmail').value;if(!f||!e)return alert('Bitte Datei + Email');log('buergerLog','[SCAN] Prüfe...');await sleep(1000);const res=demoKI(f.name);document.getElementById('buergerOutput').innerText=res;document.getElementById('buergerResult').classList.remove('hidden');log('buergerLog','[OK] Fertig');let anfr=JSON.parse(localStorage.getItem('mandanten')||'[]');anfr.push({email:e,file:f.name,date:new Date().toLocaleString()});localStorage.setItem('mandanten',JSON.stringify(anfr))}
+function buergerPDF(){const doc=new jsPDF();doc.text(document.getElementById('buergerOutput').innerText,10,10);doc.save('Analyse.pdf');log('buergerLog','[OK] PDF gespeichert')}
+function businessLogin(){const k=document.getElementById('lizenzKey').value;if(k==='DEMO-9999'||k.length>5){document.getElementById('lizenzStatus').innerHTML='<span class="badge">LIZENZ AKTIV</span>';document.getElementById('businessPanel').classList.remove('hidden');loadMandanten();log('businessLog','[OK] Business aktiv')}else alert('Test: DEMO-9999')}
+function loadMandanten(){let anfr=JSON.parse(localStorage.getItem('mandanten')||'[]');document.getElementById('mandantenLog').innerHTML=anfr.length?anfr.map(a=>`[NEU] ${a.date} | ${a.email} | ${a.file}<br>`).join(''):'[SYSTEM] Keine Anfragen<br>'}
+document.getElementById('batchFiles').onchange=e=>batchFiles=Array.from(e.target.files);
+async function startBatch(){if(!batchFiles.length)return alert('Dateien wählen');zip=new JSZip();for(let f of batchFiles){log('businessLog','[BATCH] '+f.name);await sleep(300);const res=demoKI(f.name);const pdf=new jsPDF();pdf.text(res,10,10);zip.file(f.name+'.pdf',pdf.output('blob'))}document.getElementById('downloadZipBtn').style.display='block';log('businessLog','[OK] ZIP bereit')}
+async function downloadZip(){const c=await zip.generateAsync({type:"blob"});const a=document.createElement('a');a.href=URL.createObjectURL(c);a.download='Batch.zip';a.click()}
+function log(id,m){document.getElementById(id).innerHTML+=new Date().toLocaleTimeString()+' '+m+'<br>'}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+</script>
+</body>
+</html>
