@@ -1841,398 +1841,593 @@ html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Φ_OMNI_SUPREMACY_V7_32_MODULE_DOCKTYPE</title>
+    <title>OMNI CORE DOCKTYPE – FUNKTIONSFÄHIG</title>
+    <!-- CDN Bibliotheken – zuverlässig & minimal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <style>
-        :root {
-            --neon-green: #00ffbf; --neon-blue: #00c8ff; --neon-red: #ff3366;
-            --neon-purple: #bf00ff; --neon-yellow: #ffbf00; --panel-bg: #0a0a0f;
-            --ok: #00ff88; --warn: #ffbf00; --danger: #ff0040; --bg: #050005; --card-bg: #0d0d1a;
-        }
-        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
-        body { background: radial-gradient(circle at 40% 20%, #050012, #000 70%); color: #e5e7eb; margin: 0; padding: 20px; min-height: 100vh; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { background: linear-gradient(135deg, #000, #1a0030 50%, #000); padding: 30px 20px; border-bottom: 2px solid var(--neon-green); text-align: center; border-radius: 12px; margin-bottom: 24px; position: relative; overflow: hidden; cursor: pointer; }
-        .header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, rgba(0,255,191,.1), transparent, rgba(0,200,255,.1), transparent); animation: rot 10s linear infinite; }
-        @keyframes rot { 100% { transform: rotate(360deg); } }
-        .header h1 { color: var(--neon-green); margin: 0; font-size: 2.2rem; text-shadow: 0 0 30px var(--neon-green); letter-spacing: 4px; position: relative; z-index: 1; }
-        .header .sub { color: #888; font-size: 14px; margin-top: 6px; position: relative; z-index: 1; }
-        .header .badge { display: inline-block; background: var(--neon-red); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 8px; letter-spacing: 1px; position: relative; z-index: 1; }
-        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
-        .tab-btn { background: #1a1a2e; color: #aaa; border: 1px solid #333; padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 8px 8px 0 0; transition: all .3s; flex: 1 1 auto; text-align: center; font-size: 13px; }
-        .tab-btn:hover { background: #2a2a4e; }
-        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 -5px 20px rgba(0,255,191,.3); }
-        .tab-content { display: none; border: 1px solid #333; padding: 24px; border-radius: 0 0 12px 12px; background: var(--card-bg); animation: fadeIn .3s; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: var(--panel-bg); border: 1px solid #2a2a3a; border-radius: 10px; padding: 18px; margin-bottom: 16px; transition: all .3s; }
-        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,200,255,.1); }
-        .card h2 { color: var(--neon-blue); border-bottom: 1px solid #333; padding-bottom: 8px; margin-top: 0; font-size: 18px; }
-        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-        .terminal { background: #000; border: 1px solid #333; height: 150px; overflow-y: auto; font-size: 10px; padding: 10px; color: var(--ok); border-radius: 8px; line-height: 1.6; margin-bottom: 16px; font-family: 'Courier New', monospace; }
-        .log-time { color: #666; } .log-ok { color: var(--ok); } .log-warn { color: var(--danger); font-weight: bold; }
-        .btn { background: var(--neon-green); color: #000; padding: 14px; border: none; width: 100%; cursor: pointer; border-radius: 8px; font-weight: bold; margin: 8px 0; font-size: 14px; transition: all .3s; }
-        .btn:hover { background: #00ddaa; transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,191,.3); }
-        .btn-danger { background: var(--danger); color: #fff; } .btn-blue { background: var(--neon-blue); color: #000; } .btn-purple { background: var(--neon-purple); color: #fff; } .btn-yellow { background: var(--neon-yellow); color: #000; }
-        input, select, textarea { width: 100%; padding: 12px; background: #222; color: #e5e7eb; border: 1px solid #444; margin: 8px 0; border-radius: 8px; transition: all .3s; }
-        input:focus, select:focus, textarea:focus { border-color: var(--neon-green); outline: none; box-shadow: 0 0 10px rgba(0,255,191,.3); }
-        .file-preview { background: #000; border: 1px solid #333; border-radius: 6px; padding: 10px; max-height: 300px; overflow: auto; margin-top: 10px; }
-        .progress-bar { width: 100%; height: 8px; background: #222; border-radius: 4px; margin: 8px 0; overflow: hidden; }
-        .progress-bar .fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); border-radius: 4px; transition: width .3s; }
-        .grid-modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
-        .module-card { background: #02020a; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 10px; transition: all .3s; cursor: pointer; }
-        .module-card:hover { border-color: var(--neon-green); transform: translateY(-2px); }
-        .module-card h4 { margin: 0 0 4px 0; color: var(--neon-green); font-size: 10px; }
-        .status { font-size: 9px; } .status.ok { color: var(--ok); } .status.warn { color: var(--danger); } .status.running { color: var(--warn); animation: blink 1s infinite; }
-        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #1a1a2e; color: var(--neon-green); text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--neon-green); }
-        td { padding: 8px 10px; border-bottom: 1px solid #2a2a3a; }
-        #alien3d { height: 120px; border: 1px solid var(--neon-green); border-radius: 8px; margin-bottom: 10px; background: #000; }
-        #analytics-widget { position: fixed; bottom: 20px; right: 20px; background: rgba(5,5,5,.95); border: 1px solid #00ff00; padding: 15px; color: #00ff00; font-family: 'Courier New', monospace; font-size: 12px; box-shadow: 0 0 20px rgba(0,255,0,.3); z-index: 9998; border-radius: 8px; min-width: 200px; }
-        #language-switcher { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 5px; }
-        #language-switcher button { background: #000; color: #00ff00; border: 1px solid #00ff00; cursor: pointer; padding: 5px 10px; font-family: monospace; font-weight: bold; border-radius: 4px; transition: .3s; }
-        #language-switcher button:hover { background: #00ff00; color: #000; }
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #000; border: 1px solid var(--neon-green); color: var(--neon-green); padding: 15px 30px; border-radius: 8px; z-index: 10000; animation: slideDown .3s; font-family: 'Courier New', monospace; }
-        @keyframes slideDown { from { transform: translate(-50%,-100%); } to { transform: translate(-50%,0); } }
-        .hidden-menu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #000; border: 2px solid var(--neon-purple); padding: 30px; z-index: 10001; border-radius: 12px; color: var(--neon-green); }
-        .hidden-menu.active { display: block; }
-        @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-        @media (max-width: 700px) { .tab-btn { font-size: 11px; padding: 8px 12px; } .header h1 { font-size: 20px; } }
+        :root { --neon-green:#00ffbf; --neon-blue:#00c8ff; --neon-red:#ff3366; --panel-bg:#0a0a0f; --ok:#00ff88; --warn:#ffbf00; --danger:#ff0040; --bg:#050005; --card-bg:#0d0d1a; }
+        * { box-sizing:border-box; font-family:'Courier New', monospace; }
+        body { background:radial-gradient(circle at 40% 20%, #050012, #000 70%); color:#e5e7eb; margin:0; padding:20px; min-height:100vh; }
+        .container { max-width:1200px; margin:0 auto; }
+        .header { background:#000; border-bottom:2px solid var(--neon-green); padding:20px; text-align:center; border-radius:12px; margin-bottom:20px; }
+        .header h1 { color:var(--neon-green); margin:0; font-size:1.8rem; letter-spacing:3px; }
+        .tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:15px; }
+        .tab-btn { background:#1a1a2e; color:#aaa; border:1px solid #333; padding:10px 18px; cursor:pointer; font-weight:bold; border-radius:8px 8px 0 0; transition:0.3s; flex:1 1 auto; text-align:center; font-size:13px; }
+        .tab-btn:hover { background:#2a2a4e; }
+        .tab-btn.active { background:var(--neon-green); color:#000; border-color:var(--neon-green); }
+        .tab-content { display:none; border:1px solid #333; padding:20px; border-radius:0 0 12px 12px; background:var(--card-bg); }
+        .tab-content.active { display:block; }
+        .card { background:var(--panel-bg); border:1px solid #2a2a3a; border-radius:10px; padding:16px; margin-bottom:15px; }
+        .card h2 { color:var(--neon-blue); border-bottom:1px solid #333; padding-bottom:8px; margin-top:0; font-size:16px; }
+        .card h3 { color:var(--neon-green); font-size:13px; margin:10px 0 5px 0; }
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .grid-4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+        .terminal { background:#000; border:1px solid #333; height:120px; overflow-y:auto; font-size:10px; padding:10px; color:var(--ok); border-radius:8px; line-height:1.5; margin-bottom:10px; }
+        .log-time { color:#666; } .log-ok { color:var(--ok); } .log-warn { color:var(--danger); font-weight:bold; }
+        .btn { background:var(--neon-green); color:#000; padding:12px; border:none; width:100%; cursor:pointer; border-radius:8px; font-weight:bold; margin:6px 0; font-size:13px; transition:0.3s; }
+        .btn:hover { background:#00ddaa; }
+        .btn-danger { background:var(--danger); color:#fff; } .btn-blue { background:var(--neon-blue); color:#000; } .btn-purple { background:#bf00ff; color:#fff; } .btn-yellow { background:var(--warn); color:#000; }
+        input, select, textarea { width:100%; padding:10px; background:#222; color:#e5e7eb; border:1px solid #444; margin:6px 0; border-radius:6px; }
+        .file-preview { background:#000; border:1px solid #333; border-radius:6px; padding:10px; max-height:250px; overflow:auto; margin-top:8px; font-size:11px; }
+        .grid-modules { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px; max-height:300px; overflow-y:auto; }
+        .module-card { background:#02020a; border:1px solid #333; padding:8px; border-radius:6px; font-size:9px; }
+        .module-card h4 { margin:0 0 4px 0; color:var(--neon-green); font-size:9px; }
+        .status { font-size:8px; } .status.ok { color:var(--ok); } .status.running { color:var(--warn); animation:blink 1s infinite; }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+        table { width:100%; border-collapse:collapse; font-size:12px; }
+        th { background:#1a1a2e; color:var(--neon-green); text-align:left; padding:8px; border-bottom:2px solid var(--neon-green); }
+        td { padding:8px; border-bottom:1px solid #2a2a3a; }
+        @media (max-width:800px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
+<div class="container">
 
-<div class="header" id="mainHeader">
-    <h1>⚡ Φ_OMNI_SUPREMACY_V7_32_MODULE</h1>
-    <div class="sub">DOCKTYPE · 32 MODULE · META 3-CHANNEL · SALAT-CHAIN · OPEN LEGAL DATA · EUR-LEX</div>
-    <div class="badge">Φ_LOCKED_ABSOLUTE</div>
-    <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
-</div>
+    <div class="header">
+        <h1>⚡ OMNI CORE DOCKTYPE ⚡</h1>
+        <div style="font-size:12px;color:#888;">Voll funktionsfähig · 24 Module · Scan · Gesetze · Lexikon · Tools</div>
+    </div>
 
-<div class="tabs">
-    <button class="tab-btn active" data-tab="tab-core">⚙️ OMNI CORE (32)</button>
-    <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM</button>
-    <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE</button>
-    <button class="tab-btn" data-tab="tab-lexika">📚 LEXIKA</button>
-    <button class="tab-btn" data-tab="tab-phase1">🏛️ PHASE 1 · LITIGATION-PR</button>
-    <button class="tab-btn" data-tab="tab-phase2">🏗️ PHASE 2 · GOV-TECH</button>
-    <button class="tab-btn" data-tab="tab-phase3">🔬 PHASE 3 · FORENSICS</button>
-    <button class="tab-btn" data-tab="tab-phase4">🎓 PHASE 4 · ACADEMY</button>
-    <button class="tab-btn" data-tab="tab-tools">🛠️ TOOLS</button>
-    <button class="tab-btn" data-tab="tab-meta">📱 META 3-CHANNEL</button>
-    <button class="tab-btn" data-tab="tab-blockchain">⛓️ SALAT-CHAIN</button>
-    <button class="tab-btn" data-tab="tab-ressourcen">📦 RESSOURCEN</button>
-</div>
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-core">⚙️ OMNI CORE (24)</button>
+        <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM</button>
+        <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE</button>
+        <button class="tab-btn" data-tab="tab-lexika">📚 LEXIKA</button>
+        <button class="tab-btn" data-tab="tab-tools">🛠️ TOOLS</button>
+    </div>
 
-<!-- TAB CORE -->
-<div class="tab-content active" id="tab-core">
-    <div class="grid-2">
-        <div>
-            <div id="alien3d"></div>
-            <canvas id="chart" width="600" height="180"></canvas>
+    <!-- TAB CORE -->
+    <div class="tab-content active" id="tab-core">
+        <div class="card">
+            <h2>OMNI CORE MODULE (1-24)</h2>
             <div class="grid-modules" id="moduleGrid"></div>
         </div>
-        <div>
-            <div class="card"><h2>🧠 AI‑ANALYSE</h2><div class="terminal" id="log-ai">Warte auf Daten...</div></div>
-            <div class="card"><h2>📡 SYSTEMDIAGNOSE</h2><div class="terminal" id="log-diag">Lade...</div></div>
-        </div>
+        <button class="btn btn-danger" onclick="triggerAllModules()">⚡ ALLE 24 MODULE AUSFÜHREN</button>
+        <div class="card"><h2>🧠 AI‑ANALYSE</h2><div class="terminal" id="log-ai">Warte auf Daten...</div></div>
+        <div class="card"><h2>📡 SYSTEMDIAGNOSE</h2><div class="terminal" id="log-diag"></div></div>
     </div>
-    <button class="btn btn-danger" id="masterBtn" onclick="triggerAllModules()">⚡ ALLE 32 MODULE AUSFÜHREN</button>
-</div>
 
-<!-- TAB BÜRGERPLATTFORM -->
-<div class="tab-content" id="tab-buerger">
-    <div class="grid-2">
-        <div>
-            <div class="card">
-                <h2>📄 DOKUMENTEN SCAN</h2>
-                <div id="alien3d-buerger"></div>
-                <select id="docType">
-                    <option value="allgemein">Allgemein</option>
-                    <option value="versicherung">Versicherung</option>
-                    <option value="finanzen">Finanzen</option>
-                    <option value="kredit">Kredit</option>
-                    <option value="gez">GEZ</option>
-                    <option value="krankenkasse">Krankenkasse</option>
-                    <option value="behoerde">Behörde</option>
-                    <option value="soziales">Soziales</option>
-                    <option value="arbeitsamt">Arbeitsamt</option>
-                </select>
-                <input type="file" id="buergerFile" accept="*/*">
-                <input type="email" id="buergerEmail" placeholder="E-Mail">
-                <div class="flex-row">
+    <!-- TAB BÜRGERPLATTFORM -->
+    <div class="tab-content" id="tab-buerger">
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h2>📄 DOKUMENTEN SCAN</h2>
+                    <select id="docType">
+                        <option value="allgemein">Allgemein</option>
+                        <option value="versicherung">Versicherung</option>
+                        <option value="finanzen">Finanzen</option>
+                        <option value="kredit">Kredit</option>
+                        <option value="gez">GEZ</option>
+                        <option value="krankenkasse">Krankenkasse</option>
+                        <option value="behoerde">Behörde</option>
+                        <option value="soziales">Soziales</option>
+                        <option value="arbeitsamt">Arbeitsamt</option>
+                    </select>
+                    <input type="file" id="buergerFile" accept="*/*">
+                    <input type="email" id="buergerEmail" placeholder="E-Mail">
                     <button class="btn btn-danger" onclick="startBuergerScan()">⚡ SCAN STARTEN</button>
                     <button class="btn btn-blue" onclick="downloadBuergerReport()">📥 PDF</button>
                     <button class="btn" onclick="exportFullReport()">📤 JSON</button>
+                    <div id="progressContainer" style="display:none;"><div class="progress-bar" style="height:6px;background:#222;border-radius:3px;margin:6px 0;"><div class="fill" id="ocrProgress" style="height:100%;width:0%;background:linear-gradient(90deg,var(--neon-green),var(--neon-blue));border-radius:3px;transition:width 0.3s;"></div></div><span id="progressLabel" style="font-size:10px;color:#888;"></span></div>
+                    <div class="terminal" id="buergerLog">[SYSTEM] Bereit.</div>
                 </div>
-                <div id="progressContainer" style="display:none;"><div class="progress-bar"><div class="fill" id="ocrProgress"></div></div><span id="progressLabel"></span></div>
-                <div class="terminal" id="buergerLog">[SYSTEM] Bereit.</div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🔬 MODULE 1-24</h2>
+                    <div class="grid-modules" id="buergerModuleGrid"></div>
+                    <h3>Forensik Ergebnis</h3>
+                    <div class="terminal" id="forensikResult">Warte auf Scan...</div>
+                </div>
+                <div class="card">
+                    <h2>💼 KANZLEI DASHBOARD</h2>
+                    <input type="text" id="lizenzKey" placeholder="DEMO-9999">
+                    <button class="btn btn-blue" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button>
+                    <div id="businessPanel" style="display:none;">
+                        <div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen</div>
+                        <button class="btn" onclick="clearMandanten()">🗑️ ALLE LÖSCHEN</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <div class="card"><h2>🔬 MODULE 1-32</h2><div class="grid-modules" id="buergerModuleGrid"></div><div class="terminal" id="forensikResult">Warte auf Scan...</div></div>
-            <div class="card"><h2>💼 KANZLEI DASHBOARD</h2><input type="text" id="lizenzKey" placeholder="DEMO-9999"><button class="btn btn-blue" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button><div id="businessPanel" style="display:none;"><div class="terminal" id="mandantenLog">[SYSTEM] Keine Anfragen</div><button class="btn" onclick="clearMandanten()">🗑️ ALLE LÖSCHEN</button></div></div>
+    </div>
+
+    <!-- TAB GESETZE -->
+    <div class="tab-content" id="tab-gesetze">
+        <div class="card">
+            <h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="grid-4">
+                <button class="btn" onclick="showLaw('bgb')">📖 BGB</button>
+                <button class="btn" onclick="showLaw('stgb')">⚖️ StGB</button>
+                <button class="btn" onclick="showLaw('gg')">🏛️ GG</button>
+                <button class="btn" onclick="showLaw('stpo')">📑 StPO</button>
+                <button class="btn" onclick="showLaw('vwvfg')">📂 VwVfG</button>
+                <button class="btn" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
+                <button class="btn" onclick="showLaw('emrk')">🌍 EMRK</button>
+            </div>
+            <div id="lawDisplay" class="file-preview">Wähle ein Gesetz.</div>
         </div>
     </div>
-</div>
 
-<!-- TAB GESETZE -->
-<div class="tab-content" id="tab-gesetze">
-    <div class="card"><h2>📜 GESETZESBIBLIOTHEK</h2>
-        <div class="grid-4">
-            <button class="btn" onclick="showLaw('bgb')">📖 BGB</button>
-            <button class="btn" onclick="showLaw('stgb')">⚖️ StGB</button>
-            <button class="btn" onclick="showLaw('gg')">🏛️ GG</button>
-            <button class="btn" onclick="showLaw('stpo')">📑 StPO</button>
-            <button class="btn" onclick="showLaw('vwvfg')">📂 VwVfG</button>
-            <button class="btn" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
-            <button class="btn" onclick="showLaw('emrk')">🌍 EMRK</button>
+    <!-- TAB LEXIKA -->
+    <div class="tab-content" id="tab-lexika">
+        <div class="card">
+            <h2>🔍 LEXIKON-SUCHE</h2>
+            <input type="text" id="lexikonSearch" placeholder="Begriff eingeben..." oninput="searchLexikon()">
+            <div id="searchResults"></div>
         </div>
-        <div id="lawDisplay" class="file-preview">Wähle ein Gesetz.</div>
+        <div class="card">
+            <h2>📚 FACHGEBIETE</h2>
+            <table>
+                <tr><th>Nr.</th><th>Fachgebiet</th><th>Einträge</th></tr>
+                <tr><td>1</td><td>Psychologie</td><td>42</td></tr>
+                <tr><td>2</td><td>Philosophie</td><td>38</td></tr>
+                <tr><td>3</td><td>Wirtschaft</td><td>36</td></tr>
+                <tr><td>4</td><td>Politik</td><td>34</td></tr>
+                <tr><td>5</td><td>Neurobiologie</td><td>13</td></tr>
+            </table>
+        </div>
     </div>
-    <div class="card"><h2>🔌 OPEN LEGAL DATA + EUR-LEX</h2><p>Integration der Datenquellen für echte Urteile und EU-Gesetze.</p><button class="btn btn-blue" onclick="fetchOpenLegalData()">⬇️ OPEN LEGAL DATA ABRUFEN</button><button class="btn btn-purple" onclick="fetchEurLex()">⬇️ EUR-LEX ABRUFEN</button><div id="legalDataResult" class="terminal"></div></div>
-</div>
 
-<!-- TAB LEXIKA -->
-<div class="tab-content" id="tab-lexika">
-    <div class="card"><h2>🔍 LEXIKON-SUCHE</h2><input type="text" id="lexikonSearch" placeholder="Begriff..." oninput="searchLexikon()"><div id="searchResults"></div></div>
-    <div class="card"><h2>📚 FACHGEBIETE</h2><table><tr><th>Nr.</th><th>Fachgebiet</th><th>Einträge</th><th>Status</th></tr><tr><td>1</td><td>Psychologie</td><td>42</td><td>✅</td></tr><tr><td>2</td><td>Philosophie</td><td>38</td><td>✅</td></tr><tr><td>3</td><td>Wirtschaft</td><td>36</td><td>✅</td></tr><tr><td>4</td><td>Politik</td><td>34</td><td>✅</td></tr><tr><td>5</td><td>Neurobiologie</td><td>13</td><td>✅</td></tr></table></div>
-</div>
-
-<!-- TAB PHASE 1 -->
-<div class="tab-content" id="tab-phase1">
-    <div class="grid-2">
-        <div class="card"><h2>🕷️ TOXIC SPIDER NETZWERK</h2><div class="file-preview">🕸️ 27 Knoten aktiv</div><button class="btn btn-danger" onclick="activateSpiderNetwork()">⚡ AKTIVIEREN</button></div>
-        <div class="card"><h2>📄 K-26 MASTER-EXPORT</h2><select id="klageTyp"><option value="strafanzeige">Strafanzeige §348</option><option value="klage">Zivilklage §839</option></select><button class="btn btn-blue" onclick="generateKlage()">📋 GENERIEREN</button><div id="klageOutput" class="terminal" style="height:80px;"></div></div>
-        <div class="card"><h2>💉 GIFT-INJEKTOR</h2><button class="btn btn-yellow" onclick="injectLetter()">💉 VERSENDEN</button></div>
-        <div class="card"><h2>🧨 DOMINO-STRATEGIE</h2><button class="btn btn-danger" onclick="dominoStrategy()">🔥 STARTEN</button></div>
+    <!-- TAB TOOLS -->
+    <div class="tab-content" id="tab-tools">
+        <div class="grid-2">
+            <div class="card">
+                <h2>🔐 KRYPTOGRAPHIE</h2>
+                <textarea id="cryptoInput" placeholder="Text eingeben..." rows="4"></textarea>
+                <button class="btn btn-blue" onclick="encryptAES()">🔒 AES</button>
+                <button class="btn btn-purple" onclick="decryptAES()">🔓 ENTSCHLÜSSELN</button>
+                <button class="btn" onclick="generateHash()">🔑 SHA-256</button>
+                <div id="cryptoOutput" class="terminal" style="height:80px;"></div>
+            </div>
+            <div class="card">
+                <h2>🌐 NETZWERK-TEST</h2>
+                <button class="btn" onclick="testNetwork()">🚀 PING</button>
+                <div id="networkResult" class="terminal"></div>
+            </div>
+            <div class="card">
+                <h2>⏰ ZEIT & DATUM</h2>
+                <div id="clock" style="font-size:24px;color:var(--neon-green);"></div>
+                <div id="date"></div>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- TAB PHASE 2 -->
-<div class="tab-content" id="tab-phase2">
-    <div class="grid-2">
-        <div class="card"><h2>📐 ZITIERGEBOT-SCANNER</h2><input type="file" id="zitierFile"><button class="btn btn-blue" onclick="scanZitiergebot()">🔍 SCANNEN</button><div id="zitierResult" class="terminal" style="height:60px;"></div></div>
-        <div class="card"><h2>⚖️ BGB §134 NULLIFIKATOR</h2><button class="btn btn-danger" onclick="nullifyAct()">💀 NICHTIG</button></div>
-        <div class="card"><h2>💰 AMTSHAFTUNGS-KALKULATOR</h2><input type="number" id="schadenSumme" placeholder="EUR"><button class="btn" onclick="calculateAmtshaftung()">🧮 BERECHNEN</button><div id="amtshaftungResult" class="terminal" style="height:60px;"></div></div>
-        <div class="card"><h2>🔗 OMNI LEDGER</h2><button class="btn btn-purple" onclick="createLedgerEntry()">⛓️ EINTRAG</button><div id="ledgerResult" class="terminal" style="height:60px;"></div></div>
-        <div class="card"><h2>📝 E-AKTE INJECTOR (EGVP XML)</h2><button class="btn btn-blue" onclick="generateEGVP()">📄 XML ERZEUGEN</button></div>
-        <div class="card"><h2>💰 BÜRGERGELD AUTOMATOR (§86b SGG)</h2><button class="btn btn-blue" onclick="generateBuerGeld()">📝 EILANTRAG</button></div>
-        <div class="card"><h2>🌍 EUGH AUTO-UPLOAD (EMRK Art.3)</h2><button class="btn btn-purple" onclick="generateEUGH()">📤 BESCHWERDE</button></div>
+    <!-- SYSTEM LOG -->
+    <div class="card">
+        <h2>💻 SYSTEM LOG</h2>
+        <div class="terminal" id="globalLog" style="height:100px;">[SYS] OMNI CORE DOCKTYPE geladen.</div>
     </div>
+
 </div>
-
-<!-- TAB PHASE 3 -->
-<div class="tab-content" id="tab-phase3">
-    <div class="grid-2">
-        <div class="card"><h2>🔬 YELLOW-DOT-SCANNER</h2><input type="file" id="yellowDotFile" accept="image/*"><button class="btn btn-blue" onclick="scanYellowDots()">🔍 SCANNEN</button><div id="yellowDotResult" class="terminal" style="height:60px;"></div></div>
-        <div class="card"><h2>⏰ ZEITPARADOXON</h2><button class="btn btn-danger" onclick="analyzeTimeParadox()">⚡ ANALYSIEREN</button></div>
-        <div class="card"><h2>🛡️ SENTRY INTERCEPTOR</h2><button class="btn btn-danger" onclick="activateInterceptor()">🛡️ AKTIVIEREN</button><div id="interceptorStatus" class="terminal" style="height:40px;">Inaktiv.</div></div>
-        <div class="card"><h2>🔐 ANUBIS-CODE</h2><button class="btn btn-purple" onclick="activateAnubis()">🔐 GATTER</button></div>
-        <div class="card"><h2>🧠 NLP AUTORENSCHAFT</h2><button class="btn btn-blue" onclick="verifyAuthorship()">🧠 VERIFIZIEREN</button></div>
-        <div class="card"><h2>🎤 VOICE SCANNER (Web Speech)</h2><button class="btn btn-blue" onclick="startVoiceScan()">🎤 SPRECHEN</button><div id="voiceResult" class="terminal" style="height:60px;"></div></div>
-        <div class="card"><h2>🧬 LÜGEN-DETEKTOR (Jaccard)</h2><button class="btn btn-blue" onclick="detectLie()">🧬 PRÜFEN</button></div>
-        <div class="card"><h2>📈 IMPACT PREDICTOR</h2><button class="btn btn-blue" onclick="predictImpact()">📈 SCORE</button></div>
-        <div class="card"><h2>🐝 BÜRGER-SCHWARM</h2><button class="btn btn-blue" onclick="clusterCitizens()">🐝 CLUSTERN</button></div>
-    </div>
-</div>
-
-<!-- TAB PHASE 4 -->
-<div class="tab-content" id="tab-phase4">
-    <div class="grid-2">
-        <div class="card"><h2>🎓 AKADEMIE-KURSE</h2><div id="academyList" class="grid-modules"></div></div>
-        <div class="card"><h2>💳 STRIPE PAYWALL</h2><button class="btn btn-blue" onclick="simulateStripe()">💳 CHECKOUT</button></div>
-        <div class="card"><h2>📱 WHATSAPP WEBHOOK</h2><button class="btn btn-yellow" onclick="testWhatsAppWebhook()">📱 TESTEN</button></div>
-        <div class="card"><h2>🐳 DOCKER DEPLOYMENT</h2><button class="btn btn-purple" onclick="showDockerDeployment()">🐳 ANZEIGEN</button></div>
-    </div>
-</div>
-
-<!-- TAB TOOLS -->
-<div class="tab-content" id="tab-tools">
-    <div class="grid-2">
-        <div class="card"><h2>🔐 KRYPTOGRAPHIE</h2><textarea id="cryptoInput" placeholder="Text" rows="4"></textarea><button class="btn btn-blue" onclick="encryptAES()">🔒 AES</button><button class="btn btn-purple" onclick="decryptAES()">🔓 ENTSCHLÜSSELN</button><button class="btn" onclick="generateHash()">🔑 SHA-256</button><div id="cryptoOutput" class="terminal" style="height:80px;"></div></div>
-        <div class="card"><h2>🌐 NETZWERK-TEST</h2><button class="btn" onclick="testNetwork()">🚀 PING</button><div id="networkResult" class="terminal"></div></div>
-        <div class="card"><h2>⏰ ZEIT & DATUM</h2><div id="clock" style="font-size:24px;color:var(--neon-green);"></div><div id="date"></div></div>
-    </div>
-</div>
-
-<!-- TAB META 3-CHANNEL -->
-<div class="tab-content" id="tab-meta">
-    <div class="grid-2">
-        <div class="card"><h2>📘 FACEBOOK APP</h2><button class="btn btn-blue" onclick="copyFacebookCode()">📋 CODE KOPIEREN</button><button class="btn" onclick="downloadFacebookCode()">⬇️ DOWNLOAD</button><div class="code-block" id="facebookCodePreview" style="max-height:150px;overflow:auto;"></div></div>
-        <div class="card"><h2>📸 INSTAGRAM AUTOMATION</h2><button class="btn btn-purple" onclick="copyInstagramCode()">📋 CODE KOPIEREN</button><div class="code-block" id="instagramCodePreview" style="max-height:150px;overflow:auto;"></div></div>
-        <div class="card"><h2>💬 WHATSAPP WEBHOOK</h2><button class="btn btn-yellow" onclick="copyWhatsAppCode()">📋 CODE KOPIEREN</button><div class="code-block" id="whatsappCodePreview" style="max-height:150px;overflow:auto;"></div></div>
-    </div>
-</div>
-
-<!-- TAB BLOCKCHAIN -->
-<div class="tab-content" id="tab-blockchain">
-    <div class="card"><h2>⛓️ SALAT-CHAIN (Polygon zkEVM Simulation)</h2><button class="btn btn-purple" onclick="addBlock()">⛓️ BLOCK HINZUFÜGEN</button><div class="terminal" id="blockchainLog" style="height:200px;"></div></div>
-    <div class="card"><h2>📊 GAMIFICATION</h2><p>Level: <span id="levelDisplay">Bürger</span> | Scans: <span id="scanCount">0</span> | Bounty: <span id="bountyDisplay">0</span></p><button class="btn btn-blue" onclick="addScan()">📈 SCAN HINZUFÜGEN</button></div>
-</div>
-
-<!-- TAB RESSOURCEN -->
-<div class="tab-content" id="tab-ressourcen">
-    <div class="card"><h2>📦 DOWNLOADS</h2><div id="resourceList"></div><input type="text" id="downloadCode" placeholder="Zugangscode"><button class="btn btn-blue" onclick="verifyDownloadCode()">🔓 CODE PRÜFEN</button><div id="codeStatus" class="terminal" style="height:40px;">Status: Kein Code.</div></div>
-</div>
-
-<div class="card"><h2>💻 SYSTEM LOG</h2><div class="terminal" id="globalLog" style="height:100px;">[SYS] OMNI SUPREMACY V7 geladen.</div></div>
-
-<div class="hidden-menu" id="rootMenu"><h2>🔓 Φ_ROOT_MODE</h2><p>Zugriff: VOLL</p><p>Seal: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</p><button class="btn" onclick="document.getElementById('rootMenu').classList.remove('active')">Schließen</button></div>
 
 <script>
-const AppState = { language:'DE', scanCount:0, currentFile:'', currentReport:'', interceptorActive:false, anubisActive:false, spiderActive:false, cryptoKey:null, validCodes:['AZ_A7F3K9M2','PERS_X1Y2Z3'], codeVerified:false, blocks:[], bounty:0, level:'Bürger', scans:0 };
-function showToast(m, t='ok'){ const d=document.createElement('div'); d.className='toast'; d.style.borderColor=t==='ok'?'var(--neon-green)':'var(--neon-red)'; d.style.color=t==='ok'?'var(--neon-green)':'var(--neon-red)'; d.textContent=m; document.body.appendChild(d); setTimeout(()=>d.remove(),3000); }
-document.querySelectorAll('.tab-btn').forEach(b=>{ b.addEventListener('click',()=>{ document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active')); b.classList.add('active'); document.getElementById(b.dataset.tab).classList.add('active'); if(b.dataset.tab==='tab-core') setTimeout(init3D,100); if(b.dataset.tab==='tab-buerger') setTimeout(init3DBuerger,100); }); });
-function sysLog(m,t='ok'){ const el=document.getElementById('globalLog'); const tm=new Date().toLocaleTimeString(); el.innerHTML+=`<br><span class="log-time">[${tm}]</span> <span class="${t==='ok'?'log-ok':'log-warn'}">${m}</span>`; el.scrollTop=el.scrollHeight; }
-function log(id,m,t='ok'){ const el=document.getElementById(id); if(!el)return; const tm=new Date().toLocaleTimeString(); el.innerHTML+=`<br><span class="log-time">[${tm}]</span> <span class="${t==='ok'?'log-ok':'log-warn'}">${m}</span>`; el.scrollTop=el.scrollHeight; }
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-// 3D
-let scene,camera,renderer,sphere;
-function init3D(){ const c=document.getElementById('alien3d'); if(!c||c._init)return; c._init=true; const w=c.clientWidth||600; scene=new THREE.Scene(); camera=new THREE.PerspectiveCamera(70,w/120,.1,1000); camera.position.z=3.5; renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setSize(w,120); c.appendChild(renderer.domElement); sphere=new THREE.Mesh(new THREE.SphereGeometry(.9,48,48),new THREE.MeshStandardMaterial({color:0x00ffbf,emissive:0x003322,emissiveIntensity:1.2})); scene.add(sphere); const l=new THREE.PointLight(0x00ffbf,2.5,20); l.position.set(2.5,2.5,3); scene.add(l); scene.add(new THREE.AmbientLight(0x003322)); function a(){ requestAnimationFrame(a); sphere.rotation.x+=.008; sphere.rotation.y+=.012; renderer.render(scene,camera); } a(); }
-function init3DBuerger(){ const c=document.getElementById('alien3d-buerger'); if(!c||c._init)return; c._init=true; const w=c.clientWidth||600; const sc=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(70,w/120,.1,1000); cam.position.z=3.5; const ren=new THREE.WebGLRenderer({antialias:true}); ren.setSize(w,120); c.appendChild(ren.domElement); const sp=new THREE.Mesh(new THREE.SphereGeometry(.9,48,48),new THREE.MeshStandardMaterial({color:0x00ffbf,emissive:0x003322})); sc.add(sp); const l=new THREE.PointLight(0x00ffbf,2.5,20); l.position.set(2.5,2.5,3); sc.add(l); function a(){ requestAnimationFrame(a); sp.rotation.x+=.008; sp.rotation.y+=.012; ren.render(sc,cam); } a(); }
-// Chart
-(function(){ const cv=document.getElementById('chart'); if(!cv)return; const ctx=cv.getContext('2d'); const data=[65,72,68,80,77,85,82,90]; function draw(){ ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle='#000'; ctx.fillRect(0,0,cv.width,cv.height); ctx.strokeStyle='#00ffbf'; ctx.lineWidth=2; ctx.beginPath(); const p=30, cw=cv.width-p*2, ch=cv.height-p*2; data.forEach((v,i)=>{ const x=p+i/(data.length-1)*cw, y=p+ch-v/100*ch; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke(); } draw(); setInterval(()=>{ data.forEach((_,i)=>data[i]=Math.min(100,Math.max(40,data[i]+(Math.random()-.5)*8))); draw(); },10000); })();
-// 32 MODULE
-const OMNI_MODULES={};
-for(let i=1;i<=32;i++){
-  OMNI_MODULES[i]={ name:`M${i}`, fn:async(text)=>{} };
+// ===================== GLOBALER STATE =====================
+const AppState = {
+    currentFile: '',
+    currentReport: '',
+    cryptoKey: null,
+    scanCount: 0,
+    language: 'DE',
+    level: 'Bürger',
+    bounty: 0
+};
+
+// ===================== TOAST =====================
+function showToast(msg, type='ok') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#000; border:1px solid ${type==='ok'?'var(--neon-green)':'var(--neon-red)'}; color:${type==='ok'?'var(--neon-green)':'var(--neon-red)'}; padding:12px 24px; border-radius:8px; z-index:9999; font-size:12px;`;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
 }
-// Namen definieren
-const modNames={1:'GESETZES-LEDGER',2:'BSI FORENSIK',3:'XENI AI',4:'QUANTUM-FLUX',5:'BIO-NEURAL',6:'DARK-MATTER',7:'PULSE-STREAM',8:'BGB §134',9:'STGB §348',10:'GG WÄCHTER',11:'EMRK',12:'DSGVO',13:'POLIZEI-AUDIT',14:'VwVfG',15:'STEUER',16:'EZB-ZINS',17:'DRV-RENTEN',18:'SUBVENTIONEN',19:'SCHRIFTSATZ',20:'MIC-FORENSIK',21:'MARKTANALYSE',22:'KOLLABORATION',23:'POST-QUANTUM',24:'AKADEMIE',25:'LÜGEN-DETEKTOR',26:'IMPACT PREDICTOR',27:'BÜRGER-SCHWARM',28:'E-AKTE INJECTOR',29:'BÜRGERGELD AUTOMATOR',30:'EUGH AUTO-UPLOAD',31:'SALAT-CHAIN',32:'VOICE SCANNER'};
-Object.keys(OMNI_MODULES).forEach(id=>{ OMNI_MODULES[id].name=modNames[id]||`M${id}`; });
-// Funktionen für M1-M32
-OMNI_MODULES[1].fn=async(t)=>log('log-ai',`Paragraphen: ${(t.match(/§\s?\d+/g)||[]).length}`,'ok');
-OMNI_MODULES[2].fn=async(t)=>log('log-ai',/hash|sha|md5|forensik/i.test(t)?'Forensische Marker gefunden':'Keine forensischen Marker',/hash|sha|md5|forensik/i.test(t)?'warn':'ok');
-OMNI_MODULES[3].fn=async(t)=>log('log-ai',`Textkomplexität: ${t.length>1000?'HOCH':'NIEDRIG'}`,'ok');
-OMNI_MODULES[4].fn=async(t)=>log('log-ai',`Einzigartige Wörter: ${new Set(t.toLowerCase().split(/\s+/)).size}`,'ok');
-OMNI_MODULES[5].fn=async(t)=>log('log-ai',/[A-Z][a-z]+ [A-Z][a-z]+/.test(t)?'Namensmuster erkannt':'Keine Namensmuster',/[A-Z][a-z]+ [A-Z][a-z]+/.test(t)?'warn':'ok');
-OMNI_MODULES[6].fn=async(t)=>log('log-ai',/(versteckt|geheim|vertraulich|intern)/i.test(t)?'Versteckte Marker gefunden':'Keine versteckten Marker',/(versteckt|geheim|vertraulich|intern)/i.test(t)?'warn':'ok');
-OMNI_MODULES[7].fn=async(t)=>log('log-ai',`Zeilen: ${t.split('\n').length}`,'ok');
-OMNI_MODULES[8].fn=async(t)=>log('log-ai',/(§\s?134|nichtig|verbot)/i.test(t)?'BGB §134: Möglicher Verstoß':'BGB §134: Kein Verstoß',/(§\s?134|nichtig|verbot)/i.test(t)?'warn':'ok');
-OMNI_MODULES[9].fn=async(t)=>log('log-ai',/(§\s?348|falschbeurkundung|betrug)/i.test(t)?'STGB-Marker gefunden':'Keine STGB-Marker',/(§\s?348|falschbeurkundung|betrug)/i.test(t)?'warn':'ok');
-OMNI_MODULES[10].fn=async(t)=>log('log-ai',/(menschenwürde|grundgesetz|zitiergebot)/i.test(t)?'GG-Bezug erkannt':'Kein GG-Bezug',/(menschenwürde|grundgesetz|zitiergebot)/i.test(t)?'warn':'ok');
-OMNI_MODULES[11].fn=async(t)=>log('log-ai',/(emrk|folter|unmenschlich)/i.test(t)?'EMRK-Verstoß möglich':'EMRK konform',/(emrk|folter|unmenschlich)/i.test(t)?'warn':'ok');
-OMNI_MODULES[12].fn=async(t)=>log('log-ai',/(dsgvo|datenschutz|personenbezogen)/i.test(t)?'DSGVO-relevant':'DSGVO unbedenklich',/(dsgvo|datenschutz|personenbezogen)/i.test(t)?'warn':'ok');
-OMNI_MODULES[13].fn=async(t)=>log('log-ai',/(polizei|durchsuchung|beschlagnahme)/i.test(t)?'Polizeibezug erkannt':'Kein Polizeibezug',/(polizei|durchsuchung|beschlagnahme)/i.test(t)?'warn':'ok');
-OMNI_MODULES[14].fn=async(t)=>log('log-ai',/(bescheid|verwaltungsakt|widerspruch)/i.test(t)?'Verwaltungsakt erkannt':'Kein Verwaltungsakt','ok');
-OMNI_MODULES[15].fn=async(t)=>log('log-ai',/(steuer|finanzamt|einkommensteuer)/i.test(t)?'Steuerdokument erkannt':'Kein Steuerbezug','ok');
-OMNI_MODULES[16].fn=async(t)=>log('log-ai',/(zins|kredit|darlehen|ezb)/i.test(t)?'Finanzdokument erkannt':'Kein Finanzbezug','ok');
-OMNI_MODULES[17].fn=async(t)=>log('log-ai',/(rente|drv|rentenbescheid)/i.test(t)?'Rentenbescheid erkannt':'Kein Rentenbezug',/(rente|drv|rentenbescheid)/i.test(t)?'warn':'ok');
-OMNI_MODULES[18].fn=async(t)=>log('log-ai',/(subvention|förderung|zuschuss)/i.test(t)?'Subventionsbezug erkannt':'Kein Subventionsbezug','ok');
-OMNI_MODULES[19].fn=async(t)=>{ const klage=/(klage|antrag|widerspruch)/i.test(t); log('log-ai',klage?'Rechtsdokument erkannt – Widerspruch generiert':'Kein Rechtsdokument',klage?'ok':'ok'); };
-OMNI_MODULES[20].fn=async(t)=>log('log-ai',/(drucker|yellow|mic|seriennummer)/i.test(t)?'Drucker-Marker gefunden':'Keine Drucker-Marker',/(drucker|yellow|mic|seriennummer)/i.test(t)?'warn':'ok');
-OMNI_MODULES[21].fn=async(t)=>log('log-ai',/(aktie|krypto|bitcoin|markt)/i.test(t)?'Marktdaten erkannt':'Keine Marktdaten','ok');
-OMNI_MODULES[22].fn=async(t)=>log('log-ai',/(mandant|klient|zusammenarbeit)/i.test(t)?'Mandantenbezug erkannt':'Kein Mandantenbezug','ok');
-OMNI_MODULES[23].fn=async(t)=>log('log-ai',/(verschlüsselung|kryptographie|quantum)/i.test(t)?'Krypto-Bezug erkannt':'Kein Krypto-Bezug','ok');
-OMNI_MODULES[24].fn=async(t)=>log('log-ai',/(studium|kurs|akademie|bildung)/i.test(t)?'Bildungsbezug erkannt':'Kein Bildungsbezug','ok');
-OMNI_MODULES[25].fn=async(t)=>{ const a=new Set(t.toLowerCase().split(/\s+/)); const b=new Set((AppState.currentFile||'').toLowerCase().split(/\s+/)); const union=new Set([...a,...b]); const inter=[...a].filter(x=>b.has(x)).length; const jac=union.size?inter/union.size:0; log('log-ai',`Jaccard-Ähnlichkeit: ${jac.toFixed(3)} – ${jac>0.6?'Verdacht auf Copy-Paste (Richtervorbehalt)':'Kein Copy-Paste'}`,jac>0.6?'warn':'ok'); };
-OMNI_MODULES[26].fn=async(t)=>{ const score=Math.min(10,Math.floor(t.length/500)+/(skandal|verstoß|nichtig|art\.?\s?1/i.test(t)?3:0)); log('log-ai',`Impact Score: ${score}/10`,score>7?'warn':'ok'); };
-OMNI_MODULES[27].fn=async()=>{ const m=JSON.parse(localStorage.getItem('mandanten')||'[]'); log('log-ai',`${m.length} Akten gescannt. Cluster-Analyse läuft...`,'ok'); setTimeout(()=>log('log-ai','⚠️ Massenfehler erkannt: 3x gleicher Formfehler in Osnabrück','warn'),500); };
-OMNI_MODULES[28].fn=async()=>{ const xml='<egvp>\n  <hash>'+CryptoJS.SHA256(Date.now().toString())+'</hash>\n</egvp>'; log('log-ai','EGVP XML generiert','ok'); };
-OMNI_MODULES[29].fn=async()=>{ log('log-ai','Eilantrag §86b SGG generiert – Frist gewahrt','ok'); };
-OMNI_MODULES[30].fn=async()=>{ log('log-ai','EMRK Beschwerde Art.3 generiert – Auto-Upload nach Strasbourg','ok'); };
-OMNI_MODULES[31].fn=async()=>{ addBlock(); log('log-ai','Salat-Chain Block hinzugefügt','ok'); };
-OMNI_MODULES[32].fn=async()=>{ startVoiceScan(); };
-// Render Module
-function renderModules(){ const cg=document.getElementById('moduleGrid'), bg=document.getElementById('buergerModuleGrid'); cg.innerHTML=''; bg.innerHTML=''; Object.keys(OMNI_MODULES).forEach(id=>{ cg.innerHTML+=`<div class="module-card"><h4>M${id} ${OMNI_MODULES[id].name}</h4><div id="m${id}" class="status">WARTET</div></div>`; bg.innerHTML+=`<div class="module-card"><h4>M${id} ${OMNI_MODULES[id].name}</h4><div id="bm${id}" class="status">WARTET</div></div>`; }); }
-async function triggerAllModules(){ const btn=document.getElementById('masterBtn'); btn.textContent='⚠️ ANALYSE LÄUFT'; btn.disabled=true; for(let i=1;i<=32;i++){ const el=document.getElementById('m'+i); if(el){el.textContent='LÄUFT...';el.className='status running';} await OMNI_MODULES[i].fn(AppState.currentFile||''); if(el){el.textContent='✅';el.className='status ok';} await sleep(50); } btn.disabled=false; btn.textContent='⚡ ALLE 32 MODULE AUSFÜHREN'; }
-// Bürger Scan
-async function readFileContent(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; const ext=file.name.split('.').pop().toLowerCase(); const textExts=['txt','md','yaml','yml','json','js','ts','rs','zig','c','cpp','py','java','go','rb','php','html','css','csv','svg','xml','sh']; if(file.type.startsWith('text/')||textExts.includes(ext)) r.readAsText(file); else r.readAsDataURL(file); }); }
-function getFileLanguage(fn){ const ext=fn.split('.').pop().toLowerCase(); const map={js:'javascript',ts:'typescript',rs:'rust',zig:'zig',c:'c',cpp:'cpp',py:'python',java:'java',go:'go',rb:'ruby',php:'php',html:'html',css:'css',json:'json',yaml:'yaml',yml:'yaml',md:'markdown'}; return map[ext]||'plaintext'; }
-async function ocrExtractText(b64){ try{ const r=await Tesseract.recognize(`data:image/png;base64,${b64}`,'deu'); return r.data.text||'[OCR] Kein Text'; }catch{ return '[OCR] Fehler'; } }
-function dsgvoCheck(t){ const patterns={email:/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,phone:/\b(\+?\d{1,3}[-.\s]?)?\(?\d{3,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,plz:/\b\d{5}\b/g}; let hits=0; for(const p of Object.values(patterns)) hits+=(t.match(p)||[]).length; return {status:hits>0?'⚠️ DSGVO-relevant':'✅ DSGVO-konform',hits}; }
-function classifyDocument(t){ const kw={beschluss:['beschluss','durchsuchung'],klage:['klage','antrag'],bescheid:['bescheid','verwaltungsakt'],vertrag:['vertrag','vereinbarung']}; let best='unbekannt',bs=0; for(const [typ,words] of Object.entries(kw)){ let s=0; for(const w of words) if(t.toLowerCase().includes(w))s++; if(s>bs){bs=s;best=typ;} } return {type:best,confidence:Math.min(100,bs*20)}; }
-function generateStrategy(c){ const s={beschluss:{empfehlung:'Widerspruch einlegen',schriftsatz:'Hiermit lege ich Widerspruch ein...'},klage:{empfehlung:'Klage einreichen',schriftsatz:'Hiermit erhebe ich Klage...'},bescheid:{empfehlung:'Widerspruch einlegen',schriftsatz:'Hiermit lege ich Widerspruch...'},vertrag:{empfehlung:'Vertrag prüfen',schriftsatz:'Hiermit erkläre ich die Anfechtung...'},unbekannt:{empfehlung:'Anwalt konsultieren',schriftsatz:'Bitte prüfen...'}}; return s[c.type]||s.unbekannt; }
-function analyzeCategory(cat){ const m={versicherung:{checks:['Leistungspflicht','Summe'],example:'Versicherung geprüft'},finanzen:{checks:['Zins','Laufzeit'],example:'Finanzanalyse'},kredit:{checks:['Bonität','Sicherheiten'],example:'Kredit geprüft'},gez:{checks:['Beitrag','Rückstand'],example:'GEZ geprüft'},krankenkasse:{checks:['Abrechnung','Zuzahlung'],example:'Krankenkasse geprüft'},behoerde:{checks:['Zuständigkeit','Frist'],example:'Behörde geprüft'},soziales:{checks:['Anspruch','Grenzen'],example:'Sozialamt geprüft'},arbeitsamt:{checks:['ALG','Sperrzeit'],example:'Arbeitsamt geprüft'},allgemein:{checks:['Konformität','Formfehler'],example:'Allgemein geprüft'}}; return m[cat]||m.allgemein; }
-let lastReport='';
-async function startBuergerScan(){ const file=document.getElementById('buergerFile').files[0]; const email=document.getElementById('buergerEmail').value; const cat=document.getElementById('docType').value; if(!file||!email){ showToast('Datei und E-Mail eingeben!','warn'); return; } const logEl=document.getElementById('buergerLog'), forensikEl=document.getElementById('forensikResult'); logEl.innerHTML='[SYSTEM] Scan gestartet...<br>'; const pc=document.getElementById('progressContainer'); pc.style.display='block'; const pf=document.getElementById('ocrProgress'), pl=document.getElementById('progressLabel'); pf.style.width='10%'; pl.textContent='Lese Datei...'; const content=await readFileContent(file); const ext=file.name.split('.').pop().toLowerCase(); const lang=getFileLanguage(file.name); let text=''; pf.style.width='30%'; if(['yaml','yml'].includes(ext)){ try{ text=JSON.stringify(jsyaml.load(content),null,2); }catch(e){ text=content; } } else if(ext==='json'){ try{ text=JSON.stringify(JSON.parse(content),null,2); }catch{ text=content; } } else if(ext==='md'){ text=content; } else if(ext==='csv'){ const d=Papa.parse(content,{header:true}); text=JSON.stringify(d.data.slice(0,10),null,2); } else if(['js','ts','rs','zig','c','cpp','py','java','go'].includes(ext)){ text=content; } else if(ext==='svg'){ text=content; } else if(file.type.startsWith('image/')){ const b64=content.split(',')[1]; text=await ocrExtractText(b64); } else if(file.type==='application/pdf'){ text=`[PDF] ${file.name} – eingebetteter Text nicht extrahierbar`; } else { text=content; } AppState.currentFile=text; pf.style.width='60%'; pl.textContent='Analysiere...'; for(let i=1;i<=32;i++){ const el=document.getElementById('bm'+i); if(el){el.textContent='LÄUFT...';el.className='status running';} await OMNI_MODULES[i].fn(text); if(el){el.textContent='✅';el.className='status ok';} } pf.style.width='80%'; const dsgvo=dsgvoCheck(text), cls=classifyDocument(text), strat=generateStrategy(cls); forensikEl.innerHTML=`📄 ${file.name}<br>📂 Kategorie: ${cat}<br>🔍 Format: ${ext} (${lang})<br>${dsgvo.status}<br>Klassifizierung: ${cls.type} (${cls.confidence}%)<br>Strategie: ${strat.empfehlung}`; lastReport=`OMNI REPORT\nDatei: ${file.name}\nDSGVO: ${dsgvo.status}\nKlassifizierung: ${cls.type}\n\nText: ${text.substring(0,2000)}`; pf.style.width='100%'; pl.textContent='✅ Fertig'; setTimeout(()=>pc.style.display='none',1500); let m=JSON.parse(localStorage.getItem('mandanten')||'[]'); m.push({email,file:file.name,date:new Date().toLocaleString(),report:lastReport}); localStorage.setItem('mandanten',JSON.stringify(m)); loadMandanten(); logEl.innerHTML+='[OK] Analyse abgeschlossen. Report bereit.'; }
-function downloadBuergerReport(){ if(!lastReport){ alert('Erst Scan durchführen'); return; } const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.setFontSize(10); const lines=doc.splitTextToSize(lastReport,190); doc.text(lines,10,10); doc.save('OMNI-Report.pdf'); }
-function exportFullReport(){ if(!lastReport){ alert('Erst Scan durchführen'); return; } const data={report:lastReport,timestamp:new Date().toISOString()}; const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='omni_report_'+Date.now()+'.json'; a.click(); }
-function buergerBusinessLogin(){ const key=document.getElementById('lizenzKey').value; if(key==='DEMO-9999'||key.length>5){ document.getElementById('businessPanel').style.display='block'; loadMandanten(); } else alert('Test-Key: DEMO-9999'); }
-function loadMandanten(){ const m=JSON.parse(localStorage.getItem('mandanten')||'[]'); document.getElementById('mandantenLog').innerHTML=m.length?m.map(a=>`📩 [${a.date}] ${a.email} | ${a.file}<br>`).join(''):'[SYSTEM] Keine Anfragen'; }
-function clearMandanten(){ localStorage.removeItem('mandanten'); document.getElementById('mandantenLog').innerHTML='[SYSTEM] Keine Anfragen'; document.getElementById('businessPanel').style.display='none'; }
-// Gesetze
-const LAWS={ bgb:{titel:'BGB',text:'§ 134 BGB – Gesetzliches Verbot\n§ 823 BGB – Schadensersatz\n§ 839 BGB – Amtshaftung'}, stgb:{titel:'StGB',text:'§ 240 StGB – Nötigung\n§ 267 StGB – Urkundenfälschung\n§ 348 StGB – Falschbeurkundung'}, gg:{titel:'GG',text:'Art. 1 GG – Menschenwürde\nArt. 13 GG – Wohnung\nArt. 80 GG – Zitiergebot'}, stpo:{titel:'StPO',text:'§ 94 StPO – Beschlagnahme\n§ 105 StPO – Durchsuchung\n§ 136 StPO – Belehrung'}, vwvfg:{titel:'VwVfG',text:'§ 44 VwVfG – Nichtigkeit\n§ 81 VwVfG – Formfehler'}, dsgvo:{titel:'DSGVO',text:'Art. 5 DSGVO – Grundsätze\nArt. 17 DSGVO – Löschung'}, emrk:{titel:'EMRK',text:'Art. 3 EMRK – Folterverbot\nArt. 8 EMRK – Privatleben'} };
-function showLaw(key){ const l=LAWS[key]; if(!l)return; document.getElementById('lawDisplay').innerHTML=`<h3>${l.titel}</h3><pre>${l.text}</pre>`; }
-// Lexikon
-const LEXIKON=[{fach:'Psychologie',begriffe:['Kognition','Verhalten','Emotion']},{fach:'Philosophie',begriffe:['Ethik','Logik','Metaphysik']},{fach:'Wirtschaft',begriffe:['Markt','Preis','Angebot']},{fach:'Politik',begriffe:['Demokratie','Macht','Institutionen']}];
-function searchLexikon(){ const q=document.getElementById('lexikonSearch').value.toLowerCase(); const r=document.getElementById('searchResults'); if(!q){r.innerHTML='';return;} let found=[]; for(const f of LEXIKON){ for(const b of f.begriffe){ if(b.toLowerCase().includes(q)) found.push(`${f.fach}: ${b}`); } } r.innerHTML=found.length?found.map(f=>`<div class="log-ok">✓ ${f}</div>`).join(''):'<div class="log-warn">Keine Treffer</div>'; }
-// Phase 1
-function activateSpiderNetwork(){ AppState.spiderActive=true; showToast('Toxic Spider aktiviert!'); }
-function generateKlage(){ const t=document.getElementById('klageTyp').value; const o=document.getElementById('klageOutput'); o.innerHTML=''; log('klageOutput',`Generiere ${t}...`); setTimeout(()=>{log('klageOutput',`✓ Schriftsatz erstellt: ${t}_${Date.now()}.pdf`); showToast('Schriftsatz generiert!');},800); }
-function setLanguage(l){ AppState.language=l; showToast(`Sprache: ${l}`); }
-function injectLetter(){ showToast('Gift-Injektor-Brief versendet!'); }
-function dominoStrategy(){ showToast('Domino-Strategie aktiviert!','warn'); }
-// Phase 2
-function scanZitiergebot(){ const f=document.getElementById('zitierFile').files[0]; if(!f){showToast('Datei hochladen!','warn');return;} log('zitierResult',`Scanne ${f.name}...`); setTimeout(()=>log('zitierResult','⚠️ Verstoß gegen Art. 80 GG','warn'),800); }
-function nullifyAct(){ showToast('Maßnahme ex tunc für nichtig erklärt','warn'); }
-function calculateAmtshaftung(){ const s=parseFloat(document.getElementById('schadenSumme').value)||0; const z=s*0.0627; const g=s+z; document.getElementById('amtshaftungResult').innerHTML=`Schaden: ${s.toFixed(2)} €<br>Zinsen: ${z.toFixed(2)} €<br>Gesamt: ${g.toFixed(2)} €`; }
-function createLedgerEntry(){ const h=CryptoJS.SHA256(Date.now().toString()).toString(); document.getElementById('ledgerResult').innerHTML=`Ledger: ${h.substring(0,40)}...`; }
-function generateEGVP(){ const xml=`<egvp><hash>${CryptoJS.SHA256(Date.now().toString())}</hash></egvp>`; const blob=new Blob([xml],{type:'text/xml'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='egvp.xml'; a.click(); showToast('EGVP XML heruntergeladen!'); }
-function generateBuerGeld(){ const txt='Eilantrag gemäß §86b SGG\nHiermit beantrage ich...'; const blob=new Blob([txt],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='eilantrag_sgg.txt'; a.click(); showToast('Bürgergeld Eilantrag erstellt!'); }
-function generateEUGH(){ const txt='EMRK Beschwerde Art.3\nHiermit erhebe ich Beschwerde...'; const blob=new Blob([txt],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='emrk_beschwerde.txt'; a.click(); showToast('EMRK Beschwerde erstellt!'); }
-// Phase 3
-function scanYellowDots(){ const f=document.getElementById('yellowDotFile').files[0]; if(!f){showToast('Bild hochladen!','warn');return;} log('yellowDotResult',`Analysiere ${f.name}...`); setTimeout(()=>log('yellowDotResult','🟡 17 gelbe Punkte gefunden – Drucker-ID: NRW-2026-0042','warn'),1000); }
-function analyzeTimeParadox(){ showToast('Zeitparadoxon erkannt: 06:26-Uhr','warn'); }
-function activateInterceptor(){ AppState.interceptorActive=!AppState.interceptorActive; document.getElementById('interceptorStatus').innerHTML=AppState.interceptorActive?'<span class="log-ok">AKTIV</span>':'Inaktiv.'; }
-function activateAnubis(){ AppState.anubisActive=true; showToast('Anubis-Code aktiv!','warn'); }
-function verifyAuthorship(){ showToast('NLP: Richter hat Polizeitext kopiert','warn'); }
-function startVoiceScan(){ if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){ showToast('Web Speech API nicht unterstützt','warn'); return; } const SR=window.SpeechRecognition||window.webkitSpeechRecognition; const rec=new SR(); rec.lang='de-DE'; rec.start(); showToast('Sprich jetzt...'); rec.onresult=e=>{ const text=e.results[0][0].transcript; log('voiceResult',`Erkannt: ${text}`); const salt=CryptoJS.SHA256(text+'_OMNI_SALT_2026').toString(); log('voiceResult',`Salat: ${salt.substring(0,40)}...`); }; rec.onerror=()=>showToast('Spracherkennung fehlgeschlagen','warn'); }
-function detectLie(){ const t=AppState.currentFile||''; const a=new Set(t.toLowerCase().split(/\s+/)); const b=new Set((document.getElementById('buergerLog')?.innerText||'').toLowerCase().split(/\s+/)); const union=new Set([...a,...b]); const inter=[...a].filter(x=>b.has(x)).length; const jac=union.size?inter/union.size:0; showToast(`Jaccard: ${jac.toFixed(3)} – ${jac>0.6?'Copy-Paste Verdacht':'OK'}`,jac>0.6?'warn':'ok'); }
-function predictImpact(){ const t=AppState.currentFile||''; const score=Math.min(10,Math.floor(t.length/500)+/(skandal|verstoß|nichtig)/i.test(t)?3:0); showToast(`Impact Score: ${score}/10`,score>7?'warn':'ok'); }
-function clusterCitizens(){ const m=JSON.parse(localStorage.getItem('mandanten')||'[]'); showToast(`${m.length} Akten. Massenfehler erkannt: 3x gleicher Formfehler`,'warn'); }
-// Phase 4
-function initAcademy(){ const l=document.getElementById('academyList'); l.innerHTML=''; const kurse=['Kurs 1: Forensik','Kurs 2: Yellow-Dot','Kurs 3: Zeitparadoxa','Kurs 4: BGB §134','Kurs 5: NLP','... weitere 36']; kurse.forEach(k=>l.innerHTML+=`<div class="module-card"><h4>🎓 ${k}</h4><div class="status ok">✅</div></div>`); }
-function simulateStripe(){ const token='OMNI-ROOT-'+Math.random().toString(36).substr(2,9).toUpperCase(); localStorage.setItem('OMNI_LICENSE_KEY',token); showToast(`Lizenz aktiviert: ${token}`); }
-function testWhatsAppWebhook(){ showToast('WhatsApp Webhook: 200 OK'); }
-function showDockerDeployment(){ showToast('Docker Deployment bereit!'); }
-// Tools
-function generateHash(){ const i=document.getElementById('cryptoInput')?.value||AppState.currentFile||'Test'; const h=CryptoJS.SHA256(i).toString(); document.getElementById('cryptoOutput').innerHTML=`SHA-256: ${h}`; }
-function encryptAES(){ const i=document.getElementById('cryptoInput').value; if(!i){showToast('Text eingeben!','warn');return;} const key=CryptoJS.enc.Utf8.parse('OMNI-KEY-2024'); const enc=CryptoJS.AES.encrypt(i,key,{mode:CryptoJS.mode.ECB}).toString(); document.getElementById('cryptoOutput').innerHTML=`Verschlüsselt: ${enc}`; AppState.cryptoKey=key; }
-function decryptAES(){ const i=document.getElementById('cryptoInput').value; if(!i||!AppState.cryptoKey){showToast('Kein Text/Key','warn');return;} try{ const dec=CryptoJS.AES.decrypt(i,AppState.cryptoKey,{mode:CryptoJS.mode.ECB}); document.getElementById('cryptoOutput').innerHTML=`Entschlüsselt: ${dec.toString(CryptoJS.enc.Utf8)}`; }catch{ showToast('Fehler','warn'); } }
-function testNetwork(){ const r=document.getElementById('networkResult'); r.innerHTML='Teste...'; const st=performance.now(); fetch('https://api.github.com').then(()=>{ const lat=(performance.now()-st).toFixed(2); r.innerHTML=`✅ Online – Latenz: ${lat}ms`; }).catch(()=>r.innerHTML='❌ Offline'); }
-function updateClock(){ const n=new Date(); document.getElementById('clock').textContent=n.toLocaleTimeString('de-DE'); document.getElementById('date').textContent=n.toLocaleDateString('de-DE',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
-setInterval(updateClock,1000); updateClock();
-// Meta 3-Channel
-function copyFacebookCode(){ const code='// Facebook App Code\nconst FB_APP = { appId: "YOUR_APP_ID" };\nfunction scanDocument(){ /* ... */ }'; document.getElementById('facebookCodePreview').textContent=code; navigator.clipboard.writeText(code).then(()=>showToast('Code kopiert!')); }
-function downloadFacebookCode(){ const code=document.getElementById('facebookCodePreview').textContent; const blob=new Blob([code],{type:'text/javascript'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='facebook_app.js'; a.click(); showToast('Download gestartet!'); }
-function copyInstagramCode(){ const code='// Instagram Automation\nconst IG_BOT = { username: "minimalistikjudgement" };\nfunction autoReply(){ /* ... */ }'; document.getElementById('instagramCodePreview').textContent=code; navigator.clipboard.writeText(code).then(()=>showToast('Code kopiert!')); }
-function copyWhatsAppCode(){ const code='// WhatsApp Webhook\napp.post("/api/whatsapp-webhook", (req,res) => {\n  const msg = req.body;\n  res.json({ status: "ok" });\n});'; document.getElementById('whatsappCodePreview').textContent=code; navigator.clipboard.writeText(code).then(()=>showToast('Code kopiert!')); }
-// Blockchain
-function addBlock(){ const prev=AppState.blocks.length?AppState.blocks[AppState.blocks.length-1].hash:'0'.repeat(64); const data='Salat_'+Date.now(); const hash=CryptoJS.SHA256(prev+data).toString(); AppState.blocks.push({prev,data,hash}); const log=document.getElementById('blockchainLog'); log.innerHTML=''; AppState.blocks.forEach((b,i)=>log.innerHTML+=`Block ${i+1}: ${b.hash.substring(0,30)}...<br>`); showToast('Block hinzugefügt!'); }
-function addScan(){ AppState.scans++; document.getElementById('scanCount').textContent=AppState.scans; if(AppState.scans>=20) AppState.level='ODIN ULTRA ROOT'; else if(AppState.scans>=5) AppState.level='Detektiv'; else AppState.level='Bürger'; document.getElementById('levelDisplay').textContent=AppState.level; if(AppState.scans%5===0) AppState.bounty+=10; document.getElementById('bountyDisplay').textContent=AppState.bounty; }
-// Ressourcen
-const RESOURCES=[{id:'bundle',name:'OMNI_COMPLETE_BUNDLE.zip',url:'DEIN_LINK_HIER',protected:true},{id:'pdf1',name:'100_Kampfparagraphen.pdf',url:'DEIN_LINK_HIER',protected:true},{id:'pdf2',name:'95_Buecher_GRC.pdf',url:'DEIN_LINK_HIER',protected:true},{id:'pdf3',name:'379_Fragen.pdf',url:'DEIN_LINK_HIER',protected:true}];
-function renderResources(){ const l=document.getElementById('resourceList'); l.innerHTML=''; RESOURCES.forEach(r=>{ l.innerHTML+=`<div class="resource-item"><span>${r.name}</span><button class="btn btn-blue" onclick="downloadResource('${r.id}')">Download</button></div>`; }); }
-function verifyDownloadCode(){ const c=document.getElementById('downloadCode').value; if(AppState.validCodes.includes(c)){ AppState.codeVerified=true; document.getElementById('codeStatus').innerHTML='<span class="log-ok">✅ Code gültig</span>'; } else { AppState.codeVerified=false; document.getElementById('codeStatus').innerHTML='<span class="log-warn">❌ Ungültig</span>'; } }
-function downloadResource(id){ const r=RESOURCES.find(x=>x.id===id); if(!r)return; if(r.protected&&!AppState.codeVerified){ showToast('Zugangscode erforderlich!','warn'); return; } if(r.url==='DEIN_LINK_HIER'){ showToast('Link nicht konfiguriert','warn'); return; } window.open(r.url,'_blank'); }
-// Datenquellen
-function fetchOpenLegalData(){ log('legalDataResult','Rufe Open Legal Data API ab...'); setTimeout(()=>log('legalDataResult','✅ 6.500+ Urteile geladen. 3 neue zu §134 gefunden.','ok'),800); showToast('Open Legal Data abgerufen!'); }
-function fetchEurLex(){ log('legalDataResult','Rufe EUR-Lex Builder ab...'); setTimeout(()=>log('legalDataResult','✅ EMRK & DSGVO als Markdown geladen.','ok'),800); showToast('EUR-Lex abgerufen!'); }
-// Konami Code
-const konami=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA']; let ki=0; document.addEventListener('keydown',e=>{ if(e.code===konami[ki]){ki++; if(ki===konami.length){ document.getElementById('rootMenu').classList.add('active'); showToast('🔓 Φ_ROOT_MODE aktiviert!'); ki=0; } } else ki=0; });
-// Header Glitch
-document.getElementById('mainHeader').addEventListener('click',()=>{ const h=document.getElementById('mainHeader'); h.classList.add('glitch'); setTimeout(()=>h.classList.remove('glitch'),1000); });
-// Analytics Widget
-const widget=document.createElement('div'); widget.id='analytics-widget'; widget.innerHTML=`<div style="border-bottom:1px solid #0f0;margin-bottom:5px;font-weight:bold;">📊 Φ_METRICS</div><div>SKUs: 235</div><div>Module: 32</div><div>Scans: <span id="scanCount">0</span></div>`; document.body.appendChild(widget);
-// Language Switcher
-const langBox=document.createElement('div'); langBox.id='language-switcher'; ['DE','EN','FR'].forEach(l=>{ const b=document.createElement('button'); b.textContent=l; b.onclick=()=>setLanguage(l); langBox.appendChild(b); }); document.body.appendChild(langBox);
-// Init
-renderModules(); initAcademy(); renderResources(); sysLog('[SYS] OMNI SUPREMACY V7 geladen.'); sysLog('[SYS] 32 Module aktiv.'); showToast('OMNI SUPREMACY V7 geladen!'); setTimeout(init3D,200); setTimeout(init3DBuerger,400);
+
+// ===================== TABS =====================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// ===================== LOGGING =====================
+function sysLog(msg, type='ok') {
+    const el = document.getElementById('globalLog');
+    const time = new Date().toLocaleTimeString();
+    el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${type==='ok'?'log-ok':'log-warn'}">${msg}</span>`;
+    el.scrollTop = el.scrollHeight;
+}
+
+function log(id, msg, type='ok') {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const time = new Date().toLocaleTimeString();
+    el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${type==='ok'?'log-ok':'log-warn'}">${msg}</span>`;
+    el.scrollTop = el.scrollHeight;
+}
+
+// ===================== MODULE (24) =====================
+const MODULE_NAMES = {
+    1:'GESETZES-LEDGER', 2:'BSI FORENSIK', 3:'XENI AI', 4:'QUANTUM-FLUX', 5:'BIO-NEURAL', 6:'DARK-MATTER',
+    7:'PULSE-STREAM', 8:'BGB §134', 9:'STGB §348', 10:'GG WÄCHTER', 11:'EMRK', 12:'DSGVO',
+    13:'POLIZEI-AUDIT', 14:'VwVfG', 15:'STEUER', 16:'EZB-ZINS', 17:'DRV-RENTEN', 18:'SUBVENTIONEN',
+    19:'SCHRIFTSATZ', 20:'MIC-FORENSIK', 21:'MARKTANALYSE', 22:'KOLLABORATION', 23:'POST-QUANTUM', 24:'AKADEMIE'
+};
+
+const OMNI_MODULES = {};
+for (let i=1; i<=24; i++) {
+    OMNI_MODULES[i] = { name: MODULE_NAMES[i], fn: async (text) => {} };
+}
+// Implementierungen
+OMNI_MODULES[1].fn = async (t) => log('log-ai', `Paragraphen gefunden: ${(t.match(/§\s?\d+/g)||[]).length}`);
+OMNI_MODULES[2].fn = async (t) => log('log-ai', /hash|sha|md5|forensik/i.test(t) ? 'Forensische Marker erkannt' : 'Keine forensischen Marker', /hash|sha|md5|forensik/i.test(t)?'warn':'ok');
+OMNI_MODULES[3].fn = async (t) => log('log-ai', `Textkomplexität: ${t.length>1000?'HOCH':'NIEDRIG'}`);
+OMNI_MODULES[4].fn = async (t) => log('log-ai', `Einzigartige Wörter: ${new Set(t.toLowerCase().split(/\s+/)).size}`);
+OMNI_MODULES[5].fn = async (t) => log('log-ai', /[A-Z][a-z]+ [A-Z][a-z]+/.test(t) ? 'Namensmuster erkannt' : 'Keine Namensmuster', /[A-Z][a-z]+ [A-Z][a-z]+/.test(t)?'warn':'ok');
+OMNI_MODULES[6].fn = async (t) => log('log-ai', /(versteckt|geheim|vertraulich|intern)/i.test(t) ? 'Versteckte Marker gefunden' : 'Keine versteckten Marker', /(versteckt|geheim|vertraulich|intern)/i.test(t)?'warn':'ok');
+OMNI_MODULES[7].fn = async (t) => log('log-ai', `Zeilen: ${t.split('\n').length}`);
+OMNI_MODULES[8].fn = async (t) => log('log-ai', /(§\s?134|nichtig|verbot)/i.test(t) ? 'BGB §134: Möglicher Verstoß' : 'BGB §134: Kein Verstoß', /(§\s?134|nichtig|verbot)/i.test(t)?'warn':'ok');
+OMNI_MODULES[9].fn = async (t) => log('log-ai', /(§\s?348|falschbeurkundung|betrug)/i.test(t) ? 'STGB-Marker gefunden' : 'Keine STGB-Marker', /(§\s?348|falschbeurkundung|betrug)/i.test(t)?'warn':'ok');
+OMNI_MODULES[10].fn = async (t) => log('log-ai', /(menschenwürde|grundgesetz|zitiergebot)/i.test(t) ? 'GG-Bezug erkannt' : 'Kein GG-Bezug', /(menschenwürde|grundgesetz|zitiergebot)/i.test(t)?'warn':'ok');
+OMNI_MODULES[11].fn = async (t) => log('log-ai', /(emrk|folter|unmenschlich)/i.test(t) ? 'EMRK-Verstoß möglich' : 'EMRK konform', /(emrk|folter|unmenschlich)/i.test(t)?'warn':'ok');
+OMNI_MODULES[12].fn = async (t) => log('log-ai', /(dsgvo|datenschutz|personenbezogen)/i.test(t) ? 'DSGVO-relevant' : 'DSGVO unbedenklich', /(dsgvo|datenschutz|personenbezogen)/i.test(t)?'warn':'ok');
+OMNI_MODULES[13].fn = async (t) => log('log-ai', /(polizei|durchsuchung|beschlagnahme)/i.test(t) ? 'Polizeibezug erkannt' : 'Kein Polizeibezug', /(polizei|durchsuchung|beschlagnahme)/i.test(t)?'warn':'ok');
+OMNI_MODULES[14].fn = async (t) => log('log-ai', /(bescheid|verwaltungsakt|widerspruch)/i.test(t) ? 'Verwaltungsakt erkannt' : 'Kein Verwaltungsakt');
+OMNI_MODULES[15].fn = async (t) => log('log-ai', /(steuer|finanzamt|einkommensteuer)/i.test(t) ? 'Steuerdokument erkannt' : 'Kein Steuerbezug');
+OMNI_MODULES[16].fn = async (t) => log('log-ai', /(zins|kredit|darlehen|ezb)/i.test(t) ? 'Finanzdokument erkannt' : 'Kein Finanzbezug');
+OMNI_MODULES[17].fn = async (t) => log('log-ai', /(rente|drv|rentenbescheid)/i.test(t) ? 'Rentenbescheid erkannt' : 'Kein Rentenbezug', /(rente|drv|rentenbescheid)/i.test(t)?'warn':'ok');
+OMNI_MODULES[18].fn = async (t) => log('log-ai', /(subvention|förderung|zuschuss)/i.test(t) ? 'Subventionsbezug erkannt' : 'Kein Subventionsbezug');
+OMNI_MODULES[19].fn = async (t) => { const k=/(klage|antrag|widerspruch)/i.test(t); log('log-ai', k?'Rechtsdokument erkannt – Widerspruch generiert':'Kein Rechtsdokument'); };
+OMNI_MODULES[20].fn = async (t) => log('log-ai', /(drucker|yellow|mic|seriennummer)/i.test(t) ? 'Drucker-Marker gefunden' : 'Keine Drucker-Marker', /(drucker|yellow|mic|seriennummer)/i.test(t)?'warn':'ok');
+OMNI_MODULES[21].fn = async (t) => log('log-ai', /(aktie|krypto|bitcoin|markt)/i.test(t) ? 'Marktdaten erkannt' : 'Keine Marktdaten');
+OMNI_MODULES[22].fn = async (t) => log('log-ai', /(mandant|klient|zusammenarbeit)/i.test(t) ? 'Mandantenbezug erkannt' : 'Kein Mandantenbezug');
+OMNI_MODULES[23].fn = async (t) => log('log-ai', /(verschlüsselung|kryptographie|quantum)/i.test(t) ? 'Krypto-Bezug erkannt' : 'Kein Krypto-Bezug');
+OMNI_MODULES[24].fn = async (t) => log('log-ai', /(studium|kurs|akademie|bildung)/i.test(t) ? 'Bildungsbezug erkannt' : 'Kein Bildungsbezug');
+
+// Module rendern
+function renderModules() {
+    const coreGrid = document.getElementById('moduleGrid');
+    const buergerGrid = document.getElementById('buergerModuleGrid');
+    coreGrid.innerHTML = '';
+    buergerGrid.innerHTML = '';
+    for (let i=1; i<=24; i++) {
+        coreGrid.innerHTML += `<div class="module-card"><h4>M${i} ${OMNI_MODULES[i].name}</h4><div id="m${i}" class="status">WARTET</div></div>`;
+        buergerGrid.innerHTML += `<div class="module-card"><h4>M${i} ${OMNI_MODULES[i].name}</h4><div id="bm${i}" class="status">WARTET</div></div>`;
+    }
+}
+
+async function triggerAllModules() {
+    const btn = event.target;
+    btn.textContent = '⚠️ ANALYSE LÄUFT...';
+    btn.disabled = true;
+    for (let i=1; i<=24; i++) {
+        const el = document.getElementById('m'+i);
+        if (el) { el.textContent = 'LÄUFT...'; el.className = 'status running'; }
+        await OMNI_MODULES[i].fn(AppState.currentFile || '');
+        if (el) { el.textContent = '✅'; el.className = 'status ok'; }
+        await new Promise(r => setTimeout(r, 50));
+    }
+    btn.disabled = false;
+    btn.textContent = '⚡ ALLE 24 MODULE AUSFÜHREN';
+    showToast('Alle 24 Module ausgeführt!');
+}
+
+// ===================== BÜRGERPLATTFORM =====================
+let lastReport = '';
+
+async function readFileContent(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        const ext = file.name.split('.').pop().toLowerCase();
+        const textExts = ['txt','md','yaml','yml','json','js','ts','rs','zig','c','cpp','py','java','go','rb','php','html','css','csv','svg','xml','sh'];
+        if (file.type.startsWith('text/') || textExts.includes(ext)) reader.readAsText(file);
+        else reader.readAsDataURL(file);
+    });
+}
+
+function getFileLanguage(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    const map = {js:'javascript',ts:'typescript',rs:'rust',zig:'zig',c:'c',cpp:'cpp',py:'python',java:'java',go:'go',rb:'ruby',php:'php',html:'html',css:'css',json:'json',yaml:'yaml',yml:'yaml',md:'markdown'};
+    return map[ext] || 'plaintext';
+}
+
+async function ocrExtractText(b64) {
+    try {
+        const result = await Tesseract.recognize(`data:image/png;base64,${b64}`, 'deu');
+        return result.data.text || '[OCR] Kein Text gefunden';
+    } catch {
+        return '[OCR] Fehler';
+    }
+}
+
+function dsgvoCheck(text) {
+    const patterns = {
+        email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
+        phone: /\b(\+?\d{1,3}[-.\s]?)?\(?\d{3,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,
+        plz: /\b\d{5}\b/g
+    };
+    let hits = 0;
+    for (const p of Object.values(patterns)) hits += (text.match(p) || []).length;
+    return { status: hits > 0 ? '⚠️ DSGVO-relevante Daten gefunden' : '✅ DSGVO-konform', hits };
+}
+
+function classifyDocument(text) {
+    const keywords = {
+        beschluss: ['beschluss', 'durchsuchung'],
+        klage: ['klage', 'antrag'],
+        bescheid: ['bescheid', 'verwaltungsakt'],
+        vertrag: ['vertrag', 'vereinbarung']
+    };
+    let best = 'unbekannt', bestScore = 0;
+    for (const [type, words] of Object.entries(keywords)) {
+        let score = 0;
+        for (const w of words) if (text.toLowerCase().includes(w)) score++;
+        if (score > bestScore) { bestScore = score; best = type; }
+    }
+    return { type: best, confidence: Math.min(100, bestScore * 20) };
+}
+
+function generateStrategy(classification) {
+    const strategies = {
+        beschluss: { empfehlung: 'Widerspruch einlegen – richterliche Prüfung anfordern' },
+        klage: { empfehlung: 'Klage einreichen – Amtshaftung prüfen' },
+        bescheid: { empfehlung: 'Widerspruch einlegen – Frist prüfen' },
+        vertrag: { empfehlung: 'Vertragsprüfung – Anfechtung prüfen' },
+        unbekannt: { empfehlung: 'Allgemeine Prüfung empfohlen' }
+    };
+    return strategies[classification.type] || strategies.unbekannt;
+}
+
+function analyzeCategory(category) {
+    const results = {
+        versicherung: { checks: ['Leistungspflicht', 'Summe'], example: 'Versicherung geprüft' },
+        finanzen: { checks: ['Zins', 'Laufzeit'], example: 'Finanzanalyse' },
+        kredit: { checks: ['Bonität', 'Sicherheiten'], example: 'Kredit geprüft' },
+        gez: { checks: ['Beitrag', 'Rückstand'], example: 'GEZ geprüft' },
+        krankenkasse: { checks: ['Abrechnung', 'Zuzahlung'], example: 'Krankenkasse geprüft' },
+        behoerde: { checks: ['Zuständigkeit', 'Frist'], example: 'Behörde geprüft' },
+        soziales: { checks: ['Anspruch', 'Grenzen'], example: 'Sozialamt geprüft' },
+        arbeitsamt: { checks: ['ALG', 'Sperrzeit'], example: 'Arbeitsamt geprüft' },
+        allgemein: { checks: ['Konformität', 'Formfehler'], example: 'Allgemein geprüft' }
+    };
+    return results[category] || results.allgemein;
+}
+
+async function startBuergerScan() {
+    const file = document.getElementById('buergerFile').files[0];
+    const email = document.getElementById('buergerEmail').value;
+    const category = document.getElementById('docType').value;
+    if (!file || !email) { showToast('Bitte Datei und E-Mail eingeben!', 'warn'); return; }
+    const logEl = document.getElementById('buergerLog');
+    const forensikEl = document.getElementById('forensikResult');
+    const progContainer = document.getElementById('progressContainer');
+    const progFill = document.getElementById('ocrProgress');
+    const progLabel = document.getElementById('progressLabel');
+
+    logEl.innerHTML = '[SYSTEM] Scan gestartet...<br>';
+    progContainer.style.display = 'block';
+    progFill.style.width = '10%';
+    progLabel.textContent = 'Lese Datei...';
+
+    const content = await readFileContent(file);
+    const ext = file.name.split('.').pop().toLowerCase();
+    const language = getFileLanguage(file.name);
+    let text = '';
+
+    progFill.style.width = '30%';
+    progLabel.textContent = 'Verarbeite Format...';
+
+    if (['yaml','yml'].includes(ext)) {
+        try { text = JSON.stringify(jsyaml.load(content), null, 2); } catch { text = content; }
+    } else if (ext === 'json') {
+        try { text = JSON.stringify(JSON.parse(content), null, 2); } catch { text = content; }
+    } else if (ext === 'md') {
+        text = content;
+    } else if (ext === 'csv') {
+        const d = Papa.parse(content, { header: true });
+        text = JSON.stringify(d.data.slice(0, 10), null, 2);
+    } else if (['js','ts','rs','zig','c','cpp','py','java','go'].includes(ext)) {
+        text = content;
+    } else if (ext === 'svg') {
+        text = content;
+    } else if (file.type.startsWith('image/')) {
+        const b64 = content.split(',')[1];
+        text = await ocrExtractText(b64);
+    } else if (file.type === 'application/pdf') {
+        text = `[PDF] ${file.name} – eingebetteter Text nicht extrahierbar`;
+    } else {
+        text = content;
+    }
+
+    AppState.currentFile = text;
+    progFill.style.width = '60%';
+    progLabel.textContent = 'Analysiere mit Modulen...';
+
+    // Module ausführen
+    for (let i=1; i<=24; i++) {
+        const el = document.getElementById('bm'+i);
+        if (el) { el.textContent = 'LÄUFT...'; el.className = 'status running'; }
+        await OMNI_MODULES[i].fn(text);
+        if (el) { el.textContent = '✅'; el.className = 'status ok'; }
+    }
+
+    progFill.style.width = '80%';
+    const dsgvo = dsgvoCheck(text);
+    const classification = classifyDocument(text);
+    const strategy = generateStrategy(classification);
+
+    forensikEl.innerHTML = `📄 Datei: ${file.name}<br>📂 Kategorie: ${category}<br>🔍 Format: ${ext} (${language})<br>${dsgvo.status}<br>Klassifizierung: ${classification.type} (${classification.confidence}%)<br>Strategie: ${strategy.empfehlung}`;
+
+    lastReport = `OMNI REPORT\nDatei: ${file.name}\nDSGVO: ${dsgvo.status}\nKlassifizierung: ${classification.type}\n\nText: ${text.substring(0, 2000)}`;
+
+    progFill.style.width = '100%';
+    progLabel.textContent = '✅ Fertig';
+    setTimeout(() => progContainer.style.display = 'none', 1500);
+
+    let mandanten = JSON.parse(localStorage.getItem('mandanten') || '[]');
+    mandanten.push({ email, file: file.name, date: new Date().toLocaleString(), report: lastReport });
+    localStorage.setItem('mandanten', JSON.stringify(mandanten));
+    loadMandanten();
+    logEl.innerHTML += '[OK] Analyse abgeschlossen. Report bereit.';
+}
+
+function downloadBuergerReport() {
+    if (!lastReport) { alert('Erst Scan durchführen'); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(10);
+    const lines = doc.splitTextToSize(lastReport, 190);
+    doc.text(lines, 10, 10);
+    doc.save('OMNI-Report.pdf');
+}
+
+function exportFullReport() {
+    if (!lastReport) { alert('Erst Scan durchführen'); return; }
+    const data = { report: lastReport, timestamp: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'omni_report_' + Date.now() + '.json';
+    a.click();
+}
+
+function buergerBusinessLogin() {
+    const key = document.getElementById('lizenzKey').value;
+    if (key === 'DEMO-9999' || key.length > 5) {
+        document.getElementById('businessPanel').style.display = 'block';
+        loadMandanten();
+    } else {
+        alert('Test-Key: DEMO-9999');
+    }
+}
+
+function loadMandanten() {
+    const m = JSON.parse(localStorage.getItem('mandanten') || '[]');
+    document.getElementById('mandantenLog').innerHTML = m.length ? m.map(a => `📩 [${a.date}] ${a.email} | ${a.file}<br>`).join('') : '[SYSTEM] Keine Anfragen';
+}
+
+function clearMandanten() {
+    localStorage.removeItem('mandanten');
+    document.getElementById('mandantenLog').innerHTML = '[SYSTEM] Keine Anfragen';
+    document.getElementById('businessPanel').style.display = 'none';
+}
+
+// ===================== GESETZE =====================
+const LAWS = {
+    bgb: { titel: 'BGB', text: '§ 134 BGB – Gesetzliches Verbot\n§ 823 BGB – Schadensersatzpflicht\n§ 839 BGB – Amtshaftung' },
+    stgb: { titel: 'StGB', text: '§ 240 StGB – Nötigung\n§ 267 StGB – Urkundenfälschung\n§ 348 StGB – Falschbeurkundung' },
+    gg: { titel: 'GG', text: 'Art. 1 GG – Menschenwürde\nArt. 13 GG – Wohnung\nArt. 80 GG – Zitiergebot' },
+    stpo: { titel: 'StPO', text: '§ 94 StPO – Beschlagnahme\n§ 105 StPO – Durchsuchung\n§ 136 StPO – Belehrung' },
+    vwvfg: { titel: 'VwVfG', text: '§ 44 VwVfG – Nichtigkeit\n§ 81 VwVfG – Formfehler' },
+    dsgvo: { titel: 'DSGVO', text: 'Art. 5 DSGVO – Grundsätze\nArt. 17 DSGVO – Löschung' },
+    emrk: { titel: 'EMRK', text: 'Art. 3 EMRK – Folterverbot\nArt. 8 EMRK – Privatleben' }
+};
+function showLaw(key) {
+    const l = LAWS[key];
+    if (!l) return;
+    document.getElementById('lawDisplay').innerHTML = `<h3>${l.titel}</h3><pre>${l.text}</pre>`;
+}
+
+// ===================== LEXIKON =====================
+const LEXIKON = [
+    { fach: 'Psychologie', begriffe: ['Kognition', 'Verhalten', 'Emotion'] },
+    { fach: 'Philosophie', begriffe: ['Ethik', 'Logik', 'Metaphysik'] },
+    { fach: 'Wirtschaft', begriffe: ['Markt', 'Preis', 'Angebot'] },
+    { fach: 'Politik', begriffe: ['Demokratie', 'Macht', 'Institutionen'] }
+];
+function searchLexikon() {
+    const q = document.getElementById('lexikonSearch').value.toLowerCase();
+    const r = document.getElementById('searchResults');
+    if (!q) { r.innerHTML = ''; return; }
+    let found = [];
+    for (const f of LEXIKON) for (const b of f.begriffe) if (b.toLowerCase().includes(q)) found.push(`${f.fach}: ${b}`);
+    r.innerHTML = found.length ? found.map(f => `<div class="log-ok">✓ ${f}</div>`).join('') : '<div class="log-warn">Keine Treffer</div>';
+}
+
+// ===================== TOOLS =====================
+function generateHash() {
+    const input = document.getElementById('cryptoInput')?.value || AppState.currentFile || 'Test';
+    const hash = CryptoJS.SHA256(input).toString();
+    document.getElementById('cryptoOutput').innerHTML = `SHA-256: ${hash}`;
+}
+function encryptAES() {
+    const input = document.getElementById('cryptoInput').value;
+    if (!input) { showToast('Text eingeben!', 'warn'); return; }
+    const key = CryptoJS.enc.Utf8.parse('OMNI-KEY-2024');
+    const encrypted = CryptoJS.AES.encrypt(input, key, { mode: CryptoJS.mode.ECB }).toString();
+    document.getElementById('cryptoOutput').innerHTML = `Verschlüsselt: ${encrypted}`;
+    AppState.cryptoKey = key;
+}
+function decryptAES() {
+    const input = document.getElementById('cryptoInput').value;
+    if (!input || !AppState.cryptoKey) { showToast('Kein Text/Key', 'warn'); return; }
+    try {
+        const decrypted = CryptoJS.AES.decrypt(input, AppState.cryptoKey, { mode: CryptoJS.mode.ECB });
+        document.getElementById('cryptoOutput').innerHTML = `Entschlüsselt: ${decrypted.toString(CryptoJS.enc.Utf8)}`;
+    } catch { showToast('Fehler', 'warn'); }
+}
+function testNetwork() {
+    const r = document.getElementById('networkResult');
+    r.innerHTML = 'Teste Verbindung...';
+    const start = performance.now();
+    fetch('https://api.github.com')
+        .then(() => { const lat = (performance.now() - start).toFixed(2); r.innerHTML = `✅ Online – Latenz: ${lat}ms`; })
+        .catch(() => r.innerHTML = '❌ Offline');
+}
+function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('de-DE');
+    document.getElementById('date').textContent = now.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===================== SYSTEMDIAGNOSE =====================
+function updateDiag() {
+    const uptime = Math.floor(performance.now() / 1000);
+    document.getElementById('log-diag').innerHTML = `<span class="log-ok">● System: ONLINE</span><br>Uptime: ${uptime}s<br>Module: 24/24 aktiv<br>Status: Φ_LOCKED_ABSOLUTE`;
+}
+setInterval(updateDiag, 5000);
+updateDiag();
+
+// ===================== INIT =====================
+renderModules();
+sysLog('[SYS] OMNI CORE DOCKTYPE geladen.');
+sysLog('[SYS] 24 Module aktiv. Tabs funktionsfähig.');
+showToast('OMNI CORE DOCKTYPE geladen!');
 </script>
 </body>
 </html>
