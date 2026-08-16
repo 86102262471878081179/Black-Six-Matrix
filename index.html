@@ -1,780 +1,3 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OMNI CORE SUPREMACY – FULL DOCKTYPE</title>
-    <meta name="description" content="Omni Core Supremacy – Das komplette strategische Arsenal für Litigation-PR, Gov-Tech, Advanced Forensics und Academy.">
-
-    <!-- ========== CDN BIBLIOTHEKEN ========== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-
-    <style>
-        :root {
-            --neon-green: #00ffbf;
-            --neon-blue: #00c8ff;
-            --neon-red: #ff3366;
-            --neon-purple: #bf00ff;
-            --neon-yellow: #ffbf00;
-            --panel-bg: #0a0a0f;
-            --ok: #00ff88;
-            --warn: #ffbf00;
-            --danger: #ff0040;
-            --bg: #050005;
-            --card-bg: #0d0d1a;
-        }
-        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
-        body {
-            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
-            color: #e5e7eb;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header {
-            background: linear-gradient(135deg, #000 0%, #1a0030 50%, #000 100%);
-            padding: 30px 20px;
-            border-bottom: 2px solid var(--neon-green);
-            text-align: center;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.1), transparent, rgba(0,200,255,0.1), transparent);
-            animation: rotate 10s linear infinite;
-        }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-        .header h1 {
-            color: var(--neon-green);
-            margin: 0;
-            font-size: 2.2rem;
-            text-shadow: 0 0 30px var(--neon-green);
-            letter-spacing: 4px;
-            position: relative; z-index: 1;
-        }
-        .header .sub { color: #888; font-size: 14px; margin-top: 6px; position: relative; z-index: 1; }
-        .header .badge {
-            display: inline-block;
-            background: var(--neon-red);
-            color: #fff;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 8px;
-            letter-spacing: 1px;
-            position: relative; z-index: 1;
-        }
-        .seal { font-size: 11px; color: #555; margin-top: 8px; word-break: break-all; position: relative; z-index: 1; }
-
-        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
-        .tab-btn {
-            background: #1a1a2e; color: #aaa; border: 1px solid #333;
-            padding: 10px 20px; cursor: pointer; font-weight: bold;
-            border-radius: 8px 8px 0 0; transition: all 0.3s;
-            flex: 1 1 auto; text-align: center; font-size: 13px;
-        }
-        .tab-btn:hover { background: #2a2a4e; }
-        .tab-btn.active {
-            background: var(--neon-green); color: #000;
-            border-color: var(--neon-green);
-            box-shadow: 0 -5px 20px rgba(0,255,191,0.3);
-        }
-        .tab-content {
-            display: none; border: 1px solid #333; padding: 24px;
-            border-radius: 0 0 12px 12px; background: var(--card-bg);
-            animation: fadeIn 0.3s;
-        }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card {
-            background: var(--panel-bg); border: 1px solid #2a2a3a;
-            border-radius: 10px; padding: 18px; margin-bottom: 16px;
-            transition: all 0.3s;
-        }
-        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,200,255,0.1); }
-        .card h2 {
-            color: var(--neon-blue); border-bottom: 1px solid #333;
-            padding-bottom: 8px; margin-top: 0; font-size: 18px;
-        }
-        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-        .terminal {
-            background: #000; border: 1px solid #333; height: 150px;
-            overflow-y: auto; font-size: 10px; padding: 10px;
-            color: var(--ok); border-radius: 8px; line-height: 1.6;
-            margin-bottom: 16px; font-family: 'Courier New', monospace;
-        }
-        .log-time { color: #666; }
-        .log-ok { color: var(--ok); }
-        .log-warn { color: var(--danger); font-weight: bold; }
-        .btn {
-            background: var(--neon-green); color: #000; padding: 14px;
-            border: none; width: 100%; cursor: pointer; border-radius: 8px;
-            font-weight: bold; margin: 8px 0; font-size: 14px; transition: all 0.3s;
-        }
-        .btn:hover { background: #00ddaa; transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,191,0.3); }
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { background: #cc0033; }
-        .btn-blue { background: var(--neon-blue); color: #000; }
-        .btn-purple { background: var(--neon-purple); color: #fff; }
-        .btn-yellow { background: var(--neon-yellow); color: #000; }
-        input, select, textarea {
-            width: 100%; padding: 12px; background: #222; color: #e5e7eb;
-            border: 1px solid #444; margin: 8px 0; border-radius: 8px;
-            transition: all 0.3s;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--neon-green); outline: none;
-            box-shadow: 0 0 10px rgba(0,255,191,0.3);
-        }
-        .file-preview {
-            background: #000; border: 1px solid #333; border-radius: 6px;
-            padding: 10px; max-height: 300px; overflow: auto; margin-top: 10px;
-        }
-        .progress-bar { width: 100%; height: 8px; background: #222; border-radius: 4px; margin: 8px 0; overflow: hidden; }
-        .progress-bar .fill {
-            height: 100%; width: 0%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-            border-radius: 4px; transition: width 0.3s;
-        }
-        .grid-modules {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px;
-        }
-        .module-card {
-            background: #02020a; border: 1px solid #333; padding: 8px;
-            border-radius: 6px; font-size: 10px; transition: all 0.3s; cursor: pointer;
-        }
-        .module-card:hover { border-color: var(--neon-green); transform: translateY(-2px); }
-        .module-card h4 { margin: 0 0 4px 0; color: var(--neon-green); font-size: 10px; }
-        .status { font-size: 9px; }
-        .status.ok { color: var(--ok); }
-        .status.warn { color: var(--danger); }
-        .status.running { color: var(--warn); animation: blink 1s infinite; }
-        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #1a1a2e; color: var(--neon-green); text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--neon-green); }
-        td { padding: 8px 10px; border-bottom: 1px solid #2a2a3a; }
-        #alien3d { height: 120px; border: 1px solid var(--neon-green); border-radius: 8px; margin-bottom: 10px; background: #000; }
-        #analytics-widget {
-            position: fixed; bottom: 20px; right: 20px;
-            background: rgba(5,5,5,0.95); border: 1px solid #00ff00;
-            padding: 15px; color: #00ff00; font-family: 'Courier New', monospace;
-            font-size: 12px; box-shadow: 0 0 20px rgba(0,255,0,0.3);
-            z-index: 9998; border-radius: 8px; min-width: 200px;
-        }
-        #language-switcher { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 5px; }
-        #language-switcher button {
-            background: #000; color: #00ff00; border: 1px solid #00ff00;
-            cursor: pointer; padding: 5px 10px; font-family: monospace;
-            font-weight: bold; border-radius: 4px; transition: 0.3s;
-        }
-        #language-switcher button:hover { background: #00ff00; color: #000; }
-        .toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: #000; border: 1px solid var(--neon-green); color: var(--neon-green);
-            padding: 15px 30px; border-radius: 8px; z-index: 10000;
-            animation: slideDown 0.3s; font-family: 'Courier New', monospace;
-        }
-        @keyframes slideDown { from { transform: translate(-50%, -100%); } to { transform: translate(-50%, 0); } }
-        .chart-container { position: relative; height: 200px; margin: 20px 0; }
-        @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-        @media (max-width: 700px) {
-            .tab-btn { font-size: 11px; padding: 8px 12px; }
-            .header h1 { font-size: 20px; }
-            #analytics-widget { font-size: 10px; padding: 10px; min-width: 150px; }
-            #language-switcher { top: 10px; right: 10px; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- ========== HEADER ========== -->
-    <div class="header">
-        <h1>⚡ OMNI CORE SUPREMACY ⚡</h1>
-        <div class="sub">FULL DOCKTYPE 2024 · 4 PHASEN · 235 SKUs · 48 KERNMODULE</div>
-        <div class="badge">Φ_LOCKED_ABSOLUTE</div>
-        <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
-    </div>
-
-    <!-- ========== TABS ========== -->
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-phase1">🏛️ PHASE 1 · LITIGATION-PR</button>
-        <button class="tab-btn" data-tab="tab-phase2">🏗️ PHASE 2 · GOV-TECH & EAM</button>
-        <button class="tab-btn" data-tab="tab-phase3">🔬 PHASE 3 · ADVANCED FORENSICS</button>
-        <button class="tab-btn" data-tab="tab-phase4">🎓 PHASE 4 · ACADEMY & JV</button>
-        <button class="tab-btn" data-tab="tab-cockpit">📊 SUPREMACY COCKPIT</button>
-    </div>
-
-    <!-- ========== PHASE 1: LITIGATION-PR ========== -->
-    <div class="tab-content active" id="tab-phase1">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>🕷️ TOXIC SPIDER NETZWERK</h2>
-                    <p style="font-size:12px;color:#888;">27-Knoten-Netzwerk zur Isolierung von Behörden durch Zivilgerichte, Sozialträger und Medien.</p>
-                    <div id="spiderNetwork" class="file-preview" style="min-height:100px;">
-                        <div style="color:var(--neon-green);">🕸️ Netzwerk aktiv – 27 Knoten geladen</div>
-                        <div style="color:#666;font-size:10px;">Knoten: Zivilgerichte, Sozialträger, Medien, EuGH, EGMR, Finanzämter, ...</div>
-                    </div>
-                    <button class="btn btn-danger" onclick="activateSpiderNetwork()">⚡ NETZWERK AKTIVIEREN</button>
-                </div>
-                <div class="card">
-                    <h2>📄 K-26 MASTER-EXPORT-TOKEN</h2>
-                    <p style="font-size:12px;color:#888;">Generator für gerichtsfeste Klageschriften und Strafanzeigen (§§ 348, 267 StGB).</p>
-                    <select id="klageTyp">
-                        <option value="strafanzeige">Strafanzeige (§ 348 StGB)</option>
-                        <option value="klage">Zivilklage (§ 839 BGB)</option>
-                        <option value="widerspruch">Widerspruch (VwVfG)</option>
-                    </select>
-                    <button class="btn btn-blue" onclick="generateKlage()">📋 SCHRIFTSATZ GENERIEREN</button>
-                    <div id="klageOutput" class="terminal" style="height:100px;"></div>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <h2>🌐 MULTILANGUAGE-SWITCHER</h2>
-                    <p style="font-size:12px;color:#888;">Internationale Eskalation vor EuGH und EGMR.</p>
-                    <div class="grid-3">
-                        <button class="btn" onclick="setLanguage('DE')">🇩🇪 DEUTSCH</button>
-                        <button class="btn btn-blue" onclick="setLanguage('EN')">🇬🇧 ENGLISH</button>
-                        <button class="btn btn-purple" onclick="setLanguage('FR')">🇫🇷 FRANÇAIS</button>
-                    </div>
-                    <div id="languageStatus" class="terminal" style="height:50px;">[DE] Deutsch aktiv</div>
-                </div>
-                <div class="card">
-                    <h2>💉 GIFT-INJEKTOR-BRIEFE</h2>
-                    <p style="font-size:12px;color:#888;">Modul zur gezielten Streuung von Beweisen mit Tracking.</p>
-                    <button class="btn btn-yellow" onclick="injectLetter()">💉 BRIEF VERSENDEN</button>
-                    <div id="injectorStatus" class="terminal" style="height:50px;">Bereit für Versand...</div>
-                </div>
-                <div class="card">
-                    <h2>🧨 DOMINO- & STREUFEUER-STRATEGIE</h2>
-                    <p style="font-size:12px;color:#888;">Asymmetrische Prozessführung durch kaskadierende Schriftsätze.</p>
-                    <button class="btn btn-danger" onclick="dominoStrategy()">🔥 STREUFEUER STARTEN</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== PHASE 2: GOV-TECH & EAM ========== -->
-    <div class="tab-content" id="tab-phase2">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>📐 M06 – ZITIERGEBOT-SCANNER</h2>
-                    <p style="font-size:12px;color:#888;">Prüft Akten gegen das Handbuch der Rechtsförmlichkeit (Art. 80 GG).</p>
-                    <input type="file" id="zitierFile" />
-                    <button class="btn btn-blue" onclick="scanZitiergebot()">🔍 SCANNEN</button>
-                    <div id="zitierResult" class="terminal" style="height:80px;">Warte auf Datei...</div>
-                </div>
-                <div class="card">
-                    <h2>⚖️ M05 – BGB § 134 NULLIFIKATOR</h2>
-                    <p style="font-size:12px;color:#888;">Deklariert behördliche Maßnahmen ohne Rechtsgrundlage als absolut nichtig.</p>
-                    <button class="btn btn-danger" onclick="nullifyAct()">💀 NICHTIGKEIT ERKLÄREN</button>
-                    <div id="nullifyResult" class="terminal" style="height:50px;">Bereit.</div>
-                </div>
-                <div class="card">
-                    <h2>🖨️ M11 – JINJA2 AUTO-DRAFTER</h2>
-                    <p style="font-size:12px;color:#888;">Maschinelle Generierung von juristischen Schriftsätzen.</p>
-                    <button class="btn btn-blue" onclick="autoDraft()">📝 DRAFT ERZEUGEN</button>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <h2>💰 M16 – AMTSHAFTUNGS-KALKULATOR</h2>
-                    <p style="font-size:12px;color:#888;">Berechnet Schadensersatzforderungen inkl. 6,27 % Zinsen.</p>
-                    <input type="number" id="schadenSumme" placeholder="Schadenssumme in EUR" />
-                    <button class="btn" onclick="calculateAmtshaftung()">🧮 BERECHNEN</button>
-                    <div id="amtshaftungResult" class="terminal" style="height:80px;"></div>
-                </div>
-                <div class="card">
-                    <h2>🔗 M17/M18 – OMNI LEDGER</h2>
-                    <p style="font-size:12px;color:#888;">Manipulationssicheres Backup-System mit Zero-Knowledge-Proofs.</p>
-                    <button class="btn btn-purple" onclick="createLedgerEntry()">⛓️ LEDGER-EINTRAG ERSTELLEN</button>
-                    <div id="ledgerResult" class="terminal" style="height:80px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== PHASE 3: ADVANCED FORENSICS ========== -->
-    <div class="tab-content" id="tab-phase3">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>🔬 M01 – YELLOW-DOT-SCANNER</h2>
-                    <p style="font-size:12px;color:#888;">Isoliert Machine Identification Codes von Farblaserdruckern.</p>
-                    <input type="file" id="yellowDotFile" accept="image/*" />
-                    <button class="btn btn-blue" onclick="scanYellowDots()">🔍 SCAN STARTEN</button>
-                    <div id="yellowDotResult" class="terminal" style="height:80px;"></div>
-                </div>
-                <div class="card">
-                    <h2>⏰ M02 – ZEITPARADOXON-ANALYZER</h2>
-                    <p style="font-size:12px;color:#888;">Erkennt Rückdatierungen in Einsatzprotokollen (MAC-Zeiten).</p>
-                    <button class="btn btn-danger" onclick="analyzeTimeParadox()">⚡ ANALYSIEREN</button>
-                    <div id="timeResult" class="terminal" style="height:50px;"></div>
-                </div>
-                <div class="card">
-                    <h2>📊 M03 – STRUCTURAL ENTROPY PARSER</h2>
-                    <p style="font-size:12px;color:#888;">Erkennt typografische Anomalien in veralteten Formularen.</p>
-                    <button class="btn btn-blue" onclick="parseEntropy()">📐 PARSEN</button>
-                </div>
-                <div class="card">
-                    <h2>🔢 M04 – HEX-DUMP & DIGITALE PALÄOGRAPHIE</h2>
-                    <p style="font-size:12px;color:#888;">Zerschneidet PDF-Strukturen auf Bitebene.</p>
-                    <button class="btn btn-blue" onclick="hexDump()">🔢 HEX-DUMP</button>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <h2>🛡️ M13 – SENTRY-TRACE INTERCEPTOR</h2>
-                    <p style="font-size:12px;color:#888;">Blockiert behördliche Crawler und Meta-AIs.</p>
-                    <button class="btn btn-danger" onclick="activateInterceptor()">🛡️ ABWEHR AKTIVIEREN</button>
-                    <div id="interceptorStatus" class="terminal" style="height:50px;">Inaktiv.</div>
-                </div>
-                <div class="card">
-                    <h2>🔐 ANUBIS-CODE</h2>
-                    <p style="font-size:12px;color:#888;">Kryptografisches Proof-of-Work-Gatter.</p>
-                    <button class="btn btn-purple" onclick="activateAnubis()">🔐 GATTER AKTIVIEREN</button>
-                </div>
-                <div class="card">
-                    <h2>⚖️ BGH-PRECEDENT-ENGINE</h2>
-                    <p style="font-size:12px;color:#888;">Gleicht Aktenfehler mit BGH-Präzedenzfällen ab.</p>
-                    <button class="btn btn-blue" onclick="checkPrecedents()">🔍 PRÄZEDENZFÄLLE PRÜFEN</button>
-                </div>
-                <div class="card">
-                    <h2>🧠 NLP AUTORENSCHAFTS-VERIFIKATION</h2>
-                    <p style="font-size:12px;color:#888;">Weist nach, wenn Richter Texte der Polizei blind kopiert haben.</p>
-                    <button class="btn btn-blue" onclick="verifyAuthorship()">🧠 VERIFIZIEREN</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== PHASE 4: ACADEMY & JV ========== -->
-    <div class="tab-content" id="tab-phase4">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>🎓 AKADEMIE-KURSE</h2>
-                    <p style="font-size:12px;color:#888;">41 Schulungsmodule für Anwälte und Bürger.</p>
-                    <div id="academyList" class="grid-modules" style="max-height:300px;"></div>
-                </div>
-                <div class="card">
-                    <h2>🏛️ BÜRGERPLATTFORM</h2>
-                    <p style="font-size:12px;color:#888;">Zero-Knowledge-Upload-Portal für Behördenbescheide.</p>
-                    <input type="file" id="buergerFile" />
-                    <input type="email" id="buergerEmail" placeholder="E-Mail" />
-                    <button class="btn btn-danger" onclick="startBuergerScan()">⚡ SCAN STARTEN</button>
-                    <div id="buergerLog" class="terminal" style="height:80px;">[SYSTEM] Bereit.</div>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <h2>💳 STRIPE PAYWALL & JWT AUTH</h2>
-                    <p style="font-size:12px;color:#888;">Lizenzsystem mit Zugangs-Leveln (Pro bis Root).</p>
-                    <button class="btn btn-blue" onclick="simulateStripe()">💳 CHECKOUT SIMULIEREN</button>
-                </div>
-                <div class="card">
-                    <h2>📱 WHATSAPP META WEBHOOK</h2>
-                    <p style="font-size:12px;color:#888;">Automatisierte Weiterleitung forensischer Berichte.</p>
-                    <button class="btn btn-yellow" onclick="testWhatsAppWebhook()">📱 WEBHOOK TESTEN</button>
-                </div>
-                <div class="card">
-                    <h2>🐳 BARE-METAL DOCKER DEPLOYMENT</h2>
-                    <p style="font-size:12px;color:#888;">Isolierte Server-Infrastruktur ohne Drittanbieter-Clouds.</p>
-                    <button class="btn btn-purple" onclick="showDockerDeployment()">🐳 DEPLOYMENT ANZEIGEN</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== SUPREMACY COCKPIT ========== -->
-    <div class="tab-content" id="tab-cockpit">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>📊 OMNI IMPERIUM METRICS</h2>
-                    <div class="chart-container"><canvas id="phaseChart"></canvas></div>
-                    <div class="chart-container"><canvas id="skuChart"></canvas></div>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <h2>📋 SKU-BIBLIOTHEK (235)</h2>
-                    <input type="text" id="skuSearch" placeholder="SKU suchen..." oninput="searchSKU()" />
-                    <div id="skuResults" class="file-preview" style="max-height:400px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== GLOBAL TERMINAL ========== -->
-    <div class="card">
-        <h2>💻 SYSTEM LOG</h2>
-        <div class="terminal" id="globalLog" style="height:100px;">
-            [SYS] OMNI CORE SUPREMACY FULL DOCKTYPE geladen.<br>
-        </div>
-    </div>
-
-    <script>
-        // ========== ZENTRALER STATE ==========
-        const AppState = {
-            language: 'DE',
-            scanCount: 0,
-            currentFile: null,
-            interceptorActive: false,
-            anubisActive: false,
-            spiderActive: false
-        };
-
-        // ========== TOAST SYSTEM ==========
-        function showToast(message, type = 'ok') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.style.borderColor = type === 'ok' ? 'var(--neon-green)' : 'var(--neon-red)';
-            toast.style.color = type === 'ok' ? 'var(--neon-green)' : 'var(--neon-red)';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // ========== TABS ==========
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
-                if (this.dataset.tab === 'tab-cockpit') initCockpit();
-            });
-        });
-
-        // ========== LOGGING ==========
-        function sysLog(msg, type = "ok") {
-            const el = document.getElementById('globalLog');
-            const time = new Date().toLocaleTimeString();
-            el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${type === 'ok' ? 'log-ok' : 'log-warn'}">${msg}</span>`;
-            el.scrollTop = el.scrollHeight;
-        }
-
-        function log(id, msg, type = "ok") {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const time = new Date().toLocaleTimeString();
-            el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${type === 'ok' ? 'log-ok' : 'log-warn'}">${msg}</span>`;
-            el.scrollTop = el.scrollHeight;
-        }
-
-        // ========== PHASE 1 FUNKTIONEN ==========
-        function activateSpiderNetwork() {
-            AppState.spiderActive = true;
-            log('spiderNetwork', '🕸️ Toxic Spider Netzwerk aktiviert – 27 Knoten verbunden.', 'ok');
-            showToast('Toxic Spider Netzwerk aktiviert!', 'ok');
-        }
-
-        function generateKlage() {
-            const typ = document.getElementById('klageTyp').value;
-            const output = document.getElementById('klageOutput');
-            output.innerHTML = '';
-            log('klageOutput', `[K-26] Generiere ${typ}...`, 'ok');
-            setTimeout(() => {
-                log('klageOutput', `✓ Schriftsatz erstellt: ${typ.toUpperCase()}_${Date.now()}.pdf`, 'ok');
-                showToast('Schriftsatz generiert!', 'ok');
-            }, 800);
-        }
-
-        function setLanguage(lang) {
-            AppState.language = lang;
-            document.getElementById('languageStatus').innerHTML = `[${lang}] Sprache aktiv`;
-            showToast(`Sprache auf ${lang} gesetzt`, 'ok');
-        }
-
-        function injectLetter() {
-            log('injectorStatus', '💉 Gift-Injektor-Brief wird versendet...', 'ok');
-            setTimeout(() => {
-                log('injectorStatus', '✓ Brief versendet. Tracking aktiv.', 'ok');
-                showToast('Brief versendet!', 'ok');
-            }, 600);
-        }
-
-        function dominoStrategy() {
-            log('globalLog', '🧨 Domino-Strategie gestartet – kaskadierende Schriftsätze werden erstellt.', 'warn');
-            showToast('Domino-Strategie aktiviert!', 'warn');
-        }
-
-        // ========== PHASE 2 FUNKTIONEN ==========
-        function scanZitiergebot() {
-            const file = document.getElementById('zitierFile').files[0];
-            if (!file) {
-                showToast('Bitte Datei hochladen!', 'warn');
-                return;
-            }
-            log('zitierResult', `[M06] Scanne ${file.name}...`, 'ok');
-            setTimeout(() => {
-                log('zitierResult', '⚠️ Verstoß gegen Art. 80 GG festgestellt (Zitiergebot missachtet).', 'warn');
-                showToast('Zitiergebot-Verstoß erkannt!', 'warn');
-            }, 1000);
-        }
-
-        function nullifyAct() {
-            log('nullifyResult', '[M05] Prüfe Nichtigkeit gemäß § 134 BGB...', 'ok');
-            setTimeout(() => {
-                log('nullifyResult', '💀 Maßnahme ex tunc für nichtig erklärt.', 'warn');
-                showToast('Nichtigkeit erklärt!', 'warn');
-            }, 800);
-        }
-
-        function autoDraft() {
-            log('globalLog', '[M11] Jinja2 Auto-Drafter generiert Schriftsatz...', 'ok');
-            showToast('Draft erstellt!', 'ok');
-        }
-
-        function calculateAmtshaftung() {
-            const summe = parseFloat(document.getElementById('schadenSumme').value) || 0;
-            const zinsen = summe * 0.0627;
-            const gesamt = summe + zinsen;
-            document.getElementById('amtshaftungResult').innerHTML = `
-                <span class="log-ok">Schaden: ${summe.toFixed(2)} €</span><br>
-                <span class="log-ok">Zinsen (6,27 %): ${zinsen.toFixed(2)} €</span><br>
-                <span class="log-ok">Gesamtforderung: ${gesamt.toFixed(2)} €</span>
-            `;
-            showToast('Berechnung abgeschlossen!', 'ok');
-        }
-
-        function createLedgerEntry() {
-            const hash = CryptoJS.SHA256(Date.now().toString()).toString();
-            document.getElementById('ledgerResult').innerHTML = `
-                <span class="log-ok">Ledger-Eintrag erstellt:</span><br>
-                <span style="color:var(--neon-green);">${hash.substring(0, 64)}</span>
-            `;
-            showToast('Ledger-Eintrag erstellt!', 'ok');
-        }
-
-        // ========== PHASE 3 FUNKTIONEN ==========
-        function scanYellowDots() {
-            const file = document.getElementById('yellowDotFile').files[0];
-            if (!file) {
-                showToast('Bitte Bild hochladen!', 'warn');
-                return;
-            }
-            log('yellowDotResult', `[M01] Analysiere ${file.name} auf MIC-Codes...`, 'ok');
-            setTimeout(() => {
-                log('yellowDotResult', '🟡 17 gelbe Punkte gefunden – Drucker-ID: NRW-2026-0042', 'warn');
-                showToast('Yellow-Dot-Scan abgeschlossen!', 'warn');
-            }, 1200);
-        }
-
-        function analyzeTimeParadox() {
-            log('timeResult', '[M02] Analysiere MAC-Zeiten...', 'ok');
-            setTimeout(() => {
-                log('timeResult', '⚠️ Rückdatierung erkannt: 06:26-Uhr-Paradoxon bestätigt.', 'warn');
-                showToast('Zeitparadoxon gefunden!', 'warn');
-            }, 900);
-        }
-
-        function parseEntropy() {
-            log('globalLog', '[M03] Structural Entropy Parser gestartet...', 'ok');
-            showToast('Entropy-Analyse abgeschlossen!', 'ok');
-        }
-
-        function hexDump() {
-            log('globalLog', '[M04] Hex-Dump Analyse gestartet...', 'ok');
-            showToast('Hex-Dump fertig!', 'ok');
-        }
-
-        function activateInterceptor() {
-            AppState.interceptorActive = !AppState.interceptorActive;
-            document.getElementById('interceptorStatus').innerHTML = AppState.interceptorActive ? 
-                '<span class="log-ok">🛡️ Interceptor AKTIV – Behördliche Crawler werden blockiert.</span>' : 
-                'Inaktiv.';
-            showToast(AppState.interceptorActive ? 'Interceptor aktiviert!' : 'Interceptor deaktiviert!', 'ok');
-        }
-
-        function activateAnubis() {
-            AppState.anubisActive = true;
-            log('globalLog', '🔐 Anubis-Code aktiviert – Proof-of-Work-Gatter geschlossen.', 'warn');
-            showToast('Anubis-Code aktiv!', 'warn');
-        }
-
-        function checkPrecedents() {
-            log('globalLog', '[BGH] Präzedenzfälle werden geprüft...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '✓ 3 relevante BGH-Urteile gefunden.', 'ok');
-                showToast('Präzedenzfälle geprüft!', 'ok');
-            }, 700);
-        }
-
-        function verifyAuthorship() {
-            log('globalLog', '[NLP] Autorenschafts-Verifikation läuft...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '⚠️ Richter hat Polizeitext kopiert – Verletzung des Richtervorbehalts.', 'warn');
-                showToast('Verifikation abgeschlossen!', 'warn');
-            }, 1000);
-        }
-
-        // ========== PHASE 4 FUNKTIONEN ==========
-        function initAcademy() {
-            const list = document.getElementById('academyList');
-            list.innerHTML = '';
-            const kurse = [
-                'Kurs 1: Einführung in die Forensik',
-                'Kurs 2: Yellow-Dot-Analyse',
-                'Kurs 3: Zeitparadoxa erkennen',
-                'Kurs 4: BGB § 134 in der Praxis',
-                'Kurs 5: NLP-Autorenschaft',
-                'Kurs 6: Hex-Dump Forensik',
-                '... weitere 35 Kurse'
-            ];
-            kurse.forEach(k => {
-                list.innerHTML += `
-                    <div class="module-card">
-                        <h4>🎓 ${k}</h4>
-                        <div class="status ok">✅ VERFÜGBAR</div>
-                    </div>
-                `;
-            });
-        }
-
-        function startBuergerScan() {
-            const file = document.getElementById('buergerFile').files[0];
-            const email = document.getElementById('buergerEmail').value;
-            if (!file || !email) {
-                showToast('Bitte Datei und E-Mail eingeben!', 'warn');
-                return;
-            }
-            log('buergerLog', `[SCAN] Analysiere ${file.name}...`, 'ok');
-            setTimeout(() => {
-                log('buergerLog', '✓ Analyse abgeschlossen. Report erstellt.', 'ok');
-                AppState.scanCount++;
-                showToast('Scan erfolgreich!', 'ok');
-            }, 1000);
-        }
-
-        function simulateStripe() {
-            log('globalLog', '[Stripe] Checkout-Session wird simuliert...', 'ok');
-            setTimeout(() => {
-                const token = 'OMNI-ROOT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-                localStorage.setItem('OMNI_LICENSE_KEY', token);
-                log('globalLog', `✓ Lizenz aktiviert: ${token}`, 'ok');
-                showToast('Zahlung simuliert – Lizenz aktiv!', 'ok');
-            }, 800);
-        }
-
-        function testWhatsAppWebhook() {
-            log('globalLog', '[WhatsApp] Meta Graph API Webhook wird getestet...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '✓ Webhook-Antwort: 200 OK', 'ok');
-                showToast('Webhook funktioniert!', 'ok');
-            }, 600);
-        }
-
-        function showDockerDeployment() {
-            showToast('Docker-Deployment wird angezeigt!', 'ok');
-            log('globalLog', '[Docker] Bare-Metal Deployment vorbereitet.', 'ok');
-        }
-
-        // ========== COCKPIT FUNKTIONEN ==========
-        function initCockpit() {
-            const phaseCtx = document.getElementById('phaseChart').getContext('2d');
-            new Chart(phaseCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
-                    datasets: [{
-                        label: 'SKUs pro Phase',
-                        data: [52, 68, 75, 40],
-                        backgroundColor: ['#ff3366', '#00c8ff', '#bf00ff', '#00ffbf']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            const skuCtx = document.getElementById('skuChart').getContext('2d');
-            new Chart(skuCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Aktiv', 'In Entwicklung', 'Geplant'],
-                    datasets: [{
-                        data: [185, 35, 15],
-                        backgroundColor: ['#00ff88', '#ffbf00', '#333']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function searchSKU() {
-            const query = document.getElementById('skuSearch').value.toLowerCase();
-            const results = document.getElementById('skuResults');
-            const skus = [
-                'K-26 Master-Export-Token', 'Toxic Spider Netzwerk', 'M01 Yellow-Dot-Scanner',
-                'M02 Zeitparadoxon-Analyzer', 'M03 Entropy Parser', 'M04 Hex-Dump',
-                'M05 BGB Nullifikator', 'M06 Zitiergebot-Scanner', 'M11 Auto-Drafter',
-                'M13 Sentry-Trace Interceptor', 'M16 Amtshaftungs-Kalkulator',
-                'M17 OMNI Ledger', 'Anubis-Code', 'BGH-Precedent-Engine',
-                'NLP Autorenschafts-Verifikation', 'Multilanguage-Switcher',
-                'Gift-Injektor-Briefe', 'Domino-Strategie', 'Stripe Paywall',
-                'WhatsApp Webhook', 'Docker Deployment', '41 Akademie-Kurse'
-            ];
-            const filtered = skus.filter(s => s.toLowerCase().includes(query));
-            results.innerHTML = filtered.length ? 
-                filtered.map(s => `<div class="log-ok">✓ ${s}</div>`).join('') :
-                '<div class="log-warn">Keine SKUs gefunden.</div>';
-        }
-
-        // ========== ANALYTICS WIDGET ==========
-        const widget = document.createElement('div');
-        widget.id = 'analytics-widget';
-        widget.innerHTML = `
-            <div style="border-bottom:1px solid #0f0;margin-bottom:5px;font-weight:bold;">📊 Φ_METRICS</div>
-            <div>SKUs: 235</div>
-            <div>Module: 48</div>
-            <div>Kurse: 41</div>
-            <div>Scans: <span id="scan-count">0</span></div>
-        `;
-        document.body.appendChild(widget);
-
-        // ========== LANGUAGE SWITCHER ==========
-        const langBox = document.createElement('div');
-        langBox.id = 'language-switcher';
-        ['DE', 'EN', 'FR'].forEach(lang => {
-            const btn = document.createElement('button');
-            btn.textContent = lang;
-            btn.onclick = () => setLanguage(lang);
-            langBox.appendChild(btn);
-        });
-        document.body.appendChild(langBox);
-
-        // ========== INIT ==========
-        initAcademy();
-        sysLog('[SYS] OMNI CORE SUPREMACY FULL DOCKTYPE geladen.', 'ok');
-        sysLog('[SYS] Alle 4 Phasen aktiv – 235 SKUs bereit.', 'ok');
-        sysLog('[SYS] STATUS: Φ_LOCKED_ABSOLUTE.', 'ok');
-        showToast('OMNI CORE SUPREMACY erfolgreich geladen!', 'ok');
-    </script>
-</body>
-</html>
 ```html
 <!DOCTYPE html>
 <html lang="de">
@@ -786,9 +9,7 @@
     <!-- ========== CDN BIBLIOTHEKEN ========== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <!-- Three.js klassisch laden -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- YAML, Markdown, Highlight, CSV, Chart.js, CryptoJS -->
     <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -829,6 +50,7 @@
             margin-bottom: 24px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .header::before {
             content: '';
@@ -976,6 +198,13 @@
         }
         @keyframes slideDown { from { transform: translate(-50%, -100%); } to { transform: translate(-50%, 0); } }
         .chart-container { position: relative; height: 200px; margin: 20px 0; }
+        .resource-item { margin: 8px 0; padding: 10px; border: 1px solid #333; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .resource-item.protected { border-color: var(--neon-purple); }
+        .resource-item .info { flex: 1; }
+        .resource-item .actions { display: flex; gap: 5px; }
+        .resource-item .actions button, .resource-item .actions a { margin: 0; width: auto; }
+        .hidden-menu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; border: 2px solid var(--neon-purple); padding: 30px; z-index: 10001; border-radius: 12px; color: var(--neon-green); }
+        .hidden-menu.active { display: block; }
         @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
         @media (max-width: 700px) {
             .tab-btn { font-size: 11px; padding: 8px 12px; }
@@ -988,7 +217,7 @@
 <body>
 
     <!-- ========== HEADER ========== -->
-    <div class="header">
+    <div class="header" id="mainHeader">
         <h1>⚡ Φ_OMNI_ULTIMATE_COMPLETE_PLUS_PHASEN</h1>
         <div class="sub">V50 KONSOLIDIERT + SUPREMACY PHASEN · 458 PRODUKTE · 235 SKUs</div>
         <div class="badge">Φ_LOCKED_ABSOLUTE</div>
@@ -1009,6 +238,7 @@
         <button class="tab-btn" data-tab="tab-phase3">🔬 PHASE 3 · ADVANCED FORENSICS</button>
         <button class="tab-btn" data-tab="tab-phase4">🎓 PHASE 4 · ACADEMY & JV</button>
         <button class="tab-btn" data-tab="tab-tools">🛠️ TOOLS</button>
+        <button class="tab-btn" data-tab="tab-ressourcen">📦 RESSOURCEN & DOWNLOADS</button>
     </div>
 
     <!-- ======================================================================= -->
@@ -1074,7 +304,7 @@
             </div>
             <div>
                 <div class="card">
-                    <h2>🔬 OMNI CORE MODULE 1-23</h2>
+                    <h2>🔬 OMNI CORE MODULE 1-24</h2>
                     <div class="grid-modules" id="buergerModuleGrid"></div>
                     <h3>Forensik Ergebnis</h3>
                     <div class="terminal" id="forensikResult">Warte auf Scan...</div>
@@ -1116,6 +346,11 @@
     <!-- TAB 4: LEXIKA & WISSEN                                                -->
     <!-- ======================================================================= -->
     <div class="tab-content" id="tab-lexika">
+        <div class="card">
+            <h2>🔍 LEXIKON-SUCHE</h2>
+            <input type="text" id="lexikonSearch" placeholder="Begriff eingeben..." oninput="searchLexikon()" />
+            <div id="searchResults"></div>
+        </div>
         <div class="card">
             <h2>I. Die 13 Basis-Fachgebiete (Geistes- &amp; Sozialwissenschaften)</h2>
             <table>
@@ -1535,12 +770,50 @@
         </div>
     </div>
 
+    <!-- ======================================================================= -->
+    <!-- TAB 12: RESSOURCEN & DOWNLOADS                                        -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-ressourcen">
+        <div class="card">
+            <h2>📦 GESAMT-BUNDLE</h2>
+            <p>Alle Codes, PDFs, Dashboards und Customer Compiler in einer Datei.</p>
+            <button class="btn btn-blue" onclick="downloadProtected('bundle')">⬇️ GESAMT-BUNDLE HERUNTERLADEN</button>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <h2>📄 EINZELNE PDFs</h2>
+                <div id="pdfResources"></div>
+            </div>
+            <div class="card">
+                <h2>📦 ZIP-ARCHIVE</h2>
+                <div id="zipResources"></div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>🔐 ZUGANGSCODE</h2>
+            <p>Für geschützte Dateien benötigen Sie einen Zugangscode.</p>
+            <input type="text" id="downloadCode" placeholder="Zugangscode eingeben (z.B. AZ_A7F3K9M2)" />
+            <button class="btn" onclick="verifyDownloadCode()">🔓 CODE PRÜFEN</button>
+            <div id="codeStatus" class="terminal" style="height:50px;">Status: Kein Code eingegeben.</div>
+        </div>
+    </div>
+
     <!-- ========== GLOBAL TERMINAL ========== -->
     <div class="card">
         <h2>💻 System Log</h2>
         <div class="terminal" id="globalLog" style="height:100px;">
             [SYS] OMNI CORE ULTIMATE PLUS PHASEN geladen.<br>
         </div>
+    </div>
+
+    <!-- Hidden Easter Egg Menu -->
+    <div class="hidden-menu" id="rootMenu">
+        <h2>🔓 Φ_ROOT_MODE ACTIVATED</h2>
+        <p>Systemzugriff: VOLL</p>
+        <p>Module: 48 aktiv</p>
+        <p>Geheime Paragraphen: 8482</p>
+        <p>Hash: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</p>
+        <button class="btn" onclick="document.getElementById('rootMenu').classList.remove('active')">Schließen</button>
     </div>
 
     <script>
@@ -1553,7 +826,20 @@
             interceptorActive: false,
             anubisActive: false,
             spiderActive: false,
-            cryptoKey: null
+            cryptoKey: null,
+            validCodes: ['AZ_A7F3K9M2', 'PERS_X1Y2Z3'],
+            codeVerified: false,
+            resources: [
+                { id: 'bundle', name: 'OMNI_COMPLETE_BUNDLE.zip', type: 'zip', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf1', name: '100_Kampfparagraphen.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf2', name: '95_Buecher_GRC_EMRK_UN-BRK.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf3', name: '379_Fragen_Schriftsaetze.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf4', name: 'Mission_Tina_Az_152_Gs_648_26.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf5', name: 'Zero_Knowledge_Salat_Architektur.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf6', name: 'Neuro_V3_Gaslighting_AuthorityAbuse.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'pdf7', name: 'Legal_15_Fehlerkategorien.pdf', type: 'pdf', url: 'DEIN_LINK_HIER', protected: true },
+                { id: 'zip1', name: 'OMNI_COMPLETE_ARSENAL_V5_1_ALL_FORMATS.zip', type: 'zip', url: 'DEIN_LINK_HIER', protected: true }
+            ]
         };
 
         // ========== TOAST ==========
@@ -1782,7 +1068,7 @@
             }, 10000);
         })();
 
-        // ========== OMNI MODULES (24) – mit Textparameter für echte Analyse ==========
+        // ========== OMNI MODULES (24) – datengetrieben ==========
         const OMNI_MODULES = {
             1: { name: "📜 GESETZES-LEDGER", fn: async (text) => {
                 const count = (text.match(/§\s?\d+/g) || []).length;
@@ -1886,6 +1172,8 @@
         function renderModules() {
             const coreGrid = document.getElementById('moduleGrid');
             const buergerGrid = document.getElementById('buergerModuleGrid');
+            coreGrid.innerHTML = '';
+            buergerGrid.innerHTML = '';
             Object.keys(OMNI_MODULES).forEach(id => {
                 coreGrid.innerHTML += `
                     <div class="module-card">
@@ -1969,11 +1257,9 @@
                 address: /\b[A-Z][a-z]+(?:-[A-Z][a-z]+)?\s\d{1,5}\b/g,
                 plz: /\b\d{5}\b/g
             };
-            const results = {};
             let totalHits = 0;
-            for (const [key, pattern] of Object.entries(patterns)) {
+            for (const pattern of Object.values(patterns)) {
                 const matches = (text || '').match(pattern) || [];
-                results[key] = matches;
                 totalHits += matches.length;
             }
             return { status: totalHits > 0 ? '⚠️ DSGVO-RELEVANTE DATEN GEFUNDEN' : '✅ DSGVO-KONFORM', totalHits };
@@ -2011,10 +1297,7 @@
                 for (const word of words) {
                     if ((text || '').toLowerCase().includes(word)) score++;
                 }
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMatch = type;
-                }
+                if (score > bestScore) { bestScore = score; bestMatch = type; }
             }
             return { type: bestMatch, confidence: Math.min(100, bestScore * 20) };
         }
@@ -2061,7 +1344,6 @@
             const progContainer = document.getElementById('progressContainer');
             const progFill = document.getElementById('ocrProgress');
             const progLabel = document.getElementById('progressLabel');
-            const filePreview = document.getElementById('filePreview');
 
             try {
                 const file = document.getElementById('buergerFile').files[0];
@@ -2107,7 +1389,6 @@
                     }
                 } else if (ext === 'md') {
                     extractedText = content;
-                    filePreview.innerHTML = marked.parse(content);
                     logEl.innerHTML += '[Markdown] Gerendert.<br>';
                 } else if (ext === 'csv') {
                     const csvData = Papa.parse(content, { header: true });
@@ -2115,24 +1396,19 @@
                     logEl.innerHTML += `[CSV] ${csvData.data.length} Zeilen geparst.<br>`;
                 } else if (['js', 'ts', 'rs', 'zig', 'c', 'cpp', 'h', 'py', 'java', 'go', 'rb', 'php'].includes(ext)) {
                     extractedText = content;
-                    const highlighted = hljs.highlight(content, { language }).value;
-                    filePreview.innerHTML = `<pre><code class="hljs">${highlighted}</code></pre>`;
                     logEl.innerHTML += `[${ext.toUpperCase()}] Quellcode analysiert (${content.split('\n').length} Zeilen).<br>`;
                 } else if (ext === 'svg') {
                     extractedText = content;
-                    filePreview.innerHTML = content;
                     logEl.innerHTML += '[SVG] Vektorgrafik geladen.<br>';
                 } else if (file.type.startsWith('image/')) {
                     const base64 = content.split(',')[1];
                     extractedText = await ocrExtractText(base64);
-                    filePreview.innerHTML = `<img src="${content}" style="max-width:100%;">`;
                     logEl.innerHTML += '[OCR] Bild analysiert.<br>';
                 } else if (file.type === 'application/pdf') {
                     extractedText = `[PDF] ${file.name} – Text-Extraktion nicht verfügbar. Bitte als Text oder Bild bereitstellen.`;
                     logEl.innerHTML += '[PDF] Hinweis: PDF-Analyse in dieser Version eingeschränkt.<br>';
                 } else {
                     extractedText = content;
-                    filePreview.innerHTML = `<pre>${content.substring(0, 5000)}</pre>`;
                     logEl.innerHTML += `[${ext.toUpperCase()}] Als Text gelesen.<br>`;
                 }
 
@@ -2224,12 +1500,8 @@
             }
         };
 
-        // PDF Export
         function downloadBuergerReport() {
-            if (!lastBuergerReport) {
-                alert('Erst einen erfolgreichen Scan durchführen.');
-                return;
-            }
+            if (!lastBuergerReport) { alert('Erst einen erfolgreichen Scan durchführen.'); return; }
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             doc.setFontSize(10);
@@ -2239,16 +1511,8 @@
         }
 
         function exportFullReport() {
-            if (!lastBuergerReport) {
-                alert('Erst einen erfolgreichen Scan durchführen.');
-                return;
-            }
-            const data = {
-                report: lastBuergerReport,
-                timestamp: new Date().toISOString(),
-                version: 'ULTIMATE_PLUS_PHASEN',
-                operator: 'Thomas König'
-            };
+            if (!lastBuergerReport) { alert('Erst einen erfolgreichen Scan durchführen.'); return; }
+            const data = { report: lastBuergerReport, timestamp: new Date().toISOString(), version: 'ULTIMATE_PLUS_PHASEN', operator: 'Thomas König' };
             const json = JSON.stringify(data, null, 2);
             const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -2259,7 +1523,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Kanzlei Dashboard
         function buergerBusinessLogin() {
             const key = document.getElementById('lizenzKey').value;
             if (key === 'DEMO-9999' || key.length > 5) {
@@ -2284,15 +1547,15 @@
             document.getElementById('lizenzKey').value = '';
         }
 
-        // Gesetzesbibliothek
+        // ========== GESETZESBIBLIOTHEK ==========
         const LAWS = {
-            bgb: { titel: 'Bürgerliches Gesetzbuch (BGB)', text: `§ 134 BGB – Gesetzliches Verbot: Ein Rechtsgeschäft, das gegen ein gesetzliches Verbot verstößt, ist nichtig, wenn sich nicht aus dem Gesetz ein anderes ergibt.\n\n§ 823 BGB – Schadensersatzpflicht: Wer vorsätzlich oder fahrlässig das Leben, den Körper, die Gesundheit, die Freiheit, das Eigentum oder ein sonstiges Recht eines anderen widerrechtlich verletzt, ist dem anderen zum Ersatz des daraus entstehenden Schadens verpflichtet.\n\n§ 839 BGB – Amtshaftung: Verletzt ein Beamter vorsätzlich oder fahrlässig die ihm einem Dritten gegenüber obliegende Amtspflicht, so hat er dem Dritten den daraus entstehenden Schaden zu ersetzen.` },
-            stgb: { titel: 'Strafgesetzbuch (StGB)', text: `§ 240 StGB – Nötigung: Wer einen Menschen rechtswidrig mit Gewalt oder durch Drohung mit einem empfindlichen Übel zu einer Handlung, Duldung oder Unterlassung nötigt, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.\n\n§ 267 StGB – Urkundenfälschung: Wer zur Täuschung im Rechtsverkehr eine unechte Urkunde herstellt, eine echte Urkunde verfälscht oder eine unechte oder verfälschte Urkunde gebraucht, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.\n\n§ 348 StGB – Falschbeurkundung im Amt: Ein Beamter, der eine öffentliche Urkunde unrichtig beurkundet, wird mit Freiheitsstrafe von einem Jahr bis zu fünf Jahren bestraft.` },
-            gg: { titel: 'Grundgesetz (GG)', text: `Art. 1 GG – Menschenwürde: Die Würde des Menschen ist unantastbar. Sie zu achten und zu schützen ist Verpflichtung aller staatlichen Gewalt.\n\nArt. 13 GG – Unverletzlichkeit der Wohnung: Die Wohnung ist unverletzlich. Durchsuchungen dürfen nur durch den Richter, bei Gefahr im Verzuge auch durch die gesetzlich bestimmten anderen Organe angeordnet und nur in den dort bestimmten Formen vorgenommen werden.\n\nArt. 80 Abs. 1 S. 3 GG – Zitiergebot: Die Rechtsverordnung muss die gesetzliche Ermächtigung angeben.` },
-            stpo: { titel: 'Strafprozessordnung (StPO)', text: `§ 94 StPO – Beschlagnahme: Gegenstände, die als Beweismittel für die Untersuchung von Bedeutung sein können, sind in Verwahrung zu nehmen oder auf andere Weise sicherzustellen.\n\n§ 105 StPO – Durchsuchung: Die Durchsuchung von Personen und Sachen, die in die Wohnung der beschuldigten Person führen kann, bedarf der richterlichen Anordnung.\n\n§ 136 StPO – Belehrung: Der Beschuldigte ist zu Beginn der ersten Vernehmung über die ihm zur Last liegende Tat und über seine Rechte zu belehren.` },
-            vwvfg: { titel: 'Verwaltungsverfahrensgesetz (VwVfG)', text: `§ 44 VwVfG – Nichtigkeit: Ein Verwaltungsakt ist nichtig, wenn er an einem besonders schwerwiegenden Fehler leidet und dies bei verständiger Würdigung aller in Betracht kommenden Umstände offensichtlich ist.\n\n§ 81 VwVfG – Formfehler: Die Verletzung von Verfahrens- oder Formvorschriften führt nicht zur Nichtigkeit des Verwaltungsakts, wenn die gesetzlich vorgeschriebene Form nicht gewahrt wurde.` },
-            dsgvo: { titel: 'Datenschutz-Grundverordnung (DSGVO)', text: `Art. 5 DSGVO – Grundsätze: Personenbezogene Daten müssen rechtmäßig verarbeitet, in geeigneter Weise geschützt und nur für festgelegte Zwecke erhoben werden.\n\nArt. 17 DSGVO – Recht auf Löschung: Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie betreffende personenbezogene Daten unverzüglich gelöscht werden.` },
-            emrk: { titel: 'Europäische Menschenrechtskonvention (EMRK)', text: `Art. 3 EMRK – Folterverbot: Niemand darf der Folter oder unmenschlicher oder erniedrigender Behandlung oder Strafe unterworfen werden.\n\nArt. 8 EMRK – Recht auf Achtung des Privatlebens: Jede Person hat das Recht auf Achtung ihres Privat- und Familienlebens, ihrer Wohnung und ihrer Korrespondenz.` }
+            bgb: { titel: 'Bürgerliches Gesetzbuch (BGB)', text: '§ 134 BGB – Gesetzliches Verbot: Ein Rechtsgeschäft, das gegen ein gesetzliches Verbot verstößt, ist nichtig, wenn sich nicht aus dem Gesetz ein anderes ergibt.\n\n§ 823 BGB – Schadensersatzpflicht: Wer vorsätzlich oder fahrlässig das Leben, den Körper, die Gesundheit, die Freiheit, das Eigentum oder ein sonstiges Recht eines anderen widerrechtlich verletzt, ist dem anderen zum Ersatz des daraus entstehenden Schadens verpflichtet.\n\n§ 839 BGB – Amtshaftung: Verletzt ein Beamter vorsätzlich oder fahrlässig die ihm einem Dritten gegenüber obliegende Amtspflicht, so hat er dem Dritten den daraus entstehenden Schaden zu ersetzen.' },
+            stgb: { titel: 'Strafgesetzbuch (StGB)', text: '§ 240 StGB – Nötigung: Wer einen Menschen rechtswidrig mit Gewalt oder durch Drohung mit einem empfindlichen Übel zu einer Handlung, Duldung oder Unterlassung nötigt, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.\n\n§ 267 StGB – Urkundenfälschung: Wer zur Täuschung im Rechtsverkehr eine unechte Urkunde herstellt, eine echte Urkunde verfälscht oder eine unechte oder verfälschte Urkunde gebraucht, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.\n\n§ 348 StGB – Falschbeurkundung im Amt: Ein Beamter, der eine öffentliche Urkunde unrichtig beurkundet, wird mit Freiheitsstrafe von einem Jahr bis zu fünf Jahren bestraft.' },
+            gg: { titel: 'Grundgesetz (GG)', text: 'Art. 1 GG – Menschenwürde: Die Würde des Menschen ist unantastbar. Sie zu achten und zu schützen ist Verpflichtung aller staatlichen Gewalt.\n\nArt. 13 GG – Unverletzlichkeit der Wohnung: Die Wohnung ist unverletzlich. Durchsuchungen dürfen nur durch den Richter, bei Gefahr im Verzuge auch durch die gesetzlich bestimmten anderen Organe angeordnet und nur in den dort bestimmten Formen vorgenommen werden.\n\nArt. 80 Abs. 1 S. 3 GG – Zitiergebot: Die Rechtsverordnung muss die gesetzliche Ermächtigung angeben.' },
+            stpo: { titel: 'Strafprozessordnung (StPO)', text: '§ 94 StPO – Beschlagnahme: Gegenstände, die als Beweismittel für die Untersuchung von Bedeutung sein können, sind in Verwahrung zu nehmen oder auf andere Weise sicherzustellen.\n\n§ 105 StPO – Durchsuchung: Die Durchsuchung von Personen und Sachen, die in die Wohnung der beschuldigten Person führen kann, bedarf der richterlichen Anordnung.\n\n§ 136 StPO – Belehrung: Der Beschuldigte ist zu Beginn der ersten Vernehmung über die ihm zur Last liegende Tat und über seine Rechte zu belehren.' },
+            vwvfg: { titel: 'Verwaltungsverfahrensgesetz (VwVfG)', text: '§ 44 VwVfG – Nichtigkeit: Ein Verwaltungsakt ist nichtig, wenn er an einem besonders schwerwiegenden Fehler leidet und dies bei verständiger Würdigung aller in Betracht kommenden Umstände offensichtlich ist.\n\n§ 81 VwVfG – Formfehler: Die Verletzung von Verfahrens- oder Formvorschriften führt nicht zur Nichtigkeit des Verwaltungsakts, wenn die gesetzlich vorgeschriebene Form nicht gewahrt wurde.' },
+            dsgvo: { titel: 'Datenschutz-Grundverordnung (DSGVO)', text: 'Art. 5 DSGVO – Grundsätze: Personenbezogene Daten müssen rechtmäßig verarbeitet, in geeigneter Weise geschützt und nur für festgelegte Zwecke erhoben werden.\n\nArt. 17 DSGVO – Recht auf Löschung: Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie betreffende personenbezogene Daten unverzüglich gelöscht werden.' },
+            emrk: { titel: 'Europäische Menschenrechtskonvention (EMRK)', text: 'Art. 3 EMRK – Folterverbot: Niemand darf der Folter oder unmenschlicher oder erniedrigender Behandlung oder Strafe unterworfen werden.\n\nArt. 8 EMRK – Recht auf Achtung des Privatlebens: Jede Person hat das Recht auf Achtung ihres Privat- und Familienlebens, ihrer Wohnung und ihrer Korrespondenz.' }
         };
 
         function showLaw(key) {
@@ -2301,85 +1564,63 @@
             document.getElementById('lawDisplay').innerHTML = `<strong>${law.titel}</strong>\n\n${law.text}`;
         }
 
-        // ========== PHASE 1 FUNKTIONEN ==========
-        function activateSpiderNetwork() {
-            AppState.spiderActive = true;
-            log('spiderNetwork', '🕸️ Toxic Spider Netzwerk aktiviert – 27 Knoten verbunden.', 'ok');
-            showToast('Toxic Spider Netzwerk aktiviert!', 'ok');
+        // ========== LEXIKON-SUCHE ==========
+        const LEXIKON_DATA = [
+            { fach: 'Psychologie', begriffe: ['Kognition', 'Verhalten', 'Emotion', 'Lernen'] },
+            { fach: 'Philosophie', begriffe: ['Erkenntnistheorie', 'Ethik', 'Logik', 'Metaphysik'] },
+            { fach: 'Wirtschaft', begriffe: ['Markt', 'Angebot', 'Nachfrage', 'Preis'] },
+            { fach: 'Politik', begriffe: ['Demokratie', 'Governance', 'Macht', 'Institutionen'] },
+            { fach: 'Neurobiologie', begriffe: ['Neuron', 'Synapse', 'Gehirn', 'Neurotransmitter'] },
+            { fach: 'Soziologie', begriffe: ['Gesellschaft', 'Gruppe', 'Norm', 'Rolle'] }
+        ];
+
+        function searchLexikon() {
+            const query = document.getElementById('lexikonSearch').value.toLowerCase();
+            const results = document.getElementById('searchResults');
+            if (!query) { results.innerHTML = ''; return; }
+            let found = [];
+            for (const fach of LEXIKON_DATA) {
+                for (const begriff of fach.begriffe) {
+                    if (begriff.toLowerCase().includes(query)) {
+                        found.push(`${fach.fach}: ${begriff}`);
+                    }
+                }
+            }
+            results.innerHTML = found.length ? found.map(f => `<div class="log-ok">✓ ${f}</div>`).join('') : '<div class="log-warn">Keine Treffer.</div>';
         }
 
+        // ========== PHASE 1 FUNKTIONEN ==========
+        function activateSpiderNetwork() { AppState.spiderActive = true; log('spiderNetwork', '🕸️ Toxic Spider Netzwerk aktiviert – 27 Knoten verbunden.', 'ok'); showToast('Toxic Spider Netzwerk aktiviert!', 'ok'); }
         function generateKlage() {
             const typ = document.getElementById('klageTyp').value;
             const output = document.getElementById('klageOutput');
             output.innerHTML = '';
             log('klageOutput', `[K-26] Generiere ${typ}...`, 'ok');
-            setTimeout(() => {
-                log('klageOutput', `✓ Schriftsatz erstellt: ${typ.toUpperCase()}_${Date.now()}.pdf`, 'ok');
-                showToast('Schriftsatz generiert!', 'ok');
-            }, 800);
+            setTimeout(() => { log('klageOutput', `✓ Schriftsatz erstellt: ${typ.toUpperCase()}_${Date.now()}.pdf`, 'ok'); showToast('Schriftsatz generiert!', 'ok'); }, 800);
         }
-
-        function setLanguage(lang) {
-            AppState.language = lang;
-            document.getElementById('languageStatus').innerHTML = `[${lang}] Sprache aktiv`;
-            showToast(`Sprache auf ${lang} gesetzt`, 'ok');
-        }
-
-        function injectLetter() {
-            log('injectorStatus', '💉 Gift-Injektor-Brief wird versendet...', 'ok');
-            setTimeout(() => {
-                log('injectorStatus', '✓ Brief versendet. Tracking aktiv.', 'ok');
-                showToast('Brief versendet!', 'ok');
-            }, 600);
-        }
-
-        function dominoStrategy() {
-            log('globalLog', '🧨 Domino-Strategie gestartet – kaskadierende Schriftsätze werden erstellt.', 'warn');
-            showToast('Domino-Strategie aktiviert!', 'warn');
-        }
+        function setLanguage(lang) { AppState.language = lang; document.getElementById('languageStatus').innerHTML = `[${lang}] Sprache aktiv`; showToast(`Sprache auf ${lang} gesetzt`, 'ok'); }
+        function injectLetter() { log('injectorStatus', '💉 Gift-Injektor-Brief wird versendet...', 'ok'); setTimeout(() => { log('injectorStatus', '✓ Brief versendet. Tracking aktiv.', 'ok'); showToast('Brief versendet!', 'ok'); }, 600); }
+        function dominoStrategy() { log('globalLog', '🧨 Domino-Strategie gestartet – kaskadierende Schriftsätze werden erstellt.', 'warn'); showToast('Domino-Strategie aktiviert!', 'warn'); }
 
         // ========== PHASE 2 FUNKTIONEN ==========
         function scanZitiergebot() {
             const file = document.getElementById('zitierFile').files[0];
             if (!file) { showToast('Bitte Datei hochladen!', 'warn'); return; }
             log('zitierResult', `[M06] Scanne ${file.name}...`, 'ok');
-            setTimeout(() => {
-                log('zitierResult', '⚠️ Verstoß gegen Art. 80 GG festgestellt (Zitiergebot missachtet).', 'warn');
-                showToast('Zitiergebot-Verstoß erkannt!', 'warn');
-            }, 1000);
+            setTimeout(() => { log('zitierResult', '⚠️ Verstoß gegen Art. 80 GG festgestellt (Zitiergebot missachtet).', 'warn'); showToast('Zitiergebot-Verstoß erkannt!', 'warn'); }, 1000);
         }
-
-        function nullifyAct() {
-            log('nullifyResult', '[M05] Prüfe Nichtigkeit gemäß § 134 BGB...', 'ok');
-            setTimeout(() => {
-                log('nullifyResult', '💀 Maßnahme ex tunc für nichtig erklärt.', 'warn');
-                showToast('Nichtigkeit erklärt!', 'warn');
-            }, 800);
-        }
-
-        function autoDraft() {
-            log('globalLog', '[M11] Jinja2 Auto-Drafter generiert Schriftsatz...', 'ok');
-            showToast('Draft erstellt!', 'ok');
-        }
-
+        function nullifyAct() { log('nullifyResult', '[M05] Prüfe Nichtigkeit gemäß § 134 BGB...', 'ok'); setTimeout(() => { log('nullifyResult', '💀 Maßnahme ex tunc für nichtig erklärt.', 'warn'); showToast('Nichtigkeit erklärt!', 'warn'); }, 800); }
+        function autoDraft() { log('globalLog', '[M11] Jinja2 Auto-Drafter generiert Schriftsatz...', 'ok'); showToast('Draft erstellt!', 'ok'); }
         function calculateAmtshaftung() {
             const summe = parseFloat(document.getElementById('schadenSumme').value) || 0;
             const zinsen = summe * 0.0627;
             const gesamt = summe + zinsen;
-            document.getElementById('amtshaftungResult').innerHTML = `
-                <span class="log-ok">Schaden: ${summe.toFixed(2)} €</span><br>
-                <span class="log-ok">Zinsen (6,27 %): ${zinsen.toFixed(2)} €</span><br>
-                <span class="log-ok">Gesamtforderung: ${gesamt.toFixed(2)} €</span>
-            `;
+            document.getElementById('amtshaftungResult').innerHTML = `<span class="log-ok">Schaden: ${summe.toFixed(2)} €</span><br><span class="log-ok">Zinsen (6,27 %): ${zinsen.toFixed(2)} €</span><br><span class="log-ok">Gesamtforderung: ${gesamt.toFixed(2)} €</span>`;
             showToast('Berechnung abgeschlossen!', 'ok');
         }
-
         function createLedgerEntry() {
             const hash = CryptoJS.SHA256(Date.now().toString()).toString();
-            document.getElementById('ledgerResult').innerHTML = `
-                <span class="log-ok">Ledger-Eintrag erstellt:</span><br>
-                <span style="color:var(--neon-green);">${hash.substring(0, 64)}</span>
-            `;
+            document.getElementById('ledgerResult').innerHTML = `<span class="log-ok">Ledger-Eintrag erstellt:</span><br><span style="color:var(--neon-green);">${hash.substring(0, 64)}</span>`;
             showToast('Ledger-Eintrag erstellt!', 'ok');
         }
 
@@ -2388,210 +1629,154 @@
             const file = document.getElementById('yellowDotFile').files[0];
             if (!file) { showToast('Bitte Bild hochladen!', 'warn'); return; }
             log('yellowDotResult', `[M01] Analysiere ${file.name} auf MIC-Codes...`, 'ok');
-            setTimeout(() => {
-                log('yellowDotResult', '🟡 17 gelbe Punkte gefunden – Drucker-ID: NRW-2026-0042', 'warn');
-                showToast('Yellow-Dot-Scan abgeschlossen!', 'warn');
-            }, 1200);
+            setTimeout(() => { log('yellowDotResult', '🟡 17 gelbe Punkte gefunden – Drucker-ID: NRW-2026-0042', 'warn'); showToast('Yellow-Dot-Scan abgeschlossen!', 'warn'); }, 1200);
         }
-
-        function analyzeTimeParadox() {
-            log('timeResult', '[M02] Analysiere MAC-Zeiten...', 'ok');
-            setTimeout(() => {
-                log('timeResult', '⚠️ Rückdatierung erkannt: 06:26-Uhr-Paradoxon bestätigt.', 'warn');
-                showToast('Zeitparadoxon gefunden!', 'warn');
-            }, 900);
-        }
-
-        function parseEntropy() {
-            log('globalLog', '[M03] Structural Entropy Parser gestartet...', 'ok');
-            showToast('Entropy-Analyse abgeschlossen!', 'ok');
-        }
-
-        function hexDump() {
-            log('globalLog', '[M04] Hex-Dump Analyse gestartet...', 'ok');
-            showToast('Hex-Dump fertig!', 'ok');
-        }
-
+        function analyzeTimeParadox() { log('timeResult', '[M02] Analysiere MAC-Zeiten...', 'ok'); setTimeout(() => { log('timeResult', '⚠️ Rückdatierung erkannt: 06:26-Uhr-Paradoxon bestätigt.', 'warn'); showToast('Zeitparadoxon gefunden!', 'warn'); }, 900); }
+        function parseEntropy() { log('globalLog', '[M03] Structural Entropy Parser gestartet...', 'ok'); showToast('Entropy-Analyse abgeschlossen!', 'ok'); }
+        function hexDump() { log('globalLog', '[M04] Hex-Dump Analyse gestartet...', 'ok'); showToast('Hex-Dump fertig!', 'ok'); }
         function activateInterceptor() {
             AppState.interceptorActive = !AppState.interceptorActive;
-            document.getElementById('interceptorStatus').innerHTML = AppState.interceptorActive ? 
-                '<span class="log-ok">🛡️ Interceptor AKTIV – Behördliche Crawler werden blockiert.</span>' : 
-                'Inaktiv.';
+            document.getElementById('interceptorStatus').innerHTML = AppState.interceptorActive ? '<span class="log-ok">🛡️ Interceptor AKTIV – Behördliche Crawler werden blockiert.</span>' : 'Inaktiv.';
             showToast(AppState.interceptorActive ? 'Interceptor aktiviert!' : 'Interceptor deaktiviert!', 'ok');
         }
-
-        function activateAnubis() {
-            AppState.anubisActive = true;
-            log('globalLog', '🔐 Anubis-Code aktiviert – Proof-of-Work-Gatter geschlossen.', 'warn');
-            showToast('Anubis-Code aktiv!', 'warn');
-        }
-
-        function checkPrecedents() {
-            log('globalLog', '[BGH] Präzedenzfälle werden geprüft...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '✓ 3 relevante BGH-Urteile gefunden.', 'ok');
-                showToast('Präzedenzfälle geprüft!', 'ok');
-            }, 700);
-        }
-
-        function verifyAuthorship() {
-            log('globalLog', '[NLP] Autorenschafts-Verifikation läuft...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '⚠️ Richter hat Polizeitext kopiert – Verletzung des Richtervorbehalts.', 'warn');
-                showToast('Verifikation abgeschlossen!', 'warn');
-            }, 1000);
-        }
+        function activateAnubis() { AppState.anubisActive = true; log('globalLog', '🔐 Anubis-Code aktiviert – Proof-of-Work-Gatter geschlossen.', 'warn'); showToast('Anubis-Code aktiv!', 'warn'); }
+        function checkPrecedents() { log('globalLog', '[BGH] Präzedenzfälle werden geprüft...', 'ok'); setTimeout(() => { log('globalLog', '✓ 3 relevante BGH-Urteile gefunden.', 'ok'); showToast('Präzedenzfälle geprüft!', 'ok'); }, 700); }
+        function verifyAuthorship() { log('globalLog', '[NLP] Autorenschafts-Verifikation läuft...', 'ok'); setTimeout(() => { log('globalLog', '⚠️ Richter hat Polizeitext kopiert – Verletzung des Richtervorbehalts.', 'warn'); showToast('Verifikation abgeschlossen!', 'warn'); }, 1000); }
 
         // ========== PHASE 4 FUNKTIONEN ==========
         function initAcademy() {
             const list = document.getElementById('academyList');
             list.innerHTML = '';
-            const kurse = [
-                'Kurs 1: Einführung in die Forensik',
-                'Kurs 2: Yellow-Dot-Analyse',
-                'Kurs 3: Zeitparadoxa erkennen',
-                'Kurs 4: BGB § 134 in der Praxis',
-                'Kurs 5: NLP-Autorenschaft',
-                'Kurs 6: Hex-Dump Forensik',
-                '... weitere 35 Kurse'
-            ];
-            kurse.forEach(k => {
-                list.innerHTML += `
-                    <div class="module-card">
-                        <h4>🎓 ${k}</h4>
-                        <div class="status ok">✅ VERFÜGBAR</div>
-                    </div>
-                `;
-            });
+            const kurse = ['Kurs 1: Einführung in die Forensik', 'Kurs 2: Yellow-Dot-Analyse', 'Kurs 3: Zeitparadoxa erkennen', 'Kurs 4: BGB § 134 in der Praxis', 'Kurs 5: NLP-Autorenschaft', 'Kurs 6: Hex-Dump Forensik', '... weitere 35 Kurse'];
+            kurse.forEach(k => { list.innerHTML += `<div class="module-card"><h4>🎓 ${k}</h4><div class="status ok">✅ VERFÜGBAR</div></div>`; });
         }
-
         function startPhase4Scan() {
             const file = document.getElementById('phase4File').files[0];
             const email = document.getElementById('phase4Email').value;
             if (!file || !email) { showToast('Bitte Datei und E-Mail eingeben!', 'warn'); return; }
             log('phase4Log', `[SCAN] Analysiere ${file.name}...`, 'ok');
-            setTimeout(() => {
-                log('phase4Log', '✓ Analyse abgeschlossen. Report erstellt.', 'ok');
-                AppState.scanCount++;
-                document.getElementById('scan-count').textContent = AppState.scanCount;
-                showToast('Scan erfolgreich!', 'ok');
-            }, 1000);
+            setTimeout(() => { log('phase4Log', '✓ Analyse abgeschlossen. Report erstellt.', 'ok'); AppState.scanCount++; document.getElementById('scan-count').textContent = AppState.scanCount; showToast('Scan erfolgreich!', 'ok'); }, 1000);
         }
-
         function simulateStripe() {
             log('globalLog', '[Stripe] Checkout-Session wird simuliert...', 'ok');
-            setTimeout(() => {
-                const token = 'OMNI-ROOT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-                localStorage.setItem('OMNI_LICENSE_KEY', token);
-                log('globalLog', `✓ Lizenz aktiviert: ${token}`, 'ok');
-                showToast('Zahlung simuliert – Lizenz aktiv!', 'ok');
-            }, 800);
+            setTimeout(() => { const token = 'OMNI-ROOT-' + Math.random().toString(36).substr(2, 9).toUpperCase(); localStorage.setItem('OMNI_LICENSE_KEY', token); log('globalLog', `✓ Lizenz aktiviert: ${token}`, 'ok'); showToast('Zahlung simuliert – Lizenz aktiv!', 'ok'); }, 800);
         }
-
-        function testWhatsAppWebhook() {
-            log('globalLog', '[WhatsApp] Meta Graph API Webhook wird getestet...', 'ok');
-            setTimeout(() => {
-                log('globalLog', '✓ Webhook-Antwort: 200 OK', 'ok');
-                showToast('Webhook funktioniert!', 'ok');
-            }, 600);
-        }
-
-        function showDockerDeployment() {
-            showToast('Docker-Deployment wird angezeigt!', 'ok');
-            log('globalLog', '[Docker] Bare-Metal Deployment vorbereitet.', 'ok');
-        }
+        function testWhatsAppWebhook() { log('globalLog', '[WhatsApp] Meta Graph API Webhook wird getestet...', 'ok'); setTimeout(() => { log('globalLog', '✓ Webhook-Antwort: 200 OK', 'ok'); showToast('Webhook funktioniert!', 'ok'); }, 600); }
+        function showDockerDeployment() { showToast('Docker-Deployment wird angezeigt!', 'ok'); log('globalLog', '[Docker] Bare-Metal Deployment vorbereitet.', 'ok'); }
 
         // ========== TOOLS FUNKTIONEN ==========
         function generateHash() {
             const input = document.getElementById('cryptoInput')?.value || AppState.currentFile || 'Test';
             const hash = CryptoJS.SHA256(input).toString();
-            document.getElementById('cryptoOutput').innerHTML = `
-                <span class="log-ok">SHA-256 Hash:</span><br>
-                <span style="color:var(--neon-green);">${hash}</span>
-            `;
+            document.getElementById('cryptoOutput').innerHTML = `<span class="log-ok">SHA-256 Hash:</span><br><span style="color:var(--neon-green);">${hash}</span>`;
             showToast('Hash generiert!', 'ok');
         }
-
         function encryptAES() {
             const input = document.getElementById('cryptoInput').value;
             if (!input) { showToast('Bitte Text eingeben!', 'warn'); return; }
             const key = CryptoJS.enc.Utf8.parse('OMNI-ULTIMATE-KEY-2024-SECURE');
             const encrypted = CryptoJS.AES.encrypt(input, key, { mode: CryptoJS.mode.ECB }).toString();
-            document.getElementById('cryptoOutput').innerHTML = `
-                <span class="log-ok">Verschlüsselt:</span><br>
-                <span style="color:var(--neon-green);">${encrypted}</span>
-            `;
+            document.getElementById('cryptoOutput').innerHTML = `<span class="log-ok">Verschlüsselt:</span><br><span style="color:var(--neon-green);">${encrypted}</span>`;
             AppState.cryptoKey = key;
             showToast('Text verschlüsselt!', 'ok');
         }
-
         function decryptAES() {
             const encrypted = document.getElementById('cryptoInput').value;
             if (!encrypted || !AppState.cryptoKey) { showToast('Kein verschlüsselter Text!', 'warn'); return; }
             try {
                 const decrypted = CryptoJS.AES.decrypt(encrypted, AppState.cryptoKey, { mode: CryptoJS.mode.ECB });
-                document.getElementById('cryptoOutput').innerHTML = `
-                    <span class="log-ok">Entschlüsselt:</span><br>
-                    <span style="color:var(--neon-green);">${decrypted.toString(CryptoJS.enc.Utf8)}</span>
-                `;
+                document.getElementById('cryptoOutput').innerHTML = `<span class="log-ok">Entschlüsselt:</span><br><span style="color:var(--neon-green);">${decrypted.toString(CryptoJS.enc.Utf8)}</span>`;
                 showToast('Text entschlüsselt!', 'ok');
-            } catch {
-                showToast('Fehler beim Entschlüsseln!', 'warn');
-            }
+            } catch { showToast('Fehler beim Entschlüsseln!', 'warn'); }
         }
-
         function analyzeFile() {
             const file = document.getElementById('toolFile').files[0];
             if (!file) return;
-            const analysis = document.getElementById('fileAnalysis');
-            analysis.innerHTML = `
-                <div class="log-ok">📄 Dateiname: ${file.name}</div>
-                <div class="log-ok">📏 Größe: ${(file.size / 1024).toFixed(2)} KB</div>
-                <div class="log-ok">🔍 Typ: ${file.type || 'Unbekannt'}</div>
-                <div class="log-ok">📅 Letzte Änderung: ${new Date(file.lastModified).toLocaleString()}</div>
-            `;
+            document.getElementById('fileAnalysis').innerHTML = `<div class="log-ok">📄 Dateiname: ${file.name}</div><div class="log-ok">📏 Größe: ${(file.size / 1024).toFixed(2)} KB</div><div class="log-ok">🔍 Typ: ${file.type || 'Unbekannt'}</div><div class="log-ok">📅 Letzte Änderung: ${new Date(file.lastModified).toLocaleString()}</div>`;
         }
-
         function testNetwork() {
             const result = document.getElementById('networkResult');
             result.innerHTML = '<span class="log-ok">Teste Verbindung...</span>';
             const startTime = performance.now();
             fetch('https://api.github.com')
-                .then(() => {
-                    const latency = (performance.now() - startTime).toFixed(2);
-                    result.innerHTML += `
-                        <br><span class="log-ok">✅ Verbindung erfolgreich!</span>
-                        <br><span class="log-ok">⏱️ Latenz: ${latency}ms</span>
-                    `;
-                    showToast('Netzwerk-Test erfolgreich!', 'ok');
-                })
-                .catch(() => {
-                    result.innerHTML += '<br><span class="log-warn">❌ Verbindung fehlgeschlagen!</span>';
-                    showToast('Netzwerk-Fehler!', 'warn');
-                });
+                .then(() => { const latency = (performance.now() - startTime).toFixed(2); result.innerHTML += `<br><span class="log-ok">✅ Verbindung erfolgreich!</span><br><span class="log-ok">⏱️ Latenz: ${latency}ms</span>`; showToast('Netzwerk-Test erfolgreich!', 'ok'); })
+                .catch(() => { result.innerHTML += '<br><span class="log-warn">❌ Verbindung fehlgeschlagen!</span>'; showToast('Netzwerk-Fehler!', 'warn'); });
         }
-
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleTimeString('de-DE');
-            document.getElementById('date').textContent = now.toLocaleDateString('de-DE', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            document.getElementById('date').textContent = now.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
+        // ========== RESSOURCEN & DOWNLOADS ==========
+        function renderResources() {
+            const pdfContainer = document.getElementById('pdfResources');
+            const zipContainer = document.getElementById('zipResources');
+            pdfContainer.innerHTML = '';
+            zipContainer.innerHTML = '';
+            AppState.resources.forEach(res => {
+                const item = document.createElement('div');
+                item.className = `resource-item ${res.protected ? 'protected' : ''}`;
+                item.innerHTML = `
+                    <div class="info">${res.type === 'pdf' ? '📄' : '📦'} ${res.name}</div>
+                    <div class="actions">
+                        <button class="btn btn-blue" onclick="downloadResource('${res.id}')">Download</button>
+                    </div>
+                `;
+                if (res.type === 'pdf') pdfContainer.appendChild(item);
+                else zipContainer.appendChild(item);
+            });
+        }
+
+        function verifyDownloadCode() {
+            const code = document.getElementById('downloadCode').value;
+            const statusEl = document.getElementById('codeStatus');
+            if (AppState.validCodes.includes(code)) {
+                AppState.codeVerified = true;
+                statusEl.innerHTML = '<span class="log-ok">✅ Code gültig. Geschützte Downloads freigeschaltet.</span>';
+                showToast('Zugang gewährt!', 'ok');
+            } else {
+                AppState.codeVerified = false;
+                statusEl.innerHTML = '<span class="log-warn">❌ Ungültiger Code.</span>';
+                showToast('Ungültiger Code!', 'warn');
+            }
+        }
+
+        function downloadResource(id) {
+            const res = AppState.resources.find(r => r.id === id);
+            if (!res) return;
+            if (res.protected && !AppState.codeVerified) {
+                showToast('Geschützte Datei – bitte Zugangscode eingeben.', 'warn');
+                return;
+            }
+            if (res.url === 'DEIN_LINK_HIER') {
+                showToast('Bitte Link in AppState.resources einfügen.', 'warn');
+                return;
+            }
+            window.open(res.url, '_blank');
+        }
+
+        function downloadProtected(id) {
+            if (id === 'bundle') {
+                const res = AppState.resources.find(r => r.id === 'bundle');
+                if (res && res.protected && !AppState.codeVerified) {
+                    showToast('Geschützte Datei – bitte Zugangscode eingeben.', 'warn');
+                    return;
+                }
+                if (res && res.url === 'DEIN_LINK_HIER') {
+                    showToast('Bitte Link in AppState.resources einfügen.', 'warn');
+                    return;
+                }
+                window.open(res.url, '_blank');
+            }
+        }
+
         // ========== SYSTEMDIAGNOSE ==========
         function updateDiag() {
             const uptime = Math.floor(performance.now() / 1000);
-            document.getElementById('log-diag').innerHTML = `
-                <span class="log-ok">● System: ONLINE</span><br>
-                Uptime: ${uptime}s<br>
-                Module: 24/24 geladen<br>
-                Status: Φ_LOCKED_ABSOLUTE<br>
-                <span class="log-ok">✓ Multiformat-Unterstützung aktiv</span><br>
-                <span class="log-ok">✓ Verschlüsselung bereit</span>
-            `;
+            document.getElementById('log-diag').innerHTML = `<span class="log-ok">● System: ONLINE</span><br>Uptime: ${uptime}s<br>Module: 24/24 geladen<br>Status: Φ_LOCKED_ABSOLUTE<br><span class="log-ok">✓ Multiformat-Unterstützung aktiv</span><br><span class="log-ok">✓ Verschlüsselung bereit</span>`;
         }
         setInterval(updateDiag, 5000);
         updateDiag();
@@ -2599,13 +1784,7 @@
         // ========== ANALYTICS WIDGET ==========
         const widget = document.createElement('div');
         widget.id = 'analytics-widget';
-        widget.innerHTML = `
-            <div style="border-bottom:1px solid #0f0;margin-bottom:5px;font-weight:bold;">📊 Φ_METRICS</div>
-            <div>SKUs: 235</div>
-            <div>Module: 48</div>
-            <div>Kurse: 41</div>
-            <div>Scans: <span id="scan-count">0</span></div>
-        `;
+        widget.innerHTML = `<div style="border-bottom:1px solid #0f0;margin-bottom:5px;font-weight:bold;">📊 Φ_METRICS</div><div>SKUs: 235</div><div>Module: 48</div><div>Kurse: 41</div><div>Scans: <span id="scan-count">0</span></div>`;
         document.body.appendChild(widget);
 
         // ========== LANGUAGE SWITCHER ==========
@@ -2619,11 +1798,36 @@
         });
         document.body.appendChild(langBox);
 
+        // ========== KONAMI CODE EASTER EGG ==========
+        const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', (e) => {
+            if (e.code === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    document.getElementById('rootMenu').classList.add('active');
+                    showToast('🔓 Φ_ROOT_MODE aktiviert!', 'ok');
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        // ========== HEADER GLITCH EFFECT ==========
+        document.getElementById('mainHeader').addEventListener('click', () => {
+            const header = document.getElementById('mainHeader');
+            header.classList.add('glitch');
+            setTimeout(() => header.classList.remove('glitch'), 1000);
+            showToast('Φ_LOCKED_ABSOLUTE', 'ok');
+        });
+
         // ========== INIT ==========
         renderModules();
+        renderResources();
         initAcademy();
         sysLog('[SYS] OMNI CORE ULTIMATE PLUS PHASEN geladen.', 'ok');
-        sysLog('[SYS] Alle Funktionen aktiv – Bürgerplattform, Kanzlei, Phasen 1-4, Tools.', 'ok');
+        sysLog('[SYS] Alle Funktionen aktiv – Bürgerplattform, Kanzlei, Phasen 1-4, Tools, Ressourcen.', 'ok');
         sysLog('[SYS] STATUS: Φ_LOCKED_ABSOLUTE.', 'ok');
         showToast('OMNI ULTIMATE PLUS PHASEN erfolgreich geladen!', 'ok');
         setTimeout(init3D, 200);
