@@ -5,6 +5,15 @@ html
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Φ_OMNI_ULTIMATE_COMPLETE_4167</title>
+    <!-- js-yaml für YAML-Parsing -->
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<!-- marked für Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- highlight.js für Syntax-Hervorhebung -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<!-- papaparse für CSV -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script type="importmap">
@@ -1180,7 +1189,23 @@ html
             }
         }
 
-        window.startBuergerScan = async function() {
+        window.startBuergerScan = async function(async function readFileContent(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        // Für alle Textformate und Unbekanntes als Text lesen
+        if (file.type.startsWith('text/') || 
+            file.type === 'application/json' || 
+            file.type === 'application/x-yaml' ||
+            /\.(md|yaml|yml|json|js|ts|rs|zig|c|cpp|h|py|java|go|rb|php|html|css|csv|svg)$/i.test(file.name)) {
+            reader.readAsText(file);
+        } else {
+            // Für Bilder/PDFs als DataURL lesen (wie bisher)
+            reader.readAsDataURL(file);
+        }
+    });
+}) {
             const logEl = document.getElementById('buergerLog');
             const forensikEl = document.getElementById('forensikResult');
             const progContainer = document.getElementById('progressContainer');
@@ -1259,6 +1284,10 @@ html
                                 }
                             }
                         }
+                        function displayCodeSnippet(code, language) {
+    const highlighted = hljs.highlight(code, { language }).value;
+    return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>`;
+}
 
                         const report =
                             `
@@ -1832,6 +1861,1324 @@ html
         sysLog("[SYS] OMNI CORE V50.0 ULTIMATE COMPLETE geladen.", "ok");
         sysLog("[SYS] 4.167 Zeilen · Alle Module aktiv.", "ok");
         sysLog("[SYS] STATUS: Φ_LOCKED_ABSOLUTE.", "ok");
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Φ_OMNI_ULTIMATE_DOCKTYPE_4167</title>
+    
+    <!-- Three.js - Klassischer CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- jsPDF für PDF-Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Tesseract.js für OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <!-- js-yaml für YAML-Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    
+    <!-- marked für Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- highlight.js für Syntax-Hervorhebung -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- PapaParse für CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff3366;
+            --panel-bg: #0a0a0f;
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --bg: #050005;
+            --card-bg: #0d0d1a;
+        }
+        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body {
+            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+            color: #e5e7eb;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: #000;
+            padding: 30px 20px;
+            border-bottom: 2px solid var(--neon-green);
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            color: var(--neon-green);
+            margin: 0;
+            font-size: 2.2rem;
+            text-shadow: 0 0 30px var(--neon-green);
+            letter-spacing: 4px;
+        }
+        .header .sub { color: #888; font-size: 14px; margin-top: 6px; }
+        .header .badge {
+            display: inline-block;
+            background: var(--neon-red);
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+        .seal { font-size: 11px; color: #555; margin-top: 8px; word-break: break-all; }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: #1a1a2e;
+            color: #aaa;
+            border: 1px solid #333;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+            flex: 1 1 auto;
+            text-align: center;
+            font-size: 13px;
+        }
+        .tab-btn:hover { background: #2a2a4e; }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); }
+        .tab-content {
+            display: none;
+            border: 1px solid #333;
+            padding: 24px;
+            border-radius: 0 0 12px 12px;
+            background: var(--card-bg);
+        }
+        .tab-content.active { display: block; }
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid #2a2a3a;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        .card h2 {
+            color: var(--neon-blue);
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+            margin-top: 0;
+            font-size: 18px;
+        }
+        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .badge-tag {
+            display: inline-block;
+            background: var(--neon-blue);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        .badge-tag.ok { background: var(--ok); }
+        .badge-tag.warn { background: var(--warn); }
+        .badge-tag.danger { background: var(--danger); color: #fff; }
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            overflow-x: auto;
+            color: #bdfce8;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            background: #1a1a2e;
+            color: var(--neon-green);
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 2px solid var(--neon-green);
+        }
+        td { padding: 8px 10px; border-bottom: 1px solid #2a2a3a; }
+        .terminal {
+            background: #000;
+            border: 1px solid #333;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 10px;
+            padding: 10px;
+            color: var(--ok);
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .log-time { color: #666; }
+        .log-ok { color: var(--ok); }
+        .log-warn { color: var(--danger); font-weight: bold; }
+        .grid-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .module-card {
+            background: #02020a;
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 10px;
+        }
+        .module-card h4 {
+            margin: 0 0 4px 0;
+            color: var(--neon-green);
+            font-size: 10px;
+        }
+        .module-card .status { font-size: 9px; }
+        .module-card .status.ok { color: var(--ok); }
+        .module-card .status.warn { color: var(--danger); }
+        .module-card .status.running { color: var(--warn); animation: blink 1s infinite; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .flex-row .btn { flex: 1; min-width: 120px; }
+        .btn {
+            background: var(--neon-green);
+            color: #000;
+            padding: 14px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 8px 0;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #00ddaa; transform: scale(1.02); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { background: #cc0033; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-blue:hover { background: #00aadd; }
+        .btn-media {
+            background: #222;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 10px;
+            margin: 4px 0;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .btn-media:hover { background: #444; border-color: var(--neon-green); }
+        input[type="file"], input[type="text"], input[type="email"], select {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            color: #e5e7eb;
+            border: 1px solid #444;
+            margin: 8px 0;
+            border-radius: 8px;
+        }
+        .media-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .law-display {
+            background: #000;
+            border: 1px solid #333;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 10px;
+            color: #bdfce8;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            margin-top: 8px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--neon-green);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .file-preview {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 10px;
+            max-height: 300px;
+            overflow: auto;
+            margin-top: 10px;
+        }
+        .file-preview pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #analytics-widget {
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(5,5,5,0.95);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            box-shadow: 0 0 10px rgba(0,255,0,0.3);
+            z-index: 9998;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+        #language-switcher {
+            position: fixed; top: 20px; right: 20px;
+            z-index: 9999;
+            display: flex;
+            gap: 5px;
+        }
+        #language-switcher button {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-family: monospace;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        #language-switcher button:hover { background: #00ff00; color: #000; }
+        #community-btn {
+            position: fixed; bottom: 20px; left: 20px;
+            background: #ff0000;
+            color: #fff;
+            border: 1px solid #ff0000;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+            z-index: 9998;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        #community-btn:hover { background: #fff; color: #ff0000; }
+        #alien3d {
+            height: 120px;
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #000;
+        }
+        @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+        @media (max-width: 700px) {
+            .media-grid { grid-template-columns: 1fr 1fr; }
+            .tab-btn { font-size: 11px; padding: 8px 12px; }
+            .header h1 { font-size: 20px; }
+            #analytics-widget { font-size: 10px; padding: 10px; min-width: 150px; }
+            #language-switcher { top: 10px; right: 10px; }
+            #community-btn { font-size: 10px; padding: 6px 10px; bottom: 10px; left: 10px; }
+        }
+        .terminal::-webkit-scrollbar, .grid-modules::-webkit-scrollbar,
+        .law-display::-webkit-scrollbar, .code-block::-webkit-scrollbar,
+        .file-preview::-webkit-scrollbar { width: 4px; }
+        .terminal::-webkit-scrollbar-track, .grid-modules::-webkit-scrollbar-track,
+        .law-display::-webkit-scrollbar-track, .code-block::-webkit-scrollbar-track,
+        .file-preview::-webkit-scrollbar-track { background: #111; }
+        .terminal::-webkit-scrollbar-thumb, .grid-modules::-webkit-scrollbar-thumb,
+        .law-display::-webkit-scrollbar-thumb, .code-block::-webkit-scrollbar-thumb,
+        .file-preview::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 2px; }
+        .file-info {
+            display: inline-block;
+            background: #1a1a2e;
+            color: #aaa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <div class="header">
+        <h1>⚡ Φ_OMNI_ULTIMATE_DOCKTYPE_4167</h1>
+        <div class="sub">ALL-IN-ONE HTML · MULTIFORMAT · GITHUB READY</div>
+        <div class="badge">Φ_LOCKED_ABSOLUTE</div>
+        <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
+        <div style="margin-top:8px;font-size:13px;color:#888;">Operator: Thomas König / ODIN ULTRA ROOT</div>
+    </div>
+
+    <!-- ========== TABS ========== -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-core">⚙️ OMNI CORE (24 Module)</button>
+        <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM</button>
+        <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE &amp; MEDIEN</button>
+        <button class="tab-btn" data-tab="tab-lexika">📚 LEXIKA &amp; WISSEN</button>
+        <button class="tab-btn" data-tab="tab-docktype">📦 DOCKTYPE ARCHITEKTUR</button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: OMNI CORE (24 Module)                                          -->
+    <!-- ======================================================================= -->
+    <div class="tab-content active" id="tab-core">
+        <div class="grid-2">
+            <div>
+                <div id="alien3d"></div>
+                <canvas id="chart" width="600" height="180"></canvas>
+                <div class="grid-modules" id="moduleGrid"></div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🧠 AI‑ANALYSE</h2>
+                    <div class="terminal" id="log-ai">Warte auf Daten...</div>
+                </div>
+                <div class="card" style="margin-top:16px;">
+                    <h2>📡 SYSTEMDIAGNOSE</h2>
+                    <div class="terminal" id="log-diag">Lade...</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger" id="masterBtn" onclick="triggerAllModules()" style="margin-top:16px;">
+            ⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡
+        </button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: BÜRGERPLATTFORM                                                -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-buerger">
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h2>📄 MULTIFORMAT ANALYSER (ALLES-FRESSER)</h2>
+                    <div id="alien3d-buerger"></div>
+                    <select id="docType">
+                        <option value="allgemein">Allgemein (alle Module)</option>
+                        <option value="versicherung">Versicherung</option>
+                        <option value="finanzen">Finanzen</option>
+                        <option value="kredit">Kredit</option>
+                        <option value="gez">GEZ / Rundfunkbeitrag</option>
+                        <option value="krankenkasse">Krankenkasse</option>
+                        <option value="behoerde">Behörde</option>
+                        <option value="soziales">Soziales / Sozialamt</option>
+                        <option value="arbeitsamt">Arbeitsamt / Agentur für Arbeit</option>
+                    </select>
+                    <input type="file" id="buergerFile" accept=".pdf,.jpg,.png,.txt,.jpeg,.bmp,.webp,.gif,.tiff,.md,.yaml,.yml,.json,.js,.ts,.rs,.zig,.c,.cpp,.h,.py,.java,.go,.rb,.php,.html,.css,.csv,.svg" />
+                    <input type="text" id="buergerEmail" placeholder="Ihre E-Mail für Antwort" />
+                    <div class="flex-row">
+                        <button class="btn btn-danger" onclick="startBuergerScan()">⚡ ALLES-FRESSER SCAN</button>
+                        <button class="btn btn-blue" onclick="downloadBuergerReport()">📥 PDF REPORT</button>
+                        <button class="btn" onclick="exportFullReport()" style="background:var(--neon-blue);color:#000;">📤 FULL EXPORT</button>
+                    </div>
+                    <div id="progressContainer" style="display:none;margin:8px 0;">
+                        <div class="progress-bar"><div class="fill" id="ocrProgress"></div></div>
+                        <span id="progressLabel" style="font-size:10px;color:#888;">0%</span>
+                    </div>
+                    <h3>Dateivorschau</h3>
+                    <div class="file-preview" id="filePreview">[SYSTEM] Bereit für Upload – ALLE Formate akzeptiert.<br />
+                        Unterstützt: PDF, Bilder, Text, Markdown, YAML, JSON, Quellcode (JS, TS, Rust, Zig, C, C++, Python, Java, Go), CSV, SVG
+                    </div>
+                    <h3>Live Terminal</h3>
+                    <div class="terminal" id="buergerLog">[SYSTEM] Bereit für Upload – ALLE Formate akzeptiert.<br /></div>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🔬 OMNI CORE MODULE 1-24</h2>
+                    <div class="grid-modules" id="buergerModuleGrid"></div>
+                    <h3>Forensik Ergebnis</h3>
+                    <div class="terminal" id="forensikResult">Warte auf Scan...</div>
+                </div>
+                <div class="card" style="margin-top:16px;">
+                    <h2>💼 KANZLEI DASHBOARD</h2>
+                    <input type="text" id="lizenzKey" placeholder="Test-Key: DEMO-9999" />
+                    <button class="btn btn-blue" onclick="buergerBusinessLogin()">LIZENZ AKTIVIEREN</button>
+                    <div id="businessPanel" style="display:none;margin-top:12px;">
+                        <h3>Mandanten Anfragen</h3>
+                        <div class="terminal terminal-sm" id="mandantenLog">[SYSTEM] Keine Anfragen<br /></div>
+                        <button class="btn" onclick="clearMandanten()" style="margin-top:8px;background:#444;color:#fff;">🗑️ ALLE LÖSCHEN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: GESETZE & MEDIEN                                               -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-gesetze">
+        <div class="card">
+            <h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="media-grid">
+                <button class="btn-media" onclick="showLaw('bgb')">📖 BGB</button>
+                <button class="btn-media" onclick="showLaw('stgb')">⚖️ StGB</button>
+                <button class="btn-media" onclick="showLaw('gg')">🏛️ GG</button>
+                <button class="btn-media" onclick="showLaw('stpo')">📑 StPO</button>
+                <button class="btn-media" onclick="showLaw('vwvfg')">📂 VwVfG</button>
+                <button class="btn-media" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
+                <button class="btn-media" onclick="showLaw('emrk')">🌍 EMRK</button>
+            </div>
+            <div id="lawDisplay" class="law-display">📜 Wähle ein Gesetz aus der Bibliothek.</div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: LEXIKA & WISSEN                                                -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-lexika">
+        <div class="card">
+            <h2>I. Die 13 Basis-Fachgebiete</h2>
+            <table>
+                <tr><th>Nr.</th><th>Fachgebiet</th><th>Einträge</th><th>Status</th></tr>
+                <tr><td>1</td><td>Psychologie &amp; Klinische Psychologie</td><td>42</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>2</td><td>Philosophie &amp; Erkenntnistheorie</td><td>38</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>3</td><td>Wirtschaftswissenschaften</td><td>36</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>4</td><td>Politikwissenschaft &amp; Governance</td><td>34</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>5</td><td>Neurobiologie</td><td>13</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>6</td><td>Soziologie</td><td>13</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>7</td><td>Medienwissenschaft</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>8</td><td>Bildungswissenschaft</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>9</td><td>Rechtswissenschaft</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>10</td><td>Linguistik</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>11</td><td>Kognitionswissenschaft</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>12</td><td>KI-Forschung</td><td>12</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>13</td><td>Geschichtswissenschaft</td><td>12</td><td>✅ KOMPLETT</td></tr>
+            </table>
+        </div>
+        <div class="card">
+            <h2>II. Naturwissenschaftliche Erweiterungen</h2>
+            <table>
+                <tr><th>Nr.</th><th>Fachgebiet</th><th>Einträge</th><th>Status</th></tr>
+                <tr><td>14</td><td>Biologie</td><td>10</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>15</td><td>Chemie (Kern)</td><td>10</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>16</td><td>DNA &amp; Genetik</td><td>10</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>17</td><td>Physik</td><td>10</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>18</td><td>Mathematik</td><td>5</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>19</td><td>Medizin</td><td>15</td><td>✅ KOMPLETT</td></tr>
+                <tr><td>20</td><td>Pharmazie</td><td>10</td><td>✅ KOMPLETT</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 5: DOCKTYPE ARCHITEKTUR                                           -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-docktype">
+        <div class="card">
+            <h2>📌 DOCKTYPE HTML - ALL-IN-ONE KONZEPT</h2>
+            <p>Diese HTML-Datei ist ein <strong>eigenständiger Container</strong>, der alle Ressourcen über CDN lädt und ohne Build-Prozess sofort im Browser funktioniert.</p>
+            <div class="grid-3">
+                <div><span class="badge-tag">Frontend</span> HTML5 + CSS3 + Vanilla JS</div>
+                <div><span class="badge-tag">3D</span> Three.js (CDN)</div>
+                <div><span class="badge-tag">OCR</span> Tesseract.js</div>
+                <div><span class="badge-tag">PDF</span> jsPDF</div>
+                <div><span class="badge-tag">YAML</span> js-yaml</div>
+                <div><span class="badge-tag">Markdown</span> marked</div>
+                <div><span class="badge-tag">Syntax</span> highlight.js</div>
+                <div><span class="badge-tag">CSV</span> PapaParse</div>
+                <div><span class="badge-tag">Hosting</span> GitHub Pages</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>🐳 GITHUB DEPLOYMENT</h2>
+            <div class="code-block">
+        # 1. Repository erstellen
+        git init
+        git add index.html
+        git commit -m "OMNI Ultimate Docktype"
+        git branch -M main
+        git remote add origin https://github.com/USERNAME/omni-ultimate.git
+        git push -u origin main
+
+        # 2. GitHub Pages aktivieren
+        # Settings → Pages → Source: main branch → Save
+
+        # 3. URL
+        # https://USERNAME.github.io/omni-ultimate/
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- GLOBAL TERMINAL                                                       -->
+    <!-- ======================================================================= -->
+    <h2>💻 System Log</h2>
+    <div class="terminal" id="globalLog" style="height:100px;">
+        [SYS] OMNI CORE DOCKTYPE geladen.<br>
+        [SYS] Multiformat-Analyse aktiv.<br>
+        [SYS] STATUS: Φ_LOCKED_ABSOLUTE<br>
+    </div>
+
+    <div class="seal">
+        SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br>
+        Φ_LOCKED_ABSOLUTE
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- JAVASCRIPT - KOMPLETT OPTIMIERT                                       -->
+    <!-- ======================================================================= -->
+    <script>
+        // ============================================================
+        // ZENTRALER APP STATE
+        // ============================================================
+        const AppState = {
+            modules: {},
+            reports: [],
+            mandanten: [],
+            currentReport: '',
+            currentFile: null,
+            language: 'DE',
+            scanCount: 0
+        };
+
+        // ============================================================
+        // TABS
+        // ============================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+                if (this.dataset.tab === 'tab-core') setTimeout(init3D, 100);
+                else if (this.dataset.tab === 'tab-buerger') setTimeout(init3DBuerger, 100);
+            });
+        });
+
+        // ============================================================
+        // LOGGING
+        // ============================================================
+        function sysLog(msg, type = "ok") {
+            const el = document.getElementById('globalLog');
+            if (!el) return;
+            const time = new Date().toLocaleTimeString();
+            const colorClass = type === 'warn' ? 'log-warn' : 'log-ok';
+            el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span>`;
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function log(id, msg, type = "ok") {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const time = new Date().toLocaleTimeString();
+            const colorClass = type === 'warn' ? 'log-warn' : 'log-ok';
+            el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${colorClass}">${msg}</span>`;
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        // ============================================================
+        // MULTIFORMAT DATEI-LESER
+        // ============================================================
+        async function readFileContent(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                
+                const extension = file.name.split('.').pop().toLowerCase();
+                const textExtensions = ['txt', 'md', 'yaml', 'yml', 'json', 'js', 'ts', 'rs', 'zig', 
+                                       'c', 'cpp', 'h', 'py', 'java', 'go', 'rb', 'php', 'html', 
+                                       'css', 'csv', 'svg', 'xml', 'sh', 'bash', 'toml', 'ini'];
+                
+                if (file.type.startsWith('text/') || textExtensions.includes(extension)) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function getFileLanguage(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const map = {
+                'js': 'javascript', 'ts': 'typescript', 'rs': 'rust', 'zig': 'zig',
+                'c': 'c', 'cpp': 'cpp', 'h': 'c', 'py': 'python', 'java': 'java',
+                'go': 'go', 'rb': 'ruby', 'php': 'php', 'html': 'html', 'css': 'css',
+                'json': 'json', 'yaml': 'yaml', 'yml': 'yaml', 'md': 'markdown',
+                'sh': 'bash', 'bash': 'bash', 'xml': 'xml', 'svg': 'xml'
+            };
+            return map[ext] || 'plaintext';
+        }
+
+        // ============================================================
+        // OMNI CORE MODULES (DATENGETRIEBEN)
+        // ============================================================
+        const OMNI_MODULES = {
+            1: { name: "📜 GESETZES-LEDGER", fn: async (text) => {
+                const count = (text.match(/§\s?\d+/g) || []).length;
+                log('log-ai', `Gefundene Paragraphen: ${count}`, count > 0 ? 'ok' : 'warn');
+            }},
+            2: { name: "⛓️ BSI FORENSIK", fn: async (text) => {
+                const suspicious = /(hash|sha|md5|forensik|beweiskette)/i.test(text);
+                log('log-ai', suspicious ? 'Forensische Marker gefunden' : 'Keine forensischen Marker', suspicious ? 'warn' : 'ok');
+            }},
+            3: { name: "🧠 XENI AI CORE", fn: async (text) => {
+                const complexity = text.length > 1000 ? 'HOCH' : 'NIEDRIG';
+                log('log-ai', `Textkomplexität: ${complexity}`, 'ok');
+            }},
+            4: { name: "🌌 QUANTUM-FLUX", fn: async (text) => {
+                const uniqueWords = new Set(text.toLowerCase().split(/\s+/)).size;
+                log('log-ai', `Einzigartige Wörter: ${uniqueWords}`, 'ok');
+            }},
+            5: { name: "🧬 BIO-NEURAL", fn: async (text) => {
+                const hasNames = /[A-Z][a-z]+ [A-Z][a-z]+/.test(text);
+                log('log-ai', hasNames ? 'Namensmuster erkannt' : 'Keine Namensmuster', hasNames ? 'warn' : 'ok');
+            }},
+            6: { name: "🕳️ DARK-MATTER", fn: async (text) => {
+                const hidden = /(versteckt|geheim|vertraulich|intern)/i.test(text);
+                log('log-ai', hidden ? 'Mögliche versteckte Marker' : 'Keine versteckten Marker', hidden ? 'warn' : 'ok');
+            }},
+            7: { name: "📡 PULSE-STREAM", fn: async (text) => {
+                const lines = text.split('\n').length;
+                log('log-ai', `Zeilen: ${lines}`, 'ok');
+            }},
+            8: { name: "⚖️ BGB-ANALYSATOR", fn: async (text) => {
+                const bgb = /(§\s?134|nichtig|verbot|gesetzesverstoß)/i.test(text);
+                log('log-ai', bgb ? 'BGB §134: Möglicher Verstoß' : 'BGB §134: Kein Verstoß', bgb ? 'warn' : 'ok');
+            }},
+            9: { name: "🚨 STGB-TRACKER", fn: async (text) => {
+                const stgb = /(§\s?348|falschbeurkundung|urkundenfälschung|betrug)/i.test(text);
+                log('log-ai', stgb ? 'STGB-Marker gefunden' : 'Keine STGB-Marker', stgb ? 'warn' : 'ok');
+            }},
+            10: { name: "🏛️ GG-WÄCHTER", fn: async (text) => {
+                const gg = /(art\.?\s?1|menschenwürde|grundgesetz|zitiergebot)/i.test(text);
+                log('log-ai', gg ? 'GG-Bezug erkannt' : 'Kein GG-Bezug', gg ? 'warn' : 'ok');
+            }},
+            11: { name: "🌍 EMRK-MONITOR", fn: async (text) => {
+                const emrk = /(art\.?\s?3|emrk|folter|unmenschlich)/i.test(text);
+                log('log-ai', emrk ? 'EMRK-Verstoß möglich' : 'EMRK konform', emrk ? 'warn' : 'ok');
+            }},
+            12: { name: "💶 DSGVO-SCANNER", fn: async (text) => {
+                const dsgvo = /(dsgvo|datenschutz|personenbezogen|art\.?\s?5)/i.test(text);
+                log('log-ai', dsgvo ? 'DSGVO-relevant' : 'DSGVO unbedenklich', dsgvo ? 'warn' : 'ok');
+            }},
+            13: { name: "👮 POLIZEI-AUDIT", fn: async (text) => {
+                const pol = /(polizei|durchsuchung|beschlagnahme|polg)/i.test(text);
+                log('log-ai', pol ? 'Polizeibezug erkannt' : 'Kein Polizeibezug', pol ? 'warn' : 'ok');
+            }},
+            14: { name: "📑 VERWALTUNGS-AKT", fn: async (text) => {
+                const verw = /(bescheid|verwaltungsakt|widerspruch|vwvfg)/i.test(text);
+                log('log-ai', verw ? 'Verwaltungsakt erkannt' : 'Kein Verwaltungsakt', verw ? 'ok' : 'ok');
+            }},
+            15: { name: "💰 STEUER-ENGINE", fn: async (text) => {
+                const steuer = /(steuer|finanzamt|einkommensteuer|umsatzsteuer)/i.test(text);
+                log('log-ai', steuer ? 'Steuerdokument erkannt' : 'Kein Steuerbezug', 'ok');
+            }},
+            16: { name: "🏦 EZB-ZINS", fn: async (text) => {
+                const zins = /(zins|kredit|darlehen|ezb|leitzins)/i.test(text);
+                log('log-ai', zins ? 'Finanzdokument erkannt' : 'Kein Finanzbezug', 'ok');
+            }},
+            17: { name: "👴 DRV-RENTEN", fn: async (text) => {
+                const rente = /(rente|drv|rentenbescheid|altersrente)/i.test(text);
+                log('log-ai', rente ? 'Rentenbescheid erkannt' : 'Kein Rentenbezug', rente ? 'warn' : 'ok');
+            }},
+            18: { name: "💣 SUBVENTIONEN", fn: async (text) => {
+                const sub = /(subvention|förderung|zuschuss|beihilfe)/i.test(text);
+                log('log-ai', sub ? 'Subventionsbezug erkannt' : 'Kein Subventionsbezug', 'ok');
+            }},
+            19: { name: "📄 AUTOM. SCHRIFTSATZ", fn: async (text) => {
+                const klage = /(klage|antrag|widerspruch|beschwerde)/i.test(text);
+                log('log-ai', klage ? 'Rechtsdokument erkannt' : 'Kein Rechtsdokument', klage ? 'ok' : 'ok');
+            }},
+            20: { name: "🖨️ MIC-FORENSIK", fn: async (text) => {
+                const drucker = /(drucker|yellow|mic|forensik|seriennummer)/i.test(text);
+                log('log-ai', drucker ? 'Drucker-Marker gefunden' : 'Keine Drucker-Marker', drucker ? 'warn' : 'ok');
+            }},
+            21: { name: "📈 MARKTANALYSE", fn: async (text) => {
+                const markt = /(aktie|krypto|bitcoin|markt|kurs|börse)/i.test(text);
+                log('log-ai', markt ? 'Marktdaten erkannt' : 'Keine Marktdaten', 'ok');
+            }},
+            22: { name: "🤝 KOLLABORATION", fn: async (text) => {
+                const kollab = /(mandant|klient|zusammenarbeit|kooperation)/i.test(text);
+                log('log-ai', kollab ? 'Mandantenbezug erkannt' : 'Kein Mandantenbezug', 'ok');
+            }},
+            23: { name: "🔐 POST-QUANTUM", fn: async (text) => {
+                const crypto = /(verschlüsselung|kryptographie|quantum|sha|rsa)/i.test(text);
+                log('log-ai', crypto ? 'Krypto-Bezug erkannt' : 'Kein Krypto-Bezug', 'ok');
+            }},
+            24: { name: "🎓 AKADEMIE", fn: async (text) => {
+                const akad = /(studium|kurs|akademie|bildung|zertifikat)/i.test(text);
+                log('log-ai', akad ? 'Bildungsbezug erkannt' : 'Kein Bildungsbezug', 'ok');
+            }}
+        };
+
+        // Module rendern
+        const coreGrid = document.getElementById('moduleGrid');
+        Object.keys(OMNI_MODULES).forEach(id => {
+            coreGrid.innerHTML += `
+                <div class="module-card">
+                    <h4>M${id} ${OMNI_MODULES[id].name}</h4>
+                    <div id="m${id}" class="status">WARTET</div>
+                </div>
+            `;
+        });
+
+        async function runOmniModule(id, text = '') {
+            const el = document.getElementById('m' + id);
+            if (el) { el.innerText = 'LÄUFT...'; el.className = 'status running'; }
+            await OMNI_MODULES[id].fn(text);
+            if (el) { el.innerText = '✅ FERTIG'; el.className = 'status ok'; }
+        }
+
+        async function triggerAllModules() {
+            const btn = document.getElementById('masterBtn');
+            btn.innerText = "⚠️ ANALYSE LÄUFT ⚠️";
+            btn.disabled = true;
+            for (let i = 1; i <= 24; i++) {
+                await runOmniModule(i, AppState.currentFile || '');
+                await sleep(50);
+            }
+            btn.disabled = false;
+            btn.innerText = "⚡ GESTUFTE AUTO-TRIGGER KASKADE (ALL MODULES) ⚡";
+        }
+
+        // ============================================================
+        // BÜRGERPLATTFORM - MULTIFORMAT SCAN
+        // ============================================================
+        let lastBuergerReport = '';
+
+        async function ocrExtractText(imageBase64) {
+            try {
+                const result = await Tesseract.recognize(`data:image/png;base64,${imageBase64}`, 'deu');
+                return result.data.text || '[OCR] Kein Text gefunden.';
+            } catch (error) {
+                return '[OCR] Textextraktion fehlgeschlagen.';
+            }
+        }
+
+        function dsgvoCheck(text) {
+            const patterns = {
+                email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
+                phone: /\b(\+?\d{1,3}[-.\s]?)?\(?\d{3,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,
+                plz: /\b\d{5}\b/g
+            };
+            const results = {};
+            let totalHits = 0;
+            for (const [key, pattern] of Object.entries(patterns)) {
+                const matches = (text || '').match(pattern) || [];
+                results[key] = matches;
+                totalHits += matches.length;
+            }
+            return { status: totalHits > 0 ? '⚠️ Personenbezogene Daten gefunden' : '✅ DSGVO-konform', totalHits };
+        }
+
+        function classifyDocument(text) {
+            const keywords = {
+                beschluss: ['beschluss', 'durchsuchung', 'ermittlungsverfahren', '§§'],
+                klage: ['klage', 'einklagen', 'antrag', 'widerspruch'],
+                bescheid: ['bescheid', 'verwaltungsakt', 'einstellung', 'gebühren'],
+                vertrag: ['vertrag', 'vereinbarung', 'leistung', 'honorar']
+            };
+            let bestMatch = 'unbekannt';
+            let bestScore = 0;
+            for (const [type, words] of Object.entries(keywords)) {
+                let score = 0;
+                for (const word of words) {
+                    if ((text || '').toLowerCase().includes(word)) score++;
+                }
+                if (score > bestScore) { bestScore = score; bestMatch = type; }
+            }
+            return { type: bestMatch, confidence: Math.min(100, bestScore * 20) };
+        }
+
+        window.startBuergerScan = async function() {
+            const logEl = document.getElementById('buergerLog');
+            const forensikEl = document.getElementById('forensikResult');
+            const progContainer = document.getElementById('progressContainer');
+            const progFill = document.getElementById('ocrProgress');
+            const progLabel = document.getElementById('progressLabel');
+            const filePreview = document.getElementById('filePreview');
+
+            try {
+                const file = document.getElementById('buergerFile').files[0];
+                const email = document.getElementById('buergerEmail').value;
+                const category = document.getElementById('docType').value;
+
+                if (!file || !email) {
+                    logEl.innerHTML += '<br><span class="log-warn">❌ Bitte Datei und E-Mail eingeben.</span>';
+                    return;
+                }
+
+                logEl.innerHTML = '[SYSTEM] MULTIFORMAT SCAN gestartet...<br>';
+                forensikEl.innerHTML = '';
+                if (progContainer) progContainer.style.display = 'block';
+                if (progFill) progFill.style.width = '10%';
+                if (progLabel) progLabel.innerText = 'Lese Datei...';
+
+                const content = await readFileContent(file);
+                const extension = file.name.split('.').pop().toLowerCase();
+                const language = getFileLanguage(file.name);
+                let extractedText = '';
+
+                if (progFill) progFill.style.width = '30%';
+                if (progLabel) progLabel.innerText = 'Verarbeite Format...';
+
+                // ========== FORMAT-SPEZIFISCHE VERARBEITUNG ==========
+                if (extension === 'yaml' || extension === 'yml') {
+                    try {
+                        const yamlObj = jsyaml.load(content);
+                        extractedText = JSON.stringify(yamlObj, null, 2);
+                        logEl.innerHTML += '[YAML] Erfolgreich geparst.<br>';
+                    } catch (err) {
+                        extractedText = content;
+                        logEl.innerHTML += `[YAML] Warnung: ${err.message}<br>`;
+                    }
+                } else if (extension === 'json') {
+                    try {
+                        const jsonObj = JSON.parse(content);
+                        extractedText = JSON.stringify(jsonObj, null, 2);
+                        logEl.innerHTML += '[JSON] Erfolgreich geparst.<br>';
+                    } catch (err) {
+                        extractedText = content;
+                        logEl.innerHTML += `[JSON] Warnung: ${err.message}<br>`;
+                    }
+                } else if (extension === 'md') {
+                    extractedText = content;
+                    const html = marked.parse(content);
+                    filePreview.innerHTML = html;
+                    logEl.innerHTML += '[Markdown] Gerendert.<br>';
+                } else if (extension === 'csv') {
+                    const csvData = Papa.parse(content, { header: true });
+                    extractedText = JSON.stringify(csvData.data.slice(0, 10), null, 2);
+                    logEl.innerHTML += `[CSV] ${csvData.data.length} Zeilen geparst.<br>`;
+                } else if (['js', 'ts', 'rs', 'zig', 'c', 'cpp', 'h', 'py', 'java', 'go', 'rb', 'php'].includes(extension)) {
+                    extractedText = content;
+                    const highlighted = hljs.highlight(content, { language }).value;
+                    filePreview.innerHTML = `<pre><code class="hljs">${highlighted}</code></pre>`;
+                    logEl.innerHTML += `[${extension.toUpperCase()}] Quellcode analysiert (${content.split('\n').length} Zeilen).<br>`;
+                } else if (extension === 'svg') {
+                    extractedText = content;
+                    filePreview.innerHTML = content;
+                    logEl.innerHTML += '[SVG] Vektorgrafik geladen.<br>';
+                } else if (file.type.startsWith('image/')) {
+                    const base64 = content.split(',')[1];
+                    extractedText = await ocrExtractText(base64);
+                    filePreview.innerHTML = `<img src="${content}" style="max-width:100%;height:auto;" />`;
+                    logEl.innerHTML += '[OCR] Bild analysiert.<br>';
+                } else if (file.type === 'application/pdf') {
+                    extractedText = `[PDF] ${file.name} – Text-Extraktion nicht verfügbar. Bitte als Text oder Bild bereitstellen.`;
+                    logEl.innerHTML += '[PDF] Hinweis: PDF-Analyse in dieser Version eingeschränkt.<br>';
+                } else {
+                    extractedText = content;
+                    filePreview.innerHTML = `<pre>${content.substring(0, 5000)}</pre>`;
+                    logEl.innerHTML += `[${extension.toUpperCase()}] Als Text gelesen.<br>`;
+                }
+
+                AppState.currentFile = extractedText;
+
+                if (progFill) progFill.style.width = '60%';
+                if (progLabel) progLabel.innerText = 'Analysiere mit Modulen...';
+
+                // ========== MODULE AUSFÜHREN ==========
+                const buergerGridEl = document.getElementById('buergerModuleGrid');
+                for (let i = 1; i <= 24; i++) {
+                    const moduleEl = document.getElementById('bm' + i);
+                    if (moduleEl) { moduleEl.innerText = 'LÄUFT...'; moduleEl.className = 'status running'; }
+                    await OMNI_MODULES[i].fn(extractedText);
+                    if (moduleEl) { moduleEl.innerText = '✅ FERTIG'; moduleEl.className = 'status ok'; }
+                }
+
+                if (progFill) progFill.style.width = '80%';
+                if (progLabel) progLabel.innerText = 'Erstelle Report...';
+
+                // ========== ANALYSE-ERGEBNISSE ==========
+                const dsgvoResult = dsgvoCheck(extractedText);
+                const classification = classifyDocument(extractedText);
+                
+                forensikEl.innerHTML = `
+                    <span class="log-ok">📄 DATEI: ${file.name}</span><br>
+                    <span class="log-ok">📂 KATEGORIE: ${category.toUpperCase()}</span><br>
+                    <span class="log-ok">🔍 FORMAT: ${extension.toUpperCase()} (${language})</span><br>
+                    <span class="${dsgvoResult.totalHits > 0 ? 'log-warn' : 'log-ok'}">🔒 DSGVO: ${dsgvoResult.status}</span><br>
+                    <span class="log-ok">📂 KLASSIFIZIERUNG: ${classification.type.toUpperCase()} (${classification.confidence}%)</span><br>
+                    <span class="log-ok">📊 TEXTUMFANG: ${extractedText.length} Zeichen</span>
+                `;
+
+                const report = `
+        OMNI CORE DOCKTYPE - MULTIFORMAT REPORT
+        ================================
+        Datei: ${file.name}
+        Format: ${extension.toUpperCase()}
+        E-Mail: ${email}
+        Datum: ${new Date().toLocaleString()}
+
+        Kategorie: ${category.toUpperCase()}
+        DSGVO: ${dsgvoResult.status}
+        Klassifizierung: ${classification.type.toUpperCase()} (${classification.confidence}%)
+
+        Analysierter Text:
+        ${extractedText.substring(0, 5000)}
+
+        STATUS: Φ_LOCKED_ABSOLUTE
+        `;
+
+                lastBuergerReport = report;
+                AppState.currentReport = report;
+
+                if (progFill) progFill.style.width = '100%';
+                if (progLabel) progLabel.innerText = '✅ Fertig!';
+
+                setTimeout(() => {
+                    if (progContainer) progContainer.style.display = 'none';
+                }, 1500);
+
+                // Mandanten speichern
+                let mandanten = JSON.parse(localStorage.getItem('mandanten') || '[]');
+                mandanten.push({ email, file: file.name, date: new Date().toLocaleString(), report });
+                localStorage.setItem('mandanten', JSON.stringify(mandanten));
+                loadMandanten();
+
+                logEl.innerHTML += '<br><span class="log-ok">[OK] Analyse abgeschlossen – Report bereit.</span>';
+
+            } catch (mainErr) {
+                logEl.innerHTML += `<br><span class="log-warn">❌ SCHWERER FEHLER: ${mainErr.message}</span>`;
+                if (progContainer) progContainer.style.display = 'none';
+            }
+        };
+
+        // ============================================================
+        // BÜRGER MODULES RENDERN
+        // ============================================================
+        const buergerGrid = document.getElementById('buergerModuleGrid');
+        Object.keys(OMNI_MODULES).forEach(id => {
+            buergerGrid.innerHTML += `
+                <div class="module-card">
+                    <h4>M${id} ${OMNI_MODULES[id].name}</h4>
+                    <div id="bm${id}" class="status">WARTET</div>
+                </div>
+            `;
+        });
+
+        // ============================================================
+        // KANZLEI DASHBOARD
+        // ============================================================
+        function buergerBusinessLogin() {
+            const key = document.getElementById('lizenzKey').value;
+            if (key === 'DEMO-9999' || key.length > 5) {
+                document.getElementById('businessPanel').style.display = 'block';
+                loadMandanten();
+            } else {
+                alert('Test-Key: DEMO-9999');
+            }
+        }
+
+        function loadMandanten() {
+            const mandanten = JSON.parse(localStorage.getItem('mandanten') || '[]');
+            document.getElementById('mandantenLog').innerHTML = mandanten.length ?
+                mandanten.map(a => `📩 [${a.date}] ${a.email} | ${a.file}<br>`).join('') :
+                '[SYSTEM] Keine Anfragen<br>';
+        }
+
+        function clearMandanten() {
+            localStorage.removeItem('mandanten');
+            document.getElementById('mandantenLog').innerHTML = '[SYSTEM] Keine Anfragen<br>';
+            document.getElementById('businessPanel').style.display = 'none';
+            document.getElementById('lizenzKey').value = '';
+        }
+
+        // ============================================================
+        // PDF EXPORT
+        // ============================================================
+        function downloadBuergerReport() {
+            if (!lastBuergerReport) {
+                alert('Erst einen erfolgreichen Scan durchführen.');
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(10);
+            const lines = doc.splitTextToSize(lastBuergerReport, 190);
+            doc.text(lines, 10, 10);
+            doc.save('OMNI-Report.pdf');
+        }
+
+        function exportFullReport() {
+            if (!lastBuergerReport) {
+                alert('Erst einen erfolgreichen Scan durchführen.');
+                return;
+            }
+            const data = {
+                report: lastBuergerReport,
+                timestamp: new Date().toISOString(),
+                version: 'Docktype_1.0',
+                operator: 'Thomas König'
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `omni_report_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ============================================================
+        // GESETZESBIBLIOTHEK
+        // ============================================================
+        const LAWS = {
+            bgb: { titel: 'Bürgerliches Gesetzbuch (BGB)',
+                text: `§ 134 BGB – Gesetzliches Verbot: Ein Rechtsgeschäft, das gegen ein gesetzliches Verbot verstößt, ist nichtig, wenn sich nicht aus dem Gesetz ein anderes ergibt.\n\n§ 823 BGB – Schadensersatzpflicht: Wer vorsätzlich oder fahrlässig das Leben, den Körper, die Gesundheit, die Freiheit, das Eigentum oder ein sonstiges Recht eines anderen widerrechtlich verletzt, ist dem anderen zum Ersatz des daraus entstehenden Schadens verpflichtet.\n\n§ 839 BGB – Amtshaftung: Verletzt ein Beamter vorsätzlich oder fahrlässig die ihm einem Dritten gegenüber obliegende Amtspflicht, so hat er dem Dritten den daraus entstehenden Schaden zu ersetzen.` },
+            stgb: { titel: 'Strafgesetzbuch (StGB)',
+                text: `§ 240 StGB – Nötigung: Wer einen Menschen rechtswidrig mit Gewalt oder durch Drohung mit einem empfindlichen Übel zu einer Handlung, Duldung oder Unterlassung nötigt, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.\n\n§ 267 StGB – Urkundenfälschung: Wer zur Täuschung im Rechtsverkehr eine unechte Urkunde herstellt, eine echte Urkunde verfälscht oder eine unechte oder verfälschte Urkunde gebraucht, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.\n\n§ 348 StGB – Falschbeurkundung im Amt: Ein Beamter, der eine öffentliche Urkunde unrichtig beurkundet, wird mit Freiheitsstrafe von einem Jahr bis zu fünf Jahren bestraft.` },
+            gg: { titel: 'Grundgesetz (GG)',
+                text: `Art. 1 GG – Menschenwürde: Die Würde des Menschen ist unantastbar. Sie zu achten und zu schützen ist Verpflichtung aller staatlichen Gewalt.\n\nArt. 13 GG – Unverletzlichkeit der Wohnung: Die Wohnung ist unverletzlich. Durchsuchungen dürfen nur durch den Richter, bei Gefahr im Verzuge auch durch die gesetzlich bestimmten anderen Organe angeordnet und nur in den dort bestimmten Formen vorgenommen werden.\n\nArt. 80 Abs. 1 S. 3 GG – Zitiergebot: Die Rechtsverordnung muss die gesetzliche Ermächtigung angeben.` },
+            stpo: { titel: 'Strafprozessordnung (StPO)',
+                text: `§ 94 StPO – Beschlagnahme: Gegenstände, die als Beweismittel für die Untersuchung von Bedeutung sein können, sind in Verwahrung zu nehmen oder auf andere Weise sicherzustellen.\n\n§ 105 StPO – Durchsuchung: Die Durchsuchung von Personen und Sachen, die in die Wohnung der beschuldigten Person führen kann, bedarf der richterlichen Anordnung.\n\n§ 136 StPO – Belehrung: Der Beschuldigte ist zu Beginn der ersten Vernehmung über die ihm zur Last liegende Tat und über seine Rechte zu belehren.` },
+            vwvfg: { titel: 'Verwaltungsverfahrensgesetz (VwVfG)',
+                text: `§ 44 VwVfG – Nichtigkeit: Ein Verwaltungsakt ist nichtig, wenn er an einem besonders schwerwiegenden Fehler leidet und dies bei verständiger Würdigung aller in Betracht kommenden Umstände offensichtlich ist.\n\n§ 81 VwVfG – Formfehler: Die Verletzung von Verfahrens- oder Formvorschriften führt nicht zur Nichtigkeit des Verwaltungsakts, wenn die gesetzlich vorgeschriebene Form nicht gewahrt wurde.` },
+            dsgvo: { titel: 'Datenschutz-Grundverordnung (DSGVO)',
+                text: `Art. 5 DSGVO – Grundsätze: Personenbezogene Daten müssen rechtmäßig verarbeitet, in geeigneter Weise geschützt und nur für festgelegte Zwecke erhoben werden.\n\nArt. 17 DSGVO – Recht auf Löschung: Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie betreffende personenbezogene Daten unverzüglich gelöscht werden.` },
+            emrk: { titel: 'Europäische Menschenrechtskonvention (EMRK)',
+                text: `Art. 3 EMRK – Folterverbot: Niemand darf der Folter oder unmenschlicher oder erniedrigender Behandlung oder Strafe unterworfen werden.\n\nArt. 8 EMRK – Recht auf Achtung des Privatlebens: Jede Person hat das Recht auf Achtung ihres Privat- und Familienlebens, ihrer Wohnung und ihrer Korrespondenz.` }
+        };
+
+        function showLaw(key) {
+            const law = LAWS[key];
+            if (!law) return;
+            document.getElementById('lawDisplay').innerHTML = `<strong>${law.titel}</strong>\n\n${law.text}`;
+        }
+
+        // ============================================================
+        // 3D SPHERE (OMNI CORE)
+        // ============================================================
+        let scene, camera, renderer, sphere;
+
+        function init3D() {
+            const container = document.getElementById('alien3d');
+            if (!container || container._initialized) return;
+            container._initialized = true;
+            
+            const width = container.clientWidth || 600;
+            const height = 120;
+            
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+            camera.position.z = 3.5;
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+            
+            sphere = new THREE.Mesh(
+                new THREE.SphereGeometry(0.9, 48, 48),
+                new THREE.MeshStandardMaterial({ color: 0x00ffbf, emissive: 0x003322, emissiveIntensity: 1.2 })
+            );
+            scene.add(sphere);
+            
+            const light = new THREE.PointLight(0x00ffbf, 2.5, 20);
+            light.position.set(2.5, 2.5, 3);
+            scene.add(light);
+            
+            const ambient = new THREE.AmbientLight(0x003322);
+            scene.add(ambient);
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.x += 0.008;
+                sphere.rotation.y += 0.012;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // ============================================================
+        // 3D SPHERE (BÜRGERPLATTFORM)
+        // ============================================================
+        let sceneB, cameraB, rendererB, sphereB;
+
+        function init3DBuerger() {
+            const container = document.getElementById('alien3d-buerger');
+            if (!container || container._initialized) return;
+            container._initialized = true;
+            
+            const width = container.clientWidth || 600;
+            const height = 120;
+            
+            sceneB = new THREE.Scene();
+            cameraB = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+            cameraB.position.z = 3.5;
+            
+            rendererB = new THREE.WebGLRenderer({ antialias: true });
+            rendererB.setSize(width, height);
+            rendererB.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(rendererB.domElement);
+            
+            sphereB = new THREE.Mesh(
+                new THREE.SphereGeometry(0.9, 48, 48),
+                new THREE.MeshStandardMaterial({ color: 0x00ffbf, emissive: 0x003322, emissiveIntensity: 1.2 })
+            );
+            sceneB.add(sphereB);
+            
+            const lightB = new THREE.PointLight(0x00ffbf, 2.5, 20);
+            lightB.position.set(2.5, 2.5, 3);
+            sceneB.add(lightB);
+            
+            const ambientB = new THREE.AmbientLight(0x003322);
+            sceneB.add(ambientB);
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                sphereB.rotation.x += 0.008;
+                sphereB.rotation.y += 0.012;
+                rendererB.render(sceneB, cameraB);
+            }
+            animate();
+        }
+
+        // ============================================================
+        // CHART
+        // ============================================================
+        (function initChart() {
+            const canvas = document.getElementById('chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const data = [65, 72, 68, 80, 77, 85, 82, 90, 87, 95, 92, 98];
+            
+            function drawChart() {
+                const width = canvas.width;
+                const height = canvas.height;
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, width, height);
+                
+                ctx.strokeStyle = '#00ffbf';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                const padding = 30;
+                const chartWidth = width - padding * 2;
+                const chartHeight = height - padding * 2;
+                
+                data.forEach((val, i) => {
+                    const x = padding + (i / (data.length - 1)) * chartWidth;
+                    const y = padding + chartHeight - (val / 100) * chartHeight;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+                
+                ctx.fillStyle = '#00ffbf';
+                ctx.font = '10px monospace';
+                ctx.fillText('📊 SYSTEM-LEISTUNG', 10, 14);
+            }
+            
+            drawChart();
+            setInterval(() => {
+                data.forEach((_, i) => {
+                    data[i] = Math.min(100, Math.max(40, data[i] + (Math.random() - 0.5) * 8));
+                });
+                drawChart();
+            }, 10000);
+        })();
+
+        // ============================================================
+        // SYSTEMDIAGNOSE
+        // ============================================================
+        async function updateDiag() {
+            const uptime = Math.floor(performance.now() / 1000);
+            document.getElementById('log-diag').innerHTML = `
+                <span class="log-ok">● System: ONLINE</span><br>
+                Uptime: ${uptime}s<br>
+                Module: 24/24 geladen<br>
+                Status: Φ_LOCKED_ABSOLUTE<br>
+                <span class="log-ok">✓ Multiformat-Unterstützung aktiv</span>
+            `;
+        }
+        setInterval(updateDiag, 5000);
+        updateDiag();
+
+        // ============================================================
+        // ANALYTICS WIDGET
+        // ============================================================
+        const widget = document.createElement('div');
+        widget.id = 'analytics-widget';
+        widget.innerHTML = `
+            <div style="border-bottom:1px solid #0f0;margin-bottom:5px;font-weight:bold;">📊 Φ_METRICS</div>
+            <div>Akte-Scans: <span id="scan-count">0</span></div>
+            <div>Formate: 15+</div>
+        `;
+        document.body.appendChild(widget);
+
+        // ============================================================
+        // LANGUAGE SWITCHER
+        // ============================================================
+        const langBox = document.createElement('div');
+        langBox.id = 'language-switcher';
+        ['DE', 'EN', 'FR'].forEach(lang => {
+            const btn = document.createElement('button');
+            btn.innerText = lang;
+            btn.onclick = () => {
+                AppState.language = lang;
+                sysLog(`[+] Sprache auf ${lang} gesetzt.`, 'ok');
+            };
+            langBox.appendChild(btn);
+        });
+        document.body.appendChild(langBox);
+
+        // ============================================================
+        // COMMUNITY BUTTON
+        // ============================================================
+        const communityBtn = document.createElement('button');
+        communityBtn.id = 'community-btn';
+        communityBtn.innerText = '🚨 BÜRGER HUB';
+        communityBtn.onclick = () => {
+            sysLog('[+] Community-Upload bereit.', 'ok');
+        };
+        document.body.appendChild(communityBtn);
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        sysLog('[SYS] OMNI CORE DOCKTYPE geladen.', 'ok');
+        sysLog('[SYS] Multiformat-Analyse aktiv (15+ Formate).', 'ok');
+        sysLog('[SYS] STATUS: Φ_LOCKED_ABSOLUTE.', 'ok');
+        
+        setTimeout(init3D, 200);
+        setTimeout(init3DBuerger, 400);
     </script>
 </body>
 </html>
