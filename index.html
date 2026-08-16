@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Φ OMNI CORE V21.0 – ALL-IN-ONE (REPARIERT + ERWEITERT)</title>
+<title>Φ OMNI CORE V22.0 – REPARIERT + GESETZE + MEDIEN</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script type="importmap">
@@ -151,6 +151,22 @@
     .btn-blue:hover {
         background: #00aadd;
     }
+    .btn-media {
+        background: #222;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 10px;
+        margin: 4px 0;
+        width: 100%;
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+    .btn-media:hover {
+        background: #444;
+        border-color: var(--neon-green);
+    }
     input[type="file"],
     input[type="text"],
     input[type="email"],
@@ -289,13 +305,40 @@
         50% { text-shadow: -2px 0 var(--neon-red), 2px 0 var(--neon-blue); }
         100% { text-shadow: 2px 0 var(--neon-red), -2px 0 var(--neon-blue); }
     }
+    .media-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .media-grid .btn-media {
+        font-size: 11px;
+        padding: 8px;
+    }
+    .law-display {
+        background: #000;
+        border: 1px solid #333;
+        padding: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 10px;
+        color: #bdfce8;
+        border-radius: 6px;
+        white-space: pre-wrap;
+        margin-top: 8px;
+    }
+    @media (max-width: 700px) {
+        .media-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <div class="header">
-        <h1>⚡ Φ OMNI CORE V21.0 — ALL-IN-ONE (REPARIERT + ERWEITERT)</h1>
+        <h1>⚡ Φ OMNI CORE V22.0 — REPARIERT + GESETZE + MEDIEN</h1>
         <p>Operator: Thomas König / ODIN ULTRA ROOT • Status: Φ_LOCKED_ABSOLUTE</p>
     </div>
     <div class="legal">🏛️ BÜRGERPLATTFORM | Software-Tool. Keine Rechtsberatung. OMNI CORE AKTIV</div>
@@ -304,7 +347,8 @@
     <div class="tabs">
         <button class="tab-btn active" data-tab="tab-core">⚙️ OMNI CORE (24 Module)</button>
         <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM (23+ Module)</button>
-        <button class="tab-btn" data-tab="tab-v21">🚀 V21.0 NEU</button>
+        <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE & MEDIEN</button>
+        <button class="tab-btn" data-tab="tab-v22">🚀 V22.0 NEU</button>
     </div>
 
     <!-- ========== TAB 1: OMNI CORE ========== -->
@@ -381,41 +425,61 @@
         </div>
     </div>
 
-    <!-- ========== TAB 3: V21.0 NEU ========== -->
-    <div class="tab-content" id="tab-v21">
+    <!-- ========== TAB 3: GESETZE & MEDIEN ========== -->
+    <div class="tab-content" id="tab-gesetze">
+        <div class="card">
+            <h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="media-grid">
+                <button class="btn-media" onclick="showLaw('bgb')">📖 BGB</button>
+                <button class="btn-media" onclick="showLaw('stgb')">⚖️ StGB</button>
+                <button class="btn-media" onclick="showLaw('gg')">🏛️ GG</button>
+                <button class="btn-media" onclick="showLaw('stpo')">📑 StPO</button>
+                <button class="btn-media" onclick="showLaw('vwvfg')">📂 VwVfG</button>
+                <button class="btn-media" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
+                <button class="btn-media" onclick="showLaw('emrk')">🌍 EMRK</button>
+            </div>
+            <div id="lawDisplay" class="law-display">📜 Wähle ein Gesetz aus der Bibliothek.</div>
+            <h3 style="margin-top:16px;">🎧 MEDIENBIBLIOTHEK (Bald verfügbar)</h3>
+            <div class="media-grid">
+                <button class="btn-media" style="opacity:0.5;">📚 E-Books (bald)</button>
+                <button class="btn-media" style="opacity:0.5;">🎙️ Audible (bald)</button>
+                <button class="btn-media" style="opacity:0.5;">🎧 Podcasts (bald)</button>
+                <button class="btn-media" style="opacity:0.5;">📺 Video-Lektionen (bald)</button>
+            </div>
+            <p style="font-size:10px;color:#555;margin-top:8px;">🔜 Integration von E-Books, Audible, Podcasts und Video-Lektionen geplant.</p>
+        </div>
+    </div>
+
+    <!-- ========== TAB 4: V22.0 NEU ========== -->
+    <div class="tab-content" id="tab-v22">
         <div class="grid">
             <div>
                 <div class="card">
-                    <h2>🚀 V21.0 NEUHEITEN</h2>
+                    <h2>🚀 V22.0 NEUHEITEN</h2>
                     <ul style="list-style:none;padding:0;">
                         <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">REPARIERT</span> Bürgerplattform-Scan (bricht nicht mehr ab)</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Versicherungs-Check</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Finanz- & Kredit-Analyse</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> GEZ / Rundfunkbeitrag-Prüfung</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Krankenkassen-Abrechnungs-Check</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Behörden-Audit</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Sozialamt-Prüfung</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Arbeitsamt / Agentur für Arbeit</li>
-                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Dropdown-Auswahl für Dokumententyp</li>
+                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Gesetzesbibliothek (BGB, StGB, GG, StPO, VwVfG, DSGVO, EMRK)</li>
+                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Medienbibliothek (E-Books, Audible, Podcasts – Platzhalter)</li>
+                        <li style="padding:8px;border-bottom:1px solid #333;">✅ <span class="badge badge-ok">NEU</span> Eigener Tab für Gesetze & Medien</li>
                     </ul>
                 </div>
             </div>
             <div>
                 <div class="card">
-                    <h2>📊 SYSTEMSTATUS V21.0</h2>
-                    <div class="terminal" id="log-v21">Lade V21.0 Status...</div>
-                    <button class="btn" onclick="runV21Diagnose()" style="margin-top:12px;">🔍 V21.0 DIAGNOSE</button>
+                    <h2>📊 SYSTEMSTATUS V22.0</h2>
+                    <div class="terminal" id="log-v22">Lade V22.0 Status...</div>
+                    <button class="btn" onclick="runV22Diagnose()" style="margin-top:12px;">🔍 V22.0 DIAGNOSE</button>
                 </div>
                 <div class="card" style="margin-top:16px;">
                     <h2>📈 MODUL-STATISTIK</h2>
-                    <div id="v21-stats" class="terminal" style="height:100px;">Warte auf Diagnose...</div>
+                    <div id="v22-stats" class="terminal" style="height:100px;">Warte auf Diagnose...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCRIPT – KERNEL + MODULE + V21.0 NEU                         -->
+    <!-- SCRIPT – KERNEL + MODULE + V22.0 NEU                         -->
     <!-- ============================================================ -->
     <script>
         // =====================================================================
@@ -429,7 +493,8 @@
                 document.getElementById(this.dataset.tab).classList.add('active');
                 if (this.dataset.tab === 'tab-core') setTimeout(init3D, 100);
                 else if (this.dataset.tab === 'tab-buerger') setTimeout(init3DBuerger, 100);
-                else if (this.dataset.tab === 'tab-v21') setTimeout(initV21, 100);
+                else if (this.dataset.tab === 'tab-gesetze') setTimeout(initGesetze, 100);
+                else if (this.dataset.tab === 'tab-v22') setTimeout(initV22, 100);
             });
         });
 
@@ -590,7 +655,7 @@
             const data = {
                 report: lastBuergerReport,
                 timestamp: new Date().toISOString(),
-                version: 'V21.0',
+                version: 'V22.0',
                 operator: 'Thomas König'
             };
             const json = JSON.stringify(data, null, 2);
@@ -605,52 +670,72 @@
         }
 
         // =====================================================================
-        // 8. NEUE MODULE: VERSICHERUNGEN, FINANZEN, KREDIT, GEZ, KRANKENKASSE, BEHÖRDE, SOZIALES, ARBEITSAMT
+        // 8. KATEGORIEN: VERSICHERUNGEN, FINANZEN, KREDIT, GEZ, KRANKENKASSE, BEHÖRDE, SOZIALES, ARBEITSAMT
         // =====================================================================
         function analyzeCategory(text, category) {
             const results = {
-                versicherung: {
-                    checks: ['Leistungspflicht', 'Versicherungssumme', 'Ausschlussklauseln'],
-                    example: 'Versicherungsvertrag geprüft – Leistungspflicht besteht.'
-                },
-                finanzen: {
-                    checks: ['Zinssatz', 'Laufzeit', 'Rückzahlungsplan'],
-                    example: 'Finanzanalyse: Zinssatz 3,2% p.a., Laufzeit 10 Jahre.'
-                },
-                kredit: {
-                    checks: ['Bonität', 'Sicherheiten', 'Verzugszinsen'],
-                    example: 'Kreditvertrag geprüft – Sicherheiten ausreichend.'
-                },
-                gez: {
-                    checks: ['Befreiung', 'Beitragshöhe', 'Rückstand'],
-                    example: 'GEZ-Beitragsbescheid: Rückstand 120,00 €, Mahnung geprüft.'
-                },
-                krankenkasse: {
-                    checks: ['Abrechnung', 'Zuzahlungen', 'Heilmittel'],
-                    example: 'Krankenkassen-Abrechnung: Zuzahlungen korrekt, Heilmittel bewilligt.'
-                },
-                behoerde: {
-                    checks: ['Zuständigkeit', 'Fristen', 'Rechtsbehelfsbelehrung'],
-                    example: 'Behördenbescheid: Zuständigkeit geprüft, Frist eingehalten.'
-                },
-                soziales: {
-                    checks: ['Leistungsanspruch', 'Einkommensgrenzen', 'Bescheid'],
-                    example: 'Sozialamt: Leistungsanspruch besteht, Einkommensgrenze geprüft.'
-                },
-                arbeitsamt: {
-                    checks: ['Arbeitslosengeld', 'Sperrzeit', 'Vermittlungsvorschläge'],
-                    example: 'Agentur für Arbeit: Arbeitslosengeldanspruch geprüft, keine Sperrzeit.'
-                },
-                allgemein: {
-                    checks: ['Gesetzeskonformität', 'Formfehler', 'Begründung'],
-                    example: 'Allgemeine Prüfung: Keine schwerwiegenden Fehler festgestellt.'
-                }
+                versicherung: { checks: ['Leistungspflicht', 'Versicherungssumme', 'Ausschlussklauseln'],
+                    example: 'Versicherungsvertrag geprüft – Leistungspflicht besteht.' },
+                finanzen: { checks: ['Zinssatz', 'Laufzeit', 'Rückzahlungsplan'], example: 'Finanzanalyse: Zinssatz 3,2% p.a., Laufzeit 10 Jahre.' },
+                kredit: { checks: ['Bonität', 'Sicherheiten', 'Verzugszinsen'], example: 'Kreditvertrag geprüft – Sicherheiten ausreichend.' },
+                gez: { checks: ['Befreiung', 'Beitragshöhe', 'Rückstand'], example: 'GEZ-Beitragsbescheid: Rückstand 120,00 €, Mahnung geprüft.' },
+                krankenkasse: { checks: ['Abrechnung', 'Zuzahlungen', 'Heilmittel'], example: 'Krankenkassen-Abrechnung: Zuzahlungen korrekt, Heilmittel bewilligt.' },
+                behoerde: { checks: ['Zuständigkeit', 'Fristen', 'Rechtsbehelfsbelehrung'], example: 'Behördenbescheid: Zuständigkeit geprüft, Frist eingehalten.' },
+                soziales: { checks: ['Leistungsanspruch', 'Einkommensgrenzen', 'Bescheid'], example: 'Sozialamt: Leistungsanspruch besteht, Einkommensgrenze geprüft.' },
+                arbeitsamt: { checks: ['Arbeitslosengeld', 'Sperrzeit', 'Vermittlungsvorschläge'], example: 'Agentur für Arbeit: Arbeitslosengeldanspruch geprüft, keine Sperrzeit.' },
+                allgemein: { checks: ['Gesetzeskonformität', 'Formfehler', 'Begründung'], example: 'Allgemeine Prüfung: Keine schwerwiegenden Fehler festgestellt.' }
             };
             return results[category] || results['allgemein'];
         }
 
         // =====================================================================
-        // 9. REPARIERTE startBuergerScan (MIT ALLEN KATEGORIEN)
+        // 9. GESETZESBIBLIOTHEK (NEU)
+        // =====================================================================
+        const LAWS = {
+            bgb: {
+                titel: 'Bürgerliches Gesetzbuch (BGB)',
+                text: `§ 134 BGB – Gesetzliches Verbot: Ein Rechtsgeschäft, das gegen ein gesetzliches Verbot verstößt, ist nichtig, wenn sich nicht aus dem Gesetz ein anderes ergibt.\n\n§ 823 BGB – Schadensersatzpflicht: Wer vorsätzlich oder fahrlässig das Leben, den Körper, die Gesundheit, die Freiheit, das Eigentum oder ein sonstiges Recht eines anderen widerrechtlich verletzt, ist dem anderen zum Ersatz des daraus entstehenden Schadens verpflichtet.\n\n§ 839 BGB – Amtshaftung: Verletzt ein Beamter vorsätzlich oder fahrlässig die ihm einem Dritten gegenüber obliegende Amtspflicht, so hat er dem Dritten den daraus entstehenden Schaden zu ersetzen.`
+            },
+            stgb: {
+                titel: 'Strafgesetzbuch (StGB)',
+                text: `§ 240 StGB – Nötigung: Wer einen Menschen rechtswidrig mit Gewalt oder durch Drohung mit einem empfindlichen Übel zu einer Handlung, Duldung oder Unterlassung nötigt, wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.\n\n§ 267 StGB – Urkundenfälschung: Wer zur Täuschung im Rechtsverkehr eine unechte Urkunde herstellt, eine echte Urkunde verfälscht oder eine unechte oder verfälschte Urkunde gebraucht, wird mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe bestraft.\n\n§ 348 StGB – Falschbeurkundung im Amt: Ein Beamter, der eine öffentliche Urkunde unrichtig beurkundet, wird mit Freiheitsstrafe von einem Jahr bis zu fünf Jahren bestraft.`
+            },
+            gg: {
+                titel: 'Grundgesetz (GG)',
+                text: `Art. 1 GG – Menschenwürde: Die Würde des Menschen ist unantastbar. Sie zu achten und zu schützen ist Verpflichtung aller staatlichen Gewalt.\n\nArt. 13 GG – Unverletzlichkeit der Wohnung: Die Wohnung ist unverletzlich. Durchsuchungen dürfen nur durch den Richter, bei Gefahr im Verzuge auch durch die gesetzlich bestimmten anderen Organe angeordnet und nur in den dort bestimmten Formen vorgenommen werden.\n\nArt. 80 Abs. 1 S. 3 GG – Zitiergebot: Die Rechtsverordnung muss die gesetzliche Ermächtigung angeben.`
+            },
+            stpo: {
+                titel: 'Strafprozessordnung (StPO)',
+                text: `§ 94 StPO – Beschlagnahme: Gegenstände, die als Beweismittel für die Untersuchung von Bedeutung sein können, sind in Verwahrung zu nehmen oder auf andere Weise sicherzustellen.\n\n§ 105 StPO – Durchsuchung: Die Durchsuchung von Personen und Sachen, die in die Wohnung der beschuldigten Person führen kann, bedarf der richterlichen Anordnung.\n\n§ 136 StPO – Belehrung: Der Beschuldigte ist zu Beginn der ersten Vernehmung über die ihm zur Last liegende Tat und über seine Rechte zu belehren.`
+            },
+            vwvfg: {
+                titel: 'Verwaltungsverfahrensgesetz (VwVfG)',
+                text: `§ 44 VwVfG – Nichtigkeit: Ein Verwaltungsakt ist nichtig, wenn er an einem besonders schwerwiegenden Fehler leidet und dies bei verständiger Würdigung aller in Betracht kommenden Umstände offensichtlich ist.\n\n§ 81 VwVfG – Formfehler: Die Verletzung von Verfahrens- oder Formvorschriften führt nicht zur Nichtigkeit des Verwaltungsakts, wenn die gesetzlich vorgeschriebene Form nicht gewahrt wurde.`
+            },
+            dsgvo: {
+                titel: 'Datenschutz-Grundverordnung (DSGVO)',
+                text: `Art. 5 DSGVO – Grundsätze: Personenbezogene Daten müssen rechtmäßig, verarbeitet, in geeigneter Weise geschützt und nur für festgelegte Zwecke erhoben werden.\n\nArt. 17 DSGVO – Recht auf Löschung: Die betroffene Person hat das Recht, von dem Verantwortlichen zu verlangen, dass sie betreffende personenbezogene Daten unverzüglich gelöscht werden.`
+            },
+            emrk: {
+                titel: 'Europäische Menschenrechtskonvention (EMRK)',
+                text: `Art. 3 EMRK – Folterverbot: Niemand darf der Folter oder unmenschlicher oder erniedrigender Behandlung oder Strafe unterworfen werden.\n\nArt. 8 EMRK – Recht auf Achtung des Privatlebens: Jede Person hat das Recht auf Achtung ihres Privat- und Familienlebens, ihrer Wohnung und ihrer Korrespondenz.`
+            }
+        };
+
+        function showLaw(key) {
+            const law = LAWS[key];
+            if (!law) return;
+            const display = document.getElementById('lawDisplay');
+            display.innerHTML = `<strong>${law.titel}</strong>\n\n${law.text}`;
+            document.getElementById('lawDisplay').scrollTop = 0;
+        }
+
+        function initGesetze() {
+            document.getElementById('lawDisplay').innerHTML = '📜 Wähle ein Gesetz aus der Bibliothek.';
+        }
+
+        // =====================================================================
+        // 10. REPARIERTE startBuergerScan (MIT ALLEN KATEGORIEN)
         // =====================================================================
         let lastBuergerReport = '';
 
@@ -665,57 +750,59 @@
 
             const reader = new FileReader();
             reader.onload = async (e) => {
-                const base64 = e.target.result.split(',')[1];
-                const fileType = file.type;
+                try {
+                    const base64 = e.target.result.split(',')[1];
+                    const fileType = file.type;
 
-                let extractedText = '';
-                if (fileType.startsWith('image/')) {
-                    document.getElementById('buergerLog').innerHTML += "[OCR] Extrahiere Text aus Bild...<br>";
-                    extractedText = await ocrExtractText(base64);
+                    let extractedText = '';
+                    if (fileType.startsWith('image/')) {
+                        document.getElementById('buergerLog').innerHTML += "[OCR] Extrahiere Text aus Bild...<br>";
+                        extractedText = await ocrExtractText(base64);
+                        document.getElementById('forensikResult').innerHTML +=
+                            `<br><span class="log-ok">📝 OCR: ${extractedText.substring(0, 150)}...</span>`;
+                    } else {
+                        extractedText = `[TEXT] Auszug aus ${file.name} – OCR nicht erforderlich.`;
+                    }
+
+                    // Kategorie-spezifische Analyse
+                    const catInfo = analyzeCategory(extractedText, category);
                     document.getElementById('forensikResult').innerHTML +=
-                        `<br><span class="log-ok">📝 OCR: ${extractedText.substring(0, 150)}...</span>`;
-                } else {
-                    extractedText = `[TEXT] Auszug aus ${file.name} – OCR nicht erforderlich.`;
-                }
+                        `<br><span class="log-ok">📂 KATEGORIE: ${category.toUpperCase()}</span>`;
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="log-ok">🔍 PRÜFPUNKTE: ${catInfo.checks.join(', ')}</span>`;
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="log-ok">📋 BEISPIEL: ${catInfo.example}</span>`;
 
-                // Kategorie-spezifische Analyse
-                const catInfo = analyzeCategory(extractedText, category);
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="log-ok">📂 KATEGORIE: ${category.toUpperCase()}</span>`;
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="log-ok">🔍 PRÜFPUNKTE: ${catInfo.checks.join(', ')}</span>`;
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="log-ok">📋 BEISPIEL: ${catInfo.example}</span>`;
+                    // DSGVO-Check
+                    const dsgvoResult = dsgvoCheck(extractedText);
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="${dsgvoResult.totalHits > 0 ? 'log-warn' : 'log-ok'}">🔒 DSGVO: ${dsgvoResult.status}</span>`;
 
-                // DSGVO-Check
-                const dsgvoResult = dsgvoCheck(extractedText);
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="${dsgvoResult.totalHits > 0 ? 'log-warn' : 'log-ok'}">🔒 DSGVO: ${dsgvoResult.status}</span>`;
+                    // Klassifizierung (allgemein)
+                    const classification = classifyDocument(extractedText);
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="log-ok">📂 KLASSIFIZIERUNG: ${classification.type.toUpperCase()} (${classification.confidence}%)</span>`;
 
-                // Klassifizierung (allgemein)
-                const classification = classifyDocument(extractedText);
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="log-ok">📂 KLASSIFIZIERUNG: ${classification.type.toUpperCase()} (${classification.confidence}%)</span>`;
+                    // Strategie
+                    const strategy = generateStrategy(classification, extractedText);
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="log-ok">📋 STRATEGIE: ${strategy.empfehlung}</span>`;
 
-                // Strategie
-                const strategy = generateStrategy(classification, extractedText);
-                document.getElementById('forensikResult').innerHTML +=
-                    `<br><span class="log-ok">📋 STRATEGIE: ${strategy.empfehlung}</span>`;
-
-                // BGH-Urteile
-                for (const kw of ['zeitparadoxon', 'zitiergebot', 'falschbeurkundung', 'durchsuchung']) {
-                    if (extractedText.toLowerCase().includes(kw)) {
-                        const urteile = findBGHUrteil(kw);
-                        for (const u of urteile) {
-                            document.getElementById('forensikResult').innerHTML +=
-                                `<br><span class="log-ok">⚖️ BGH: ${u.titel} – ${u.kern}</span>`;
+                    // BGH-Urteile
+                    for (const kw of ['zeitparadoxon', 'zitiergebot', 'falschbeurkundung', 'durchsuchung']) {
+                        if (extractedText.toLowerCase().includes(kw)) {
+                            const urteile = findBGHUrteil(kw);
+                            for (const u of urteile) {
+                                document.getElementById('forensikResult').innerHTML +=
+                                    `<br><span class="log-ok">⚖️ BGH: ${u.titel} – ${u.kern}</span>`;
+                            }
                         }
                     }
-                }
 
-                // Report generieren
-                const report = `
-        OMNI CORE V21.0 – FORENSIK REPORT (KATEGORIE: ${category.toUpperCase()})
+                    // Report generieren
+                    const report =
+                        `
+        OMNI CORE V22.0 – FORENSIK REPORT (KATEGORIE: ${category.toUpperCase()})
         ================================
         Datei: ${file.name}
         E-Mail: ${email}
@@ -735,30 +822,38 @@
         STATUS: Φ_LOCKED_ABSOLUTE
         `;
 
-                lastBuergerReport = report;
-                document.getElementById('buergerLog').innerHTML +=
-                    `<br><span class="log-ok">[OK] Analyse abgeschlossen – PDF bereit.</span>`;
+                    lastBuergerReport = report;
+                    document.getElementById('buergerLog').innerHTML +=
+                        `<br><span class="log-ok">[OK] Analyse abgeschlossen – PDF bereit.</span>`;
 
-                // Speichern für Kanzlei
-                let anfr = JSON.parse(localStorage.getItem('mandanten') || '[]');
-                anfr.push({ email, file: file.name, date: new Date().toLocaleString(), report });
-                localStorage.setItem('mandanten', JSON.stringify(anfr));
-                loadMandanten();
+                    // Speichern für Kanzlei
+                    let anfr = JSON.parse(localStorage.getItem('mandanten') || '[]');
+                    anfr.push({ email, file: file.name, date: new Date().toLocaleString(), report });
+                    localStorage.setItem('mandanten', JSON.stringify(anfr));
+                    loadMandanten();
 
-                // Feedback (Modul 5)
-                setTimeout(() => {
-                    if (confirm('📊 Wie hilfreich war die Analyse? (OK = Bewertung abgeben)')) {
-                        showFeedbackDialog();
-                    }
-                }, 1000);
-
-                // E-Mail (Modul 2)
-                if (email && report) {
+                    // Feedback (Modul 5)
                     setTimeout(() => {
-                        if (confirm(`📧 Report an ${email} senden?`)) {
-                            sendReportEmail(email, report);
+                        if (confirm('📊 Wie hilfreich war die Analyse? (OK = Bewertung abgeben)')) {
+                            showFeedbackDialog();
                         }
-                    }, 1500);
+                    }, 1000);
+
+                    // E-Mail (Modul 2)
+                    if (email && report) {
+                        setTimeout(() => {
+                            if (confirm(`📧 Report an ${email} senden?`)) {
+                                sendReportEmail(email, report);
+                            }
+                        }, 1500);
+                    }
+
+                } catch (err) {
+                    console.error('[SCAN ERROR]', err);
+                    document.getElementById('buergerLog').innerHTML +=
+                        `<br><span class="log-warn">❌ FEHLER: ${err.message}</span>`;
+                    document.getElementById('forensikResult').innerHTML +=
+                        `<br><span class="log-warn">❌ SCAN FEHLGESCHLAGEN – bitte erneut versuchen.</span>`;
                 }
             };
             reader.readAsDataURL(file);
@@ -776,7 +871,7 @@
         }
 
         // =====================================================================
-        // 10. KANZLEI DASHBOARD (unverändert)
+        // 11. KANZLEI DASHBOARD (unverändert)
         // =====================================================================
         function buergerBusinessLogin() {
             const key = document.getElementById('lizenzKey').value;
@@ -803,7 +898,7 @@
         }
 
         // =====================================================================
-        // 11. OMNI CORE MODULE (1-24) – wie gehabt, aber gekürzt (Platzsparend)
+        // 12. OMNI CORE MODULE (1-24) – gekürzt
         // =====================================================================
         const OMNI_MODULES = {
             1: { name: "📜 GESETZES-LEDGER", fn: async () => { log('log-ai', "Lade 1.797 Gesetze...");
@@ -929,7 +1024,7 @@
         };
 
         // =====================================================================
-        // 12. BÜRGERPLATTFORM MODULE (1-23) – gekürzt
+        // 13. BÜRGERPLATTFORM MODULE (1-23) – gekürzt
         // =====================================================================
         const BUERGER_MODULES = {
             1: { name: "GESETZES-LEDGER", fn: async (f) => { log("buergerLog", "Prüfe Gesetzeskatalog...");
@@ -1005,7 +1100,7 @@
         };
 
         // =====================================================================
-        // 13. RENDER-FUNKTIONEN
+        // 14. RENDER-FUNKTIONEN
         // =====================================================================
         const coreGrid = document.getElementById('moduleGrid');
         Object.keys(OMNI_MODULES).forEach(id => {
@@ -1028,7 +1123,7 @@
         });
 
         // =====================================================================
-        // 14. OMNI CORE LAUNCHER
+        // 15. OMNI CORE LAUNCHER
         // =====================================================================
         async function runOmniModule(id) {
             const el = document.getElementById('m' + id);
@@ -1058,7 +1153,7 @@
         }
 
         // =====================================================================
-        // 15. SYSTEMDIAGNOSE
+        // 16. SYSTEMDIAGNOSE
         // =====================================================================
         async function updateDiag() {
             const uptime = Math.floor(performance.now() / 1000);
@@ -1074,7 +1169,7 @@
         updateDiag();
 
         // =====================================================================
-        // 16. AI-ANALYSE (OMNI CORE)
+        // 17. AI-ANALYSE (OMNI CORE)
         // =====================================================================
         setInterval(() => {
             const logAi = document.getElementById('log-ai');
@@ -1094,7 +1189,7 @@
         }, 4000);
 
         // =====================================================================
-        // 17. 3D SPHERE (OMNI CORE)
+        // 18. 3D SPHERE (OMNI CORE)
         // =====================================================================
         let scene, camera, renderer, sphere, light;
 
@@ -1140,7 +1235,7 @@
         }
 
         // =====================================================================
-        // 18. 3D SPHERE (BÜRGERPLATTFORM)
+        // 19. 3D SPHERE (BÜRGERPLATTFORM)
         // =====================================================================
         let sceneB, cameraB, rendererB, sphereB, lightB;
 
@@ -1186,7 +1281,7 @@
         }
 
         // =====================================================================
-        // 19. CHART (OMNI CORE)
+        // 20. CHART (OMNI CORE)
         // =====================================================================
         (function initChart() {
             const canvas = document.getElementById('chart');
@@ -1282,18 +1377,19 @@
         })();
 
         // =====================================================================
-        // 20. V21.0 DIAGNOSE
+        // 21. V22.0 DIAGNOSE
         // =====================================================================
-        async function runV21Diagnose() {
-            const logEl = document.getElementById('log-v21');
-            const statsEl = document.getElementById('v21-stats');
-            logEl.innerHTML = '[SYS] V21.0 Diagnose läuft...<br>';
+        async function runV22Diagnose() {
+            const logEl = document.getElementById('log-v22');
+            const statsEl = document.getElementById('v22-stats');
+            logEl.innerHTML = '[SYS] V22.0 Diagnose läuft...<br>';
 
             const modules = [
                 'OCR-Erkennung', 'E-Mail-Benachrichtigung', 'DSGVO-Check',
                 'BGH-Urteils-DB', 'Feedback-Schleife', 'Klassifizierung',
                 'Entscheidungsbaum', 'Versicherung', 'Finanzen', 'Kredit',
-                'GEZ', 'Krankenkasse', 'Behörde', 'Soziales', 'Arbeitsamt'
+                'GEZ', 'Krankenkasse', 'Behörde', 'Soziales', 'Arbeitsamt',
+                'Gesetzesbibliothek', 'Medienbibliothek'
             ];
 
             let stats = {};
@@ -1306,21 +1402,21 @@
             statsEl.innerHTML = `
         Module geladen: ${modules.length}<br>
         Status: ${Object.values(stats).every(v => v === 'OK') ? '✅ ALLE OK' : '⚠️ FEHLER'}<br>
-        Version: V21.0<br>
+        Version: V22.0<br>
         ${Object.entries(stats).map(([k,v]) => `${k}: ${v}`).join('<br>')}
       `;
 
-            logEl.innerHTML += `<br><span class="log-ok">✅ V21.0 Diagnose abgeschlossen.</span>`;
-            document.getElementById('log-v21').scrollTop = document.getElementById('log-v21').scrollHeight;
+            logEl.innerHTML += `<br><span class="log-ok">✅ V22.0 Diagnose abgeschlossen.</span>`;
+            document.getElementById('log-v22').scrollTop = document.getElementById('log-v22').scrollHeight;
         }
 
-        function initV21() {
-            document.getElementById('log-v21').innerHTML = '[SYS] V21.0 geladen – alle Module aktiv.<br>';
-            document.getElementById('v21-stats').innerHTML = 'Warte auf Diagnose...';
+        function initV22() {
+            document.getElementById('log-v22').innerHTML = '[SYS] V22.0 geladen – alle Module aktiv.<br>';
+            document.getElementById('v22-stats').innerHTML = 'Warte auf Diagnose...';
         }
 
         // =====================================================================
-        // 21. STRIPE / AUTH (TASK 8 & 13) – Integration
+        // 22. STRIPE / AUTH (TASK 8 & 13) – Integration
         // =====================================================================
         (function() {
             console.log("[Φ] INIT: ZERO-TRUST AUTH & STRIPE MODULATION");
@@ -1388,20 +1484,22 @@
         })();
 
         // =====================================================================
-        // 22. ERROR HANDLING
+        // 23. ERROR HANDLING
         // =====================================================================
         window.addEventListener('error', (e) => {
             console.error('[Φ_KERNEL] Fehler:', e.message);
         });
-        console.log('Φ OMNI CORE V21.0 ALL-IN-ONE geladen (reparliert + erweitert).');
+        console.log('Φ OMNI CORE V22.0 ALL-IN-ONE geladen (reparliert + Gesetze + Medien).');
         console.log('🏴‍☠️ STATUS: Φ_LOCKED_ABSOLUTE');
         console.log('✅ MODULE 1-7 AKTIV');
-        console.log('✅ NEUE KATEGORIEN: Versicherung, Finanzen, Kredit, GEZ, Krankenkasse, Behörde, Soziales, Arbeitsamt');
+        console.log('✅ GESETZESBIBLIOTHEK AKTIV');
+        console.log('✅ MEDIENBIBLIOTHEK (Platzhalter) AKTIV');
 
         // INIT 3D
         setTimeout(init3D, 200);
         setTimeout(init3DBuerger, 400);
-        setTimeout(initV21, 500);
+        setTimeout(initV22, 500);
+        setTimeout(initGesetze, 600);
     </script>
 </body>
 </html>
