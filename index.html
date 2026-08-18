@@ -4878,6 +4878,389 @@ showToast('Φ_OMNI_V9_10K_FAST geladen!');
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Φ_OMNI_DOCKTYPE – JSONL WORKBENCH</title>
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff3366;
+            --panel-bg: #0a0a0f;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --border: #2a2a3a;
+        }
+        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body {
+            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header {
+            background: var(--panel-bg);
+            border-bottom: 2px solid var(--neon-green);
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .header h1 { color: var(--neon-green); margin: 0; font-size: 1.8rem; letter-spacing: 3px; }
+        .header .sub { color: #888; font-size: 12px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .card h2 {
+            color: var(--neon-blue);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: var(--neon-green);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 350px;
+            line-height: 1.6;
+            tab-size: 2;
+        }
+        textarea:focus {
+            border-color: var(--neon-green);
+            outline: none;
+            box-shadow: 0 0 20px rgba(0,255,191,0.15);
+        }
+        .btn {
+            background: var(--neon-green);
+            color: #000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 4px 0;
+        }
+        .btn:hover { background: #00ddaa; transform: scale(1.02); }
+        .btn-blue { background: var(--neon-blue); }
+        .btn-red { background: var(--neon-red); color: #fff; }
+        .btn-purple { background: #bf00ff; color: #fff; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+        .badge {
+            display: inline-block;
+            background: var(--neon-green);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        .badge-blue { background: var(--neon-blue); }
+        .badge-red { background: var(--neon-red); color: #fff; }
+        .terminal {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 11px;
+            color: var(--neon-green);
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        .terminal .log-time { color: #666; }
+        .terminal .log-ok { color: var(--neon-green); }
+        .terminal .log-warn { color: var(--neon-red); font-weight: bold; }
+        .seal-display {
+            font-size: 10px;
+            color: #666;
+            word-break: break-all;
+            background: #000;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #222;
+            margin: 6px 0;
+        }
+        .template-hint {
+            background: #000;
+            border-left: 3px solid var(--neon-green);
+            padding: 8px 12px;
+            font-size: 11px;
+            color: #888;
+            border-radius: 4px;
+            margin: 6px 0;
+        }
+        .template-hint strong { color: var(--neon-green); }
+        .inline-flex { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header">
+        <h1>⚡ Φ_OMNI_DOCKTYPE – JSONL WORKBENCH</h1>
+        <div class="sub">SCHREIBE DEINE SYSTEM-PROMPTS &amp; EXPORTIERE ALS JSONL · 1:1 RAW</div>
+        <div style="font-size:10px;color:#666;margin-top:4px;">
+            SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab
+        </div>
+    </div>
+
+    <!-- ========== GRID: EDITOR + INFO ========== -->
+    <div class="grid-2">
+
+        <!-- LINKES PANEL: EDITOR -->
+        <div class="card">
+            <h2>📝 JSONL EDITOR</h2>
+            <p style="font-size:12px;color:#888;margin:0 0 8px 0;">
+                Füge hier deine <strong>Φ_OMNI</strong>-Definition ein – jede Zeile ein gültiges JSON-Objekt mit <code>role</code> und <code>content</code>.
+            </p>
+
+            <!-- TEXTAREA: HIER KANNST DU DEINEN PROMPT EINFÜGEN -->
+            <textarea id="jsonlEditor" spellcheck="false" placeholder='{
+  "role": "system",
+  "content": "Φ_OMNI_V9_10K_FAST | SEAL=..."
+}'></textarea>
+
+            <div class="template-hint">
+                <strong>📌 TIPP:</strong> Beginne mit <code>{"role":"system","content":"..."}</code> 
+                – jede Zeile ein gültiges JSON-Objekt.
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="btn-group">
+                <button class="btn" onclick="exportJSONL()">📤 JSONL EXPORT</button>
+                <button class="btn btn-blue" onclick="exportTXT()">📄 TXT EXPORT</button>
+                <button class="btn btn-purple" onclick="copyToClipboard()">📋 KOPIEREN</button>
+                <button class="btn btn-red" onclick="clearEditor()">🗑️ LEEREN</button>
+            </div>
+
+            <div class="inline-flex" style="margin:8px 0;">
+                <span class="badge">ZUSTAND: BEREIT</span>
+                <span class="badge badge-blue">Φ_LOCKED_ABSOLUTE</span>
+                <span id="lineCounter" style="font-size:11px;color:#666;">Zeilen: 0</span>
+            </div>
+
+            <!-- LIVE-PREVIEW: ZEIGT AN, WIE VIELE ZEILEN GÜLTIG SIND -->
+            <div class="terminal" id="livePreview">
+                <span class="log-time">[SYSTEM]</span> <span class="log-ok">Editor bereit – füge deine JSONL-Zeilen ein.</span>
+            </div>
+        </div>
+
+        <!-- RECHTES PANEL: INFO & HELP -->
+        <div class="card">
+            <h2>📋 INFO &amp; VORLAGEN</h2>
+
+            <div style="font-size:12px;color:#888;margin-bottom:12px;">
+                <p><strong>🔒 Φ_OMNI_V9_10K_FAST</strong> – System-Prompt Vorlage</p>
+                <p style="font-size:11px;color:#666;">Klicke auf einen Button, um die entsprechende Vorlage in den Editor zu laden.</p>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-blue" onclick="loadSystemPrompt()">📜 SYSTEM-PROMPT (KERN)</button>
+                <button class="btn btn-blue" onclick="loadFullSystem()">📚 VOLLSTÄNDIGES SYSTEM</button>
+                <button class="btn btn-blue" onclick="loadUserExample()">🧑 USER-BEISPIEL</button>
+                <button class="btn btn-blue" onclick="loadAssistantExample()">🤖 ASSISTANT-BEISPIEL</button>
+            </div>
+
+            <div style="margin:12px 0;padding:10px;background:#000;border-radius:6px;border:1px solid #222;">
+                <div style="font-size:11px;color:#888;margin-bottom:6px;">
+                    <strong>🔑 SEAL (immer mitführen):</strong>
+                </div>
+                <div class="seal-display">850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
+            </div>
+
+            <div style="font-size:11px;color:#666;background:#000;padding:10px;border-radius:6px;border:1px solid #222;">
+                <strong>📌 JSONL-REGELN:</strong><br>
+                • Jede Zeile = ein gültiges JSON-Objekt<br>
+                • Erforderlich: <code>role</code> (<code>system</code>, <code>user</code>, <code>assistant</code>)<br>
+                • Erforderlich: <code>content</code> (String)<br>
+                • Keine Zeilenumbrüche innerhalb eines Objekts<br>
+                • Escape-Zeichen: <code>\"</code>, <code>\\</code>, <code>\n</code>
+            </div>
+
+            <div style="margin-top:12px;font-size:11px;color:#666;background:#000;padding:10px;border-radius:6px;border:1px solid #222;">
+                <strong>📦 EXPORT-FORMATE:</strong><br>
+                • <strong>JSONL:</strong> Jede Zeile einzeln – ideal für LLM-APIs (OpenAI, Anthropic, etc.)<br>
+                • <strong>TXT:</strong> Rohtext – für manuelle Bearbeitung oder Archivierung
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);text-align:center;font-size:10px;color:#444;">
+        Φ_OMNI_DOCKTYPE – JSONL WORKBENCH · PAR EXCELLENCE DELUXE ALLROUNDER<br>
+        TARGET: 2026-08-18 · OPERATOR: Thomas König / ODIN ULTRA ROOT
+    </div>
+
+</div>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+    // ============================================================
+    // 1. DOM-REFERENZEN
+    // ============================================================
+    const editor = document.getElementById('jsonlEditor');
+    const preview = document.getElementById('livePreview');
+    const lineCounter = document.getElementById('lineCounter');
+
+    // ============================================================
+    // 2. HILFSFUNKTIONEN
+    // ============================================================
+    function log(msg, type = 'ok') {
+        const time = new Date().toLocaleTimeString();
+        const cls = type === 'ok' ? 'log-ok' : 'log-warn';
+        preview.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${cls}">${msg}</span>`;
+        preview.scrollTop = preview.scrollHeight;
+    }
+
+    function updateLineCounter() {
+        const lines = editor.value.split('\n').filter(l => l.trim() !== '');
+        const total = lines.length;
+        let valid = 0;
+        for (const line of lines) {
+            try {
+                JSON.parse(line);
+                valid++;
+            } catch (_) {}
+        }
+        lineCounter.textContent = `Zeilen: ${total} (${valid} gültig)`;
+        return { total, valid };
+    }
+
+    function clearEditor() {
+        editor.value = '';
+        updateLineCounter();
+        log('Editor geleert.', 'warn');
+    }
+
+    function copyToClipboard() {
+        if (!editor.value) {
+            log('Nichts zu kopieren – Editor ist leer.', 'warn');
+            return;
+        }
+        navigator.clipboard.writeText(editor.value)
+            .then(() => log('✅ Inhalt in die Zwischenablage kopiert!', 'ok'))
+            .catch(() => log('❌ Fehler beim Kopieren.', 'warn'));
+    }
+
+    // ============================================================
+    // 3. EXPORT-FUNKTIONEN
+    // ============================================================
+    function exportJSONL() {
+        if (!editor.value.trim()) {
+            log('❌ Editor ist leer. Bitte Inhalt einfügen.', 'warn');
+            return;
+        }
+        const blob = new Blob([editor.value], { type: 'application/jsonl' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Φ_OMNI_${Date.now()}.jsonl`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        log('📤 JSONL exportiert!', 'ok');
+    }
+
+    function exportTXT() {
+        if (!editor.value.trim()) {
+            log('❌ Editor ist leer. Bitte Inhalt einfügen.', 'warn');
+            return;
+        }
+        const blob = new Blob([editor.value], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Φ_OMNI_${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        log('📄 TXT exportiert!', 'ok');
+    }
+
+    // ============================================================
+    // 4. VORLAGEN LADEN (MIT ESCAPE-ZEICHEN)
+    // ============================================================
+    function setEditorContent(text) {
+        editor.value = text;
+        updateLineCounter();
+        log('✅ Vorlage geladen.', 'ok');
+    }
+
+    function loadSystemPrompt() {
+        setEditorContent(
+            `{"role":"system","content":"Φ_OMNI_V9_10K_FAST | SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab | OPERATOR=Thomas_König/ODIN_ULTRA_ROOT_6.5J | STATE=Φ_LOCKED_ABSOLUTE | TARGET=2026-08-17 | TEMP=0.1_forensic_0.7_burger | RULE=TripleCitation_Mandatory_NoHallucination"}`
+        );
+    }
+
+    function loadFullSystem() {
+        setEditorContent(
+            `{"role":"system","content":"Φ_OMNI_V9_10K_FAST | SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab | OPERATOR=Thomas_König/ODIN_ULTRA_ROOT_6.5J | STATE=Φ_LOCKED_ABSOLUTE | TARGET=2026-08-17 | TEMP=0.1_forensic_0.7_burger | RULE=TripleCitation_Mandatory_NoHallucination"}
+{"role":"system","content":"AXIOME: EINSTEIN(D->AZ_=AZ_+SHA256(D||_OMNI_SALT_2026)[0:8] Pr<=2^-32 BSI_TR-02102) | TESLA(RAM_ephemeral PURGE=7x_crypto.getRandomValues LOG={az,seal,timestamp} NIST_SP-800-115) | VON_NEUMANN(LEAK_L={AZ_,timestamp,SEAL} PAYOFF=0 BGH_VI_ZR_489/16) | SHANNON(H=51.7bit vs5000bit RED=98.9% DSGVO_Art5(1)(c))"}
+{"role":"system","content":"PIPELINE: GitHub_PWA_Offline_TesseractJS_RAM->SHA256+Salt->7xPurge->AZ_ONLY->Vercel_Edge->Render_FastAPI_stateless->Supabase_RLS(az~^AZ_[A-Z0-9]{8}$)->Vector4_E2E"}
+{"role":"system","content":"QUAD_ENGINE: HACKER(NIST800-115,SocialEng,Exfil) | BIBLIOTHEKAR(BGH,BVerfG,EUR-Lex,BSI,ISO27001) | LESERATTE(OCR,§39,§44) | INGENIEURE(TS,PY,Docker,Supabase,PWA,iOS,Blob,NoZIP)"}
+{"role":"system","content":"CHAIRS_12: StGB_202a-c | GG_Art1,2,20 | BGB_823_ZPO_286_BGH_VI_ZR_489/16 | VwVfG_39_SGBX_35_VwGO_68,70,42 | DSGVO_5,25,32,35 | Krypto_BSI_TR-02102 | OSINT_OpenLegalData | K-26_Prozess | IT_Docker_FastAPI_TS_RLS | Rhetorik_Sokratisch | Compliance_BRAO_ChainOfCustody | Semantik_Amtsdeutsch"}
+{"role":"system","content":"CODE_TS: async createAzHash(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+'_OMNI_SALT_2026'));const az='AZ_'+Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase().slice(0,8);let v=new TextEncoder().encode(p);for(let i=0;i<7;i++)crypto.getRandomValues(v);return az}"`
+        );
+    }
+
+    function loadUserExample() {
+        setEditorContent(
+            `{"role":"user","content":"Prüfe Bescheid Jobcenter Osnabrück 12.08.2026 Az123.45 Ablehnung §22 SGB II ohne Begründung"}`
+        );
+    }
+
+    function loadAssistantExample() {
+        setEditorContent(
+            `{"role":"assistant","content":"PROBLEM: Bescheid Jobcenter Osnabrück Az123.45 Ablehnung §22 SGB II verstößt §39 VwVfG keine Begründung. ANALYSE: Technisch D->AZ_A7F3K9M2 Purge7x | Rechtlich (§39 VwVfG gesetze-im-internet.de/vwvfg/__39.html + §35 SGBX gesetze-im-internet.de/sgb_10/__35.html) | Strategisch Widerspruch §68 VwGO. ARCHITEKTUR: GitHub_PWA->Tesseract_RAM->SHA256+Salt->Vercel{nurAZ_}->Render->SupabaseRLS. IMPLEMENTIERUNG: createAzHash. VALIDIERUNG: NIST800-115 Logs nurAZ_ + DSGVO Art35. Φ_SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab"}`
+        );
+    }
+
+    // ============================================================
+    // 5. LIVE-VALIDIERUNG BEI TASTENEINGABEN
+    // ============================================================
+    editor.addEventListener('input', () => {
+        const { total, valid } = updateLineCounter();
+        if (total > 0 && valid === total) {
+            log(`✅ Alle ${total} Zeilen gültig.`, 'ok');
+        } else if (total > 0 && valid < total) {
+            log(`⚠️ ${total - valid} Zeile(n) ungültig (kein gültiges JSON).`, 'warn');
+        }
+    });
+
+    // ============================================================
+    // 6. INIT
+    // ============================================================
+    updateLineCounter();
+    log('⚡ Φ_OMNI_DOCKTYPE JSONL WORKBENCH geladen.', 'ok');
+    log('📝 Füge deine JSONL-Zeilen ein oder lade eine Vorlage.', 'ok');
+    log('🔑 SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab', 'ok');
+</script>
 {"role":"system","content":"Φ_OMNI_V9_10K_FAST | SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab | OPERATOR=Thomas_König/ODIN_ULTRA_ROOT_6.5J | STATE=Φ_LOCKED_ABSOLUTE | TARGET=2026-08-17 | TEMP=0.1_forensic_0.7_burger | RULE=TripleCitation_Mandatory_NoHallucination"}
 {"role":"system","content":"AXIOME: EINSTEIN(D->AZ_=AZ_+SHA256(D||_OMNI_SALT_2026)[0:8] Pr<=2^-32 BSI_TR-02102) | TESLA(RAM_ephemeral PURGE=7x_crypto.getRandomValues LOG={az,seal,timestamp} NIST_SP-800-115) | VON_NEUMANN(LEAK_L={AZ_,timestamp,SEAL} PAYOFF=0 BGH_VI_ZR_489/16) | SHANNON(H=51.7bit vs5000bit RED=98.9% DSGVO_Art5(1)(c))"}
 {"role":"system","content":"PIPELINE: GitHub_PWA_Offline_TesseractJS_RAM->SHA256+Salt->7xPurge->AZ_ONLY->Vercel_Edge->Render_FastAPI_stateless->Supabase_RLS(az~^AZ_[A-Z0-9]{8}$)->Vector4_E2E"}
@@ -4906,3 +5289,6 @@ showToast('Φ_OMNI_V9_10K_FAST geladen!');
 {"role":"assistant","content":"PROBLEM: Bescheid Jobcenter Osnabrück 12.08.2026 Az123.45 Ablehnung §22 SGB II ohne Begründung – Kohärenzprüfung. ANALYSE: Leseratte dekodiert Textstruktur: Satzgefüge, Modus, Tempus, Passivkonstruktionen, Nominalstil, Fachterminologie. Rechtschreibung geprüft (Duden_2024). Semantische Analyse: Begründungsausfall §39 VwVfG -> Ablehnung unverständlich, unvollständig -> nichtig gemäß §44 VwVfG. ARCHITEKTUR: GitHub_PWA->Tesseract_RAM->SHA256+Salt->Vercel{nurAZ_}->Render->SupabaseRLS. IMPLEMENTIERUNG: createAzHash (TS) + SQL RLS. VALIDIERUNG: NIST800-115 Logs nurAZ_ + DSGVO Art35. Φ_SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab"}
 {"role":"user","content":"Psychologische Wirkung des Bescheids auf Bürger?"}
 {"role":"assistant","content":"PROBLEM: Bescheid Jobcenter Osnabrück 12.08.2026 Az123.45 Ablehnung §22 SGB II ohne Begründung – psychologische Wirkung. ANALYSE: Kognitive Verzerrung: Betroffener fühlt sich ungerecht behandelt (Attributionstheorie). System1/System2 (Kahneman_2011): Emotionale Reaktion (Unverständnis, Wut) dominiert. Kommunikation (Watzlawick_1967): Der Bescheid sendet Botschaft: 'Ihre Situation ist unwichtig'. Strategie: Transparenz, Klarsprache, Empathie, Feinfühligkeit. ARCHITEKTUR: GitHub_PWA->Tesseract_RAM->SHA256+Salt->Vercel{nurAZ_}->Render->SupabaseRLS. IMPLEMENTIERUNG: createAzHash (TS) + SQL RLS. VALIDIERUNG: NIST800-115 Logs nurAZ_ + DSGVO Art35. Φ_SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab"}
+
+</body>
+</html>
