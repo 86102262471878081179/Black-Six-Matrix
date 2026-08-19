@@ -1,6 +1,618 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black‑Six‑Matrix — PAR EXCELLENCE DELUXE</title>
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --panel-bg: #0a0a0f;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --border: #2a2a3a;
+            --ok: #00ff88;
+        }
+        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body {
+            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #000 0%, #1a0030 50%, #000 100%);
+            padding: 30px 20px;
+            border-bottom: 2px solid var(--neon-green);
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.1), transparent, rgba(0,200,255,0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .header h1 { color: var(--neon-green); margin: 0; font-size: 2rem; text-shadow: 0 0 30px var(--neon-green); letter-spacing: 4px; position: relative; z-index: 1; }
+        .header .sub { color: #888; font-size: 14px; margin-top: 6px; position: relative; z-index: 1; }
+        .header .badge { display: inline-block; background: var(--neon-red); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 8px; letter-spacing: 1px; position: relative; z-index: 1; }
+        .seal { font-size: 11px; color: #555; margin-top: 8px; word-break: break-all; position: relative; z-index: 1; }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+        .tab-btn {
+            background: #1a1a2e; color: #aaa; border: 1px solid #333;
+            padding: 10px 20px; cursor: pointer; font-weight: bold;
+            border-radius: 8px 8px 0 0; transition: all 0.3s;
+            flex: 1 1 auto; text-align: center; font-size: 13px;
+        }
+        .tab-btn:hover { background: #2a2a4e; }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 -5px 20px rgba(0,255,191,0.3); }
+
+        .tab-content { display: none; border: 1px solid #333; padding: 24px; border-radius: 0 0 12px 12px; background: var(--card-bg); animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--panel-bg); border: 1px solid #2a2a3a; border-radius: 10px; padding: 18px; margin-bottom: 16px; transition: all 0.3s; }
+        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,200,255,0.1); }
+        .card h2 { color: var(--neon-blue); border-bottom: 1px solid #333; padding-bottom: 8px; margin-top: 0; font-size: 18px; }
+        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+        .terminal {
+            background: #000; border: 1px solid #333; height: 150px;
+            overflow-y: auto; font-size: 10px; padding: 10px;
+            color: var(--ok); border-radius: 8px; line-height: 1.6;
+            margin-bottom: 16px; font-family: 'Courier New', monospace;
+        }
+        .log-time { color: #666; }
+        .log-ok { color: var(--ok); }
+        .log-warn { color: var(--neon-red); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 14px;
+            border: none; width: 100%; cursor: pointer; border-radius: 8px;
+            font-weight: bold; margin: 8px 0; font-size: 14px; transition: all 0.3s;
+        }
+        .btn:hover { background: #00ddaa; transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,191,0.3); }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+        .btn-red { background: var(--neon-red); color: #fff; }
+
+        .tree {
+            background: #000; border: 1px solid #333; border-radius: 8px;
+            padding: 16px; font-size: 12px; color: var(--ok); line-height: 1.8;
+            overflow-x: auto; font-family: 'Courier New', monospace;
+        }
+        .tree .folder { color: var(--neon-yellow); }
+        .tree .file { color: var(--neon-blue); }
+
+        .folder-card {
+            background: #02020a; border: 1px solid #333; border-radius: 8px;
+            padding: 14px; margin: 8px 0;
+            border-left: 4px solid var(--neon-green);
+        }
+        .folder-card .folder-title { color: var(--neon-yellow); font-weight: bold; font-size: 14px; }
+        .folder-card .folder-files { font-size: 12px; color: #888; margin-top: 6px; }
+
+        .badge-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 12px;
+            font-size: 10px; font-weight: bold; margin-right: 4px;
+        }
+        .badge-tag.ok { background: var(--neon-green); color: #000; }
+        .badge-tag.danger { background: var(--neon-red); color: #fff; }
+
+        @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header" id="mainHeader">
+        <h1>⚡ Black‑Six‑Matrix — PAR EXCELLENCE DELUXE</h1>
+        <div class="sub">8 Module · SYSTEM FUSION · NEXT.JS · NEON-UI · VERCEL-READY</div>
+        <div class="badge">Φ_LOCKED_ABSOLUTE</div>
+        <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
+        <div style="margin-top:8px;font-size:13px;color:#888;">Operator: Thomas König / ODIN ULTRA ROOT</div>
+    </div>
+
+    <!-- ========== TABS ========== -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-architektur">🏛️ ARCHITEKTUR</button>
+        <button class="tab-btn" data-tab="tab-dashboard">📊 DASHBOARD</button>
+        <button class="tab-btn" data-tab="tab-module">🧩 MODULE (8)</button>
+        <button class="tab-btn" data-tab="tab-deploy">🚀 DEPLOY</button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: ARCHITEKTUR                                                   -->
+    <!-- ======================================================================= -->
+    <div class="tab-content active" id="tab-architektur">
+        <div class="card">
+            <h2>📁 Gesamtarchitektur – REAL, STABIL, MODULAR</h2>
+            <div class="tree">
+<span class="folder">black-six-matrix/</span><br>
+├── <span class="folder">src/</span><br>
+│   ├── <span class="folder">dashboard/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">simulation/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">matrix_ui/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">visualizer/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">project_viewer/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">engine_monitor/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   ├── <span class="folder">neon_interface/</span><br>
+│   │   └── <span class="file">index.js</span><br>
+│   └── <span class="folder">supreme_frontend/</span><br>
+│       └── <span class="file">index.js</span><br>
+├── <span class="folder">public/</span><br>
+│   └── <span class="folder">assets/</span><br>
+│       └── <span class="file">favicon.ico</span><br>
+├── <span class="folder">pages/</span><br>
+│   ├── <span class="file">index.js</span><br>
+│   ├── <span class="folder">api/</span><br>
+│   │   └── <span class="file">hello.js</span><br>
+│   └── <span class="folder">modules/</span><br>
+│       ├── <span class="file">dashboard.js</span><br>
+│       ├── <span class="file">simulation.js</span><br>
+│       ├── <span class="file">matrix.js</span><br>
+│       ├── <span class="file">visualizer.js</span><br>
+│       ├── <span class="file">projects.js</span><br>
+│       ├── <span class="file">engine.js</span><br>
+│       ├── <span class="file">neon.js</span><br>
+│       └── <span class="file">supreme.js</span><br>
+├── <span class="folder">styles/</span><br>
+│   └── <span class="file">neon.css</span><br>
+├── <span class="folder">docs/</span><br>
+│   ├── <span class="file">README.md</span><br>
+│   ├── <span class="file">ARCHITECTURE.md</span><br>
+│   ├── <span class="file">MODULES.md</span><br>
+│   └── <span class="file">UI.md</span><br>
+├── <span class="folder">build/</span><br>
+│   ├── <span class="file">manifest.json</span><br>
+│   └── <span class="file">pipeline.md</span><br>
+├── <span class="file">package.json</span><br>
+├── <span class="file">next.config.js</span><br>
+├── <span class="file">vercel.json</span><br>
+├── <span class="file">.env.local</span><br>
+└── <span class="file">README.md</span>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>🔧 CORE-RUNTIME</h2>
+                <div class="terminal" style="height: 120px; font-size: 9px;">
+// core/runtime.js
+export function runtimePulse() {
+  return {
+    pulse: Math.random().toFixed(3),
+    timestamp: Date.now()
+  };
+}
+
+export function engineStatus() {
+  return {
+    status: 'OK',
+    uptime: Math.floor(performance.now() / 1000),
+    modules: 8
+  };
+}
+                </div>
+            </div>
+            <div class="card">
+                <h2>📦 MANIFEST (v2.0.0)</h2>
+                <div class="terminal" style="height: 120px; font-size: 9px;">
+{
+  "name": "Black-Six-Matrix",
+  "version": "2.0.0",
+  "entry": "pages/index.js",
+  "modules": [
+    "dashboard",
+    "simulation",
+    "matrix_ui",
+    "visualizer",
+    "project_viewer",
+    "engine_monitor",
+    "neon_interface",
+    "supreme_frontend"
+  ]
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: DASHBOARD                                                    -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-dashboard">
+        <div class="card">
+            <h2>📊 Black‑Six‑Matrix Dashboard</h2>
+            <p style="font-size: 12px; color: #888;">Zentrale Übersicht über alle 8 Module</p>
+            <div class="grid-4">
+                <div class="folder-card" style="border-left-color: var(--neon-green);">
+                    <div class="folder-title">🟩 Simulation</div>
+                    <div class="folder-files">Pulse · Grid · Wave · Fractal</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('simulation')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: var(--neon-purple);">
+                    <div class="folder-title">🟪 Matrix‑UI</div>
+                    <div class="folder-files">Matrix-Animation · Canvas</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('matrix')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: var(--neon-blue);">
+                    <div class="folder-title">🟦 Visualizer</div>
+                    <div class="folder-files">Data Visualization · Graphen</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('visualizer')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: var(--neon-yellow);">
+                    <div class="folder-title">🟫 Projekt‑Viewer</div>
+                    <div class="folder-files">SupremeOmegaX3 · Black‑Core · Neon‑UI</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('projects')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: var(--neon-red);">
+                    <div class="folder-title">🟥 Engine‑Monitor</div>
+                    <div class="folder-files">Status · Pulse · Uptime</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('engine')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: #ff66aa;">
+                    <div class="folder-title">🟧 Neon‑Interface</div>
+                    <div class="folder-files">Pulse-Visualisierung · UI-Module</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('neon')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: #00ff88;">
+                    <div class="folder-title">🟩 SupremeOmegaX3</div>
+                    <div class="folder-files">Frontend · Dashboard · Monitor</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('supreme')">➜ Öffnen</button>
+                </div>
+                <div class="folder-card" style="border-left-color: var(--neon-green);">
+                    <div class="folder-title">🏠 Dashboard</div>
+                    <div class="folder-files">Zentrale Übersicht</div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="navigateTo('dashboard')">➜ Öffnen</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Dashboard-Code (pages/index.js)</h2>
+            <div class="terminal" style="height: 120px; font-size: 9px;">
+export default function Dashboard() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Black‑Six‑Matrix Dashboard&lt;/h1&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/simulation"&gt;Simulation&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/matrix"&gt;Matrix‑UI&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/visualizer"&gt;Visualizer&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/projects"&gt;Projekt‑Viewer&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/engine"&gt;Engine‑Monitor&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/neon"&gt;Neon‑Interface&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/supreme"&gt;SupremeOmegaX3‑Frontend&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: MODULE (8)                                                   -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-module">
+        <div class="grid-2">
+            <!-- Simulation -->
+            <div class="card">
+                <h2>🟩 Simulation</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function Simulation() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Simulation&lt;/h1&gt;
+      &lt;p&gt;Pulse‑Simulation, Grid‑Simulation, Wave‑Simulation, Fractal‑Simulation.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Matrix-UI -->
+            <div class="card">
+                <h2>🟪 Matrix‑UI</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function MatrixUI() {
+  return (
+    &lt;div className="matrix"&gt;
+      &lt;canvas id="matrixCanvas"&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Visualizer -->
+            <div class="card">
+                <h2>🟦 Visualizer</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function Visualizer() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Data Visualizer&lt;/h1&gt;
+      &lt;canvas id="viz"&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Projekt-Viewer -->
+            <div class="card">
+                <h2>🟫 Projekt‑Viewer</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function Projects() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Projekt‑Viewer&lt;/h1&gt;
+      &lt;p&gt;SupremeOmegaX3, Black‑Core, Neon‑UI, Engine‑Blueprints.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Engine-Monitor -->
+            <div class="card">
+                <h2>🟥 Engine‑Monitor</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+import { runtimePulse } from "../core/runtime";
+
+export default function EngineMonitor() {
+  const pulse = runtimePulse();
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Engine‑Monitor&lt;/h1&gt;
+      &lt;p&gt;Status: OK&lt;/p&gt;
+      &lt;p&gt;Pulse: {pulse.pulse}&lt;/p&gt;
+      &lt;p&gt;Timestamp: {pulse.timestamp}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Neon-Interface -->
+            <div class="card">
+                <h2>🟧 Neon‑Interface</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function NeonInterface() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Neon‑Interface&lt;/h1&gt;
+      &lt;p&gt;UI‑Module für Pulse‑Visualisierung.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- SupremeOmegaX3 Frontend -->
+            <div class="card">
+                <h2>🟩 SupremeOmegaX3 Frontend</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+import EngineMonitor from "../ui/engineMonitor";
+
+export default function SupremeFrontend() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;SupremeOmegaX3 — Frontend&lt;/h1&gt;
+      &lt;EngineMonitor /&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="card">
+                <h2>🏠 Dashboard</h2>
+                <div class="terminal" style="height: 80px; font-size: 9px;">
+export default function Dashboard() {
+  return (
+    &lt;div className="neon"&gt;
+      &lt;h1&gt;Black‑Six‑Matrix Dashboard&lt;/h1&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/simulation"&gt;Simulation&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/matrix"&gt;Matrix‑UI&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/visualizer"&gt;Visualizer&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/projects"&gt;Projekt‑Viewer&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/engine"&gt;Engine‑Monitor&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/neon"&gt;Neon‑Interface&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/supreme"&gt;SupremeOmegaX3‑Frontend&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: DEPLOY                                                       -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-deploy">
+        <div class="card">
+            <h2>🚀 Build‑Pipeline</h2>
+            <div class="terminal" style="height: 120px; font-size: 9px;">
+# Build Pipeline
+
+npm install          # Abhängigkeiten installieren
+npm run dev          # Lokal testen (http://localhost:3000)
+npm run build        # Produktionsbuild erstellen
+npx vercel deploy    # Deployment zu Vercel
+
+# Environment Variables
+NEXT_PUBLIC_API_URL=https://api.black-six-matrix.io
+OMNI_SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>📦 package.json</h2>
+                <div class="terminal" style="height: 120px; font-size: 9px;">
+{
+  "name": "black-six-matrix",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "vercel deploy --prod"
+  },
+  "dependencies": {
+    "next": "14.0.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
+                </div>
+            </div>
+            <div class="card">
+                <h2>⚡ vercel.json</h2>
+                <div class="terminal" style="height: 120px; font-size: 9px;">
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://api.black-six-matrix.io"
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Neon‑CSS (styles/neon.css)</h2>
+            <div class="terminal" style="height: 120px; font-size: 9px;">
+.neon {
+  background: #000;
+  color: #0ff;
+  font-family: monospace;
+  padding: 20px;
+  min-height: 100vh;
+}
+.neon a {
+  color: #0ff;
+  text-decoration: none;
+}
+.neon a:hover {
+  color: #fff;
+  text-shadow: 0 0 20px #0ff;
+}
+.neon h1 {
+  color: #0ff;
+  text-shadow: 0 0 30px #0ff;
+}
+.matrix {
+  background: #000;
+  color: #0f0;
+  min-height: 100vh;
+}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Deployment-Checkliste</h2>
+            <ul style="font-size: 13px; line-height: 2;">
+                <li>✅ <strong>Repository</strong> auf GitHub erstellen</li>
+                <li>✅ <strong>Code</strong> in das Repository pushen</li>
+                <li>✅ <strong>Vercel</strong> mit GitHub verbinden</li>
+                <li>✅ <strong>Build</strong> automatisch ausführen lassen</li>
+                <li>✅ <strong>URL</strong> testen: <code>https://black-six-matrix.vercel.app</code></li>
+                <li>✅ <strong>Umgebungsvariablen</strong> in Vercel setzen</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========== GLOBAL TERMINAL ========== -->
+    <div class="card">
+        <h2>💻 SYSTEM LOG</h2>
+        <div class="terminal" id="globalLog" style="height: 100px;">
+            [SYS] Black‑Six‑Matrix — PAR EXCELLENCE DELUXE geladen.<br>
+            [SYS] STATUS: Φ_LOCKED_ABSOLUTE<br>
+            [SYS] 8 Module bereit: Dashboard, Simulation, Matrix-UI, Visualizer, Projekt-Viewer, Engine-Monitor, Neon-Interface, SupremeOmegaX3-Frontend.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ========== TABS ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ========== HEADER GLITCH ==========
+    document.getElementById('mainHeader').addEventListener('click', function() {
+        this.classList.add('glitch');
+        setTimeout(() => this.classList.remove('glitch'), 1000);
+    });
+
+    // ========== NAVIGATION ==========
+    function navigateTo(module) {
+        showToast(`➜ Navigiere zu: ${module}`, 'ok');
+        // In einer echten Next.js-Umgebung würde hier geroutet werden:
+        // window.location.href = `/${module}`;
+    }
+
+    function showToast(msg, type = 'ok') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#000; border:1px solid ${type === 'ok' ? '#00ffbf' : '#ff0040'}; color:${type === 'ok' ? '#00ffbf' : '#ff0040'}; padding:12px 24px; border-radius:8px; z-index:9999; font-size:12px;`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ========== INIT ==========
+    console.log('[SYS] Black‑Six‑Matrix — PAR EXCELLENCE DELUXE geladen.');
+    console.log('[SYS] STATUS: Φ_LOCKED_ABSOLUTE');
+    console.log('[SYS] 8 Module bereit.');
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Φ_OMNI_ULTIMATE_COMPLETE_PLUS_PHASEN</title>
