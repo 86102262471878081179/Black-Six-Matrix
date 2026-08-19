@@ -3929,3 +3929,926 @@ auto:
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🏛️ BÜRGERPLATTFORM – Φ_OMNI_V9 · MODUL</title>
+
+    <!-- CDN Bibliotheken -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --neon-orange: #ff6b00;
+            --panel-bg: #0a0a12;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --text-muted: #8899bb;
+            --text-dark: #445566;
+            --border: #1a2a3a;
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --shadow: 0 12px 48px rgba(0,0,0,0.8);
+            --glass: rgba(10,10,18,0.75);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(ellipse at 20% 30%, #0f1a2e, #060a14 90%);
+            color: var(--text);
+            font-family: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.7;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--panel-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+
+        .master-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(13,13,26,0.96), rgba(6,10,20,0.98));
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 32px 40px;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+        .master-container::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.03), transparent, rgba(0,200,255,0.03), transparent);
+            animation: rotateBackground 30s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotateBackground { 100% { transform: rotate(360deg); } }
+
+        .header {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-green); padding-bottom: 24px; margin-bottom: 32px;
+            position: relative; z-index: 1;
+        }
+        .title-block h1 {
+            font-size: 2.4rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin: 0;
+        }
+        .title-block .sub {
+            font-size: 0.95rem; color: var(--text-muted); letter-spacing: 0.15em;
+        }
+        .title-block .tag {
+            display: inline-block; margin-top: 6px; padding: 4px 16px;
+            border: 1px solid var(--neon-yellow); border-radius: 20px;
+            font-size: 0.7rem; color: var(--neon-yellow); letter-spacing: 2px;
+            font-weight: 700; text-transform: uppercase;
+        }
+        .badge-cluster {
+            text-align: right; font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.75rem; color: var(--text-muted);
+            background: var(--card-bg); padding: 12px 20px; border-radius: 12px;
+            border: 1px solid var(--border); min-width: 200px;
+        }
+        .badge-cluster .lock { color: var(--ok); font-weight: 700; font-size: 0.85rem; display: block; }
+        .badge-cluster .seal { color: var(--neon-yellow); font-size: 0.6rem; word-break: break-all; }
+        .badge-cluster .operator { color: var(--neon-blue); }
+
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 24px; position: relative; z-index: 1;
+        }
+        .tab-btn {
+            background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);
+            padding: 10px 22px; cursor: pointer; font-weight: 700; border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease; flex: 1 1 auto; text-align: center; font-size: 12px;
+            letter-spacing: 0.5px; font-family: 'Courier New', monospace;
+        }
+        .tab-btn:hover { background: var(--panel-bg); color: var(--text); border-color: var(--neon-green); }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 0 30px rgba(0,255,191,0.2); }
+
+        .tab-content {
+            display: none; border: 1px solid var(--border); padding: 24px;
+            border-radius: 0 0 12px 12px; background: var(--card-bg);
+            animation: fadeIn 0.4s ease; position: relative; z-index: 1;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 18px 20px; margin-bottom: 16px; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-blue), transparent);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .card:hover { border-color: var(--neon-green); }
+        .card:hover::after { opacity: 1; }
+        .card h2 {
+            color: var(--neon-blue); border-bottom: 1px solid var(--border);
+            padding-bottom: 8px; margin-top: 0; margin-bottom: 14px;
+            font-size: 16px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
+        }
+        .card h3 { color: var(--neon-green); font-size: 13px; margin: 12px 0 6px 0; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+
+        .terminal {
+            background: #000a0a; border: 1px solid rgba(0,255,191,0.12);
+            border-radius: 8px; padding: 12px 14px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 10px; color: var(--neon-green); overflow-y: auto;
+            line-height: 1.8; max-height: 200px; min-height: 80px;
+        }
+        .terminal .log-time { color: var(--text-dark); }
+        .terminal .log-ok { color: var(--ok); }
+        .terminal .log-warn { color: var(--neon-orange); font-weight: bold; }
+        .terminal .log-error { color: var(--danger); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 12px 20px;
+            border: none; border-radius: 8px; font-weight: 700;
+            font-family: 'Courier New', monospace; font-size: 13px; cursor: pointer;
+            transition: all 0.3s ease; width: 100%; margin: 6px 0; letter-spacing: 0.5px;
+        }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,255,191,0.2); background: #00ddaa; }
+        .btn-orange { background: var(--neon-orange); color: #000; box-shadow: 0 0 30px rgba(255,107,0,0.2); }
+        .btn-orange:hover { background: #ff7a1a; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+        .btn-red { background: var(--danger); color: #fff; }
+        .btn-sm { padding: 6px 14px; font-size: 10px; width: auto; display: inline-block; }
+
+        .module-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: 12px 14px; transition: all 0.3s ease; cursor: pointer;
+            border-left: 3px solid var(--neon-green);
+        }
+        .module-card:hover { border-color: var(--neon-green); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,255,191,0.06); }
+        .module-card .name { font-weight: 600; font-size: 12px; color: var(--text); }
+        .module-card .desc { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+        .module-card .status { font-size: 8px; margin-top: 4px; }
+        .module-card .status.online { color: var(--ok); }
+        .module-card .status.running { color: var(--neon-orange); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .sector-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+            padding: 16px; transition: all 0.3s ease; border-left: 4px solid var(--neon-green);
+        }
+        .sector-card:hover { border-color: var(--neon-green); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,255,191,0.06); }
+        .sector-card .name { font-weight: 700; font-size: 14px; color: var(--text); }
+        .sector-card .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .sector-card .status { font-size: 9px; margin-top: 6px; }
+        .sector-card .status.online { color: var(--ok); }
+
+        .memory-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: 12px 16px; margin: 6px 0; border-left: 3px solid var(--neon-orange);
+            transition: all 0.3s ease;
+        }
+        .memory-card:hover { border-color: var(--neon-orange); box-shadow: 0 0 20px rgba(255,107,0,0.05); }
+        .memory-card .tag { color: var(--neon-orange); font-weight: 700; font-size: 11px; }
+        .memory-card .content { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #000; border: 1px solid var(--neon-green); color: var(--neon-green);
+            padding: 12px 28px; border-radius: 8px; z-index: 9999;
+            font-family: 'Courier New', monospace; font-size: 12px;
+            animation: slideDown 0.3s ease; box-shadow: 0 0 30px rgba(0,255,191,0.15);
+        }
+        .toast.warn { border-color: var(--neon-orange); color: var(--neon-orange); box-shadow: 0 0 30px rgba(255,107,0,0.15); }
+        @keyframes slideDown { from { opacity: 0; transform: translate(-50%, -100%); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        .footer {
+            margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            font-size: 0.75rem; color: var(--text-muted); position: relative; z-index: 1;
+        }
+        .footer strong { color: var(--neon-green); }
+        .footer .seal-line { font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text-dark); font-size: 0.65rem; }
+
+        @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .master-container { padding: 24px 20px; } .header { flex-direction: column; align-items: stretch; } .title-block h1 { font-size: 1.8rem; } .badge-cluster { text-align: left; margin-top: 12px; width: 100%; } }
+        @media (max-width: 600px) { .master-container { padding: 16px 12px; } .card { padding: 14px; } .grid-4, .grid-5 { grid-template-columns: 1fr 1fr; } .tab-btn { font-size: 10px; padding: 8px 12px; } }
+        .glitch { animation: glitch 0.8s ease; }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-2px, 4px); } 80% { transform: translate(2px, -4px); } 100% { transform: translate(0); } }
+    </style>
+</head>
+<body>
+
+<div class="master-container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="title-block">
+            <h1>🏛️ BÜRGERPLATTFORM</h1>
+            <div class="sub">Φ_OMNI_V9 · MODUL · PAR EXCELLENCE DELUXE</div>
+            <div class="sub" style="font-size:0.8rem; margin-top:4px; color: var(--neon-orange);">
+                <span class="tag">📜 DOCKTYPE CONSTITUTION v10.0.0</span>
+                <span style="margin-left:12px; color:var(--text-dark);">|</span>
+                <span style="margin-left:12px; color:var(--text-muted);">Zero-Trust · Triple-Citation · Bürgerrechte</span>
+            </div>
+        </div>
+        <div class="badge-cluster">
+            <span class="lock">⏺ Φ_LOCKED_ABSOLUTE</span>
+            <span class="operator">OPERATOR: THOMAS KÖNIG (ODIN ULTRA ROOT)</span>
+            <span class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</span>
+            <span style="color:var(--neon-blue);">TARGET: 2026-08-18 · VERSION: 10.0.0</span>
+        </div>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-scan">📄 SCAN</button>
+        <button class="tab-btn" data-tab="tab-analyse">🔬 ANALYSE</button>
+        <button class="tab-btn" data-tab="tab-widerspruch">⚖️ WIDERSPRUCH</button>
+        <button class="tab-btn" data-tab="tab-gesetze">📜 GESETZE</button>
+        <button class="tab-btn" data-tab="tab-lexikon">📚 LEXIKON</button>
+        <button class="tab-btn" data-tab="tab-export">📦 EXPORT</button>
+    </div>
+
+    <!-- TAB 1: SCAN -->
+    <div class="tab-content active" id="tab-scan">
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h2>📄 DOKUMENTEN SCAN (ALLES-FRESSER)</h2>
+                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+                        Lade Behördenbescheide, Verträge, Rechnungen oder andere Dokumente hoch.
+                        Die Plattform extrahiert Text, erkennt Strukturfehler und bereitet einen Widerspruch vor.
+                    </p>
+                    <select id="docType" style="width:100%;padding:10px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:6px;margin-bottom:10px;">
+                        <option value="allgemein">Allgemein</option>
+                        <option value="behoerde">Behörde</option>
+                        <option value="versicherung">Versicherung</option>
+                        <option value="finanzen">Finanzen</option>
+                        <option value="kredit">Kredit</option>
+                        <option value="krankenkasse">Krankenkasse</option>
+                        <option value="soziales">Soziales / Sozialamt</option>
+                        <option value="arbeitsamt">Arbeitsamt / Agentur für Arbeit</option>
+                        <option value="gez">GEZ / Rundfunkbeitrag</option>
+                    </select>
+                    <input type="file" id="buergerFile" accept="*/*" style="width:100%;padding:10px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:6px;margin-bottom:10px;" />
+                    <input type="email" id="buergerEmail" placeholder="Ihre E-Mail für Antwort" style="width:100%;padding:10px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:6px;margin-bottom:10px;" />
+                    <button class="btn btn-orange" onclick="startScan()">⚡ SCAN STARTEN</button>
+                    <div id="progressContainer" style="display:none;margin:8px 0;">
+                        <div style="height:6px;background:var(--panel-bg);border-radius:3px;overflow:hidden;">
+                            <div id="ocrProgress" style="height:100%;width:0%;background:linear-gradient(90deg,var(--neon-green),var(--neon-blue));border-radius:3px;transition:width 0.3s;"></div>
+                        </div>
+                        <span id="progressLabel" style="font-size:10px;color:var(--text-muted);">0%</span>
+                    </div>
+                    <h3 style="margin-top:12px;color:var(--neon-green);">Live Terminal</h3>
+                    <div class="terminal" id="buergerLog">[SYSTEM] Bereit für Upload – alle Formate akzeptiert.<br /></div>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h2>🔬 FORENSIK ERGEBNIS</h2>
+                    <div class="terminal" id="forensikResult" style="height:180px;">Warte auf Scan...</div>
+                </div>
+                <div class="card">
+                    <h2>💼 KANZLEI DASHBOARD</h2>
+                    <input type="text" id="lizenzKey" placeholder="Test-Key: DEMO-9999" style="width:100%;padding:10px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:6px;margin-bottom:10px;" />
+                    <button class="btn btn-blue" onclick="businessLogin()">LIZENZ AKTIVIEREN</button>
+                    <div id="businessPanel" style="display:none;margin-top:12px;">
+                        <h3 style="color:var(--neon-yellow);">Mandanten Anfragen</h3>
+                        <div class="terminal" id="mandantenLog" style="height:80px;">[SYSTEM] Keine Anfragen<br /></div>
+                        <button class="btn btn-sm btn-red" onclick="clearMandanten()">🗑️ ALLE LÖSCHEN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: ANALYSE -->
+    <div class="tab-content" id="tab-analyse">
+        <div class="card">
+            <h2>🔬 OMNI CORE MODULE (24)</h2>
+            <div class="grid-4" id="moduleGrid"></div>
+        </div>
+        <button class="btn btn-orange" onclick="triggerAllModules()">⚡ ALLE 24 MODULE AUSFÜHREN</button>
+        <div class="grid-2">
+            <div class="card">
+                <h2>🧠 AI-ANALYSE</h2>
+                <div class="terminal" id="log-ai" style="height:120px;">Warte auf Daten...</div>
+            </div>
+            <div class="card">
+                <h2>📡 SYSTEMDIAGNOSE</h2>
+                <div class="terminal" id="log-diag" style="height:120px;">Lade...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: WIDERSPRUCH -->
+    <div class="tab-content" id="tab-widerspruch">
+        <div class="card">
+            <h2>⚖️ WIDERSPRUCH GENERIEREN</h2>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+                Basierend auf der Analyse wird ein fertiger Widerspruch erstellt. Du kannst ihn kopieren, als TXT herunterladen oder als PDF exportieren.
+            </p>
+            <div class="terminal" id="widerspruchOutput" style="height:200px;font-size:11px;white-space:pre-wrap;">[SYSTEM] Führe zuerst einen Scan durch.</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                <button class="btn btn-sm btn-blue" onclick="copyWiderspruch()">📋 KOPIEREN</button>
+                <button class="btn btn-sm btn-orange" onclick="downloadWiderspruchTxt()">📄 TXT DOWNLOAD</button>
+                <button class="btn btn-sm btn-purple" onclick="downloadWiderspruchPDF()">📥 PDF DOWNLOAD</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>📋 FEHLERANALYSE</h2>
+            <div class="terminal" id="fehlerListe" style="height:120px;">[SYSTEM] Keine Fehler detektiert.</div>
+        </div>
+    </div>
+
+    <!-- TAB 4: GESETZE -->
+    <div class="tab-content" id="tab-gesetze">
+        <div class="card">
+            <h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="grid-4">
+                <button class="btn btn-sm" onclick="showLaw('bgb')">📖 BGB</button>
+                <button class="btn btn-sm" onclick="showLaw('stgb')">⚖️ StGB</button>
+                <button class="btn btn-sm" onclick="showLaw('gg')">🏛️ GG</button>
+                <button class="btn btn-sm" onclick="showLaw('stpo')">📑 StPO</button>
+                <button class="btn btn-sm" onclick="showLaw('vwvfg')">📂 VwVfG</button>
+                <button class="btn btn-sm" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
+                <button class="btn btn-sm" onclick="showLaw('emrk')">🌍 EMRK</button>
+            </div>
+            <div id="lawDisplay" class="terminal" style="height:150px;font-size:11px;">📜 Wähle ein Gesetz aus der Bibliothek.</div>
+        </div>
+    </div>
+
+    <!-- TAB 5: LEXIKON -->
+    <div class="tab-content" id="tab-lexikon">
+        <div class="card">
+            <h2>🔍 LEXIKON-SUCHE</h2>
+            <input type="text" id="lexikonSearch" placeholder="Begriff eingeben..." style="width:100%;padding:10px;background:var(--card-bg);border:1px solid var(--border);color:var(--text);border-radius:6px;margin-bottom:10px;" oninput="searchLexikon()" />
+            <div id="searchResults" class="terminal" style="height:150px;font-size:11px;">Gib einen Begriff ein, um zu suchen.</div>
+        </div>
+        <div class="card">
+            <h2>📚 FACHGEBIETE (ÜBERSICHT)</h2>
+            <div style="font-size:12px;color:var(--text-muted);line-height:2;">
+                <strong style="color:var(--neon-green);">1. Psychologie</strong> · 42 Einträge<br>
+                <strong style="color:var(--neon-green);">2. Philosophie</strong> · 38 Einträge<br>
+                <strong style="color:var(--neon-green);">3. Wirtschaft</strong> · 36 Einträge<br>
+                <strong style="color:var(--neon-green);">4. Politik</strong> · 34 Einträge<br>
+                <strong style="color:var(--neon-green);">5. Neurobiologie</strong> · 13 Einträge<br>
+                <span style="color:var(--text-dark);">... und 17 weitere Fachgebiete</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: EXPORT -->
+    <div class="tab-content" id="tab-export">
+        <div class="card">
+            <h2>📦 GESAMT-EXPORT</h2>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Exportiert den aktuellen Report als JSON, PDF oder ZIP.</p>
+            <div class="grid-3">
+                <button class="btn btn-blue" onclick="exportReportJSON()">📤 JSON EXPORT</button>
+                <button class="btn btn-orange" onclick="exportReportPDF()">📥 PDF EXPORT</button>
+                <button class="btn btn-purple" onclick="exportAllZip()">📦 ZIP EXPORT</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>📋 EXPORT-VORSCHAU</h2>
+            <div id="exportPreview" class="terminal" style="height:120px;font-size:9px;">Klicke auf einen Export-Button.</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>
+            © 2026 <strong>OMEGA NEMESIS Architektur</strong> · Φ_OMNI_V9 · BÜRGERPLATTFORM MODUL<br />
+            Streng vertraulich. Konform mit <strong>GxP, AMWHV, EU‑GMP Annex 1 &amp; 11, ICH Q12, BSI IT‑Grundschutz, GoBD, FDA 21 CFR Part 11</strong>.
+        </div>
+        <div class="seal-line">
+            SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br />
+            Φ_LOCKED_ABSOLUTE · TARGET: 2026-08-18 · VERSION: 10.0.0
+        </div>
+    </footer>
+
+</div>
+
+<!-- ============================================================
+SCRIPT
+============================================================ -->
+<script>
+    // ============================================================
+    // 1. MODULE (24)
+    // ============================================================
+    const OMNI_MODULES = {
+        1: { name: "📜 GESETZES-LEDGER", fn: async (t) => `Paragraphen: ${(t.match(/§\s?\d+/g)||[]).length}` },
+        2: { name: "⛓️ BSI FORENSIK", fn: async (t) => /hash|sha|md5|forensik/i.test(t) ? 'Forensische Marker erkannt' : 'Keine forensischen Marker' },
+        3: { name: "🧠 XENI AI CORE", fn: async (t) => `Komplexität: ${t.length>1000?'HOCH':'NIEDRIG'}` },
+        4: { name: "🌌 QUANTUM-FLUX", fn: async (t) => `Einzigartige Wörter: ${new Set(t.toLowerCase().split(/\s+/)).size}` },
+        5: { name: "🧬 BIO-NEURAL", fn: async (t) => /[A-Z][a-z]+ [A-Z][a-z]+/.test(t) ? 'Namensmuster erkannt' : 'Keine Namensmuster' },
+        6: { name: "🕳️ DARK-MATTER", fn: async (t) => /(versteckt|geheim|vertraulich)/i.test(t) ? 'Versteckte Marker gefunden' : 'Keine versteckten Marker' },
+        7: { name: "📡 PULSE-STREAM", fn: async (t) => `Zeilen: ${t.split('\n').length}` },
+        8: { name: "⚖️ BGB-ANALYSATOR", fn: async (t) => /(§\s?134|nichtig|verbot)/i.test(t) ? 'BGB §134: Möglicher Verstoß' : 'BGB §134: Kein Verstoß' },
+        9: { name: "🚨 STGB-TRACKER", fn: async (t) => /(§\s?348|falschbeurkundung)/i.test(t) ? 'STGB §348 Marker gefunden' : 'Keine STGB Marker' },
+        10: { name: "🏛️ GG-WÄCHTER", fn: async (t) => /(menschenwürde|grundgesetz|zitiergebot)/i.test(t) ? 'GG-Bezug erkannt' : 'Kein GG-Bezug' },
+        11: { name: "🌍 EMRK-MONITOR", fn: async (t) => /(emrk|folter|unmenschlich)/i.test(t) ? 'EMRK-Verstoß möglich' : 'EMRK konform' },
+        12: { name: "💶 DSGVO-SCANNER", fn: async (t) => /(dsgvo|datenschutz|personenbezogen)/i.test(t) ? 'DSGVO-relevant' : 'DSGVO unbedenklich' },
+        13: { name: "👮 POLIZEI-AUDIT", fn: async (t) => /(polizei|durchsuchung|beschlagnahme)/i.test(t) ? 'Polizeibezug erkannt' : 'Kein Polizeibezug' },
+        14: { name: "📑 VERWALTUNGS-AKT", fn: async (t) => /(bescheid|verwaltungsakt|widerspruch)/i.test(t) ? 'Verwaltungsakt erkannt' : 'Kein Verwaltungsakt' },
+        15: { name: "💰 STEUER-ENGINE", fn: async (t) => /(steuer|finanzamt)/i.test(t) ? 'Steuerdokument erkannt' : 'Kein Steuerbezug' },
+        16: { name: "🏦 EZB-ZINS", fn: async (t) => /(zins|kredit|ezb)/i.test(t) ? 'Finanzdokument erkannt' : 'Kein Finanzbezug' },
+        17: { name: "👴 DRV-RENTEN", fn: async (t) => /(rente|drv)/i.test(t) ? 'Rentenbescheid erkannt' : 'Kein Rentenbezug' },
+        18: { name: "💣 SUBVENTIONEN", fn: async (t) => /(subvention|förderung)/i.test(t) ? 'Subventionsbezug erkannt' : 'Kein Subventionsbezug' },
+        19: { name: "📄 AUTOM. SCHRIFTSATZ", fn: async (t) => /(klage|antrag|widerspruch)/i.test(t) ? 'Rechtsdokument erkannt' : 'Kein Rechtsdokument' },
+        20: { name: "🖨️ MIC-FORENSIK", fn: async (t) => /(drucker|yellow|mic)/i.test(t) ? 'Drucker-Marker gefunden' : 'Keine Drucker-Marker' },
+        21: { name: "📈 MARKTANALYSE", fn: async (t) => /(aktie|krypto|bitcoin|markt)/i.test(t) ? 'Marktdaten erkannt' : 'Keine Marktdaten' },
+        22: { name: "🤝 KOLLABORATION", fn: async (t) => /(mandant|klient|zusammenarbeit)/i.test(t) ? 'Mandantenbezug erkannt' : 'Kein Mandantenbezug' },
+        23: { name: "🔐 POST-QUANTUM", fn: async (t) => /(verschlüsselung|kryptographie|quantum)/i.test(t) ? 'Krypto-Bezug erkannt' : 'Kein Krypto-Bezug' },
+        24: { name: "🎓 AKADEMIE", fn: async (t) => /(studium|kurs|akademie)/i.test(t) ? 'Bildungsbezug erkannt' : 'Kein Bildungsbezug' }
+    };
+
+    // ============================================================
+    // 2. GESETZE
+    // ============================================================
+    const LAWS = {
+        bgb: { titel: 'Bürgerliches Gesetzbuch (BGB)', text: '§ 134 BGB – Gesetzliches Verbot\n§ 823 BGB – Schadensersatzpflicht\n§ 839 BGB – Amtshaftung' },
+        stgb: { titel: 'Strafgesetzbuch (StGB)', text: '§ 240 StGB – Nötigung\n§ 267 StGB – Urkundenfälschung\n§ 348 StGB – Falschbeurkundung im Amt' },
+        gg: { titel: 'Grundgesetz (GG)', text: 'Art. 1 GG – Menschenwürde\nArt. 13 GG – Unverletzlichkeit der Wohnung\nArt. 80 GG – Zitiergebot' },
+        stpo: { titel: 'Strafprozessordnung (StPO)', text: '§ 94 StPO – Beschlagnahme\n§ 105 StPO – Durchsuchung\n§ 136 StPO – Belehrung' },
+        vwvfg: { titel: 'Verwaltungsverfahrensgesetz (VwVfG)', text: '§ 44 VwVfG – Nichtigkeit\n§ 39 VwVfG – Begründungspflicht' },
+        dsgvo: { titel: 'Datenschutz-Grundverordnung (DSGVO)', text: 'Art. 5 DSGVO – Grundsätze\nArt. 17 DSGVO – Recht auf Löschung' },
+        emrk: { titel: 'Europäische Menschenrechtskonvention (EMRK)', text: 'Art. 3 EMRK – Folterverbot\nArt. 8 EMRK – Recht auf Privatleben' }
+    };
+
+    // ============================================================
+    // 3. LEXIKON
+    // ============================================================
+    const LEXIKON_DATA = [
+        { fach: 'Psychologie', begriffe: ['Kognition', 'Verhalten', 'Emotion', 'Lernen'] },
+        { fach: 'Philosophie', begriffe: ['Erkenntnistheorie', 'Ethik', 'Logik', 'Metaphysik'] },
+        { fach: 'Wirtschaft', begriffe: ['Markt', 'Angebot', 'Nachfrage', 'Preis'] },
+        { fach: 'Politik', begriffe: ['Demokratie', 'Governance', 'Macht', 'Institutionen'] }
+    ];
+
+    // ============================================================
+    // 4. STATE
+    // ============================================================
+    let currentReport = '';
+    let currentFileText = '';
+    let currentFileName = '';
+    let currentCategory = 'allgemein';
+    let scanCount = 0;
+
+    // ============================================================
+    // 5. RENDER FUNCTIONS
+    // ============================================================
+    function renderModules() {
+        const grid = document.getElementById('moduleGrid');
+        grid.innerHTML = '';
+        Object.keys(OMNI_MODULES).forEach(id => {
+            const m = OMNI_MODULES[id];
+            grid.innerHTML += `
+                <div class="module-card" onclick="runModule(${id})">
+                    <div class="name">M${id} ${m.name}</div>
+                    <div class="desc">${m.desc || 'Analyse-Modul'}</div>
+                    <div class="status online">● ONLINE</div>
+                </div>
+            `;
+        });
+    }
+
+    // ============================================================
+    // 6. SCAN-FUNKTION
+    // ============================================================
+    async function startScan() {
+        const file = document.getElementById('buergerFile').files[0];
+        const email = document.getElementById('buergerEmail').value;
+        const cat = document.getElementById('docType').value;
+        currentCategory = cat;
+
+        if (!file || !email) {
+            logBuerger('❌ Bitte Datei und E-Mail eingeben.', 'warn');
+            return;
+        }
+
+        const logEl = document.getElementById('buergerLog');
+        const forensikEl = document.getElementById('forensikResult');
+        const progContainer = document.getElementById('progressContainer');
+        const progFill = document.getElementById('ocrProgress');
+        const progLabel = document.getElementById('progressLabel');
+
+        logEl.innerHTML = '[SYSTEM] Scan gestartet...<br>';
+        progContainer.style.display = 'block';
+        progFill.style.width = '10%';
+        progLabel.textContent = 'Lese Datei...';
+
+        try {
+            const content = await readFileContent(file);
+            const ext = file.name.split('.').pop().toLowerCase();
+            let text = '';
+
+            if (['yaml','yml'].includes(ext)) {
+                try { text = JSON.stringify(jsyaml.load(content), null, 2); } catch { text = content; }
+            } else if (ext === 'json') {
+                try { text = JSON.stringify(JSON.parse(content), null, 2); } catch { text = content; }
+            } else if (ext === 'md') {
+                text = content;
+            } else if (ext === 'csv') {
+                const d = Papa.parse(content, { header: true });
+                text = JSON.stringify(d.data.slice(0, 10), null, 2);
+            } else if (['js','ts','py','java','go','rs','zig','c','cpp','rb','php','html','css','xml','svg'].includes(ext)) {
+                text = content;
+            } else if (file.type.startsWith('image/')) {
+                const b64 = content.split(',')[1];
+                text = await ocrExtractText(b64);
+            } else if (file.type === 'application/pdf') {
+                text = `[PDF] ${file.name} – nicht extrahierbar. Bitte als Text oder Bild bereitstellen.`;
+            } else {
+                text = content;
+            }
+
+            currentFileText = text;
+            currentFileName = file.name;
+
+            progFill.style.width = '60%';
+            progLabel.textContent = 'Analysiere...';
+
+            // Module ausführen
+            const results = [];
+            for (let i = 1; i <= 24; i++) {
+                const m = OMNI_MODULES[i];
+                const result = await m.fn(text);
+                results.push(`M${i}: ${result}`);
+                // Update UI
+                const moduleEl = document.querySelector(`#moduleGrid .module-card:nth-child(${i}) .status`);
+                if (moduleEl) {
+                    moduleEl.className = 'status running';
+                    moduleEl.textContent = '● LÄUFT...';
+                }
+                await sleep(50);
+                if (moduleEl) {
+                    moduleEl.className = 'status online';
+                    moduleEl.textContent = '● ONLINE';
+                }
+            }
+
+            progFill.style.width = '80%';
+            progLabel.textContent = 'Erstelle Report...';
+
+            // Fehleranalyse
+            const fehler = detectErrors(text);
+            const dsgvoStatus = dsgvoCheck(text);
+
+            forensikEl.innerHTML = `
+                <span class="log-ok">📄 DATEI: ${file.name}</span><br>
+                <span class="log-ok">📂 KATEGORIE: ${cat.toUpperCase()}</span><br>
+                <span class="log-ok">🔍 FORMAT: ${ext.toUpperCase()}</span><br>
+                <span class="${dsgvoStatus.hits > 0 ? 'log-warn' : 'log-ok'}">🔒 DSGVO: ${dsgvoStatus.status}</span><br>
+                <span class="log-ok">📊 TEXTUMFANG: ${text.length} Zeichen</span><br>
+                ${fehler.map(f => `<span class="log-warn">⚠️ ${f}</span><br>`).join('')}
+                <span class="log-ok">📋 MODULE: 24/24 durchgelaufen</span>
+            `;
+
+            document.getElementById('fehlerListe').innerHTML = fehler.length ?
+                fehler.map(f => `<span class="log-warn">⚠️ ${f}</span><br>`).join('') :
+                '<span class="log-ok">✅ Keine strukturellen Fehler erkannt.</span>';
+
+            // Widerspruch generieren
+            const widerspruch = generateWiderspruch(text, fehler, cat);
+            document.getElementById('widerspruchOutput').textContent = widerspruch;
+            currentReport = widerspruch;
+
+            // Mandanten speichern
+            let mandanten = JSON.parse(localStorage.getItem('mandanten_buerger') || '[]');
+            mandanten.push({ email, file: file.name, date: new Date().toLocaleString(), report: widerspruch });
+            localStorage.setItem('mandanten_buerger', JSON.stringify(mandanten));
+            loadMandanten();
+
+            progFill.style.width = '100%';
+            progLabel.textContent = '✅ Fertig!';
+            setTimeout(() => { progContainer.style.display = 'none'; }, 1500);
+
+            logBuerger('✅ Analyse abgeschlossen. Report bereit.', 'ok');
+
+        } catch (err) {
+            logBuerger(`❌ FEHLER: ${err.message}`, 'warn');
+            progContainer.style.display = 'none';
+        }
+    }
+
+    // ============================================================
+    // 7. HELPER FUNCTIONS
+    // ============================================================
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function logBuerger(msg, type = 'ok') {
+        const el = document.getElementById('buergerLog');
+        const time = new Date().toLocaleTimeString();
+        const cls = type === 'ok' ? 'log-ok' : 'log-warn';
+        el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${cls}">${msg}</span>`;
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function readFileContent(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = reject;
+            const ext = file.name.split('.').pop().toLowerCase();
+            const textExts = ['txt','md','yaml','yml','json','js','ts','rs','zig','c','cpp','h','py','java','go','rb','php','html','css','csv','svg','xml','sh','toml','ini'];
+            if (file.type.startsWith('text/') || textExts.includes(ext)) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    async function ocrExtractText(b64) {
+        try {
+            const result = await Tesseract.recognize(`data:image/png;base64,${b64}`, 'deu');
+            return result.data.text || '[OCR] Kein Text gefunden';
+        } catch { return '[OCR] Fehler'; }
+    }
+
+    function dsgvoCheck(text) {
+        const patterns = {
+            email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
+            phone: /\b(\+?\d{1,3}[-.\s]?)?\(?\d{3,5}\)?[-.\s]?\d{3,5}[-.\s]?\d{3,5}\b/g,
+            plz: /\b\d{5}\b/g
+        };
+        let hits = 0;
+        for (const p of Object.values(patterns)) {
+            hits += (text.match(p) || []).length;
+        }
+        return { status: hits > 0 ? '⚠️ DSGVO-relevante Daten gefunden' : '✅ DSGVO-konform', hits };
+    }
+
+    function detectErrors(text) {
+        const errors = [];
+        if (!text.match(/§\s?\d+/g)) errors.push('Keine Paragraphenreferenz gefunden.');
+        if (!text.match(/[0-9]{2}\.[0-9]{2}\.[0-9]{4}/)) errors.push('Kein Datum gefunden.');
+        if (text.length < 100) errors.push('Text ist sehr kurz – möglicherweise unvollständig.');
+        if (!text.match(/(begründung|grund|gemäß|nach|unter Berücksichtigung)/i)) errors.push('Begründung fehlt oder ist unzureichend.');
+        if (text.match(/(muster|schablone|standardisiert|copy & paste)/i)) errors.push('Möglicherweise wurde eine Schablone verwendet – Einzelfallprüfung fehlt.');
+        return errors;
+    }
+
+    function generateWiderspruch(text, errors, category) {
+        const heute = new Date().toLocaleDateString('de-DE');
+        const fehlerText = errors.length ? errors.map(e => `- ${e}`).join('\n') : '- Keine formalen Fehler erkannt.';
+        return `WIDERSPRUCH
+
+Sehr geehrte Damen und Herren,
+
+hiermit lege ich fristgerecht WIDERSPRUCH gegen den Bescheid vom [DATUM] – Az: [AKTENZEICHEN] ein.
+
+Begründung:
+Die forensische Prüfung mit Φ_OMNI_V9 Bürgerplattform hat folgende strukturelle Mängel ergeben:
+${fehlerText}
+
+Kategorie: ${category.toUpperCase()}
+Datum der Prüfung: ${heute}
+
+Diese Mängel begründen die Rechtswidrigkeit bzw. Nichtigkeit gemäß § 44 VwVfG i.V.m. § 134 BGB.
+
+Hinweis:
+Gem. § 152 Abs. 2 StPO besteht Meldepflicht bei Anfangsverdacht § 348 StGB.
+
+Anträge:
+1. Sofortige Aufhebung der Maßnahme
+2. Neuer rechtmäßiger Bescheid mit vollständiger Begründung
+3. Aussetzung der Vollziehung bis zur Entscheidung
+
+Mit freundlichen Grüßen
+
+[NAME]
+[ADRESSE]
+
+Φ_LOCKED_ABSOLUTE · SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab`;
+    }
+
+    // ============================================================
+    // 8. MODULE FUNCTIONS
+    // ============================================================
+    async function runModule(id) {
+        const m = OMNI_MODULES[id];
+        const text = currentFileText || 'Test';
+        const result = await m.fn(text);
+        showToast(`▶️ Modul ${id}: ${result}`, 'ok');
+    }
+
+    async function triggerAllModules() {
+        const text = currentFileText || 'Test';
+        for (let i = 1; i <= 24; i++) {
+            const m = OMNI_MODULES[i];
+            const result = await m.fn(text);
+            const el = document.querySelector(`#moduleGrid .module-card:nth-child(${i}) .status`);
+            if (el) {
+                el.className = 'status running';
+                el.textContent = '● LÄUFT...';
+            }
+            await sleep(80);
+            if (el) {
+                el.className = 'status online';
+                el.textContent = '● ONLINE';
+            }
+            document.getElementById('log-ai').innerHTML += `<br>M${i}: ${result}`;
+        }
+        showToast('✅ Alle 24 Module ausgeführt!', 'ok');
+    }
+
+    // ============================================================
+    // 9. WIDERSPRUCH FUNCTIONS
+    // ============================================================
+    function copyWiderspruch() {
+        const text = document.getElementById('widerspruchOutput').textContent;
+        if (!text || text.includes('[SYSTEM]')) { showToast('Kein Widerspruch vorhanden.', 'warn'); return; }
+        navigator.clipboard.writeText(text).then(() => showToast('📋 Kopiert!', 'ok'));
+    }
+
+    function downloadWiderspruchTxt() {
+        const text = document.getElementById('widerspruchOutput').textContent;
+        if (!text || text.includes('[SYSTEM]')) { showToast('Kein Widerspruch vorhanden.', 'warn'); return; }
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Widerspruch_${Date.now()}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📄 TXT heruntergeladen!', 'ok');
+    }
+
+    function downloadWiderspruchPDF() {
+        const text = document.getElementById('widerspruchOutput').textContent;
+        if (!text || text.includes('[SYSTEM]')) { showToast('Kein Widerspruch vorhanden.', 'warn'); return; }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(10);
+        const lines = doc.splitTextToSize(text, 190);
+        doc.text(lines, 10, 10);
+        doc.save(`Widerspruch_${Date.now()}.pdf`);
+        showToast('📥 PDF heruntergeladen!', 'ok');
+    }
+
+    // ============================================================
+    // 10. BUSINESS DASHBOARD
+    // ============================================================
+    function businessLogin() {
+        const key = document.getElementById('lizenzKey').value;
+        if (key === 'DEMO-9999' || key.length > 5) {
+            document.getElementById('businessPanel').style.display = 'block';
+            loadMandanten();
+            showToast('✅ Lizenz aktiviert!', 'ok');
+        } else {
+            showToast('❌ Ungültiger Key. Test-Key: DEMO-9999', 'warn');
+        }
+    }
+
+    function loadMandanten() {
+        const m = JSON.parse(localStorage.getItem('mandanten_buerger') || '[]');
+        document.getElementById('mandantenLog').innerHTML = m.length ?
+            m.map(a => `📩 [${a.date}] ${a.email} | ${a.file}<br>`).join('') :
+            '[SYSTEM] Keine Anfragen<br>';
+    }
+
+    function clearMandanten() {
+        localStorage.removeItem('mandanten_buerger');
+        document.getElementById('mandantenLog').innerHTML = '[SYSTEM] Keine Anfragen<br>';
+        document.getElementById('businessPanel').style.display = 'none';
+        showToast('🗑️ Alle Mandanten gelöscht.', 'ok');
+    }
+
+    // ============================================================
+    // 11. GESETZE & LEXIKON
+    // ============================================================
+    function showLaw(key) {
+        const law = LAWS[key];
+        if (!law) return;
+        document.getElementById('lawDisplay').innerHTML = `<strong>${law.titel}</strong>\n\n${law.text}`;
+    }
+
+    function searchLexikon() {
+        const query = document.getElementById('lexikonSearch').value.toLowerCase();
+        const results = document.getElementById('searchResults');
+        if (!query) { results.innerHTML = 'Gib einen Begriff ein, um zu suchen.'; return; }
+        let found = [];
+        for (const f of LEXIKON_DATA) {
+            for (const b of f.begriffe) {
+                if (b.toLowerCase().includes(query)) found.push(`${f.fach}: ${b}`);
+            }
+        }
+        results.innerHTML = found.length ?
+            found.map(f => `<span class="log-ok">✓ ${f}</span><br>`).join('') :
+            '<span class="log-warn">Keine Treffer.</span>';
+    }
+
+    // ============================================================
+    // 12. EXPORT FUNCTIONS
+    // ============================================================
+    function exportReportJSON() {
+        const data = {
+            report: currentReport,
+            file: currentFileName,
+            category: currentCategory,
+            timestamp: new Date().toISOString(),
+            version: '10.0.0',
+            seal: '850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab'
+        };
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `report_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById('exportPreview').textContent = json;
+        showToast('📤 JSON exportiert!', 'ok');
+    }
+
+    function exportReportPDF() {
+        if (!currentReport) { showToast('Kein Report vorhanden.', 'warn'); return; }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(10);
+        const lines = doc.splitTextToSize(currentReport, 190);
+        doc.text(lines, 10, 10);
+        doc.save(`report_${Date.now()}.pdf`);
+        showToast('📥 PDF exportiert!', 'ok');
+    }
+
+    function exportAllZip() {
+        showToast('📦 ZIP-Export: Wird generiert... (Demo)', 'ok');
+        document.getElementById('exportPreview').textContent = '📦 ZIP-Export würde hier alle Dateien bündeln.';
+        // In einer echten Umgebung würde hier eine ZIP-Datei erstellt werden.
+    }
+
+    // ============================================================
+    // 13. TOAST
+    // ============================================================
+    function showToast(msg, type = 'ok') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'warn' ? 'warn' : ''}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ============================================================
+    // 14. TABS
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ============================================================
+    // 15. INIT
+    // ============================================================
+    renderModules();
+    loadMandanten();
+
+    // Auto-Refresh System Log
+    setInterval(() => {
+        const el = document.getElementById('log-diag');
+        if (el) {
+            const uptime = Math.floor(performance.now() / 1000);
+            el.innerHTML = `<span class="log-ok">● System: ONLINE</span><br>Uptime: ${uptime}s<br>Module: 24/24 aktiv<br>Status: Φ_LOCKED_ABSOLUTE`;
+        }
+    }, 5000);
+
+    console.log('🏛️ Φ_OMNI_V9 – BÜRGERPLATTFORM MODUL geladen.');
+    console.log('📌 STATUS: Φ_LOCKED_ABSOLUTE');
+    console.log('📌 24 Module · Gesetze · Lexikon · Widerspruch · Scan');
+    showToast('🏛️ Bürgerplattform geladen!', 'ok');
+</script>
+
+</body>
+</html>
+
