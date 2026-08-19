@@ -1834,4 +1834,451 @@
     </script>
 </body>
 </html>
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SupremeOmegaX3 – Stabilisierung · Wissensspeicher · Korrektur</title>
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-purple: #bf00ff;
+            --neon-red: #ff3366;
+            --neon-yellow: #ffbf00;
+            --panel-bg: #0a0a0f;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --border: #2a2a3a;
+            --ok: #00ff88;
+        }
+        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body {
+            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #000 0%, #1a0030 50%, #000 100%);
+            padding: 30px 20px;
+            border-bottom: 2px solid var(--neon-green);
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.1), transparent, rgba(0,200,255,0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .header h1 { color: var(--neon-green); margin: 0; font-size: 2rem; text-shadow: 0 0 30px var(--neon-green); letter-spacing: 4px; position: relative; z-index: 1; }
+        .header .sub { color: #888; font-size: 14px; margin-top: 6px; position: relative; z-index: 1; }
+        .header .badge { display: inline-block; background: var(--neon-red); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 8px; letter-spacing: 1px; position: relative; z-index: 1; }
+        .seal { font-size: 11px; color: #555; margin-top: 8px; word-break: break-all; position: relative; z-index: 1; }
 
+        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+        .tab-btn {
+            background: #1a1a2e; color: #aaa; border: 1px solid #333;
+            padding: 10px 20px; cursor: pointer; font-weight: bold;
+            border-radius: 8px 8px 0 0; transition: all 0.3s;
+            flex: 1 1 auto; text-align: center; font-size: 13px;
+        }
+        .tab-btn:hover { background: #2a2a4e; }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 -5px 20px rgba(0,255,191,0.3); }
+
+        .tab-content { display: none; border: 1px solid #333; padding: 24px; border-radius: 0 0 12px 12px; background: var(--card-bg); animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--panel-bg); border: 1px solid #2a2a3a; border-radius: 10px; padding: 18px; margin-bottom: 16px; transition: all 0.3s; }
+        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,200,255,0.1); }
+        .card h2 { color: var(--neon-blue); border-bottom: 1px solid #333; padding-bottom: 8px; margin-top: 0; font-size: 18px; }
+        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+        .terminal {
+            background: #000; border: 1px solid #333; height: 150px;
+            overflow-y: auto; font-size: 10px; padding: 10px;
+            color: var(--ok); border-radius: 8px; line-height: 1.6;
+            margin-bottom: 16px; font-family: 'Courier New', monospace;
+        }
+        .log-time { color: #666; }
+        .log-ok { color: var(--ok); }
+        .log-warn { color: var(--neon-red); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 14px;
+            border: none; width: 100%; cursor: pointer; border-radius: 8px;
+            font-weight: bold; margin: 8px 0; font-size: 14px; transition: all 0.3s;
+        }
+        .btn:hover { background: #00ddaa; transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,191,0.3); }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+
+        .tree {
+            background: #000; border: 1px solid #333; border-radius: 8px;
+            padding: 16px; font-size: 12px; color: var(--ok); line-height: 1.8;
+            overflow-x: auto; font-family: 'Courier New', monospace;
+        }
+        .tree .folder { color: var(--neon-yellow); }
+        .tree .file { color: var(--neon-blue); }
+
+        .memory-item {
+            background: #02020a; border: 1px solid #333; border-radius: 6px;
+            padding: 12px; margin: 6px 0; font-size: 12px;
+            border-left: 3px solid var(--neon-green);
+        }
+        .memory-item strong { color: var(--neon-yellow); }
+
+        .badge-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 12px;
+            font-size: 10px; font-weight: bold; margin-right: 4px;
+        }
+        .badge-tag.ok { background: var(--neon-green); color: #000; }
+        .badge-tag.danger { background: var(--neon-red); color: #fff; }
+
+        @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header" id="mainHeader">
+        <h1>⚡ SupremeOmegaX3</h1>
+        <div class="sub">Stabilisierung · Wissensspeicher · Korrektur</div>
+        <div class="badge">Φ_LOCKED_ABSOLUTE</div>
+        <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
+        <div style="margin-top:8px;font-size:13px;color:#888;">Operator: Thomas König / ODIN ULTRA ROOT</div>
+    </div>
+
+    <!-- ========== TABS ========== -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-stabilisierung">🟦 A · Stabilisierung</button>
+        <button class="tab-btn" data-tab="tab-korrektur">🟧 B · Korrektur</button>
+        <button class="tab-btn" data-tab="tab-wissensspeicher">🟩 C · Wissensspeicher</button>
+        <button class="tab-btn" data-tab="tab-architektur">🏛️ Architektur</button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB A: STABILISIERUNG                                                 -->
+    <!-- ======================================================================= -->
+    <div class="tab-content active" id="tab-stabilisierung">
+        <div class="card">
+            <h2>📁 Finaler Projektbaum (stabil, real, nutzbar)</h2>
+            <div class="tree">
+                <span class="folder">SupremeOmegaX3/</span><br>
+                ├── <span class="folder">src/</span><br>
+                │   ├── <span class="folder">core/</span><br>
+                │   │   ├── <span class="file">runtime.py</span><br>
+                │   │   ├── <span class="file">exec.py</span><br>
+                │   │   └── <span class="file">pulse.py</span><br>
+                │   ├── <span class="folder">ui/</span><br>
+                │   │   ├── <span class="file">dashboard.html</span><br>
+                │   │   └── <span class="file">neon.css</span><br>
+                │   ├── <span class="folder">api/</span><br>
+                │   │   └── <span class="file">api_mock.py</span><br>
+                │   ├── <span class="folder">cluster/</span><br>
+                │   │   └── <span class="file">cluster_sim.py</span><br>
+                │   └── <span class="folder">config/</span><br>
+                │       ├── <span class="file">master.yaml</span><br>
+                │       └── <span class="file">runtime.yaml</span><br>
+                ├── <span class="folder">data/</span><br>
+                │   └── <span class="file">events.jsonl</span><br>
+                ├── <span class="folder">docs/</span><br>
+                │   ├── <span class="file">README.md</span><br>
+                │   ├── <span class="file">ARCHITECTURE.md</span><br>
+                │   ├── <span class="file">MODULES.md</span><br>
+                │   └── <span class="file">UI.md</span><br>
+                ├── <span class="folder">tests/</span><br>
+                │   └── <span class="file">test_runtime.py</span><br>
+                └── <span class="folder">build/</span><br>
+                    ├── <span class="file">manifest.json</span><br>
+                    └── <span class="file">pipeline.md</span>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>✅ Warum diese Struktur stabil ist</h2>
+                <ul style="font-size:13px;line-height:1.8;">
+                    <li>📁 <strong>src/</strong> trennt Code sauber</li>
+                    <li>📄 <strong>docs/</strong> enthält echte technische Dokumentation</li>
+                    <li>📦 <strong>build/</strong> enthält Manifest + Pipeline</li>
+                    <li>📊 <strong>data/</strong> enthält Streams</li>
+                    <li>🧪 <strong>tests/</strong> ermöglicht echte Stabilität</li>
+                    <li>🎨 <strong>ui/</strong> ist klar abgegrenzt</li>
+                    <li>⚙️ <strong>config/</strong> ist sauber versionierbar</li>
+                </ul>
+                <p style="color:#888;font-size:12px;margin-top:8px;">➜ Das ist echte Software‑Architektur, kein Fantasie‑System.</p>
+            </div>
+            <div class="card">
+                <h2>📋 Manifest (stabil)</h2>
+                <div class="terminal" style="height:120px;font-size:9px;">
+{
+  "name": "SupremeOmegaX3",
+  "version": "7.0.0",
+  "entrypoint": "src/core/runtime.py",
+  "modules": [
+    "core/runtime.py",
+    "core/exec.py",
+    "core/pulse.py",
+    "api/api_mock.py",
+    "cluster/cluster_sim.py"
+  ],
+  "ui": ["ui/dashboard.html", "ui/neon.css"],
+  "config": ["config/master.yaml", "config/runtime.yaml"]
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB B: KORREKTUR                                                    -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-korrektur">
+        <div class="card">
+            <h2>🧠 Dein technischer Stil</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>🔹 Direktheit</h3>
+                    <ul style="font-size:13px;line-height:1.8;">
+                        <li>✅ Extrem direkt</li>
+                        <li>✅ Neon‑klar</li>
+                        <li>✅ Hohe Output‑Dichte</li>
+                        <li>✅ Strukturierte Dokumentation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>🔹 Modularität</h3>
+                    <ul style="font-size:13px;line-height:1.8;">
+                        <li>✅ Modulare Architektur</li>
+                        <li>✅ JSONL / Manifest / Build‑Pipeline als Standard</li>
+                        <li>✅ Versionierung als Prinzip</li>
+                        <li>✅ Klare Abgrenzungen</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚡ Deine Arbeitsweise</h2>
+            <div class="grid-3">
+                <div style="background:#02020a;padding:12px;border-radius:6px;border:1px solid #333;">
+                    <strong style="color:var(--neon-yellow);">Blueprint‑Simulationen</strong>
+                    <p style="font-size:12px;color:#888;">Arbeit mit Blueprint‑Simulationen, nicht mit echten Systemkontrollen.</p>
+                </div>
+                <div style="background:#02020a;padding:12px;border-radius:6px;border:1px solid #333;">
+                    <strong style="color:var(--neon-yellow);">Versionierung</strong>
+                    <p style="font-size:12px;color:#888;">Bevorzugst klare, nachvollziehbare Versionierung.</p>
+                </div>
+                <div style="background:#02020a;padding:12px;border-radius:6px;border:1px solid #333;">
+                    <strong style="color:var(--neon-yellow);">Modulare Strukturen</strong>
+                    <p style="font-size:12px;color:#888;">Nutzt modulare Projektstrukturen mit klaren Schnittstellen.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📦 Deine Projekte</h2>
+            <div class="grid-2">
+                <div>
+                    <span class="badge-tag ok">Black‑Core</span>
+                    <span style="font-size:13px;">v1.1.0</span>
+                    <p style="font-size:12px;color:#888;">Forensische Core‑Engine mit Zero‑Trust‑Pipeline.</p>
+                </div>
+                <div>
+                    <span class="badge-tag ok">SupremeOmegaX3</span>
+                    <span style="font-size:13px;">Blueprint</span>
+                    <p style="font-size:12px;color:#888;">Modulare Simulations‑Umgebung mit Neon‑UI.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Deine Präferenzen</h2>
+            <ul style="font-size:13px;line-height:2;">
+                <li>🔹 <strong>Neon‑UI</strong> als bevorzugter Stil</li>
+                <li>🔹 <strong>Hohe technische Dichte</strong> in Ausgaben</li>
+                <li>🔹 <strong>Klare Struktur</strong> ohne Redundanz</li>
+                <li>🔹 <strong>Keine Rückfragen</strong> – maximaler Output</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB C: WISSENSSPEICHER                                               -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-wissensspeicher">
+        <div class="card">
+            <h2>🧠 Memory‑Sätze (direkt speicherbar)</h2>
+            <p style="font-size:12px;color:#888;">Diese Sätze können 1:1 in Copilot gespeichert werden.</p>
+
+            <div class="memory-item">
+                <strong>📌 Persönliche Arbeitsweise</strong><br>
+                • Merke dir, dass ich extrem direkte und technisch dichte Antworten bevorzuge.<br>
+                • Merke dir, dass ich klare, strukturierte Ausgaben ohne Rückfragen möchte.
+            </div>
+
+            <div class="memory-item">
+                <strong>📌 Projektpräferenzen</strong><br>
+                • Merke dir, dass SupremeOmegaX3 mein Hauptprojekt ist.<br>
+                • Merke dir, dass ich JSONL‑Exports, Manifest‑Dateien und Build‑Pipelines als Standard nutze.<br>
+                • Merke dir, dass ich modulare Projektstrukturen bevorzuge.
+            </div>
+
+            <div class="memory-item">
+                <strong>📌 UI‑Stil</strong><br>
+                • Merke dir, dass ich Neon‑UI als bevorzugten Stil nutze.
+            </div>
+
+            <div class="memory-item">
+                <strong>📌 Dokumentationsstil</strong><br>
+                • Merke dir, dass ich technische Dokumentation in klaren, modularen Dateien strukturiere.
+            </div>
+
+            <div class="memory-item">
+                <strong>📌 Systemarbeitsweise</strong><br>
+                • Merke dir, dass ich mit Blueprint‑Simulationen arbeite, nicht mit echten Systemkontrollen.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Export‑Vorschau (JSONL)</h2>
+            <div class="terminal" style="height:100px;font-size:9px;">
+{"role":"user","content":"Merke dir, dass ich extrem direkte und technisch dichte Antworten bevorzuge."}
+{"role":"user","content":"Merke dir, dass SupremeOmegaX3 mein Hauptprojekt ist."}
+{"role":"user","content":"Merke dir, dass ich Neon‑UI als bevorzugten Stil nutze."}
+{"role":"user","content":"Merke dir, dass ich mit Blueprint‑Simulationen arbeite."}
+            </div>
+            <button class="btn btn-blue" onclick="exportMemoryJSONL()">📤 Memory‑JSONL exportieren</button>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB ARCHITEKTUR                                                      -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-architektur">
+        <div class="card">
+            <h2>🏛️ Architektur‑Übersicht</h2>
+            <div class="terminal" style="height:200px;font-size:11px;">
+┌─────────────────────────────────────────────────────────┐
+│               SupremeOmegaX3 v7.0.0                    │
+│              Φ_LOCKED_ABSOLUTE                         │
+├─────────────────────────────────────────────────────────┤
+│  src/                                                  │
+│  ├── core/       Runtime · Exec · Pulse               │
+│  ├── ui/         Dashboard · Neon.CSS                │
+│  ├── api/        API‑Mock                            │
+│  ├── cluster/    Cluster‑Simulation                  │
+│  └── config/     Master · Runtime                    │
+├─────────────────────────────────────────────────────────┤
+│  data/           events.jsonl                         │
+│  docs/           README · ARCHITECTURE · MODULES · UI│
+│  tests/          test_runtime.py                      │
+│  build/          manifest.json · pipeline.md          │
+├─────────────────────────────────────────────────────────┤
+│  🔒 Zero‑Trust · SHA‑256 · RLS · 7x RAM‑Purge       │
+│  🎨 Neon‑UI · Modular · Versioniert                  │
+└─────────────────────────────────────────────────────────┘
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>🔒 Sicherheits‑Layer</h2>
+                <ul style="font-size:13px;line-height:1.8;">
+                    <li>✅ <strong>Zero‑Trust</strong> – kein Vertrauen in interne/externe Systeme</li>
+                    <li>✅ <strong>SHA‑256</strong> – kryptografische Absicherung</li>
+                    <li>✅ <strong>RLS</strong> – Row Level Security (Supabase)</li>
+                    <li>✅ <strong>7x RAM‑Purge</strong> – keine Persistenz von Klartext</li>
+                    <li>✅ <strong>Triple Citation</strong> – jede Aussage mit Quelle</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h2>📦 Build‑Pipeline</h2>
+                <ul style="font-size:13px;line-height:1.8;">
+                    <li>📌 <strong>Lokal:</strong> <code>python start_supreme.py</code></li>
+                    <li>📌 <strong>UI:</strong> <code>ui/exelance_dashboard_v7.html</code></li>
+                    <li>📌 <strong>Docker:</strong> <code>docker-compose -f docker-compose-v2.yml up --build</code></li>
+                    <li>📌 <strong>Tests:</strong> <code>python -m pytest tests/</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== GLOBAL TERMINAL ========== -->
+    <div class="card">
+        <h2>💻 System Log</h2>
+        <div class="terminal" id="globalLog" style="height:100px;">
+            [SYS] SupremeOmegaX3 – Stabilisierung · Wissensspeicher · Korrektur geladen.<br>
+            [SYS] STATUS: Φ_LOCKED_ABSOLUTE<br>
+            [SYS] Alle Module bereit.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ========== TABS ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ========== HEADER GLITCH ==========
+    document.getElementById('mainHeader').addEventListener('click', function() {
+        this.classList.add('glitch');
+        setTimeout(() => this.classList.remove('glitch'), 1000);
+    });
+
+    // ========== EXPORT MEMORY JSONL ==========
+    function exportMemoryJSONL() {
+        const memories = [
+            '{"role":"user","content":"Merke dir, dass ich extrem direkte und technisch dichte Antworten bevorzuge."}',
+            '{"role":"user","content":"Merke dir, dass ich klare, strukturierte Ausgaben ohne Rückfragen möchte."}',
+            '{"role":"user","content":"Merke dir, dass SupremeOmegaX3 mein Hauptprojekt ist."}',
+            '{"role":"user","content":"Merke dir, dass ich JSONL‑Exports, Manifest‑Dateien und Build‑Pipelines als Standard nutze."}',
+            '{"role":"user","content":"Merke dir, dass ich modulare Projektstrukturen bevorzuge."}',
+            '{"role":"user","content":"Merke dir, dass ich Neon‑UI als bevorzugten Stil nutze."}',
+            '{"role":"user","content":"Merke dir, dass ich technische Dokumentation in klaren, modularen Dateien strukturiere."}',
+            '{"role":"user","content":"Merke dir, dass ich mit Blueprint‑Simulationen arbeite, nicht mit echten Systemkontrollen."}'
+        ];
+        const content = memories.join('\n');
+        const blob = new Blob([content], { type: 'application/jsonl' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'memory_supreme_omega_x3.jsonl';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // ========== INIT ==========
+    console.log('[SYS] SupremeOmegaX3 – Stabilisierung · Wissensspeicher · Korrektur geladen.');
+    console.log('[SYS] STATUS: Φ_LOCKED_ABSOLUTE');
+</script>
+
+</body>
+</html>
+```
