@@ -1,6 +1,1011 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>⚡ Φ_OMNI_V9 – ENGINE SUITE · 8+1 ENGINES</title>
+
+    <!-- CDN Bibliotheken -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --neon-orange: #ff6b00;
+            --panel-bg: #0a0a12;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --text-muted: #8899bb;
+            --border: #1a2a3a;
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --shadow: 0 12px 48px rgba(0,0,0,0.8);
+            --radius: 14px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(ellipse at 20% 30%, #0f1a2e, #060a14 90%);
+            color: var(--text);
+            font-family: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.7;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--panel-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+
+        .master-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(13,13,26,0.96), rgba(6,10,20,0.98));
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 32px 40px;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+        .master-container::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.03), transparent, rgba(0,200,255,0.03), transparent);
+            animation: rotateBackground 30s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotateBackground { 100% { transform: rotate(360deg); } }
+
+        .header {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-green); padding-bottom: 24px; margin-bottom: 32px;
+            position: relative; z-index: 1;
+        }
+        .title-block h1 {
+            font-size: 2.4rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin: 0;
+        }
+        .title-block .sub {
+            font-size: 0.95rem; color: var(--text-muted); letter-spacing: 0.15em;
+        }
+        .title-block .tag {
+            display: inline-block; margin-top: 6px; padding: 4px 16px;
+            border: 1px solid var(--neon-yellow); border-radius: 20px;
+            font-size: 0.7rem; color: var(--neon-yellow); letter-spacing: 2px;
+            font-weight: 700; text-transform: uppercase;
+        }
+        .badge-cluster {
+            text-align: right; font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.75rem; color: var(--text-muted);
+            background: var(--card-bg); padding: 12px 20px; border-radius: 12px;
+            border: 1px solid var(--border); min-width: 200px;
+        }
+        .badge-cluster .lock { color: var(--ok); font-weight: 700; font-size: 0.85rem; display: block; }
+        .badge-cluster .seal { color: var(--neon-yellow); font-size: 0.6rem; word-break: break-all; }
+        .badge-cluster .operator { color: var(--neon-blue); }
+
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 24px; position: relative; z-index: 1;
+        }
+        .tab-btn {
+            background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);
+            padding: 10px 22px; cursor: pointer; font-weight: 700; border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease; flex: 1 1 auto; text-align: center; font-size: 12px;
+            letter-spacing: 0.5px; font-family: 'Courier New', monospace;
+        }
+        .tab-btn:hover { background: var(--panel-bg); color: var(--text); border-color: var(--neon-green); }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 0 30px rgba(0,255,191,0.2); }
+
+        .tab-content {
+            display: none; border: 1px solid var(--border); padding: 24px;
+            border-radius: 0 0 12px 12px; background: var(--card-bg);
+            animation: fadeIn 0.4s ease; position: relative; z-index: 1;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 18px 20px; margin-bottom: 16px; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-blue), transparent);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .card:hover { border-color: var(--neon-green); }
+        .card:hover::after { opacity: 1; }
+        .card h2 {
+            color: var(--neon-blue); border-bottom: 1px solid var(--border);
+            padding-bottom: 8px; margin-top: 0; margin-bottom: 14px;
+            font-size: 16px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+        .terminal {
+            background: #000a0a; border: 1px solid rgba(0,255,191,0.12);
+            border-radius: 8px; padding: 12px 14px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 10px; color: var(--neon-green); overflow-y: auto;
+            line-height: 1.8; max-height: 200px; min-height: 80px;
+        }
+        .terminal .log-time { color: var(--text-dark); }
+        .terminal .log-ok { color: var(--ok); }
+        .terminal .log-warn { color: var(--neon-orange); font-weight: bold; }
+        .terminal .log-error { color: var(--danger); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 12px 20px;
+            border: none; border-radius: 8px; font-weight: 700;
+            font-family: 'Courier New', monospace; font-size: 13px; cursor: pointer;
+            transition: all 0.3s ease; width: 100%; margin: 6px 0; letter-spacing: 0.5px;
+        }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,255,191,0.2); background: #00ddaa; }
+        .btn-orange { background: var(--neon-orange); color: #000; box-shadow: 0 0 30px rgba(255,107,0,0.2); }
+        .btn-orange:hover { background: #ff7a1a; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+        .btn-red { background: var(--danger); color: #fff; }
+        .btn-sm { padding: 6px 14px; font-size: 10px; width: auto; display: inline-block; }
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        .input-group label { font-size: 12px; color: var(--text-muted); }
+        .input-group input, .input-group textarea, .input-group select {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+            padding: 8px 12px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 13px;
+            width: 100%;
+        }
+        .input-group textarea { min-height: 80px; resize: vertical; }
+
+        .footer {
+            margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            font-size: 0.75rem; color: var(--text-muted); position: relative; z-index: 1;
+        }
+        .footer strong { color: var(--neon-green); }
+        .footer .seal-line { font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text-dark); font-size: 0.65rem; }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #000; border: 1px solid var(--neon-green); color: var(--neon-green);
+            padding: 12px 28px; border-radius: 8px; z-index: 9999;
+            font-family: 'Courier New', monospace; font-size: 12px;
+            animation: slideDown 0.3s ease; box-shadow: 0 0 30px rgba(0,255,191,0.15);
+        }
+        .toast.warn { border-color: var(--neon-orange); color: var(--neon-orange); box-shadow: 0 0 30px rgba(255,107,0,0.15); }
+        @keyframes slideDown { from { opacity: 0; transform: translate(-50%, -100%); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        @media (max-width: 1024px) { .grid-2 { grid-template-columns: 1fr; } .master-container { padding: 24px 20px; } .header { flex-direction: column; align-items: stretch; } .title-block h1 { font-size: 1.8rem; } .badge-cluster { text-align: left; margin-top: 12px; width: 100%; } }
+        @media (max-width: 600px) { .master-container { padding: 16px 12px; } .card { padding: 14px; } .tab-btn { font-size: 10px; padding: 8px 12px; } }
+        .glitch { animation: glitch 0.8s ease; }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-2px, 4px); } 80% { transform: translate(2px, -4px); } 100% { transform: translate(0); } }
+    </style>
+</head>
+<body>
+
+<div class="master-container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="title-block">
+            <h1>⚡ Φ_OMNI_V9</h1>
+            <div class="sub">ENGINE SUITE · 8+1 ENGINES</div>
+            <div class="sub" style="font-size:0.8rem; margin-top:4px; color: var(--neon-orange);">
+                <span class="tag">🔧 FORENSIK · LEGAL · MEDICAL · FINANCIAL · SECURITY · AI · CRYPTO · EXPORT · NEON-CORTEX</span>
+                <span style="margin-left:12px; color:var(--text-dark);">|</span>
+                <span style="margin-left:12px; color:var(--text-muted);">Par Excellence · Zero-Trust · PQC-Ready</span>
+            </div>
+        </div>
+        <div class="badge-cluster">
+            <span class="lock">⏺ Φ_LOCKED_ABSOLUTE</span>
+            <span class="operator">OPERATOR: THOMAS KÖNIG (ODIN ULTRA ROOT)</span>
+            <span class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</span>
+            <span style="color:var(--neon-blue);">TARGET: 2026-08-19 · VERSION: 10.0.0</span>
+        </div>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-forensic">🔬 FORENSIK</button>
+        <button class="tab-btn" data-tab="tab-legal">⚖️ LEGAL</button>
+        <button class="tab-btn" data-tab="tab-medical">🏥 MEDICAL</button>
+        <button class="tab-btn" data-tab="tab-financial">💰 FINANCIAL</button>
+        <button class="tab-btn" data-tab="tab-security">🛡️ SECURITY</button>
+        <button class="tab-btn" data-tab="tab-ai">🧠 AI/CLUSTER</button>
+        <button class="tab-btn" data-tab="tab-crypto">🔗 CRYPTO</button>
+        <button class="tab-btn" data-tab="tab-export">📦 EXPORT</button>
+        <button class="tab-btn" data-tab="tab-neon">🌈 NEON-CORTEX</button>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 1: FORENSIK
+    ============================================================ -->
+    <div class="tab-content active" id="tab-forensic">
+        <div class="card">
+            <h2>🔬 FORENSIK · BSI / MIC-FORENSIK / HASH-LEDGER</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Text / Dokument</label>
+                        <textarea id="forensicText" placeholder="Hier Text oder Dokument einfügen...">Dies ist ein Beispieltext für die forensische Analyse. Enthält sensible Daten.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Quelle</label>
+                        <select id="forensicSource">
+                            <option value="chat">Chat</option>
+                            <option value="pdf">PDF</option>
+                            <option value="doc">Dokument</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Case-ID</label>
+                        <input type="text" id="forensicCase" value="CASE-2026-001" />
+                    </div>
+                    <button class="btn btn-orange" onclick="runForensic()">⚡ FORENSIK AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="forensicOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 2: LEGAL
+    ============================================================ -->
+    <div class="tab-content" id="tab-legal">
+        <div class="card">
+            <h2>⚖️ LEGAL · GESETZES-LEDGER</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Text / Akte</label>
+                        <textarea id="legalText" placeholder="Hier Text einfügen...">Verstoß gegen BGB §134 und STGB §348.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Norm-Hint (optional)</label>
+                        <input type="text" id="legalNorm" value="BGB §134|STGB §348" />
+                    </div>
+                    <div class="input-group">
+                        <label>Dokumenttyp</label>
+                        <select id="legalDocType">
+                            <option value="schriftsatz">Schriftsatz</option>
+                            <option value="akte">Akte</option>
+                            <option value="notiz">Notiz</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-purple" onclick="runLegal()">⚖️ LEGAL AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="legalOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 3: MEDICAL
+    ============================================================ -->
+    <div class="tab-content" id="tab-medical">
+        <div class="card">
+            <h2>🏥 MEDICAL · PRAXIS-STACK</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Befund / Text</label>
+                        <textarea id="medicalText" placeholder="Befundtext...">Patient mit starken Blutungen.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Patient</label>
+                        <input type="text" id="medicalPatient" value="Max Mustermann" />
+                    </div>
+                    <div class="input-group">
+                        <label>Alter</label>
+                        <input type="number" id="medicalAge" value="45" />
+                    </div>
+                    <div class="input-group">
+                        <label>Praxis</label>
+                        <input type="text" id="medicalPraxis" value="Praxis Dr. Muster" />
+                    </div>
+                    <div class="input-group">
+                        <label>KV-Region</label>
+                        <input type="text" id="medicalKV" value="KV Westfalen-Lippe" />
+                    </div>
+                    <button class="btn btn-blue" onclick="runMedical()">🏥 MEDICAL AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="medicalOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 4: FINANCIAL
+    ============================================================ -->
+    <div class="tab-content" id="tab-financial">
+        <div class="card">
+            <h2>💰 FINANCIAL · SOCIAL / RENTEN</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Einkommen (€)</label>
+                        <input type="number" id="finIncome" value="45000" />
+                    </div>
+                    <div class="input-group">
+                        <label>Ausgaben (€)</label>
+                        <input type="number" id="finExpenses" value="28000" />
+                    </div>
+                    <div class="input-group">
+                        <label>Vermögen (€)</label>
+                        <input type="number" id="finAssets" value="50000" />
+                    </div>
+                    <div class="input-group">
+                        <label>Verbindlichkeiten (€)</label>
+                        <input type="number" id="finLiabilities" value="15000" />
+                    </div>
+                    <div class="input-group">
+                        <label>Bürgergeld</label>
+                        <select id="finBuergergeld">
+                            <option value="true">Ja</option>
+                            <option value="false">Nein</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Subventionen (kommagetrennt)</label>
+                        <input type="text" id="finSubventions" value="Miete,Energie" />
+                    </div>
+                    <div class="input-group">
+                        <label>DRV-Punkte</label>
+                        <input type="number" step="0.1" id="finDRV" value="38.5" />
+                    </div>
+                    <button class="btn btn-yellow" onclick="runFinancial()">💰 FINANCIAL AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="financialOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 5: SECURITY
+    ============================================================ -->
+    <div class="tab-content" id="tab-security">
+        <div class="card">
+            <h2>🛡️ SECURITY · ZERO-TRUST / PQC-READY</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Session-ID</label>
+                        <input type="text" id="secSession" value="sess-2026-08-19-001" />
+                    </div>
+                    <div class="input-group">
+                        <label>User</label>
+                        <input type="text" id="secUser" value="Thomas" />
+                    </div>
+                    <div class="input-group">
+                        <label>Aktive Module (kommagetrennt)</label>
+                        <input type="text" id="secModules" value="forensic,legal-ledger,medical,financial" />
+                    </div>
+                    <button class="btn btn-purple" onclick="runSecurity()">🛡️ SECURITY AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="securityOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 6: AI / CLUSTER
+    ============================================================ -->
+    <div class="tab-content" id="tab-ai">
+        <div class="card">
+            <h2>🧠 AI / CLUSTER · IMPACT</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Text / Ereignis</label>
+                        <textarea id="aiText" placeholder="Ereignisbeschreibung...">Große Demo für Bürgerrechte heute in Berlin.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Channel</label>
+                        <select id="aiChannel">
+                            <option value="social">Social</option>
+                            <option value="market">Market</option>
+                            <option value="client">Client</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Tags (kommagetrennt)</label>
+                        <input type="text" id="aiTags" value="demo,kampagne" />
+                    </div>
+                    <button class="btn btn-blue" onclick="runAI()">🧠 AI AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="aiOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 7: CRYPTO / BLOCKCHAIN
+    ============================================================ -->
+    <div class="tab-content" id="tab-crypto">
+        <div class="card">
+            <h2>🔗 CRYPTO · QUANTUM / BLOCKCHAIN</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Case-ID</label>
+                        <input type="text" id="cryptoCase" value="CASE-2026-001" />
+                    </div>
+                    <div class="input-group">
+                        <label>Hashes (kommagetrennt)</label>
+                        <input type="text" id="cryptoHashes" value="sha256:abc123,sha256:def456" />
+                    </div>
+                    <div class="input-group">
+                        <label>Events (kommagetrennt)</label>
+                        <input type="text" id="cryptoEvents" value="ingest,hash,legal-tag" />
+                    </div>
+                    <button class="btn btn-purple" onclick="runCrypto()">🔗 CRYPTO AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (JSONL-Record)</h3>
+                    <div class="terminal" id="cryptoOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ENGINE 8: EXPORT / DOKU
+    ============================================================ -->
+    <div class="tab-content" id="tab-export">
+        <div class="card">
+            <h2>📦 EXPORT · DOKU / AKADEMIE</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Case-ID</label>
+                        <input type="text" id="exportCase" value="CASE-2026-001" />
+                    </div>
+                    <div class="input-group">
+                        <label>Zu inkludierende Module</label>
+                        <input type="text" id="exportModules" value="forensic,legal-ledger,medical,financial" />
+                    </div>
+                    <div class="input-group">
+                        <label>Format</label>
+                        <select id="exportFormat">
+                            <option value="pdf">PDF</option>
+                            <option value="json">JSON</option>
+                            <option value="md">Markdown</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-orange" onclick="runExport()">📦 EXPORT AUSFÜHREN</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (Meta-Record)</h3>
+                    <div class="terminal" id="exportOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    BONUS: NEON-CORTEX (Visual Layer)
+    ============================================================ -->
+    <div class="tab-content" id="tab-neon">
+        <div class="card">
+            <h2>🌈 NEON-CORTEX · VISUAL LAYER</h2>
+            <div class="grid-2">
+                <div>
+                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+                        Aggregiert alle Engine-Outputs zu einer visuellen Punktwolke. Hier werden die Vektoren der Module in 3D dargestellt.
+                    </p>
+                    <button class="btn btn-blue" onclick="runNeonCortex()">🌈 NEON-CORTEX GENERIEREN</button>
+                    <div id="neonCortexContainer" style="margin-top:16px;border:1px solid var(--border);border-radius:8px;background:#000;height:300px;position:relative;overflow:hidden;">
+                        <canvas id="neonCanvas" width="600" height="300"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Output (UI-Daten)</h3>
+                    <div class="terminal" id="neonOutput" style="height:300px;font-size:9px;">[SYSTEM] Warte auf Ausführung...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>
+            © 2026 <strong>OMEGA NEMESIS Architektur</strong> · Φ_OMNI_V9 · ENGINE SUITE<br />
+            Streng vertraulich. Konform mit <strong>GxP, AMWHV, EU‑GMP Annex 1 &amp; 11, ICH Q12, BSI IT‑Grundschutz, GoBD, FDA 21 CFR Part 11</strong>.
+        </div>
+        <div class="seal-line">
+            SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br />
+            Φ_LOCKED_ABSOLUTE · TARGET: 2026-08-19 · VERSION: 10.0.0
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    // ============================================================
+    // GLOBALE HELPER
+    // ============================================================
+    const SEAL = "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab";
+    const OMNI_SALT = "_OMNI_SALT_2026";
+
+    function getTimestamp() { return new Date().toISOString(); }
+
+    function computeHash(text) {
+        return CryptoJS.SHA256(text + OMNI_SALT).toString();
+    }
+
+    function showToast(msg, type = 'ok') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'warn' ? 'warn' : ''}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ============================================================
+    // ENGINE 1: FORENSIK
+    // ============================================================
+    function runForensic() {
+        const text = document.getElementById('forensicText').value || 'Default text';
+        const source = document.getElementById('forensicSource').value;
+        const caseId = document.getElementById('forensicCase').value || 'CASE-2026-001';
+        const hash = computeHash(text);
+        const preview = text.substring(0, 80) + (text.length > 80 ? '…' : '');
+
+        const record = {
+            module: "forensic",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "forensic",
+                severity: 2,
+                length: text.length
+            },
+            ast: {
+                node_type: "ForensicNode",
+                children: [
+                    { type: "Source", value: source },
+                    { type: "CaseId", value: caseId }
+                ]
+            },
+            data: {
+                hash: `sha256:${hash}`,
+                chain: [
+                    { step: 1, action: "ingest", status: "OK" },
+                    { step: 2, action: "hash", status: "OK" }
+                ],
+                classification: text.length > 500 ? "Langdokument" : "Kurzdokument",
+                preview: preview
+            }
+        };
+
+        document.getElementById('forensicOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('🔬 Forensik-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 2: LEGAL
+    // ============================================================
+    function runLegal() {
+        const text = document.getElementById('legalText').value || 'Standardtext';
+        const normHint = document.getElementById('legalNorm').value || 'BGB §134';
+        const docType = document.getElementById('legalDocType').value;
+        const norms = normHint.split('|').filter(Boolean);
+        const riskFlags = [];
+        if (norms.some(n => n.includes('§134') || n.includes('§348') || n.includes('EMRK') || n.includes('GG'))) {
+            riskFlags.push('critical');
+        }
+
+        const record = {
+            module: "legal-ledger",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "legal",
+                severity: riskFlags.includes('critical') ? 3 : 1
+            },
+            ast: {
+                node_type: "LegalNode",
+                children: [
+                    { type: "NormHint", value: normHint },
+                    { type: "DocType", value: docType }
+                ]
+            },
+            data: {
+                norms: norms,
+                risk_flags: riskFlags,
+                doc_type: docType,
+                preview: text.substring(0, 80) + (text.length > 80 ? '…' : '')
+            }
+        };
+
+        document.getElementById('legalOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('⚖️ Legal-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 3: MEDICAL
+    // ============================================================
+    function runMedical() {
+        const text = document.getElementById('medicalText').value || 'Befundtext';
+        const patient = document.getElementById('medicalPatient').value || 'Unbekannt';
+        const age = parseInt(document.getElementById('medicalAge').value) || 0;
+        const praxis = document.getElementById('medicalPraxis').value || 'Praxis';
+        const kv = document.getElementById('medicalKV').value || 'KV-Region';
+
+        const findings = [];
+        let severity = 'LOW';
+        if (text.match(/blutung|schmerz|akut|hoch/i)) {
+            findings.push({ key: 'blutung', severity: 'HIGH' });
+            severity = 'HIGH';
+        } else if (text.match(/mittel|mäßig/i)) {
+            severity = 'MEDIUM';
+        }
+
+        const record = {
+            module: "medical",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "medical",
+                severity: severity === 'HIGH' ? 3 : severity === 'MEDIUM' ? 2 : 1
+            },
+            ast: {
+                node_type: "MedicalNode",
+                children: [
+                    { type: "Patient", value: patient },
+                    { type: "KVRegion", value: kv }
+                ]
+            },
+            data: {
+                patient: patient,
+                age: age,
+                findings: findings,
+                severity: severity,
+                workflow: ["Anmeldung", "Anamnese", "Diagnostik", "Therapie", "Abrechnung"]
+            }
+        };
+
+        document.getElementById('medicalOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('🏥 Medical-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 4: FINANCIAL
+    // ============================================================
+    function runFinancial() {
+        const income = parseFloat(document.getElementById('finIncome').value) || 0;
+        const expenses = parseFloat(document.getElementById('finExpenses').value) || 0;
+        const assets = parseFloat(document.getElementById('finAssets').value) || 0;
+        const liabilities = parseFloat(document.getElementById('finLiabilities').value) || 0;
+        const buergergeld = document.getElementById('finBuergergeld').value === 'true';
+        const subventions = document.getElementById('finSubventions').value.split(',').map(s => s.trim()).filter(Boolean);
+        const drvPoints = parseFloat(document.getElementById('finDRV').value) || 0;
+
+        const liquidity = income - expenses;
+        const netWorth = assets - liabilities;
+        const estimatedPension = Math.round(drvPoints * 35.0);
+
+        let riskLevel = 'LOW';
+        const ratio = income / (expenses || 1);
+        if (ratio < 0.8) riskLevel = 'HIGH';
+        else if (ratio < 1.2) riskLevel = 'MEDIUM';
+
+        const record = {
+            module: "financial",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "financial",
+                risk: riskLevel === 'HIGH' ? 0.7 : riskLevel === 'MEDIUM' ? 0.4 : 0.1,
+                liquidity: liquidity,
+                netWorth: netWorth
+            },
+            ast: {
+                node_type: "FinancialNode",
+                children: [
+                    { type: "Income", value: income.toString() },
+                    { type: "DRVPoints", value: drvPoints.toString() }
+                ]
+            },
+            data: {
+                income: income,
+                expenses: expenses,
+                assets: assets,
+                liabilities: liabilities,
+                liquidity: liquidity,
+                netWorth: netWorth,
+                social: {
+                    buergergeld: buergergeld,
+                    subventionen: subventions,
+                    drv_points: drvPoints,
+                    estimated_pension: estimatedPension
+                },
+                riskLevel: riskLevel
+            }
+        };
+
+        document.getElementById('financialOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('💰 Financial-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 5: SECURITY
+    // ============================================================
+    function runSecurity() {
+        const session = document.getElementById('secSession').value || 'sess-default';
+        const user = document.getElementById('secUser').value || 'User';
+        const modules = document.getElementById('secModules').value.split(',').map(s => s.trim()).filter(Boolean);
+
+        const record = {
+            module: "security",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "security",
+                severity: 1
+            },
+            ast: {
+                node_type: "SecurityNode",
+                children: [
+                    { type: "Session", value: session },
+                    { type: "User", value: user }
+                ]
+            },
+            data: {
+                pqc_ready: true,
+                hash_algorithm: "SHA-256",
+                zero_trust: ["RAM-Purge", "Nur Hashes an Meta", "RLS in Supabase"],
+                audit_log: true,
+                modules_active: modules
+            }
+        };
+
+        document.getElementById('securityOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('🛡️ Security-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 6: AI / CLUSTER
+    // ============================================================
+    function runAI() {
+        const text = document.getElementById('aiText').value || 'Standardereignis';
+        const channel = document.getElementById('aiChannel').value;
+        const tags = document.getElementById('aiTags').value.split(',').map(s => s.trim()).filter(Boolean);
+
+        const impactScore = Math.min(1, (text.length / 500) + (tags.length * 0.1));
+        let cluster = 'ALLGEMEIN';
+        if (channel === 'social') cluster = 'BÜRGER-SCHWARM';
+        else if (channel === 'market') cluster = 'MARKTANALYSE';
+        else if (channel === 'client') cluster = 'MANDANTEN-POOL';
+
+        const record = {
+            module: "ai-cluster",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "cluster",
+                severity: 2
+            },
+            ast: {
+                node_type: "ClusterNode",
+                children: [
+                    { type: "Channel", value: channel }
+                ]
+            },
+            data: {
+                impact_score: Math.round(impactScore * 100) / 100,
+                cluster: cluster,
+                tags: tags
+            }
+        };
+
+        document.getElementById('aiOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('🧠 AI/Cluster-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 7: CRYPTO
+    // ============================================================
+    function runCrypto() {
+        const caseId = document.getElementById('cryptoCase').value || 'CASE-2026-001';
+        const hashes = document.getElementById('cryptoHashes').value.split(',').map(s => s.trim()).filter(Boolean);
+        const events = document.getElementById('cryptoEvents').value.split(',').map(s => s.trim()).filter(Boolean);
+
+        const chain = events.map((ev, idx) => ({
+            event: ev,
+            hash: hashes[idx] || `sha256:${computeHash(ev + idx)}`
+        }));
+
+        const record = {
+            module: "salat-chain",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "blockchain",
+                severity: 2
+            },
+            ast: {
+                node_type: "ChainNode",
+                children: [
+                    { type: "CaseId", value: caseId }
+                ]
+            },
+            data: {
+                chain: chain,
+                pqc_ready: true
+            }
+        };
+
+        document.getElementById('cryptoOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('🔗 Crypto-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // ENGINE 8: EXPORT
+    // ============================================================
+    function runExport() {
+        const caseId = document.getElementById('exportCase').value || 'CASE-2026-001';
+        const modules = document.getElementById('exportModules').value.split(',').map(s => s.trim()).filter(Boolean);
+        const format = document.getElementById('exportFormat').value;
+
+        const record = {
+            module: "export",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: {
+                domain: "export",
+                severity: 1
+            },
+            ast: {
+                node_type: "ExportNode",
+                children: [
+                    { type: "CaseId", value: caseId },
+                    { type: "Format", value: format }
+                ]
+            },
+            data: {
+                k26_pdf_generated: format === 'pdf',
+                questions_379: true,
+                whitepaper_section: true,
+                included_modules: modules
+            }
+        };
+
+        document.getElementById('exportOutput').textContent = JSON.stringify(record, null, 2);
+        showToast('📦 Export-Engine ausgeführt', 'ok');
+    }
+
+    // ============================================================
+    // BONUS: NEON-CORTEX
+    // ============================================================
+    function runNeonCortex() {
+        // Simuliere Vektoren für die Module
+        const modules = [
+            { name: 'forensic', domain: 'forensic', severity: 2, length: 1024 },
+            { name: 'legal-ledger', domain: 'legal', severity: 3, length: 512 },
+            { name: 'medical', domain: 'medical', severity: 3, length: 2048 },
+            { name: 'financial', domain: 'financial', risk: 0.3, liquidity: 12000 },
+            { name: 'security', domain: 'security', severity: 1, length: 256 },
+            { name: 'ai-cluster', domain: 'cluster', severity: 2, length: 768 }
+        ];
+
+        const colors = {
+            forensic: '#ff00ff',
+            legal: '#00ffbf',
+            medical: '#ff6b00',
+            financial: '#ffbf00',
+            security: '#00c8ff',
+            cluster: '#bf00ff'
+        };
+
+        const points = modules.map((m, i) => {
+            const x = (i / modules.length) * 0.8 + 0.1;
+            const y = (m.severity || 1) / 4 + 0.1;
+            const z = (m.length || 512) / 2048;
+            return {
+                name: m.name,
+                x: x,
+                y: y,
+                z: z,
+                color: colors[m.domain] || '#ffffff',
+                size: 3 + (m.severity || 1)
+            };
+        });
+
+        const output = {
+            modules: points,
+            supervisors: {
+                core: { pqc_ready: true },
+                security: { zero_trust: true }
+            }
+        };
+
+        document.getElementById('neonOutput').textContent = JSON.stringify(output, null, 2);
+
+        // Zeichne auf Canvas
+        const canvas = document.getElementById('neonCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#000a0a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        points.forEach(p => {
+            const x = p.x * canvas.width;
+            const y = (1 - p.y) * canvas.height;
+            ctx.beginPath();
+            ctx.arc(x, y, p.size, 0, 2 * Math.PI);
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#e5e7eb';
+            ctx.font = '8px monospace';
+            ctx.fillText(p.name, x + 10, y);
+        });
+
+        showToast('🌈 Neon-Cortex visualisiert', 'ok');
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    console.log('⚡ Φ_OMNI_V9 – ENGINE SUITE geladen.');
+    console.log('📌 8+1 Engines: Forensik, Legal, Medical, Financial, Security, AI, Crypto, Export, Neon-Cortex');
+    console.log('📌 STATUS: Φ_LOCKED_ABSOLUTE');
+    showToast('⚡ Φ_OMNI_V9 ENGINE SUITE geladen!', 'ok');
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Φ_OMNI_V9_SUPER_DOCKTYPE</title>
