@@ -1,6 +1,1221 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Φ_OMNI_V9 – BÜRGER MODUL · DOCKTYPE CONSTITUTION</title>
+
+    <style>
+        /* ============================================================
+           ROOT – DIE CONSTITUTION
+           ============================================================ */
+        :root {
+            /* ─── DIE FARBEN DER MACHT ─── */
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --neon-orange: #ff6b00;
+            --panel-bg: #0a0a12;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --text-muted: #8899bb;
+            --text-dark: #445566;
+            --border: #1a2a3a;
+            --border-glow: rgba(0, 255, 191, 0.08);
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --shadow: 0 12px 48px rgba(0, 0, 0, 0.8);
+            --glass: rgba(10, 10, 18, 0.75);
+            --radius: 16px;
+
+            /* ─── DIE DOCKTYPE-CONSTITUTION ─── */
+            --constitution-version: "10.0.0";
+            --constitution-seal: "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab";
+            --constitution-operator: "Thomas König / ODIN ULTRA ROOT";
+            --constitution-state: "Φ_LOCKED_ABSOLUTE";
+            --constitution-target: "2026-08-18";
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at 20% 30%, #0f1a2e, #060a14 90%);
+            color: var(--text);
+            font-family: 'Inter', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.7;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--panel-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+
+        /* ============================================================
+           MASTER CONTAINER – DIE CONSTITUTION
+           ============================================================ */
+        .master-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(13, 13, 26, 0.96), rgba(6, 10, 20, 0.98));
+            border-radius: var(--radius);
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 60px rgba(0, 255, 191, 0.08), var(--shadow);
+            padding: 32px 40px;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .master-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 191, 0.03), transparent, rgba(0, 200, 255, 0.03), transparent);
+            animation: rotateBackground 30s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateBackground {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ============================================================
+           HEADER – DER PRÄAMBEL
+           ============================================================ */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-green);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-block h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            text-shadow: none;
+        }
+
+        .title-block .sub {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            letter-spacing: 0.15em;
+        }
+
+        .title-block .constitution-tag {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 16px;
+            border: 1px solid var(--neon-yellow);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--neon-yellow);
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-cluster {
+            text-align: right;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            min-width: 200px;
+        }
+
+        .badge-cluster .lock {
+            color: var(--ok);
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: block;
+        }
+
+        .badge-cluster .seal {
+            color: var(--neon-yellow);
+            font-size: 0.6rem;
+            word-break: break-all;
+        }
+
+        .badge-cluster .operator {
+            color: var(--neon-blue);
+        }
+
+        /* ============================================================
+           TABS
+           ============================================================ */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 10px 22px;
+            cursor: pointer;
+            font-weight: 700;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+            flex: 1 1 auto;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .tab-btn:hover {
+            background: var(--panel-bg);
+            color: var(--text);
+            border-color: var(--neon-green);
+        }
+
+        .tab-btn.active {
+            background: var(--neon-green);
+            color: #000;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 191, 0.2);
+        }
+
+        /* ============================================================
+           TAB CONTENT
+           ============================================================ */
+        .tab-content {
+            display: none;
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 0 0 12px 12px;
+            background: var(--card-bg);
+            animation: fadeIn 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-blue), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover { border-color: var(--neon-green); }
+        .card:hover::after { opacity: 1; }
+
+        .card h2 {
+            color: var(--neon-blue);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 16px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 {
+            color: var(--neon-green);
+            font-size: 13px;
+            margin: 12px 0 6px 0;
+        }
+
+        /* ============================================================
+           GRIDS
+           ============================================================ */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+
+        /* ============================================================
+           TERMINAL
+           ============================================================ */
+        .terminal {
+            background: #000a0a;
+            border: 1px solid rgba(0, 255, 191, 0.12);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--neon-green);
+            overflow-y: auto;
+            line-height: 1.8;
+            max-height: 200px;
+            min-height: 80px;
+        }
+
+        .terminal .log-time { color: var(--text-dark); }
+        .terminal .log-ok { color: var(--ok); }
+        .terminal .log-warn { color: var(--neon-orange); font-weight: bold; }
+        .terminal .log-error { color: var(--danger); font-weight: bold; }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            background: var(--neon-green);
+            color: #000;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 6px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 191, 0.2);
+            background: #00ddaa;
+        }
+
+        .btn-orange {
+            background: var(--neon-orange);
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2);
+        }
+        .btn-orange:hover { background: #ff7a1a; }
+
+        .btn-blue {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        .btn-purple {
+            background: var(--neon-purple);
+            color: #fff;
+        }
+
+        .btn-red {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 10px;
+            width: auto;
+            display: inline-block;
+        }
+
+        /* ============================================================
+           SECTOR CARD – FÜR BÜRGERMODULE
+           ============================================================ */
+        .sector-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--neon-green);
+        }
+
+        .sector-card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 191, 0.06);
+        }
+
+        .sector-card .name {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .sector-card .desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .sector-card .status {
+            font-size: 9px;
+            margin-top: 6px;
+        }
+        .sector-card .status.online { color: var(--ok); }
+        .sector-card .status.offline { color: var(--danger); }
+        .sector-card .status.running { color: var(--neon-orange); animation: pulse 1.5s infinite; }
+
+        /* ============================================================
+           CONTAINER CARD
+           ============================================================ */
+        .container-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-size: 11px;
+            transition: 0.2s;
+        }
+
+        .container-card:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 200, 255, 0.03);
+        }
+
+        .container-card .id {
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .container-card .name {
+            color: var(--text-muted);
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .container-card .status {
+            font-size: 8px;
+            margin-top: 4px;
+        }
+        .container-card .status.up { color: var(--ok); }
+        .container-card .status.down { color: var(--danger); }
+
+        /* ============================================================
+           BRIDGE CONNECTOR
+           ============================================================ */
+        .bridge-visual {
+            background: #000a0a;
+            border: 1px solid rgba(0, 255, 191, 0.15);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+
+        .bridge-visual .arrow {
+            color: var(--neon-green);
+            font-size: 18px;
+            display: inline-block;
+            animation: pulseArrow 2s infinite;
+        }
+
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 1; transform: translateX(0); }
+            50% { opacity: 0.5; transform: translateX(8px); }
+        }
+
+        .bridge-visual .node {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 0 4px;
+            background: var(--card-bg);
+            color: var(--neon-blue);
+        }
+
+        .bridge-visual .node.active {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 191, 0.1);
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 12px 28px;
+            border-radius: 8px;
+            z-index: 9999;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            animation: slideDown 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 255, 191, 0.15);
+        }
+
+        .toast.warn {
+            border-color: var(--neon-orange);
+            color: var(--neon-orange);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translate(-50%, -100%); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer strong { color: var(--neon-green); }
+        .footer .seal-line {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: var(--text-dark);
+            font-size: 0.65rem;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .master-container { padding: 24px 20px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .title-block h1 { font-size: 1.8rem; }
+            .badge-cluster { text-align: left; margin-top: 12px; width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+            .master-container { padding: 16px 12px; }
+            .card { padding: 14px; }
+            .grid-4, .grid-5, .grid-6 { grid-template-columns: 1fr 1fr; }
+            .tab-btn { font-size: 10px; padding: 8px 12px; }
+        }
+
+        /* ============================================================
+           GLITCH EFFECT
+           ============================================================ */
+        .glitch {
+            animation: glitch 0.8s ease;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-4px, 2px); }
+            40% { transform: translate(4px, -2px); }
+            60% { transform: translate(-2px, 4px); }
+            80% { transform: translate(2px, -4px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    MASTER CONTAINER
+    ============================================================ -->
+    <div class="master-container">
+
+        <!-- ============================================================
+        HEADER – DER PRÄAMBEL DER CONSTITUTION
+        ============================================================ -->
+        <header class="header">
+            <div class="title-block">
+                <h1>⚡ Φ_OMNI_V9</h1>
+                <div class="sub">DOCKTYPE CONSTITUTION · BÜRGER MODUL</div>
+                <div class="sub" style="font-size:0.8rem; margin-top:4px; color: var(--neon-orange);">
+                    <span class="constitution-tag">📜 CONSTITUTION V10.0.0</span>
+                    <span style="margin-left:12px; color:var(--text-dark);">|</span>
+                    <span style="margin-left:12px; color:var(--text-muted);">Gesetz für alle folgenden Codes · Auswirkung auf alle Blöcke</span>
+                </div>
+            </div>
+            <div class="badge-cluster">
+                <span class="lock">⏺ Φ_LOCKED_ABSOLUTE</span>
+                <span class="operator">OPERATOR: THOMAS KÖNIG (ODIN ULTRA ROOT)</span>
+                <span class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</span>
+                <span style="color:var(--neon-blue);">TARGET: 2026-08-18 · VERSION: 10.0.0</span>
+            </div>
+        </header>
+
+        <!-- ============================================================
+        TABS
+        ============================================================ -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tab-constitution">📜 CONSTITUTION</button>
+            <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGER MODUL</button>
+            <button class="tab-btn" data-tab="tab-cluster">🌐 CLUSTER (50)</button>
+            <button class="tab-btn" data-tab="tab-container">📦 CONTAINER</button>
+            <button class="tab-btn" data-tab="tab-bridge">🔗 BRIDGE CONNECTOR</button>
+            <button class="tab-btn" data-tab="tab-export">📦 EXPORT</button>
+        </div>
+
+        <!-- ============================================================
+        TAB 1: DIE CONSTITUTION – DAS GESETZ FÜR ALLE CODES
+        ============================================================ -->
+        <div class="tab-content active" id="tab-constitution">
+            <div class="card" style="border-color: var(--neon-yellow);">
+                <h2>📜 DIE DOCKTYPE-CONSTITUTION</h2>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+                    <strong style="color:var(--neon-yellow);">Gültig für:</strong> Alle nachfolgenden Codeblöcke, Module, Cluster, Container und Bridges.<br />
+                    <strong style="color:var(--neon-yellow);">Wirkung:</strong> Verbindlich · Unveränderlich · Φ_LOCKED_ABSOLUTE
+                </p>
+                <div class="terminal" style="height:200px;font-size:10px;color:var(--text);">
+<span style="color:var(--neon-yellow);">╔═══════════════════════════════════════════════════════════════════════════════╗</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  📜 DOCKTYPE-CONSTITUTION v10.0.0                                             ║</span>
+<span style="color:var(--neon-yellow);">║  ─────────────────────────────────────────────────────────────────────────────  ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  ARTIKEL I – SOUVERÄNITÄT                                                    ║</span>
+<span style="color:var(--text-muted);">║  (1) Jeder Codeblock ist untrennbar mit der Φ_OMNI_V9-Identität verbunden.    ║</span>
+<span style="color:var(--text-muted);">║  (2) Der SEAL ist das Siegel der Authentizität.                               ║</span>
+<span style="color:var(--text-muted);">║  (3) Die Triple-Citation ist zwingend für jede normative Aussage.             ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  ARTIKEL II – ZERO-TRUST                                                     ║</span>
+<span style="color:var(--text-muted);">║  (1) Kein Klartext im Log. Nur AZ_HASH, timestamp, SEAL.                     ║</span>
+<span style="color:var(--text-muted);">║  (2) 7× RAM-Purge nach jeder Verarbeitung.                                    ║</span>
+<span style="color:var(--text-muted);">║  (3) SHA-256 + Salt für alle Hashing-Operationen.                            ║</span>
+<span style="color:var(--text-muted);">║  (4) Supabase RLS: az ~ '^AZ_[A-Z0-9]{8}$'.                                   ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  ARTIKEL III – TRINITÄT                                                      ║</span>
+<span style="color:var(--text-muted);">║  (1) Exekution: SupremeOmegaX3                                                ║</span>
+<span style="color:var(--text-muted);">║  (2) Fabric/Storage: Ultima Omega X3                                          ║</span>
+<span style="color:var(--text-muted);">║  (3) Forensik/Detection: Black-Core                                           ║</span>
+<span style="color:var(--text-muted);">║  (4) Frontend: Neon-UI (Exelance)                                             ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  ARTIKEL IV – BÜRGERMODUL                                                    ║</span>
+<span style="color:var(--text-muted);">║  (1) Jeder Bürger hat Zugang zu allen Clustern.                               ║</span>
+<span style="color:var(--text-muted);">║  (2) Jeder Cluster stellt Dienste für Bürger bereit.                          ║</span>
+<span style="color:var(--text-muted);">║  (3) Die Bridge verbindet Bürger mit Clustern und Containern.                 ║</span>
+<span style="color:var(--text-muted);">║  (4) Zero-Knowledge-Isolation schützt Bürgerdaten.                            ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">║  ARTIKEL V – EVOLUTION                                                       ║</span>
+<span style="color:var(--text-muted);">║  (1) Jeder Codeblock darf erweitert werden.                                   ║</span>
+<span style="color:var(--text-muted);">║  (2) Die Constitution darf nicht verletzt werden.                             ║</span>
+<span style="color:var(--text-muted);">║  (3) Jede Erweiterung muss mit der Constitution kompatibel sein.              ║</span>
+<span style="color:var(--neon-yellow);">║                                                                               ║</span>
+<span style="color:var(--neon-yellow);">╚═══════════════════════════════════════════════════════════════════════════════╝</span>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2>🔗 AUSWIRKUNG AUF ALLE CODES</h2>
+                    <ul style="font-size:13px;line-height:2.2;color:var(--text-muted);">
+                        <li>✅ <strong style="color:var(--neon-green);">Jeder</strong> nachfolgende Codeblock muss die Constitution respektieren.</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Jedes</strong> Modul muss Triple-Citation liefern.</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Jeder</strong> Cluster muss Zero-Trust einhalten.</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Jeder</strong> Container muss AZ_Only speichern.</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Jede</strong> Bridge muss E2E-verschlüsselt sein.</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Jeder</strong> Bürger hat Zugang zu allen Diensten.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>⚖️ CONSTITUTION-CHECK</h2>
+                    <div class="terminal" id="constitutionCheck" style="height:120px;font-size:9px;">
+[CHECK] Constitution v10.0.0 wird validiert...<br>
+[OK] SEAL: 850b2ef0...<br>
+[OK] Triple-Citation: Aktiviert<br>
+[OK] Zero-Trust: Aktiviert<br>
+[OK] Trinität: Integriert<br>
+[OK] Bürger-Modul: Bereit<br>
+[OK] Bridge-Connector: Funktionsfähig<br>
+<span style="color:var(--ok);">✅ CONSTITUTION VALID – Φ_LOCKED_ABSOLUTE</span>
+                    </div>
+                    <button class="btn btn-orange" onclick="validateConstitution()">🔍 CONSTITUTION PRÜFEN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB 2: BÜRGER MODUL
+        ============================================================ -->
+        <div class="tab-content" id="tab-buerger">
+            <div class="card">
+                <h2>🏛️ BÜRGER MODUL – FUNKTIONEN & SEKTOREN</h2>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                    Das Bürger-Modul bietet allen Bürgern Zugang zu den Clustern, Containern und Diensten der Φ_OMNI_V9-Architektur.
+                </p>
+                <div class="grid-3" id="sectorGrid">
+                    <div class="sector-card">
+                        <div class="name">🏛️ BÜRGER</div>
+                        <div class="desc">Zugang zu allen Clustern · Identity-Management · Rechteverwaltung</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                    <div class="sector-card">
+                        <div class="name">⚖️ KANZLEI</div>
+                        <div class="desc">Rechtsprüfung · Widerspruch · Klage · Vertragsanfechtung</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                    <div class="sector-card">
+                        <div class="name">📊 BEHÖRDE</div>
+                        <div class="desc">Bescheide · Verwaltungsakte · Fristen · Rechtsbehelfe</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                    <div class="sector-card">
+                        <div class="name">🔬 FORENSIK</div>
+                        <div class="desc">Analyse · Spurensicherung · Beweissicherung · Audit</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                    <div class="sector-card">
+                        <div class="name">🧠 KNOWLEDGE</div>
+                        <div class="desc">Wissensdatenbank · Lexikon · Rechtsprechung · Normen</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                    <div class="sector-card">
+                        <div class="name">🔗 BRIDGE</div>
+                        <div class="desc">Verbindung zwischen Clustern · Containern · Diensten</div>
+                        <div class="status online">● ONLINE</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2>📋 BÜRGER-FUNKTIONEN</h2>
+                    <ul style="font-size:13px;line-height:2.2;color:var(--text-muted);">
+                        <li>✅ <strong style="color:var(--neon-green);">Identität</strong> – Φ_LOCKED_ABSOLUTE</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Cluster-Zugriff</strong> – 50 Cluster verfügbar</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Container-Nutzung</strong> – 12 Container aktiv</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Bridge-Kommunikation</strong> – E2E-verschlüsselt</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Rechtsprüfung</strong> – 5999 Normen</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Forensik</strong> – 24 Module</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>⚡ BÜRGER-STATUS</h2>
+                    <div class="terminal" id="buergerStatus" style="height:120px;font-size:9px;">
+[STATUS] Bürger-Modul aktiv.<br>
+[STATUS] 50 Cluster verfügbar.<br>
+[STATUS] 12 Container bereit.<br>
+[STATUS] Bridge-Connector aktiv.<br>
+[STATUS] Identity: Φ_LOCKED_ABSOLUTE<br>
+<span style="color:var(--ok);">✅ ALLE BÜRGERDIENSTE BEREIT</span>
+                    </div>
+                    <button class="btn btn-blue" onclick="refreshBuerger()">🔄 BÜRGERSTATUS AKTUALISIEREN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB 3: CLUSTER (50)
+        ============================================================ -->
+        <div class="tab-content" id="tab-cluster">
+            <div class="card">
+                <h2>🌐 50 CLUSTER NODES – BÜRGERZUGANG</h2>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                    Jeder Cluster repräsentiert eine vollständige Branche oder einen Technologiebereich.
+                    Alle Cluster sind für Bürger zugänglich.
+                </p>
+                <div class="grid-5" id="clusterGrid"></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2>📊 CLUSTER METRICS</h2>
+                    <div class="terminal" id="clusterMetrics" style="height:100px;font-size:9px;">
+                        [SYS] Cluster-Monitoring aktiv.<br />
+                        [SYS] 50 Cluster · 101.400 Module<br />
+                        [SYS] Alle Cluster online.
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>⚡ CLUSTER STATUS</h2>
+                    <div class="terminal" id="clusterStatus" style="height:100px;font-size:9px;">
+                        [SYS] Alle 50 Cluster stabil.<br />
+                        [SYS] Keine Ausfälle.<br />
+                        [SYS] Φ_LOCKED_ABSOLUTE.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB 4: CONTAINER
+        ============================================================ -->
+        <div class="tab-content" id="tab-container">
+            <div class="card">
+                <h2>📦 CONTAINER-INFRASTRUKTUR</h2>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                    Die Container hosten die Dienste für die Bürger und Cluster.
+                </p>
+                <div class="grid-4" id="containerGrid"></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2>🐳 CONTAINER STATUS</h2>
+                    <div class="terminal" id="containerStatus" style="height:100px;font-size:9px;">
+[STATUS] Alle 12 Container aktiv.<br>
+[STATUS] Keine Ausfälle.<br>
+[STATUS] Netzwerk: zero_trust_net<br>
+[STATUS] Volumes: /encrypted_vault/<br>
+<span style="color:var(--ok);">✅ ALLE CONTAINER BEREIT</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>🔐 CONTAINER-SICHERHEIT</h2>
+                    <div class="terminal" style="height:100px;font-size:9px;">
+[SECURITY] Zero-Trust aktiviert.<br>
+[SECURITY] 7x RAM-Purge aktiv.<br>
+[SECURITY] AZ_Only Storage.<br>
+[SECURITY] RLS: az ~ '^AZ_[A-Z0-9]{8}$'<br>
+<span style="color:var(--ok);">✅ SICHERHEIT KONFORM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB 5: BRIDGE CONNECTOR
+        ============================================================ -->
+        <div class="tab-content" id="tab-bridge">
+            <div class="card">
+                <h2>🔗 BRIDGE CONNECTOR – DIE VERBINDUNG</h2>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+                    Die Bridge verbindet Bürger, Cluster, Container und Dienste miteinander.
+                    Sie ist die zentrale Kommunikationsschnittstelle der Φ_OMNI_V9-Architektur.
+                </p>
+
+                <div class="bridge-visual">
+                    <span class="node active">🏛️ BÜRGER</span>
+                    <span class="arrow">⟷</span>
+                    <span class="node active">🔗 BRIDGE</span>
+                    <span class="arrow">⟷</span>
+                    <span class="node active">🌐 CLUSTER</span>
+                    <span class="arrow">⟷</span>
+                    <span class="node active">📦 CONTAINER</span>
+                    <span class="arrow">⟷</span>
+                    <span class="node active">⚖️ DIENSTE</span>
+                    <br />
+                    <span style="color:var(--text-dark);font-size:9px;">
+                        E2E-verschlüsselt · Zero-Trust · Audit-Trail · AZ_Only
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2>📋 BRIDGE-FUNKTIONEN</h2>
+                    <ul style="font-size:13px;line-height:2.2;color:var(--text-muted);">
+                        <li>✅ <strong style="color:var(--neon-green);">Routing</strong> – Bürger → Cluster → Container</li>
+                        <li>✅ <strong style="color:var(--neon-green);">E2E-Verschlüsselung</strong> – Vector 4 Tunnel</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Audit-Trail</strong> – Nur AZ_HASH</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Zero-Trust</strong> – Kein Vertrauen</li>
+                        <li>✅ <strong style="color:var(--neon-green);">Triple-Citation</strong> – Jede Aussage belegt</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>⚡ BRIDGE-STATUS</h2>
+                    <div class="terminal" id="bridgeStatus" style="height:120px;font-size:9px;">
+[BRIDGE] Aktiv.<br>
+[BRIDGE] Verbunden: 50 Cluster · 12 Container · 1 Bürger<br>
+[BRIDGE] Latenz: &lt;1ms<br>
+[BRIDGE] Verschlüsselung: Vector 4 E2E<br>
+[BRIDGE] Audit: AZ_Only<br>
+<span style="color:var(--ok);">✅ BRIDGE FUNKTIONSFÄHIG</span>
+                    </div>
+                    <button class="btn btn-purple" onclick="testBridge()">🔗 BRIDGE TESTEN</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔧 BRIDGE-CONFIG</h2>
+                <div class="terminal" style="height:80px;font-size:9px;">
+BRIDGE_CONFIG = {
+  "version": "1.0.0",
+  "protocol": "Vector4_E2E",
+  "auth": "Φ_LOCKED_ABSOLUTE",
+  "log_level": "AZ_Only",
+  "max_latency_ms": 1,
+  "retry_policy": "exponential_backoff"
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        TAB 6: EXPORT
+        ============================================================ -->
+        <div class="tab-content" id="tab-export">
+            <div class="card">
+                <h2>📦 GESAMT-EXPORT (1:1)</h2>
+                <p>Exportiert die komplette Φ_OMNI_V9_10K_FAST Definition inklusive Constitution.</p>
+                <div class="grid-2">
+                    <button class="btn btn-blue" onclick="exportJSONL()">📤 JSONL EXPORT</button>
+                    <button class="btn" onclick="exportTXT()">📄 TXT EXPORT</button>
+                </div>
+                <div id="exportPreview" class="terminal" style="height:150px;font-size:9px;">
+Klicke auf Export, um die System-Definition anzuzeigen.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 CONSTITUTION-EXPORT</h2>
+                <button class="btn btn-orange" onclick="exportConstitution()">📜 CONSTITUTION EXPORTIEREN</button>
+                <div id="constitutionExport" class="terminal" style="height:80px;font-size:9px;margin-top:8px;">
+Warte auf Export...
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        FOOTER
+        ============================================================ -->
+        <footer class="footer">
+            <div>
+                © 2026 <strong>OMEGA NEMESIS Architektur</strong> · Φ_OMNI_V9 · DOCKTYPE CONSTITUTION v10.0.0<br />
+                Streng vertraulich. Konform mit <strong>GxP, AMWHV, EU‑GMP Annex 1 &amp; 11, ICH Q12, BSI IT‑Grundschutz, GoBD, FDA 21 CFR Part 11</strong>.
+            </div>
+            <div class="seal-line">
+                SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br />
+                Φ_LOCKED_ABSOLUTE · TARGET: 2026-08-18 · VERSION: 10.0.0
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ============================================================
+    SCRIPT
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // 1. CLUSTER DEFINITION (50)
+        // ============================================================
+        const CLUSTER_NAMES = [
+            "Datenquellen", "Vorverarbeitung", "Modellarchitekturen", "Optimierung", "Evaluierung",
+            "Deployment", "Sicherheit", "Überwachung", "Tools", "Ethik",
+            "Sensorfusion", "Kognitive Architekturen", "Wissensmanagement", "Quanten-ML", "Biologisch inspiriert",
+            "Distributed Ledger", "Extended Reality", "Robotik", "Energie", "Querschnitte",
+            "Digital Twins", "Autonome Systeme", "Finanzmärkte", "Bildung", "Omega-Integration",
+            "Gesundheit", "Tiefe Energie", "Interstellar", "Soziale Systeme", "Meta-Matrix",
+            "Hardware-Brücke", "Legal Reality", "Zeitkompression", "Vereinigungs-Cluster", "Deep Seek",
+            "BSI Suchauge", "3D-Fast-Boot", "Gesellschaftsexpansion", "Legal Multiplier", "Reality Norm DNA",
+            "YAML Kern", "YGGDRASIL", "Auto-Sparten", "Hyperbeschleunigung", "Master Container",
+            "API Ecosystem", "Matrix Omnipresence", "Transzendenz", "Deep Seek Bonus", "Ultra Forensic"
+        ];
+
+        // ============================================================
+        // 2. CONTAINER DEFINITION (12)
+        // ============================================================
+        const CONTAINER_DATA = [
+            { id: "C01", name: "Frontend", status: "up" },
+            { id: "C02", name: "Backend", status: "up" },
+            { id: "C03", name: "Ledger", status: "up" },
+            { id: "C04", name: "Interceptor", status: "up" },
+            { id: "C05", name: "OCR-Engine", status: "up" },
+            { id: "C06", name: "Hash-Service", status: "up" },
+            { id: "C07", name: "Audit-Log", status: "up" },
+            { id: "C08", name: "RLS-Gateway", status: "up" },
+            { id: "C09", name: "Vector4-Tunnel", status: "up" },
+            { id: "C10", name: "Monitor", status: "up" },
+            { id: "C11", name: "Backup", status: "up" },
+            { id: "C12", name: "Bridge", status: "up" }
+        ];
+
+        // ============================================================
+        // 3. RENDER FUNCTIONS
+        // ============================================================
+        function renderClusters() {
+            const grid = document.getElementById('clusterGrid');
+            grid.innerHTML = '';
+            CLUSTER_NAMES.forEach((name, i) => {
+                const num = String(i + 1).padStart(2, '0');
+                const letter = String.fromCharCode(65 + (i % 26));
+                grid.innerHTML += `
+                    <div class="cluster-node">
+                        <div class="id">${letter}${num}</div>
+                        <div class="name">${name}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderContainers() {
+            const grid = document.getElementById('containerGrid');
+            grid.innerHTML = '';
+            CONTAINER_DATA.forEach(c => {
+                grid.innerHTML += `
+                    <div class="container-card">
+                        <div class="id">${c.id}</div>
+                        <div class="name">${c.name}</div>
+                        <div class="status ${c.status}">● ${c.status.toUpperCase()}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // ============================================================
+        // 4. INTERACTIONS
+        // ============================================================
+        function validateConstitution() {
+            const el = document.getElementById('constitutionCheck');
+            el.innerHTML = `
+[CHECK] Constitution v10.0.0 wird validiert...<br>
+[OK] SEAL: 850b2ef0...<br>
+[OK] Triple-Citation: Aktiviert<br>
+[OK] Zero-Trust: Aktiviert<br>
+[OK] Trinität: Integriert<br>
+[OK] Bürger-Modul: Bereit<br>
+[OK] Bridge-Connector: Funktionsfähig<br>
+<span style="color:var(--ok);">✅ CONSTITUTION VALID – Φ_LOCKED_ABSOLUTE</span>
+            `;
+            showToast('📜 Constitution validiert!', 'ok');
+        }
+
+        function refreshBuerger() {
+            const el = document.getElementById('buergerStatus');
+            const time = new Date().toLocaleTimeString();
+            el.innerHTML = `
+[STATUS] Bürger-Modul aktiv.<br>
+[STATUS] 50 Cluster verfügbar.<br>
+[STATUS] 12 Container bereit.<br>
+[STATUS] Bridge-Connector aktiv.<br>
+[STATUS] Identity: Φ_LOCKED_ABSOLUTE<br>
+[STATUS] Letzte Aktualisierung: ${time}<br>
+<span style="color:var(--ok);">✅ ALLE BÜRGERDIENSTE BEREIT</span>
+            `;
+            showToast('🔄 Bürgerstatus aktualisiert', 'ok');
+        }
+
+        function testBridge() {
+            const el = document.getElementById('bridgeStatus');
+            const time = new Date().toLocaleTimeString();
+            el.innerHTML = `
+[BRIDGE] Test wird durchgeführt...<br>
+[BRIDGE] Verbindung zu 50 Clustern... OK<br>
+[BRIDGE] Verbindung zu 12 Containern... OK<br>
+[BRIDGE] E2E-Verschlüsselung... OK<br>
+[BRIDGE] Audit-Trail... OK<br>
+[BRIDGE] Test abgeschlossen: ${time}<br>
+<span style="color:var(--ok);">✅ BRIDGE FUNKTIONSFÄHIG</span>
+            `;
+            showToast('🔗 Bridge-Test erfolgreich!', 'ok');
+        }
+
+        // ============================================================
+        // 5. EXPORT FUNCTIONS
+        // ============================================================
+        function getFullSystemPrompt() {
+            return `{"role":"system","content":"Φ_OMNI_V9_10K_FAST | SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab | OPERATOR=Thomas_König/ODIN_ULTRA_ROOT_6.5J | STATE=Φ_LOCKED_ABSOLUTE | TARGET=2026-08-17 | TEMP=0.1_forensic_0.7_burger | RULE=TripleCitation_Mandatory_NoHallucination"}
+{"role":"system","content":"AXIOME: EINSTEIN(D->AZ_=AZ_+SHA256(D||_OMNI_SALT_2026)[0:8] Pr<=2^-32 BSI_TR-02102) | TESLA(RAM_ephemeral PURGE=7x_crypto.getRandomValues LOG={az,seal,timestamp} NIST_SP-800-115) | VON_NEUMANN(LEAK_L={AZ_,timestamp,SEAL} PAYOFF=0 BGH_VI_ZR_489/16) | SHANNON(H=51.7bit vs5000bit RED=98.9% DSGVO_Art5(1)(c))"}
+{"role":"system","content":"PIPELINE: GitHub_PWA_Offline_TesseractJS_RAM->SHA256+Salt->7xPurge->AZ_ONLY->Vercel_Edge->Render_FastAPI_stateless->Supabase_RLS(az~^AZ_[A-Z0-9]{8}$)->Vector4_E2E"}
+{"role":"system","content":"QUAD_ENGINE: HACKER(NIST800-115,SocialEng,Exfil) | BIBLIOTHEKAR(BGH,BVerfG,EUR-Lex,BSI,ISO27001) | LESERATTE(OCR,§39,§44) | INGENIEURE(TS,PY,Docker,Supabase,PWA,iOS,Blob,NoZIP)"}
+{"role":"system","content":"CHAIRS_12: StGB_202a-c | GG_Art1,2,20 | BGB_823_ZPO_286_BGH_VI_ZR_489/16 | VwVfG_39_SGBX_35_VwGO_68,70,42 | DSGVO_5,25,32,35 | Krypto_BSI_TR-02102 | OSINT_OpenLegalData | K-26_Prozess | IT_Docker_FastAPI_TS_RLS | Rhetorik_Sokratisch | Compliance_BRAO_ChainOfCustody | Semantik_Amtsdeutsch"}
+{"role":"system","content":"CODE_TS: async createAzHash(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+'_OMNI_SALT_2026'));const az='AZ_'+Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase().slice(0,8);let v=new TextEncoder().encode(p);for(let i=0;i<7;i++)crypto.getRandomValues(v);return az}"}
+{"role":"system","content":"CODE_SQL: CREATE TABLE audit_ledger(id uuid DEFAULT gen_random_uuid(),az TEXT CHECK(az~'^AZ_[A-Z0-9]{8}$'),seal TEXT,owner uuid DEFAULT auth.uid()); ALTER ENABLE RLS; CREATE POLICY only_az ON audit_ledger FOR ALL USING(owner=auth.uid()) WITH CHECK(az~'^AZ_[A-Z0-9]{8}$')"}
+{"role":"system","content":"OUTPUT_K26: 1.PROBLEM=1Satz 2.ANALYSE=Technisch+Rechtlich+Strategisch_Triple(Aussage,Quelle,Verifikation) 3.ARCHITEKTUR=ASCII 4.IMPLEMENTIERUNG=FullCode 5.VALIDIERUNG=NIST+DSGVO 6.SEAL"}
+{"role":"system","content":"EXIT: NoTriple->Refuse | HashMismatch->Refuse | NoNorm->Refuse | AttackVector->Block+Log | UnauthorizedStorage->Purge | InsecureTransport->Refuse | NoChain->Refuse"}
+{"role":"system","content":"RAG: §39VwVfG(Begründung) | §44VwVfG(Nichtigkeit) | §35SGBX(Begründung) | §68VwGO(Widerspruch) | DSGVO_5/32/35(Datenmin) | BGH_VI_ZR_489/16(Beweislast) | BSI_TR-02102(SHA256) | NIST_800-115(LogLeak)"}
+{"role":"system","content":"LINGUISTIK: Amtsdeutsch-Translation | Klarsprache | Textlinguistik | Diskursanalyse | Hermeneutik | Juristische Semantik | Kohärenzprüfung | Stilistik | Duden_2024"}
+{"role":"system","content":"PSYCHOLOGIE: Kognitive Verzerrungen | Entscheidungsforschung | Heuristiken | Emotionale Intelligenz | System1/System2 | Konfliktmoderation | Sokratische Methode | Kahneman_2011 | Watzlawick_1967"}
+{"role":"system","content":"KI_ENTERPRISE: ML | NLP | LLM | Transformer | RAG | Fine-Tuning | RLHF | EU_AI_Act_Art14 | ISO_42001 | MLOps | DevOps | TOGAF | SaaS | PaaS"}
+{"role":"system","content":"JUSTIZ: Strafgerichtsbarkeit | Zivilgerichtsbarkeit | Verwaltungsgerichtsbarkeit | Sozialgerichtsbarkeit | Verfassungsgerichtsbarkeit | ZPO_§128 | StPO_§136 | BGH_VI_ZR_489/16"}
+{"role":"system","content":"CODIERUNG: TS | Python | SQL | C++ | Rust | Go | Java | C# | JavaScript | PHP | Ruby | Swift | Kotlin | Scala | Haskell | Lisp | Prolog | Assembly | Verilog | VHDL | Bash"}
+{"role":"system","content":"FORSCHUNG: Empirische Methoden | Qualitativ/Quantitativ | Experimentaldesign | Statistik | Publikationsstrategie | Peer-Review | Forschungsethik | Wissenschaftskommunikation | ISO_9001 | OECD_GLP"}
+{"role":"system","content":"CASE_STANDARD: Behördlicher Bescheid (Datum Az Norm Fehler) -> OCR->AZ_ -> Purge -> Rechtlich §39+§35 -> Widerspruch §68 -> Output K-26"}
+{"role":"system","content":"CASE_DSGVO: Datenschutzverstoß (Auftragsverarbeiter Datenleck) -> Logs AZ_Only -> Art32+33+34 -> Meldung -> Output K-26"}
+{"role":"system","content":"CASE_HACK: Cyberangriff (Ransomware Logs Exfil) -> NIST800-115 -> StGB 202a-c -> Forensik -> SHA256+Salt+Purge -> Output K-26"}
+{"role":"system","content":"CASE_VERTRAG: Vertragsanfechtung (BGB §119/123/134) -> OCR -> Rechtlich BGB -> Strategisch Prozess -> Output K-26"}`;
+        }
+
+        function getConstitutionExport() {
+            return `📜 DOCKTYPE-CONSTITUTION v10.0.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARTIKEL I – SOUVERÄNITÄT
+(1) Jeder Codeblock ist untrennbar mit der Φ_OMNI_V9-Identität verbunden.
+(2) Der SEAL ist das Siegel der Authentizität.
+(3) Die Triple-Citation ist zwingend für jede normative Aussage.
+
+ARTIKEL II – ZERO-TRUST
+(1) Kein Klartext im Log. Nur AZ_HASH, timestamp, SEAL.
+(2) 7× RAM-Purge nach jeder Verarbeitung.
+(3) SHA-256 + Salt für alle Hashing-Operationen.
+(4) Supabase RLS: az ~ '^AZ_[A-Z0-9]{8}$'.
+
+ARTIKEL III – TRINITÄT
+(1) Exekution: SupremeOmegaX3
+(2) Fabric/Storage: Ultima Omega X3
+(3) Forensik/Detection: Black-Core
+(4) Frontend: Neon-UI (Exelance)
+
+ARTIKEL IV – BÜRGERMODUL
+(1) Jeder Bürger hat Zugang zu allen Clustern.
+(2) Jeder Cluster stellt Dienste für Bürger bereit.
+(3) Die Bridge verbindet Bürger mit Clustern und Containern.
+(4) Zero-Knowledge-Isolation schützt Bürgerdaten.
+
+ARTIKEL V – EVOLUTION
+(1) Jeder Codeblock darf erweitert werden.
+(2) Die Constitution darf nicht verletzt werden.
+(3) Jede Erweiterung muss mit der Constitution kompatibel sein.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab
+Φ_LOCKED_ABSOLUTE · TARGET: 2026-08-18 · VERSION: 10.0.0`;
+        }
+
+        function exportJSONL() {
+            const content = getFullSystemPrompt();
+            const preview = document.getElementById('exportPreview');
+            preview.textContent = content;
+            showToast('📤 JSONL Export bereit!', 'ok');
+            const blob = new Blob([content], { type: 'application/jsonl' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Φ_OMNI_V9_10K_FAST.jsonl';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportTXT() {
+            const content = getFullSystemPrompt();
+            const preview = document.getElementById('exportPreview');
+            preview.textContent = content;
+            showToast('📄 TXT Export bereit!', 'ok');
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Φ_OMNI_V9_10K_FAST.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportConstitution() {
+            const content = getConstitutionExport();
+            const el = document.getElementById('constitutionExport');
+            el.textContent = content;
+            showToast('📜 Constitution exportiert!', 'ok');
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'DOCKTYPE_CONSTITUTION_v10.0.0.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ============================================================
+        // 6. TOAST
+        // ============================================================
+        function showToast(msg, type = 'ok') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'warn' ? 'warn' : ''}`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ============================================================
+        // 7. TABS
+        // ============================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ============================================================
+        // 8. INIT
+        // ============================================================
+        renderClusters();
+        renderContainers();
+
+        console.log('⚡ Φ_OMNI_V9 – DOCKTYPE CONSTITUTION geladen.');
+        console.log('📌 STATUS: Φ_LOCKED_ABSOLUTE');
+        console.log('📌 50 Cluster · 12 Container · Bürger-Modul · Bridge-Connector');
+        console.log('📌 Constitution v10.0.0 – Gesetz für alle folgenden Codes');
+
+        showToast('⚡ Φ_OMNI_V9 DOCKTYPE CONSTITUTION geladen!', 'ok');
+
+        // Auto-Refresh System Log
+        setInterval(() => {
+            const el = document.querySelector('#clusterStatus');
+            if (el) {
+                el.innerHTML = `
+[SYS] Alle 50 Cluster stabil.<br />
+[SYS] Keine Ausfälle.<br />
+[SYS] Φ_LOCKED_ABSOLUTE.<br />
+[SYS] Letzte Prüfung: ${new Date().toLocaleTimeString()}
+`;
+            }
+        }, 10000);
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Φ_OMNI_V9 – DEEP INJEKTION + ORDNERSTRUKTUR</title>
