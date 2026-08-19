@@ -1,580 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🏴‍☠️ BLACK CORE – v1.1.0</title>
-
-    <!-- GitHub Docktype Styles -->
-    <style>
-        /* ============================================
-           BLACK CORE – GITHUB DOCKTYPE STYLES
-           ============================================ */
-
-        /* ─── Reset & Base ─── */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #0d0d12;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        /* ─── Scrollbar ─── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #1a1a24; }
-        ::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 3px; }
-
-        /* ─── Header ─── */
-        .repo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #2a2a3a;
-            margin-bottom: 30px;
-        }
-
-        .repo-header .title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .repo-header .title h1 {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00d4ff, #00ffd4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .repo-header .title .badge {
-            background: #1a1a24;
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .repo-header .seal {
-            font-size: 12px;
-            color: #666;
-            background: #1a1a24;
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid #2a2a3a;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* ─── Badges ─── */
-        .badge-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .badge-row .badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        .badge.version { background: #1a1a24; color: #00d4ff; border: 1px solid #00d4ff; }
-        .badge.zero-trust { background: #0a2a1a; color: #00ff41; border: 1px solid #00ff41; }
-        .badge.k26 { background: #1a0a2a; color: #b400ff; border: 1px solid #b400ff; }
-        .badge.license { background: #1a1a24; color: #ffd700; border: 1px solid #ffd700; }
-        .badge.status { background: #0a1a2a; color: #00d4ff; border: 1px solid #00d4ff; }
-
-        /* ─── Grid ─── */
-        .grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ─── Cards ─── */
-        .card {
-            background: #14141e;
-            border-radius: 16px;
-            border: 1px solid #2a2a3a;
-            padding: 24px;
-            margin-bottom: 24px;
-            transition: border-color 0.3s ease;
-        }
-
-        .card:hover {
-            border-color: #00d4ff40;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title .icon {
-            font-size: 20px;
-        }
-
-        /* ─── Module Grid ─── */
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-        }
-
-        .module-item {
-            background: #1a1a24;
-            border-radius: 10px;
-            padding: 12px 16px;
-            text-align: center;
-            border: 1px solid #2a2a3a;
-            transition: all 0.3s ease;
-        }
-
-        .module-item:hover {
-            border-color: #00d4ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.08);
-        }
-
-        .module-item .name {
-            font-weight: 600;
-            font-size: 13px;
-            color: #e0e0e0;
-        }
-
-        .module-item .version {
-            font-size: 10px;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        /* ─── Engine List ─── */
-        .engine-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 8px;
-        }
-
-        .engine-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #1a1a24;
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: 1px solid #2a2a3a;
-            font-size: 13px;
-        }
-
-        .engine-item .id {
-            color: #00d4ff;
-            font-weight: 700;
-            font-size: 11px;
-            min-width: 32px;
-        }
-
-        .engine-item .name {
-            color: #ccc;
-        }
-
-        .engine-item .status {
-            margin-left: auto;
-            font-size: 8px;
-            color: #00ff41;
-        }
-
-        /* ─── Step List ─── */
-        .step-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .step-item {
-            background: #1a1a24;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            border: 1px solid #2a2a3a;
-            font-family: 'Courier New', monospace;
-            color: #888;
-        }
-
-        .step-item.parallel {
-            border-color: #ffd70040;
-            color: #ffd700;
-        }
-
-        .step-item.active {
-            border-color: #00d4ff;
-            color: #00d4ff;
-        }
-
-        /* ─── Features ─── */
-        .feature-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px 16px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #bbb;
-        }
-
-        .feature-item .check {
-            color: #00ff41;
-        }
-
-        /* ─── AST Viewer ─── */
-        .ast-viewer {
-            background: #0a0a10;
-            border-radius: 10px;
-            padding: 16px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            overflow-x: auto;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #1a1a24;
-        }
-
-        .ast-viewer .key {
-            color: #00d4ff;
-        }
-
-        .ast-viewer .string {
-            color: #ffd700;
-        }
-
-        .ast-viewer .number {
-            color: #ff6b6b;
-        }
-
-        .ast-viewer .boolean {
-            color: #00ff41;
-        }
-
-        .ast-viewer .null {
-            color: #666;
-        }
-
-        /* ─── Footer ─── */
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #2a2a3a;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 12px;
-            color: #444;
-        }
-
-        .footer a {
-            color: #00d4ff;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* ─── Responsive ─── */
-        @media (max-width: 600px) {
-            body { padding: 16px; }
-            .repo-header .title h1 { font-size: 20px; }
-            .feature-list { grid-template-columns: 1fr; }
-            .module-grid { grid-template-columns: repeat(2, 1fr); }
-            .engine-list { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <!-- ════════════════════════════════════════
-        HEADER
-        ════════════════════════════════════════ -->
-        <header class="repo-header">
-            <div class="title">
-                <h1>🏴‍☠️ BLACK CORE</h1>
-                <span class="badge">v1.1.0</span>
-                <span style="font-size:13px;color:#666;margin-left:4px;">Zero‑Trust Security Framework</span>
-            </div>
-            <div class="seal">🔒 SEAL: 850b2ef0...</div>
-        </header>
-
-        <!-- ════════════════════════════════════════
-        BADGES
-        ════════════════════════════════════════ -->
-        <div class="badge-row">
-            <span class="badge version">🏷️ BlackCore v1.1.0</span>
-            <span class="badge zero-trust">🛡️ Zero-Trust ENABLED</span>
-            <span class="badge k26">🔐 K-26 Standard</span>
-            <span class="badge license">📄 Black-Core-Standard</span>
-            <span class="badge status">✅ Production Ready</span>
-        </div>
-
-        <!-- ════════════════════════════════════════
-        MAIN GRID
-        ════════════════════════════════════════ -->
-        <div class="grid">
-
-            <!-- ─── LEFT COLUMN ─── -->
-            <div>
-
-                <!-- ═══ DESCRIPTION ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">📖</span> Description
-                    </div>
-                    <p style="color:#aaa;font-size:14px;line-height:1.8;">
-                        <strong style="color:#e0e0e0;">Black Core</strong> ist ein
-                        <strong style="color:#00d4ff;">Zero-Trust-Sicherheitsframework</strong>
-                        für kognitive Systeme, das mit dem
-                        <strong style="color:#b400ff;">K‑26‑Standard</strong> Signatur, Hash,
-                        Strict‑Mode und Audit‑Trail vereint.
-                    </p>
-                    <p style="color:#666;font-size:13px;margin-top:12px;">
-                        Entwickelt für <strong style="color:#e0e0e0;">Thomas König</strong> (Zero‑Trust, K‑26, Pipeline)
-                        &amp; <strong style="color:#e0e0e0;">Tina König</strong> (Affective Computing, KI‑Infrastruktur).
-                    </p>
-                </div>
-
-                <!-- ═══ MODULES ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">🧩</span> Modules
-                    </div>
-                    <div class="module-grid">
-                        <div class="module-item">
-                            <div class="name">pipeline</div>
-                            <div class="version">v2.0.0</div>
-                        </div>
-                        <div class="module-item">
-                            <div class="name">engines</div>
-                            <div class="version">v2.0.0</div>
-                        </div>
-                        <div class="module-item">
-                            <div class="name">fabric</div>
-                            <div class="version">v1.0.0</div>
-                        </div>
-                        <div class="module-item">
-                            <div class="name">devops</div>
-                            <div class="version">v1.0.0</div>
-                        </div>
-                        <div class="module-item">
-                            <div class="name">neon</div>
-                            <div class="version">v1.0.0</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ═══ ENGINES ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">⚙️</span> Engines <span style="font-size:12px;color:#666;font-weight:400;">(9 active)</span>
-                    </div>
-                    <div class="engine-list">
-                        <div class="engine-item"><span class="id">E01</span><span class="name">ZK-HASH</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E02</span><span class="name">FORENSIC</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E04</span><span class="name">ZERO-TRUST</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E06</span><span class="name">K-26</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E07</span><span class="name">DSGVO</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E11</span><span class="name">JUSTIZ</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E17</span><span class="name">SENTRY</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E18</span><span class="name">SPIDER</span><span class="status">●</span></div>
-                        <div class="engine-item"><span class="id">E23</span><span class="name">PROZESS</span><span class="status">●</span></div>
-                    </div>
-                </div>
-
-                <!-- ═══ PIPELINE STEPS ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">🔀</span> Pipeline Steps <span style="font-size:12px;color:#666;font-weight:400;">(14 steps, 6 parallel)</span>
-                    </div>
-                    <div class="step-list">
-                        <span class="step-item">01</span>
-                        <span class="step-item">02</span>
-                        <span class="step-item">03</span>
-                        <span class="step-item">04</span>
-                        <span class="step-item">05</span>
-                        <span class="step-item parallel">06</span>
-                        <span class="step-item parallel">07</span>
-                        <span class="step-item parallel">08</span>
-                        <span class="step-item parallel">09</span>
-                        <span class="step-item">10</span>
-                        <span class="step-item parallel">11</span>
-                        <span class="step-item parallel">12</span>
-                        <span class="step-item active">13</span>
-                        <span class="step-item">14</span>
-                    </div>
-                    <div style="margin-top:10px;display:flex;gap:16px;font-size:11px;color:#666;flex-wrap:wrap;">
-                        <span>⬜ Normal</span>
-                        <span style="color:#ffd700;">⬜ Parallel</span>
-                        <span style="color:#00d4ff;">⬜ Active</span>
-                    </div>
-                </div>
-
-                <!-- ═══ FEATURES ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">✨</span> Key Features
-                    </div>
-                    <div class="feature-list">
-                        <span class="feature-item"><span class="check">✅</span> K-26 Signatur &amp; Hash</span>
-                        <span class="feature-item"><span class="check">✅</span> Strict-Mode Validation</span>
-                        <span class="feature-item"><span class="check">✅</span> Parallel Pipeline (6x)</span>
-                        <span class="feature-item"><span class="check">✅</span> Hash-only Audit Trail</span>
-                        <span class="feature-item"><span class="check">✅</span> DSGVO / Forensic / Justiz</span>
-                        <span class="feature-item"><span class="check">✅</span> Neon Dashboard UI</span>
-                        <span class="feature-item"><span class="check">✅</span> CI/CD GitHub Actions</span>
-                        <span class="feature-item"><span class="check">✅</span> Zero-Trust Hardening</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- ─── RIGHT COLUMN ─── -->
-            <div>
-
-                <!-- ═══ QUICKSTART ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">⚡</span> Quickstart
-                    </div>
-                    <div style="background:#0a0a10;border-radius:10px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#aaa;overflow-x:auto;">
-                        <span style="color:#666;"># Clone</span><br>
-                        git clone https://github.com/black-core/black-core.git<br>
-                        cd black-core<br><br>
-                        <span style="color:#666;"># Install &amp; Run API</span><br>
-                        pip install -r api/requirements.txt<br>
-                        uvicorn api.main:app --reload<br><br>
-                        <span style="color:#666;"># Open UI</span><br>
-                        cd ui &amp;&amp; python -m http.server 3000
-                    </div>
-                </div>
-
-                <!-- ═══ API ENDPOINTS ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">🔌</span> API Endpoints
-                    </div>
-                    <div style="font-size:13px;color:#aaa;line-height:2;">
-                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/health</span><br>
-                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/</span><br>
-                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/build</span><br>
-                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/normalize</span><br>
-                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/strict-validate</span><br>
-                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/k26_v2/status</span><br>
-                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/metrics</span>
-                    </div>
-                </div>
-
-                <!-- ═══ AST VIEWER ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">🌳</span> AST Structure
-                    </div>
-                    <div class="ast-viewer">
-                        <span style="color:#666;">{</span><br>
-                        &nbsp;&nbsp;<span class="key">"project"</span>: <span class="string">"Black-Core"</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"version"</span>: <span class="string">"1.1.0"</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"modules"</span>: <span style="color:#666;">[</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"pipeline"</span>, <span class="string">"engines"</span>,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"fabric"</span>, <span class="string">"devops"</span>, <span class="string">"neon"</span><br>
-                        &nbsp;&nbsp;<span style="color:#666;">]</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"engines"</span>: <span class="number">9</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"parallel_steps"</span>: <span class="number">6</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"training_examples"</span>: <span class="number">10000</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"vector_dimensions"</span>: <span class="number">384</span>,<br>
-                        &nbsp;&nbsp;<span class="key">"seal"</span>: <span class="string">"850b2ef0..."</span><br>
-                        <span style="color:#666;">}</span>
-                    </div>
-                </div>
-
-                <!-- ═══ LINKS ═══ -->
-                <div class="card">
-                    <div class="card-title">
-                        <span class="icon">📚</span> Documentation
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">📄 README.md</a>
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">📐 ARCHITEKTUR.md</a>
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">📜 WHITEPAPER.md</a>
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">📋 AUDIT.md</a>
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">📝 RELEASE_NOTES_v1.1.0.md</a>
-                        <a href="#" style="color:#00d4ff;text-decoration:none;">🎨 UI_ARCHITEKTUR.md</a>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- ════════════════════════════════════════
-        FOOTER
-        ════════════════════════════════════════ -->
-        <footer class="footer">
-            <span>🏴‍☠️ BLACK CORE v1.1.0 · Zero-Trust Security Framework</span>
-            <span>
-                <span style="color:#00d4ff;">●</span> 9 Engines ·
-                <span style="color:#ffd700;">⚡</span> 6 Parallel Steps ·
-                <span style="color:#00ff41;">🔐</span> K-26 Standard
-            </span>
-            <span>
-                Made with ❤️ by <a href="#">Thomas &amp; Tina König</a>
-            </span>
-        </footer>
-
-    </div>
-
-</body>
-</html>
-<!DOCTYPE html>
+<!rDOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -4848,4 +4272,579 @@ ultima_omega_x3_absolute_final:
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🏴‍☠️ BLACK CORE – v1.1.0</title>
 
+    <!-- GitHub Docktype Styles -->
+    <style>
+        /* ============================================
+           BLACK CORE – GITHUB DOCKTYPE STYLES
+           ============================================ */
+
+        /* ─── Reset & Base ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0d0d12;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a24; }
+        ::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 3px; }
+
+        /* ─── Header ─── */
+        .repo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #2a2a3a;
+            margin-bottom: 30px;
+        }
+
+        .repo-header .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .repo-header .title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #00ffd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .repo-header .title .badge {
+            background: #1a1a24;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .repo-header .seal {
+            font-size: 12px;
+            color: #666;
+            background: #1a1a24;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #2a2a3a;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ─── Badges ─── */
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .badge-row .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge.version { background: #1a1a24; color: #00d4ff; border: 1px solid #00d4ff; }
+        .badge.zero-trust { background: #0a2a1a; color: #00ff41; border: 1px solid #00ff41; }
+        .badge.k26 { background: #1a0a2a; color: #b400ff; border: 1px solid #b400ff; }
+        .badge.license { background: #1a1a24; color: #ffd700; border: 1px solid #ffd700; }
+        .badge.status { background: #0a1a2a; color: #00d4ff; border: 1px solid #00d4ff; }
+
+        /* ─── Grid ─── */
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ─── Cards ─── */
+        .card {
+            background: #14141e;
+            border-radius: 16px;
+            border: 1px solid #2a2a3a;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #00d4ff40;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            font-size: 20px;
+        }
+
+        /* ─── Module Grid ─── */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .module-item {
+            background: #1a1a24;
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: center;
+            border: 1px solid #2a2a3a;
+            transition: all 0.3s ease;
+        }
+
+        .module-item:hover {
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.08);
+        }
+
+        .module-item .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+
+        .module-item .version {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* ─── Engine List ─── */
+        .engine-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 8px;
+        }
+
+        .engine-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1a1a24;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #2a2a3a;
+            font-size: 13px;
+        }
+
+        .engine-item .id {
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 11px;
+            min-width: 32px;
+        }
+
+        .engine-item .name {
+            color: #ccc;
+        }
+
+        .engine-item .status {
+            margin-left: auto;
+            font-size: 8px;
+            color: #00ff41;
+        }
+
+        /* ─── Step List ─── */
+        .step-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .step-item {
+            background: #1a1a24;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid #2a2a3a;
+            font-family: 'Courier New', monospace;
+            color: #888;
+        }
+
+        .step-item.parallel {
+            border-color: #ffd70040;
+            color: #ffd700;
+        }
+
+        .step-item.active {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        /* ─── Features ─── */
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #bbb;
+        }
+
+        .feature-item .check {
+            color: #00ff41;
+        }
+
+        /* ─── AST Viewer ─── */
+        .ast-viewer {
+            background: #0a0a10;
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #1a1a24;
+        }
+
+        .ast-viewer .key {
+            color: #00d4ff;
+        }
+
+        .ast-viewer .string {
+            color: #ffd700;
+        }
+
+        .ast-viewer .number {
+            color: #ff6b6b;
+        }
+
+        .ast-viewer .boolean {
+            color: #00ff41;
+        }
+
+        .ast-viewer .null {
+            color: #666;
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a3a;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 12px;
+            color: #444;
+        }
+
+        .footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 600px) {
+            body { padding: 16px; }
+            .repo-header .title h1 { font-size: 20px; }
+            .feature-list { grid-template-columns: 1fr; }
+            .module-grid { grid-template-columns: repeat(2, 1fr); }
+            .engine-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ════════════════════════════════════════
+        HEADER
+        ════════════════════════════════════════ -->
+        <header class="repo-header">
+            <div class="title">
+                <h1>🏴‍☠️ BLACK CORE</h1>
+                <span class="badge">v1.1.0</span>
+                <span style="font-size:13px;color:#666;margin-left:4px;">Zero‑Trust Security Framework</span>
+            </div>
+            <div class="seal">🔒 SEAL: 850b2ef0...</div>
+        </header>
+
+        <!-- ════════════════════════════════════════
+        BADGES
+        ════════════════════════════════════════ -->
+        <div class="badge-row">
+            <span class="badge version">🏷️ BlackCore v1.1.0</span>
+            <span class="badge zero-trust">🛡️ Zero-Trust ENABLED</span>
+            <span class="badge k26">🔐 K-26 Standard</span>
+            <span class="badge license">📄 Black-Core-Standard</span>
+            <span class="badge status">✅ Production Ready</span>
+        </div>
+
+        <!-- ════════════════════════════════════════
+        MAIN GRID
+        ════════════════════════════════════════ -->
+        <div class="grid">
+
+            <!-- ─── LEFT COLUMN ─── -->
+            <div>
+
+                <!-- ═══ DESCRIPTION ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">📖</span> Description
+                    </div>
+                    <p style="color:#aaa;font-size:14px;line-height:1.8;">
+                        <strong style="color:#e0e0e0;">Black Core</strong> ist ein
+                        <strong style="color:#00d4ff;">Zero-Trust-Sicherheitsframework</strong>
+                        für kognitive Systeme, das mit dem
+                        <strong style="color:#b400ff;">K‑26‑Standard</strong> Signatur, Hash,
+                        Strict‑Mode und Audit‑Trail vereint.
+                    </p>
+                    <p style="color:#666;font-size:13px;margin-top:12px;">
+                        Entwickelt für <strong style="color:#e0e0e0;">Thomas König</strong> (Zero‑Trust, K‑26, Pipeline)
+                        &amp; <strong style="color:#e0e0e0;">Tina König</strong> (Affective Computing, KI‑Infrastruktur).
+                    </p>
+                </div>
+
+                <!-- ═══ MODULES ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🧩</span> Modules
+                    </div>
+                    <div class="module-grid">
+                        <div class="module-item">
+                            <div class="name">pipeline</div>
+                            <div class="version">v2.0.0</div>
+                        </div>
+                        <div class="module-item">
+                            <div class="name">engines</div>
+                            <div class="version">v2.0.0</div>
+                        </div>
+                        <div class="module-item">
+                            <div class="name">fabric</div>
+                            <div class="version">v1.0.0</div>
+                        </div>
+                        <div class="module-item">
+                            <div class="name">devops</div>
+                            <div class="version">v1.0.0</div>
+                        </div>
+                        <div class="module-item">
+                            <div class="name">neon</div>
+                            <div class="version">v1.0.0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══ ENGINES ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">⚙️</span> Engines <span style="font-size:12px;color:#666;font-weight:400;">(9 active)</span>
+                    </div>
+                    <div class="engine-list">
+                        <div class="engine-item"><span class="id">E01</span><span class="name">ZK-HASH</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E02</span><span class="name">FORENSIC</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E04</span><span class="name">ZERO-TRUST</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E06</span><span class="name">K-26</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E07</span><span class="name">DSGVO</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E11</span><span class="name">JUSTIZ</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E17</span><span class="name">SENTRY</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E18</span><span class="name">SPIDER</span><span class="status">●</span></div>
+                        <div class="engine-item"><span class="id">E23</span><span class="name">PROZESS</span><span class="status">●</span></div>
+                    </div>
+                </div>
+
+                <!-- ═══ PIPELINE STEPS ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🔀</span> Pipeline Steps <span style="font-size:12px;color:#666;font-weight:400;">(14 steps, 6 parallel)</span>
+                    </div>
+                    <div class="step-list">
+                        <span class="step-item">01</span>
+                        <span class="step-item">02</span>
+                        <span class="step-item">03</span>
+                        <span class="step-item">04</span>
+                        <span class="step-item">05</span>
+                        <span class="step-item parallel">06</span>
+                        <span class="step-item parallel">07</span>
+                        <span class="step-item parallel">08</span>
+                        <span class="step-item parallel">09</span>
+                        <span class="step-item">10</span>
+                        <span class="step-item parallel">11</span>
+                        <span class="step-item parallel">12</span>
+                        <span class="step-item active">13</span>
+                        <span class="step-item">14</span>
+                    </div>
+                    <div style="margin-top:10px;display:flex;gap:16px;font-size:11px;color:#666;flex-wrap:wrap;">
+                        <span>⬜ Normal</span>
+                        <span style="color:#ffd700;">⬜ Parallel</span>
+                        <span style="color:#00d4ff;">⬜ Active</span>
+                    </div>
+                </div>
+
+                <!-- ═══ FEATURES ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">✨</span> Key Features
+                    </div>
+                    <div class="feature-list">
+                        <span class="feature-item"><span class="check">✅</span> K-26 Signatur &amp; Hash</span>
+                        <span class="feature-item"><span class="check">✅</span> Strict-Mode Validation</span>
+                        <span class="feature-item"><span class="check">✅</span> Parallel Pipeline (6x)</span>
+                        <span class="feature-item"><span class="check">✅</span> Hash-only Audit Trail</span>
+                        <span class="feature-item"><span class="check">✅</span> DSGVO / Forensic / Justiz</span>
+                        <span class="feature-item"><span class="check">✅</span> Neon Dashboard UI</span>
+                        <span class="feature-item"><span class="check">✅</span> CI/CD GitHub Actions</span>
+                        <span class="feature-item"><span class="check">✅</span> Zero-Trust Hardening</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ─── RIGHT COLUMN ─── -->
+            <div>
+
+                <!-- ═══ QUICKSTART ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">⚡</span> Quickstart
+                    </div>
+                    <div style="background:#0a0a10;border-radius:10px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#aaa;overflow-x:auto;">
+                        <span style="color:#666;"># Clone</span><br>
+                        git clone https://github.com/black-core/black-core.git<br>
+                        cd black-core<br><br>
+                        <span style="color:#666;"># Install &amp; Run API</span><br>
+                        pip install -r api/requirements.txt<br>
+                        uvicorn api.main:app --reload<br><br>
+                        <span style="color:#666;"># Open UI</span><br>
+                        cd ui &amp;&amp; python -m http.server 3000
+                    </div>
+                </div>
+
+                <!-- ═══ API ENDPOINTS ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🔌</span> API Endpoints
+                    </div>
+                    <div style="font-size:13px;color:#aaa;line-height:2;">
+                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/health</span><br>
+                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/</span><br>
+                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/build</span><br>
+                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/normalize</span><br>
+                        <span style="color:#ffd700;">POST</span> <span style="color:#e0e0e0;">/k26_v2/strict-validate</span><br>
+                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/k26_v2/status</span><br>
+                        <span style="color:#00d4ff;">GET</span> <span style="color:#e0e0e0;">/metrics</span>
+                    </div>
+                </div>
+
+                <!-- ═══ AST VIEWER ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🌳</span> AST Structure
+                    </div>
+                    <div class="ast-viewer">
+                        <span style="color:#666;">{</span><br>
+                        &nbsp;&nbsp;<span class="key">"project"</span>: <span class="string">"Black-Core"</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"version"</span>: <span class="string">"1.1.0"</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"modules"</span>: <span style="color:#666;">[</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"pipeline"</span>, <span class="string">"engines"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"fabric"</span>, <span class="string">"devops"</span>, <span class="string">"neon"</span><br>
+                        &nbsp;&nbsp;<span style="color:#666;">]</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"engines"</span>: <span class="number">9</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"parallel_steps"</span>: <span class="number">6</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"training_examples"</span>: <span class="number">10000</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"vector_dimensions"</span>: <span class="number">384</span>,<br>
+                        &nbsp;&nbsp;<span class="key">"seal"</span>: <span class="string">"850b2ef0..."</span><br>
+                        <span style="color:#666;">}</span>
+                    </div>
+                </div>
+
+                <!-- ═══ LINKS ═══ -->
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">📚</span> Documentation
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">📄 README.md</a>
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">📐 ARCHITEKTUR.md</a>
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">📜 WHITEPAPER.md</a>
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">📋 AUDIT.md</a>
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">📝 RELEASE_NOTES_v1.1.0.md</a>
+                        <a href="#" style="color:#00d4ff;text-decoration:none;">🎨 UI_ARCHITEKTUR.md</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ════════════════════════════════════════
+        FOOTER
+        ════════════════════════════════════════ -->
+        <footer class="footer">
+            <span>🏴‍☠️ BLACK CORE v1.1.0 · Zero-Trust Security Framework</span>
+            <span>
+                <span style="color:#00d4ff;">●</span> 9 Engines ·
+                <span style="color:#ffd700;">⚡</span> 6 Parallel Steps ·
+                <span style="color:#00ff41;">🔐</span> K-26 Standard
+            </span>
+            <span>
+                Made with ❤️ by <a href="#">Thomas &amp; Tina König</a>
+            </span>
+        </footer>
+
+    </div>
+
+</body>
+</html>
