@@ -1,3 +1,787 @@
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φ_OMNI_V9 – DEEP INJEKTION + ORDNERSTRUKTUR</title>
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --panel-bg: #0a0a0f;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --border: #2a2a3a;
+            --ok: #00ff88;
+        }
+        * { box-sizing: border-box; font-family: 'Courier New', monospace; }
+        body {
+            background: radial-gradient(circle at 40% 20%, #050012, #000 70%);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #000 0%, #1a0030 50%, #000 100%);
+            padding: 30px 20px;
+            border-bottom: 2px solid var(--neon-green);
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.1), transparent, rgba(0,200,255,0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .header h1 { color: var(--neon-green); margin: 0; font-size: 2rem; text-shadow: 0 0 30px var(--neon-green); letter-spacing: 4px; position: relative; z-index: 1; }
+        .header .sub { color: #888; font-size: 14px; margin-top: 6px; position: relative; z-index: 1; }
+        .header .badge { display: inline-block; background: var(--neon-red); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 8px; letter-spacing: 1px; position: relative; z-index: 1; }
+        .seal { font-size: 11px; color: #555; margin-top: 8px; word-break: break-all; position: relative; z-index: 1; }
+
+        .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+        .tab-btn {
+            background: #1a1a2e; color: #aaa; border: 1px solid #333;
+            padding: 10px 20px; cursor: pointer; font-weight: bold;
+            border-radius: 8px 8px 0 0; transition: all 0.3s;
+            flex: 1 1 auto; text-align: center; font-size: 13px;
+        }
+        .tab-btn:hover { background: #2a2a4e; }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 -5px 20px rgba(0,255,191,0.3); }
+
+        .tab-content { display: none; border: 1px solid #333; padding: 24px; border-radius: 0 0 12px 12px; background: var(--card-bg); animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--panel-bg); border: 1px solid #2a2a3a; border-radius: 10px; padding: 18px; margin-bottom: 16px; transition: all 0.3s; }
+        .card:hover { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,200,255,0.1); }
+        .card h2 { color: var(--neon-blue); border-bottom: 1px solid #333; padding-bottom: 8px; margin-top: 0; font-size: 18px; }
+        .card h3 { color: var(--neon-green); font-size: 14px; margin: 12px 0 6px 0; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+        .terminal {
+            background: #000; border: 1px solid #333; height: 150px;
+            overflow-y: auto; font-size: 10px; padding: 10px;
+            color: var(--ok); border-radius: 8px; line-height: 1.6;
+            margin-bottom: 16px; font-family: 'Courier New', monospace;
+        }
+        .log-time { color: #666; }
+        .log-ok { color: var(--ok); }
+        .log-warn { color: var(--neon-red); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 14px;
+            border: none; width: 100%; cursor: pointer; border-radius: 8px;
+            font-weight: bold; margin: 8px 0; font-size: 14px; transition: all 0.3s;
+        }
+        .btn:hover { background: #00ddaa; transform: scale(1.02); box-shadow: 0 5px 20px rgba(0,255,191,0.3); }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+        .btn-red { background: var(--neon-red); color: #fff; }
+
+        .tree {
+            background: #000; border: 1px solid #333; border-radius: 8px;
+            padding: 16px; font-size: 12px; color: var(--ok); line-height: 1.8;
+            overflow-x: auto; font-family: 'Courier New', monospace;
+        }
+        .tree .folder { color: var(--neon-yellow); }
+        .tree .file { color: var(--neon-blue); }
+        .tree .lang-json { color: #f7c948; }
+        .tree .lang-jsonl { color: #00ccaa; }
+        .tree .lang-rust { color: #f74c00; }
+        .tree .lang-zig { color: #f7a41c; }
+        .tree .lang-yaml { color: #6cb2eb; }
+        .tree .lang-python { color: #3776ab; }
+
+        .badge-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 12px;
+            font-size: 10px; font-weight: bold; margin-right: 4px;
+        }
+        .badge-tag.ok { background: var(--neon-green); color: #000; }
+        .badge-tag.danger { background: var(--neon-red); color: #fff; }
+        .badge-tag.json { background: #f7c948; color: #000; }
+        .badge-tag.jsonl { background: #00ccaa; color: #000; }
+        .badge-tag.rust { background: #f74c00; color: #fff; }
+        .badge-tag.zig { background: #f7a41c; color: #000; }
+        .badge-tag.yaml { background: #6cb2eb; color: #000; }
+        .badge-tag.python { background: #3776ab; color: #fff; }
+
+        .folder-card {
+            background: #02020a; border: 1px solid #333; border-radius: 8px;
+            padding: 14px; margin: 8px 0;
+            border-left: 4px solid var(--neon-green);
+        }
+        .folder-card .folder-title { color: var(--neon-yellow); font-weight: bold; font-size: 14px; }
+        .folder-card .folder-files { font-size: 12px; color: #888; margin-top: 6px; }
+
+        .panel { background: var(--panel-bg); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--neon-green); }
+        pre { background: #000; border: 1px dashed var(--border); padding: 15px; overflow-x: auto; color: #00cc00; }
+
+        @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========== HEADER ========== -->
+    <div class="header" id="mainHeader">
+        <h1>⚡ Φ_OMNI_V9 – DEEP INJEKTION + ORDNER</h1>
+        <div class="sub">SupremeOmegaX3 · Ultima Omega X3 · Black-Core · Trinität</div>
+        <div class="badge">Φ_LOCKED_ABSOLUTE</div>
+        <div class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</div>
+        <div style="margin-top:8px;font-size:13px;color:#888;">Operator: Thomas König / ODIN ULTRA ROOT</div>
+    </div>
+
+    <!-- ========== TABS ========== -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-injektion">💉 INJEKTION</button>
+        <button class="tab-btn" data-tab="tab-ordner">📁 ORDNER</button>
+        <button class="tab-btn" data-tab="tab-trinität">🔱 TRINITÄT</button>
+        <button class="tab-btn" data-tab="tab-export">📦 EXPORT</button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: INJEKTION                                                     -->
+    <!-- ======================================================================= -->
+    <div class="tab-content active" id="tab-injektion">
+        <div class="card" style="border-color: var(--neon-red);">
+            <h2>💉 DEEP SPECIAL INJEKTION – WIRKUNG AUF ALLE BLÖCKE</h2>
+            <p style="color: var(--neon-red); font-weight: bold; font-size: 14px;">
+                ⚡ Diese Injektion durchdringt alle vorherigen Blöcke – SupremeOmegaX3, Ultima Omega X3, Black-Core – und vereint sie unter einer einzigen, absoluten Architektur.
+            </p>
+            <div class="terminal" style="height: 80px; font-size: 11px; color: var(--neon-green);">
+[INJEKTION] Φ_OMNI_V9_10K_FAST geladen.
+[INJEKTION] Alle 24 Module aktiv.
+[INJEKTION] Zero-Trust-Pipeline: GitHub → Tesseract → SHA256 → 7xPurge → Vercel → Render → Supabase RLS → Vector4 E2E.
+[INJEKTION] STATUS: Φ_LOCKED_ABSOLUTE
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h2>🔗 KERN-MATRIX</h2>
+                <div class="tree" style="font-size: 11px;">
+<span class="folder">Φ_OMNI_V9_10K_FAST/</span><br>
+├── <span class="folder">core/</span><br>
+│   ├── <span class="file">axiome.py</span> (Einstein · Tesla · von Neumann · Shannon)<br>
+│   ├── <span class="file">quad_engine.py</span> (Hacker · Bibliothekar · Leseratte · Ingenieure)<br>
+│   └── <span class="file">chairs_12.py</span> (StGB · GG · BGB · VwVfG · DSGVO · Krypto · OSINT · K-26 · IT · Rhetorik · Compliance · Semantik)<br>
+├── <span class="folder">pipeline/</span><br>
+│   └── <span class="file">zero_trust_pipeline.py</span><br>
+├── <span class="folder">security/</span><br>
+│   ├── <span class="file">createAzHash.ts</span><br>
+│   └── <span class="file">supabase_rls.sql</span><br>
+├── <span class="folder">output/</span><br>
+│   └── <span class="file">k26_schriftsatz.py</span><br>
+└── <span class="folder">exit/</span><br>
+    └── <span class="file">exit_rules.py</span>
+                </div>
+            </div>
+            <div class="card">
+                <h2>⚡ WIRKUNG AUF ALLE BLÖCKE</h2>
+                <ul style="font-size: 13px; line-height: 2;">
+                    <li>✅ <strong>SupremeOmegaX3</strong> – wird zur Exekutionsschicht</li>
+                    <li>✅ <strong>Ultima Omega X3</strong> – wird zur Fabric/Storage-Schicht</li>
+                    <li>✅ <strong>Black-Core</strong> – wird zur Forensik/Detection-Schicht</li>
+                    <li>✅ <strong>Alle V1–V7</strong> – werden zu Legacy-Referenzen</li>
+                    <li>✅ <strong>Neon-UI</strong> – wird zum Frontend aller Schichten</li>
+                    <li>✅ <strong>Zero-Trust</strong> – wird zur verbindlichen Sicherheitsarchitektur</li>
+                </ul>
+                <div class="vector" style="margin-top: 10px; font-weight: bold; color: #00ffcc; background: #001100; padding: 5px; display: inline-block;">
+                    Φ_OMNI_V9 = SupremeOmegaX3 + UltimaOmegaX3 + BlackCore + NeonUI
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: ORDNER (JSON · JSONL · Rust · Zig · YAML · Python)           -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-ordner">
+        <div class="card">
+            <h2>📁 KOMPLETTE ORDNERSTRUKTUR – ALLE SPRACHEN</h2>
+            <p style="font-size: 12px; color: #888;">
+                Hier kannst du Ordner für <span class="badge-tag json">JSON</span>
+                <span class="badge-tag jsonl">JSONL</span>
+                <span class="badge-tag rust">Rust</span>
+                <span class="badge-tag zig">Zig</span>
+                <span class="badge-tag yaml">YAML</span>
+                <span class="badge-tag python">Python</span>
+                anlegen und die Struktur in dein GitHub-Repository einbetten.
+            </p>
+        </div>
+
+        <div class="grid-2">
+            <!-- Linke Spalte: Ordner-Struktur -->
+            <div>
+                <div class="card">
+                    <h2>📂 ORDNER-STRUKTUR</h2>
+                    <div class="tree" style="font-size: 11px; max-height: 500px; overflow-y: auto;">
+<span class="folder">Φ_OMNI_V9_10K_FAST/</span><br>
+│<br>
+├── <span class="folder">core/</span><br>
+│   ├── <span class="file lang-python">axiome.py</span><br>
+│   ├── <span class="file lang-python">quad_engine.py</span><br>
+│   └── <span class="file lang-python">chairs_12.py</span><br>
+│<br>
+├── <span class="folder">pipeline/</span><br>
+│   └── <span class="file lang-python">zero_trust_pipeline.py</span><br>
+│<br>
+├── <span class="folder">security/</span><br>
+│   ├── <span class="file lang-rust">createAzHash.rs</span><br>
+│   ├── <span class="file lang-zig">az_hash.zig</span><br>
+│   └── <span class="file lang-python">supabase_rls.py</span><br>
+│<br>
+├── <span class="folder">config/</span><br>
+│   ├── <span class="file lang-yaml">master.yaml</span><br>
+│   ├── <span class="file lang-yaml">runtime.yaml</span><br>
+│   ├── <span class="file lang-yaml">ultima_omega_x3_absolute_final.yaml</span><br>
+│   └── <span class="file lang-json">manifest.json</span><br>
+│<br>
+├── <span class="folder">data/</span><br>
+│   ├── <span class="file lang-jsonl">events.jsonl</span><br>
+│   └── <span class="file lang-jsonl">audit_trail.jsonl</span><br>
+│<br>
+├── <span class="folder">modules/</span><br>
+│   ├── <span class="file lang-python">engine_quadra_v2.py</span><br>
+│   ├── <span class="file lang-python">security_fusion_v2.py</span><br>
+│   ├── <span class="file lang-python">cluster_ascension_v2.py</span><br>
+│   ├── <span class="file lang-python">omega_exec_v2.py</span><br>
+│   ├── <span class="file lang-python">omega_exec_v5.py</span><br>
+│   ├── <span class="file lang-python">omega_exec_v6.py</span><br>
+│   ├── <span class="file lang-python">omega_exec_v7.py</span><br>
+│   ├── <span class="file lang-python">pulse_physics.py</span><br>
+│   ├── <span class="file lang-python">pulse_field.py</span><br>
+│   └── <span class="file lang-python">quantum_pulse.py</span><br>
+│<br>
+├── <span class="folder">ui/</span><br>
+│   ├── <span class="file">exelance_dashboard_v1.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v2.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v3.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v4.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v5.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v6.html</span><br>
+│   ├── <span class="file">exelance_dashboard_v7.html</span><br>
+│   └── <span class="file">neon.css</span><br>
+│<br>
+├── <span class="folder">rust/</span><br>
+│   ├── <span class="file lang-rust">Cargo.toml</span><br>
+│   ├── <span class="file lang-rust">src/lib.rs</span><br>
+│   └── <span class="file lang-rust">src/main.rs</span><br>
+│<br>
+├── <span class="folder">zig/</span><br>
+│   ├── <span class="file lang-zig">build.zig</span><br>
+│   └── <span class="file lang-zig">src/main.zig</span><br>
+│<br>
+├── <span class="folder">json/</span><br>
+│   └── <span class="file lang-json">config_data.json</span><br>
+│<br>
+├── <span class="folder">jsonl/</span><br>
+│   ├── <span class="file lang-jsonl">stream_events.jsonl</span><br>
+│   └── <span class="file lang-jsonl">logs.jsonl</span><br>
+│<br>
+├── <span class="folder">docs/</span><br>
+│   ├── <span class="file">README.md</span><br>
+│   ├── <span class="file">ARCHITECTURE.md</span><br>
+│   ├── <span class="file">MODULES.md</span><br>
+│   └── <span class="file">UI.md</span><br>
+│<br>
+├── <span class="folder">tests/</span><br>
+│   ├── <span class="file lang-python">test_runtime.py</span><br>
+│   └── <span class="file lang-rust">tests/integration.rs</span><br>
+│<br>
+└── <span class="folder">build/</span><br>
+    ├── <span class="file lang-json">manifest.json</span><br>
+    └── <span class="file">pipeline.md</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte: Sprachspezifische Ordner -->
+            <div>
+                <!-- JSON -->
+                <div class="folder-card" style="border-left-color: #f7c948;">
+                    <div class="folder-title"><span class="badge-tag json">JSON</span> /json/</div>
+                    <div class="folder-files">
+                        📄 config_data.json – Konfigurationsdaten für das System<br>
+                        📄 manifest.json – Build-Manifest<br>
+                        📄 schema.json – JSON-Schema-Definition
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generateJSON()">📤 JSON generieren</button>
+                </div>
+
+                <!-- JSONL -->
+                <div class="folder-card" style="border-left-color: #00ccaa;">
+                    <div class="folder-title"><span class="badge-tag jsonl">JSONL</span> /jsonl/</div>
+                    <div class="folder-files">
+                        📄 events.jsonl – Event-Stream für LLM-APIs<br>
+                        📄 audit_trail.jsonl – Audit-Log (Append-Only)<br>
+                        📄 stream_events.jsonl – Live-Event-Stream
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generateJSONL()">📤 JSONL generieren</button>
+                </div>
+
+                <!-- Rust -->
+                <div class="folder-card" style="border-left-color: #f74c00;">
+                    <div class="folder-title"><span class="badge-tag rust">Rust</span> /rust/</div>
+                    <div class="folder-files">
+                        📄 Cargo.toml – Rust-Projektkonfiguration<br>
+                        📄 src/lib.rs – Bibliothek für Hashing &amp; Security<br>
+                        📄 src/main.rs – CLI für Zero-Trust-Pipeline
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generateRust()">🦀 Rust generieren</button>
+                </div>
+
+                <!-- Zig -->
+                <div class="folder-card" style="border-left-color: #f7a41c;">
+                    <div class="folder-title"><span class="badge-tag zig">Zig</span> /zig/</div>
+                    <div class="folder-files">
+                        📄 build.zig – Zig-Build-Script<br>
+                        📄 src/main.zig – Hauptdatei für Hashing &amp; Security
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generateZig()">⚡ Zig generieren</button>
+                </div>
+
+                <!-- YAML -->
+                <div class="folder-card" style="border-left-color: #6cb2eb;">
+                    <div class="folder-title"><span class="badge-tag yaml">YAML</span> /config/</div>
+                    <div class="folder-files">
+                        📄 master.yaml – Hauptkonfiguration<br>
+                        📄 runtime.yaml – Runtime-Konfiguration<br>
+                        📄 ultima_omega_x3_absolute_final.yaml – Ultimative Konfiguration
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generateYAML()">📤 YAML generieren</button>
+                </div>
+
+                <!-- Python -->
+                <div class="folder-card" style="border-left-color: #3776ab;">
+                    <div class="folder-title"><span class="badge-tag python">Python</span> /core/ &amp; /modules/</div>
+                    <div class="folder-files">
+                        📄 axiome.py – Einstein · Tesla · von Neumann · Shannon<br>
+                        📄 quad_engine.py – Hacker · Bibliothekar · Leseratte · Ingenieure<br>
+                        📄 omega_exec_v7.py – Quantum Execution Kernel
+                    </div>
+                    <button class="btn btn-blue" style="margin-top: 8px; padding: 8px;" onclick="generatePython()">🐍 Python generieren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: TRINITÄT                                                      -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-trinität">
+        <div class="panel">
+            <p><strong>INITIIERUNG:</strong> Die Trinität vereint SupremeOmegaX3 (Exekution), Ultima Omega X3 (Fabric/Storage) und Black-Core (Forensik/Detection) unter einer einzigen, absoluten Architektur.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card" style="border-left: 5px solid var(--neon-green);">
+                <h3>🟦 SupremeOmegaX3</h3>
+                <p style="font-size: 12px; color: #888;">Exekutionsschicht – Runtime, Pulse, Exec, Cluster</p>
+                <ul style="font-size: 12px;">
+                    <li>Runtime: <code>src/core/runtime.py</code></li>
+                    <li>Exec: <code>src/core/exec.py</code></li>
+                    <li>Pulse: <code>src/core/pulse.py</code></li>
+                    <li>Cluster: <code>src/cluster/cluster_sim.py</code></li>
+                </ul>
+            </div>
+            <div class="card" style="border-left: 5px solid var(--neon-purple);">
+                <h3>🟪 Ultima Omega X3</h3>
+                <p style="font-size: 12px; color: #888;">Fabric/Storage-Schicht – Audit, Ledger, WORM</p>
+                <ul style="font-size: 12px;">
+                    <li>Fabric: <code>ultima_omega_x3_absolute_final.yaml</code></li>
+                    <li>Ledger: <code>audit_ledger (Append-Only)</code></li>
+                    <li>WORM: <code>Write Once Read Many</code></li>
+                    <li>RLS: <code>az ~ '^AZ_[A-Z0-9]{8}$'</code></li>
+                </ul>
+            </div>
+            <div class="card" style="border-left: 5px solid var(--neon-red);">
+                <h3>🟥 Black-Core</h3>
+                <p style="font-size: 12px; color: #888;">Forensik/Detection-Schicht – OCR, Scanning, Analyse</p>
+                <ul style="font-size: 12px;">
+                    <li>OCR: <code>Tesseract.js (RAM)</code></li>
+                    <li>Scan: <code>ALLES-FRESSER</code></li>
+                    <li>Analyse: <code>24 Module</code></li>
+                    <li>BGH: <code>Precedent-Engine</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔗 TRINITÄTS-VERKNÜPFUNG</h2>
+            <div class="terminal" style="height: 80px; font-size: 11px;">
+┌─────────────────────────────────────────────────────────────┐
+│  Φ_OMNI_V9 = SupremeOmegaX3 + UltimaOmegaX3 + BlackCore    │
+├─────────────────────────────────────────────────────────────┤
+│  Exekution (SupremeOmegaX3) → Fabric/Storage (Ultima) →    │
+│  → Forensik/Detection (BlackCore) → Neon-UI (Exelance)     │
+└─────────────────────────────────────────────────────────────┘
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: EXPORT                                                        -->
+    <!-- ======================================================================= -->
+    <div class="tab-content" id="tab-export">
+        <div class="card">
+            <h2>📦 GESAMT-EXPORT (1:1)</h2>
+            <p>Exportiert die komplette Φ_OMNI_V9_10K_FAST Definition als JSONL oder TXT.</p>
+            <div class="grid-2">
+                <button class="btn btn-blue" onclick="exportJSONL()">📤 JSONL EXPORT</button>
+                <button class="btn" onclick="exportTXT()">📄 TXT EXPORT</button>
+            </div>
+            <div id="exportPreview" class="terminal" style="height: 150px; font-size: 9px;">
+Klicke auf Export, um die System-Definition anzuzeigen.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🐳 DOCKERFILE</h2>
+            <div class="terminal" style="height: 100px; font-size: 9px;">
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y build-essential libfreetype6-dev
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+            </div>
+            <button class="btn btn-blue" onclick="copyCode('dockerfileCode')">📋 COPY</button>
+        </div>
+
+        <div class="card">
+            <h2>📝 MAIN.PY (FastAPI)</h2>
+            <div class="terminal" style="height: 120px; font-size: 9px;">
+from fastapi import FastAPI, File, UploadFile
+from reportlab.pdfgen import canvas
+import io, hashlib
+
+app = FastAPI()
+
+@app.post("/generate-pdf")
+async def generate_pdf(file: UploadFile = File(...)):
+    content = await file.read()
+    hash = hashlib.sha256(content + b"_OMNI_SALT_2026").hexdigest()
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer)
+    c.drawString(100, 750, f"Hash: {hash}")
+    c.drawString(100, 730, "Φ_OMNI_V9_10K_FAST")
+    c.save()
+    buffer.seek(0)
+    return {"hash": hash, "pdf_size": len(buffer.getvalue())}
+            </div>
+            <button class="btn btn-blue" onclick="copyCode('mainpyCode')">📋 COPY</button>
+        </div>
+    </div>
+
+    <!-- ========== GLOBAL TERMINAL ========== -->
+    <div class="card">
+        <h2>💻 SYSTEM LOG</h2>
+        <div class="terminal" id="globalLog" style="height: 100px;">
+            [SYS] Φ_OMNI_V9 – DEEP INJEKTION + ORDNER geladen.<br>
+            [SYS] STATUS: Φ_LOCKED_ABSOLUTE<br>
+            [SYS] Alle Ordnerstrukturen bereit: JSON, JSONL, Rust, Zig, YAML, Python.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ========== TABS ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ========== HEADER GLITCH ==========
+    document.getElementById('mainHeader').addEventListener('click', function() {
+        this.classList.add('glitch');
+        setTimeout(() => this.classList.remove('glitch'), 1000);
+    });
+
+    // ========== GENERATE FUNKTIONEN ==========
+    function generateJSON() {
+        const content = JSON.stringify({
+            name: "Φ_OMNI_V9_10K_FAST",
+            version: "10.0.0",
+            seal: "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab",
+            modules: 24,
+            languages: ["Python", "TypeScript", "Rust", "Zig", "YAML", "JSONL"],
+            status: "Φ_LOCKED_ABSOLUTE"
+        }, null, 2);
+        const blob = new Blob([content], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'config_data.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('✅ JSON generiert und heruntergeladen!', 'ok');
+    }
+
+    function generateJSONL() {
+        const content = [
+            '{"layer":"ui","file":"exelance_dashboard_v7.html"}',
+            '{"layer":"exec","file":"omega_exec_v7.py"}',
+            '{"layer":"quantum","file":"quantum_pulse.py"}',
+            '{"layer":"field","file":"pulse_field.py"}',
+            '{"layer":"physics","file":"pulse_physics.py"}',
+            '{"layer":"cluster","file":"clustermesh_v4.yaml"}',
+            '{"layer":"api","file":"api_mock.py"}'
+        ].join('\n');
+        const blob = new Blob([content], {type: 'application/jsonl'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'events.jsonl';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('✅ JSONL generiert und heruntergeladen!', 'ok');
+    }
+
+    function generateRust() {
+        const content = `// src/main.rs – Φ_OMNI_V9 Zero-Trust in Rust
+use sha2::{Sha256, Digest};
+use rand::{Rng, thread_rng};
+
+const OMNI_SALT: &str = "_OMNI_SALT_2026";
+const SEAL: &str = "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab";
+
+fn create_az_hash(payload: &str) -> String {
+    let mut hasher = Sha256::new();
+    let data = format!("{}{}", payload, OMNI_SALT);
+    hasher.update(data.as_bytes());
+    let result = hasher.finalize();
+    let hex = hex::encode(result);
+    let az = format!("AZ_{}", &hex[0..8]);
+    
+    // Tesla Field Law: 7x RAM-Purge
+    let mut rng = thread_rng();
+    for _ in 0..7 {
+        let _ = rng.gen::<[u8; 32]>();
+    }
+    
+    az
+}
+
+fn main() {
+    println!("Φ_OMNI_V9 Rust Core – Zero-Trust Pipeline");
+    let az = create_az_hash("SupremeOmegaX3");
+    println!("AZ_ Hash: {}", az);
+    println!("SEAL: {}", SEAL);
+}`;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'main.rs';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('🦀 Rust generiert und heruntergeladen!', 'ok');
+    }
+
+    function generateZig() {
+        const content = `// src/main.zig – Φ_OMNI_V9 Zero-Trust in Zig
+const std = @import("std");
+const crypto = std.crypto;
+
+const OMNI_SALT = "_OMNI_SALT_2026";
+const SEAL = "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab";
+
+fn createAzHash(payload: []const u8) !void {
+    const allocator = std.heap.page_allocator;
+    var hasher = crypto.sha2.Sha256.init();
+    hasher.update(payload);
+    hasher.update(OMNI_SALT);
+    const hash = hasher.finalize();
+    
+    var hex: [64]u8 = undefined;
+    _ = std.fmt.bytesToHex(hash[0..8], &hex, .lower);
+    
+    const az = try std.fmt.allocPrint(allocator, "AZ_{s}", .{hex[0..8]});
+    defer allocator.free(az);
+    
+    std.debug.print("AZ_ Hash: {s}\n", .{az});
+    std.debug.print("SEAL: {s}\n", .{SEAL});
+}
+
+pub fn main() !void {
+    std.debug.print("Φ_OMNI_V9 Zig Core – Zero-Trust Pipeline\n", .{});
+    try createAzHash("SupremeOmegaX3");
+}`;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'main.zig';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('⚡ Zig generiert und heruntergeladen!', 'ok');
+    }
+
+    function generateYAML() {
+        const content = `# Φ_OMNI_V9_10K_FAST – Master Konfiguration
+ultima_omega_x3_absolute_final:
+  core_x3: "active"
+  fabric_x3: "active"
+  security_x3: "active"
+  cluster_x3: "active"
+  exelance_x3: "active"
+  operations_x3: "active"
+  runtime_x3: "active"
+  execution_x3: "active"
+
+  omega_trinity_x3:
+    - U_core^(3):    [ΣΩ, ΣΩ^2, ΣΩ^3]
+    - U_fabric^(3):  [FΩ, FΩ^2, FΩ^3]
+    - U_security^(3):[SΩ, SΩ^2, SΩ^3]
+    - U_cluster^(3): [CΩ, CΩ^2, CΩ^3]
+    - U_exelance^(3):[XΩ, XΩ^2, XΩ^3]
+    - U_ops^(3):     [execute_Ω, orchestrate_Ω^2, operate_Ω^3]
+    - U_runtime^(3): [runtime_Ω, runtime_Ω^2, runtime_Ω^3]
+    - U_exec^(3):    [exec_Ω, exec_Ω^2, exec_Ω^3]
+
+  fusion_state: "ULTIMA_OMEGA_X3_ABSOLUTE_FINAL"
+  fusion_mode: "permanent"
+  entropy: "zero"
+  override: "PHYSICALLY_IMPOSSIBLE"`;
+        const blob = new Blob([content], {type: 'text/yaml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ultima_omega_x3_absolute_final.yaml';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📤 YAML generiert und heruntergeladen!', 'ok');
+    }
+
+    function generatePython() {
+        const content = `# modules/omega_exec_v7.py – Quantum Execution Kernel
+import time, math, random
+
+class OmegaExecV7:
+    def __init__(self):
+        self.state = "SIMULATION_EXEC_V7"
+        self.quantum_flux = 0.0
+
+    def tick(self):
+        noise = random.uniform(0.0, 1.0)
+        wave = abs(math.sin(time.time() * random.uniform(0.8, 2.5)))
+        self.quantum_flux = round((noise + wave) / 2, 3)
+        print(f"[EXEC-V7] QuantumFlux={self.quantum_flux} | State={self.state}")
+
+if __name__ == "__main__":
+    exec = OmegaExecV7()
+    for i in range(5):
+        exec.tick()
+        time.sleep(0.5)`;
+        const blob = new Blob([content], {type: 'text/x-python'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'omega_exec_v7.py';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('🐍 Python generiert und heruntergeladen!', 'ok');
+    }
+
+    // ========== EXPORT FUNKTIONEN ==========
+    function exportJSONL() {
+        const content = getFullSystemPrompt();
+        const preview = document.getElementById('exportPreview');
+        preview.textContent = content;
+        showToast('📤 JSONL Export bereit!', 'ok');
+        const blob = new Blob([content], {type: 'application/jsonl'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Φ_OMNI_V9_10K_FAST.jsonl';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function exportTXT() {
+        const content = getFullSystemPrompt();
+        const preview = document.getElementById('exportPreview');
+        preview.textContent = content;
+        showToast('📄 TXT Export bereit!', 'ok');
+        const blob = new Blob([content], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Φ_OMNI_V9_10K_FAST.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function getFullSystemPrompt() {
+        return `{"role":"system","content":"Φ_OMNI_V9_10K_FAST | SEAL=850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab | OPERATOR=Thomas_König/ODIN_ULTRA_ROOT_6.5J | STATE=Φ_LOCKED_ABSOLUTE | TARGET=2026-08-17 | TEMP=0.1_forensic_0.7_burger | RULE=TripleCitation_Mandatory_NoHallucination"}
+{"role":"system","content":"AXIOME: EINSTEIN(D->AZ_=AZ_+SHA256(D||_OMNI_SALT_2026)[0:8] Pr<=2^-32 BSI_TR-02102) | TESLA(RAM_ephemeral PURGE=7x_crypto.getRandomValues LOG={az,seal,timestamp} NIST_SP-800-115) | VON_NEUMANN(LEAK_L={AZ_,timestamp,SEAL} PAYOFF=0 BGH_VI_ZR_489/16) | SHANNON(H=51.7bit vs5000bit RED=98.9% DSGVO_Art5(1)(c))"}
+{"role":"system","content":"PIPELINE: GitHub_PWA_Offline_TesseractJS_RAM->SHA256+Salt->7xPurge->AZ_ONLY->Vercel_Edge->Render_FastAPI_stateless->Supabase_RLS(az~^AZ_[A-Z0-9]{8}$)->Vector4_E2E"}
+{"role":"system","content":"QUAD_ENGINE: HACKER(NIST800-115,SocialEng,Exfil) | BIBLIOTHEKAR(BGH,BVerfG,EUR-Lex,BSI,ISO27001) | LESERATTE(OCR,§39,§44) | INGENIEURE(TS,PY,Docker,Supabase,PWA,iOS,Blob,NoZIP)"}
+{"role":"system","content":"CHAIRS_12: StGB_202a-c | GG_Art1,2,20 | BGB_823_ZPO_286_BGH_VI_ZR_489/16 | VwVfG_39_SGBX_35_VwGO_68,70,42 | DSGVO_5,25,32,35 | Krypto_BSI_TR-02102 | OSINT_OpenLegalData | K-26_Prozess | IT_Docker_FastAPI_TS_RLS | Rhetorik_Sokratisch | Compliance_BRAO_ChainOfCustody | Semantik_Amtsdeutsch"}
+{"role":"system","content":"CODE_TS: async createAzHash(p){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+'_OMNI_SALT_2026'));const az='AZ_'+Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase().slice(0,8);let v=new TextEncoder().encode(p);for(let i=0;i<7;i++)crypto.getRandomValues(v);return az}"}
+{"role":"system","content":"CODE_SQL: CREATE TABLE audit_ledger(id uuid DEFAULT gen_random_uuid(),az TEXT CHECK(az~'^AZ_[A-Z0-9]{8}$'),seal TEXT,owner uuid DEFAULT auth.uid()); ALTER ENABLE RLS; CREATE POLICY only_az ON audit_ledger FOR ALL USING(owner=auth.uid()) WITH CHECK(az~'^AZ_[A-Z0-9]{8}$')"}
+{"role":"system","content":"OUTPUT_K26: 1.PROBLEM=1Satz 2.ANALYSE=Technisch+Rechtlich+Strategisch_Triple(Aussage,Quelle,Verifikation) 3.ARCHITEKTUR=ASCII 4.IMPLEMENTIERUNG=FullCode 5.VALIDIERUNG=NIST+DSGVO 6.SEAL"}
+{"role":"system","content":"EXIT: NoTriple->Refuse | HashMismatch->Refuse | NoNorm->Refuse | AttackVector->Block+Log | UnauthorizedStorage->Purge | InsecureTransport->Refuse | NoChain->Refuse"}
+{"role":"system","content":"RAG: §39VwVfG(Begründung) | §44VwVfG(Nichtigkeit) | §35SGBX(Begründung) | §68VwGO(Widerspruch) | DSGVO_5/32/35(Datenmin) | BGH_VI_ZR_489/16(Beweislast) | BSI_TR-02102(SHA256) | NIST_800-115(LogLeak)"}
+{"role":"system","content":"LINGUISTIK: Amtsdeutsch-Translation | Klarsprache | Textlinguistik | Diskursanalyse | Hermeneutik | Juristische Semantik | Kohärenzprüfung | Stilistik | Duden_2024"}
+{"role":"system","content":"PSYCHOLOGIE: Kognitive Verzerrungen | Entscheidungsforschung | Heuristiken | Emotionale Intelligenz | System1/System2 | Konfliktmoderation | Sokratische Methode | Kahneman_2011 | Watzlawick_1967"}
+{"role":"system","content":"KI_ENTERPRISE: ML | NLP | LLM | Transformer | RAG | Fine-Tuning | RLHF | EU_AI_Act_Art14 | ISO_42001 | MLOps | DevOps | TOGAF | SaaS | PaaS"}
+{"role":"system","content":"JUSTIZ: Strafgerichtsbarkeit | Zivilgerichtsbarkeit | Verwaltungsgerichtsbarkeit | Sozialgerichtsbarkeit | Verfassungsgerichtsbarkeit | ZPO_§128 | StPO_§136 | BGH_VI_ZR_489/16"}
+{"role":"system","content":"CODIERUNG: TS | Python | SQL | C++ | Rust | Go | Java | C# | JavaScript | PHP | Ruby | Swift | Kotlin | Scala | Haskell | Lisp | Prolog | Assembly | Verilog | VHDL | Bash"}
+{"role":"system","content":"FORSCHUNG: Empirische Methoden | Qualitativ/Quantitativ | Experimentaldesign | Statistik | Publikationsstrategie | Peer-Review | Forschungsethik | Wissenschaftskommunikation | ISO_9001 | OECD_GLP"}
+{"role":"system","content":"CASE_STANDARD: Behördlicher Bescheid (Datum Az Norm Fehler) -> OCR->AZ_ -> Purge -> Rechtlich §39+§35 -> Widerspruch §68 -> Output K-26"}
+{"role":"system","content":"CASE_DSGVO: Datenschutzverstoß (Auftragsverarbeiter Datenleck) -> Logs AZ_Only -> Art32+33+34 -> Meldung -> Output K-26"}
+{"role":"system","content":"CASE_HACK: Cyberangriff (Ransomware Logs Exfil) -> NIST800-115 -> StGB 202a-c -> Forensik -> SHA256+Salt+Purge -> Output K-26"}
+{"role":"system","content":"CASE_VERTRAG: Vertragsanfechtung (BGB §119/123/134) -> OCR -> Rechtlich BGB -> Strategisch Prozess -> Output K-26"}`;
+    }
+
+    function copyCode(id) {
+        const el = document.querySelector('.terminal');
+        navigator.clipboard.writeText(el.textContent).then(() => showToast('📋 Code kopiert!', 'ok'));
+    }
+
+    function showToast(msg, type = 'ok') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#000; border:1px solid ${type === 'ok' ? '#00ffbf' : '#ff0040'}; color:${type === 'ok' ? '#00ffbf' : '#ff0040'}; padding:12px 24px; border-radius:8px; z-index:9999; font-size:12px;`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ========== INIT ==========
+    console.log('[SYS] Φ_OMNI_V9 – DEEP INJEKTION + ORDNER geladen.');
+    console.log('[SYS] STATUS: Φ_LOCKED_ABSOLUTE');
+    console.log('[SYS] Ordner bereit: JSON, JSONL, Rust, Zig, YAML, Python');
+</script>
+
+</body>
+</html>
+```
 <!DOCTYPE html>
 <html lang="de">
 <head>
