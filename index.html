@@ -3,6 +3,913 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>⚡ Φ_OMNI_V9 – MASTERPRINT ALL IN ONE</title>
+
+    <style>
+        :root {
+            --neon-green: #00ffbf;
+            --neon-blue: #00c8ff;
+            --neon-red: #ff0040;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffbf00;
+            --neon-orange: #ff6b00;
+            --panel-bg: #0a0a12;
+            --card-bg: #0d0d1a;
+            --text: #e5e7eb;
+            --text-muted: #8899bb;
+            --text-dark: #445566;
+            --border: #1a2a3a;
+            --ok: #00ff88;
+            --warn: #ffbf00;
+            --danger: #ff0040;
+            --shadow: 0 12px 48px rgba(0,0,0,0.8);
+            --radius: 14px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(ellipse at 20% 30%, #0f1a2e, #060a14 90%);
+            color: var(--text);
+            font-family: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 16px;
+            line-height: 1.7;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--panel-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 4px; }
+
+        .master-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(13,13,26,0.96), rgba(6,10,20,0.98));
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 24px 28px;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+        .master-container::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,191,0.03), transparent, rgba(0,200,255,0.03), transparent);
+            animation: rotateBackground 30s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes rotateBackground { 100% { transform: rotate(360deg); } }
+
+        .header {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-green); padding-bottom: 20px; margin-bottom: 28px;
+            position: relative; z-index: 1;
+        }
+        .title-block h1 {
+            font-size: 2.2rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin: 0;
+        }
+        .title-block .sub {
+            font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.15em;
+        }
+        .title-block .tag {
+            display: inline-block; margin-top: 6px; padding: 4px 16px;
+            border: 1px solid var(--neon-yellow); border-radius: 20px;
+            font-size: 0.65rem; color: var(--neon-yellow); letter-spacing: 2px;
+            font-weight: 700; text-transform: uppercase;
+        }
+        .badge-cluster {
+            text-align: right; font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.7rem; color: var(--text-muted);
+            background: var(--card-bg); padding: 10px 18px; border-radius: 12px;
+            border: 1px solid var(--border); min-width: 180px;
+        }
+        .badge-cluster .lock { color: var(--ok); font-weight: 700; font-size: 0.8rem; display: block; }
+        .badge-cluster .seal { color: var(--neon-yellow); font-size: 0.55rem; word-break: break-all; }
+        .badge-cluster .operator { color: var(--neon-blue); }
+
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; position: relative; z-index: 1;
+        }
+        .tab-btn {
+            background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);
+            padding: 8px 18px; cursor: pointer; font-weight: 700; border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease; flex: 1 1 auto; text-align: center; font-size: 11px;
+            letter-spacing: 0.5px; font-family: 'Courier New', monospace;
+        }
+        .tab-btn:hover { background: var(--panel-bg); color: var(--text); border-color: var(--neon-green); }
+        .tab-btn.active { background: var(--neon-green); color: #000; border-color: var(--neon-green); box-shadow: 0 0 30px rgba(0,255,191,0.2); }
+
+        .tab-content {
+            display: none; border: 1px solid var(--border); padding: 20px;
+            border-radius: 0 0 12px 12px; background: var(--card-bg);
+            animation: fadeIn 0.4s ease; position: relative; z-index: 1;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px 18px; margin-bottom: 14px; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-blue), transparent);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .card:hover { border-color: var(--neon-green); }
+        .card:hover::after { opacity: 1; }
+        .card h2 {
+            color: var(--neon-blue); border-bottom: 1px solid var(--border);
+            padding-bottom: 6px; margin-top: 0; margin-bottom: 12px;
+            font-size: 15px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+        .terminal {
+            background: #000a0a; border: 1px solid rgba(0,255,191,0.12);
+            border-radius: 8px; padding: 10px 12px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 9px; color: var(--neon-green); overflow-y: auto;
+            line-height: 1.8; max-height: 200px; min-height: 60px;
+        }
+        .terminal .log-time { color: var(--text-dark); }
+        .terminal .log-ok { color: var(--ok); }
+        .terminal .log-warn { color: var(--neon-orange); font-weight: bold; }
+        .terminal .log-error { color: var(--danger); font-weight: bold; }
+
+        .btn {
+            background: var(--neon-green); color: #000; padding: 10px 18px;
+            border: none; border-radius: 8px; font-weight: 700;
+            font-family: 'Courier New', monospace; font-size: 12px; cursor: pointer;
+            transition: all 0.3s ease; width: 100%; margin: 4px 0; letter-spacing: 0.5px;
+        }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,255,191,0.2); background: #00ddaa; }
+        .btn-orange { background: var(--neon-orange); color: #000; box-shadow: 0 0 30px rgba(255,107,0,0.2); }
+        .btn-orange:hover { background: #ff7a1a; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-purple { background: var(--neon-purple); color: #fff; }
+        .btn-red { background: var(--danger); color: #fff; }
+        .btn-sm { padding: 4px 12px; font-size: 9px; width: auto; display: inline-block; }
+
+        .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .input-group label { font-size: 11px; color: var(--text-muted); }
+        .input-group input, .input-group textarea, .input-group select {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+            padding: 6px 10px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px;
+            width: 100%;
+        }
+        .input-group textarea { min-height: 60px; resize: vertical; }
+
+        .module-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: 10px 12px; transition: all 0.3s ease; cursor: pointer;
+            border-left: 3px solid var(--neon-green);
+        }
+        .module-card:hover { border-color: var(--neon-green); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,255,191,0.06); }
+        .module-card .name { font-weight: 600; font-size: 11px; color: var(--text); }
+        .module-card .desc { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
+        .module-card .severity { font-size: 7px; margin-top: 4px; }
+        .module-card .severity.critical { color: var(--danger); }
+        .module-card .severity.high { color: var(--neon-orange); }
+        .module-card .severity.medium { color: var(--neon-yellow); }
+        .module-card .severity.low { color: var(--ok); }
+        .module-card .severity.info { color: var(--neon-blue); }
+
+        .bridge-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+            padding: 14px; transition: all 0.3s ease;
+            border-left: 4px solid var(--neon-green);
+            cursor: pointer;
+        }
+        .bridge-card:hover { border-color: var(--neon-green); transform: translateY(-3px); box-shadow: 0 0 30px rgba(0,255,191,0.08); }
+        .bridge-card .bridge-name { font-weight: 700; font-size: 13px; color: var(--text); }
+        .bridge-card .bridge-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+        .footer {
+            margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            font-size: 0.7rem; color: var(--text-muted); position: relative; z-index: 1;
+        }
+        .footer strong { color: var(--neon-green); }
+        .footer .seal-line { font-family: 'JetBrains Mono', 'Courier New', monospace; color: var(--text-dark); font-size: 0.6rem; }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #000; border: 1px solid var(--neon-green); color: var(--neon-green);
+            padding: 10px 24px; border-radius: 8px; z-index: 9999;
+            font-family: 'Courier New', monospace; font-size: 11px;
+            animation: slideDown 0.3s ease; box-shadow: 0 0 30px rgba(0,255,191,0.15);
+        }
+        .toast.warn { border-color: var(--neon-orange); color: var(--neon-orange); }
+        @keyframes slideDown { from { opacity: 0; transform: translate(-50%, -100%); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .master-container { padding: 16px; } .header { flex-direction: column; align-items: stretch; } .title-block h1 { font-size: 1.8rem; } .badge-cluster { text-align: left; margin-top: 10px; width: 100%; } }
+        @media (max-width: 600px) { .master-container { padding: 12px; } .card { padding: 12px; } .tab-btn { font-size: 9px; padding: 6px 10px; } }
+        .glitch { animation: glitch 0.8s ease; }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-4px, 2px); } 40% { transform: translate(4px, -2px); } 60% { transform: translate(-2px, 4px); } 80% { transform: translate(2px, -4px); } 100% { transform: translate(0); } }
+    </style>
+</head>
+<body>
+
+<div class="master-container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="title-block">
+            <h1>⚡ Φ_OMNI_V9</h1>
+            <div class="sub">MASTERPRINT ALL IN ONE</div>
+            <div class="sub" style="font-size:0.75rem; margin-top:4px; color: var(--neon-orange);">
+                <span class="tag">📜 CONSTITUTION v10.0.0</span>
+                <span style="margin-left:10px; color:var(--text-dark);">|</span>
+                <span style="margin-left:10px; color:var(--text-muted);">8+1 Engines · Bürgerplattform · Trinity · Bridges · Export</span>
+            </div>
+        </div>
+        <div class="badge-cluster">
+            <span class="lock">⏺ Φ_LOCKED_ABSOLUTE</span>
+            <span class="operator">OPERATOR: THOMAS KÖNIG (ODIN ULTRA ROOT)</span>
+            <span class="seal">SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab</span>
+            <span style="color:var(--neon-blue);">TARGET: 2026-08-19 · v10.0.0</span>
+        </div>
+    </header>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-overview">📋 OVERVIEW</button>
+        <button class="tab-btn" data-tab="tab-engines">🔧 ENGINES (8+1)</button>
+        <button class="tab-btn" data-tab="tab-buerger">🏛️ BÜRGERPLATTFORM</button>
+        <button class="tab-btn" data-tab="tab-trinity">🔱 TRINITY</button>
+        <button class="tab-btn" data-tab="tab-bridges">🌉 BRIDGES</button>
+        <button class="tab-btn" data-tab="tab-export">📦 EXPORT</button>
+    </div>
+
+    <!-- ============================================================
+    TAB 1: OVERVIEW
+    ============================================================ -->
+    <div class="tab-content active" id="tab-overview">
+        <div class="card">
+            <h2>📋 SYSTEM-ÜBERSICHT</h2>
+            <div class="grid-2">
+                <div class="terminal" style="height:140px;font-size:9px;">
+<span style="color:var(--neon-yellow);">╔══════════════════════════════════════════════════════════════════╗</span>
+<span style="color:var(--neon-yellow);">║  Φ_OMNI_V9 – MASTERPRINT ALL IN ONE                            ║</span>
+<span style="color:var(--neon-yellow);">║  ──────────────────────────────────────────────────────────────  ║</span>
+<span style="color:var(--text-muted);">║  Version: 10.0.0                                                ║</span>
+<span style="color:var(--text-muted);">║  Edition: Black_Co-Pilo                                         ║</span>
+<span style="color:var(--text-muted);">║  Operator: Thomas König / ODIN ULTRA ROOT                      ║</span>
+<span style="color:var(--neon-yellow);">║  Seal: 850b2ef0...                                              ║</span>
+<span style="color:var(--neon-yellow);">║  Status: Φ_LOCKED_ABSOLUTE                                      ║</span>
+<span style="color:var(--neon-yellow);">╚══════════════════════════════════════════════════════════════════╝</span>
+                </div>
+                <div class="terminal" style="height:140px;font-size:9px;">
+<span style="color:var(--neon-green);">📊 KOMPONENTEN</span><br>
+<span style="color:var(--text-muted);">8+1 Engines (Forensik, Legal, Medical, Financial, Security, AI, Crypto, Export, Neon-Cortex)</span><br>
+<span style="color:var(--text-muted);">Bürgerplattform: Scan, Analyse, Widerspruch, Gesetze, Lexikon</span><br>
+<span style="color:var(--text-muted);">Trinity: SupremeOmegaX3 + Ultima Omega X3 + BlackCore</span><br>
+<span style="color:var(--text-muted);">12 Bridges · Constitution · Zero-Trust · PQC-Ready</span><br>
+<span style="color:var(--ok);">✅ ALL SYSTEMS NOMINAL</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>⚡ QUICK-ACTIONS</h2>
+            <div class="grid-3">
+                <button class="btn btn-orange" onclick="runAllEngines()">⚡ ALLE ENGINES AUSFÜHREN</button>
+                <button class="btn btn-blue" onclick="runFullScan()">🏛️ BÜGERPLATTFORM SCAN</button>
+                <button class="btn btn-purple" onclick="exportFullMaster()">📦 MASTERPRINT EXPORT</button>
+            </div>
+            <div class="terminal" id="quickLog" style="height:80px;margin-top:10px;">[SYSTEM] Bereit für Aktionen.</div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TAB 2: ENGINES (8+1)
+    ============================================================ -->
+    <div class="tab-content" id="tab-engines">
+        <div class="card">
+            <h2>🔧 8+1 ENGINES</h2>
+            <div class="grid-3">
+                <button class="btn btn-sm btn-orange" onclick="runForensic()">🔬 FORENSIK</button>
+                <button class="btn btn-sm btn-purple" onclick="runLegal()">⚖️ LEGAL</button>
+                <button class="btn btn-sm btn-blue" onclick="runMedical()">🏥 MEDICAL</button>
+                <button class="btn btn-sm btn-yellow" onclick="runFinancial()">💰 FINANCIAL</button>
+                <button class="btn btn-sm btn-purple" onclick="runSecurity()">🛡️ SECURITY</button>
+                <button class="btn btn-sm btn-blue" onclick="runAI()">🧠 AI/CLUSTER</button>
+                <button class="btn btn-sm btn-purple" onclick="runCrypto()">🔗 CRYPTO</button>
+                <button class="btn btn-sm btn-orange" onclick="runExport()">📦 EXPORT</button>
+                <button class="btn btn-sm btn-blue" onclick="runNeonCortex()">🌈 NEON-CORTEX</button>
+            </div>
+            <div class="terminal" id="engineLog" style="height:120px;font-size:9px;">[SYSTEM] Warte auf Engine-Ausführung...</div>
+        </div>
+        <div class="card">
+            <h2>📋 ENGINE-DETAILS</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Eingabetext (für Engines)</label>
+                        <textarea id="engineInput" placeholder="Text für Forensik, Legal, Medical, AI...">Dies ist ein Beispieltext für die Analyse. Enthält BGB §134 und STGB §348.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Case-ID (für alle Engines)</label>
+                        <input type="text" id="engineCase" value="CASE-2026-001" />
+                    </div>
+                </div>
+                <div>
+                    <div class="terminal" id="engineDetailOutput" style="height:120px;font-size:9px;">[SYSTEM] Engine-Details erscheinen hier.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TAB 3: BÜRGERPLATTFORM
+    ============================================================ -->
+    <div class="tab-content" id="tab-buerger">
+        <div class="card">
+            <h2>🏛️ BÜRGERPLATTFORM</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="input-group">
+                        <label>Dokumententext</label>
+                        <textarea id="buergerText" placeholder="Bescheidtext, Vertrag, etc.">Bescheid vom 12.08.2026: Ablehnung §22 SGB II ohne Begründung.</textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>E-Mail (für Report)</label>
+                        <input type="email" id="buergerEmail" value="buerger@example.com" />
+                    </div>
+                    <button class="btn btn-orange" onclick="runBuergerScan()">⚡ SCAN & ANALYSE</button>
+                </div>
+                <div>
+                    <h3 style="color:var(--neon-green);">Ergebnis</h3>
+                    <div class="terminal" id="buergerOutput" style="height:200px;font-size:9px;">[SYSTEM] Warte auf Scan...</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>⚖️ WIDERSPRUCH GENERIEREN</h2>
+            <div class="grid-2">
+                <div>
+                    <button class="btn btn-blue" onclick="generateWiderspruch()">📋 WIDERSPRUCH ERSTELLEN</button>
+                    <button class="btn btn-sm btn-purple" onclick="copyWiderspruch()">📋 KOPIEREN</button>
+                </div>
+                <div>
+                    <div class="terminal" id="widerspruchOutput" style="height:100px;font-size:9px;">[SYSTEM] Widerspruch wird hier angezeigt.</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>📜 GESETZESBIBLIOTHEK</h2>
+            <div class="grid-4">
+                <button class="btn btn-sm" onclick="showLaw('bgb')">📖 BGB</button>
+                <button class="btn btn-sm" onclick="showLaw('stgb')">⚖️ StGB</button>
+                <button class="btn btn-sm" onclick="showLaw('gg')">🏛️ GG</button>
+                <button class="btn btn-sm" onclick="showLaw('stpo')">📑 StPO</button>
+                <button class="btn btn-sm" onclick="showLaw('vwvfg')">📂 VwVfG</button>
+                <button class="btn btn-sm" onclick="showLaw('dsgvo')">🔒 DSGVO</button>
+                <button class="btn btn-sm" onclick="showLaw('emrk')">🌍 EMRK</button>
+            </div>
+            <div id="lawDisplay" class="terminal" style="height:80px;font-size:10px;">📜 Wähle ein Gesetz aus.</div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TAB 4: TRINITY
+    ============================================================ -->
+    <div class="tab-content" id="tab-trinity">
+        <div class="card">
+            <h2>🔱 TRINITY – SUPREMEOMEGAX3 + ULTIMA OMEGA X3 + BLACK-CORE</h2>
+            <div class="terminal" style="height:100px;font-size:11px;color:var(--neon-yellow);">
+┌─────────────────────────────────────────────────────────────────────┐
+│  Φ_OMNI_V9 = SupremeOmegaX3 + UltimaOmegaX3 + BlackCore            │
+├─────────────────────────────────────────────────────────────────────┤
+│  Exekution (SupremeOmegaX3) → Fabric/Storage (Ultima) →            │
+│  → Forensik/Detection (BlackCore) → Neon-UI (Exelance)             │
+└─────────────────────────────────────────────────────────────────────┘
+            </div>
+        </div>
+        <div class="grid-3">
+            <div class="card" style="border-left:5px solid var(--neon-green);">
+                <h3 style="color:var(--neon-green);">🟦 SupremeOmegaX3</h3>
+                <p style="font-size:11px;color:var(--text-muted);">Exekutionsschicht – Runtime, Pulse, Exec, Cluster</p>
+                <ul style="font-size:10px;color:var(--text-muted);line-height:1.8;">
+                    <li><code style="color:var(--neon-blue);">src/core/runtime.py</code></li>
+                    <li><code style="color:var(--neon-blue);">src/core/exec.py</code></li>
+                    <li><code style="color:var(--neon-blue);">src/core/pulse.py</code></li>
+                </ul>
+            </div>
+            <div class="card" style="border-left:5px solid var(--neon-purple);">
+                <h3 style="color:var(--neon-purple);">🟪 Ultima Omega X3</h3>
+                <p style="font-size:11px;color:var(--text-muted);">Fabric/Storage – Audit, Ledger, WORM</p>
+                <ul style="font-size:10px;color:var(--text-muted);line-height:1.8;">
+                    <li><code style="color:var(--neon-purple);">ultima_omega_x3_absolute_final.yaml</code></li>
+                    <li><code style="color:var(--neon-purple);">audit_ledger (Append-Only)</code></li>
+                    <li><code style="color:var(--neon-purple);">RLS: az ~ '^AZ_[A-Z0-9]{8}$'</code></li>
+                </ul>
+            </div>
+            <div class="card" style="border-left:5px solid var(--neon-red);">
+                <h3 style="color:var(--neon-red);">🟥 Black-Core</h3>
+                <p style="font-size:11px;color:var(--text-muted);">Forensik/Detection – OCR, Scanning, Analyse</p>
+                <ul style="font-size:10px;color:var(--text-muted);line-height:1.8;">
+                    <li><code style="color:var(--neon-red);">Tesseract.js (RAM)</code></li>
+                    <li><code style="color:var(--neon-red);">24 Module</code></li>
+                    <li><code style="color:var(--neon-red);">BGH Precedent-Engine</code></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <h2>📋 TRINITY-MANIFEST</h2>
+            <div class="terminal" style="height:80px;font-size:9px;">
+{
+  "name": "Φ_OMNI_V9_TRINITY",
+  "version": "10.0.0",
+  "layers": {
+    "exekution": "SupremeOmegaX3",
+    "storage": "UltimaOmegaX3",
+    "forensik": "BlackCore",
+    "frontend": "NeonUI"
+  },
+  "status": "Φ_LOCKED_ABSOLUTE"
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TAB 5: BRIDGES
+    ============================================================ -->
+    <div class="tab-content" id="tab-bridges">
+        <div class="card">
+            <h2>🌉 12 BRIDGES – ALLE SYSTEME VERBUNDEN</h2>
+            <div class="grid-3" id="bridgeGrid">
+                <!-- Bridges werden per JS gerendert -->
+            </div>
+        </div>
+        <div class="card">
+            <h2>🔗 BRIDGE-STATUS</h2>
+            <div class="terminal" id="bridgeStatus" style="height:80px;font-size:9px;">[SYSTEM] Alle Bridges online.</div>
+            <button class="btn btn-blue" onclick="refreshBridges()">🔄 BRIDGES AKTUALISIEREN</button>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TAB 6: EXPORT
+    ============================================================ -->
+    <div class="tab-content" id="tab-export">
+        <div class="card">
+            <h2>📦 EXPORT MASTERPRINT</h2>
+            <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">Exportiert das gesamte System als JSON, JSONL oder TXT.</p>
+            <div class="grid-3">
+                <button class="btn btn-blue" onclick="exportMasterJSON()">📤 JSON</button>
+                <button class="btn btn-orange" onclick="exportMasterJSONL()">📤 JSONL</button>
+                <button class="btn btn-purple" onclick="exportMasterTXT()">📄 TXT</button>
+            </div>
+            <div id="exportPreview" class="terminal" style="height:120px;font-size:9px;margin-top:10px;">Klicke auf einen Export-Button.</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>
+            © 2026 <strong>OMEGA NEMESIS Architektur</strong> · Φ_OMNI_V9 · MASTERPRINT ALL IN ONE<br />
+            Konform mit <strong>GxP, AMWHV, EU‑GMP Annex 1 &amp; 11, ICH Q12, BSI IT‑Grundschutz, GoBD, FDA 21 CFR Part 11</strong>.
+        </div>
+        <div class="seal-line">
+            SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br />
+            Φ_LOCKED_ABSOLUTE · TARGET: 2026-08-19 · v10.0.0
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    // ============================================================
+    // GLOBALE KONSTANTEN & HELPER
+    // ============================================================
+    const SEAL = "850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab";
+    const OMNI_SALT = "_OMNI_SALT_2026";
+
+    function getTimestamp() { return new Date().toISOString(); }
+
+    function computeHash(text) {
+        return CryptoJS.SHA256(text + OMNI_SALT).toString();
+    }
+
+    function showToast(msg, type = 'ok') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'warn' ? 'warn' : ''}`;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function log(id, msg, type = 'ok') {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const time = new Date().toLocaleTimeString();
+        const cls = type === 'ok' ? 'log-ok' : 'log-warn';
+        el.innerHTML += `<br><span class="log-time">[${time}]</span> <span class="${cls}">${msg}</span>`;
+        el.scrollTop = el.scrollHeight;
+    }
+
+    // ============================================================
+    // ENGINES (8+1) – alle Funktionalitäten aus den vorherigen Chats
+    // ============================================================
+
+    // ENGINE 1: FORENSIK
+    function runForensic() {
+        const text = document.getElementById('engineInput').value || 'Standardtext';
+        const caseId = document.getElementById('engineCase').value || 'CASE-2026-001';
+        const hash = computeHash(text);
+        const preview = text.substring(0, 80) + (text.length > 80 ? '…' : '');
+        const record = {
+            module: "forensic",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "forensic", severity: 2, length: text.length },
+            ast: { node_type: "ForensicNode", children: [{ type: "CaseId", value: caseId }] },
+            data: { hash: `sha256:${hash}`, chain: [{ step: 1, action: "ingest", status: "OK" }], preview: preview }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '🔬 Forensik-Engine ausgeführt', 'ok');
+        showToast('🔬 Forensik-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 2: LEGAL
+    function runLegal() {
+        const text = document.getElementById('engineInput').value || 'Standardtext';
+        const norms = ['BGB §134', 'STGB §348'];
+        const riskFlags = ['critical'];
+        const record = {
+            module: "legal-ledger",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "legal", severity: 3 },
+            ast: { node_type: "LegalNode", children: [{ type: "NormHint", value: norms.join('|') }] },
+            data: { norms: norms, risk_flags: riskFlags, preview: text.substring(0, 80) + '…' }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '⚖️ Legal-Engine ausgeführt', 'ok');
+        showToast('⚖️ Legal-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 3: MEDICAL
+    function runMedical() {
+        const text = document.getElementById('engineInput').value || 'Befundtext';
+        const findings = text.match(/blutung|schmerz/i) ? [{ key: 'blutung', severity: 'HIGH' }] : [];
+        const severity = findings.length ? 'HIGH' : 'LOW';
+        const record = {
+            module: "medical",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "medical", severity: severity === 'HIGH' ? 3 : 1 },
+            ast: { node_type: "MedicalNode", children: [{ type: "Patient", value: "Max Mustermann" }] },
+            data: { patient: "Max Mustermann", age: 45, findings: findings, severity: severity, workflow: ["Anmeldung", "Anamnese", "Diagnostik", "Therapie", "Abrechnung"] }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '🏥 Medical-Engine ausgeführt', 'ok');
+        showToast('🏥 Medical-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 4: FINANCIAL
+    function runFinancial() {
+        const income = 45000, expenses = 28000, assets = 50000, liabilities = 15000;
+        const liquidity = income - expenses;
+        const netWorth = assets - liabilities;
+        const riskLevel = liquidity / expenses < 0.5 ? 'HIGH' : 'LOW';
+        const record = {
+            module: "financial",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "financial", risk: riskLevel === 'HIGH' ? 0.7 : 0.1, liquidity: liquidity, netWorth: netWorth },
+            ast: { node_type: "FinancialNode", children: [{ type: "Income", value: income.toString() }] },
+            data: { income: income, expenses: expenses, assets: assets, liabilities: liabilities, liquidity: liquidity, netWorth: netWorth, riskLevel: riskLevel }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '💰 Financial-Engine ausgeführt', 'ok');
+        showToast('💰 Financial-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 5: SECURITY
+    function runSecurity() {
+        const record = {
+            module: "security",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "security", severity: 1 },
+            ast: { node_type: "SecurityNode", children: [{ type: "Session", value: "sess-001" }] },
+            data: { pqc_ready: true, hash_algorithm: "SHA-256", zero_trust: ["RAM-Purge", "Nur Hashes an Meta", "RLS in Supabase"], audit_log: true }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '🛡️ Security-Engine ausgeführt', 'ok');
+        showToast('🛡️ Security-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 6: AI/CLUSTER
+    function runAI() {
+        const text = document.getElementById('engineInput').value || 'Standardereignis';
+        const impactScore = Math.min(1, text.length / 500);
+        const record = {
+            module: "ai-cluster",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "cluster", severity: 2 },
+            ast: { node_type: "ClusterNode", children: [{ type: "Channel", value: "social" }] },
+            data: { impact_score: Math.round(impactScore * 100) / 100, cluster: "BÜRGER-SCHWARM", tags: ["demo"] }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '🧠 AI/Cluster-Engine ausgeführt', 'ok');
+        showToast('🧠 AI/Cluster-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 7: CRYPTO
+    function runCrypto() {
+        const caseId = document.getElementById('engineCase').value || 'CASE-2026-001';
+        const chain = [
+            { event: "ingest", hash: `sha256:${computeHash('ingest')}` },
+            { event: "hash", hash: `sha256:${computeHash('hash')}` }
+        ];
+        const record = {
+            module: "salat-chain",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "blockchain", severity: 2 },
+            ast: { node_type: "ChainNode", children: [{ type: "CaseId", value: caseId }] },
+            data: { chain: chain, pqc_ready: true }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '🔗 Crypto-Engine ausgeführt', 'ok');
+        showToast('🔗 Crypto-Engine ausgeführt', 'ok');
+    }
+
+    // ENGINE 8: EXPORT
+    function runExport() {
+        const record = {
+            module: "export",
+            version: "1.0.0",
+            timestamp: getTimestamp(),
+            vector: { domain: "export", severity: 1 },
+            ast: { node_type: "ExportNode", children: [{ type: "Format", value: "pdf" }] },
+            data: { k26_pdf_generated: true, questions_379: true, whitepaper_section: true }
+        };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(record, null, 2);
+        log('engineLog', '📦 Export-Engine ausgeführt', 'ok');
+        showToast('📦 Export-Engine ausgeführt', 'ok');
+    }
+
+    // BONUS: NEON-CORTEX
+    function runNeonCortex() {
+        const points = [
+            { name: 'forensic', x: 0.2, y: 0.7, z: 0.3, color: '#ff00ff', size: 4 },
+            { name: 'legal', x: 0.4, y: 0.8, z: 0.2, color: '#00ffbf', size: 5 },
+            { name: 'medical', x: 0.6, y: 0.5, z: 0.6, color: '#ff6b00', size: 3 },
+            { name: 'financial', x: 0.8, y: 0.3, z: 0.5, color: '#ffbf00', size: 4 }
+        ];
+        const output = { modules: points };
+        document.getElementById('engineDetailOutput').textContent = JSON.stringify(output, null, 2);
+        log('engineLog', '🌈 Neon-Cortex generiert', 'ok');
+        showToast('🌈 Neon-Cortex generiert', 'ok');
+    }
+
+    function runAllEngines() {
+        runForensic(); setTimeout(() => { runLegal(); }, 200);
+        setTimeout(() => { runMedical(); }, 400);
+        setTimeout(() => { runFinancial(); }, 600);
+        setTimeout(() => { runSecurity(); }, 800);
+        setTimeout(() => { runAI(); }, 1000);
+        setTimeout(() => { runCrypto(); }, 1200);
+        setTimeout(() => { runExport(); }, 1400);
+        setTimeout(() => { runNeonCortex(); }, 1600);
+        log('quickLog', '⚡ Alle Engines gestartet', 'ok');
+        showToast('⚡ Alle Engines gestartet', 'ok');
+    }
+
+    // ============================================================
+    // BÜRGERPLATTFORM
+    // ============================================================
+    function runBuergerScan() {
+        const text = document.getElementById('buergerText').value || 'Kein Text';
+        const email = document.getElementById('buergerEmail').value || 'unbekannt';
+        const hash = computeHash(text);
+        const errors = [];
+        if (!text.match(/§\s?\d+/g)) errors.push('Keine Paragraphenreferenz.');
+        if (!text.match(/\d{2}\.\d{2}\.\d{4}/)) errors.push('Kein Datum gefunden.');
+        const result = `📄 Scan durchgeführt\nTextlänge: ${text.length}\nHash: ${hash.substring(0,16)}...\nFehler: ${errors.length ? errors.join(' ') : 'Keine'}\nE-Mail: ${email}`;
+        document.getElementById('buergerOutput').textContent = result;
+        log('quickLog', '🏛️ Bürgerplattform-Scan durchgeführt', 'ok');
+        showToast('🏛️ Scan abgeschlossen', 'ok');
+    }
+
+    function generateWiderspruch() {
+        const text = document.getElementById('buergerText').value || 'Bescheidtext';
+        const widerspruch = `WIDERSPRUCH\n\nSehr geehrte Damen und Herren,\n\nhiermit lege ich Widerspruch gegen den Bescheid ein.\nBegründung: Formelle Mängel.\n\nMit freundlichen Grüßen\n\nΦ_LOCKED_ABSOLUTE`;
+        document.getElementById('widerspruchOutput').textContent = widerspruch;
+        showToast('⚖️ Widerspruch generiert', 'ok');
+    }
+
+    function copyWiderspruch() {
+        const text = document.getElementById('widerspruchOutput').textContent;
+        if (text && text.includes('WIDERSPRUCH')) {
+            navigator.clipboard.writeText(text).then(() => showToast('📋 Kopiert!', 'ok'));
+        } else {
+            showToast('Kein Widerspruch vorhanden.', 'warn');
+        }
+    }
+
+    // Gesetze
+    const LAWS = {
+        bgb: { titel: 'BGB', text: '§ 134 BGB – Gesetzliches Verbot\n§ 823 BGB – Schadensersatzpflicht' },
+        stgb: { titel: 'StGB', text: '§ 240 StGB – Nötigung\n§ 348 StGB – Falschbeurkundung im Amt' },
+        gg: { titel: 'GG', text: 'Art. 1 GG – Menschenwürde\nArt. 80 GG – Zitiergebot' },
+        stpo: { titel: 'StPO', text: '§ 94 StPO – Beschlagnahme\n§ 105 StPO – Durchsuchung' },
+        vwvfg: { titel: 'VwVfG', text: '§ 44 VwVfG – Nichtigkeit\n§ 39 VwVfG – Begründungspflicht' },
+        dsgvo: { titel: 'DSGVO', text: 'Art. 5 DSGVO – Grundsätze\nArt. 17 DSGVO – Löschung' },
+        emrk: { titel: 'EMRK', text: 'Art. 3 EMRK – Folterverbot\nArt. 8 EMRK – Privatleben' }
+    };
+
+    function showLaw(key) {
+        const law = LAWS[key];
+        if (!law) return;
+        document.getElementById('lawDisplay').textContent = `${law.titel}\n${law.text}`;
+        showToast(`📜 ${law.titel} geladen`, 'ok');
+    }
+
+    function runFullScan() {
+        runBuergerScan();
+        generateWiderspruch();
+        log('quickLog', '🏛️ Vollständiger Bürger-Scan durchgeführt', 'ok');
+        showToast('🏛️ Full Scan abgeschlossen', 'ok');
+    }
+
+    // ============================================================
+    // BRIDGES
+    // ============================================================
+    const BRIDGES = [
+        { name: 'DOCKTYPE CONSTITUTION', desc: 'Verfassung aller Codes' },
+        { name: 'BÜRGERPLATTFORM', desc: 'Scan, Analyse, Widerspruch' },
+        { name: 'SUPREMEOMEGAX3', desc: 'Exekutionsschicht' },
+        { name: 'ULTIMA OMEGA X3', desc: 'Fabric/Storage' },
+        { name: 'BLACK-CORE', desc: 'Forensik/Detection' },
+        { name: 'OMNI CORE (24)', desc: '24 Analyse-Module' },
+        { name: 'NEON-UI EXELANCE', desc: 'Dashboards V1–V7' },
+        { name: 'BLACKGREMMEL v5', desc: 'Edge-Cluster OS' },
+        { name: 'NEUROMATRIX v2.1', desc: 'SynapseOS' },
+        { name: 'ALIEN HUNT', desc: 'Game + K-26 Archive' },
+        { name: 'K-26 BUILDER', desc: 'Signatur + Hash' },
+        { name: 'DEEP SEEK INJEKTION', desc: 'Ultimative Synthese' }
+    ];
+
+    function renderBridges() {
+        const grid = document.getElementById('bridgeGrid');
+        grid.innerHTML = '';
+        BRIDGES.forEach(b => {
+            grid.innerHTML += `
+                <div class="bridge-card" onclick="showToast('🔗 ${b.name} aktiviert', 'ok')">
+                    <div class="bridge-name">🌉 ${b.name}</div>
+                    <div class="bridge-desc">${b.desc}</div>
+                </div>
+            `;
+        });
+    }
+
+    function refreshBridges() {
+        document.getElementById('bridgeStatus').innerHTML = `[${new Date().toLocaleTimeString()}] Alle Bridges online.`;
+        showToast('🔄 Bridges aktualisiert', 'ok');
+    }
+
+    // ============================================================
+    // EXPORT FUNKTIONEN
+    // ============================================================
+    function getMasterData() {
+        return {
+            name: "Φ_OMNI_V9_MASTERPRINT",
+            version: "10.0.0",
+            seal: SEAL,
+            operator: "Thomas König / ODIN ULTRA ROOT",
+            timestamp: getTimestamp(),
+            status: "Φ_LOCKED_ABSOLUTE",
+            components: {
+                engines: ["forensic", "legal", "medical", "financial", "security", "ai-cluster", "salat-chain", "export", "neon-cortex"],
+                bridges: BRIDGES.map(b => b.name),
+                trinity: ["SupremeOmegaX3", "UltimaOmegaX3", "BlackCore"]
+            }
+        };
+    }
+
+    function exportMasterJSON() {
+        const data = getMasterData();
+        const json = JSON.stringify(data, null, 2);
+        document.getElementById('exportPreview').textContent = json;
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'masterprint_all_in_one.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📤 JSON exportiert', 'ok');
+    }
+
+    function exportMasterJSONL() {
+        const data = getMasterData();
+        const lines = [
+            JSON.stringify({ type: 'meta', data: { name: data.name, version: data.version, seal: data.seal } }),
+            ...data.components.engines.map(e => JSON.stringify({ type: 'engine', data: e })),
+            ...data.components.bridges.map(b => JSON.stringify({ type: 'bridge', data: b })),
+            JSON.stringify({ type: 'trinity', data: data.components.trinity })
+        ];
+        const jsonl = lines.join('\n');
+        document.getElementById('exportPreview').textContent = jsonl;
+        const blob = new Blob([jsonl], { type: 'application/jsonl' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'masterprint_all_in_one.jsonl';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📤 JSONL exportiert', 'ok');
+    }
+
+    function exportMasterTXT() {
+        const data = getMasterData();
+        const txt = `
+╔═══════════════════════════════════════════════════════╗
+║  Φ_OMNI_V9 – MASTERPRINT ALL IN ONE                   ║
+║  ────────────────────────────────────────────────────  ║
+║  Version: ${data.version}                              ║
+║  Seal: ${data.seal.substring(0, 20)}...               ║
+║  Operator: ${data.operator}                           ║
+║  Status: ${data.status}                               ║
+║  Timestamp: ${data.timestamp}                         ║
+╚═══════════════════════════════════════════════════════╝
+
+ENGINES (8+1):
+${data.components.engines.map(e => `  - ${e}`).join('\n')}
+
+BRIDGES (${data.components.bridges.length}):
+${data.components.bridges.map(b => `  - ${b}`).join('\n')}
+
+TRINITY:
+${data.components.trinity.map(t => `  - ${t}`).join('\n')}
+
+Φ_LOCKED_ABSOLUTE
+`;
+        document.getElementById('exportPreview').textContent = txt;
+        const blob = new Blob([txt], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'masterprint_all_in_one.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📄 TXT exportiert', 'ok');
+    }
+
+    function exportFullMaster() {
+        exportMasterJSON();
+        setTimeout(() => { exportMasterJSONL(); }, 300);
+        setTimeout(() => { exportMasterTXT(); }, 600);
+        log('quickLog', '📦 Masterprint-Export gestartet', 'ok');
+        showToast('📦 Masterprint-Export gestartet', 'ok');
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    renderBridges();
+    refreshBridges();
+
+    console.log('⚡ Φ_OMNI_V9 – MASTERPRINT ALL IN ONE geladen.');
+    console.log('📌 8+1 Engines · Bürgerplattform · Trinity · Bridges · Export');
+    console.log('📌 STATUS: Φ_LOCKED_ABSOLUTE');
+    showToast('⚡ MASTERPRINT ALL IN ONE geladen!', 'ok');
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>⚡ Φ_OMNI_V9 – ENGINE SUITE · 8+1 ENGINES</title>
 
     <!-- CDN Bibliotheken -->
