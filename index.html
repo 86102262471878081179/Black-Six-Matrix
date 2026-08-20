@@ -1,6 +1,602 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLACK SIX — Product Dogstyle</title>
+  <!-- Font & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ─── RESET & BASIS ─── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0a1a, #000000);
+      color: #d0d0ff;
+      font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 0, 255, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff44ff;
+      border-radius: 6px;
+    }
+
+    /* ─── HEADER / HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+      background: radial-gradient(ellipse at 50% 80%, rgba(255, 0, 255, 0.08), transparent 70%);
+    }
+
+    .hero .logo {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 40px #ff00ff88, 0 0 80px #ff00ff44;
+      color: #ff44ff;
+      margin-bottom: 0.2em;
+    }
+
+    .hero .logo span {
+      color: #00ffff;
+      text-shadow: 0 0 40px #00ffff88;
+    }
+
+    .hero .sub {
+      font-size: 1.2rem;
+      letter-spacing: 0.3em;
+      color: #8888bb;
+      border-top: 1px solid rgba(255, 0, 255, 0.2);
+      border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+      padding: 12px 0;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .hero .tagline {
+      max-width: 700px;
+      font-size: 1.1rem;
+      color: #bbbbdd;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      padding: 20px 30px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.1);
+    }
+
+    .hero .cta {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 14px 36px;
+      border-radius: 40px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      cursor: default;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff44ff, #aa44ff);
+      color: #fff;
+      box-shadow: 0 0 30px #ff44ff55;
+    }
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 60px #ff44ffaa;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: #ff44ff;
+      color: #ff44ff;
+    }
+    .btn-outline:hover {
+      background: #ff44ff22;
+      box-shadow: 0 0 30px #ff44ff44;
+    }
+
+    /* ─── SECTIONEN ─── */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 40px;
+      color: #ff88ff;
+      text-shadow: 0 0 30px #ff44ff44;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60%;
+      height: 2px;
+      background: linear-gradient(90deg, #ff44ff, transparent);
+    }
+
+    /* ─── CORE ZYKLUS (Interactive) ─── */
+    .cycle-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .cycle-card {
+      background: rgba(20, 0, 40, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px 20px;
+      flex: 1 1 180px;
+      min-width: 150px;
+      text-align: center;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    }
+
+    .cycle-card:hover {
+      transform: translateY(-8px);
+      border-color: #ff44ff;
+      box-shadow: 0 0 50px rgba(255, 0, 255, 0.2);
+    }
+
+    .cycle-card .icon {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+    }
+    .cycle-card .phase {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ff88ff;
+      letter-spacing: 0.05em;
+    }
+    .cycle-card .desc {
+      font-size: 0.75rem;
+      color: #aaaacc;
+      margin-top: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ─── FEATURE GRID ─── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .feature-item {
+      background: rgba(10, 0, 20, 0.5);
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      padding: 28px 22px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      border-color: #ff44ff66;
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.08);
+    }
+
+    .feature-item i {
+      font-size: 2rem;
+      color: #ff88ff;
+      margin-bottom: 12px;
+    }
+    .feature-item h3 {
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: #fff;
+    }
+    .feature-item p {
+      font-size: 0.9rem;
+      color: #9999bb;
+      margin-top: 6px;
+    }
+
+    /* ─── TECH STACK ─── */
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .tech-pill {
+      background: rgba(255, 0, 255, 0.08);
+      border: 1px solid rgba(255, 0, 255, 0.2);
+      padding: 8px 24px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      color: #ddddff;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── ARCHITECTURE DIAGRAM (CSS) ─── */
+    .arch-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 40px 0;
+      font-size: 0.85rem;
+    }
+    .arch-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px 40px;
+      margin: 6px 0;
+    }
+    .arch-node {
+      background: rgba(20, 0, 40, 0.6);
+      border: 1px solid #ff44ff66;
+      border-radius: 14px;
+      padding: 12px 24px;
+      backdrop-filter: blur(4px);
+      font-weight: 600;
+      color: #ff88ff;
+      text-shadow: 0 0 12px #ff44ff44;
+      min-width: 100px;
+      text-align: center;
+    }
+    .arch-arrow {
+      color: #6666aa;
+      font-size: 1.4rem;
+      padding: 0 4px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid rgba(255, 0, 255, 0.1);
+      color: #7777aa;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    footer .seal {
+      color: #ff44ff;
+      font-weight: 700;
+      text-shadow: 0 0 20px #ff44ff44;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .hero .logo { font-size: 2.6rem; }
+      .hero .tagline { font-size: 0.95rem; padding: 16px; }
+      .cycle-card { flex: 1 1 130px; }
+      .arch-node { padding: 8px 14px; font-size: 0.75rem; min-width: 70px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+  <div class="logo">BLACK <span>SIX</span></div>
+  <div class="sub">⚡ OMNI · HYBRID · ENGINE ⚡</div>
+  <div class="tagline">
+    <i class="fas fa-infinity" style="color:#ff44ff;margin-right:10px;"></i>
+    Kernel‑Governance‑Fusion — Zero‑Trust, PBFT, eBPF, Neon
+  </div>
+  <div class="cta">
+    <span class="btn btn-primary"><i class="fas fa-rocket"></i> &nbsp; Φ_LOCKED_ABSOLUTE</span>
+    <span class="btn btn-outline"><i class="fas fa-code"></i> &nbsp; v∞.ULTIMA</span>
+  </div>
+</header>
+
+<!-- ─── CORE CYCLE ─── -->
+<section>
+  <h2 class="section-title">🌀 Black Core — Zyklus</h2>
+  <div class="cycle-grid">
+    <div class="cycle-card"><div class="icon">⚫</div><div class="phase">ORIGIN</div><div class="desc">eBPF · Kernel‑Events</div></div>
+    <div class="cycle-card"><div class="icon">🔄</div><div class="phase">FORM</div><div class="desc">Normalisierung · Enrichment</div></div>
+    <div class="cycle-card"><div class="icon">📊</div><div class="phase">STRUCTURE</div><div class="desc">125 Regeln · Graph</div></div>
+    <div class="cycle-card"><div class="icon">🌐</div><div class="phase">REALITY</div><div class="desc">PBFT · Audit‑Ledger</div></div>
+    <div class="cycle-card"><div class="icon">♾️</div><div class="phase">LOOP</div><div class="desc">Policy‑Sync · Feedback</div></div>
+  </div>
+  <p style="text-align:center;color:#8888bb;margin-top:30px;font-size:0.9rem;">
+    <i class="fas fa-arrow-right" style="color:#ff44ff;"></i>
+    Jede Operation durchläuft den Zyklus — kein State bleibt ohne Struktur.
+  </p>
+</section>
+
+<!-- ─── ARCHITECTURE ─── -->
+<section>
+  <h2 class="section-title">🏛️ Architektur‑Ebenen</h2>
+  <div class="arch-diagram">
+    <div class="arch-row">
+      <span class="arch-node">Layer 0</span>
+      <span class="arch-node" style="border-color:#44ddff;">eBPF/XDP Shield</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-node" style="border-color:#88ff88;">Ringbuffer</span>
+    </div>
+    <div class="arch-row">
+      <span class="arch-node" style="border-color:#ffaa44;">JudgmentEngine</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-node" style="border-color:#ff4488;">PBFT‑Cluster</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-node" style="border-color:#ff44ff;">Audit‑Ledger</span>
+    </div>
+    <div class="arch-row">
+      <span class="arch-node" style="border-color:#ffffff;">OmniHyperGalaxyKernel</span>
+      <span class="arch-arrow">↔</span>
+      <span class="arch-node" style="border-color:#ff88ff;">Dark Copilot Engine</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section>
+  <h2 class="section-title">⚡ Kern‑Features</h2>
+  <div class="feature-grid">
+    <div class="feature-item"><i class="fas fa-shield-alt"></i><h3>Zero‑Trust Security</h3><p>eBPF/XDP mit Rate‑Limiting, SYN‑Flood‑Schutz, Blocklist</p></div>
+    <div class="feature-item"><i class="fas fa-gavel"></i><h3>PBFT‑Governance</h3><p>64 Nodes, 43 Quorum, View‑Change, ED25519‑Signaturen</p></div>
+    <div class="feature-item"><i class="fas fa-link"></i><h3>Audit‑Ledger</h3><p>SHA‑256 Append‑only, Multi‑Signatur, IPFS‑fähig</p></div>
+    <div class="feature-item"><i class="fas fa-brain"></i><h3>125 Regeln</h3><p>Security, Compliance, Forensic, System — dynamisch</p></div>
+    <div class="feature-item"><i class="fas fa-sync-alt"></i><h3>Echtzeit‑Telemetrie</h3><p>Ringbuffer + Emanation‑Loop + WebSocket‑Stream</p></div>
+    <div class="feature-item"><i class="fas fa-palette"></i><h3>Neon‑UI</h3><p>Dark‑Glass‑Panels, Live‑Graphs, Heatmap, Chain‑Viewer</p></div>
+  </div>
+</section>
+
+<!-- ─── TECH STACK ─── -->
+<section>
+  <h2 class="section-title">🛠️ Technologie‑Stack</h2>
+  <div class="tech-pills">
+    <span class="tech-pill">Go (Core)</span>
+    <span class="tech-pill">Rust (eBPF‑Bridge)</span>
+    <span class="tech-pill">Python (Analytics)</span>
+    <span class="tech-pill">Kubernetes (Deployment)</span>
+    <span class="tech-pill">PostgreSQL (Ledger)</span>
+    <span class="tech-pill">Prometheus (Metriken)</span>
+    <span class="tech-pill">WebSockets (Live‑UI)</span>
+    <span class="tech-pill">IPFS (optional)</span>
+  </div>
+</section>
+
+<!-- ─── PRODUCT OFFERING ─── -->
+<section>
+  <h2 class="section-title">📦 Produkt‑Angebote</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:20px;">
+    <div style="background:rgba(20,0,40,0.5);border-radius:16px;padding:20px;border:1px solid rgba(255,0,255,0.15);">
+      <h3 style="color:#ff88ff;">Enterprise Frozen Core</h3>
+      <p style="font-size:0.85rem;color:#9999bb;">Kritische Infrastruktur, Audit‑Suite, PBFT‑Backend</p>
+    </div>
+    <div style="background:rgba(20,0,40,0.5);border-radius:16px;padding:20px;border:1px solid rgba(0,255,255,0.15);">
+      <h3 style="color:#44ddff;">Medical Insight Hub</h3>
+      <p style="font-size:0.85rem;color:#9999bb;">Compliance‑Filter, Red‑Flag‑Erkennung, DSGVO‑konform</p>
+    </div>
+    <div style="background:rgba(20,0,40,0.5);border-radius:16px;padding:20px;border:1px solid rgba(136,255,136,0.15);">
+      <h3 style="color:#88ff88;">IaC Template Suite</h3>
+      <p style="font-size:0.85rem;color:#9999bb;">Terraform, Nomad, Docker — sofort deploybar</p>
+    </div>
+    <div style="background:rgba(20,0,40,0.5);border-radius:16px;padding:20px;border:1px solid rgba(255,170,68,0.15);">
+      <h3 style="color:#ffaa44;">GOT(SHA) Multi‑Language</h3>
+      <p style="font-size:0.85rem;color:#9999bb;">53 Sprachen, polymorphe Imitations‑Engine</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>
+    <span class="seal">Φ_LOCKED_ABSOLUTE</span> · v21.0.0-DEEP_SEEK + DARK_COPILOT · 
+    <i class="fas fa-code"></i> 1.289 SHA‑Artefakte · 
+    <i class="fas fa-users"></i> 64 PBFT‑Nodes
+  </p>
+  <p style="margin-top:10px;">
+    <i class="fas fa-infinity" style="color:#ff44ff;"></i>
+    <span style="color:#6666aa;">Der Zyklus ist die einzige Konstante.</span>
+  </p>
+  <p style="margin-top:14px;font-size:0.7rem;color:#555577;">
+    👉♾️🔚🏴‍☠️👑💯 · 2026 · Black‑Six‑Matrix
+  </p>
+</footer>
+
+<!-- ─── LEICHTE INTERAKTION ─── -->
+<script>
+  // Scroll‑Animation für Cycle‑Cards (einfach)
+  const cards = document.querySelectorAll('.cycle-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.2 });
+
+  cards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'all 0.6s ease';
+    observer.observe(card);
+  });
+
+  // Neon‑Typing‑Effekt für den Tagline (optional)
+  console.log('🔥 BLACK SIX — Product Dogstyle ready');
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Dark Copilot Engine — Black Product Page</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050509;
+            color: #e0e0ff;
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .header {
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(90deg, #8b5cf6, #22d3ee, #4ade80, #f472b6);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .section {
+            padding: 40px;
+            border-bottom: 1px solid #222;
+        }
+
+        h2 {
+            color: #22d3ee;
+            text-shadow: 0 0 10px rgba(34,211,238,0.7);
+        }
+
+        .code {
+            background: #0a0a13;
+            border: 1px solid #333;
+            padding: 20px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            box-shadow: 0 0 12px rgba(120, 0, 255, 0.6);
+        }
+
+        .panel {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 0 12px rgba(120, 0, 255, 0.6);
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        DARK COPILOT ENGINE — BLACK PRODUCT PAGE
+    </div>
+
+    <div class="section">
+        <h2>🚀 Produktbeschreibung</h2>
+        <p>
+            Die <strong>Dark Copilot Engine</strong> ist ein vollständiger, geschlossener, end‑to‑end
+            Black‑System‑Kern.  
+            Sie vereint:
+        </p>
+
+        <ul>
+            <li>[BlackCore](ca://s?q=BlackCore_Engine) — Ursprung, Form, Struktur, Realität, Loop</li>
+            <li>[Decision Engine](ca://s?q=Decision_Engine) — Entscheidungen im Realize‑Step</li>
+            <li>[Telemetry Layer](ca://s?q=Telemetry_Layer) — vollständige Beobachtung</li>
+            <li>[Audit Trail](ca://s?q=Audit_Trail) — Nachvollziehbarkeit jeder Entscheidung</li>
+            <li>[Neon UI](ca://s?q=Neon_UI) — visuelle Darstellung des Zyklus</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ Backend — Rust BlackCore Engine</h2>
+
+        <div class="code">
+pub struct State { id: u64, payload: serde_json::Value }
+pub struct Graph { nodes: Vec&lt;State&gt;, edges: Vec&lt;(u64,u64)&gt; }
+pub struct Reality { events: Vec&lt;serde_json::Value&gt;, decisions: Vec&lt;Decision&gt; }
+
+pub struct BlackEngine {
+    pub telemetry: Mutex&lt;Telemetry&gt;,
+    pub audit: Mutex&lt;AuditTrail&gt;,
+}
+
+impl BlackEngine {
+    pub fn origin(&self) -> State { ... }
+    pub fn form(&self, s: State) -> State { ... }
+    pub fn structure(&self, s: State) -> Graph { ... }
+    pub fn realize(&self, g: Graph) -> Reality { ... }
+    pub fn loop_back(&self, r: Reality) -> State { ... }
+}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🌌 Neon UI — Black Cycle Panels</h2>
+
+        <div class="panel">
+            <strong>Origin Panel:</strong> Pulsierender Neon‑Kern  
+            <br> <strong>Form Panel:</strong> Morphende Shapes  
+            <br> <strong>Structure Panel:</strong> AST‑Graph  
+            <br> <strong>Reality Panel:</strong> Event‑Tiles  
+            <br> <strong>Loop Panel:</strong> Infinity‑Ring
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📐 End‑to‑End Diagramm</h2>
+
+        <div class="code">
+ORIGIN → FORM → STRUCTURE → REALITY → LOOP → ORIGIN
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Dark Copilot Engine — Black Edition
+    </div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>⚡ Φ_OMNI_V9 – MASTERPRINT ALL IN ONE</title>
