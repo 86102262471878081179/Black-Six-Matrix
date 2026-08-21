@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -13,21 +14,18 @@ import (
 )
 
 // ============================
-// KONFIGURATION (erweitert)
+// KONFIGURATION
 // ============================
 
 type SwitcherConfig struct {
 	CurrentRegion string                 `json:"current_region"`
 	BlackKey      string                 `json:"black_key"`
 	Mood          string                 `json:"mood"`
-
-	// --- NEU: Punkt 2, 3, 4 ---
 	ProxyPool     []string               `json:"proxy_pool"`
-	CurrentProxy  int                    `json:"current_proxy"`  // Index für Rotation
+	CurrentProxy  int                    `json:"current_proxy"`
 	UserAgents    []string               `json:"user_agents"`
 	CurrentUA     int                    `json:"current_ua"`
-	RateLimit     int                    `json:"rate_limit"`     // Requests pro Sekunde
-
+	RateLimit     int                    `json:"rate_limit"`
 	Profiles      map[string]interface{} `json:"profiles"`
 	LastUpdated   int64                  `json:"last_updated"`
 }
@@ -72,6 +70,71 @@ var defaultProfiles = map[string]interface{}{
 const configDir = ".blackmatrix"
 const configFile = "switcher.json"
 
+// ============================
+// MAIN HAMMER – ZENTRALER AUTOCOMMIT & DEBUG
+// ============================
+
+const autoFooter = "🏴‍☠️Auto_Com_debug_Par exelance_footer🏴‍☠️"
+var debugMode bool
+
+type CommandFn func() error
+
+func ExecuteWithHammer(cmdName string, args []string, fn CommandFn) {
+	if debugMode {
+		fmt.Printf("🐞 [HAMMER] Start: %s %v\n", cmdName, args)
+		start := time.Now()
+		defer func() {
+			fmt.Printf("🐞 [HAMMER] Dauer: %v\n", time.Since(start))
+		}()
+	}
+
+	err := fn()
+	status := "✅ SUCCESS"
+	if err != nil {
+		status = fmt.Sprintf("❌ FAILED: %v", err)
+		fmt.Println(status)
+	} else {
+		fmt.Println(status)
+	}
+
+	// Zentraler Autocommit für ALLE Befehle
+	cfg := loadConfig()
+	proxy := getCurrentProxyString(cfg)
+	ua := getCurrentUAString(cfg)
+
+	msg := fmt.Sprintf("[AUTO] %s | Region: %s | Mood: %s | Proxy: %s | UA: %s | Status: %s",
+		cmdName, cfg.CurrentRegion, cfg.Mood, proxy, ua, status)
+	if len(args) > 0 {
+		msg += " | Args: " + strings.Join(args, " ")
+	}
+
+	if hasGitChanges() {
+		fullMsg := fmt.Sprintf("%s\n\n%s", msg, autoFooter)
+		exec.Command("git", "add", ".").Run()
+		if out, err := exec.Command("git", "commit", "-m", fullMsg).CombinedOutput(); err != nil {
+			fmt.Printf("⚠️  Commit fehlgeschlagen: %s\n", out)
+		} else {
+			fmt.Println("📦 Autocommit durch Hammer ausgeführt.")
+		}
+	} else {
+		if debugMode {
+			fmt.Println("ℹ️  Keine Änderungen – überspringe Commit.")
+		}
+	}
+}
+
+func hasGitChanges() bool {
+	out, err := exec.Command("git", "status", "--porcelain").Output()
+	if err != nil {
+		return false
+	}
+	return len(strings.TrimSpace(string(out))) > 0
+}
+
+// ============================
+// CONFIG LOAD / SAVE
+// ============================
+
 func getConfigPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -84,7 +147,7 @@ func loadConfig() *SwitcherConfig {
 	path := getConfigPath()
 	data, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Println("⚙️  Neue Standard-Config (inkl. Proxy/UA/Rate)...")
+		fmt.Println("⚙️  Neue Standard-Config...")
 		return &SwitcherConfig{
 			CurrentRegion: "EU",
 			BlackKey:      "BLACK_SIX_ULTRA",
@@ -93,7 +156,7 @@ func loadConfig() *SwitcherConfig {
 			CurrentProxy:  0,
 			UserAgents:    defaultUserAgents,
 			CurrentUA:     0,
-			RateLimit:     10, // default: 10 req/s
+			RateLimit:     10,
 			Profiles:      defaultProfiles,
 			LastUpdated:   time.Now().Unix(),
 		}
@@ -127,7 +190,7 @@ func saveConfig(cfg *SwitcherConfig) {
 }
 
 // ============================
-// HELFER FÜR ROTATION
+// HELFER FÜR PROXY / UA / RATE
 // ============================
 
 func getNextProxy(cfg *SwitcherConfig) string {
@@ -150,7 +213,20 @@ func getNextUA(cfg *SwitcherConfig) string {
 	return ua
 }
 
-// Rate-Limiter: Token-Bucket (einfach)
+func getCurrentProxyString(cfg *SwitcherConfig) string {
+	if len(cfg.ProxyPool) == 0 {
+		return "DIRECT"
+	}
+	return cfg.ProxyPool[cfg.CurrentProxy%len(cfg.ProxyPool)]
+}
+
+func getCurrentUAString(cfg *SwitcherConfig) string {
+	if len(cfg.UserAgents) == 0 {
+		return "Default"
+	}
+	return cfg.UserAgents[cfg.CurrentUA%len(cfg.UserAgents)]
+}
+
 var rateMu sync.Mutex
 var lastRequestTime time.Time
 
@@ -172,50 +248,46 @@ func waitForRateLimit(cfg *SwitcherConfig) {
 }
 
 // ============================
-// STATUS (erweitert)
+// CORE-FUNKTIONEN (ohne AutoCommit – der Hammer macht das)
 // ============================
 
-func printStatus(cfg *SwitcherConfig) {
-	fmt.Printf("\n📍 REGION:     [%s]\n", cfg.CurrentRegion)
-	fmt.Printf("🔑 Black Key:  %s\n", maskString(cfg.BlackKey, 4))
-	fmt.Printf("🎭 Mood:       %s\n", cfg.Mood)
-	fmt.Printf("🌐 Proxy-Pool: %d Proxies (aktuell: %s)\n", len(cfg.ProxyPool), getCurrentProxyString(cfg))
-	fmt.Printf("🖥️  User-Agents: %d (aktuell: %s)\n", len(cfg.UserAgents), getCurrentUAString(cfg))
-	fmt.Printf("⏱️  Rate-Limit:  %d req/s\n", cfg.RateLimit)
-	if profile, ok := cfg.Profiles[cfg.CurrentRegion]; ok {
-		for k, v := range profile.(map[string]interface{}) {
-			fmt.Printf("   %s = %v\n", k, v)
-		}
+func switchProfileCore(cfg *SwitcherConfig, target string) error {
+	target = strings.ToUpper(target)
+	if _, ok := cfg.Profiles[target]; !ok {
+		return fmt.Errorf("Region '%s' nicht gefunden", target)
 	}
-	fmt.Println(strings.Repeat("━", 50))
+	cfg.CurrentRegion = target
+	saveConfig(cfg)
+	profile := cfg.Profiles[target].(map[string]interface{})
+	for k, v := range profile {
+		os.Setenv(k, v.(string))
+	}
+	fmt.Printf("✅ Region zu '%s' gewechselt.\n", target)
+	return nil
 }
 
-func getCurrentProxyString(cfg *SwitcherConfig) string {
-	if len(cfg.ProxyPool) == 0 {
-		return "DIRECT"
+func setMoodCore(cfg *SwitcherConfig, mood string) error {
+	mood = strings.ToLower(mood)
+	if mood != "aggressive" && mood != "cautious" && mood != "normal" {
+		return fmt.Errorf("Mood muss aggressive, cautious oder normal sein")
 	}
-	return cfg.ProxyPool[cfg.CurrentProxy%len(cfg.ProxyPool)]
-}
-func getCurrentUAString(cfg *SwitcherConfig) string {
-	if len(cfg.UserAgents) == 0 {
-		return "Default"
-	}
-	return cfg.UserAgents[cfg.CurrentUA%len(cfg.UserAgents)]
+	cfg.Mood = mood
+	saveConfig(cfg)
+	fmt.Printf("🎭 Mood auf '%s' gesetzt.\n", mood)
+	return nil
 }
 
-func maskString(s string, show int) string {
-	if len(s) <= show {
-		return s
+func setBlackKeyCore(cfg *SwitcherConfig, key string) error {
+	if len(key) < 8 {
+		return fmt.Errorf("Key zu kurz (min. 8 Zeichen)")
 	}
-	return s[:show] + strings.Repeat("•", len(s)-show)
+	cfg.BlackKey = key
+	saveConfig(cfg)
+	fmt.Println("🔑 Black Key aktualisiert.")
+	return nil
 }
 
-// ============================
-// NEUE COMMANDS: PROXY / UA / RATE
-// ============================
-
-func proxyCmd(args []string) {
-	cfg := loadConfig()
+func proxyCmdCore(cfg *SwitcherConfig, args []string) error {
 	if len(args) == 0 {
 		fmt.Println("🌐 Proxy-Pool:")
 		for i, p := range cfg.ProxyPool {
@@ -225,30 +297,26 @@ func proxyCmd(args []string) {
 			}
 			fmt.Printf("   %s %s\n", marker, p)
 		}
-		return
+		return nil
 	}
 	switch args[0] {
 	case "add":
 		if len(args) < 2 {
-			fmt.Println("❌ proxy add <url>")
-			return
+			return fmt.Errorf("proxy add <url>")
 		}
 		cfg.ProxyPool = append(cfg.ProxyPool, args[1])
 		saveConfig(cfg)
 		fmt.Printf("✅ Proxy hinzugefügt: %s\n", args[1])
 	case "rotate":
 		if len(cfg.ProxyPool) == 0 {
-			fmt.Println("❌ Keine Proxies vorhanden.")
-			return
+			return fmt.Errorf("Keine Proxies vorhanden")
 		}
-		old := cfg.ProxyPool[cfg.CurrentProxy%len(cfg.ProxyPool)]
 		cfg.CurrentProxy = (cfg.CurrentProxy + 1) % len(cfg.ProxyPool)
 		saveConfig(cfg)
-		fmt.Printf("🔄 Proxy rotiert: %s → %s\n", old, cfg.ProxyPool[cfg.CurrentProxy%len(cfg.ProxyPool)])
+		fmt.Printf("🔄 Proxy rotiert.\n")
 	case "remove":
 		if len(args) < 2 {
-			fmt.Println("❌ proxy remove <url>")
-			return
+			return fmt.Errorf("proxy remove <url>")
 		}
 		newList := []string{}
 		for _, p := range cfg.ProxyPool {
@@ -257,8 +325,7 @@ func proxyCmd(args []string) {
 			}
 		}
 		if len(newList) == len(cfg.ProxyPool) {
-			fmt.Println("❌ Proxy nicht gefunden.")
-			return
+			return fmt.Errorf("Proxy nicht gefunden")
 		}
 		cfg.ProxyPool = newList
 		if cfg.CurrentProxy >= len(cfg.ProxyPool) {
@@ -267,12 +334,12 @@ func proxyCmd(args []string) {
 		saveConfig(cfg)
 		fmt.Printf("✅ Proxy entfernt: %s\n", args[1])
 	default:
-		fmt.Println("❌ proxy <add|rotate|remove> [url]")
+		return fmt.Errorf("unbekannt: proxy %s", args[0])
 	}
+	return nil
 }
 
-func uaCmd(args []string) {
-	cfg := loadConfig()
+func uaCmdCore(cfg *SwitcherConfig, args []string) error {
 	if len(args) == 0 {
 		fmt.Println("🖥️  User-Agent-Pool:")
 		for i, u := range cfg.UserAgents {
@@ -282,54 +349,50 @@ func uaCmd(args []string) {
 			}
 			fmt.Printf("   %s %s\n", marker, u)
 		}
-		return
+		return nil
 	}
 	switch args[0] {
 	case "add":
 		if len(args) < 2 {
-			fmt.Println("❌ ua add <user_agent_string>")
-			return
+			return fmt.Errorf("ua add <user_agent_string>")
 		}
 		cfg.UserAgents = append(cfg.UserAgents, strings.Join(args[1:], " "))
 		saveConfig(cfg)
 		fmt.Println("✅ User-Agent hinzugefügt.")
 	case "rotate":
 		if len(cfg.UserAgents) == 0 {
-			fmt.Println("❌ Keine User-Agents vorhanden.")
-			return
+			return fmt.Errorf("Keine User-Agents vorhanden")
 		}
-		old := cfg.UserAgents[cfg.CurrentUA%len(cfg.UserAgents)]
 		cfg.CurrentUA = (cfg.CurrentUA + 1) % len(cfg.UserAgents)
 		saveConfig(cfg)
-		fmt.Printf("🔄 UA rotiert: %s → %s\n", old, cfg.UserAgents[cfg.CurrentUA%len(cfg.UserAgents)])
+		fmt.Printf("🔄 User-Agent rotiert.\n")
 	default:
-		fmt.Println("❌ ua <add|rotate>")
+		return fmt.Errorf("unbekannt: ua %s", args[0])
 	}
+	return nil
 }
 
-func rateCmd(args []string) {
-	cfg := loadConfig()
+func rateCmdCore(cfg *SwitcherConfig, args []string) error {
 	if len(args) == 0 {
 		fmt.Printf("⏱️  Aktuelles Rate-Limit: %d req/s\n", cfg.RateLimit)
-		return
+		return nil
 	}
 	if args[0] == "set" && len(args) >= 2 {
 		var newRate int
 		fmt.Sscanf(args[1], "%d", &newRate)
 		if newRate < 1 {
-			fmt.Println("❌ Rate muss >= 1 sein.")
-			return
+			return fmt.Errorf("Rate muss >= 1 sein")
 		}
 		cfg.RateLimit = newRate
 		saveConfig(cfg)
 		fmt.Printf("✅ Rate-Limit auf %d req/s gesetzt.\n", newRate)
-	} else {
-		fmt.Println("❌ rate set <zahl>")
+		return nil
 	}
+	return fmt.Errorf("rate set <zahl>")
 }
 
 // ============================
-// SEARCH & DEEPSEARCH (angepasst mit Proxy/UA/Rate)
+// SEARCH & DEEPSEARCH (mit Logging)
 // ============================
 
 type SearchResult struct {
@@ -341,13 +404,33 @@ type SearchResult struct {
 }
 
 var mockResults = []SearchResult{
-	{"Quantencomputing in Europa", "https://eu.example.com/quantum", 0.92, "EU", "Hier steht Inhalt..."},
+	{"Quantencomputing in Europa", "https://eu.example.com/quantum", 0.92, "EU", "..."},
 	{"US Quantum Initiative", "https://us.example.com/quantum", 0.85, "US", "..."},
 	{"Asiatische Quantenforschung", "https://apac.example.com/quantum", 0.78, "APAC", "..."},
 	{"KI für Quantensimulation", "https://global.example.com/ai-quantum", 0.95, "EU", "..."},
 }
 
-func searchCmd(args []string) {
+func saveSearchResults(results []SearchResult, query string, similar bool) string {
+	os.MkdirAll("logs", 0755)
+	ts := time.Now().Format("20060102_150405")
+	filename := fmt.Sprintf("logs/search_%s.json", ts)
+	data := struct {
+		Query     string         `json:"query"`
+		Similar   bool           `json:"similar"`
+		Results   []SearchResult `json:"results"`
+		Timestamp int64          `json:"timestamp"`
+	}{
+		Query:     query,
+		Similar:   similar,
+		Results:   results,
+		Timestamp: time.Now().Unix(),
+	}
+	jsonData, _ := json.MarshalIndent(data, "", "  ")
+	os.WriteFile(filename, jsonData, 0644)
+	return filename
+}
+
+func searchCmdCore(cfg *SwitcherConfig, args []string) error {
 	fs := flag.NewFlagSet("search", flag.ExitOnError)
 	query := fs.String("query", "", "Suchbegriff")
 	similar := fs.Bool("similar", false, "Artverwandte Suche")
@@ -355,17 +438,11 @@ func searchCmd(args []string) {
 	fs.Parse(args)
 
 	if *query == "" {
-		fmt.Println("❌ --query muss angegeben werden.")
-		return
+		return fmt.Errorf("--query muss angegeben werden")
 	}
 
-	cfg := loadConfig()
 	fmt.Printf("🔍 Suche nach '%s' (Region: %s, Mood: %s)\n", *query, cfg.CurrentRegion, cfg.Mood)
-
-	// Rate-Limiting anwenden
 	waitForRateLimit(cfg)
-
-	// Proxy & UA in der Ausgabe zeigen (in Echt würdest du sie beim HTTP-Request nutzen)
 	proxy := getNextProxy(cfg)
 	ua := getNextUA(cfg)
 	fmt.Printf("   🛡️  Proxy: %s\n", proxy)
@@ -383,7 +460,7 @@ func searchCmd(args []string) {
 	}
 	if len(filtered) == 0 {
 		fmt.Println("⚠️ Keine Treffer.")
-		return
+		return nil
 	}
 	if len(filtered) > *limit {
 		filtered = filtered[:*limit]
@@ -392,22 +469,22 @@ func searchCmd(args []string) {
 	for i, r := range filtered {
 		fmt.Printf("%2d. [%.2f] %s\n   %s\n", i+1, r.Score, r.Title, r.URL)
 	}
+	filename := saveSearchResults(filtered, *query, *similar)
+	fmt.Printf("💾 Ergebnisse gespeichert in %s\n", filename)
+	return nil
 }
 
-func deepsearchCmd(args []string) {
+func deepsearchCmdCore(cfg *SwitcherConfig, args []string) error {
 	fs := flag.NewFlagSet("deepsearch", flag.ExitOnError)
 	prompt := fs.String("prompt", "", "Anfrage")
 	auto := fs.Bool("auto", false, "Autonom harvesten")
 	fs.Parse(args)
 
 	if *prompt == "" {
-		fmt.Println("❌ --prompt erforderlich.")
-		return
+		return fmt.Errorf("--prompt erforderlich")
 	}
-	cfg := loadConfig()
-	fmt.Printf("🧠 DEEPSEARCH: '%s' (Mood: %s)\n", *prompt, cfg.Mood)
 
-	// Rate-Limiting
+	fmt.Printf("🧠 DEEPSEARCH: '%s' (Mood: %s)\n", *prompt, cfg.Mood)
 	waitForRateLimit(cfg)
 	proxy := getNextProxy(cfg)
 	ua := getNextUA(cfg)
@@ -441,7 +518,7 @@ func deepsearchCmd(args []string) {
 	}
 	if len(unique) == 0 {
 		fmt.Println("⚠️ Keine Quellen.")
-		return
+		return nil
 	}
 	fmt.Println("\n📊 TOP-TREFFER (Ω-33):")
 	for i, r := range unique {
@@ -449,26 +526,100 @@ func deepsearchCmd(args []string) {
 	}
 	if *auto {
 		fmt.Println("🚀 Autonomes Harvesting gestartet...")
+		harvested := []SearchResult{}
 		for _, r := range unique {
 			if r.Score > 0.8 {
 				fmt.Printf("   ⚡ Scrape: %s (via %s)\n", r.URL, proxy)
-				// Hier: scrapeAndStore(r.URL, proxy, ua)
+				harvested = append(harvested, r)
 			}
 		}
-		fmt.Println("✅ Fertig.")
+		filename := saveSearchResults(harvested, *prompt, true)
+		fmt.Printf("💾 Geharvestete Daten gespeichert in %s\n", filename)
+	} else {
+		filename := saveSearchResults(unique, *prompt, true)
+		fmt.Printf("💾 Suchergebnisse gespeichert in %s\n", filename)
 	}
+	return nil
 }
 
 // ============================
-// INTERAKTIVE SHELL (erweitert)
+// STATUS / LIST / HELP
+// ============================
+
+func printStatus(cfg *SwitcherConfig) {
+	fmt.Printf("\n📍 REGION:     [%s]\n", cfg.CurrentRegion)
+	fmt.Printf("🔑 Black Key:  %s\n", maskString(cfg.BlackKey, 4))
+	fmt.Printf("🎭 Mood:       %s\n", cfg.Mood)
+	fmt.Printf("🌐 Proxy-Pool: %d Proxies (aktuell: %s)\n", len(cfg.ProxyPool), getCurrentProxyString(cfg))
+	fmt.Printf("🖥️  User-Agents: %d (aktuell: %s)\n", len(cfg.UserAgents), getCurrentUAString(cfg))
+	fmt.Printf("⏱️  Rate-Limit:  %d req/s\n", cfg.RateLimit)
+	if profile, ok := cfg.Profiles[cfg.CurrentRegion]; ok {
+		for k, v := range profile.(map[string]interface{}) {
+			fmt.Printf("   %s = %v\n", k, v)
+		}
+	}
+	fmt.Println(strings.Repeat("━", 50))
+}
+
+func maskString(s string, show int) string {
+	if len(s) <= show {
+		return s
+	}
+	return s[:show] + strings.Repeat("•", len(s)-show)
+}
+
+func listProfiles(cfg *SwitcherConfig) {
+	fmt.Println("\n🌍 REGIONEN:")
+	for name := range cfg.Profiles {
+		marker := " "
+		if name == cfg.CurrentRegion {
+			marker = "▶"
+		}
+		fmt.Printf("   %s %s\n", marker, name)
+	}
+	fmt.Println(strings.Repeat("━", 50))
+}
+
+func printHelp() {
+	fmt.Println(`
+🏴‍☠️  BLACK-SIX DATAHANDLER v3.0 – mit zentralem Main-Hammer
+
+Usage:
+  datahandler [command] [flags] [args]
+  datahandler --debug   aktiviert Debug-Ausgaben
+
+Commands:
+  switch <EU|US|APAC>      Region wechseln
+  status                   Status anzeigen
+  list                     Regionen auflisten
+  mood <aggressive|cautious|normal>
+  key <neuer_key>          Black Key setzen
+  search --query "text"    Suche (--similar, --limit)
+  deepsearch --prompt "text" KI-Suche (--auto)
+  proxy                    Proxy-Pool anzeigen
+  proxy add <url>          Proxy hinzufügen
+  proxy rotate             Nächsten Proxy nutzen
+  proxy remove <url>       Proxy entfernen
+  ua                       User-Agent-Pool anzeigen
+  ua add <ua>              User-Agent hinzufügen
+  ua rotate                Nächsten UA nutzen
+  rate set <zahl>          Rate-Limit (req/s) setzen
+  help                     Diese Hilfe
+
+Ohne Argumente → interaktive Shell.
+Jeder Befehl wird automatisch mit dem Black-Footer committed.
+`)
+}
+
+// ============================
+// INTERAKTIVE SHELL (mit Hammer)
 // ============================
 
 func interactiveShell() {
 	cfg := loadConfig()
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Println("\n🦾 Black-Six Datahoarder – Interaktive Shell v2.0")
-	fmt.Println("   Befehle: switch, status, list, mood, key, search, deepsearch,")
-	fmt.Println("            proxy, ua, rate, exit")
+	fmt.Println("\n🦾 Black-Six Datahandler – Interaktive Shell (Hammer aktiv)")
+	fmt.Println("   Befehle: switch, status, list, mood, key, search, deepsearch, proxy, ua, rate, exit")
 	fmt.Println(strings.Repeat("━", 50))
 
 	for {
@@ -493,7 +644,9 @@ func interactiveShell() {
 				fmt.Println("❌ switch <EU|US|APAC>")
 				continue
 			}
-			switchProfile(cfg, parts[1])
+			ExecuteWithHammer("switch", parts[1:], func() error {
+				return switchProfileCore(cfg, parts[1])
+			})
 		case "status":
 			printStatus(cfg)
 		case "list":
@@ -503,23 +656,37 @@ func interactiveShell() {
 				fmt.Println("❌ mood <aggressive|cautious|normal>")
 				continue
 			}
-			setMood(cfg, parts[1])
+			ExecuteWithHammer("mood", parts[1:], func() error {
+				return setMoodCore(cfg, parts[1])
+			})
 		case "key":
 			if len(parts) < 2 {
 				fmt.Println("❌ key <neuer_key>")
 				continue
 			}
-			setBlackKey(cfg, parts[1])
-		case "search":
-			searchCmd(parts[1:])
-		case "deepsearch":
-			deepsearchCmd(parts[1:])
+			ExecuteWithHammer("key", parts[1:], func() error {
+				return setBlackKeyCore(cfg, parts[1])
+			})
 		case "proxy":
-			proxyCmd(parts[1:])
+			ExecuteWithHammer("proxy", parts[1:], func() error {
+				return proxyCmdCore(cfg, parts[1:])
+			})
 		case "ua":
-			uaCmd(parts[1:])
+			ExecuteWithHammer("ua", parts[1:], func() error {
+				return uaCmdCore(cfg, parts[1:])
+			})
 		case "rate":
-			rateCmd(parts[1:])
+			ExecuteWithHammer("rate", parts[1:], func() error {
+				return rateCmdCore(cfg, parts[1:])
+			})
+		case "search":
+			ExecuteWithHammer("search", parts[1:], func() error {
+				return searchCmdCore(cfg, parts[1:])
+			})
+		case "deepsearch":
+			ExecuteWithHammer("deepsearch", parts[1:], func() error {
+				return deepsearchCmdCore(cfg, parts[1:])
+			})
 		default:
 			fmt.Printf("❌ Unbekannt: %s\n", cmd)
 			fmt.Println("   Verfügbar: switch, status, list, mood, key, search, deepsearch, proxy, ua, rate, exit")
@@ -528,131 +695,82 @@ func interactiveShell() {
 }
 
 // ============================
-// ALTE KERNLOGIK (unverändert)
+// MAIN – EINZIGER EINSTIEGSPUNKT
 // ============================
 
-func listProfiles(cfg *SwitcherConfig) {
-	fmt.Println("\n🌍 REGIONEN:")
-	for name := range cfg.Profiles {
-		marker := " "
-		if name == cfg.CurrentRegion {
-			marker = "▶"
-		}
-		fmt.Printf("   %s %s\n", marker, name)
-	}
-	fmt.Println(strings.Repeat("━", 50))
-}
-
-func switchProfile(cfg *SwitcherConfig, target string) {
-	target = strings.ToUpper(target)
-	if _, ok := cfg.Profiles[target]; !ok {
-		fmt.Printf("❌ Region '%s' nicht gefunden.\n", target)
-		return
-	}
-	cfg.CurrentRegion = target
-	saveConfig(cfg)
-	profile := cfg.Profiles[target].(map[string]interface{})
-	for k, v := range profile {
-		os.Setenv(k, v.(string))
-	}
-	fmt.Printf("✅ Region zu '%s' gewechselt.\n", target)
-	printStatus(cfg)
-}
-
-func setMood(cfg *SwitcherConfig, mood string) {
-	mood = strings.ToLower(mood)
-	if mood != "aggressive" && mood != "cautious" && mood != "normal" {
-		fmt.Println("❌ Mood muss aggressive, cautious oder normal sein.")
-		return
-	}
-	cfg.Mood = mood
-	saveConfig(cfg)
-	fmt.Printf("🎭 Mood auf '%s' gesetzt.\n", mood)
-}
-
-func setBlackKey(cfg *SwitcherConfig, key string) {
-	if len(key) < 8 {
-		fmt.Println("❌ Key zu kurz (min. 8 Zeichen).")
-		return
-	}
-	cfg.BlackKey = key
-	saveConfig(cfg)
-	fmt.Println("🔑 Black Key aktualisiert.")
-}
-
-func printHelp() {
-	fmt.Println(`
-🏴‍☠️  BLACK-SIX DATAHOARDER v2.0
-
-Usage:
-  datahoarder [command] [flags] [args]
-
-Commands:
-  switch <EU|US|APAC>      Region wechseln
-  status                   Status anzeigen (mit Proxy/UA/Rate)
-  list                     Regionen auflisten
-  mood <mood>              aggressive|cautious|normal
-  key <key>                Black Key setzen
-  search --query "text"    Suche (--similar, --limit)
-  deepsearch --prompt "text" KI-Suche (--auto)
-  proxy                    Proxy-Pool anzeigen
-  proxy add <url>          Proxy hinzufügen
-  proxy rotate             Nächsten Proxy nutzen
-  proxy remove <url>       Proxy entfernen
-  ua                       User-Agent-Pool anzeigen
-  ua add <ua>              User-Agent hinzufügen
-  ua rotate                Nächsten UA nutzen
-  rate set <zahl>          Rate-Limit (req/s) setzen
-  help                     Diese Hilfe
-
-Ohne Argumente → interaktive Shell.
-`)
-}
-
 func main() {
+	// Debug-Flag global entfernen
+	for i, arg := range os.Args {
+		if arg == "--debug" {
+			debugMode = true
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+			break
+		}
+	}
+
 	if len(os.Args) < 2 {
 		interactiveShell()
 		return
 	}
 
 	cfg := loadConfig()
-	switch os.Args[1] {
+	cmd := os.Args[1]
+	args := os.Args[2:]
+
+	// JEDER Befehl wird durch den Hammer gejagt
+	switch cmd {
 	case "switch":
-		if len(os.Args) < 3 {
+		if len(args) < 1 {
 			fmt.Println("❌ switch <EU|US|APAC>")
 			return
 		}
-		switchProfile(cfg, os.Args[2])
+		ExecuteWithHammer("switch", args, func() error {
+			return switchProfileCore(cfg, args[0])
+		})
 	case "status":
 		printStatus(cfg)
 	case "list":
 		listProfiles(cfg)
 	case "mood":
-		if len(os.Args) < 3 {
+		if len(args) < 1 {
 			fmt.Println("❌ mood <aggressive|cautious|normal>")
 			return
 		}
-		setMood(cfg, os.Args[2])
+		ExecuteWithHammer("mood", args, func() error {
+			return setMoodCore(cfg, args[0])
+		})
 	case "key":
-		if len(os.Args) < 3 {
+		if len(args) < 1 {
 			fmt.Println("❌ key <neuer_key>")
 			return
 		}
-		setBlackKey(cfg, os.Args[2])
-	case "search":
-		searchCmd(os.Args[2:])
-	case "deepsearch":
-		deepsearchCmd(os.Args[2:])
+		ExecuteWithHammer("key", args, func() error {
+			return setBlackKeyCore(cfg, args[0])
+		})
 	case "proxy":
-		proxyCmd(os.Args[2:])
+		ExecuteWithHammer("proxy", args, func() error {
+			return proxyCmdCore(cfg, args)
+		})
 	case "ua":
-		uaCmd(os.Args[2:])
+		ExecuteWithHammer("ua", args, func() error {
+			return uaCmdCore(cfg, args)
+		})
 	case "rate":
-		rateCmd(os.Args[2:])
+		ExecuteWithHammer("rate", args, func() error {
+			return rateCmdCore(cfg, args)
+		})
+	case "search":
+		ExecuteWithHammer("search", args, func() error {
+			return searchCmdCore(cfg, args)
+		})
+	case "deepsearch":
+		ExecuteWithHammer("deepsearch", args, func() error {
+			return deepsearchCmdCore(cfg, args)
+		})
 	case "help", "-h", "--help":
 		printHelp()
 	default:
-		fmt.Printf("❌ Unbekannt: %s\n", os.Args[1])
+		fmt.Printf("❌ Unbekannter Befehl: %s\n", cmd)
 		printHelp()
 	}
 }
