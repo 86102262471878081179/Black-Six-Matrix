@@ -31,7 +31,107 @@ User Input (Web/Email/Notebook)
     ↓
 [audit_ledger.db] ← Immutable Decision Log
 ```
+So damit du einen Überblick bekommst 
+Auf dem Foto Github zur Zeit/-
 
+
+
+Aber so sollte das sein/:
+
+Black-Six-Matrix/
+│
+├── 📁 /architecture
+│   ├── SYSTEM_OVERVIEW.md          # Die komplette Architektur-Dokumentation
+│   ├── SCHEMA.md                   # Alle 7 Schichten, 12 Module
+│   └── COMPONENT_MAP.md            # Welche Datei macht was?
+│
+├── 📁 /core
+│   ├── /runtime-governance         # Zero-Trust & Runtime Control
+│   │   ├── judgment_engine.go
+│   │   ├── policy_engine.go
+│   │   └── rule_validator.go
+│   │
+│   ├── /mesh-security              # Multi-Agent Isolation
+│   │   ├── mtls_handler.go
+│   │   ├── token_verifier.go
+│   │   └── mesh_guard.go
+│   │
+│   ├── /cosmic-memory              # WORM-Ledger & Audit
+│   │   ├── ledger_writer.go
+│   │   ├── hash_validator.go
+│   │   └── audit_trail.go
+│   │
+│   └── /deepseek-engine            # KI-Reasoning & Maschinenraum
+│       ├── kernel.go
+│       ├── reasoning_core.go
+│       └── policy_monitor.go
+│
+├── 📁 /products                    # Die 12 Kernprodukte
+│   ├── /ai-governance-platform
+│   ├── /cybersecurity-suite
+│   ├── /legal-tech-suite
+│   ├── /quantum-orchestrator
+│   ├── /compliance-engine
+│   ├── /threat-intelligence
+│   ├── /sovereign-cloud
+│   ├── /data-fabric
+│   ├── /regulatory-fabric
+│   ├── /evidence-fabric
+│   ├── /policy-fabric
+│   └── /orchestration-fabric
+│
+├── 📁 /agents                      # Die KI-Agenten (bis zu 458)
+│   ├── /tier-1-governance          # Compliance-Agenten
+│   ├── /tier-2-security            # Security-Agenten
+│   ├── /tier-3-analysis            # Analysis-Agenten
+│   └── agent_registry.json         # Index aller 458 Agenten
+│
+├── 📁 /infrastructure
+│   ├── /kubernetes
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── /helm-charts
+│   ├── /docker
+│   │   └── Dockerfile
+│   └── /terraform
+│       └── main.tf
+│
+├── 📁 /frontend
+│   ├── /vercel-app
+│   │   ├── /pages/api
+│   │   ├── /components
+│   │   └── package.json
+│   └── /dashboard
+│       └── index.html
+│
+├── 📁 /tests
+│   ├── /unit
+│   ├── /integration
+│   └── /security
+│
+├── 📁 /docs
+│   ├── API_REFERENCE.md
+│   ├── QUICKSTART.md
+│   ├── COMPLIANCE_GUIDE.md
+│   └── DEPLOYMENT.md
+│
+├── 📁 /examples
+│   ├── /compliance-scenarios
+│   ├── /security-cases
+│   └── /agent-workflows
+│
+├── 📁 /assets
+│   ├── /images
+│   ├── /logos
+│   └── /branding
+│
+├── go.mod
+├── go.sum
+├── .github/
+│   └── /workflows                  # GitHub Actions CI/CD
+│
+├── README.md                       # Deine Hauptseite (5min Überblick)
+└── ARCHITECTURE.md                 # Detaillierte Tech-Docs
 ---
 
 ## 🚀 Quick Start
