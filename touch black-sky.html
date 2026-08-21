@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏴‍☠️ BLACK-SIX MATRIX — OMNI COMMAND CENTER</title>
+    <style>
+        /* ========================
+           GLOBAL RESET & FONTS
+        ======================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121e;
+            --bg-card: #1a1a2e;
+            --border-glow: #00ffc8;
+            --text-primary: #e0e0ff;
+            --text-accent: #00ffc8;
+            --text-danger: #ff2d55;
+            --text-warning: #ffb800;
+            --shadow-glow: 0 0 30px rgba(0, 255, 200, 0.15);
+            --font-display: 'Orbitron', monospace;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image:
+                radial-gradient(ellipse at 10% 20%, rgba(0, 255, 200, 0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 90% 80%, rgba(0, 255, 200, 0.03) 0%, transparent 60%);
+        }
+
+        /* ========================
+           MAIN CONTAINER
+        ======================== */
+        .matrix-dashboard {
+            max-width: 1400px;
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            border-radius: 32px;
+            padding: 30px 35px;
+            box-shadow: var(--shadow-glow), inset 0 0 100px rgba(0, 255, 200, 0.02);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ========================
+           HEADER
+        ======================== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(0, 255, 200, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 200, 0.4));
+        }
+
+        .logo-text h1 {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #00ffc8, #00b8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+
+        .logo-text .sub {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            color: rgba(0, 255, 200, 0.5);
+            text-transform: uppercase;
+            -webkit-text-fill-color: rgba(0, 255, 200, 0.5);
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 255, 200, 0.06);
+            padding: 6px 16px 6px 12px;
+            border-radius: 100px;
+            border: 1px solid rgba(0, 255, 200, 0.15);
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ffc8;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .status-dot.warning {
+            background: #ffb800;
+        }
+
+        .status-dot.danger {
+            background: #ff2d55;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        .header-time {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: var(--font-mono);
+        }
+
+        /* ========================
+           GRID SYSTEM
+        ======================== */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 28px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* ========================
+           CARDS
+        ======================== */
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px 22px;
+            border: 1px solid rgba(0, 255, 200, 0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 255, 200, 0.2);
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .card-glow::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 200, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            animation: rotate-glow 30s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.2);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-value {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #00ffc8, #00b8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-value.danger {
+            background: linear-gradient(135deg, #ff2d55, #ff6b8a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-value.warning {
+            background: linear-gradient(135deg, #ffb800, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-sub {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.25);
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-badge {
+            background: rgba(0, 255, 200, 0.08);
+            padding: 2px 12px;
+            border-radius: 100px;
+            font-size: 0.55rem;
+            letter-spacing: 1px;
+            color: rgba(0, 255, 200, 0.6);
+            border: 1px solid rgba(0, 255, 200, 0.1);
+        }
+
+        /* ========================
+           AGENT LIST
+        ======================== */
+        .agent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .agent-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            border-left: 2px solid rgba(0, 255, 200, 0.2);
+            transition: all 0.2s;
+        }
+
+        .agent-item:hover {
+            background: rgba(0, 255, 200, 0.05);
+            border-left-color: #00ffc8;
+        }
+
+        .agent-name {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .agent-status .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ffc8;
+            display: inline-block;
+        }
+        .agent-status .dot.idle {
+            background: #ffb800;
+        }
+        .agent-status .dot.offline {
+            background: #ff2d55;
+        }
+
+        /* ========================
+           REGION SWITCHER (Live)
+        ======================== */
+        .region-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .region-btn {
+            background: rgba(0, 255, 200, 0.04);
+            border: 1px solid rgba(0, 255, 200, 0.1);
+            color: rgba(255, 255, 255, 0.3);
+            padding: 8px 22px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .region-btn:hover {
+            background: rgba(0, 255, 200, 0.1);
+            color: #fff;
+            border-color: rgba(0, 255, 200, 0.3);
+        }
+
+        .region-btn.active {
+            background: rgba(0, 255, 200, 0.15);
+            border-color: #00ffc8;
+            color: #00ffc8;
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.08);
+        }
+
+        /* ========================
+           CONSOLE / LOG
+        ======================== */
+        .console-log {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 255, 200, 0.05);
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .console-log .log-time {
+            color: rgba(0, 255, 200, 0.3);
+            margin-right: 12px;
+        }
+
+        .console-log .log-info {
+            color: rgba(0, 255, 200, 0.6);
+        }
+        .console-log .log-success {
+            color: #00ffc8;
+        }
+        .console-log .log-error {
+            color: #ff2d55;
+        }
+        .console-log .log-warn {
+            color: #ffb800;
+        }
+
+        .console-log::-webkit-scrollbar {
+            width: 3px;
+        }
+        .console-log::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .console-log::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 200, 0.2);
+            border-radius: 10px;
+        }
+
+        /* ========================
+           RESPONSIVE
+        ======================== */
+        @media (max-width: 600px) {
+            .matrix-dashboard {
+                padding: 16px;
+            }
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+            .card-value {
+                font-size: 1.6rem;
+            }
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ========================
+           SCROLLBAR GLOBAL
+        ======================== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 200, 0.2);
+            border-radius: 10px;
+        }
+
+        /* ========================
+           ANIMATIONEN
+        ======================== */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="matrix-dashboard">
+
+        <!-- ===== HEADER ===== -->
+        <header class="dashboard-header">
+            <div class="logo-area">
+                <span class="logo-icon">🏴‍☠️</span>
+                <div class="logo-text">
+                    <h1>BLACK-SIX MATRIX</h1>
+                    <div class="sub">Ω-33 TRUST ENGINE — OMNI COMMAND CENTER</div>
+                </div>
+            </div>
+            <div class="header-status">
+                <div class="status-pill">
+                    <span class="status-dot"></span>
+                    <span>SYSTEM ONLINE</span>
+                </div>
+                <div class="status-pill">
+                    <span>🌍</span>
+                    <span id="current-region-display">EU</span>
+                </div>
+                <div class="status-pill">
+                    <span>🎭</span>
+                    <span id="current-mood-display">normal</span>
+                </div>
+                <div class="header-time" id="header-clock">--:--:--</div>
+            </div>
+        </header>
+
+        <!-- ===== STATS ROW ===== -->
+        <div class="grid-4 fade-in delay-1">
+            <div class="card">
+                <div class="card-title">
+                    <span>🤖 Agenten</span>
+                    <span class="card-badge">aktiv</span>
+                </div>
+                <div class="card-value">458</div>
+                <div class="card-sub">davon 412 online · 46 im Standby</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <span>📊 Ω-33 Trust Score</span>
+                    <span class="card-badge">global</span>
+                </div>
+                <div class="card-value warning">94.7</div>
+                <div class="card-sub">⏫ +2.3 seit letztem Zyklus</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <span>📦 Geharvestet</span>
+                    <span class="card-badge">heute</span>
+                </div>
+                <div class="card-value">12.4k</div>
+                <div class="card-sub">Dokumente · 847 MB</div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <span>⚡ Entscheidungen</span>
+                    <span class="card-badge">letzte 24h</span>
+                </div>
+                <div class="card-value">3,847</div>
+                <div class="card-sub">⏱️ Ø 12ms Latenz</div>
+            </div>
+        </div>
+
+        <!-- ===== MAIN GRID: AGENTS + REGION ===== -->
+        <div class="grid-2 fade-in delay-2">
+            <!-- Linke Spalte: Agenten -->
+            <div class="card">
+                <div class="card-title">
+                    <span>🤖 AKTIVE AGENTEN</span>
+                    <span class="card-badge">Top 8</span>
+                </div>
+                <div class="agent-list">
+                    <div class="agent-item">
+                        <span class="agent-name">🧠 OMNI-CORE-01</span>
+                        <span class="agent-status"><span class="dot"></span> entscheidet</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">🌐 SCRAPE-EU-07</span>
+                        <span class="agent-status"><span class="dot"></span> harvestet</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">🔍 DEEPSEARCH-12</span>
+                        <span class="agent-status"><span class="dot"></span> analysiert</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">📊 MONITOR-04</span>
+                        <span class="agent-status"><span class="dot idle"></span> idle</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">🛡️ ZERO-TRUST-09</span>
+                        <span class="agent-status"><span class="dot"></span> validiert</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">⚡ JUDGEMENT-22</span>
+                        <span class="agent-status"><span class="dot"></span> bewertet</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">🧩 CLUSTER-03</span>
+                        <span class="agent-status"><span class="dot idle"></span> idle</span>
+                    </div>
+                    <div class="agent-item">
+                        <span class="agent-name">📦 EXPORT-18</span>
+                        <span class="agent-status"><span class="dot offline"></span> offline</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte: Region & Mood -->
+            <div class="card">
+                <div class="card-title">
+                    <span>🌍 REGION & MOOD</span>
+                    <span class="card-badge">aktiv</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size:0.6rem; color:rgba(255,255,255,0.2); letter-spacing:1px; margin-bottom:4px;">AKTUELLE REGION</div>
+                    <div style="font-family:var(--font-display); font-size:1.8rem; background:linear-gradient(135deg,#00ffc8,#00b8ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;" id="region-display-main">EU</div>
+                </div>
+
+                <div class="region-selector">
+                    <button class="region-btn active" data-region="EU" onclick="switchRegion('EU')">🇪🇺 EU</button>
+                    <button class="region-btn" data-region="US" onclick="switchRegion('US')">🇺🇸 US</button>
+                    <button class="region-btn" data-region="APAC" onclick="switchRegion('APAC')">🌏 APAC</button>
+                </div>
+
+                <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(0,255,200,0.06);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.6rem; color:rgba(255,255,255,0.2); letter-spacing:1px;">🎭 MOOD</span>
+                        <span style="font-family:var(--font-display); font-size:0.9rem; color:rgba(255,255,255,0.6);" id="mood-display-main">normal</span>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                        <button class="region-btn" style="padding:4px 14px; font-size:0.6rem;" onclick="setMood('aggressive')">🔥 aggressive</button>
+                        <button class="region-btn" style="padding:4px 14px; font-size:0.6rem; border-color:rgba(0,255,200,0.15);" onclick="setMood('normal')">⚖️ normal</button>
+                        <button class="region-btn" style="padding:4px 14px; font-size:0.6rem; border-color:rgba(255,184,0,0.2);" onclick="setMood('cautious')">🛡️ cautious</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CONSOLE LOG ===== -->
+        <div class="card fade-in delay-3">
+            <div class="card-title">
+                <span>📟 SYSTEM CONSOLE</span>
+                <span class="card-badge">live</span>
+            </div>
+            <div class="console-log" id="console-log">
+                <div><span class="log-time">[18:58:12]</span> <span class="log-info">🔄 OMNI-CORE gestartet · 458 Agenten initialisiert</span></div>
+                <div><span class="log-time">[18:58:15]</span> <span class="log-success">✅ Region EU aktiv · Ω-33 Score: 94.7</span></div>
+                <div><span class="log-time">[18:58:22]</span> <span class="log-info">📦 Harvesting-Pipeline läuft · 12.4k Dokumente</span></div>
+                <div><span class="log-time">[18:58:30]</span> <span class="log-warn">⚠️ Agent EXPORT-18 offline · Neuverbindung in 30s</span></div>
+                <div><span class="log-time">[18:58:45]</span> <span class="log-success">✅ DeepSearch abgeschlossen · 47 neue Quellen</span></div>
+                <div><span class="log-time">[18:59:01]</span> <span class="log-info">🧠 ReasoningCore: Entscheidung #3847 getroffen</span></div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div style="margin-top: 20px; text-align: center; font-size:0.55rem; color:rgba(255,255,255,0.08); letter-spacing:2px; border-top:1px solid rgba(0,255,200,0.04); padding-top:16px;">
+            🏴‍☠️ BLACK-SIX MATRIX v∞ · Ω-33 TRUST ENGINE · Φ_LOCKED_ABSOLUTE
+        </div>
+
+    </div>
+
+    <script>
+        // ========================================
+        // LIVE CLOCK
+        // ========================================
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('header-clock').textContent = now.toTimeString().slice(0, 8);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ========================================
+        // REGION SWITCHER (Visual + Log)
+        // ========================================
+        function switchRegion(region) {
+            // Buttons aktualisieren
+            document.querySelectorAll('.region-btn[data-region]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.region === region);
+            });
+
+            // Anzeige aktualisieren
+            document.getElementById('region-display-main').textContent = region;
+            document.getElementById('current-region-display').textContent = region;
+
+            // Log-Eintrag
+            addLog(`🌍 Region zu ${region} gewechselt`, 'success');
+        }
+
+        // ========================================
+        // MOOD SETTER
+        // ========================================
+        function setMood(mood) {
+            const moodMap = {
+                'aggressive': '🔥 aggressive',
+                'normal': '⚖️ normal',
+                'cautious': '🛡️ cautious'
+            };
+            document.getElementById('mood-display-main').textContent = mood;
+            document.getElementById('current-mood-display').textContent = mood;
+            addLog(`🎭 Mood auf ${moodMap[mood]} gesetzt`, 'info');
+        }
+
+        // ========================================
+        // CONSOLE LOG
+        // ========================================
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('console-log');
+            const time = new Date().toTimeString().slice(0, 8);
+            const cls = type === 'success' ? 'log-success' :
+                type === 'error' ? 'log-error' :
+                type === 'warn' ? 'log-warn' :
+                'log-info';
+            const entry = document.createElement('div');
+            entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="${cls}">${message}</span>`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+
+            // Max 100 Einträge
+            while (log.children.length > 100) {
+                log.removeChild(log.firstChild);
+            }
+        }
+
+        // ========================================
+        // SIMULIERTE LIVE-LOGS (alle 8s)
+        // ========================================
+        const logMessages = [
+            { msg: '🧠 ReasoningCore: Entscheidung getroffen', type: 'info' },
+            { msg: '📊 Ω-33 Score: 94.7 · stabil', type: 'success' },
+            { msg: '🌐 SCRAPE-EU-07: 237 neue Dokumente', type: 'info' },
+            { msg: '⚡ JUDGEMENT-22: Anfrage bewertet', type: 'success' },
+            { msg: '🔄 Agenten-Sync: 412 online · 46 idle', type: 'info' },
+            { msg: '📦 Export-Pipeline: 1.2 GB bereit', type: 'warn' },
+        ];
+
+        let logIndex = 0;
+        setInterval(() => {
+            const entry = logMessages[logIndex % logMessages.length];
+            addLog(entry.msg, entry.type);
+            logIndex++;
+        }, 8000);
+    </script>
+
+</body>
+</html>
