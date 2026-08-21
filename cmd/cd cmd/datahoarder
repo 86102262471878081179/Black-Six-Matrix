@@ -1,0 +1,16 @@
+# 1. Klonen
+git clone https://github.com/86102262471878081179/Black-Six-Matrix.git
+cd Black-Six-Matrix
+
+# 2. Datahandler bauen
+cd cmd/datahoarder
+go build -o datahandler.exe main.go
+
+# 3. Testen
+./datahandler.exe --debug status
+
+# 4. Region wechseln (mit Autocommit)
+./datahandler.exe --debug switch US
+
+# 5. Black-Sky öffnen
+start ..\..\black-sky.html
