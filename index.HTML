@@ -3,6 +3,824 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – ULTIMATIVE KONSOLE</title>
+    <style>
+        /* ================================================================
+           BLACK SIX MATRIX – ULTIMATIVE KONSOLE
+           PIANO BLACK (#0A0A0F) + DARK RED (#991B2D) + GOLD (#C0A050)
+           KEIN NEON – NUR ELEGANZ & MACHT
+           ================================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #06060A;
+            --bg-elev: #0E0E16;
+            --bg-card: rgba(12, 12, 18, 0.88);
+            --bg-card-hover: rgba(18, 18, 28, 0.95);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-bright: rgba(153, 27, 45, 0.4);
+            --text-primary: #EAEAEA;
+            --text-muted: #8A8A9A;
+            --text-dark: #5A5A6A;
+            --accent-red: #991B2D;
+            --accent-red-bright: #B3203A;
+            --accent-red-glow: rgba(153, 27, 45, 0.12);
+            --accent-gold: #C0A050;
+            --accent-silver: #C0C0C0;
+            --shadow-card: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px inset var(--border-subtle);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --font-mono: 'Courier New', monospace;
+            --font-sans: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-deep);
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(153,27,45,0.05) 0%, transparent 60%),
+                              radial-gradient(ellipse at 80% 80%, rgba(153,27,45,0.03) 0%, transparent 50%);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ================================================================
+           HINTERGRUND-RAUSCHEN
+           ================================================================ */
+        .bg-noise {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+
+        /* ================================================================
+           SCROLLBAR – EDEL
+           ================================================================ */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-red); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-red-bright); }
+
+        /* ================================================================
+           TOPBAR – PIANO BLACK
+           ================================================================ */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 32px;
+            background: rgba(6,6,10,0.92);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .topbar .brand {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-silver);
+        }
+        .topbar .brand span { color: var(--accent-red-bright); }
+        .topbar nav { display: flex; gap: 24px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .topbar nav a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .topbar nav a:hover { color: var(--accent-red-bright); }
+        .topbar .status-led {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .topbar .led {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 12px #00ff8866;
+            animation: pulse-led 2s infinite;
+        }
+        @keyframes pulse-led {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @media (max-width: 760px) {
+            .topbar nav { display: none; }
+            .topbar { padding: 12px 20px; }
+        }
+
+        /* ================================================================
+           HERO – DIE VERSIEGELUNG
+           ================================================================ */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+        }
+        .hero .sigil {
+            font-family: var(--font-mono);
+            font-size: 2.4rem;
+            letter-spacing: 12px;
+            color: var(--accent-red);
+            opacity: 0.6;
+            margin-bottom: 16px;
+            font-weight: 700;
+            cursor: default;
+            user-select: none;
+        }
+        .hero h1 {
+            font-size: clamp(2.4rem, 7vw, 4.8rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+        .hero h1 span { color: var(--accent-red-bright); }
+        .hero .sub {
+            font-size: 1.0rem;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 auto 8px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .hero .meta {
+            font-size: 0.7rem;
+            color: var(--text-dark);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .hero .meta b { color: var(--accent-silver); }
+
+        /* ================================================================
+           TRUST-BAR
+           ================================================================ */
+        .trust {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px 32px;
+            padding: 18px 20px;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            margin: 10px 0 30px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .trust b { color: var(--accent-silver); }
+        .trust .red { color: var(--accent-red-bright); }
+
+        /* ================================================================
+           MAIN GRID
+           ================================================================ */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        /* ================================================================
+           PANEL – KARTEN
+           ================================================================ */
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-card);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .panel:hover {
+            border-color: var(--border-bright);
+            background: var(--bg-card-hover);
+        }
+        .panel .title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-silver);
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 8px;
+        }
+        .panel .title span { color: var(--accent-red-bright); }
+
+        /* ================================================================
+           TERMINAL
+           ================================================================ */
+        .terminal {
+            background: #000000;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-silver);
+            line-height: 1.8;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 6px;
+        }
+        .terminal .prompt { color: var(--accent-red-bright); }
+        .terminal .ok { color: #00ff88; }
+        .terminal .dim { color: var(--text-dark); }
+        .terminal .gold { color: var(--accent-gold); }
+
+        /* ================================================================
+           PILLAR TABLE
+           ================================================================ */
+        .pillar-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .pillar-table th {
+            background: rgba(153,27,45,0.12);
+            color: var(--accent-silver);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .pillar-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            vertical-align: top;
+        }
+        .pillar-table tr:last-child td { border-bottom: none; }
+        .pillar-table td:first-child {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+        }
+        .pillar-table td:last-child {
+            color: var(--text-primary);
+            font-size: 0.75rem;
+        }
+
+        /* ================================================================
+           CLUSTER GRID
+           ================================================================ */
+        .cluster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .cluster-node {
+            padding: 10px 6px;
+            border-radius: 8px;
+            background: var(--bg-deep);
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+        .cluster-node.online { border-color: #00ff88; color: #00ff88; box-shadow: 0 0 12px #00ff8822; }
+        .cluster-node.secure { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .cluster-node.isolated { border-color: #ff8800; color: #ff8800; }
+        .cluster-node.error { border-color: var(--accent-red-bright); color: var(--accent-red-bright); }
+        .cluster-node .status {
+            display: block;
+            font-size: 0.5rem;
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        /* ================================================================
+           METRIK
+           ================================================================ */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.78rem;
+        }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-row .label { color: var(--text-muted); }
+        .metric-row .value { color: var(--text-primary); font-weight: 600; font-family: var(--font-mono); }
+
+        /* ================================================================
+           FEATURES LIST
+           ================================================================ */
+        .feature-list {
+            list-style: none;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .feature-list li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+        }
+        .feature-list li::before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            color: var(--accent-red-bright);
+            font-size: 0.5rem;
+            top: 5px;
+        }
+
+        /* ================================================================
+           YGGDRASIL SVG
+           ================================================================ */
+        .ygg-svg {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ================================================================
+           RESPONSIVE
+           ================================================================ */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; letter-spacing: 2px; }
+            .hero .sigil { font-size: 1.4rem; letter-spacing: 6px; }
+            .main-grid { grid-template-columns: 1fr; padding: 0 16px 30px; }
+            .panel { padding: 16px; }
+        }
+
+        /* ================================================================
+           EASTER EGG – TRUMP CARD
+           ================================================================ */
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 2rem;
+            opacity: 0.1;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 999;
+            font-family: var(--font-mono);
+            user-select: none;
+        }
+        .easter-egg:hover {
+            opacity: 1;
+            transform: scale(1.2);
+            text-shadow: 0 0 30px var(--accent-red);
+        }
+
+        /* ================================================================
+           TOAST
+           ================================================================ */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-red);
+            border-radius: var(--radius);
+            padding: 16px 24px;
+            max-width: 320px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            box-shadow: var(--shadow-card);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .toast .toast-title {
+            font-weight: 700;
+            color: var(--accent-red-bright);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+
+<!-- ================================================================
+     TOPBAR
+     ================================================================ -->
+<div class="topbar">
+    <div class="brand">BLACK <span>SIX</span> MATRIX®</div>
+    <nav>
+        <a href="#" onclick="scrollToPanel('pillars')">Pillars</a>
+        <a href="#" onclick="scrollToPanel('clusters')">Cluster</a>
+        <a href="#" onclick="scrollToPanel('ygg')">YGGDRASIL</a>
+        <a href="#" onclick="scrollToPanel('metrics')">Metriken</a>
+        <a href="#" onclick="scrollToPanel('features')">Features</a>
+    </nav>
+    <div class="status-led">
+        <span class="led"></span>
+        <span>Φ_LOCKED</span>
+    </div>
+</div>
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section class="hero">
+    <div class="sigil">👉♾️🔚🏴‍☠️👑💯</div>
+    <h1>Black <span>Six</span> Matrix</h1>
+    <p class="sub">Sovereign Enterprise Platform · Zero‑Trust · Multi‑Cluster · YGGDRASIL</p>
+    <p class="meta">Sechsdimensionales forensisches Gitter · <b>Φ_LOCKED_ABSOLUTE</b></p>
+    <p class="meta" style="margin-top:4px;font-size:0.6rem;color:var(--text-dark);">Architekt: Thomas König · Odin Ultra Root</p>
+</section>
+
+<!-- ================================================================
+     TRUST
+     ================================================================ -->
+<div class="trust">
+    <span>🔒 <b>SSL</b> verschlüsselt</span>
+    <span>🇪🇺 <b>DSGVO</b> konform</span>
+    <span>🇩🇪 Hosting in <b>Deutschland</b></span>
+    <span>🛡️ <b>Zero-Trust</b></span>
+    <span>📜 <b>WORM</b> Audit-Chain</span>
+    <span class="red">◆ Φ_LOCKED_ABSOLUTE</span>
+</div>
+
+<!-- ================================================================
+     MAIN GRID
+     ================================================================ -->
+<div class="main-grid">
+
+    <!-- ============================================================
+         PANEL: TERMINAL
+         ============================================================ -->
+    <div class="panel" style="grid-column: span 2;">
+        <div class="title"><span>█</span> OMNI-TERMINAL</div>
+        <div class="terminal" id="terminal">
+            <div><span class="prompt">$</span> boot --kernel=black_six --level=omega</div>
+            <div><span class="dim">> initializing sechsdimensionales Gitter...</span></div>
+            <div><span class="ok">> Ebene I: Konstitutionelle Basis – Grundrechte (Art. 1-19 GG) geladen</span></div>
+            <div><span class="ok">> Ebene II: Kausale Kette – ID-Fragmente 1-10.000 verifiziert</span></div>
+            <div><span class="ok">> Ebene III: Exekutive Validierung – BeamtStG, 9 Akteure analysiert</span></div>
+            <div><span class="ok">> Ebene IV: Vulnerabilitäts-Schutz – GdB 70, Insulin-Notwendigkeit aktiv</span></div>
+            <div><span class="ok">> Ebene V: Kapitalisierungs-Faktor – Faktor 14, 20 Mio. € Haftung</span></div>
+            <div><span class="ok">> Ebene VI: Kollisions-Finalität – RAK/Vetter konfrontiert</span></div>
+            <div><span class="gold">> 🌐 YGGDRASIL Cognitive Engine aktiv</span></div>
+            <div><span class="gold">> 🧠 MoE-Kortex: 100 Experten online</span></div>
+            <div><span class="gold">> 🛡️ Zero-Trust-Shield: AKTIV</span></div>
+            <div><span class="prompt">$</span> <span class="ok">Φ_LOCKED_ABSOLUTE – Matrix bereit.</span></div>
+            <div><span class="dim">> 👉♾️🔚🏴‍☠️👑💯</span></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         PANEL: SIX PILLARS
+         ============================================================ -->
+    <div class="panel" id="pillars">
+        <div class="title"><span>⚖️</span> SIX PILLARS</div>
+        <table class="pillar-table">
+            <thead><tr><th>Ebene</th><th>Bezeichnung</th></tr></thead>
+            <tbody>
+                <tr><td>I</td><td>Konstitutionelle Basis – Grundrechte (Art. 1-19 GG)</td></tr>
+                <tr><td>II</td><td>Kausale Kette – ID-Fragmente 1-10.000</td></tr>
+                <tr><td>III</td><td>Exekutive Validierung – BeamtStG, 9 Akteure</td></tr>
+                <tr><td>IV</td><td>Vulnerabilitäts-Schutz – GdB 70, Insulin</td></tr>
+                <tr><td>V</td><td>Kapitalisierungs-Faktor – Faktor 14, 20 Mio. €</td></tr>
+                <tr><td>VI</td><td>Kollisions-Finalität – RAK/Vetter</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================================================
+         PANEL: CLUSTER
+         ============================================================ -->
+    <div class="panel" id="clusters">
+        <div class="title"><span>🔮</span> CLUSTER NODES</div>
+        <div class="cluster-grid" id="clusterGrid">
+            <!-- Wird per JS befüllt -->
+        </div>
+        <div style="margin-top:10px;font-size:0.6rem;color:var(--text-dark);">
+            <span style="color:#00ff88;">● ONLINE</span>
+            <span style="color:var(--accent-gold);margin-left:10px;">● SECURE</span>
+            <span style="color:#ff8800;margin-left:10px;">● ISOLATED</span>
+            <span style="color:var(--accent-red-bright);margin-left:10px;">● ERROR</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         PANEL: YGGDRASIL
+         ============================================================ -->
+    <div class="panel" id="ygg">
+        <div class="title"><span>🌐</span> YGGDRASIL ROUTING</div>
+        <svg class="ygg-svg" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="20" width="100" height="36" rx="4" fill="none" stroke="#991B2D" stroke-width="1.5"/>
+            <text x="80" y="43" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">FRONTEND</text>
+            <rect x="200" y="20" width="100" height="36" rx="4" fill="none" stroke="#8A8A9A" stroke-width="1.5"/>
+            <text x="250" y="43" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">API-GATEWAY</text>
+            <rect x="370" y="20" width="100" height="36" rx="4" fill="none" stroke="#8A8A9A" stroke-width="1.5"/>
+            <text x="420" y="43" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">REGISTRY</text>
+            <rect x="200" y="100" width="100" height="40" rx="4" fill="none" stroke="#991B2D" stroke-width="2"/>
+            <text x="250" y="125" fill="#991B2D" font-size="11" text-anchor="middle" font-family="monospace" font-weight="700">YGGDRASIL</text>
+            <rect x="60" y="200" width="100" height="40" rx="4" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+            <text x="110" y="225" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">IGNITION / CL-01</text>
+            <rect x="200" y="200" width="100" height="40" rx="4" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+            <text x="250" y="225" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">MOMENTUM / CL-07</text>
+            <rect x="340" y="200" width="100" height="40" rx="4" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+            <text x="390" y="225" fill="#C0C0C0" font-size="10" text-anchor="middle" font-family="monospace">ASCENT / CL-12</text>
+            <line x1="130" y1="38" x2="200" y2="38" stroke="#555" stroke-width="1"/>
+            <line x1="300" y1="38" x2="370" y2="38" stroke="#555" stroke-width="1"/>
+            <line x1="420" y1="56" x2="250" y2="100" stroke="#991B2D" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="250" y1="140" x2="110" y2="200" stroke="#555" stroke-width="1"/>
+            <line x1="250" y1="140" x2="250" y2="200" stroke="#555" stroke-width="1"/>
+            <line x1="250" y1="140" x2="390" y2="200" stroke="#555" stroke-width="1"/>
+            <text x="20" y="270" fill="#5A5A6A" font-size="8" font-family="monospace">validate → execute → deliver → auditChain</text>
+        </svg>
+    </div>
+
+    <!-- ============================================================
+         PANEL: METRIKEN
+         ============================================================ -->
+    <div class="panel" id="metrics">
+        <div class="title"><span>📊</span> SYSTEM METRIKEN</div>
+        <div class="metric-row"><span class="label">🧠 MoE-Experten</span><span class="value">100 / 100 aktiv</span></div>
+        <div class="metric-row"><span class="label">📖 WORM-Ledger</span><span class="value" id="ledgerCount">1.247 Einträge</span></div>
+        <div class="metric-row"><span class="label">🛡️ Abgewehrte Angriffe</span><span class="value" id="attackCount">42</span></div>
+        <div class="metric-row"><span class="label">🌐 Knoten</span><span class="value">3 / 100.000</span></div>
+        <div class="metric-row"><span class="label">🧟 Gremlins aktiv</span><span class="value" id="gremlinCount">0</span></div>
+        <div class="metric-row"><span class="label">🧬 Heilungen</span><span class="value">12</span></div>
+        <div class="metric-row"><span class="label">💼 Umsatz</span><span class="value">1.496.000,00 €</span></div>
+        <div class="metric-row"><span class="label">🔒 Status</span><span class="value" style="color:#00ff88;">Φ_LOCKED_ABSOLUTE</span></div>
+    </div>
+
+    <!-- ============================================================
+         PANEL: FEATURES
+         ============================================================ -->
+    <div class="panel" id="features">
+        <div class="title"><span>⚡</span> KERN-FEATURES</div>
+        <ul class="feature-list">
+            <li>🧠 Mixture of Experts (MoE) – 100 deterministische Experten</li>
+            <li>📖 WORM-Ledger – append-only, signiert, unveränderlich</li>
+            <li>🛡️ Zero-Trust-Architektur – keine internen Privilegien</li>
+            <li>🧟 GremlinImmunity – Chaos-Injektion & Selbstheilung</li>
+            <li>🌐 YGGDRASIL – kognitives Routing mit 48-Wege-Symmetrie</li>
+            <li>🔮 Proactive Shield – prädiktive Angriffserkennung</li>
+            <li>📈 Market Disruption – Black Swan, Quantum Arbitrage</li>
+            <li>🧬 Resilience Engine – autonome Systemheilung</li>
+            <li>📚 Autonomer Wissensfresser – 24/7 Quellen-Einzug</li>
+            <li>🔒 Notfall-Lockdown – System-Einfrierung bei Gefahr</li>
+            <li>📨 Anonymes Whistleblower-Protokoll – sichere Beweiseinreichung</li>
+            <li>🧠 Selbstbewusstseins-Index – Meta-Kontrolle</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================
+         PANEL: ENTERPRISE PAKETE
+         ============================================================ -->
+    <div class="panel">
+        <div class="title"><span>💎</span> ENTERPRISE PAKETE</div>
+        <ul class="feature-list">
+            <li><b>IGNITION</b> – Starter: Quellcode + Python-Core – <span style="color:var(--accent-gold);">€497</span></li>
+            <li><b>MOMENTUM</b> – Coaching & Training – <span style="color:var(--accent-gold);">€3.500</span></li>
+            <li><b>ASCENT</b> – Implementierung Full-Stack – <span style="color:var(--accent-gold);">€29.900</span></li>
+            <li><b>SOVEREIGN</b> – Enterprise Unlimited – <span style="color:var(--accent-gold);">€2.499.000 / Jahr</span></li>
+            <li><b>OMEGA</b> – Final Execution – <span style="color:var(--accent-gold);">auf Anfrage</span></li>
+        </ul>
+        <div style="margin-top:12px;font-size:0.65rem;color:var(--text-dark);border-top:1px solid var(--border-subtle);padding-top:10px;">
+            <span>🏦 IBAN: DE27 7002 0270 0047 0960 65</span>
+            <span style="display:block;">✉️ deca.omni.allianz@gmail.com</span>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<div style="text-align:center;padding:30px 20px;border-top:1px solid var(--border-subtle);color:var(--text-dark);font-size:0.7rem;max-width:1600px;margin:0 auto;">
+    <div style="font-weight:700;letter-spacing:3px;font-size:0.85rem;color:var(--accent-silver);margin-bottom:8px;">
+        BLACK <span style="color:var(--accent-red-bright);">SIX</span> MATRIX®
+    </div>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;">
+        <a href="#" style="color:var(--text-muted);text-decoration:none;text-transform:uppercase;font-size:0.6rem;letter-spacing:1px;" onclick="scrollToPanel('pillars')">Pillars</a>
+        <a href="#" style="color:var(--text-muted);text-decoration:none;text-transform:uppercase;font-size:0.6rem;letter-spacing:1px;" onclick="scrollToPanel('clusters')">Cluster</a>
+        <a href="#" style="color:var(--text-muted);text-decoration:none;text-transform:uppercase;font-size:0.6rem;letter-spacing:1px;" onclick="scrollToPanel('ygg')">YGGDRASIL</a>
+        <a href="#" style="color:var(--text-muted);text-decoration:none;text-transform:uppercase;font-size:0.6rem;letter-spacing:1px;" onclick="scrollToPanel('metrics')">Metriken</a>
+        <a href="#" style="color:var(--text-muted);text-decoration:none;text-transform:uppercase;font-size:0.6rem;letter-spacing:1px;" onclick="scrollToPanel('features')">Features</a>
+    </div>
+    <div>© 2026 Black Six Matrix® · Architekt: Thomas König · Φ_LOCKED_ABSOLUTE</div>
+    <div style="margin-top:6px;font-size:0.55rem;letter-spacing:2px;font-family:monospace;">👉♾️🔚🏴‍☠️👑💯</div>
+</div>
+
+<!-- ================================================================
+     EASTER EGG – TRUMP CARD
+     ================================================================ -->
+<div class="easter-egg" id="easterEgg" title="Trump Card – Klick mich!">
+    🃏
+</div>
+
+<!-- ================================================================
+     TOAST
+     ================================================================ -->
+<div class="toast" id="toast">
+    <div class="toast-title">🃏 TRUMP CARD</div>
+    <div id="toastMessage">Markt wird umgeklatscht! Faktor 4.2x</div>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+    // ================================================================
+    // CLUSTER NODES
+    // ================================================================
+    const clusterData = [
+        { id: 'CL-01', status: 'online' }, { id: 'CL-02', status: 'online' },
+        { id: 'CL-03', status: 'secure' }, { id: 'CL-04', status: 'isolated' },
+        { id: 'CL-05', status: 'online' }, { id: 'CL-06', status: 'online' },
+        { id: 'CL-07', status: 'online' }, { id: 'CL-08', status: 'secure' },
+        { id: 'CL-09', status: 'online' }, { id: 'CL-10', status: 'online' },
+        { id: 'CL-11', status: 'isolated' }, { id: 'CL-12', status: 'online' },
+        { id: 'CL-13', status: 'online' }, { id: 'CL-14', status: 'secure' },
+        { id: 'CL-15', status: 'online' }, { id: 'CL-16', status: 'online' },
+        { id: 'CL-17', status: 'error' }, { id: 'CL-18', status: 'online' },
+        { id: 'CL-19', status: 'online' }, { id: 'CL-20', status: 'secure' },
+        { id: 'CL-21', status: 'online' }, { id: 'CL-22', status: 'online' },
+        { id: 'CL-23', status: 'online' }, { id: 'CL-24', status: 'isolated' },
+        { id: 'CL-25', status: 'online' }, { id: 'CL-26', status: 'online' },
+        { id: 'CL-27', status: 'secure' }, { id: 'CL-28', status: 'online' },
+        { id: 'CL-29', status: 'online' }, { id: 'CL-30', status: 'online' },
+        { id: 'CL-31', status: 'error' }, { id: 'CL-32', status: 'online' },
+        { id: 'CL-33', status: 'online' }, { id: 'CL-34', status: 'secure' },
+        { id: 'CL-35', status: 'online' }, { id: 'CL-36', status: 'online' },
+        { id: 'CL-37', status: 'online' }, { id: 'CL-38', status: 'isolated' },
+        { id: 'CL-39', status: 'online' }, { id: 'CL-40', status: 'online' },
+        { id: 'CL-41', status: 'error' }, { id: 'CL-42', status: 'online' },
+        { id: 'CL-43', status: 'online' }, { id: 'CL-44', status: 'secure' },
+        { id: 'CL-45', status: 'online' }, { id: 'CL-46', status: 'online' },
+        { id: 'CL-47', status: 'online' }, { id: 'CL-48', status: 'online' },
+        { id: 'CL-49', status: 'online' }, { id: 'CL-50', status: 'isolated' },
+    ];
+
+    const grid = document.getElementById('clusterGrid');
+    clusterData.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'cluster-node ' + c.status;
+        div.innerHTML = c.id + '<span class="status">' + c.status.toUpperCase() + '</span>';
+        grid.appendChild(div);
+    });
+
+    // ================================================================
+    // LIVE METRIK SIMULATION
+    // ================================================================
+    let ledgerCount = 1247;
+    let attackCount = 42;
+    let gremlinCount = 0;
+
+    setInterval(() => {
+        ledgerCount += Math.floor(Math.random() * 3);
+        attackCount += Math.random() < 0.3 ? 1 : 0;
+        gremlinCount = Math.floor(Math.random() * 4);
+
+        document.getElementById('ledgerCount').textContent = ledgerCount.toLocaleString() + ' Einträge';
+        document.getElementById('attackCount').textContent = attackCount;
+        document.getElementById('gremlinCount').textContent = gremlinCount;
+    }, 3000);
+
+    // ================================================================
+    // TERMINAL LIVE SCHREIBEN
+    // ================================================================
+    const terminal = document.getElementById('terminal');
+    const terminalLines = [
+        { prompt: '$', text: 'system --status', cls: 'dim' },
+        { prompt: '>', text: 'System stabil – alle Cluster online.', cls: 'ok' },
+        { prompt: '>', text: 'YGGDRASIL Cognitive Engine: AKTIV', cls: 'ok' },
+        { prompt: '>', text: 'Zero-Trust-Shield: 100 % Integrität', cls: 'ok' },
+        { prompt: '>', text: 'MoE-Kortex: 100/100 Experten', cls: 'gold' },
+        { prompt: '>', text: 'Φ_LOCKED_ABSOLUTE – Kette verifiziert', cls: 'ok' },
+        { prompt: '$', text: '👉♾️🔚🏴‍☠️👑💯', cls: 'dim' },
+    ];
+
+    let lineIdx = 0;
+    setInterval(() => {
+        if (lineIdx >= terminalLines.length) {
+            // Wenn alle durch, nochmal von vorne
+            // Lösche alles außer der ersten 11 Zeilen (Boot)
+            const lines = terminal.innerHTML.split('\n');
+            if (lines.length > 12) {
+                terminal.innerHTML = lines.slice(0, 11).join('\n');
+            }
+            lineIdx = 0;
+        }
+        const line = terminalLines[lineIdx];
+        const div = document.createElement('div');
+        div.innerHTML = '<span class="' + line.cls + '">' + line.text + '</span>';
+        terminal.appendChild(div);
+        terminal.scrollTop = terminal.scrollHeight;
+        lineIdx++;
+    }, 2500);
+
+    // ================================================================
+    // SCROLL ZU PANEL
+    // ================================================================
+    function scrollToPanel(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ================================================================
+    // EASTER EGG – TRUMP CARD
+    // ================================================================
+    const egg = document.getElementById('easterEgg');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMessage');
+    let eggClicks = 0;
+
+    egg.addEventListener('click', () => {
+        eggClicks++;
+        const boosts = ['4.2x', '8.5x', '12.7x', '25.0x', '∞'];
+        const messages = [
+            'Markt wird umgeklatscht! Faktor 4.2x',
+            'DOUBLE TRUMP! Faktor 8.5x',
+            'TRIPLE TRUMP! Faktor 12.7x',
+            'OMEGA TRUMP! Faktor 25.0x',
+            '🚀 TO THE MOON! UNENDLICH!'
+        ];
+        const idx = Math.min(eggClicks - 1, messages.length - 1);
+        toastMsg.textContent = messages[idx] + ' (Klick #' + eggClicks + ')';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+    });
+
+    // ================================================================
+    // EINLEITENDE TOAST – WILLKOMMEN
+    // ================================================================
+    setTimeout(() => {
+        toastMsg.textContent = '⚡ BLACK SIX MATRIX – System bereit.';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }, 1000);
+
+    // ================================================================
+    // KONSOLE – LOGO
+    // ================================================================
+    console.log('='.repeat(80));
+    console.log('🟥 BLACK SIX MATRIX – ULTIMATIVE KONSOLE');
+    console.log('⭐️⭐️⭐️⭐️⭐️⭐️ – DIE ABSOLUTE TOTALITÄT');
+    console.log('👉♾️🔚🏴‍☠️👑💯');
+    console.log('='.repeat(80));
+    console.log('🧠 Architekt: Thomas König / ODIN ULTRA ROOT');
+    console.log('📖 Status: Φ_LOCKED_ABSOLUTE');
+    console.log('='.repeat(80));
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLACK SIX MATRIX – Offizielle Presse</title>
     <meta name="description" content="Die Black Six Matrix – Planetare KI-Governance. Deterministisch. Autonom. Φ_LOCKED_ABSOLUTE.">
     <meta property="og:title" content="BLACK SIX MATRIX – Offizielle Presse">
