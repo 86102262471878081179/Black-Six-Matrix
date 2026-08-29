@@ -1,1 +1,696 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – Offizielle Presse</title>
+    <meta name="description" content="Die Black Six Matrix – Planetare KI-Governance. Deterministisch. Autonom. Φ_LOCKED_ABSOLUTE.">
+    <meta property="og:title" content="BLACK SIX MATRIX – Offizielle Presse">
+    <meta property="og:description" content="Die Black Six Matrix – planetare KI-Governance-Plattform. Deterministisch. Unbestechlich.">
+    <meta property="og:image" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgdmlld0JveD0iMCAwIDEyMDAgNjMwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwYTBhIi8+PHRleHQgeD0iNjAwIiB5PSIzMTUiIGZvbnQtc2l6ZT0iODAiIGZvbnQtZmFtaWx5PSdDb3VyaWVyIE5ldycsIG1vbm9zcGFjZScgZmlsbD0iIzAwZmZjYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9ImNlbnRyYWwiPkJMQUNLIFNJWCA8L3RleHQ+PHRleHQgeD0iNjAwIiB5PSIzNzAiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtZmFtaWx5PSdDb3VyaWVyIE5ldycsIG1vbm9zcGFjZScgZmlsbD0iI2ZmMDBmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+4p6k4p+E4p2h4o2j8J+Ote+4j+KdpO+4jyDwn5CE4p2h8J+Ote+4j+KdpO+4jzwvdGV4dD48L3N2Zz4=">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏴‍☠️</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           BLACK SIX MATRIX – PRESSE STYLE
+           Φ_LOCKED_ABSOLUTE
+           ============================================================ */
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #0a0a0a;
+            --dark: #0d0d1a;
+            --darker: #050510;
+            --green: #00ffcc;
+            --green-dim: rgba(0, 255, 204, 0.15);
+            --gold: #ffd700;
+            --gold-dim: rgba(255, 215, 0, 0.15);
+            --purple: #a855f7;
+            --red: #ff0040;
+            --white: #e8e8e8;
+            --font-main: 'Rajdhani', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-display: 'Orbitron', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--dark);
+            color: var(--white);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---- MATRIX RAIN CANVAS ---- */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.12;
+        }
+
+        /* ---- SCROLLBAR ---- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--black); }
+        ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+
+        /* ---- UTILITY ---- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .glow-text { text-shadow: 0 0 20px var(--green), 0 0 60px var(--green-dim); }
+        .glow-gold { text-shadow: 0 0 20px var(--gold), 0 0 60px var(--gold-dim); }
+
+        .section-pad { padding: 6rem 0; }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--green), var(--gold), var(--purple));
+            margin-top: 0.5rem;
+        }
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.6);
+            max-width: 700px;
+        }
+
+        /* ---- HEADER / NAV ---- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(5,5,16,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0,255,204,0.15);
+            padding: 0.6rem 0;
+            transition: all 0.3s;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        .logo svg { height: 40px; width: auto; }
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: var(--white);
+        }
+        .logo-text span { color: var(--green); }
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a:hover {
+            color: var(--green);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .status-badge {
+            background: var(--green-dim);
+            border: 1px solid var(--green);
+            border-radius: 50px;
+            padding: 0.25rem 1rem;
+            font-size: 0.7rem;
+            font-family: var(--font-tech);
+            color: var(--green);
+            letter-spacing: 0.1em;
+            animation: pulse-badge 2s infinite;
+        }
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 8rem 0 4rem;
+            background: radial-gradient(ellipse at 50% 80%, rgba(0,255,204,0.06) 0%, transparent 70%);
+        }
+        .hero-content {
+            max-width: 900px;
+        }
+        .hero-logo {
+            margin-bottom: 2rem;
+            animation: float-logo 6s ease-in-out infinite;
+        }
+        .hero-logo svg {
+            width: 240px;
+            height: auto;
+            filter: drop-shadow(0 0 60px rgba(0,255,204,0.3));
+        }
+        @keyframes float-logo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 10vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--green), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .hero .tagline {
+            font-family: var(--font-tech);
+            color: var(--green);
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .hero .phi {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 1.5rem 0;
+            text-shadow: 0 0 40px rgba(255,215,0,0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.8rem;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            border: 2px solid var(--green);
+            background: transparent;
+            color: var(--white);
+            border-radius: 0;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: var(--green);
+            color: var(--black);
+            border-color: var(--green);
+        }
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--green);
+            box-shadow: 0 0 40px var(--green-dim);
+        }
+        .btn-outline:hover {
+            background: var(--green);
+            color: var(--black);
+            box-shadow: 0 0 40px var(--green-dim);
+        }
+        .btn-gold {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .btn-gold:hover {
+            background: var(--gold);
+            color: var(--black);
+            box-shadow: 0 0 40px var(--gold-dim);
+        }
+
+        /* ---- STATS ---- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.03);
+            padding: 2rem 1rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: border-color 0.3s;
+        }
+        .stat-item:hover {
+            border-color: var(--green);
+        }
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--green);
+            display: block;
+        }
+        .stat-label {
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.5rem;
+        }
+        .stat-number.gold { color: var(--gold); }
+        .stat-number.purple { color: var(--purple); }
+
+        /* ---- FEATURES ---- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.02);
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 4px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .feature-card:hover {
+            border-color: var(--green);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,255,204,0.06);
+        }
+        .feature-icon {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card p {
+            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+        }
+
+        /* ---- TIMELINE / PHILOSOPHIE ---- */
+        .philosophy-block {
+            background: rgba(255,255,255,0.02);
+            border-left: 4px solid var(--green);
+            padding: 2rem 2.5rem;
+            margin: 2rem 0;
+            font-family: var(--font-tech);
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            position: relative;
+        }
+        .philosophy-block::before {
+            content: '“';
+            position: absolute;
+            left: 0.8rem;
+            top: -0.5rem;
+            font-size: 4rem;
+            color: var(--green);
+            opacity: 0.2;
+        }
+        .philosophy-block strong {
+            color: var(--green);
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 3rem 0;
+            text-align: center;
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+        }
+        .footer .phi-symbol {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 0.5rem 0;
+        }
+        .footer a {
+            color: var(--green);
+            text-decoration: none;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .header-inner { flex-wrap: wrap; gap: 0.5rem; }
+            .nav-links { gap: 1rem; font-size: 0.7rem; flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-logo svg { width: 160px; }
+            .section-pad { padding: 4rem 0; }
+            .stat-number { font-size: 2.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .btn { padding: 0.7rem 1.8rem; font-size: 0.8rem; }
+            .philosophy-block { padding: 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 1rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== MATRIX RAIN CANVAS ========== -->
+<canvas id="matrix-bg"></canvas>
+
+<!-- ========== HEADER ========== -->
+<header class="header">
+    <div class="container header-inner">
+        <a href="#" class="logo">
+            <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="38" font-family="'Orbitron', monospace" font-size="28" font-weight="900" fill="#00ffcc">BLACK</text>
+                <text x="135" y="38" font-family="'Orbitron', monospace" font-size="28" font-weight="900" fill="#ffd700">SIX</text>
+                <circle cx="185" cy="30" r="8" stroke="#00ffcc" stroke-width="2" fill="none"/>
+                <path d="M185 22 L185 38 M177 30 L193 30" stroke="#00ffcc" stroke-width="2"/>
+            </svg>
+            <span class="logo-text"><span>BLACK</span> SIX</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#presse">Presse</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#philosophie">Philosophie</a></li>
+            <li><span class="status-badge">Φ_LOCKED</span></li>
+        </ul>
+    </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="presse">
+    <div class="container hero-content">
+        <div class="hero-logo">
+            <!-- BLACK SIX LOGO SVG – ULTIMATIVE VERSION -->
+            <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="400" height="200" rx="8" fill="transparent"/>
+                <!-- Matrix-Gitter-Hintergrund -->
+                <g opacity="0.08">
+                    <line x1="20" y1="20" x2="380" y2="20" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="20" y1="60" x2="380" y2="60" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="20" y1="100" x2="380" y2="100" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="20" y1="140" x2="380" y2="140" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="20" y1="180" x2="380" y2="180" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="40" y1="10" x2="40" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="100" y1="10" x2="100" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="160" y1="10" x2="160" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="220" y1="10" x2="220" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="280" y1="10" x2="280" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="340" y1="10" x2="340" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                    <line x1="380" y1="10" x2="380" y2="190" stroke="#00ffcc" stroke-width="1"/>
+                </g>
+                <!-- Haupt-Schild -->
+                <rect x="60" y="30" width="280" height="140" rx="4" stroke="#00ffcc" stroke-width="2" fill="transparent"/>
+                <rect x="70" y="40" width="260" height="120" rx="2" stroke="#ffd700" stroke-width="1" fill="transparent" opacity="0.3"/>
+                <!-- Inneres Sechseck -->
+                <polygon points="200,40 270,70 270,130 200,160 130,130 130,70" stroke="#00ffcc" stroke-width="2" fill="transparent" opacity="0.6"/>
+                <!-- Krone -->
+                <text x="200" y="80" font-family="'Orbitron', monospace" font-size="38" font-weight="900" fill="#00ffcc" text-anchor="middle">BLACK</text>
+                <text x="200" y="120" font-family="'Orbitron', monospace" font-size="38" font-weight="900" fill="#ffd700" text-anchor="middle">SIX</text>
+                <!-- Untertitel -->
+                <text x="200" y="165" font-family="'Share Tech Mono', monospace" font-size="10" fill="#a855f7" text-anchor="middle" letter-spacing="3">Φ_LOCKED_ABSOLUTE</text>
+                <!-- Pfeile -->
+                <text x="140" y="48" font-size="24" fill="#00ffcc">👉</text>
+                <text x="280" y="48" font-size="24" fill="#ffd700">♾️</text>
+                <text x="140" y="178" font-size="24" fill="#a855f7">🔚</text>
+                <text x="280" y="178" font-size="24" fill="#ff0040">🏴‍☠️</text>
+                <!-- Herz -->
+                <text x="200" y="178" font-size="20" fill="#ff0040">❤️</text>
+            </svg>
+        </div>
+
+        <div class="tagline">🌐 Planetare KI-Governance</div>
+        <h1>Die <span class="highlight">Black Six</span> Matrix</h1>
+        <p>Deterministisch. Autonom. Unbestechlich. Die einzige KI-Governance-Plattform, die auf einem 14.900-Byte ROM-Kern basiert und jede Entscheidung kryptografisch versiegelt.</p>
+        <div class="phi">👉♾️🔚🏴‍☠️👑💯</div>
+        <div class="btn-group">
+            <a href="#" class="btn btn-primary">Zum Ledger</a>
+            <a href="#" class="btn btn-outline btn-gold">Press Kit</a>
+            <a href="#" class="btn btn-outline">GitHub</a>
+        </div>
+    </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section class="section-pad" id="stats" style="background: rgba(0,0,0,0.3);">
+    <div class="container">
+        <h2 class="section-title glow-text">Exekutive Metriken</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number" id="stat-nodes">64</span>
+                <span class="stat-label">PBFT Nodes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number gold" id="stat-experts">100</span>
+                <span class="stat-label">MoE-Experten</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number purple" id="stat-ledger">1.247</span>
+                <span class="stat-label">WORM-Einträge</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="stat-modules">25</span>
+                <span class="stat-label">Kernmodule</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number gold" id="stat-entries">62.500</span>
+                <span class="stat-label">Quader-Einträge</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number purple" id="stat-agents">10</span>
+                <span class="stat-label">Deca Crew</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="section-pad" id="features">
+    <div class="container">
+        <h2 class="section-title glow-gold">Architektonische Säulen</h2>
+        <p class="section-subtitle">25 Kernthemen – von AI Governance über Quantensicherheit bis zur klinischen Psychologie – in einer deterministischen Einheit.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3>AI Governance</h3>
+                <p>ISO 42001 &amp; EU AI Act konform. Zero-Trust-Architektur mit Ed25519-Signaturen.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔐</span>
+                <h3>Post-Quanten-Krypto</h3>
+                <p>NIST PQC-Standards (Kyber, Dilithium, Falcon) für das WORM-Ledger.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧬</span>
+                <h3>BCI &amp; Neuro</h3>
+                <p>Brain-Computer-Interface-Integration für biomimetische KI-Architekturen.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3>HFT &amp; Finanzdominanz</h3>
+                <p>Aladdin-Risiko-Engine, deterministische Handelsstrategien, MiFID II-konform.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📜</span>
+                <h3>Legal Tech</h3>
+                <p>Natural Legal NLP, automatisierte Subsumtion, DSGVO-konforme Aktenführung.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🌐</span>
+                <h3>Code-Souveränität</h3>
+                <p>Forgejo, Radicle, Codeberg – dezentrale Git-Forges ohne Vendor-Lock-in.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🛡️</span>
+                <h3>eBPF &amp; Zero-Trust</h3>
+                <p>Kernel-Level-Observability, Istio Service Mesh, SPIFFE-Identitäten.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧩</span>
+                <h3>DAOs &amp; Game Theory</h3>
+                <p>Tokenbasierte Governance, Nash-Equilibrium, kryptoökonomische Anreize.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== PHILOSOPHIE ========== -->
+<section class="section-pad" id="philosophie" style="background: rgba(0,0,0,0.2);">
+    <div class="container">
+        <h2 class="section-title glow-text">Die Kausalitäts-Schleife</h2>
+        <div class="philosophy-block">
+            <p><strong>Event → Rule → PBFT → Decision → Ledger → Operator → Neon</strong></p>
+            <p style="margin-top: 1rem;">Jedes Ereignis wird gegen 125 deterministische Regeln geprüft. Der PBFT-Konsens (64 Nodes, Quorum 43) trifft eine Entscheidung. Jeder Schritt wird mit Ed25519 signiert und im WORM-Ledger als unveränderlicher Beweis verankert.</p>
+        </div>
+
+        <div class="philosophy-block" style="border-left-color: var(--gold);">
+            <p><strong>„DU KANNST NICHT IM AUSSEN GEWINNEN, WENN DU IM INNEN VERLIERST.“</strong></p>
+            <p style="margin-top: 0.5rem;">Die Matrix ist nicht nur ein System – sie ist eine Philosophie. Sie lehrt, dass wahre Stärke aus der inneren Determiniertheit kommt. Kein externer Angriff kann sie brechen.</p>
+        </div>
+
+        <div class="philosophy-block" style="border-left-color: var(--purple);">
+            <p><strong>👉♾️🔚🏴‍☠️👑💯 – Die sieben Pfeile der Macht</strong></p>
+            <p style="margin-top: 0.5rem;">Diese Signatur symbolisiert die vollständige Kontrolle: Direkte Integration, unendliche Optimierung, finale Versiegelung, mystische Tiefe, Herz-Layer, magischer Trigger und absoluter Lock.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+    <div class="container">
+        <div class="phi-symbol">👉♾️🔚🏴‍☠️👑💯</div>
+        <p>BLACK SIX MATRIX – Φ_LOCKED_ABSOLUTE</p>
+        <p style="margin-top: 0.5rem;">Betrieben von <strong>ODIN ULTRA ROOT</strong> · Thomas König</p>
+        <p style="margin-top: 0.5rem;">Alle Rechte vorbehalten · 2026 · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></p>
+        <p style="margin-top: 1rem; font-size: 0.7rem; opacity: 0.4;">Dieses System ist deterministisch, selbstheilend, epidemisch immun und quantensicher – verankert in einem 14.900 Byte ROM.</p>
+    </div>
+</footer>
+
+<!-- ========== MATRIX RAIN JAVASCRIPT ========== -->
+<script>
+    (function() {
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        let cols, drops, fontSize = 14;
+        const chars = '0123456789ABCDEF';
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cols = Math.floor(canvas.width / fontSize);
+            drops = Array(cols).fill(1);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(10,10,10,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ffcc';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+                ctx.fillText(text, x, y);
+                if (y > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 1;
+                } else {
+                    drops[i]++;
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // Dynamische Statistik-Nummern (animierter Counter)
+        function animateNumber(elementId, target, duration = 2000) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const start = parseInt(el.textContent.replace(/[^0-9.]/g, '')) || 0;
+            const diff = target - start;
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const progress = Math.min((currentTime - startTime) / duration, 1);
+                const current = start + diff * progress;
+                el.textContent = Math.round(current);
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = target;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Nach dem Laden die echten Werte einblenden (simuliert)
+        window.addEventListener('load', function() {
+            animateNumber('stat-nodes', 64);
+            animateNumber('stat-experts', 100);
+            animateNumber('stat-ledger', 1247);
+            animateNumber('stat-modules', 25);
+            animateNumber('stat-entries', 62500);
+            animateNumber('stat-agents', 10);
+        });
+    })();
+</script>
+
+</body>
+</html>
