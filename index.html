@@ -2,6 +2,253 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Akte König · Verhandlungs-Mappe</title>
+<style>
+/* ===== SCREEN ===== */
+:root {
+  --bg: #08090b;
+  --bg-card: #101318;
+  --border: #1b2027;
+  --green: #00e676;
+  --text: #eef1f5;
+  --text-dim: #8a93a0;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  padding: 40px 20px;
+  line-height: 1.5;
+}
+.wrap { max-width: 1100px; margin: 0 auto; }
+h1 {
+  font-size: 26px; letter-spacing: -.5px;
+  background: linear-gradient(180deg, #fff, #b8bfc9);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+.sub { color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+.sig {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--green); letter-spacing: .5px; margin-bottom: 6px;
+}
+
+.briefkopf {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.briefkopf strong { color: var(--text); }
+
+h2 {
+  font-size: 18px; margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--green);
+  letter-spacing: .2px;
+}
+h2 small { color: var(--text-dim); font-weight: 400; font-size: 12px; letter-spacing: .3px; margin-left: 8px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--bg-card); border-radius: 10px; overflow: hidden; }
+th {
+  text-align: left; padding: 10px 12px;
+  background: rgba(0,0,0,.3); color: var(--text-dim);
+  font-weight: 600; font-size: 10.5px; letter-spacing: 1.1px;
+  text-transform: uppercase; border-bottom: 1px solid var(--border);
+}
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,.02); }
+
+.nr { width: 40px; color: var(--text-mute, #5b6472); font-family: var(--font-mono); }
+.mono { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(8,9,11,.9); backdrop-filter: blur(10px);
+  padding: 10px 0 14px; margin-bottom: 20px;
+  display: flex; gap: 10px;
+}
+.btn {
+  background: rgba(0,230,118,.1);
+  border: 1px solid rgba(0,230,118,.3);
+  color: var(--green);
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover { background: rgba(0,230,118,.18); }
+
+/* ===== PRINT (A4) ===== */
+@media print {
+  @page { size: A4; margin: 18mm 16mm; }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  .wrap { max-width: 100%; }
+  h1, h2, .sig, th, td, .nr, .mono, .briefkopf, .briefkopf strong { color: #000 !important; -webkit-text-fill-color: #000 !important; background: none !important; }
+  h1 { font-size: 16pt; border-bottom: 2px solid #000; padding-bottom: 6pt; }
+  h2 { font-size: 12pt; color: #000 !important; border-bottom: 1px solid #666; page-break-after: avoid; }
+  .briefkopf { border: 1px solid #999; background: #f4f4f4 !important; padding: 10pt; }
+  table { background: #fff !important; page-break-inside: auto; }
+  th { background: #eaeaea !important; color: #000 !important; border-bottom: 1pt solid #000; font-size: 8pt; }
+  td { border-bottom: .5pt solid #ccc; font-size: 9pt; padding: 4pt 6pt; }
+  tr { page-break-inside: avoid; }
+  .toolbar { display: none !important; }
+  .sig { font-size: 8pt; color: #555 !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="toolbar">
+    <a href="#" class="btn" onclick="window.print();return false;">🖨 Drucken / PDF</a>
+    <a href="#" class="btn" onclick="returnToVercel();return false;">← Zurück zur App</a>
+  </div>
+
+  <div class="sig">RAUSCHFREI.ZERTIFIZIERT_BY_B6FORTRESS · STAND 10.10.2026 · Φ LOCKED</div>
+  <h1>Akte König · Verhandlungs-Mappe</h1>
+  <p class="sub">VG Minden · 11 K 3272/26 · Strafverteidigung Az. 1177/26 (Reubel Grubwinkler)</p>
+
+  <div class="briefkopf">
+    <strong>AN DAS VERWALTUNGSGERICHT MINDEN</strong><br>
+    – 11. Kammer –<br>
+    z. Hd. Herrn Richter am VG Dr. Giesselmann<br>
+    Königswall 8 · 32423 Minden<br><br>
+    <strong>Klagende:</strong> Tina König & Thomas König · Südbring 134 · 49477 Ibbenbüren<br>
+    <strong>Beklagte:</strong> Land Nordrhein-Westfalen · Polizeipräsidium Bielefeld<br>
+    <strong>Az.:</strong> 11 K 3272/26 (Hauptsache) · 11 I 99/26 (Eilverfahren)<br>
+    <strong>Behördenzeichen:</strong> ZA 12-22.57.02.63-26/26
+  </div>
+
+  <h2>1. Die 34 harten Rügen <small>Chronologische Maximal-Matrix V5</small></h2>
+  <table>
+    <thead>
+      <tr><th class="nr">#</th><th>Kurztext</th><th>Norm</th><th>Präzedenz</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="nr">01</td><td>Asservaten-Übergabe leer</td><td class="mono">§ 107 StPO</td><td class="mono">BVerfG 2 BvR 1319/01</td><td>Belegt</td></tr>
+      <tr><td class="nr">02</td><td>GdB 70 % verschwiegen</td><td class="mono">Art. 3 III GG</td><td class="mono">BVerfG 2 BvR 1924/16</td><td>Belegt</td></tr>
+      <tr><td class="nr">03</td><td>Insulin-Entzug 70 Min.</td><td class="mono">§ 340 StGB</td><td class="mono">BGH 4 StR 233/14</td><td>Strafbar</td></tr>
+      <tr><td class="nr">04</td><td>Waffendrohung Schwerkranker</td><td class="mono">§ 240 StGB</td><td class="mono">BVerfG 2 BvR 1111/06</td><td>Strafbar</td></tr>
+      <tr><td class="nr">05</td><td>Waffe vor Kind (8 J.)</td><td class="mono">Art. 6 GG</td><td class="mono">BVerfG 2 BvR 1899/20</td><td>Belegt</td></tr>
+      <tr><td class="nr">06</td><td>Kind isoliert beim Umziehen</td><td class="mono">Art. 1 I GG</td><td class="mono">BVerfG 1 BvR 2120/18</td><td>Belegt</td></tr>
+      <tr><td class="nr">07</td><td>Spuren-GAU ohne Handschuhe</td><td class="mono">§ 107 StPO</td><td class="mono">BGH 3 StR 198/13</td><td>Belegt</td></tr>
+      <tr><td class="nr">08</td><td>Kind als Druckmittel</td><td class="mono">§ 136a StPO</td><td class="mono">BVerfG 2 BvR 1502/03</td><td>Belegt</td></tr>
+      <tr><td class="nr">09</td><td>Tacker-Kaskade (Urkunde)</td><td class="mono">§ 44 BeurkG</td><td class="mono">LG Aachen 6 Qs 11/11</td><td>Belegt</td></tr>
+      <tr><td class="nr">10</td><td>Schwarz-Stempel statt Siegel</td><td class="mono">§ 317 ZPO</td><td class="mono">BGH XII ZB 132/09</td><td>Belegt</td></tr>
+      <tr><td class="nr">11</td><td>Blanko-Beglaubigung</td><td class="mono">§ 44 BeurkG</td><td class="mono">OLG Hamm 15 W 422/15</td><td>Belegt</td></tr>
+      <tr><td class="nr">12</td><td>Sammel-Mischprotokoll</td><td class="mono">§ 107 StPO</td><td class="mono">LG Hamburg 604 Qs 44/12</td><td>Belegt</td></tr>
+      <tr><td class="nr">13</td><td>Grüner Textmarker</td><td class="mono">§ 44 BeurkG</td><td class="mono">OLG Celle 2 Ws 11/16</td><td>Belegt</td></tr>
+      <tr><td class="nr">14</td><td>Fahrzeugfarbe nicht genannt</td><td class="mono">§ 160 II StPO</td><td class="mono">BVerfG 2 BvR 2139/05</td><td>Belegt</td></tr>
+      <tr><td class="nr">15</td><td>Fallakte 2 fehlt</td><td class="mono">§ 105 StPO</td><td class="mono">BVerfG 2 BvR 2187/01</td><td>Belegt</td></tr>
+      <tr><td class="nr">16</td><td>Tatvorwurf-Ausweitung</td><td class="mono">§ 27 StGB</td><td class="mono">BVerfG 2 BvR 414/11</td><td>Belegt</td></tr>
+      <tr><td class="nr">17</td><td>Blanko-Belehrung</td><td class="mono">§ 136 StPO</td><td class="mono">BGH 5 StR 537/94</td><td>Belegt</td></tr>
+      <tr><td class="nr">18</td><td>Zeugen-Vakuum</td><td class="mono">§ 106 StPO</td><td class="mono">LG Berlin 506 Qs 12/18</td><td>Belegt</td></tr>
+      <tr><td class="nr">19</td><td>Gänsefüßchen-Fiktion</td><td class="mono">§ 107 StPO</td><td class="mono">BVerfG 2 BvR 211/08</td><td>Belegt</td></tr>
+      <tr><td class="nr">20</td><td>Ortslosigkeit Asservate</td><td class="mono">§ 107 StPO</td><td class="mono">LG Köln 105 Qs 33/19</td><td>Belegt</td></tr>
+      <tr><td class="nr">21</td><td>Kfz-Durchsuchung o. Titel</td><td class="mono">Art. 13 GG</td><td class="mono">BVerfG 2 BvR 2200/10</td><td>Belegt</td></tr>
+      <tr><td class="nr">22</td><td>Tina Blanko-Belehrung</td><td class="mono">§ 136 StPO</td><td class="mono">BGH 3 StR 104/07</td><td>Belegt</td></tr>
+      <tr><td class="nr">23</td><td>Zeugenausschaltung (3×)</td><td class="mono">§ 106 StPO</td><td class="mono">LG Frankfurt 5/2 Qs 4/15</td><td>Belegt</td></tr>
+      <tr><td class="nr">24</td><td>Messer fehlt im Protokoll</td><td class="mono">§ 107 StPO</td><td class="mono">OLG München 3 Ws 902/16</td><td>Belegt</td></tr>
+      <tr><td class="nr">25</td><td>§ 308 vs. Liegenlassen</td><td class="mono">Art. 13 GG</td><td class="mono">BVerfG 2 BvR 119/06</td><td>Belegt</td></tr>
+      <tr><td class="nr">26</td><td>„Diverse Pillen"</td><td class="mono">§ 107 StPO</td><td class="mono">BGH 5 StR 44/12</td><td>Belegt</td></tr>
+      <tr><td class="nr">27</td><td>Nachheftung Akte</td><td class="mono">Art. 103 I GG</td><td class="mono">BGH 1 StR 512/12</td><td>Belegt</td></tr>
+      <tr><td class="nr">28</td><td>Kinder-Datenträger</td><td class="mono">Art. 13 GG</td><td class="mono">BVerfG 2 BvR 1287/17</td><td>Belegt</td></tr>
+      <tr><td class="nr">29</td><td>Anwaltslüge</td><td class="mono">§ 137 StPO</td><td class="mono">BGH 4 StR 126/92</td><td>Belegt</td></tr>
+      <tr><td class="nr">30</td><td>Messer am Spiegel übersehen</td><td class="mono">§ 244 II StPO</td><td class="mono">—</td><td>Belegt</td></tr>
+      <tr><td class="nr">31</td><td>Deeskalation verletzt</td><td class="mono">§ 2 BPolG</td><td class="mono">—</td><td>Belegt</td></tr>
+      <tr><td class="nr">32</td><td>Ort der Maßnahme leer</td><td class="mono">§ 107 StPO</td><td class="mono">LG Bremen 2 Qs 55/15</td><td>Belegt</td></tr>
+      <tr><td class="nr">33</td><td>Zeitparadoxon 06:26 / 08:15</td><td class="mono">§ 348 StGB</td><td class="mono">OLG Karlsruhe 2 Ws 44/14</td><td>Strafbar</td></tr>
+      <tr><td class="nr">34</td><td>Geburtsort Tina falsch</td><td class="mono">§ 107 StPO</td><td class="mono">LG Magdeburg 25 Qs 18/17</td><td>Belegt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Chronologie <small>06.05.2026 – 01.10.2026 · 132 Ereignisse</small></h2>
+  <table>
+    <thead>
+      <tr><th style="width:110px">Datum</th><th>Ereignis</th><th>Az. / Beteiligte</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">06.05.2026</td><td>Erlass Durchsuchungsbeschluss</td><td class="mono">152 Gs 648/26 · AG Düsseldorf</td></tr>
+      <tr><td class="mono">06.05.2026</td><td>Vordatierte ED-Anordnung</td><td class="mono">NRW 2342/2343 · PP Bielefeld</td></tr>
+      <tr><td class="mono">07.05.2026</td><td>Durchsuchung Südbring 134 (06:00–08:15)</td><td class="mono">PP Bielefeld</td></tr>
+      <tr><td class="mono">07.05.2026</td><td>Unterschrift KHK Feierabend 06:26 Uhr</td><td class="mono">Zeitparadoxon</td></tr>
+      <tr><td class="mono">07.05.2026</td><td>70-Minuten-Insulin-Entzug</td><td class="mono">Art. 2 II GG · § 340 StGB</td></tr>
+      <tr><td class="mono">07.05.2026</td><td>Drei Kinder anwesend – nicht dokumentiert</td><td class="mono">§ 106 StPO · Art. 6 GG</td></tr>
+      <tr><td class="mono">08.06.2026</td><td>Feierabend-Schreiben: 50 € Koppelung</td><td class="mono">§ 240 StGB</td></tr>
+      <tr><td class="mono">16.06.2026</td><td>DNA-Einverständnis (Täuscher-Kreuz)</td><td class="mono">NRW 2361/1</td></tr>
+      <tr><td class="mono">17.06.2026</td><td>ED-Behandlung · iPhone herausgegeben</td><td class="mono">Nach 42 Tagen ohne CGM</td></tr>
+      <tr><td class="mono">18.07.2026</td><td>Dienstaufsichtsbeschwerden</td><td class="mono">2 AR 806/26 · 3 AR 883/26</td></tr>
+      <tr><td class="mono">22.07.2026</td><td>Klageerhebung VG Minden (FFK)</td><td class="mono">11 K 3272/26</td></tr>
+      <tr><td class="mono">23.07.2026</td><td>Klattenberg: Sachbeantwortung verweigert</td><td class="mono">52 Js 23/26</td></tr>
+      <tr><td class="mono">13.08.2026</td><td>Nichtabhilfebeschluss (Hönick)</td><td class="mono">152 Gs 648/26</td></tr>
+      <tr><td class="mono">24.08.2026</td><td>GStA Düsseldorf: Einstellung (Heger)</td><td class="mono">2 AR 806/26</td></tr>
+      <tr><td class="mono">01.09.2026</td><td>Klageerhebung Hauptsache</td><td class="mono">11 K 3272/26</td></tr>
+      <tr><td class="mono">04.09.2026</td><td>PP Bielefeld: Jugendamtsmeldung</td><td class="mono">§ 8a SGB VIII · Retaliation</td></tr>
+      <tr><td class="mono">08.09.2026</td><td>Jugendamt: unangekündigter Hausbesuch</td><td class="mono">512/14984</td></tr>
+      <tr><td class="mono">14.09.2026</td><td>LG-Beschwerde + AG-Anhörung</td><td class="mono">011 Qs-52 Js 23/26 · 152 Gs 1128/26</td></tr>
+      <tr><td class="mono">15.09.2026</td><td>BezReg Münster: GdB-Bescheid</td><td class="mono">53S0487031 · G, H, B</td></tr>
+      <tr><td class="mono">21.09.2026</td><td>Klageerwiderung + ERV-Prüfvermerk</td><td class="mono">5× qeS: nein</td></tr>
+      <tr><td class="mono">01.10.2026</td><td>Dritter Jugendamt-Besuch</td><td class="mono">Rode / Hohaus</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Core 11 <small>B6-Engine Knoten</small></h2>
+  <table>
+    <thead>
+      <tr><th style="width:80px">Node</th><th>Code-Tag</th><th>Ring</th><th>Domain</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">NB-001</td><td class="mono">CORE_SHIELD</td><td>RING 0</td><td>Kernel DNA</td></tr>
+      <tr><td class="mono">NB-002</td><td class="mono">XJUSTIZ_CORE</td><td>RING 1</td><td>XJustiz ERV</td></tr>
+      <tr><td class="mono">NB-004</td><td class="mono">GFW_UNIVERSE</td><td>RING 0</td><td>GFW Doctrine</td></tr>
+      <tr><td class="mono">NB-005</td><td class="mono">CODEX_COMPENDIUM</td><td>RING 0</td><td>Universe Compendium</td></tr>
+      <tr><td class="mono">NB-006</td><td class="mono">FORTRESS_JUSTICE</td><td>RING 1</td><td>Verfassung 11K</td></tr>
+      <tr><td class="mono">NB-007</td><td class="mono">UNIFIED_MATRIX</td><td>RING 0</td><td>Matrix Engine</td></tr>
+      <tr><td class="mono">NB-008</td><td class="mono">OMNI_NEURO</td><td>RING 3</td><td>Neuromorphic Gov</td></tr>
+      <tr><td class="mono">NB-009</td><td class="mono">QUANTUM_TRESOR</td><td>RING 2</td><td>WORM Quantum</td></tr>
+      <tr><td class="mono">NB-010</td><td class="mono">SENIOR_GEMINIS</td><td>RING 1</td><td>Senior AI</td></tr>
+      <tr><td class="mono">NB-011</td><td class="mono">PSYCH_PARADIGMS</td><td>RING 4</td><td>Psychologie</td></tr>
+      <tr><td class="mono">NB-080</td><td class="mono">ODIN_MATRIX 1-200</td><td>RING 1</td><td>200 Normen · LOCKED</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:40px;padding-top:20px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:11px;color:var(--text-dim);">
+    Ibbenbüren, 10.10.2026 · Thomas König · Tina König · Südbring 134 · 49477 Ibbenbüren<br>
+    Signatur: rauschfrei.zertifiziert_by_b6fortress · Status: Φ LOCKED · Memory Frozen
+  </div>
+
+</div>
+
+<script>
+function returnToVercel() {
+  window.location.href = 'https://black-six-matrix.vercel.app/';
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="theme-color" content="#08090b" />
