@@ -1,3 +1,79 @@
+<div class="nav-section">Forensik</div>
+      <div class="nav-item" data-page="richter" onclick="showPage('richter', this)">
+        <span class="nav-icon">◬</span> Richter-Validator
+      </div>
+      <div class="nav-item" data-page="signatur" onclick="showPage('signatur', this)">
+        <span class="nav-icon">✎</span> Signatur-Check
+      </div>
+<!-- ========== RICHTER-VALIDATOR ========== -->
+      <div id="richter" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Richter-Validator</h2>
+        <p class="page-sub">
+          Deterministische Prüfung · 5 Achsen · Precision-Guard aktiv
+        </p>
+
+        <!-- Eingabe -->
+        <div class="card" style="cursor:default;margin-bottom:18px">
+          <h3>Dokument einfügen oder laden</h3>
+          <p>Text einfügen oder .txt-Datei wählen. PDFs bitte vorher in Text umwandeln.</p>
+
+          <textarea; id="rv-input" class="field"
+            style="margin-top:12px;height:180px;font-family:var(--font-mono);font-size:12.5px"
+            placeholder="Dokumenttext hier einfügen…"></textarea>
+
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            <label class="back-btn" style="margin:0;cursor:pointer">
+              📎 Datei wählen
+              <input type="file" id="rv-file" accept=".txt,.md,.csv,.log"
+                     style="display:none">
+            </label>
+            <button class="back-btn" id="rv-run"
+              style="margin:0;border-color:rgba(0,230,118,.4);color:var(--green)">
+              ▬ Prüfen
+            </button>
+            <button class="back-btn" id="rv-clear" style="margin:0">
+              ✕ Leeren
+            </button>
+          </div>
+        </div>
+
+        <!-- Ergebnis-Container -->
+        <div id="rv-result"></div>
+      </div>
+
+      <!-- ========== SIGNATUR-CHECK (UI-Stub) ========== -->
+      <div id="signatur" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Signatur-Check</h2>
+        <p class="page-sub">Pflicht + Ist-Zustand · nur Text-Marker (Vision = Server-Pfad)</p>
+
+        <div class="card" style="cursor:default">
+          <h3>Dokumenttyp wählen</h3>
+          <p>Nach Auswahl wird der Textmarker-Scan ausgeführt.</p>
+          <select id="sig-typ" class="field" style="margin-top:12px">
+            <option value="durchsuchungsbeschluss">Durchsuchungsbeschluss</option>
+            <option value="anklageschrift">Anklageschrift</option>
+            <option value="beschluss">Beschluss</option>
+            <option value="urteil">Urteil</option>
+            <option value="haftbefehl">Haftbefehl</option>
+            <option value="protokoll">Protokoll</option>
+            <option value="belehrung_beschuldigter_nrw">Belehrung</option>
+            <option value="ed_anordnung_nrw">ED-Anordnung</option>
+            <option value="dna_anordnung_nrw">DNA-Anordnung</option>
+            <option value="verwaltungsakt">Verwaltungsakt</option>
+          </select>
+          <textarea id="sig-input" class="field"
+            style="margin-top:12px;height:140px;font-family:var(--font-mono);font-size:12.5px"
+            placeholder="Dokumenttext einfügen…"></textarea>
+          <button class="back-btn" id="sig-run"
+            style="margin-top:12px;margin-bottom:0border-color:rgba(0,230,118,.4);color:var(--green)">
+            ▬ Signatur prüfen
+          </button>
+        </div>
+
+        <div id="sig-result"></div>
+      </div>
 <!DOCTYPE html>
 <html lang="de">
 <head>
