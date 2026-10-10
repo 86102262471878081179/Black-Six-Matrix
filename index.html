@@ -530,3 +530,528 @@ function copyToClipboard(elementId, btn) {
 </body>
 </html>
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="B6 Justice" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a0a0a" />
+  
+  <!-- High-quality Apple Touch Icon (SVG) -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23111111'/%3E%3Cstop offset='100%25' stop-color='%230a0a0a'/%3E%3C/linearGradient%3E%3ClinearGradient id='green' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300e676'/%3E%3Cstop offset='100%25' stop-color='%2300c853'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23bg)'/%3E%3Crect x='8' y='8' width='164' height='164' rx='34' fill='none' stroke='url(%23green)' stroke-width='3' opacity='0.9'/%3E%3Ctext x='90' y='108' font-family='-apple-system, BlinkMacSystemFont, sans-serif' font-size='64' font-weight='800' fill='url(%23green)' text-anchor='middle'%3EB6%3C/text%3E%3C/svg%3E" />
+  
+  <title>Black Six Strategie – Justice Tool</title>
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-card: #121212;
+      --bg-sidebar: #0d0d0d;
+      --border: #1c1c1c;
+      --green: #00e676;
+      --text: #f0f0f0;
+      --text-dim: #9a9a9a;
+      --radius: 16px;
+      --safe-top: env(safe-area-inset-top);
+      --safe-bottom: env(safe-area-inset-bottom);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .logo-area {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(145deg, #141414, #0a0a0a);
+      border: 2px solid var(--green);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--green);
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.25);
+    }
+
+    .logo-text h1 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .logo-text span {
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      color: var(--text-dim);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+      user-select: none;
+    }
+
+    .nav-item:active { transform: scale(0.97); }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(0, 230, 118, 0.12);
+      color: var(--green);
+    }
+    .nav-item.active { border-left: 3px solid var(--green); }
+
+    .nav-icon { width: 22px; text-align: center; font-size: 18px; }
+
+    .user-area {
+      padding: 18px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--green);
+      font-size: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .user-info strong { display: block; font-size: 14px; }
+    .user-info span { font-size: 12px; color: var(--text-dim); }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 14px; }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .search {
+      background: #161616;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      color: var(--text);
+      width: 260px;
+      font-size: 15px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .search:focus { border-color: var(--green); }
+
+    .badge {
+      background: rgba(0, 230, 118, 0.12);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 230, 118, 0.25);
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 24px 20px 40px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      transition: all 0.25s;
+      cursor: pointer;
+      -webkit-user-select: none;
+    }
+    .card:active { transform: scale(0.98); }
+    .card:hover {
+      border-color: rgba(0, 230, 118, 0.35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      background: rgba(0, 230, 118, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+      color: var(--green);
+    }
+
+    .card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .card p { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; margin-bottom: 18px; }
+    .card-stat { font-size: 24px; font-weight: 700; color: var(--green); margin-bottom: 6px; }
+    .card-link { font-size: 13px; color: var(--green); font-weight: 600; }
+
+    .detail { display: none; }
+    .detail.active { display: block; }
+    .dashboard.hidden { display: none; }
+
+    .back-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      -webkit-appearance: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        transform: translateX(-100%);
+        padding-top: var(--safe-top);
+        padding-bottom: var(--safe-bottom);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .menu-btn { display: block; }
+      .search { width: 150px; font-size: 14px; }
+      .content { padding: 20px 16px 50px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 90;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .overlay.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-area">
+      <div class="logo">
+        <div class="logo-icon">B6</div>
+        <div class="logo-text">
+          <h1>BLACK SIX</h1>
+          <span>JUSTICE TOOL</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard', this)">
+        <span class="nav-icon">▣</span> Dashboard
+      </div>
+      <div class="nav-item" data-page="cases" onclick="showPage('cases', this)">
+        <span class="nav-icon">⚖</span> Cases
+      </div>
+      <div class="nav-item" data-page="strategy" onclick="showPage('strategy', this)">
+        <span class="nav-icon">◎</span> Strategy Maps
+      </div>
+      <div class="nav-item" data-page="research" onclick="showPage('research', this)">
+        <span class="nav-icon">⌕</span> Legal Research
+      </div>
+      <div class="nav-item" data-page="risk" onclick="showPage('risk', this)">
+        <span class="nav-icon">🛡</span> Risk Assessment
+      </div>
+      <div class="nav-item" data-page="evidence" onclick="showPage('evidence', this)">
+        <span class="nav-icon">📁</span> Evidence Vault
+      </div>
+      <div class="nav-item" data-page="ai" onclick="showPage('ai', this)">
+        <span class="nav-icon">🧠</span> AI Advisor
+      </div>
+      <div class="nav-item" data-page="settings" onclick="showPage('settings', this)">
+        <span class="nav-icon">⚙</span> Settings
+      </div>
+    </nav>
+
+    <div class="user-area">
+      <div class="avatar">TK</div>
+      <div class="user-info">
+        <strong>Thomas König</strong>
+        <span>Senior Counsel</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <input type="text" class="search" placeholder="Suche Fälle, Dokumente..." />
+      </div>
+      <div class="header-right">
+        <div class="badge">SECURE</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div id="dashboard" class="dashboard">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-sub">Strategic Intelligence • Legal Excellence • Just Outcomes</p>
+
+        <div class="grid">
+          <div class="card" onclick="showPage('cases')">
+            <div class="card-icon">⚖</div>
+            <h3>Case Analytics</h3>
+            <p>Track case progress, outcomes and key metrics in real time.</p>
+            <div class="card-stat">24</div>
+            <div class="card-link">View Analytics →</div>
+          </div>
+          <div class="card" onclick="showPage('strategy')">
+            <div class="card-icon">◎</div>
+            <h3>Strategy Maps</h3>
+            <p>Visualize case strategy, arguments and dependencies.</p>
+            <div class="card-stat">12</div>
+            <div class="card-link">Open Maps →</div>
+          </div>
+          <div class="card" onclick="showPage('research')">
+            <div class="card-icon">⌕</div>
+            <h3>Legal Research</h3>
+            <p>AI-powered research across statutes, case law and precedents.</p>
+            <div class="card-stat">37</div>
+            <div class="card-link">Start Research →</div>
+          </div>
+          <div class="card" onclick="showPage('risk')">
+            <div class="card-icon">🛡</div>
+            <h3>Risk Assessment</h3>
+            <p>Evaluate risks and exposure with predictive intelligence.</p>
+            <div class="card-stat">7</div>
+            <div class="card-link">Assess Risks →</div>
+          </div>
+          <div class="card" onclick="showPage('evidence')">
+            <div class="card-icon">📁</div>
+            <h3>Evidence Vault</h3>
+            <p>Securely store, organize and manage case evidence.</p>
+            <div class="card-stat">156</div>
+            <div class="card-link">Access Vault →</div>
+          </div>
+          <div class="card" onclick="showPage('ai')">
+            <div class="card-icon">🧠</div>
+            <h3>AI Advisor</h3>
+            <p>Get AI-powered insights, suggestions and strategy recommendations.</p>
+            <div class="card-stat">Online</div>
+            <div class="card-link">Consult Advisor →</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cases" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Case Analytics</h2>
+        <p class="page-sub">24 aktive Fälle • Echtzeit-Tracking</p>
+        <div class="grid">
+          <div class="card"><h3>Aktive Fälle</h3><div class="card-stat">24</div></div>
+          <div class="card"><h3>Gewonnen diesen Monat</h3><div class="card-stat">5</div></div>
+          <div class="card"><h3>In Prüfung</h3><div class="card-stat">8</div></div>
+        </div>
+      </div>
+
+      <div id="strategy" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Strategy Maps</h2>
+        <p class="page-sub">12 aktive Strategiekarten</p>
+        <div class="card"><h3>Visual Strategy Builder</h3><p>Argumente, Beweisverknüpfungen und Entscheidungsbäume visualisieren.</p></div>
+      </div>
+
+      <div id="research" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Legal Research</h2>
+        <p class="page-sub">KI-gestützte juristische Recherche</p>
+        <div class="card">
+          <h3>Research Assistant</h3>
+          <p>Stelle eine Rechtsfrage oder gib eine Norm ein.</p>
+          <input type="text" class="search" style="width:100%;margin-top:14px" placeholder="z. B. § 823 BGB Haftung..." />
+        </div>
+      </div>
+
+      <div id="risk" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Risk Assessment</h2>
+        <p class="page-sub">7 High-Risk-Matters aktuell überwacht</p>
+        <div class="card"><h3>Predictive Risk Engine</h3><p>Automatisierte Bewertung von Risiko, Erfolgswahrscheinlichkeit und finanziellem Impact.</p></div>
+      </div>
+
+      <div id="evidence" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Evidence Vault</h2>
+        <p class="page-sub">156 gesicherte Elemente • AES-256 verschlüsselt</p>
+        <div class="card"><h3>Secure Storage</h3><p>Beweise hochladen, taggen und mit Fällen verknüpfen. Vollständige Chain-of-Custody.</p></div>
+      </div>
+
+      <div id="ai" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">AI Advisor</h2>
+        <p class="page-sub">Status: Online • Bereit</p>
+        <div class="card">
+          <h3>Strategic AI Counsel</h3>
+          <p>Frage nach Strategie-Empfehlungen, Argumentstärke oder Entwürfen.</p>
+          <textarea style="width:100%;height:110px;background:#161616;border:1px solid #333;border-radius:12px;color:#f0f0f0;padding:14px;margin-top:14px;resize:none;font-size:15px;" placeholder="Beschreibe die rechtliche Situation..."></textarea>
+        </div>
+      </div>
+
+      <div id="settings" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Einstellungen</h2>
+        <div class="card">
+          <h3>Account & Sicherheit</h3>
+          <p>Session-Verschlüsselung: AES-256<br>Letzter Login: Heute<br>Zwei-Faktor-Authentifizierung: Aktiviert</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showPage(pageId, navElement) {
+      document.getElementById('dashboard').classList.add('hidden');
+      document.querySelectorAll('.detail').forEach(el => el.classList.remove('active'));
+
+      if (pageId === 'dashboard') {
+        document.getElementById('dashboard').classList.remove('hidden');
+      } else {
+        const el = document.getElementById(pageId);
+        if (el) el.classList.add('active');
+      }
+
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      if (navElement) {
+        navElement.classList.add('active');
+      } else {
+        const match = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+        if (match) match.classList.add('active');
+      }
+
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    }
+  </script>
+</body>
+</html>
+
