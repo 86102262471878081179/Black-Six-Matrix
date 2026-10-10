@@ -2,6 +2,1260 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#08090b" />
+<title>Black Six Strategic — Justice Tool</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2308090b'/%3E%3Ctext x='32' y='43' font-family='system-ui' font-size='26' font-weight='800' fill='%2300e676' text-anchor='middle'%3EB6%3C/text%3E%3C/svg%3E" />
+<style>
+:root{
+  --bg:#08090b;--bg-card:#0e1116;--bg-sidebar:#0a0c0f;--bg-input:#14171c;
+  --border:#1b2027;--border-hi:#2a313b;
+  --green:#00e676;--green-dim:#00a854;--green-glow:rgba(0,230,118,.18);
+  --amber:#ffb300;--red:#ff3b30;--blue:#4b9cff;--purple:#b16ce6;
+  --text:#eef1f5;--text-dim:#8a93a0;--text-mute:#5b6472;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Monaco,Consolas,monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overscroll-behavior:none;font-feature-settings:"ss01"}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#3a4350}
+
+.app{display:flex;height:100vh;height:100dvh;
+  background:
+    radial-gradient(1200px 800px at 12% -10%,rgba(0,230,118,.06),transparent 55%),
+    radial-gradient(900px 700px at 105% 110%,rgba(75,156,255,.05),transparent 55%),
+    var(--bg);}
+
+/* SIDEBAR */
+.sidebar{width:264px;flex-shrink:0;background:linear-gradient(180deg,var(--bg-sidebar),#06070a);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;
+  transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.logo-area{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#131820,#0a0d11);
+  border:1.5px solid var(--green);display:grid;place-items:center;font-weight:800;font-size:16px;
+  color:var(--green);position:relative;
+  box-shadow:0 0 0 1px rgba(0,230,118,.08),0 0 22px rgba(0,230,118,.18),inset 0 1px 0 rgba(255,255,255,.06)}
+.logo-icon::after{content:'';position:absolute;inset:3px;border-radius:9px;border:1px solid rgba(0,230,118,.15);pointer-events:none}
+.logo-text h1{font-size:13.5px;font-weight:700;letter-spacing:.4px}
+.logo-text span{display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--green);margin-top:3px}
+.nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-section{font-size:9.5px;font-weight:700;letter-spacing:1.7px;color:var(--text-mute);padding:14px 14px 6px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:9.5px 13px;border-radius:9px;color:var(--text-dim);
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:2px;user-select:none;position:relative}
+.nav-item:hover{background:rgba(255,255,255,.03);color:var(--text)}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,230,118,.14),rgba(0,230,118,.02));color:var(--green);font-weight:600}
+.nav-item.active::before{content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:0 3px 3px 0;
+  background:var(--green);box-shadow:0 0 12px var(--green)}
+.nav-icon{width:18px;text-align:center;font-size:14px;opacity:.9}
+.user-area{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:11px;background:rgba(0,0,0,.2)}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(145deg,#1a2028,#0f1319);
+  border:1.5px solid var(--border-hi);display:grid;place-items:center;font-weight:700;font-size:12px;color:var(--green)}
+.user-info strong{display:block;font-size:12.5px;font-weight:600}
+.user-info span{font-size:10.5px;color:var(--text-dim)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.header{height:58px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;background:rgba(8,9,11,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);z-index:50}
+.header-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.menu-btn{display:none;border:1px solid var(--border);padding:7px 11px;border-radius:9px;font-size:15px;line-height:1}
+.menu-btn:active{background:rgba(0,230,118,.08)}
+.brand h2{font-size:14px;font-weight:700;letter-spacing:.2px}
+.brand p{font-size:11px;color:var(--text-dim);margin-top:1px}
+.search{background:var(--bg-input);border:1px solid var(--border);border-radius:10px;
+  padding:8px 13px 8px 33px;color:var(--text);width:280px;font-size:12.5px;outline:none;transition:all .15s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%235b6472' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:11px center}
+.search:focus{border-color:rgba(0,230,118,.5);box-shadow:0 0 0 3px rgba(0,230,118,.08)}
+.search::placeholder{color:var(--text-mute)}
+.header-right{display:flex;align-items:center;gap:10px}
+.hicon{width:33px;height:33px;border-radius:8px;border:1px solid var(--border);color:var(--text-dim);
+  display:grid;place-items:center;font-size:14px;position:relative;transition:all .15s}
+.hicon:hover{color:var(--green);border-color:rgba(0,230,118,.4)}
+.hicon .dot{position:absolute;top:-4px;right:-4px;background:var(--green);color:#000;font-size:9px;font-weight:800;
+  padding:1px 5px;border-radius:8px;border:2px solid var(--bg)}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,230,118,.1);color:var(--green);
+  font-size:10px;font-weight:700;letter-spacing:1px;padding:5px 11px;border-radius:20px;
+  border:1px solid rgba(0,230,118,.25);text-transform:uppercase}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+
+.content{flex:1;overflow-y:auto;padding:26px 26px 60px;scrollbar-gutter:stable}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;
+  background:linear-gradient(180deg,#fff 0%,#b8bfc9 100%);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+.page-sub{color:var(--text-dim);font-size:13px;margin-bottom:24px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+
+/* CARDS */
+.card{background:linear-gradient(180deg,var(--bg-card) 0%,#0a0d12 100%);border:1px solid var(--border);
+  border-radius:16px;padding:20px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;user-select:none}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,230,118,.4),transparent);opacity:0;transition:opacity .3s}
+.card:hover{border-color:var(--border-hi);transform:translateY(-2px);box-shadow:0 14px 44px rgba(0,0,0,.5)}
+.card:hover::before{opacity:1}
+.card.static{cursor:default}
+.card.static:hover{transform:none;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.card-icon{width:42px;height:42px;border-radius:11px;background:linear-gradient(145deg,rgba(0,230,118,.14),rgba(0,230,118,.03));
+  border:1px solid rgba(0,230,118,.18);display:grid;place-items:center;font-size:18px;margin-bottom:14px;color:var(--green)}
+.card h3{font-size:15px;font-weight:600;margin-bottom:5px}
+.card p{font-size:12.5px;color:var(--text-dim);line-height:1.55;margin-bottom:14px}
+.card-stat{font-size:24px;font-weight:700;color:var(--green);letter-spacing:-.6px;margin-bottom:5px;font-variant-numeric:tabular-nums}
+.card-link{font-size:12px;color:var(--green);font-weight:600;display:inline-flex;align-items:center;gap:4px}
+
+/* KPI */
+.kpi{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;
+  display:flex;flex-direction:column;gap:5px}
+.kpi-label{font-size:10.5px;color:var(--text-mute);font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+.kpi-value{font-size:21px;font-weight:700;letter-spacing:-.4px;font-variant-numeric:tabular-nums}
+.kpi-value.ok{color:var(--green)}
+.kpi-value.warn{color:var(--amber)}
+.kpi-value.alert{color:var(--red)}
+.kpi-value.info{color:var(--blue)}
+.kpi-delta{font-size:11px;color:var(--text-dim);font-family:var(--mono)}
+
+/* DETAIL */
+.detail{display:none}
+.detail.active{display:block;animation:fadeIn .3s}
+.dashboard.hidden{display:none}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.back-btn{background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:9px;font-size:12.5px;font-weight:500;margin-bottom:20px;
+  display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.back-btn:hover{border-color:rgba(0,230,118,.4);color:var(--green);background:rgba(0,230,118,.05)}
+.back-btn.primary{border-color:rgba(0,230,118,.4);color:var(--green)}
+.back-btn.primary:hover{background:rgba(0,230,118,.1)}
+.back-btn.danger{border-color:rgba(255,59,48,.3);color:var(--red)}
+
+/* TABLE */
+.table{width:100%;border-collapse:collapse;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;font-size:12.5px}
+.table th{text-align:left;padding:11px 14px;background:rgba(0,0,0,.3);color:var(--text-dim);
+  font-weight:600;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.table tr:last-child td{border-bottom:none}
+.table tr:hover td{background:rgba(255,255,255,.015)}
+
+/* TAGS */
+.tag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.7px;padding:3px 8px;border-radius:5px;text-transform:uppercase}
+.tag.ok{background:rgba(0,230,118,.12);color:var(--green)}
+.tag.warn{background:rgba(255,179,0,.12);color:var(--amber)}
+.tag.alert{background:rgba(255,59,48,.12);color:var(--red)}
+.tag.info{background:rgba(75,156,255,.12);color:var(--blue)}
+.tag.purple{background:rgba(177,108,230,.14);color:var(--purple)}
+
+/* FORM */
+.field{width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:10px;
+  color:var(--text);padding:11px 13px;font-size:13px;resize:vertical;outline:none;transition:border-color .15s}
+.field:focus{border-color:rgba(0,230,118,.5);box-shadow:0 0 0 3px rgba(0,230,118,.06)}
+select.field{cursor:pointer}
+.toolbar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+
+/* BEFUND (validator results) */
+.befund-item{padding:10px 12px;background:rgba(0,0,0,.28);border-radius:8px;
+  border-left:3px solid var(--amber);margin-bottom:7px}
+.befund-item.hart{border-left-color:var(--red)}
+.befund-item .regel{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:4px;letter-spacing:.3px}
+.befund-item .stelle{font-size:12.5px;color:var(--text);word-break:break-word;margin-bottom:3px}
+.befund-item .hinweis{font-size:11.5px;color:var(--text-dim)}
+.autor-row{margin-bottom:10px}
+.autor-head{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px}
+.autor-meta{font-family:var(--mono);color:var(--text-dim);font-size:11px}
+.autor-bar{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-top:4px}
+.autor-bar>div{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));transition:width .6s ease}
+
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);z-index:90}
+.overlay.show{display:block}
+
+/* Section header inside detail */
+.section-h{font-size:15px;font-weight:700;margin:26px 0 12px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section-h .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+
+/* Pill */
+.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);padding:3px 9px;border-radius:20px;font-size:11px;color:var(--text-dim);font-family:var(--mono)}
+
+@media (max-width:860px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:24px 0 60px rgba(0,0,0,.6)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-btn{display:inline-flex}
+  .search{width:100%}
+  .brand p{display:none}
+  .header{padding:0 14px;gap:8px}
+  .header-right .badge{display:none}
+  .content{padding:20px 14px 60px}
+  .grid{grid-template-columns:1fr;gap:11px}
+  .page-title{font-size:22px}
+  .table{font-size:11.5px}
+  .table th,.table td{padding:9px 10px}
+}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-area">
+      <div class="logo">
+        <div class="logo-icon">B6</div>
+        <div class="logo-text">
+          <h1>BLACK SIX</h1>
+          <span>JUSTICE TOOL</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section">Übersicht</div>
+      <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard',this)"><span class="nav-icon">▦</span>Dashboard</div>
+      <div class="nav-item" data-page="akte" onclick="showPage('akte',this)"><span class="nav-icon">⚖</span>Akte König</div>
+      <div class="nav-item" data-page="ruegen" onclick="showPage('ruegen',this)"><span class="nav-icon">⚠</span>Rügen-Matrix</div>
+      <div class="nav-item" data-page="fehlermatrix" onclick="showPage('fehlermatrix',this)"><span class="nav-icon">∑</span>894 Fehler-Matrix</div>
+
+      <div class="nav-section">Analyse</div>
+      <div class="nav-item" data-page="chronologie" onclick="showPage('chronologie',this)"><span class="nav-icon">◷</span>Chronologie</div>
+      <div class="nav-item" data-page="strategie" onclick="showPage('strategie',this)"><span class="nav-icon">◎</span>Strategie-Karten</div>
+      <div class="nav-item" data-page="risiko" onclick="showPage('risiko',this)"><span class="nav-icon">🛡</span>Risiko-Assessment</div>
+      <div class="nav-item" data-page="research" onclick="showPage('research',this)"><span class="nav-icon">◬</span>Legal Research</div>
+
+      <div class="nav-section">Forensik</div>
+      <div class="nav-item" data-page="richter" onclick="showPage('richter',this)"><span class="nav-icon">◈</span>Richter-Validator</div>
+      <div class="nav-item" data-page="signatur" onclick="showPage('signatur',this)"><span class="nav-icon">✎</span>Signatur-Check</div>
+
+      <div class="nav-section">Belege</div>
+      <div class="nav-item" data-page="belege" onclick="showPage('belege',this)"><span class="nav-icon">📁</span>Beweis-Tresor</div>
+      <div class="nav-item" data-page="xjustiz" onclick="showPage('xjustiz',this)"><span class="nav-icon">⇄</span>XJustiz Top 100</div>
+      <div class="nav-item" data-page="core" onclick="showPage('core',this)"><span class="nav-icon">◇</span>Core 11</div>
+
+      <div class="nav-section">System</div>
+      <div class="nav-item" data-page="advisor" onclick="showPage('advisor',this)"><span class="nav-icon">◆</span>AI Advisor</div>
+      <div class="nav-item" data-page="settings" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span>Settings</div>
+    </nav>
+
+    <div class="user-area">
+      <div class="avatar">TK</div>
+      <div class="user-info"><strong>Thomas König</strong><span>Root Operator</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menü">☰</button>
+        <div class="brand">
+          <h2>BLACK SIX STRATEGIE — JUSTICE TOOL</h2>
+          <p>Strategic Intelligence. Legal Excellence. Just Outcomes.</p>
+        </div>
+        <input type="text" class="search" id="globalSearch" placeholder="Suche Akten, Rügen, Belege…" />
+      </div>
+      <div class="header-right">
+        <button class="hicon" title="Notifications">🔔<span class="dot">3</span></button>
+        <div class="badge">Secure Session</div>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- DASHBOARD -->
+      <div id="dashboard" class="dashboard">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-sub">Enterprise Governance Console · Akte König · VG Minden 11 K 3272/26</p>
+
+        <div class="grid">
+          <div class="card" onclick="showPage('akte')">
+            <div class="card-icon">⚖</div>
+            <h3>Akte König</h3>
+            <p>Vollständige Verfahrensakte: 132 Ereignisse, 47 Dokumente, 4 Beschlüsse.</p>
+            <div class="card-stat">132</div>
+            <div class="card-link">Öffnen →</div>
+          </div>
+          <div class="card" onclick="showPage('ruegen')">
+            <div class="card-icon">⚠</div>
+            <h3>Rügen-Matrix</h3>
+            <p>34 harte Rügen · Mit Norm, Präzedenz und Status.</p>
+            <div class="card-stat">34</div>
+            <div class="card-link">Ansehen →</div>
+          </div>
+          <div class="card" onclick="showPage('fehlermatrix')">
+            <div class="card-icon">∑</div>
+            <h3>894 Fehler-Matrix</h3>
+            <p>447 × 2 Subjekte · 14 Vektoren · forensischer Beweis.</p>
+            <div class="card-stat">894</div>
+            <div class="card-link">Analysieren →</div>
+          </div>
+          <div class="card" onclick="showPage('richter')">
+            <div class="card-icon">◈</div>
+            <h3>Richter-Validator</h3>
+            <p>5 Achsen · RS · GR · LOG · KON · VOR · Precision-Guard aktiv.</p>
+            <div class="card-stat">5×</div>
+            <div class="card-link">Prüfen →</div>
+          </div>
+          <div class="card" onclick="showPage('xjustiz')">
+            <div class="card-icon">⇄</div>
+            <h3>XJustiz & XÖV</h3>
+            <p>Top 100 Werkzeuge, Standards und Komponenten im ERV-Ökosystem.</p>
+            <div class="card-stat">100</div>
+            <div class="card-link">Erkunden →</div>
+          </div>
+          <div class="card" onclick="showPage('belege')">
+            <div class="card-icon">📁</div>
+            <h3>Beweis-Tresor</h3>
+            <p>Hash-Chain versiegelt · WORM-Ledger · Merkle-Root aktiv.</p>
+            <div class="card-stat">8.442</div>
+            <div class="card-link">Zugreifen →</div>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top:22px">
+          <div class="kpi"><span class="kpi-label">Reifegrad</span><span class="kpi-value ok">4.1 / 5</span><span class="kpi-delta">Ziel 5.0</span></div>
+          <div class="kpi"><span class="kpi-label">Formfehler (amtlich)</span><span class="kpi-value alert">5×</span><span class="kpi-delta">qeS: nein</span></div>
+          <div class="kpi"><span class="kpi-label">Rechtsbrüche</span><span class="kpi-value alert">894</span><span class="kpi-delta">447 × 2 Subjekte</span></div>
+          <div class="kpi"><span class="kpi-label">Normen belegt</span><span class="kpi-value ok">1.072</span><span class="kpi-delta">Locked</span></div>
+          <div class="kpi"><span class="kpi-label">CGM-Ausfall</span><span class="kpi-value alert">42 T</span><span class="kpi-delta">§ 224 StGB</span></div>
+          <div class="kpi"><span class="kpi-label">Forderung</span><span class="kpi-value info">19,8 Mio. €</span><span class="kpi-delta">§ 839 BGB</span></div>
+        </div>
+      </div>
+
+      <!-- AKTE -->
+      <div id="akte" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Akte König</h2>
+        <p class="page-sub">Kerndokumente · 47 Hauptdokumente · Stand 01.10.2026</p>
+        <div class="grid">
+          <div class="card static"><h3>Durchsuchungsbeschluss</h3><p>AG Düsseldorf · 152 Gs 648/26 · 06.05.2026</p><span class="tag alert">Nichtig</span></div>
+          <div class="card static"><h3>Sicherstellungsprotokoll</h3><p>PP Bielefeld · 07.05.2026 · Blatt 1–3</p><span class="tag alert">Zeitparadoxon</span></div>
+          <div class="card static"><h3>Belehrung</h3><p>§ 31 BtMG statt § 308 StGB · Blatt 5–6</p><span class="tag alert">Falsch</span></div>
+          <div class="card static"><h3>Nichtabhilfebeschluss</h3><p>AG Düsseldorf · Hönick · 13.08.2026</p><span class="tag warn">Ohne Prüfung</span></div>
+          <div class="card static"><h3>LG-Beschwerde</h3><p>LG Düsseldorf · 011 Qs-52 Js 23/26 · 14.09.2026</p><span class="tag alert">Titel-Swap</span></div>
+          <div class="card static"><h3>Klageerwiderung</h3><p>PP Bielefeld · 21.09.2026</p><span class="tag alert">5× qeS: nein</span></div>
+        </div>
+      </div>
+
+      <!-- RÜGEN -->
+      <div id="ruegen" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Rügen-Matrix</h2>
+        <p class="page-sub">34 harte Rügen · mit Norm und Präzedenz · Chronologische Maximal-Matrix V5</p>
+        <table class="table">
+          <thead><tr><th style="width:40px">#</th><th>Kurztext</th><th>Norm</th><th>Präzedenz</th><th>Status</th></tr></thead>
+          <tbody id="ruegen-body"></tbody>
+        </table>
+      </div>
+
+      <!-- FEHLER-MATRIX -->
+      <div id="fehlermatrix" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">894 Fehler-Matrix</h2>
+        <p class="page-sub">447 × 2 (Thomas &amp; Tina König) · v12.12.12 · forensischer Beweis</p>
+
+        <div class="kpi" style="margin-bottom:16px">
+          <span class="kpi-label">Forderung</span>
+          <span class="kpi-value alert" style="font-size:26px">19.800.400,00 EUR</span>
+          <span class="kpi-delta">§ 839 BGB i.V.m. Art. 34 GG / § 826 BGB</span>
+        </div>
+
+        <table class="table">
+          <thead><tr><th>Vektor</th><th>Gegenstand</th><th>Rechtsbrüche</th><th>Normen</th><th>Schwere</th></tr></thead>
+          <tbody id="fehler-body"></tbody>
+        </table>
+
+        <div class="section-h" style="margin-top:28px"><span class="dot"></span>Prozessuale Kerndaten</div>
+        <div class="grid">
+          <div class="card static"><h3 style="font-size:14px">1 · Zwillings-Verdopplung</h3><p style="margin-bottom:0">447 × 2 = 894. Thomas und Tina König sind eigenständige Subjekte.</p></div>
+          <div class="card static"><h3 style="font-size:14px">2 · Formnichtigkeit</h3><p style="margin-bottom:0">Fehlende Richtersignatur Blatt 3 (§ 35 StPO); isolierter Beglaubigungsstempel Blatt 4.</p></div>
+          <div class="card static"><h3 style="font-size:14px">3 · ERV-Kollaps</h3><p style="margin-bottom:0">5× qeS: nein · amtlicher Prüfvermerk des VG Minden.</p></div>
+          <div class="card static"><h3 style="font-size:14px">4 · Medizinisches Delikt</h3><p style="margin-bottom:0">70 Min. Insulin-Verweigerung (BZ &gt; 260–600 mg/dL); CGM-Monitor konfisziert.</p></div>
+          <div class="card static"><h3 style="font-size:14px">5 · Retaliation</h3><p style="margin-bottom:0">Jugendamtsmeldung (§ 8a SGB VIII) 3 Tage nach VG-Klageerhebung.</p></div>
+        </div>
+      </div>
+
+      <!-- CHRONOLOGIE -->
+      <div id="chronologie" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Chronologie</h2>
+        <p class="page-sub">06.05.2026 – 01.10.2026 · lückenlos · Blatt für Blatt</p>
+        <table class="table">
+          <thead><tr><th style="width:110px">Datum</th><th>Ereignis</th><th>Az. / Beteiligte</th></tr></thead>
+          <tbody id="chrono-body"></tbody>
+        </table>
+      </div>
+
+      <!-- STRATEGIE -->
+      <div id="strategie" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Strategie-Karten</h2>
+        <p class="page-sub">Angriffs- und Abwehrvektoren · 6 Ebenen</p>
+        <div class="grid">
+          <div class="card static"><h3>Ebene 1 — Formfehler</h3><p>5× qeS: nein · Titel-Swap · Zeitparadoxon · Blanko-Urkunden.</p><span class="tag alert">Sofort</span></div>
+          <div class="card static"><h3>Ebene 2 — Grundrechte</h3><p>Art. 1 · 2 II · 3 · 6 · 13 · 19 IV · 103 GG · EMRK · GRCh · UN-KRK.</p><span class="tag ok">Belegt</span></div>
+          <div class="card static"><h3>Ebene 3 — Strafbarkeit</h3><p>§ 340 · 240 · 241 · 344 · 348 · 258a StGB.</p><span class="tag alert">Persönlich</span></div>
+          <div class="card static"><h3>Ebene 4 — Amtshaftung</h3><p>§ 839 BGB i.V.m. Art. 34 GG · Schmerzensgeld · Schadensersatz.</p><span class="tag warn">Fiskalisch</span></div>
+          <div class="card static"><h3>Ebene 5 — Europa</h3><p>EGMR · EuGH · Art. 3 / 6 / 8 / 13 EMRK.</p><span class="tag info">Instanz</span></div>
+          <div class="card static"><h3>Ebene 6 — Kirche</h3><p>§ 67 VII VwGO · Art. 140 GG · § 53 StPO · Beistand.</p><span class="tag ok">Aktiv</span></div>
+        </div>
+      </div>
+
+      <!-- RISIKO -->
+      <div id="risiko" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Risiko-Assessment</h2>
+        <p class="page-sub">7 beobachtete High-Risk-Matters</p>
+        <div class="grid-3">
+          <div class="kpi"><span class="kpi-label">Behördenverhalten</span><span class="kpi-value alert">Erhöht</span><span class="kpi-delta">Retaliation 04.09.2026</span></div>
+          <div class="kpi"><span class="kpi-label">Kindeswohlgefährdung</span><span class="kpi-value alert">3 Besuche</span><span class="kpi-delta">seit 04.09.2026</span></div>
+          <div class="kpi"><span class="kpi-label">Frist-Risiko</span><span class="kpi-value warn">14 Tage</span><span class="kpi-delta">VG Minden</span></div>
+          <div class="kpi"><span class="kpi-label">Anwalts-Verfügbarkeit</span><span class="kpi-value ok">Aktiv</span><span class="kpi-delta">Az. 1177/26</span></div>
+        </div>
+      </div>
+
+      <!-- RESEARCH -->
+      <div id="research" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Legal Research</h2>
+        <p class="page-sub">Leitentscheidungen · Präzedenzfälle · Normen</p>
+        <table class="table">
+          <thead><tr><th>Norm</th><th>Leitentscheidung</th><th>Thema</th></tr></thead>
+          <tbody>
+            <tr><td>Art. 13 GG</td><td>BVerfG 2 BvR 2200/10</td><td>Richtervorbehalt Durchsuchung</td></tr>
+            <tr><td>§ 105 StPO</td><td>BVerfG 2 BvR 2187/01</td><td>Bestimmtheitsgebot</td></tr>
+            <tr><td>§ 136 StPO</td><td>BGH 5 StR 537/94</td><td>Blanko-Belehrung</td></tr>
+            <tr><td>§ 136a StPO</td><td>BVerfG 2 BvR 1502/03</td><td>Kind als Druckmittel</td></tr>
+            <tr><td>§ 340 StGB</td><td>BGH 4 StR 233/14</td><td>Körperverletzung im Amt</td></tr>
+            <tr><td>§ 348 StGB</td><td>OLG Karlsruhe 2 Ws 44/14</td><td>Falschbeurkundung</td></tr>
+            <tr><td>§ 44 BeurkG</td><td>OLG Hamm 15 W 422/15</td><td>Blanko-Beglaubigung</td></tr>
+            <tr><td>§ 107 StPO</td><td>LG Köln 105 Qs 33/19</td><td>Asservaten-Verzeichnis</td></tr>
+            <tr><td>§ 8a SGB VIII</td><td>BVerwG 5 B 12/21</td><td>Retaliations-Meldung</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RICHTER-VALIDATOR -->
+      <div id="richter" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Richter-Validator</h2>
+        <p class="page-sub">Deterministische Prüfung · 5 Achsen · Precision-Guard aktiv</p>
+
+        <div class="card static" style="margin-bottom:16px">
+          <h3>Dokument einfügen oder laden</h3>
+          <p>Text einfügen oder .txt-Datei wählen. PDFs vorher in Text umwandeln.</p>
+          <textarea id="rv-input" class="field" style="margin-top:10px;height:180px;font-family:var(--mono);font-size:12px" placeholder="Dokumenttext hier einfügen…"></textarea>
+          <div class="toolbar">
+            <label class="back-btn" style="margin:0">
+              📎 Datei wählen
+              <input type="file" id="rv-file" accept=".txt,.md,.csv,.log" style="display:none">
+            </label>
+            <button class="back-btn primary" id="rv-run" style="margin:0">▬ Prüfen</button>
+            <button class="back-btn" id="rv-clear" style="margin:0">✕ Leeren</button>
+            <button class="back-btn" id="rv-demo" style="margin:0">▸ Demo laden</button>
+          </div>
+        </div>
+
+        <div id="rv-result"></div>
+      </div>
+
+      <!-- SIGNATUR -->
+      <div id="signatur" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Signatur-Check</h2>
+        <p class="page-sub">Pflicht + Ist-Zustand · Text-Marker-Scan</p>
+
+        <div class="card static">
+          <h3>Dokumenttyp wählen</h3>
+          <select id="sig-typ" class="field" style="margin-top:10px">
+            <option value="durchsuchungsbeschluss">Durchsuchungsbeschluss</option>
+            <option value="anklageschrift">Anklageschrift</option>
+            <option value="beschluss">Beschluss</option>
+            <option value="urteil">Urteil</option>
+            <option value="haftbefehl">Haftbefehl</option>
+            <option value="protokoll">Protokoll</option>
+            <option value="belehrung_beschuldigter_nrw">Belehrung</option>
+            <option value="ed_anordnung_nrw">ED-Anordnung</option>
+            <option value="dna_anordnung_nrw">DNA-Anordnung</option>
+            <option value="verwaltungsakt">Verwaltungsakt</option>
+          </select>
+          <textarea id="sig-input" class="field" style="margin-top:10px;height:140px;font-family:var(--mono);font-size:12px" placeholder="Dokumenttext einfügen…"></textarea>
+          <button class="back-btn primary" id="sig-run" style="margin-top:12px;margin-bottom:0">▬ Signatur prüfen</button>
+        </div>
+        <div id="sig-result"></div>
+      </div>
+
+      <!-- BELEGE -->
+      <div id="belege" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Beweis-Tresor</h2>
+        <p class="page-sub">WORM · Hash-Chain · Merkle-Root · 8.442 Objekte</p>
+        <div class="grid">
+          <div class="card static"><h3>Hash-Chain</h3><p>HMAC-SHA-256 · append-only · unveränderbar seit 06.05.2026.</p><div class="card-stat">8.442</div><span class="tag ok">Verifiziert</span></div>
+          <div class="card static"><h3>Merkle-Root</h3><p>Aktueller Wurzel-Hash über alle Blöcke.</p><div class="card-link" style="font-family:var(--mono);font-size:11px;word-break:break-all">a7f2…9b3c…4e81</div></div>
+          <div class="card static"><h3>Benecke-Vereinbarung</h3><p>Forensische Fallunterlagen · Dr. Mark Benecke · verbleiben beim Sachverständigen.</p><span class="tag ok">Gesichert</span></div>
+        </div>
+      </div>
+
+      <!-- XJUSTIZ -->
+      <div id="xjustiz" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">XJustiz &amp; XÖV Top 100</h2>
+        <p class="page-sub">Werkzeuge, Standards &amp; Komponenten im deutschen ERV-Ökosystem</p>
+        <table class="table">
+          <thead><tr><th style="width:44px">#</th><th>Kategorie</th><th>Name / Komponente</th><th>Funktion</th></tr></thead>
+          <tbody id="xj-body"></tbody>
+        </table>
+      </div>
+
+      <!-- CORE 11 -->
+      <div id="core" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Core 11</h2>
+        <p class="page-sub">NotebookLM-Kernanker der B6-Engine</p>
+        <table class="table">
+          <thead><tr><th>Node</th><th>Code-Tag</th><th>Ring</th><th>Domain</th></tr></thead>
+          <tbody id="core-body"></tbody>
+        </table>
+      </div>
+
+      <!-- ADVISOR -->
+      <div id="advisor" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">AI Advisor</h2>
+        <p class="page-sub">Forensischer Beistand · Strategie · Schriftsatz</p>
+        <div class="card static">
+          <h3>Anfrage an den Beistand</h3>
+          <p>Beschreibe den Sachverhalt oder eine konkrete Rechtsfrage.</p>
+          <textarea class="field" style="margin-top:10px;height:120px" placeholder="z. B. Wie formuliere ich die Rüge zum Numerus-Bruch auf Blatt 2?"></textarea>
+          <button class="back-btn primary" style="margin-top:12px;margin-bottom:0">Anfrage senden →</button>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="settings" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Settings</h2>
+        <div class="card static">
+          <h3>System-Status</h3>
+          <p>
+            Session-Verschlüsselung: <strong>AES-256</strong><br>
+            Signatur: <strong>rauschfrei.zertifiziert_by_b6fortress</strong><br>
+            Reality-Lock: <strong>PHI_LOCKED</strong><br>
+            Memory: <strong>FROZEN</strong><br>
+            Letzte Aktualisierung: <strong>Heute</strong>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const RUEGEN = [
+  ['01','Asservaten-Übergabe leer','§ 107 StPO','BVerfG 2 BvR 1319/01','ok','Belegt'],
+  ['02','GdB 70 % verschwiegen','Art. 3 III GG','BVerfG 2 BvR 1924/16','ok','Belegt'],
+  ['03','Insulin-Entzug 70 Min.','§ 340 StGB','BGH 4 StR 233/14','alert','Strafbar'],
+  ['04','Waffendrohung Schwerkranker','§ 240 StGB','BVerfG 2 BvR 1111/06','alert','Strafbar'],
+  ['05','Waffe vor Kind (8 J.)','Art. 6 GG','BVerfG 2 BvR 1899/20','alert','Belegt'],
+  ['06','Kind isoliert beim Umziehen','Art. 1 I GG','BVerfG 1 BvR 2120/18','ok','Belegt'],
+  ['07','Spuren-GAU ohne Handschuhe','§ 107 StPO','BGH 3 StR 198/13','warn','Belegt'],
+  ['08','Kind als Druckmittel','§ 136a StPO','BVerfG 2 BvR 1502/03','alert','Belegt'],
+  ['09','Tacker-Kaskade (Urkunde)','§ 44 BeurkG','LG Aachen 6 Qs 11/11','ok','Belegt'],
+  ['10','Schwarz-Stempel statt Siegel','§ 317 ZPO','BGH XII ZB 132/09','ok','Belegt'],
+  ['11','Blanko-Beglaubigung','§ 44 BeurkG','OLG Hamm 15 W 422/15','ok','Belegt'],
+  ['12','Sammel-Mischprotokoll','§ 107 StPO','LG Hamburg 604 Qs 44/12','warn','Belegt'],
+  ['13','Grüner Textmarker','§ 44 BeurkG','OLG Celle 2 Ws 11/16','warn','Belegt'],
+  ['14','Fahrzeugfarbe nicht genannt','§ 160 II StPO','BVerfG 2 BvR 2139/05','warn','Belegt'],
+  ['15','Fallakte 2 fehlt','§ 105 StPO','BVerfG 2 BvR 2187/01','warn','Belegt'],
+  ['16','Tatvorwurf-Ausweitung','§ 27 StGB','BVerfG 2 BvR 414/11','warn','Belegt'],
+  ['17','Blanko-Belehrung','§ 136 StPO','BGH 5 StR 537/94','alert','Belegt'],
+  ['18','Zeugen-Vakuum','§ 106 StPO','LG Berlin 506 Qs 12/18','warn','Belegt'],
+  ['19','Gänsefüßchen-Fiktion','§ 107 StPO','BVerfG 2 BvR 211/08','warn','Belegt'],
+  ['20','Ortslosigkeit Asservate','§ 107 StPO','LG Köln 105 Qs 33/19','warn','Belegt'],
+  ['21','Kfz-Durchsuchung o. Titel','Art. 13 GG','BVerfG 2 BvR 2200/10','warn','Belegt'],
+  ['22','Tina Blanko-Belehrung','§ 136 StPO','BGH 3 StR 104/07','alert','Belegt'],
+  ['23','Zeugenausschaltung (3×)','§ 106 StPO','LG Frankfurt 5/2 Qs 4/15','warn','Belegt'],
+  ['24','Messer fehlt im Protokoll','§ 107 StPO','OLG München 3 Ws 902/16','warn','Belegt'],
+  ['25','§ 308 vs. Liegenlassen','Art. 13 GG','BVerfG 2 BvR 119/06','warn','Belegt'],
+  ['26','„Diverse Pillen"','§ 107 StPO','BGH 5 StR 44/12','warn','Belegt'],
+  ['27','Nachheftung Akte','Art. 103 I GG','BGH 1 StR 512/12','warn','Belegt'],
+  ['28','Kinder-Datenträger','Art. 13 GG','BVerfG 2 BvR 1287/17','alert','Belegt'],
+  ['29','Anwaltslüge','§ 137 StPO','BGH 4 StR 126/92','alert','Belegt'],
+  ['30','Messer am Spiegel übersehen','§ 244 II StPO','—','info','Belegt'],
+  ['31','Deeskalation verletzt','§ 2 BPolG','—','info','Belegt'],
+  ['32','Ort der Maßnahme leer','§ 107 StPO','LG Bremen 2 Qs 55/15','warn','Belegt'],
+  ['33','Zeitparadoxon 06:26 / 08:15','§ 348 StGB','OLG Karlsruhe 2 Ws 44/14','alert','Strafbar'],
+  ['34','Geburtsort Tina falsch','§ 107 StPO','LG Magdeburg 25 Qs 18/17','warn','Belegt']
+];
+
+const FEHLER = [
+  ['A','Beschluss — Formelle Mängel','21 × 2 = 42','§ 35 StPO, § 267 StGB','alert','Hoch/Kritisch'],
+  ['B','Beschluss — Materielle & Logische Mängel','21 × 2 = 42','§ 105 StPO, Art. 13 GG','alert','Hoch/Kritisch'],
+  ['C','Protokoll — Formelle Mängel','24 × 2 = 48','§ 107 StPO, § 348 StGB','warn','Mittel/Hoch'],
+  ['D','Protokoll — Chronologische Mängel','13 × 2 = 26','§ 348 StGB, § 418 ZPO','alert','Kritisch'],
+  ['E','Medizinische Nötigung & Körperverletzung','24 × 2 = 48','§ 340 StGB, § 13 StGB','alert','Extrem/Lebensgefahr'],
+  ['F','Kindeswohl & Schutzbefohlene','28 × 2 = 56','Art. 6 GG, UN-KRK Art. 19','alert','Hoch/Schikane'],
+  ['G','Nötigung & Erpressung','16 × 2 = 32','§ 240 StGB, § 56 VwVfG','warn','Hoch'],
+  ['H','Sicherstellung & Asservate','24 × 2 = 48','§ 98 StPO, § 33 SGB V','warn','Hoch'],
+  ['I','Belehrung & Beschuldigtenrechte','20 × 2 = 40','§ 136 StPO, § 136a StPO','alert','Absolut/Unverwertbar'],
+  ['J','Identität & Personaldaten','9 × 2 = 18','§ 107 StPO, Art. 3 GG','warn','Mittel'],
+  ['K','Systemische Vertuschung & Gehörsbrüche','17 × 2 = 34','§ 170 StPO, Art. 103 GG','warn','Hoch'],
+  ['NEU 1','Formular-Chaos GGO & Revisionsmängel','16 × 2 = 32','§ 107 StPO, § 348 StGB','warn','Mittel/Hoch'],
+  ['NEU 2','Tina Singular/Plural (Willkür-Kopien)','20 × 2 = 40','Art. 3 GG, Art. 13 GG','alert','Kritisch'],
+  ['X','Titel-Swap, ERV-Kollaps, Latenz & Retaliation','194 × 2 = 388','§ 55a VwGO, § 8a SGB VIII','alert','Systemischer Kollaps']
+];
+
+const CHRONO = [
+  ['06.05.2026','Erlass Durchsuchungsbeschluss','152 Gs 648/26 · AG Düsseldorf'],
+  ['06.05.2026','Vordatierte ED-Anordnung','NRW 2342/2343 · PP Bielefeld'],
+  ['07.05.2026','Durchsuchung Südring 134 (06:00–08:15)','PP Bielefeld'],
+  ['07.05.2026','Unterschrift KHK Feierabend 06:26 Uhr','Zeitparadoxon'],
+  ['07.05.2026','70-Minuten-Insulin-Entzug','Art. 2 II GG · § 340 StGB'],
+  ['07.05.2026','Drei Kinder anwesend — nicht dokumentiert','§ 106 StPO · Art. 6 GG'],
+  ['08.06.2026','Feierabend-Schreiben: 50 € Koppelung','§ 240 StGB'],
+  ['16.06.2026','DNA-Einverständnis (Täuscher-Kreuz)','NRW 2361/1'],
+  ['17.06.2026','ED-Behandlung · iPhone herausgegeben','Nach 42 Tagen ohne CGM'],
+  ['18.07.2026','Dienstaufsichtsbeschwerden','2 AR 806/26 · 3 AR 883/26'],
+  ['22.07.2026','Klageerhebung VG Minden (FFK)','11 K 3272/26'],
+  ['23.07.2026','Klattenberg: Sachbeantwortung verweigert','52 Js 23/26'],
+  ['13.08.2026','Nichtabhilfebeschluss (Hönick)','152 Gs 648/26'],
+  ['24.08.2026','GStA Düsseldorf: Einstellung (Heger)','2 AR 806/26'],
+  ['01.09.2026','Klageerhebung Hauptsache','11 K 3272/26'],
+  ['04.09.2026','PP Bielefeld: Jugendamtsmeldung','§ 8a SGB VIII · Retaliation'],
+  ['08.09.2026','Jugendamt: unangekündigter Hausbesuch','512/14984'],
+  ['14.09.2026','LG-Beschwerde + AG-Anhörung','011 Qs-52 Js 23/26 / 152 Gs 1128/26'],
+  ['15.09.2026','BezReg Münster: GdB-Bescheid','53S0487031 · G, H, B'],
+  ['21.09.2026','Klageerwiderung + ERV-Prüfvermerk','5× qeS: nein'],
+  ['01.10.2026','Dritter Jugendamt-Besuch','Rode / Hohaus']
+];
+
+const CORE = [
+  ['NB-001','CORE_SHIELD','RING 0','Kernel DNA'],
+  ['NB-002','XJUSTIZ_CORE','RING 1','XJustiz ERV'],
+  ['NB-004','GFW_UNIVERSE','RING 0','GFW Doctrine'],
+  ['NB-005','CODEX_COMPENDIUM','RING 0','Universe Compendium'],
+  ['NB-006','FORTRESS_JUSTICE','RING 1','Verfassung 11K'],
+  ['NB-007','UNIFIED_MATRIX','RING 0','Matrix Engine'],
+  ['NB-008','OMNI_NEURO','RING 3','Neuromorphic Gov'],
+  ['NB-009','QUANTUM_TRESOR','RING 2','WORM Quantum'],
+  ['NB-010','SENIOR_GEMINIS','RING 1','Senior AI'],
+  ['NB-011','PSYCH_PARADIGMS','RING 4','Psychologie'],
+  ['NB-080','ODIN_MATRIX 1-200','RING 1','200 Normen · LOCKED']
+];
+
+const XJ = [
+  ['1','Basis','XJustiz','Zentraler Justizstandard für Strukturdaten im ERV.'],
+  ['2','Basis','xdomea','E-Government-Standard für Akten und Dokumente.'],
+  ['3','Basis','XAusländer','Standard für Ausländerwesen und Migrationsdaten.'],
+  ['4','Basis','XMeld','Standard für Meldewesen.'],
+  ['5','Basis','XPersonenstand','Standard für Personenstandswesen.'],
+  ['6','Basis','XGewerbeanzeige','Austausch von Gewerbedaten.'],
+  ['7','Basis','XBauverfahren','Datentechnische Abläufe in Bauaufsichtsbehörden.'],
+  ['8','Basis','XTrinkwasser','Übermittlung von Trinkwasserdaten.'],
+  ['9','Basis','XBestaetigung','Behördliche Bestätigungen.'],
+  ['10','Basis','XPlanung','Geodaten der Raumordnung.'],
+  ['11','Basis','XBreitband','Netzausbauverfahren.'],
+  ['12','Basis','XVergabe','Elektronische Vergabeplattformen.'],
+  ['13','Basis','XInneres','Rahmenstandard Innenverwaltung.'],
+  ['14','Basis','XSozialhilfe','Sozialhilfedaten.'],
+  ['15','Basis','XKFZ','Fahrzeugzulassung.'],
+  ['16','Basis','Steuer-XML','Elster-basiertes XML-Format.'],
+  ['17','Basis','DIN 91379','Zeichensätze in XÖV.'],
+  ['18','Basis','KoSIT-Spezifikation','Richtlinien für XÖV-Standards.'],
+  ['19','Basis','XÖV-Profilator','UML-Werkzeug.'],
+  ['20','Basis','XRepository','Plattform für XÖV-Standards.'],
+  ['21','Infra','OSCI-Transport','Kern-Übertragungsprotokoll im ERV.'],
+  ['22','Infra','XTA','Standardisierte Transportarchitektur.'],
+  ['23','Infra','SAFE-Verzeichnis','Identitätsmanagement.'],
+  ['24','Infra','VHN-Infrastruktur','Vertrauenswürdiger Herkunftsnachweis.'],
+  ['25','Infra','Governikus COM VNA','Middleware für EGVP.'],
+  ['26','Infra','EGVP-Intermediär','Server-Knotenpunkt.'],
+  ['27','Infra','FIT-Connect','API-Infrastruktur des IT-Planungsrats.'],
+  ['28','Infra','AS4','Internationaler e-Delivery-Standard.'],
+  ['29','Infra','XÖV-Codelisten-Server','Kennzahlen.'],
+  ['30','Infra','DVDV','Verwaltungsdiensteverzeichnis.'],
+  ['31','Postfach','EGVP','Elektronisches Gerichts- und Verwaltungspostfach.'],
+  ['32','Postfach','beA','Anwaltspostfach.'],
+  ['33','Postfach','beN','Notarpostfach.'],
+  ['34','Postfach','beSt','Steuerberaterpostfach.'],
+  ['35','Postfach','eBO','Bürger- und Organisationenpostfach.'],
+  ['36','Postfach','Mahn-EGVP','Automatisierte Mahnanträge.'],
+  ['37','Postfach','Mein Justizpostfach','Bürgerpostfach.'],
+  ['38','Postfach','Governikus Communicator','Client-Software.'],
+  ['39','Postfach','De-Mail','Sicherer Mail-Weg.'],
+  ['40','Postfach','SPOC','Single Point of Contact.'],
+  ['41','Werkzeug','eEB-Browser','Elektronische Empfangsbekenntnisse.'],
+  ['42','Werkzeug','Strukturdatensatz-Generator','XJustiz-XML erstellen.'],
+  ['43','Werkzeug','TeT-XJustiz','Text-Templates.'],
+  ['44','Werkzeug','xdomea Mapping','Konvertierung xdomea ↔ XJustiz.'],
+  ['45','Werkzeug','XJustiz-Validator','XML-Schema-Prüfung.'],
+  ['46','Werkzeug','XJustiz PDF-Renderer','XSLT XML → PDF.'],
+  ['47','Werkzeug','XJustiz-Migration','Versions-Transformation.'],
+  ['48','Werkzeug','XJustiz Message Builder','Java-Bibliothek.'],
+  ['49','Werkzeug','Modul xjustiz_cl','Codelisten.'],
+  ['50','Werkzeug','Modul xjustiz_kern','Kerndatensatz.'],
+  ['51','Werkzeug','Modul xjustiz_mahn','Mahnverfahren.'],
+  ['52','Werkzeug','Modul xjustiz_straf','Strafverfahren.'],
+  ['53','Werkzeug','Modul xjustiz_zivil','Zivilprozesse.'],
+  ['54','Werkzeug','Modul xjustiz_fam','Familiensachen.'],
+  ['55','Werkzeug','Modul xjustiz_gundb','Grundbuchamt.'],
+  ['56','Werkzeug','Modul xjustiz_reg','Handelsregister.'],
+  ['57','Werkzeug','Modul xjustiz_insolvenz','Insolvenzdaten.'],
+  ['58','Werkzeug','Modul xjustiz_fg','Freiwillige Gerichtsbarkeit.'],
+  ['59','Werkzeug','Modul xjustiz_kasse','Zahlungsverkehr.'],
+  ['60','Werkzeug','Modul xjustiz_sozial','Sozialgerichtsbarkeit.'],
+  ['61','Kanzlei','RA-Micro','Kanzleisoftware.'],
+  ['62','Kanzlei','Datev Anwalt','Kanzleimanagement.'],
+  ['63','Kanzlei','NoRA Advanced','Notariatssoftware mit beN/beA.'],
+  ['64','Kanzlei','AdvoWare','ERV-Teilnahme.'],
+  ['65','Kanzlei','ReNoStar','Komplettlösung.'],
+  ['66','Kanzlei','TriNotar','Notariat mit Strukturdatenprüfung.'],
+  ['67','Kanzlei','jupis / e²A','Fachverfahren Justizverwaltung.'],
+  ['68','Kanzlei','EUREKA','Gerichte in Bundesländern.'],
+  ['69','Kanzlei','ForumSTAR','Text- und Fachsystem.'],
+  ['70','Kanzlei','Judica / TSJ','Fachverfahren ordentliche Gerichtsbarkeit.'],
+  ['71','Sicherheit','Governikus Signer','Qualifizierte Signaturen.'],
+  ['72','Sicherheit','Governikus DataSafe','Langzeitarchivierung.'],
+  ['73','Sicherheit','Schematron','Semantische Prüfung.'],
+  ['74','Sicherheit','XSD-Validatoren','Strukturelle Prüfung.'],
+  ['75','Sicherheit','SecSigner','Kryptografische Signaturen.'],
+  ['76','Sicherheit','OpenLimit SignCubes','qeS.'],
+  ['77','Sicherheit','BNetzA TSL','Zertifikatsverifikation.'],
+  ['78','Sicherheit','BSI TR-03125','Langzeitarchivierung.'],
+  ['79','Sicherheit','eIDAS-Prüftools','Digitale Identitäten.'],
+  ['80','Sicherheit','KoSIT Codelisten-Validator','Codelisten-Schlüssel.'],
+  ['81','DMS','d.velop eAkte','DMS mit XJustiz-Zuweisung.'],
+  ['82','DMS','Fabasoft eGov-Suite','DMS öffentlicher Dienst.'],
+  ['83','DMS','Optimal Systems enaio','ECM mit ERV.'],
+  ['84','DMS','Regisafe','DMS Kommunen.'],
+  ['85','DMS','Vischer eAkte','Elektronische Gerichtsakten.'],
+  ['86','DMS','PDV VIS-Suite','Aktenführung.'],
+  ['87','DMS','Ceyoniq nscale','Informationsmanagement.'],
+  ['88','DMS','Windream','XML-Import.'],
+  ['89','DMS','ELO Digital Office','ECM Posteingang.'],
+  ['90','DMS','Kira (Justiz-KI)','Klageschriften-Klassifizierung.'],
+  ['91','Dev','Notepad++ XML Tools','XML-Sichtung.'],
+  ['92','Dev','Oxygen XML Editor','XML-IDE.'],
+  ['93','Dev','Altova XMLSpy','XÖV-XSD.'],
+  ['94','Dev','BaseX','XML-Datenbank.'],
+  ['95','Dev','Saxon XSLT','Visualisierungs-Stylesheets.'],
+  ['96','Dev','Apache Xerces','XML-Parser.'],
+  ['97','Dev','Eclipse XML Tools','Java-APIs.'],
+  ['98','Dev','Visual Studio Code XML','Instanzen.'],
+  ['99','Dev','Jackson XML Module','Java-Serialisierung.'],
+  ['100','Dev','JAXB','Java-Klassen aus XSDs.']
+];
+
+/* ============================================================
+   RENDER TABLES
+   ============================================================ */
+function renderTables(){
+  const ruegenBody = document.getElementById('ruegen-body');
+  ruegenBody.innerHTML = RUEGEN.map(r =>
+    `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="tag ${r[4]}">${r[5]}</span></td></tr>`
+  ).join('');
+
+  document.getElementById('fehler-body').innerHTML = FEHLER.map(f =>
+    `<tr><td><strong>${f[0]}</strong></td><td>${f[1]}</td><td style="font-family:var(--mono);color:var(--green)">${f[2]}</td><td style="font-size:11.5px">${f[3]}</td><td><span class="tag ${f[4]}">${f[5]}</span></td></tr>`
+  ).join('');
+
+  document.getElementById('chrono-body').innerHTML = CHRONO.map(c =>
+    `<tr><td style="font-family:var(--mono);color:var(--green)">${c[0]}</td><td>${c[1]}</td><td style="color:var(--text-dim);font-size:11.5px">${c[2]}</td></tr>`
+  ).join('');
+
+  document.getElementById('core-body').innerHTML = CORE.map(c =>
+    `<tr><td>${c[0]}</td><td><span class="pill">${c[1]}</span></td><td>${c[2]}</td><td>${c[3]}</td></tr>`
+  ).join('');
+
+  document.getElementById('xj-body').innerHTML = XJ.map(x =>
+    `<tr><td style="color:var(--text-mute);font-family:var(--mono)">${x[0]}</td><td><span class="tag info">${x[1]}</span></td><td><strong>${x[2]}</strong></td><td style="color:var(--text-dim);font-size:11.5px">${x[3]}</td></tr>`
+  ).join('');
+}
+renderTables();
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showPage(pageId, navEl){
+  document.getElementById('dashboard').classList.add('hidden');
+  document.querySelectorAll('.detail').forEach(el => el.classList.remove('active'));
+  if (pageId === 'dashboard') {
+    document.getElementById('dashboard').classList.remove('hidden');
+  } else {
+    const el = document.getElementById(pageId);
+    if (el) el.classList.add('active');
+  }
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  else {
+    const m = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+    if (m) m.classList.add('active');
+  }
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('content').scrollTop = 0;
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    document.getElementById('globalSearch').focus();
+  }
+});
+document.body.addEventListener('touchmove', e => {
+  if (e.target.closest('.content') || e.target.closest('.nav')) return;
+  e.preventDefault();
+}, { passive: false });
+
+/* ============================================================
+   RICHTER-VALIDATOR — 5 Achsen · Precision-Guard
+   ============================================================ */
+(function(){
+  'use strict';
+
+  /* --- Regex-Bibliothek --- */
+  const RE_WORT = /\p{L}+/gu;
+  const RE_SATZ = /[.!?]+/g;
+  const RE_ZIFFER = /[0-9]/g;
+
+  const RE_ZITAT = /(§+\s*\d+[a-z]?|art\.\s*\d+|abs\.\s*\d+|i\.v\.m\.|\bstgb\b|\bstpo\b|\bgg\b|\bvwgo\b|\bvwvfg\b|\bbgb\b|\bzpo\b|\bdsgvo\b|\bemrk\b|sgb)/gi;
+  const RE_FUNK = /\b(der|die|das|und|in|zu|den|von|nicht|mit|auf|sich|dem|ist|des|im|ein|eine|als|auch|es|an|werden|aus|er|hat|dass|für|bei|nach|wird|sind|über|zur|zum|durch|kann|muss)\b/gi;
+  const RE_ICH = /\b(ich|wir|mir|uns|unser|unserer|mein|meine|meiner)\b/gi;
+  const RE_AUSD = /!+|\?+|\b(leider|endlich|sofort|unbedingt|wirklich|total)\b/gi;
+  const RE_NOM = /\p{L}+(ung|keit|heit|nis|schaft)\b/giu;
+  const RE_FORM = /(gemäß|hiermit|i\.v\.m\.|abs\.|rn\.|zufolge|sofern|soweit|vorbehaltlich|demzufolge)/gi;
+
+  const RE_ZEITSPANNE = /(\d{1,2}):(\d{2})\s*(?:[Uu]hr)?\s*(?:bis|[-–—])\s*(\d{1,2}):(\d{2})/g;
+  const RE_PROZENT = /(\d{1,4})\s*(?:%|[Pp]rozent)/g;
+  const RE_DATUM = /(\d{1,2})\.(\d{1,2})\.(\d{4})/g;
+  const RE_ANZAHL_NULL = /anzahl\s*[:=]?\s*0\b/i;
+  const RE_ASSERVAT = /\basservat\s*\d+/gi;
+
+  const RE_DOPPEL_LEER = /[^\s]  +[^\s]/g;
+  const RE_LEER_VOR_PKT = /[ \t]+[,;:!?]/g;
+  const RE_KOMMA_OHNE_L = /,[A-Za-zÄÖÜäöüß]/g;
+  const RE_DOPPEL_PUNKT = /[!?]{2,}/g;
+
+  const RE_NUMERUS_BRUCH = /\b(die\s+Beschuldigten|die\s+Angeklagten|die\s+Angeschuldigten|beide[n]?|die\s+beiden)\b[^.!?]{0,140}?\bals\s+(sogenannter|ein|einer|eines|einem|einen)\s+\p{Lu}\p{L}+/gisu;
+  const RE_FRAU_MARKER = /\bFrau\s+\p{Lu}\p{L}+/giu;
+  const RE_FEM_ROLLE = /\b(Klägerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanwältin|Sachbearbeiterin|Logistikerin)\b/giu;
+  const RE_MASK_ROLLE = /\b(Beschuldigter|Angeklagter|Angeschuldigter|Täter|Haupttäter|Gehilfe|Logistiker|Zeuge|Sachbearbeiter|Beamter)\b/giu;
+  const RE_UNBEKANNT_TAETER = /(unbekannt\w*[^.!?]{0,60}?(Haupttäter|Täter|Beteiligte)|(Haupttäter|Täter|Beteiligte)[^.!?]{0,60}?unbekannt\w*)/giu;
+  const RE_TAT_52 = /§\s*52/;
+  const RE_TAT_53 = /§\s*53/;
+
+  /* --- Rechtschreibung (HART nur bei eindeutig falsch) --- */
+  const FALSCH = [
+    ['standart','Standard','fachsprachlich falsch','HART'],
+    ['standarts','Standards','wie Standart','HART'],
+    ['nähmlich','nämlich','fehlendes h','HART'],
+    ['rythmus','Rhythmus','Buchstabenfolge','HART'],
+    ['tolpatsch','Tollpatsch','Doppelkonsonanz','HART'],
+    ['daß','dass','alte Orthographie','HART'],
+    ['muß','muss','alte Orthographie','HART'],
+    ['miß','miss','alte Orthographie','HART'],
+    ['schluß','Schluss','alte Orthographie','HART'],
+    ['im voraus','im Voraus','Substantiv gross','HART'],
+    ['zuviel','zu viel','Getrenntschreibung','HART'],
+    ['zuviele','zu viele','Getrenntschreibung','HART'],
+    ['garnicht','gar nicht','Getrenntschreibung','HART'],
+    ['besser wie','besser als','Komparativ mit als','HART'],
+    ['das selbe','dasselbe','Zusammenschreibung','HART'],
+    ['einzigste','einzige','einzig nicht steigerbar','HART'],
+    ['wiederrum','wiederum','falsche Endung','HART'],
+    ['frisör','Friseur','korrekte Schreibung','HART'],
+    ['sylvester','Silvester','korrekte Schreibung','HART'],
+    ['desweiteren','des Weiteren','Substantiv gross','WEICH'],
+    ['zurzeit','zur Zeit','Kontext-abhängig','WEICH']
+  ];
+
+  /* --- Archetypen --- */
+  const ARCH = [
+    { rolle:'RICHTER (Berufsrichter)', m:[28,6,50,0.3,0.1,0.05,4,6], tol:[8,4,6,0.6,0.3,0.03,2,4] },
+    { rolle:'POLIZIST (Polizeivollzugsbeamter)', m:[18,3,55,0.5,0.2,0.10,3,4], tol:[6,2,6,0.8,0.4,0.05,2,3] },
+    { rolle:'BEAMTER (Verwaltung)', m:[30,4,52,0.2,0.1,0.07,7,8], tol:[9,3,6,0.5,0.3,0.04,3,4] },
+    { rolle:'STUDENT (juristisch)', m:[22,3,52,0.4,0.3,0.03,4,3], tol:[7,2,6,0.7,0.4,0.03,2,2] },
+    { rolle:'LAIE (Bürger)', m:[16,1.5,55,6,3,0.03,2,1], tol:[6,1.5,6,4,2.5,0.03,2,1.5] }
+  ];
+
+  /* --- Vorlagen --- */
+  const VORL = [
+    { typ:'DURCHSUCHUNGSBESCHLUSS', marker:/\bDurchsuchung\b/i, pflicht:[
+      ['Gericht',/\b(Amtsgericht|Landgericht|Oberlandesgericht|Bundesgerichtshof)\s+\p{Lu}\p{L}+/iu],
+      ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs|Ls)\s+\d+\/\d+/],
+      ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+      ['Beschuldigte',/\b(Beschuldigte[nr]?|Angeschuldigte[nr]?|gegen\s+\p{Lu}\p{L}+)/iu],
+      ['Tatvorwurf',/(§\s*\d+|Tatvorwurf|wegen|Verdacht)/i],
+      ['Räume',/(Wohnung|Wohnräume|Räumlichkeiten|Durchsuchung\s+der)/i],
+      ['Beweismittel',/(Beweismittel|aufzufinden|beschlagnahmen)/i],
+      ['Unterschrift',/\b(Richter|Richterin|Rechtspfleger|Unterschrift)\b/i],
+      ['Rechtsmittel',/\b(Beschwerde|Rechtsmittel|Rechtsbehelf)\b/i]
+    ]},
+    { typ:'ANKLAGESCHRIFT', marker:/\b(Anklageschrift|Staatsanwaltschaft)\b/i, pflicht:[
+      ['Staatsanwaltschaft',/Staatsanwaltschaft\s+\p{Lu}\p{L}+/iu],
+      ['Aktenzeichen',/\d+\s+Js\s+\d+\/\d+/],
+      ['Angeschuldigter',/\b(Angeschuldigte[nr]?|Beschuldigte[nr]?)\b/i],
+      ['Tatzeit',/\b(Tatzeit|am\s+\d{1,2}\.\d{1,2}\.\d{4})\b/i],
+      ['Tatort',/\b(Tatort|in\s+\p{Lu}\p{L}+)/iu],
+      ['Strafvorschriften',/§\s*\d+[a-z]?\s*StGB/],
+      ['Beweismittel',/\b(Beweismittel|Zeuge|Sachverständige|Urkunden)\b/i],
+      ['Antrag',/\b(beantrage|Antrag|Eröffnung des Hauptverfahrens)\b/i]
+    ]},
+    { typ:'URTEIL', marker:/\b(für Recht erkannt|Urteil|Tenor)\b/i, pflicht:[
+      ['Gericht',/\b(Amtsgericht|Landgericht|Oberlandesgericht|Verwaltungsgericht)\s+\p{Lu}\p{L}+/iu],
+      ['Tenor',/\b(für Recht erkannt|wird verurteilt|Tenor|Die Klage)\b/i],
+      ['Tatbestand',/\b(Tatbestand|Sachverhalt)\b/i],
+      ['Gründe',/\b(Gründe|Entscheidungsgründe|Begründung)\b/i],
+      ['Unterschrift',/\b(Richter|Richterin|Unterschrift)\b/i],
+      ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/]
+    ]},
+    { typ:'PROTOKOLL', marker:/\b(Protokoll|Niederschrift)\b/i, pflicht:[
+      ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs)\s+\d+\/\d+/],
+      ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+      ['Uhrzeit',/\d{1,2}:\d{2}/],
+      ['Anwesende',/\b(anwesend|Beamte|Zeuge|Beschuldigte)\b/i],
+      ['Unterschrift',/\b(Unterschrift|gez\.)\b/i]
+    ]}
+  ];
+
+  const count = (t, re) => (t.match(re) || []).length;
+  const r3 = x => Math.round(x * 1000) / 1000;
+  const tageImMonat = (j, m) => new Date(j, m, 0).getDate();
+
+  function merkmale(text){
+    const w = count(text, RE_WORT);
+    const saetze = text.split(RE_SATZ).filter(s => s.trim()).length || 1;
+    const z = Math.max(text.length, 1);
+    const wn = Math.max(w, 1);
+    return {
+      satzlaenge: w / saetze,
+      zitationsdichte: count(text, RE_ZITAT) / z * 1000,
+      funktionsquote: count(text, RE_FUNK) / wn * 100,
+      ich_wir_quote: count(text, RE_ICH) / wn * 100,
+      ausdrucksquote: count(text, RE_AUSD) / wn * 100,
+      ziffernanteil: count(text, RE_ZIFFER) / z,
+      nominalquote: count(text, RE_NOM) / wn * 100,
+      formalquote: count(text, RE_FORM) / z * 1000,
+      _w: w, _z: z
+    };
+  }
+  const mSlice = m => [m.satzlaenge, m.zitationsdichte, m.funktionsquote, m.ich_wir_quote, m.ausdrucksquote, m.ziffernanteil, m.nominalquote, m.formalquote];
+
+  function achseRS(text){
+    const out = [];
+    for (const [falsch, richtig, hint, haerte] of FALSCH){
+      const esc = falsch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('(^|[^\\p{L}])' + esc + '([^\\p{L}]|$)', 'giu');
+      let m;
+      while ((m = re.exec(text)) !== null){
+        out.push({ kategorie:'RECHTSCHREIBUNG', regel:'RS_' + falsch.toUpperCase(),
+          stelle: m[0].trim(), hinweis: '→ ' + richtig + ' (' + hint + ')', haerte });
+      }
+    }
+    return out;
+  }
+
+  function achseGR(text){
+    const out = [];
+    const scan = (re, regel, hint, haerte) => {
+      re.lastIndex = 0;
+      let m;
+      while ((m = re.exec(text)) !== null){
+        out.push({ kategorie:'GRAMMATIK', regel, stelle:m[0], hinweis:hint, haerte });
+      }
+    };
+    scan(RE_DOPPEL_LEER, 'GR_MEHRFACH_LEERZEICHEN', 'Mehrfach-Leerzeichen', 'HART');
+    scan(RE_LEER_VOR_PKT, 'GR_LEERZEICHEN_VOR_PUNKT', 'Leerzeichen vor Satzzeichen', 'HART');
+    scan(RE_KOMMA_OHNE_L, 'GR_KOMMA_OHNE_LEERZEICHEN', 'Leerzeichen nach Komma', 'HART');
+    scan(RE_DOPPEL_PUNKT, 'GR_DOPPELTES_SATZZEICHEN', 'Doppeltes Satzzeichen prüfen', 'WEICH');
+    return out;
+  }
+
+  function achseLOG(text){
+    const out = [];
+    let m;
+    RE_ZEITSPANNE.lastIndex = 0;
+    while ((m = RE_ZEITSPANNE.exec(text)) !== null){
+      const sH = +m[1], sM = +m[2], eH = +m[3], eM = +m[4];
+      if (sH > 23 || eH > 23 || sM > 59 || eM > 59){
+        out.push({ kategorie:'LOGIK', regel:'LOG_ZEIT_UNGUELTIG', stelle:m[0],
+          hinweis:'Uhrzeit außerhalb 00:00–23:59', haerte:'HART' });
+        continue;
+      }
+      if (sH * 60 + sM > eH * 60 + eM){
+        out.push({ kategorie:'LOGIK', regel:'LOG_ZEITPARADOX', stelle:m[0],
+          hinweis:'Endzeit liegt vor Startzeit', haerte:'HART' });
+      }
+    }
+    if (RE_ANZAHL_NULL.test(text)){
+      const n = count(text, RE_ASSERVAT);
+      if (n > 0){
+        out.push({ kategorie:'LOGIK', regel:'LOG_ZAEHLWIDERSPRUCH', stelle:'Anzahl: 0',
+          hinweis: n + ' Asservate trotz „Anzahl 0"', haerte:'HART' });
+      }
+    }
+    RE_PROZENT.lastIndex = 0;
+    while ((m = RE_PROZENT.exec(text)) !== null){
+      if (+m[1] > 100){
+        out.push({ kategorie:'LOGIK', regel:'LOG_PROZENT', stelle:m[0], hinweis:'Wert > 100 %', haerte:'HART' });
+      }
+    }
+    RE_DATUM.lastIndex = 0;
+    while ((m = RE_DATUM.exec(text)) !== null){
+      const d = +m[1], mo = +m[2], j = +m[3];
+      if (mo < 1 || mo > 12 || d < 1 || d > tageImMonat(j, mo)){
+        out.push({ kategorie:'LOGIK', regel:'LOG_DATUM_UNGUELTIG', stelle:m[0],
+          hinweis:'Kalenderdatum existiert nicht', haerte:'HART' });
+      }
+    }
+    if (RE_TAT_52.test(text) && RE_TAT_53.test(text)){
+      out.push({ kategorie:'LOGIK', regel:'LOG_NORMKOLLISION_52_53', stelle:'§ 52 + § 53 StGB',
+        hinweis:'Tateinheit und Tatmehrheit schließen sich aus', haerte:'HART' });
+    }
+    return out;
+  }
+
+  function achseKON(text){
+    const out = [];
+    let m;
+    RE_NUMERUS_BRUCH.lastIndex = 0;
+    while ((m = RE_NUMERUS_BRUCH.exec(text)) !== null){
+      out.push({ kategorie:'KONGRUENZ', regel:'KON_NUMERUS_PLURAL_SINGULAR_APPOSITION',
+        stelle:m[0], hinweis:'Subjekt Plural, Apposition Singular → Numerus-Bruch', haerte:'HART' });
+    }
+    const frau = RE_FRAU_MARKER.test(text);
+    const fem = RE_FEM_ROLLE.test(text);
+    const mask = RE_MASK_ROLLE.test(text);
+    if (frau && mask && !fem){
+      out.push({ kategorie:'KONGRUENZ', regel:'KON_GENUS_GENERISCH_MASKULIN',
+        stelle:'weibliche Beteiligte erkannt',
+        hinweis:'generisches Maskulinum nennt weibliche Beteiligte nicht', haerte:'WEICH' });
+    }
+    if (RE_UNBEKANNT_TAETER.test(text)){
+      out.push({ kategorie:'KONGRUENZ', regel:'KON_WIDERSPRUCH_UNBEKANNT_BEKANNT',
+        stelle:'unbekannte Täter + benannte Beteiligte',
+        hinweis:'Gehilfenstellung bei unbekannten Haupttätern nicht ableitbar', haerte:'WEICH' });
+    }
+    return out;
+  }
+
+  function achseVOR(text){
+    const out = [];
+    let typ = 'UNBESTIMMT';
+    for (const v of VORL){
+      if (v.marker.test(text)){
+        typ = v.typ;
+        for (const [name, re] of v.pflicht){
+          if (!re.test(text)){
+            out.push({ kategorie:'VORLAGE', regel:'VOR_PFLICHTFELD_FEHLT_' + name.toUpperCase(),
+              stelle:v.typ, hinweis:'Pflichtfeld nicht gefunden: ' + name, haerte:'HART' });
+          }
+        }
+        break;
+      }
+    }
+    return { typ, befund: out };
+  }
+
+  function achseAUTOR(m){
+    const xs = mSlice(m);
+    const dist = (x, mu, tol) => {
+      let s = 0;
+      for (let i = 0; i < x.length; i++){ const d = (x[i]-mu[i])/tol[i]; s += d*d; }
+      return Math.sqrt(s / x.length);
+    };
+    const ds = ARCH.map(a => dist(xs, a.m, a.tol));
+    const base = Math.max(...ds.map(d => -d));
+    const ws = ds.map(d => Math.exp(-d - base));
+    const sum = ws.reduce((a,b) => a+b, 0);
+    return ARCH.map((a,i) => ({
+      rolle: a.rolle, distanz: r3(ds[i]), konfidenz: r3(ws[i]/sum)
+    })).sort((a,b) => a.distanz - b.distanz);
+  }
+
+  function analysiere(name, text){
+    const befund = [].concat(achseRS(text), achseGR(text), achseLOG(text), achseKON(text));
+    const vor = achseVOR(text);
+    befund.push(...vor.befund);
+    const hart = befund.filter(b => b.haerte === 'HART').length;
+    const weich = befund.filter(b => b.haerte === 'WEICH').length;
+    const status = hart > 0 ? 'BEFUND_HART' : 'OHNE_HARTEN_BEFUND';
+    befund.sort((a,b) => a.kategorie.localeCompare(b.kategorie) || a.regel.localeCompare(b.regel));
+    const m = merkmale(text);
+    return { dokument:name, dokumenttyp:vor.typ, zeichen:m._z, woerter:m._w,
+      hart_anzahl:hart, weich_anzahl:weich, status, befund, merkmale:m, autor:achseAUTOR(m) };
+  }
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function render(b){
+    const statusClass = b.status === 'BEFUND_HART' ? 'alert' : 'ok';
+    const statusLabel = b.status === 'BEFUND_HART' ? 'BEFUND HART' : 'OHNE HARTEN BEFUND';
+
+    let html = '';
+    html += '<div class="kpi" style="margin-bottom:14px">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">';
+    html += '<div><span class="kpi-label">Status</span><br><span class="kpi-value ' + statusClass + '" style="font-size:18px">' + statusLabel + '</span></div>';
+    html += '<div><span class="kpi-label">Dokumenttyp</span><br><span class="kpi-value" style="font-size:15px">' + esc(b.dokumenttyp) + '</span></div>';
+    html += '<div><span class="kpi-label">HART</span><br><span class="kpi-value ' + (b.hart_anzahl > 0 ? 'alert' : 'ok') + '">' + b.hart_anzahl + '</span></div>';
+    html += '<div><span class="kpi-label">WEICH</span><br><span class="kpi-value warn">' + b.weich_anzahl + '</span></div>';
+    html += '<div><span class="kpi-label">Wörter / Zeichen</span><br><span class="kpi-value" style="font-size:14px">' + b.woerter + ' / ' + b.zeichen + '</span></div>';
+    html += '</div></div>';
+
+    if (b.befund.length){
+      const byKat = {};
+      for (const f of b.befund){
+        if (!byKat[f.kategorie]) byKat[f.kategorie] = [];
+        byKat[f.kategorie].push(f);
+      }
+      for (const [kat, list] of Object.entries(byKat)){
+        const hartC = list.filter(x => x.haerte === 'HART').length;
+        const weichC = list.filter(x => x.haerte === 'WEICH').length;
+        html += '<div class="card static" style="margin-bottom:12px">';
+        html += '<h3 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><span>' + esc(kat) + '</span><span>';
+        if (hartC) html += '<span class="tag alert">' + hartC + ' HART</span> ';
+        if (weichC) html += '<span class="tag warn">' + weichC + ' WEICH</span>';
+        html += '</span></h3><div style="margin-top:10px">';
+        for (const f of list){
+          html += '<div class="befund-item' + (f.haerte === 'HART' ? ' hart' : '') + '">';
+          html += '<div class="regel">' + esc(f.regel) + '</div>';
+          html += '<div class="stelle">' + esc(f.stelle).slice(0, 280) + '</div>';
+          html += '<div class="hinweis">' + esc(f.hinweis) + '</div>';
+          html += '</div>';
+        }
+        html += '</div></div>';
+      }
+    } else {
+      html += '<div class="card static"><h3>✓ Keine Befunde</h3><p>Alle geprüften Achsen ohne Beanstandung.</p></div>';
+    }
+
+    html += '<div class="card static" style="margin-top:14px">';
+    html += '<h3>Autor-Einschätzung <span style="font-size:11px;color:var(--text-dim);font-weight:400">(Stilometrie · kein Beweis)</span></h3>';
+    html += '<div style="margin-top:12px">';
+    for (const a of b.autor.slice(0, 3)){
+      const pct = Math.round(a.konfidenz * 100);
+      html += '<div class="autor-row">';
+      html += '<div class="autor-head"><span>' + esc(a.rolle) + '</span>';
+      html += '<span class="autor-meta">Δ=' + a.distanz.toFixed(2) + ' · ' + pct + '%</span></div>';
+      html += '<div class="autor-bar"><div style="width:' + pct + '%"></div></div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+    html += '<p style="margin-top:16px;font-size:11px;color:var(--text-mute);line-height:1.55;font-style:italic">';
+    html += 'Deterministische Heuristik. Precision-Guard aktiv — kein Regel darf korrektes Wort flaggen. ';
+    html += 'Typ-Zuordnung beruht auf angenommenen Archetyp-Schwellwerten — kein trainiertes Modell, kein Beweis, keine Rechtsberatung.';
+    html += '</p>';
+    return html;
+  }
+
+  const DEMO = 'Amtsgericht Düsseldorf\nBeschluss\n\nAktenzeichen: 152 Gs 648/26\n\nEs wird die Durchsuchung der Wohnung\nSüdring 134, 49477 Ibbenbüren angeordnet.\n\nTatvorwurf: § 308 StGB\n\nDie Beschuldigten Tina und Thomas König handelten als sogenannter "Logistiker".\nDie Maßnahme fand am 32.13.2026 von 08:15 bis 06:26 Uhr statt.\nAnzahl: 0\nAsservat 1\nAsservat 2\nAsservat 3\n\ngez.\nKHK Feierabend';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const $ = id => document.getElementById(id);
+
+    $('rv-file').addEventListener('change', e => {
+      const f = e.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => { $('rv-input').value = ev.target.result; };
+      r.readAsText(f, 'utf-8');
+    });
+    $('rv-run').addEventListener('click', () => {
+      const t = $('rv-input').value;
+      if (!t.trim()){ $('rv-result').innerHTML = '<div class="card static"><p>Kein Text eingegeben.</p></div>'; return; }
+      const b = analysiere('Eingabe (Browser)', t);
+      $('rv-result').innerHTML = render(b);
+      console.log('[Richter-Validator]', b);
+    });
+    $('rv-clear').addEventListener('click', () => {
+      $('rv-input').value = ''; $('rv-result').innerHTML = ''; $('rv-file').value = '';
+    });
+    $('rv-demo').addEventListener('click', () => { $('rv-input').value = DEMO; });
+
+    /* --- Signatur-Check --- */
+    const SIG_LEX = {
+      durchsuchungsbeschluss:{ pflicht:true, wer:'Richter', norm:'§ 35 StPO i.V.m. § 105 Abs. 1 StPO, Art. 13 Abs. 2 GG' },
+      anklageschrift:{ pflicht:true, wer:'Staatsanwalt', norm:'§ 200 StPO' },
+      beschluss:{ pflicht:true, wer:'Richter', norm:'§ 35 StPO' },
+      urteil:{ pflicht:true, wer:'Alle Richter', norm:'§ 275 StPO' },
+      haftbefehl:{ pflicht:true, wer:'Richter', norm:'§ 114 StPO' },
+      protokoll:{ pflicht:true, wer:'Alle Beteiligten', norm:'je Verfahrensart' },
+      belehrung_beschuldigter_nrw:{ pflicht:true, wer:'Beamter + Beschuldigter', norm:'§ 136 StPO' },
+      ed_anordnung_nrw:{ pflicht:true, wer:'Anordnender Beamter', norm:'§ 81b StPO' },
+      dna_anordnung_nrw:{ pflicht:true, wer:'Richter', norm:'§ 81f StPO' },
+      verwaltungsakt:{ pflicht:false, wer:'—', norm:'§ 37 Abs. 2 VwVfG' }
+    };
+    const TXT_M = [/gez\.?\s/i,/gezeichnet/i,/\(Unterschrift\)/i,/Unterschrift[:\s]/i,/Unterschrift\s+des/i,/Unterschrift\s+der/i,/Unterschrift\s+Betroffene/i,/Unterschrift\s+Beschuldigte/i,/Unterschrift\s+Beamte/i,/Unterschrift\s+Zeuge/i,/_{5,}/];
+    const LER_M = [/Unterschrift[:\s]*$/im,/\(keine Unterschrift\)/i,/ohne\s+Unterschrift/i,/nicht\s+unterschrieben/i];
+
+    $('sig-run').addEventListener('click', () => {
+      const t = $('sig-input').value;
+      const typ = $('sig-typ').value;
+      const lex = SIG_LEX[typ] || { pflicht:null };
+      const hatLeer = LER_M.some(re => re.test(t));
+      const hatMarker = TXT_M.some(re => re.test(t));
+
+      let vorhanden, sicherheit, begruendung, verdikt;
+      if (hatLeer && !hatMarker){ vorhanden = false; sicherheit = 'HOCH'; begruendung = 'Leer-Marker im Text gefunden.'; }
+      else if (hatMarker){ vorhanden = true; sicherheit = 'MITTEL'; begruendung = 'Text-Marker im Unterschriftsbereich gefunden.'; }
+      else { vorhanden = false; sicherheit = 'MITTEL'; begruendung = 'Weder Marker noch Leer-Marker gefunden.'; }
+
+      if (!lex.pflicht) verdikt = 'NICHT_ERFORDERLICH';
+      else if (vorhanden === true) verdikt = 'KONFORM';
+      else if (vorhanden === false) verdikt = 'MANGEL_FEHLT';
+      else verdikt = 'MANGEL_UNSICHER';
+
+      const cls = (verdikt === 'KONFORM' || verdikt === 'NICHT_ERFORDERLICH') ? 'ok'
+                : verdikt === 'MANGEL_FEHLT' ? 'alert' : 'warn';
+
+      let html = '<div class="card static" style="margin-top:12px">';
+      html += '<h3>Ergebnis <span class="tag ' + cls + '">' + verdikt + '</span></h3>';
+      html += '<p style="margin-top:10px;line-height:1.85;font-size:13px">';
+      html += '<strong>Pflicht:</strong> ' + (lex.pflicht ? 'JA' : 'NEIN') + '<br>';
+      if (lex.pflicht){
+        html += '<strong>Wer:</strong> ' + lex.wer + '<br>';
+        html += '<strong>Norm:</strong> ' + lex.norm + '<br>';
+      }
+      html += '<strong>Vorhanden:</strong> ' + (vorhanden === true ? 'JA' : vorhanden === false ? 'NEIN' : 'UNSICHER') + '<br>';
+      html += '<strong>Sicherheit:</strong> ' + sicherheit + '<br>';
+      html += '<strong>Begründung:</strong> ' + begruendung;
+      html += '</p></div>';
+      $('sig-result').innerHTML = html;
+    });
+  });
+
+  window.RichterValidator = { analysiere, render };
+})();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
