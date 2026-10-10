@@ -2554,7 +2554,116 @@ var XJ = [
       $('sig-result').innerHTML = html;
     });
   });
+/* ============================================================
+   DEBUG-ANSICHT — zeigt, was der Validator tatsächlich sieht
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = id => document.getElementById(id);
+  if (!$('rv-debug')) return;
 
+  $('rv-debug').addEventListener('click', () => {
+    const raw = $('rv-input').value || '';
+
+    // 1) Rohtext-Sichtbarmachung
+    const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const hex = s => Array.from(s).map(c => {
+      const n = c.codePointAt(0);
+      if (n > 127 || n < 32) return '\\u' + n.toString(16).padStart(4,'0');
+      return c;
+    }).join('');
+
+    // 2) Alle relevanten Treffer einzeln auflisten
+    const checks = [
+      ['KONGRUENZ – Numerus',
+       /\b(die\s+Beschuldigten|die\s+Angeklagten|die\s+Angeschuldigten|beide[n]?|die\s+beiden)\b[^.!?]{0,140}?\bals\s+(sogenannter|ein|einer|eines|einem|einen)\s+\p{Lu}\p{L}+/gisu],
+      ['KONGRUENZ – generisches Maskulinum',
+       /\b(Frau\s+\p{Lu}\p{L}+|Kl[äa]gerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanw[äa]ltin|Sachbearbeiterin|Logistikerin)\b/giu],
+      ['KONGRUENZ – unbekannte Täter',
+       /(unbekannt\w*[^.!?]{0,60}?(Hauptt[äa]ter|T[äa]ter|Beteiligte)|(Hauptt[äa]ter|T[äa]ter|Beteiligte)[^.!?]{0,60}?unbekannt\w*)/giu],
+      ['LOGIK – Zeitspanne',
+       /(\d{1,2}):(\d{2})\s*(?:[Uu]hr)?\s*(?:bis|[-–—])\s*(\d{1,2}):(\d{2})/g],
+      ['LOGIK – Datum',
+       /(\d{1,2})\.(\d{1,2})\.(\d{4})/g],
+      ['LOGIK – Anzahl 0',
+       /anzahl\s*[:=]?\s*0\b/gi],
+      ['LOGIK – Asservat',
+       /\basservat\s*\d+/gi],
+      ['LOGIK – Normkollision',
+       /§\s*(52|53)/g],
+      ['VORLAGE – Marker Durchsuchung',
+       /\bDurchsuchung\b/i],
+      ['VORLAGE – Pflichtfeld Gericht',
+       /\b(Amtsgericht|Landgericht|Oberlandesgericht|Bundesgerichtshof)\s+\p{Lu}\p{L}+/iu],
+      ['VORLAGE – Pflichtfeld Aktenzeichen',
+       /\d{1,4}\s+(?:Gs|Qs|Js|KLs|Ls)\s+\d+\/\d+/],
+      ['VORLAGE – Pflichtfeld Unterschrift',
+       /\b(Richter|Richterin|Rechtspfleger|Unterschrift)\b/i],
+      ['VORLAGE – Pflichtfeld Rechtsmittel',
+       /\b(Beschwerde|Rechtsmittel|Rechtsbehelf)\b/i]
+    ];
+
+    let h = '';
+    h += '<div class="card static" style="margin-top:12px;border-color:rgba(75,156,255,.4)">';
+    h += '<h3>🔍 DEBUG — Was der Validator sieht</h3>';
+
+    // Zeichenstatistik
+    h += '<div style="display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 14px 0;font-family:var(--mono);font-size:11.5px">';
+    h += '<span class="pill">Zeichen: ' + raw.length + '</span>';
+    h += '<span class="pill">Zeilen: ' + raw.split('\n').length + '</span>';
+    h += '<span class="pill">Wörter: ' + (raw.match(/\p{L}+/gu) || []).length + '</span>';
+    h += '<span class="pill">Umbrüche: ' + (raw.match(/\n/g) || []).length + '</span>';
+    h += '</div>';
+
+    // Verdächtige Zeichen
+    const susp = [];
+    const rawCodes = new Set(Array.from(raw).map(c => c.codePointAt(0)));
+    for (const c of rawCodes){
+      if (c < 32 && c !== 10 && c !== 13 && c !== 9) susp.push('\\u' + c.toString(16).padStart(4,'0'));
+      if (c === 0xa0) susp.push('\\u00a0 NBSP');
+      if (c === 0x2011) susp.push('\\u2011 NON-BREAKING HYPHEN');
+      if (c === 0x2013) susp.push('\\u2013 EN-DASH');
+      if (c === 0x2014) susp.push('\\u2014 EM-DASH');
+    }
+    if (susp.length){
+      h += '<div style="background:rgba(255,59,48,.1);border-left:3px solid var(--red);padding:10px;border-radius:6px;margin-bottom:12px">';
+      h += '<div style="font-weight:600;font-size:12px;color:var(--red);margin-bottom:4px">⚠ Verdächtige Zeichen</div>';
+      h += '<div style="font-family:var(--mono);font-size:11.5px">' + susp.join(' · ') + '</div>';
+      h += '<div style="font-size:11px;color:var(--text-dim);margin-top:4px">Diese Zeichen können Regexe brechen. Wir normalisieren sie gleich.</div>';
+      h += '</div>';
+    }
+
+    // Trefferliste
+    h += '<div style="font-family:var(--mono);font-size:11.5px;line-height:1.9">';
+    for (const [name, re] of checks){
+      let hits = [];
+      try {
+        const m = raw.match(re);
+        hits = m ? (Array.isArray(m) ? m : [m]) : [];
+      } catch (e){ hits = ['REGEX-FEHLER: ' + e.message]; }
+      const ok = hits.length > 0;
+      const marker = ok ? '<span style="color:var(--green)">✓ ' + hits.length + ' Treffer</span>'
+                        : '<span style="color:var(--red)">✗ NICHT GEFUNDEN</span>';
+      h += '<div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:4px 0">';
+      h += '<span>' + esc(name) + '</span><span>' + marker + '</span>';
+      h += '</div>';
+      if (ok && hits.length <= 4){
+        for (const hit of hits){
+          h += '<div style="padding-left:14px;color:var(--text-dim);font-size:11px">• ' + esc(String(hit).slice(0,120)) + '</div>';
+        }
+      }
+    }
+    h += '</div>';
+
+    // Rohtext mit Escapes
+    h += '<details style="margin-top:14px">';
+    h += '<summary style="cursor:pointer;font-size:12px;color:var(--text-dim)">Rohtext (Hex-Escapes für Unsichtbares)</summary>';
+    h += '<pre style="background:#08090b;padding:12px;border-radius:8px;font-family:var(--mono);font-size:11px;max-height:280px;overflow:auto;margin-top:8px;white-space:pre-wrap;word-break:break-all">' + esc(hex(raw.slice(0, 4000))) + '</pre>';
+    h += '</details>';
+
+    h += '</div>';
+    $('rv-result').innerHTML = h;
+  });
+});
   window.RichterValidator = { analysiere: analysiere, render: render };
 })();
 </script>
