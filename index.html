@@ -1247,6 +1247,156 @@ document.body.addEventListener('touchmove', e => {
     });
   });
 
+  /* ============================================================
+     DEBUG-ANSICHT — Knopf oben rechts im Validator
+     Zeigt an: was der Validator tatsächlich sieht,
+     welche Regexe matchen, welche nicht.
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', () => {
+    const $ = id => document.getElementById(id);
+
+    // Debug-Knopf neben "Demo laden" dynamisch einbauen
+    const demoBtn = $('rv-demo');
+    if (demoBtn && !$('rv-debug')) {
+      const dbg = document.createElement('button');
+      dbg.className = 'back-btn';
+      dbg.id = 'rv-debug';
+      dbg.style.margin = '0';
+      dbg.textContent = '🔍 Debug';
+      demoBtn.parentNode.appendChild(dbg);
+    }
+
+    const escH = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const hexDump = s => Array.from(s).map(c => {
+      const n = c.codePointAt(0);
+      if (n > 127 || n < 32) return '\\u' + n.toString(16).padStart(4,'0');
+      return c;
+    }).join('');
+
+    $('rv-debug') && $('rv-debug').addEventListener('click', () => {
+      const raw = $('rv-input').value || '';
+
+      // Treffer-Checks
+      const checks = [
+        ['KONGRUENZ – Numerus (HART)',
+         /\b(die\s+Beschuldigten|die\s+Angeklagten|die\s+Angeschuldigten|beide[n]?|die\s+beiden|die\s+Eheleute|die\s+Betroffenen)\b[^.!?]{0,160}?\bals\s+(sogenannter|sogenannte[rn]?|sog\.|ein|einer|eines|einem|einen)\s+\p{Lu}\p{L}+/gisu],
+        ['KONGRUENZ – weibliche Marker',
+         /\b(Frau\s+\p{Lu}\p{L}+|Kl[äa]gerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanw[äa]ltin|Sachbearbeiterin|Logistikerin)\b/giu],
+        ['KONGRUENZ – unbekannt+benannt',
+         /(unbekannt\w*[^.!?]{0,60}?(Hauptt[äa]ter|T[äa]ter|Beteiligte)|(Hauptt[äa]ter|T[äa]ter|Beteiligte)[^.!?]{0,60}?unbekannt\w*)/giu],
+        ['LOGIK – Zeitspanne',
+         /(\d{1,2})[.:](\d{2})\s*(?:Uhr)?\s*(?:bis|[-–—])\s*(\d{1,2})[.:](\d{2})/gi],
+        ['LOGIK – Datum',
+         /(\d{1,2})\s*\.\s*(\d{1,2})\s*\.\s*(\d{2,4})/g],
+        ['LOGIK – Anzahl 0',
+         /anzahl\s*[:=]?\s*0\b/gi],
+        ['LOGIK – Asservat-Liste',
+         /\basservat\s*\d+/gi],
+        ['LOGIK – § 52 + § 53',
+         /§\s*(52|53)/g],
+        ['VORLAGE – Marker "Durchsuchung"',
+         /\bDurchsuchung\b/i],
+        ['VORLAGE – Pflichtfeld Gericht',
+         /\b(Amtsgericht|Landgericht|Oberlandesgericht|Bundesgerichtshof)\s+\p{Lu}\p{L}+/iu],
+        ['VORLAGE – Pflichtfeld Aktenzeichen',
+         /\d{1,4}\s+(?:Gs|Qs|Js|KLs|Ls)\s+\d+\/\d+/],
+        ['VORLAGE – Pflichtfeld Unterschrift',
+         /\b(Richter|Richterin|Rechtspfleger|Unterschrift)\b/i],
+        ['VORLAGE – Pflichtfeld Rechtsmittel',
+         /\b(Beschwerde|Rechtsmittel|Rechtsbehelf)\b/i]
+      ];
+
+      // Verdächtige Zeichen
+      const susp = new Set();
+      for (const c of raw){
+        const n = c.codePointAt(0);
+        if (n < 32 && c !== '\n' && c !== '\r' && c !== '\t') susp.add('\\u' + n.toString(16).padStart(4,'0'));
+        if (n === 0xa0) susp.add('NBSP');
+        if (n === 0x2011) susp.add('NON-BREAK-HYPHEN');
+        if (n === 0x2013) susp.add('EN-DASH');
+        if (n === 0x2014) susp.add('EM-DASH');
+        if (n === 0x2018 || n === 0x2019) susp.add('CURLY-APOSTROPH');
+        if (n === 0x201c || n === 0x201d) susp.add('CURLY-QUOTE');
+      }
+
+      let h = '';
+      h += '<div class="card static" style="margin-top:12px;border-color:rgba(75,156,255,.45)">';
+      h += '<h3 style="color:var(--blue)">🔍 DEBUG — Was der Validator sieht</h3>';
+
+      h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 16px 0;font-family:var(--mono);font-size:11px">';
+      h += '<span class="pill">Zeichen: ' + raw.length + '</span>';
+      h += '<span class="pill">Zeilen: ' + raw.split('\n').length + '</span>';
+      h += '<span class="pill">Wörter: ' + (raw.match(/\p{L}+/gu) || []).length + '</span>';
+      h += '<span class="pill">Regexe: ' + checks.length + '</span>';
+      h += '</div>';
+
+      if (susp.size){
+        h += '<div style="background:rgba(255,59,48,.1);border-left:3px solid var(--red);padding:10px 12px;border-radius:6px;margin-bottom:14px">';
+        h += '<div style="font-weight:600;font-size:12.5px;color:var(--red);margin-bottom:5px">⚠ Verdächtige Zeichen im Text</div>';
+        h += '<div style="font-family:var(--mono);font-size:11.5px;color:var(--text)">' + [...susp].join(' · ') + '</div>';
+        h += '<div style="font-size:11px;color:var(--text-dim);margin-top:5px">Diese können Regexe brechen (Unicode-Varianten).</div>';
+        h += '</div>';
+      } else {
+        h += '<div style="background:rgba(0,230,118,.08);border-left:3px solid var(--green);padding:9px 12px;border-radius:6px;margin-bottom:14px;font-size:12px">';
+        h += '<span style="color:var(--green);font-weight:600">✓ Keine problematischen Unicode-Zeichen gefunden.</span>';
+        h += '</div>';
+      }
+
+      h += '<div style="font-family:var(--mono);font-size:11.5px;line-height:1.95">';
+      for (const [name, re] of checks){
+        let hits = [];
+        try {
+          const m = raw.match(re);
+          hits = m ? (Array.isArray(m) ? m : [m]) : [];
+        } catch (e){ hits = ['REGEX-FEHLER: ' + e.message]; }
+        const ok = hits.length > 0;
+        const marker = ok
+          ? '<span style="color:var(--green)">✓ ' + hits.length + '</span>'
+          : '<span style="color:var(--red)">✗ nichts</span>';
+        h += '<div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:3px 0">';
+        h += '<span>' + escH(name) + '</span><span>' + marker + '</span>';
+        h += '</div>';
+        if (ok && hits.length <= 4){
+          for (const hit of hits){
+            h += '<div style="padding-left:16px;color:var(--text-dim);font-size:10.5px">• ' + escH(String(hit).slice(0, 120)) + '</div>';
+          }
+        }
+      }
+      h += '</div>';
+
+      h += '<details style="margin-top:16px">';
+      h += '<summary style="cursor:pointer;font-size:12px;color:var(--text-dim);user-select:none">Rohtext anzeigen (Escapes für Unsichtbares)</summary>';
+      h += '<pre style="background:#050608;padding:12px;border-radius:8px;font-family:var(--mono);font-size:11px;max-height:320px;overflow:auto;margin-top:8px;white-space:pre-wrap;word-break:break-all;color:var(--text)">' + escH(hexDump(raw.slice(0, 5000))) + '</pre>';
+      h += '</details>';
+
+      h += '</div>';
+      $('rv-result').innerHTML = h;
+    });
+  });
+
+  /* ============================================================
+     Zusätzlich: Text-Normalisierung vor der Analyse
+     (entfernt NBSP, En-Dash, Curly-Quotes etc.)
+     ============================================================ */
+  function normalisiere(text){
+    return text
+      .replace(/\u00a0/g, ' ')
+      .replace(/[\u2010\u2011]/g, '-')
+      .replace(/\u2013/g, '-')
+      .replace(/\u2014/g, '--')
+      .replace(/\u2018|\u2019/g, "'")
+      .replace(/\u201c|\u201d/g, '"')
+      .replace(/\u00ad/g, '')
+      .replace(/\ufeff/g, '')
+      .replace(/\r\n?/g, '\n');
+  }
+
+  // Wrapper, damit auch der normale "Prüfen"-Knopf die Normalisierung nutzt
+  const _origAnalysiere = analysiere;
+  analysiere = function(name, text){
+    return _origAnalysiere(name, normalisiere(text));
+  };
+
   window.RichterValidator = { analysiere, render };
 })();
 </script>
