@@ -1,0 +1,12 @@
+{
+  "registry_version": "1.0.0",
+  "agents": [
+    {
+      "id": "compliance-governance-001",
+      "name": "Compliance Governance Agent",
+      "tier": "tier-1-governance",
+      "status": "planned",
+      "description": "Initialer Registereintrag. Die ausführbare Agentenlogik ist noch nicht implementiert."
+    }
+  ]
+}

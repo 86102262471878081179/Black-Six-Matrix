@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/86102262471878081179/Black-Six-Matrix/blob/main/agents/agent_registry.schema.json",
+  "title": "Black-Six-Matrix Agent Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["registry_version", "agents"],
+  "properties": {
+    "registry_version": { "const": "1.0.0" },
+    "agents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/agent" }
+    }
+  },
+  "$defs": {
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "tier", "status", "description"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "tier": { "enum": ["tier-1-governance", "tier-2-security", "tier-3-analysis"] },
+        "status": { "enum": ["planned", "active", "deprecated"] },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
