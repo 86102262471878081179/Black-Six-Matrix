@@ -1,6 +1,538 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK SIX MATRIX – Enterprise Level Platform & AI Control Center</title>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-XXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA-XXXXX');
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATVcQHq4ldG5YHE_Q3DSU8PqPG-k0O_jVQFfA9TAM9t1-alkVLpKLrMcmf7E-NZOL9tQ8x7Ff__NcMPo&currency=EUR&locale=de_DE"></script>
+
+    <style>
+        :root {
+            --bg-base: #06060a;
+            --bg-elev: #0e0e14;
+            --bg-card: rgba(15, 15, 22, 0.85);
+            --bg-card-hover: rgba(22, 22, 32, 0.95);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-bright: rgba(0, 242, 254, 0.25);
+            
+            --metallic-silver: #c0c0c0;
+            --metallic-gold: #d4af37;
+            --metallic-platinum: #e8e8e8;
+            
+            --accent-cyan: #00F2FE;
+            --accent-cyan-translucent: rgba(0, 242, 254, 0.1);
+            --accent-red: #FF2A4B;
+            --green-check: #3fbf7f;
+            
+            --text-main: #e8e8e8;
+            --text-muted: #a8a8b8;
+            --text-dark: #6c7a8a;
+            
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 24px;
+            --shadow-8k: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 1px inset rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--bg-base); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.05) 0%, transparent 45%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 10% 80%, rgba(255, 42, 75, 0.04) 0%, transparent 40%);
+            color: var(--text-main); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            line-height: 1.6; 
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        a { color: inherit; text-decoration: none; }
+
+        /* TOPBAR */
+        .topbar {
+            position: sticky; top: 0; z-index: 90; display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 28px; background: rgba(6, 6, 10, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .topbar .brand-group { display: flex; align-items: center; gap: 14px; }
+        .topbar .brand {
+            font-weight: 900; letter-spacing: 2px; font-size: 1rem;
+            background: linear-gradient(135deg, var(--text-main), var(--metallic-gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .deepseek-badge {
+            display: flex; align-items: center; gap: 8px; padding: 4px 12px;
+            background: rgba(77, 107, 254, 0.12); border: 1px solid rgba(77, 107, 254, 0.3);
+            border-radius: 20px; font-size: 0.72rem; font-weight: 700; color: #6B8AFF;
+        }
+        .deepseek-logo-svg { width: 18px; height: 18px; fill: currentColor; }
+        .topbar nav { display: flex; gap: 24px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .topbar nav a:hover { color: var(--accent-cyan); }
+        .topbar .cta {
+            padding: 9px 22px; border-radius: 30px; background: var(--metallic-gold); color: #0a0a0f;
+            font-weight: 800; font-size: 0.8rem; text-decoration: none; transition: 0.2s;
+        }
+        .topbar .cta:hover { background: #e5be48; transform: translateY(-1px); }
+        @media(max-width: 880px) { .topbar nav { display: none; } }
+
+        /* HEADER */
+        header { 
+            text-align: center; padding: 80px 20px 40px; 
+            border-bottom: 1px solid var(--border-subtle); position: relative;
+        }
+        .eyebrow {
+            display: inline-block; padding: 6px 18px; border: 1px solid var(--border-bright);
+            border-radius: 30px; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--accent-cyan); background: var(--accent-cyan-translucent); margin-bottom: 24px; font-weight: 700;
+        }
+        h1 { 
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: 5px; 
+            text-transform: uppercase; 
+            background: linear-gradient(135deg, #e8e8e8 0%, #d4af37 60%, var(--accent-red) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px; filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
+        }
+        .subtitle { color: var(--text-muted); font-size: 1.15rem; max-width: 680px; margin: 0 auto 16px; font-weight: 300; }
+        .sigil { 
+            font-size: 2.2rem; margin-top: 15px; letter-spacing: 8px; cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; user-select: none; opacity: 0.8;
+        }
+        .sigil:hover { transform: scale(1.12); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5)); opacity: 1; }
+
+        /* TRUST BAR & STATS */
+        .trust {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 34px;
+            padding: 22px 20px; border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-muted); font-size: 0.82rem; font-weight: 600; background: rgba(10, 10, 15, 0.4);
+        }
+        .trust b { color: var(--accent-cyan); }
+
+        /* SECTION BASE */
+        .section { max-width: 1600px; margin: 0 auto 70px; padding: 0 20px; }
+        .section h2 { 
+            font-size: 2rem; font-weight: 800; color: var(--text-main); 
+            margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); 
+        }
+
+        /* SPARTEN NAV */
+        .sparten-nav { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 40px 20px 30px; padding: 20px;
+            background: rgba(15, 15, 22, 0.5); border-radius: var(--radius-m); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle);
+        }
+        .sparten-nav a { 
+            padding: 12px 26px; border-radius: 40px; text-decoration: none; color: var(--text-main); 
+            font-weight: 700; font-size: 0.82rem; letter-spacing: 0.5px; transition: all 0.3s ease; 
+            border: 1px solid var(--border-subtle); background: var(--bg-card);
+        }
+        .sparten-nav a:hover { transform: translateY(-3px); border-color: var(--metallic-silver); color: var(--metallic-gold); }
+
+        /* GRID & CARDS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px; }
+        .card { 
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-l); 
+            padding: 28px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; 
+            backdrop-filter: blur(16px); box-shadow: var(--shadow-8k); position: relative; overflow: hidden;
+        }
+        .card:hover { border-color: var(--border-bright); transform: translateY(-6px); background: var(--bg-card-hover); }
+        .card.featured { 
+            border: 1px solid var(--metallic-gold); 
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 15, 22, 0.92) 100%); 
+        }
+        .badge { 
+            padding: 6px 16px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; 
+            text-transform: uppercase; display: inline-block; margin-bottom: 16px; width: fit-content; 
+            border: 1px solid var(--metallic-gold); color: var(--metallic-gold); background: rgba(212, 175, 55, 0.08);
+        }
+        h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; }
+        .price { font-size: 2.2rem; color: var(--metallic-gold); font-weight: 900; margin: 12px 0; letter-spacing: -1px; }
+        .price small { font-size: 0.85rem; color: var(--text-dark); font-weight: 400; letter-spacing: 0; }
+        .features { list-style: none; margin: 16px 0 24px; font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; }
+        .features li { padding: 6px 0; position: relative; padding-left: 24px; }
+        .features li::before { content: "✓"; position: absolute; left: 0; color: var(--green-check); font-weight: bold; }
+
+        .btn { 
+            background: var(--metallic-silver); color: #0a0a0f; padding: 14px 20px; border: none; 
+            border-radius: var(--radius-s); font-size: 0.9rem; font-weight: 800; cursor: pointer; width: 100%; 
+            transition: all 0.2s ease; letter-spacing: 0.5px; text-align: center; display: inline-block;
+        }
+        .btn:hover { background: var(--metallic-platinum); transform: scale(1.02); }
+        .btn-gold { background: var(--metallic-gold); color: #0a0a0f; }
+        .btn-gold:hover { background: #e5be48; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-elev); border: 1px solid var(--border-bright); border-radius: var(--radius-l);
+            max-width: 540px; width: 100%; padding: 32px; position: relative; box-shadow: var(--shadow-8k);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal .close { position: absolute; top: 16px; right: 18px; cursor: pointer; color: var(--text-dark); font-size: 1.6rem; background: none; border: none; }
+        .modal h3 { font-size: 1.4rem; margin-bottom: 6px; }
+        .modal .m-price { color: var(--metallic-gold); font-weight: 900; font-size: 1.8rem; margin: 6px 0 20px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab {
+            flex: 1; padding: 10px; text-align: center; border-radius: var(--radius-s); cursor: pointer; font-size: 0.82rem;
+            font-weight: 700; border: 1px solid var(--border-subtle); color: var(--text-muted); transition: 0.2s;
+        }
+        .tab.active { background: var(--metallic-gold); color: #0a0a0f; border-color: var(--metallic-gold); }
+        .tab-pane { display: none; } .tab-pane.active { display: block; }
+        .info-row { background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-s); padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+
+        footer { 
+            text-align: center; padding: 70px 20px 40px; border-top: 1px solid var(--border-subtle); 
+            color: var(--text-dark); font-size: 0.85rem; background: rgba(6, 6, 10, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="brand-group">
+        <div class="brand">🏴‍☠️ BLACK SIX MATRIX®</div>
+        <div class="deepseek-badge">
+            <svg class="deepseek-logo-svg" viewBox="0 0 100 100">
+                <path d="M20 20 L80 20 L80 80 L20 80 Z M35 35 L65 35 L65 65 L35 65 Z"/>
+            </svg>
+            DeepSeek-R1 Integrated
+        </div>
+    </div>
+    <nav>
+        <a href="#pakete">Pakete</a>
+        <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#pakete" class="cta">Jetzt Bestellen</a>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="eyebrow">Sovereign Enterprise Architecture · Master Deliveries</div>
+    <h1>Black Six Matrix</h1>
+    <p class="subtitle">25 MVP-Pakete · Sofort-Download nach Autorisierung</p>
+    <p class="sigil" id="header-sigil">👉♾️🔚🏴‍☠️👑💯</p>
+</header>
+
+<div id="pakete"></div>
+<nav class="sparten-nav">
+    <a href="#ignition">🔥 IGNITION</a>
+    <a href="#momentum">⚡ MOMENTUM</a>
+    <a href="#ascent">🚀 ASCENT</a>
+    <a href="#sovereign">👑 SOVEREIGN</a>
+    <a href="#omega">💎 OMEGA</a>
+</nav>
+
+<!-- IGNITION SPARTE -->
+<section id="ignition" class="section">
+    <h2>🔥 IGNITION – Starter Pakete</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">I1</span>
+            <h3>I1 – ZÜNDFUNKE</h3>
+            <p class="desc">Quellcode + Python-Core</p>
+            <p class="price">€497</p>
+            <ul class="features"><li>Vollständiger Quellcode</li><li>Deca Crew Agenten</li></ul>
+            <button class="btn" onclick="kaufeJetzt('I1 – ZÜNDFUNKE', 497)">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I2</span>
+            <h3>I2 – GLIMMER</h3>
+            <p class="desc">+ Installation</p>
+            <p class="price">€750</p>
+            <ul class="features"><li>Alles aus I1</li><li>1h Remote-Support</li></ul>
+            <button class="btn" onclick="kaufeJetzt('I2 – GLIMMER', 750)">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I3</span>
+            <h3>I3 – FUNKE</h3>
+            <p class="desc">+ CLI-Tool</p>
+            <p class="price">€990</p>
+            <ul class="features"><li>Alles aus I2</li><li>CLI-Tool b6</li></ul>
+            <button class="btn" onclick="kaufeJetzt('I3 – FUNKE', 990)">Jetzt kaufen</button>
+        </div>
+        <div class="card">
+            <span class="badge">I4</span>
+            <h3>I4 – FLAMME</h3>
+            <p class="desc">+ Docker</p>
+            <p class="price">€1.200</p>
+            <ul class="features"><li>Alles aus I3</li><li>Docker-Container</li></ul>
+            <button class="btn" onclick="kaufeJetzt('I4 – FLAMME', 1200)">Jetzt kaufen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">I5</span>
+            <h3>I5 – INFERNO</h3>
+            <p class="desc">Komplettpaket + iOS Basis</p>
+            <p class="price">€1.500</p>
+            <ul class="features"><li>Alles aus I4</li><li>1 Jahr Updates</li><li>iOS Xcode Basis</li></ul>
+            <button class="btn btn-gold" onclick="kaufeJetzt('I5 – INFERNO', 1500)">Jetzt kaufen</button>
+        </div>
+    </div>
+</section>
+
+<!-- MOMENTUM SPARTE -->
+<section id="momentum" class="section">
+    <h2>⚡ MOMENTUM – Training & Audit</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="badge">M1</span>
+            <h3>M1 – BOOTCAMP</h3>
+            <p class="price">€1.250</p>
+            <button class="btn" onclick="kaufeJetzt('M1 – BOOTCAMP', 1250)">Jetzt buchen</button>
+        </div>
+        <div class="card featured">
+            <span class="badge">M5</span>
+            <h3>M5 – MEISTER</h3>
+            <p class="price">€3.500</p>
+            <button class="btn btn-gold" onclick="kaufeJetzt('M5 – MEISTER', 3500)">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- ASCENT SPARTE -->
+<section id="ascent" class="section">
+    <h2>🚀 ASCENT – Professional Implementation</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">A5</span>
+            <h3>A5 – GIPFEL</h3>
+            <p class="price">€29.900</p>
+            <button class="btn btn-gold" onclick="kaufeJetzt('A5 – GIPFEL', 29900)">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- SOVEREIGN SPARTE -->
+<section id="sovereign" class="section">
+    <h2>👑 SOVEREIGN – Enterprise Solutions</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">S5</span>
+            <h3>S5 – OMEGA ENTERPRISE</h3>
+            <p class="price">€2.499.000</p>
+            <button class="btn btn-gold" onclick="kaufeJetzt('S5 – OMEGA ENTERPRISE', 2499000)">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- OMEGA SPARTE -->
+<section id="omega" class="section">
+    <h2>💎 OMEGA – Custom Build</h2>
+    <div class="grid">
+        <div class="card featured">
+            <span class="badge">O5</span>
+            <h3>O5 – OMEGA STEIN</h3>
+            <p class="price">€25.000</p>
+            <button class="btn btn-gold" onclick="kaufeJetzt('O5 – OMEGA STEIN', 25000)">Jetzt buchen</button>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="flogo">🏴‍☠️ BLACK SIX MATRIX®</div>
+    <p>© 2026 Thomas König · All Rights Reserved</p>
+</footer>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModal">
+    <div class="modal">
+        <button class="close" onclick="closeModal('payModal')">×</button>
+        <h3 id="m-title">Paket auswählen</h3>
+        <div class="m-price" id="m-price">€0</div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('pp', this)">PayPal / Kreditkarte</div>
+            <div class="tab" onclick="switchTab('bank', this)">Banküberweisung (SEPA)</div>
+        </div>
+        
+        <div class="tab-pane active" id="pane-pp">
+            <div id="paypal-button-container"></div>
+        </div>
+        
+        <div class="tab-pane" id="pane-bank">
+            <div class="info-row"><span>Empfänger</span><b>Thomas König · Black Six</b></div>
+            <div class="info-row"><span>IBAN</span><b class="mono" id="m-iban">DE27 7002 0270 0047 0960 65</b></div>
+            <div class="info-row"><span>Betrag</span><b id="m-amount">€0</b></div>
+            <div class="info-row"><span>Verwendungszweck</span><b id="m-ref" class="mono">B6-ORDER</b></div>
+            <button class="btn btn-gold" style="margin-top:14px" onclick="copyToClipboard('m-iban', this)">IBAN kopieren</button>
+            <button class="btn" style="margin-top:10px" onclick="simulierteSepaBestatigung()">Überweisung getätigt (Download freischalten)</button>
+        </div>
+    </div>
+</div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="modal-overlay" id="downloadModal">
+    <div class="modal" style="text-align:center;">
+        <button class="close" onclick="closeModal('downloadModal')">×</button>
+        <h3 style="color:var(--green-check); margin-bottom:10px;">✓ Autorisierung Erfolgreich</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem;" id="download-title">Ihr Paket steht bereit</p>
+        <div id="download-links" style="margin: 25px 0; background:rgba(0,0,0,0.4); padding:20px; border-radius:var(--radius-m); border:1px solid var(--border-bright);">
+            <!-- Dynamic Download Button -->
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-dark);">Bestätigung zugestellt an: <span id="buyer-email" style="color:var(--text-main);"></span></p>
+    </div>
+</div>
+
+<script>
+const DOWNLOADS = {
+    "I1": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/I1-ZÜNDFUNKE.zip",
+    "I2": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/I2-GLIMMER.zip",
+    "I3": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/I3-FUNKE.zip",
+    "I4": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/I4-FLAMME.zip",
+    "I5": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/I5-INFERNO.zip",
+    "M1": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/M1-BOOTCAMP.zip",
+    "M2": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/M2-FORTGESCHRITTEN.zip",
+    "M3": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/M3-AUDIT.zip",
+    "M4": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/M4-LEGAL-TECH.zip",
+    "M5": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/M5-MEISTER.zip",
+    "A1": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/A1-AUFSTIEG.zip",
+    "A2": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/A2-ORBIT.zip",
+    "A3": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/A3-BESCHLEUNIGUNG.zip",
+    "A4": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/A4-MULTIVERSUM.zip",
+    "A5": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/A5-GIPFEL.zip",
+    "S1": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/S1-ENTERPRISE-S.zip",
+    "S2": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/S2-ENTERPRISE-M.zip",
+    "S3": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/S3-ENTERPRISE-L.zip",
+    "S4": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/S4-ENTERPRISE-XL.zip",
+    "S5": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/S5-OMEGA-ENTERPRISE.zip",
+    "O1": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/O1-AIRGAP.zip",
+    "O2": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/O2-TRAINING.zip",
+    "O3": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/O3-TREUHAND.zip",
+    "O4": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/O4-INDIVIDUELL.zip",
+    "O5": "https://github.com/86102262471878081179/Black-Six-Matrix/releases/download/v1.0/O5-OMEGA-STEIN.zip"
+};
+
+let currentStufeKey = "I1";
+let currentStufeName = "";
+let currentEmail = "deca.omni.allianz@gmail.com";
+
+function kaufeJetzt(stufe, preis) {
+    currentStufeName = stufe;
+    currentStufeKey = stufe.split(' –')[0].trim();
+    
+    document.getElementById('m-title').innerText = stufe;
+    const formatted = '€' + Number(preis).toLocaleString('de-DE');
+    document.getElementById('m-price').innerText = formatted;
+    document.getElementById('m-amount').innerText = formatted;
+    document.getElementById('m-ref').innerText = 'BLACKSIX-' + currentStufeKey;
+    
+    document.getElementById('payModal').classList.add('active');
+    renderPayPalButton(stufe, preis);
+}
+
+function switchTab(type, element) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    
+    element.classList.add('active');
+    document.getElementById(type === 'pp' ? 'pane-pp' : 'pane-bank').classList.add('active');
+}
+
+function renderPayPalButton(name, amount) {
+    const container = document.getElementById('paypal-button-container');
+    container.innerHTML = ''; // Sauberes Clearing verhindert UI-Freeze
+    
+    if (typeof paypal === 'undefined') {
+        container.innerHTML = '<p style="color:var(--text-dark); padding:10px; font-size:0.85rem;">PayPal SDK nicht erreichbar. Nutzen Sie die SEPA-Überweisung.</p>';
+        return;
+    }
+    
+    try {
+        paypal.Buttons({
+            style: { layout: 'vertical', color: 'gold', shape: 'rect' },
+            createOrder: (data, actions) => {
+                return actions.order.create({
+                    purchase_units: [{
+                        description: 'Black Six Matrix – ' + name,
+                        amount: { value: amount.toString() }
+                    }]
+                });
+            },
+            onApprove: (data, actions) => {
+                return actions.order.capture().then(details => {
+                    currentEmail = details.payer.email_address || currentEmail;
+                    triggerDownloadModal();
+                });
+            },
+            onError: (err) => {
+                console.error("PayPal Error:", err);
+                alert("Zahlungs-Abbruch oder Fehler im PayPal-Kanal.");
+            }
+        }).render('#paypal-button-container');
+    } catch(e) {
+        console.error("PayPal Render Exception:", e);
+    }
+}
+
+function simulierteSepaBestatigung() {
+    const email = prompt("Bitte geben Sie Ihre E-Mail-Adresse für die Download-Zustellung ein:", currentEmail);
+    if (!email) return;
+    currentEmail = email;
+    triggerDownloadModal();
+}
+
+function triggerDownloadModal() {
+    closeModal('payModal');
+    
+    const downloadLink = DOWNLOADS[currentStufeKey] || DOWNLOADS["I1"];
+    document.getElementById('buyer-email').innerText = currentEmail;
+    document.getElementById('download-title').innerText = currentStufeName;
+    document.getElementById('download-links').innerHTML = `
+        <a href="${downloadLink}" target="_blank" class="btn btn-gold" style="display:inline-block; text-decoration:none; font-size:1.1rem; padding:16px 24px;">
+            📦 JETZT DOWNLOADEN: ${currentStufeKey}.zip
+        </a>
+    `;
+    
+    document.getElementById('downloadModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+function copyToClipboard(elementId, btn) {
+    const text = document.getElementById(elementId).innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = '✓ Kopiert!';
+        setTimeout(() => btn.innerText = orig, 1500);
+    });
+}
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   
