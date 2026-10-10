@@ -1,2 +1,7 @@
 __pycache__/
 *.py[cod]
+
+# Notebook intake is local-only; publish only reviewed files under curated/.
+/notebooks/inbox/
+/notebooks/derived/
+/notebooks/curated/**/.ipynb_checkpoints/

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Black-Six-Matrix Notebook Manifest Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "notebook_id",
+    "title",
+    "source_filename",
+    "source_format",
+    "source_location",
+    "source_system",
+    "project_area",
+    "confidentiality",
+    "owner",
+    "created_at",
+    "source_updated_at",
+    "captured_at",
+    "source_sha256",
+    "curated_sha256",
+    "review_status",
+    "curated_path",
+    "related_artifact_ids",
+    "reviewed_by",
+    "reviewed_at",
+    "license_rights",
+    "notes"
+  ],
+  "properties": {
+    "notebook_id": { "type": "string", "pattern": "^NB-[0-9]{3}$" },
+    "title": { "type": "string" },
+    "source_filename": { "type": "string" },
+    "source_format": { "type": "string" },
+    "source_location": { "type": "string" },
+    "source_system": { "type": "string" },
+    "project_area": {
+      "enum": ["governance", "security", "architecture", "research", "operations", "unknown", ""]
+    },
+    "confidentiality": {
+      "enum": ["public", "internal", "confidential", "restricted", "unclassified", "unknown", ""]
+    },
+    "owner": { "type": "string" },
+    "created_at": { "type": "string" },
+    "source_updated_at": { "type": "string" },
+    "captured_at": { "type": "string" },
+    "source_sha256": { "type": "string", "pattern": "^(|[a-fA-F0-9]{64})$" },
+    "curated_sha256": { "type": "string", "pattern": "^(|[a-fA-F0-9]{64})$" },
+    "review_status": {
+      "enum": ["untriaged", "in_review", "curated", "restricted", "duplicate", "excluded"]
+    },
+    "curated_path": { "type": "string" },
+    "related_artifact_ids": { "type": "string" },
+    "reviewed_by": { "type": "string" },
+    "reviewed_at": { "type": "string" },
+    "license_rights": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}
