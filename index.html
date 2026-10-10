@@ -1,3 +1,940 @@
+<div class="nav-section">Forensik</div>
+      <div class="nav-item" data-page="richter" onclick="showPage('richter', this)">
+        <span class="nav-icon">◬</span> Richter-Validator
+      </div>
+      <div class="nav-item" data-page="signatur" onclick="showPage('signatur', this)">
+        <span class="nav-icon">✎</span> Signatur-Check
+      </div>
+      <!-- ========== RICHTER-VALIDATOR ========== -->
+      <div id="richter" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Richter-Validator</h2>
+        <p class="page-sub">
+          Deterministische Prüfung · 5 Achsen · Precision-Guard aktiv
+        </p>
+
+        <!-- Eingabe -->
+        <div class="card" style="cursor:default;margin-bottom:18px">
+          <h3>Dokument einfügen oder laden</h3>
+          <p>Text einfügen oder .txt-Datei wählen. PDFs bitte vorher in Text umwandeln.</p>
+
+          <textarea id="rv-input" class="field"
+            style="margin-top:12px;height:180px;font-family:var(--font-mono);font-size:12.5px"
+            placeholder="Dokumenttext hier einfügen…"></textarea>
+
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            <label class="back-btn" style="margin:0;cursor:pointer">
+              📎 Datei wählen
+              <input type="file" id="rv-file" accept=".txt,.md,.csv,.log"
+                     style="display:none">
+            </label>
+            <button class="back-btn" id="rv-run"
+              style="margin:0;border-color:rgba(0,230,118,.4);color:var(--green)">
+              ▬ Prüfen
+            </button>
+            <button class="back-btn" id="rv-clear" style="margin:0">
+              ✕ Leeren
+            </button>
+          </div>
+        </div>
+
+        <!-- Ergebnis-Container -->
+        <div id="rv-result"></div>
+      </div>
+
+      <!-- ========== SIGNATUR-CHECK (UI-Stub) ========== -->
+      <div id="signatur" class="detail">
+        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
+        <h2 class="page-title">Signatur-Check</h2>
+        <p class="page-sub">Pflicht + Ist-Zustand · nur Text-Marker (Vision = Server-Pfad)</p>
+
+        <div class="card" style="cursor:default">
+          <h3>Dokumenttyp wählen</h3>
+          <p>Nach Auswahl wird der Textmarker-Scan ausgeführt.</p>
+          <select id="sig-typ" class="field" style="margin-top:12px">
+            <option value="durchsuchungsbeschluss">Durchsuchungsbeschluss</option>
+            <option value="anklageschrift">Anklageschrift</option>
+            <option value="beschluss">Beschluss</option>
+            <option value="urteil">Urteil</option>
+            <option value="haftbefehl">Haftbefehl</option>
+            <option value="protokoll">Protokoll</option>
+            <option value="belehrung_beschuldigter_nrw">Belehrung</option>
+            <option value="ed_anordnung_nrw">ED-Anordnung</option>
+            <option value="dna_anordnung_nrw">DNA-Anordnung</option>
+            <option value="verwaltungsakt">Verwaltungsakt</option>
+          </select>
+          <textarea id="sig-input" class="field"
+            style="margin-top:12px;height:140px;font-family:var(--font-mono);font-size:12.5px"
+            placeholder="Dokumenttext einfügen…"></textarea>
+          <button class="back-btn" id="sig-run"
+            style="margin-top:12px;margin-bottom:0;border-color:rgba(0,230,118,.4);color:var(--green)">
+            ▬ Signatur prüfen
+          </button>
+        </div>
+
+        <div id="sig-result"></div>
+      </div>
+      <!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>RICHTER-VALIDATOR Suite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #050608;
+      --card: #11141a;
+      --accent: #00e676;
+      --accent-soft: rgba(0, 230, 118, 0.25);
+      --text: #e5e9f0;
+      --muted: #9fa6b2;
+      --border: #1f2933;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top, #111827 0, #020309 55%);
+      color: var(--text);
+    }
+
+    .shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #0b1016, #05070b);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.35);
+      margin-bottom: 10px;
+    }
+
+    .badge span.icon {
+      font-size: 12px;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px;
+      font-size: 12px;
+    }
+
+    .list li {
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .list li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #05070b;
+      color: var(--text);
+      font-size: 11px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .btn span.icon {
+      font-size: 12px;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid #1f2937;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="title">RICHTER-VALIDATOR · Suite</div>
+      <div class="subtitle">
+        Vollausbau: Engine · API · Module · Konsole · deterministische Justiz-Tools
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- 1. Kompletter neuer Richter-Validator-Code -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">◬</span>
+            <span>Modul: Core-Validator</span>
+          </div>
+          <div class="card-title">Neuer Richter-Validator (Code)</div>
+          <div class="card-sub">
+            Achsen-Engine, Befundmodell, Merkmalsextraktion, Stilometrie – portiert und modularisiert.
+          </div>
+          <ul class="list">
+            <li><strong>Achsen:</strong> Rechtschreibung, Grammatik, Logik, Kongruenz, Vorlage, Autor-Typ</li>
+            <li><strong>Struktur:</strong> <code>engine/</code>, <code>axes/</code>, <code>report/</code></li>
+            <li><strong>Status:</strong> deterministisch, Precision-Guard, HART/WEICH-Befunde</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">▤</span>
+              Code-Layout anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⤵</span>
+              Als Modul exportieren
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. API-Spezifikation -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">⧉</span>
+            <span>Modul: API / Schema</span>
+          </div>
+          <div class="card-title">API-Spezifikation (JSON / HTTP)</div>
+          <div class="card-sub">
+            Validator als Service: Request/Response, Versionierung, Schema-Validierung, Status-Codes.
+          </div>
+          <ul class="list">
+            <li><strong>Schema:</strong> <code>RichterValidatorReport</code> (JSON-Schema 2020-12)</li>
+            <li><strong>Endpunkte:</strong> <code>POST /analyse</code>, <code>GET /schema</code></li>
+            <li><strong>Integrationen:</strong> Justiz-UI, Batch-Checks, Forensik-Pipeline</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">{ }</span>
+              JSON-Schema öffnen
+            </button>
+            <button class="btn">
+              <span class="icon">⇆</span>
+              API-Flow skizzieren
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Modul-Framework -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">☷</span>
+            <span>Modul: Framework</span>
+          </div>
+          <div class="card-title">Modul-Framework (Axes & Engine)</div>
+          <div class="card-sub">
+            Plug-in-Architektur für Achsen, Regeln, Reporter und Konfiguration.
+          </div>
+          <ul class="list">
+            <li><strong>Module:</strong> <code>axes.rechtschreibung</code>, <code>axes.logik</code>, …</li>
+            <li><strong>Engine:</strong> Pipeline, Rule-Interface, Matcher, Reporter</li>
+            <li><strong>Konfiguration:</strong> YAML/JSON für Aktivierung, Schwellwerte, Vorlagen</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">⚙</span>
+              Framework-Struktur anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⊕</span>
+              Neue Achse hinzufügen
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. Engine-Konsole -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">⌘</span>
+            <span>Modul: Konsole / UI</span>
+          </div>
+          <div class="card-title">Engine-Konsole (Richter-UI)</div>
+          <div class="card-sub">
+            Interaktive Oberfläche für Dokument-Upload, Achsen-Status, Befund-Ansicht, Export.
+          </div>
+          <ul class="list">
+            <li><strong>Views:</strong> Dashboard, Achsen-Detail, Befund-Tabelle, Stilometrie-Panel</li>
+            <li><strong>Interaktion:</strong> Textfeld, Datei-Upload, Filter, Export (JSON/CSV)</li>
+            <li><strong>Modus:</strong> Precision-Guard, HART/WEICH-Highlighting</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">▮▮▮</span>
+              Konsole-Layout anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⇪</span>
+              Befund-Export testen
+            </button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      LAW 10 · FAIL_CLOSED_BINARY_STATE · kein HART-Befund → OHNE_HARTEN_BEFUND · ≥1 HART-Befund → BEFUND_HART
+    </footer>
+  </div>
+</body>
+</html>
+<script>
+/* ============================================================
+   RICHTER-VALIDATOR v3 — Port aus cmd/richter/richter.go
+   Precision-Guard aktiv · FAIL_CLOSED_BINARY_STATE
+   ============================================================ */
+(function () {
+  'use strict';
+
+  // ---------- Kategorien / Härte ----------
+  const Kat = {
+    RS: 'RECHTSCHREIBUNG', GR: 'GRAMMATIK', LOG: 'LOGIK',
+    KON: 'KONGRUENZ', VOR: 'VORLAGE', AUTOR: 'AUTOR_TYP'
+  };
+
+  // ---------- Regexe (u-Flag für Unicode) ----------
+  const RE_WORT   = /\p{L}+/gu;
+  const RE_SATZ   = /[.!?]+/g;
+  const RE_ZIFFER = /[0-9]/g;
+
+  const RE_ZITAT = /(§+\s*\d+[a-z]?|art\.\s*\d+|abs\.\s*\d+|i\.v\.m\.|\bstgb\b|\bstpo\b|\bgg\b|\bvwgo\b|\bvwvfg\b|\bbgb\b|\bzpo\b|\bdsgvo\b|\bemrk\b|sgb)/gi;
+  const RE_FUNK  = /\b(der|die|das|und|in|zu|den|von|nicht|mit|auf|sich|dem|ist|des|im|ein|eine|als|auch|es|an|werden|aus|er|hat|dass|für|bei|nach|wird|sind|über|zur|zum|durch|kann|muss)\b/gi;
+  const RE_ICH   = /\b(ich|wir|mir|uns|unser|unserer|mein|meine|meiner)\b/gi;
+  const RE_AUSD  = /!+|\?+|\b(leider|endlich|sofort|unbedingt|wirklich|total)\b/gi;
+  const RE_NOM   = /\p{L}+(ung|keit|heit|nis|schaft)\b/giu;
+  const RE_FORM  = /(gemäß|hiermit|i\.v\.m\.|abs\.|rn\.|zufolge|sofern|soweit|vorbehaltlich|demzufolge)/gi;
+
+  const RE_ZEITSPANNE = /(\d{1,2}):(\d{2})\s*(?:[Uu]hr)?\s*(?:bis|[-–—])\s*(\d{1,2}):(\d{2})/g;
+  const RE_PROZENT    = /(\d{1,4})\s*(?:%|[Pp]rozent)/g;
+  const RE_DATUM      = /(\d{1,2})\.(\d{1,2})\.(\d{4})/g;
+  const RE_ANZAHL_NULL = /anzahl\s*[:=]?\s*0\b/i;
+  const RE_ASSERVAT   = /\basservat\s*\d+/gi;
+
+  const RE_DOPPEL_LEER  = /[^\s]  +[^\s]/g;
+  const RE_LEER_VOR_PKT = /[ \t]+[,;:!?]/g;
+  const RE_KOMMA_OHNE_L = /,[A-Za-zÄÖÜäöüß]/g;
+  const RE_DOPPEL_PUNKT = /[!?]{2,}/g;
+
+  // ---------- Kongruenz (u-Flag, Unicode-Properties) ----------
+  const RE_NUMERUS_BRUCH = /\b(die\s+Beschuldigten|die\s+Angeklagten|die\s+Angeschuldigten|beide[n]?|die\s+beiden)\b[^.!?]{0,140}?\bals\s+(sogenannter|ein|einer|eines|einem|einen)\s+\p{Lu}\p{L}+/gisu;
+  const RE_FRAU_MARKER = /\bFrau\s+\p{Lu}\p{L}+/giu;
+  const RE_FEM_ROLLE   = /\b(Klägerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanwältin|Sachbearbeiterin|Logistikerin)\b/giu;
+  const RE_MASK_ROLLE  = /\b(Beschuldigter|Angeklagter|Angeschuldigter|Täter|Haupttäter|Gehilfe|Logistiker|Zeuge|Sachbearbeiter|Beamter)\b/giu;
+  const RE_UNBEKANNT_TAETER = /(unbekannt\w*[^.!?]{0,60}?(Haupttäter|Täter|Beteiligte)|(Haupttäter|Täter|Beteiligte)[^.!?]{0,60}?unbekannt\w*)/giu;
+  const RE_TAT_52 = /§\s*52/;
+  const RE_TAT_53 = /§\s*53/;
+
+  // ---------- Rechtschreib-Lexikon ----------
+  const FALSCH_LISTE = [
+    ['standart','Standard','fachsprachlich falsch','HART'],
+    ['standarts','Standards',"wie 'Standart'",'HART'],
+    ['nähmlich','nämlich','fehlendes h','HART'],
+    ['rythmus','Rhythmus','Buchstabenfolge','HART'],
+    ['tolpatsch','Tollpatsch','Doppelkonsonanz','HART'],
+    ['daß','dass','alte Orthographie','HART'],
+    ['muß','muss','alte Orthographie','HART'],
+    ['miß','miss','alte Orthographie','HART'],
+    ['schluß','Schluss','alte Orthographie','HART'],
+    ['im voraus','im Voraus','Substantiv gross','HART'],
+    ['zuviel','zu viel','Getrenntschreibung','HART'],
+    ['zuviele','zu viele','Getrenntschreibung','HART'],
+    ['garnicht','gar nicht','Getrenntschreibung','HART'],
+    ['besser wie','besser als',"Komparativ mit 'als'",'HART'],
+    ['das selbe','dasselbe','Zusammenschreibung','HART'],
+    ['einzigste','einzige',"'einzig' nicht steigerbar",'HART'],
+    ['wiederrum','wiederum','falsche Endung','HART'],
+    ['frisör','Friseur','korrekte Schreibung','HART'],
+    ['sylvester','Silvester','korrekte Schreibung','HART'],
+    ['desweiteren','des Weiteren','Substantiv gross','WEICH'],
+    ['zurzeit','zur Zeit','Kontext: Zeitpunkt vs. Dauer','WEICH'],
+  ];
+
+  // ---------- Archetypen ----------
+  const ARCHETYPEN = [
+    { rolle:'RICHTER (Berufsrichter, Spruchkoerper)', m:[28,6,50,0.3,0.1,0.05,4,6], tol:[8,4,6,0.6,0.3,0.03,2,4] },
+    { rolle:'POLIZIST (Polizeivollzugsbeamter)',      m:[18,3,55,0.5,0.2,0.10,3,4], tol:[6,2,6,0.8,0.4,0.05,2,3] },
+    { rolle:'BEAMTER (Verwaltung / Sachbearbeiter)',  m:[30,4,52,0.2,0.1,0.07,7,8], tol:[9,3,6,0.5,0.3,0.04,3,4] },
+    { rolle:'STUDENT (juristisch, Referendar)',       m:[22,3,52,0.4,0.3,0.03,4,3], tol:[7,2,6,0.7,0.4,0.03,2,2] },
+    { rolle:'BAUER (landwirtschaftlich, umgangsspr.)',m:[12,0.3,58,3,1.5,0.04,1,0.5], tol:[5,0.4,6,3,1.5,0.03,1.5,0.6] },
+    { rolle:'LAIE (Buerger, ohne anwaltliche Vertr.)',m:[16,1.5,55,6,3,0.03,2,1], tol:[6,1.5,6,4,2.5,0.03,2,1.5] },
+  ];
+
+  // ---------- Vorlagen ----------
+  const VORLAGEN = [
+    {
+      typ:'DURCHSUCHUNGSBESCHLUSS',
+      marker:/\bDurchsuchung\b/i,
+      pflicht:[
+        ['Gericht',/(Amtsgericht|Landgericht|Oberlandesgericht|Bundesgerichtshof)\s+\p{Lu}\p{L}+/iu],
+        ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs|Ls)\s+\d+\/\d+/],
+        ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+        ['Beschuldigte',/(Beschuldigte[nr]?|Angeschuldigte[nr]?|gegen\s+\p{Lu}\p{L}+)/iu],
+        ['Tatvorwurf',/(§\s*\d+|Tatvorwurf|wegen|Verdacht)/i],
+        ['Raeume',/(Wohnung|Wohnräume|Räumlichkeiten|Durchsuchung\s+der)/i],
+        ['Beweismittel',/(Beweismittel|aufzufinden|beschlagnahmen)/i],
+        ['Unterschrift',/(Richter|Richterin|Rechtspfleger|Unterschrift)/i],
+        ['Rechtsmittel',/(Beschwerde|Rechtsmittel|Rechtsbehelf)/i],
+      ]
+    },
+    {
+      typ:'ANKLAGESCHRIFT',
+      marker:/\b(Anklageschrift|Staatsanwaltschaft)\b/i,
+      pflicht:[
+        ['Staatsanwaltschaft',/Staatsanwaltschaft\s+\p{Lu}\p{L}+/iu],
+        ['Aktenzeichen',/\d+\s+Js\s+\d+\/\d+/],
+        ['Angeschuldigter',/(Angeschuldigte[nr]?|Beschuldigte[nr]?)/i],
+        ['Personalien',/(geboren|wohnhaft|Personalien|geb\.)/i],
+        ['Tatzeit',/(Tatzeit|am\s+\d{1,2}\.\d{1,2}\.\d{4}|\d{1,2}\.\d{1,2}\.\d{4})/i],
+        ['Tatort',/(Tatort|in\s+\p{Lu}\p{L}+)/iu],
+        ['Strafvorschriften',/§\s*\d+[a-z]?\s*StGB/],
+        ['Beweismittel',/(Beweismittel|Zeuge|Sachverständige|Urkunden)/i],
+        ['Antrag',/(beantrage|Antrag|Eröffnung des Hauptverfahrens)/i],
+      ]
+    },
+    {
+      typ:'URTEIL',
+      marker:/\b(für Recht erkannt|Urteil|Tenor)\b/i,
+      pflicht:[
+        ['Gericht',/(Amtsgericht|Landgericht|Oberlandesgericht|Bundesgerichtshof|Verwaltungsgericht)\s+\p{Lu}\p{L}+/iu],
+        ['Aktenzeichen',/\d{1,4}\s+\p{Lu}\p{L}*\s+\d+\/\d+/u],
+        ['Parteien',/(Kläger|Beklagte|Antragsteller|Antragsgegner)/i],
+        ['Tenor',/(für Recht erkannt|wird verurteilt|Tenor|Die Klage)/i],
+        ['Tatbestand',/(Tatbestand|Sachverhalt)/i],
+        ['Gruende',/(Gründe|Entscheidungsgründe|Begründung)/i],
+        ['Unterschrift',/(Richter|Richterin|Unterschrift)/i],
+        ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+      ]
+    },
+    {
+      typ:'BESCHEID',
+      marker:/\b(Bescheid|Widerspruch|Verwaltungsakt)\b/i,
+      pflicht:[
+        ['Behoerde',/(Behörde|Amt|Landratsamt|Kreisverwaltung|Stadt\s+\p{Lu}\p{L}+)/iu],
+        ['Aktenzeichen',/\d{1,4}[-/]\d+[-/]?\d*/],
+        ['Empfaenger',/(Sehr geehrte|Herrn|Frau|Adressat)/i],
+        ['Regelung',/(abgelehnt|festgesetzt|angeordnet|bewilligt|Tenor)/i],
+        ['Begruendung',/(Begründung|Gründe|Erwägungen)/i],
+        ['Rechtsbehelf',/(Widerspruch|Klage|Rechtsbehelf|Rechtsmittel)/i],
+        ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+        ['Unterschrift',/(Unterschrift|im Auftrag|Sachbearbeiter)/i],
+      ]
+    },
+    {
+      typ:'PROTOKOLL',
+      marker:/\b(Protokoll|Niederschrift)\b/i,
+      pflicht:[
+        ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs)\s+\d+\/\d+/],
+        ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
+        ['Uhrzeit',/\d{1,2}:\d{2}/],
+        ['Ort',/(Ort|Anschrift|in\s+\p{Lu}\p{L}+)/iu],
+        ['Anwesende',/(anwesend|Beamte|Zeuge|Beschuldigte)/i],
+        ['Unterschrift',/(Unterschrift|gez\.)/i],
+      ]
+    },
+  ];
+
+  // ---------- Helfer ----------
+  const count = (txt, re) => (txt.match(re) || []).length;
+  const r3 = x => Math.round(x * 1000) / 1000;
+  const tageImMonat = (j, m) => new Date(j, m, 0).getDate();
+
+  // ---------- Merkmale ----------
+  function merkmale(text) {
+    const w = count(text, RE_WORT);
+    const saetze = text.split(RE_SATZ).filter(s => s.trim()).length || 1;
+    const z = Math.max(text.length, 1);
+    const wn = Math.max(w, 1);
+    return {
+      satzlaenge: w / saetze,
+      zitationsdichte: count(text, RE_ZITAT) / z * 1000,
+      funktionsquote: count(text, RE_FUNK) / wn * 100,
+      ich_wir_quote: count(text, RE_ICH) / wn * 100,
+      ausdrucksquote: count(text, RE_AUSD) / wn * 100,
+      ziffernanteil: count(text, RE_ZIFFER) / z,
+      nominalquote: count(text, RE_NOM) / wn * 100,
+      formalquote: count(text, RE_FORM) / z * 1000,
+      _w: w, _z: z
+    };
+  }
+
+  const mSlice = m => [m.satzlaenge, m.zitationsdichte, m.funktionsquote,
+    m.ich_wir_quote, m.ausdrucksquote, m.ziffernanteil, m.nominalquote, m.formalquote];
+
+  // ---------- Achse 1: Rechtschreibung ----------
+  function achseRS(text) {
+    const out = [];
+    for (const [falsch, richtig, hint, haerte] of FALSCH_LISTE) {
+      const re = new RegExp('(^|[^\\p{L}])' + falsch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^\\p{L}]|$)', 'giu');
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        out.push({ kategorie: Kat.RS, regel: 'RS_' + falsch.toUpperCase(),
+                   stelle: m[0].trim(), hinweis: `→ ${richtig} (${hint})`, haerte });
+      }
+    }
+    return out;
+  }
+
+  // ---------- Achse 2: Grammatik ----------
+  function achseGR(text) {
+    const out = [];
+    const scan = (re, regel, hint, haerte) => {
+      let m; re.lastIndex = 0;
+      while ((m = re.exec(text)) !== null) {
+        out.push({ kategorie: Kat.GR, regel, stelle: m[0], hinweis: hint, haerte });
+      }
+    };
+    scan(RE_DOPPEL_LEER, 'GR_MEHRFACH_LEERZEICHEN', 'Mehrfach-Leerzeichen', 'HART');
+    scan(RE_LEER_VOR_PKT, 'GR_LEERZEICHEN_VOR_PUNKT', 'Leerzeichen vor Satzzeichen', 'HART');
+    scan(RE_KOMMA_OHNE_L, 'GR_KOMMA_OHNE_LEERZEICHEN', 'Leerzeichen nach Komma', 'HART');
+    scan(RE_DOPPEL_PUNKT, 'GR_DOPPELTES_SATZZEICHEN', 'Doppeltes Satzzeichen prüfen', 'WEICH');
+    return out;
+  }
+
+  // ---------- Achse 3: Logik ----------
+  function achseLOG(text) {
+    const out = [];
+    let m;
+    RE_ZEITSPANNE.lastIndex = 0;
+    while ((m = RE_ZEITSPANNE.exec(text)) !== null) {
+      const [_, sH, sM, eH, eM] = m.map(Number);
+      if (sH > 23 || eH > 23 || sM > 59 || eM > 59) {
+        out.push({ kategorie: Kat.LOG, regel: 'LOG_ZEIT_UNGUELTIG',
+                   stelle: m[0], hinweis: 'Uhrzeit außerhalb 00:00–23:59', haerte: 'HART' });
+        continue;
+      }
+      if (sH * 60 + sM > eH * 60 + eM) {
+        out.push({ kategorie: Kat.LOG, regel: 'LOG_ZEITPARADOX',
+                   stelle: m[0], hinweis: 'Endzeit vor Startzeit', haerte: 'HART' });
+      }
+    }
+    if (RE_ANZAHL_NULL.test(text)) {
+      const n = count(text, RE_ASSERVAT);
+      if (n > 0) {
+        out.push({ kategorie: Kat.LOG, regel: 'LOG_ZAEHLWIDERSPRUCH',
+                   stelle: 'Anzahl: 0',
+                   hinweis: `${n} Asservate bei 'Anzahl 0'`, haerte: 'HART' });
+      }
+    }
+    RE_PROZENT.lastIndex = 0;
+    while ((m = RE_PROZENT.exec(text)) !== null) {
+      if (Number(m[1]) > 100) {
+        out.push({ kategorie: Kat.LOG, regel: 'LOG_PROZENT',
+                   stelle: m[0], hinweis: 'Wert > 100 %', haerte: 'HART' });
+      }
+    }
+    RE_DATUM.lastIndex = 0;
+    while ((m = RE_DATUM.exec(text)) !== null) {
+      const [d, mo, j] = [Number(m[1]), Number(m[2]), Number(m[3])];
+      if (mo < 1 || mo > 12 || d < 1 || d > tageImMonat(j, mo)) {
+        out.push({ kategorie: Kat.LOG, regel: 'LOG_DATUM_UNGUELTIG',
+                   stelle: m[0], hinweis: 'Kalenderdatum existiert nicht', haerte: 'HART' });
+      }
+    }
+    if (RE_TAT_52.test(text) && RE_TAT_53.test(text)) {
+      out.push({ kategorie: Kat.LOG, regel: 'LOG_NORMKOLLISION_52_53',
+                 stelle: '§ 52 + § 53 StGB',
+                 hinweis: 'Tateinheit und Tatmehrheit schließen sich aus',
+                 haerte: 'HART' });
+    }
+    return out;
+  }
+
+  // ---------- Achse 4: Kongruenz ----------
+  function achseKON(text) {
+    const out = [];
+    let m;
+    RE_NUMERUS_BRUCH.lastIndex = 0;
+    while ((m = RE_NUMERUS_BRUCH.exec(text)) !== null) {
+      out.push({ kategorie: Kat.KON, regel: 'KON_NUMERUS_PLURAL_SINGULAR_APPOSITION',
+                 stelle: m[0], hinweis: "Subjekt Plural, Apposition Singular → Numerus-Bruch",
+                 haerte: 'HART' });
+    }
+    const frau = RE_FRAU_MARKER.test(text);
+    const fem  = RE_FEM_ROLLE.test(text);
+    const mask = RE_MASK_ROLLE.test(text);
+    if (frau && mask && !fem) {
+      out.push({ kategorie: Kat.KON, regel: 'KON_GENUS_GENERISCH_MASKULIN',
+                 stelle: 'weibliche Beteiligte erkannt',
+                 hinweis: 'generisches Maskulinum nennt weibliche Beteiligte nicht',
+                 haerte: 'WEICH' });
+    }
+    if (RE_UNBEKANNT_TAETER.test(text)) {
+      out.push({ kategorie: Kat.KON, regel: 'KON_WIDERSPRUCH_UNBEKANNT_BEKANNT',
+                 stelle: 'unbekannte Täter + benannte Beteiligte',
+                 hinweis: 'Gehilfenstellung bei unbekannten Haupttätern nicht ableitbar',
+                 haerte: 'WEICH' });
+    }
+    return out;
+  }
+
+  // ---------- Achse 5: Vorlage ----------
+  function achseVOR(text) {
+    const out = [];
+    let typ = 'UNBESTIMMT';
+    for (const v of VORLAGEN) {
+      if (v.marker.test(text)) {
+        typ = v.typ;
+        for (const [name, re] of v.pflicht) {
+          if (!re.test(text)) {
+            out.push({ kategorie: Kat.VOR,
+                       regel: 'VOR_PFLICHTFELD_FEHLT_' + name.toUpperCase(),
+                       stelle: v.typ,
+                       hinweis: 'Pflichtfeld nicht gefunden: ' + name,
+                       haerte: 'HART' });
+          }
+        }
+        break;
+      }
+    }
+    return { typ, befund: out };
+  }
+
+  // ---------- Achse 6: Autor-Typ ----------
+  function achseAUTOR(m) {
+    const xs = mSlice(m);
+    const dist = (x, mu, tol) => {
+      let s = 0;
+      for (let i = 0; i < x.length; i++) {
+        const d = (x[i] - mu[i]) / tol[i];
+        s += d * d;
+      }
+      return Math.sqrt(s / x.length);
+    };
+    const ds = ARCHETYPEN.map(a => dist(xs, a.m, a.tol));
+    const base = Math.max(...ds.map(d => -d));
+    const ws = ds.map(d => Math.exp(-d - base));
+    const sum = ws.reduce((a, b) => a + b, 0);
+    return ARCHETYPEN.map((a, i) => ({
+      rolle: a.rolle, distanz: r3(ds[i]), konfidenz: r3(ws[i] / sum)
+    })).sort((a, b) => a.distanz - b.distanz);
+  }
+
+  // ---------- Hauptfunktion ----------
+  function analysiere(name, text) {
+    const befund = [
+      ...achseRS(text),
+      ...achseGR(text),
+      ...achseLOG(text),
+      ...achseKON(text),
+    ];
+    const vor = achseVOR(text);
+    befund.push(...vor.befund);
+
+    const hart = befund.filter(b => b.haerte === 'HART').length;
+    const weich = befund.filter(b => b.haerte === 'WEICH').length;
+    const status = hart > 0 ? 'BEFUND_HART' : 'OHNE_HARTEN_BEFUND';
+
+    befund.sort((a, b) => a.kategorie.localeCompare(b.kategorie) || a.regel.localeCompare(b.regel));
+
+    const m = merkmale(text);
+    return {
+      dokument: name, dokumenttyp: vor.typ,
+      zeitpunkt: new Date().toISOString(),
+      zeichen: m._z, woerter: m._w,
+      hart_anzahl: hart, weich_anzahl: weich, status,
+      befund, merkmale: m, autor: achseAUTOR(m),
+    };
+  }
+
+  // ---------- UI-Render ----------
+  function render(b) {
+    const statusClass = b.status === 'BEFUND_HART' ? 'alert' : 'ok';
+    const statusLabel = b.status === 'BEFUND_HART' ? 'BEFUND HART' : 'OHNE HARTEN BEFUND';
+
+    // KPIs
+    let html = '';
+    html += `<div class="kpi" style="margin-bottom:16px;grid-column:1/-1">`;
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">`;
+    html += `<div>`;
+    html += `<span class="kpi-label">Status</span>`;
+    html += `<span class="kpi-value ${statusClass}" style="font-size:20px">${statusLabel}</span>`;
+    html += `</div>`;
+    html += `<div>`;
+    html += `<span class="kpi-label">Dokumenttyp</span>`;
+    html += `<span class="kpi-value" style="font-size:16px">${b.dokumenttyp}</span>`;
+    html += `</div>`;
+    html += `<div>`;
+    html += `<span class="kpi-label">HART</span>`;
+    html += `<span class="kpi-value ${b.hart_anzahl > 0 ? 'alert' : 'ok'}">${b.hart_anzahl}</span>`;
+    html += `</div>`;
+    html += `<div>`;
+    html += `<span class="kpi-label">WEICH</span>`;
+    html += `<span class="kpi-value warn">${b.weich_anzahl}</span>`;
+    html += `</div>`;
+    html += `<div>`;
+    html += `<span class="kpi-label">Wörter / Zeichen</span>`;
+    html += `<span class="kpi-value" style="font-size:15px">${b.woerter} / ${b.zeichen}</span>`;
+    html += `</div>`;
+    html += `</div></div>`;
+
+    // Befunde nach Kategorie
+    if (b.befund.length) {
+      const byKat = {};
+      for (const f of b.befund) {
+        (byKat[f.kategorie] = byKat[f.kategorie] || []).push(f);
+      }
+      for (const [kat, list] of Object.entries(byKat)) {
+        const hartCount = list.filter(x => x.haerte === 'HART').length;
+        const weichCount = list.filter(x => x.haerte === 'WEICH').length;
+        html += `<div class="card" style="cursor:default;margin-bottom:14px">`;
+        html += `<h3 style="display:flex;justify-content:space-between;align-items:center">`;
+        html += `<span>${kat}</span>`;
+        html += `<span style="font-size:12px;font-weight:500;color:var(--text-dim)">`;
+        if (hartCount) html += `<span class="tag alert">${hartCount} HART</span> `;
+        if (weichCount) html += `<span class="tag warn">${weichCount} WEICH</span>`;
+        html += `</span>`;
+        html += `</h3>`;
+        html += `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">`;
+        for (const f of list) {
+          const cls = f.haerte === 'HART' ? 'alert' : 'warn';
+          html += `<div style="padding:10px 12px;background:rgba(0,0,0,.25);border-radius:8px;border-left:3px solid var(--${cls === 'alert' ? 'red' : 'amber'})">`;
+          html += `<div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-bottom:4px">${f.regel}</div>`;
+          html += `<div style="font-size:13px;color:var(--text);word-break:break-word">${escapeHtml(f.stelle).slice(0, 200)}</div>`;
+          html += `<div style="font-size:12px;color:var(--text-dim);margin-top:4px">${escapeHtml(f.hinweis)}</div>`;
+          html += `</div>`;
+        }
+        html += `</div></div>`;
+      }
+    } else {
+      html += `<div class="card" style="cursor:default"><h3>Keine Befunde</h3><p>Alle geprüften Achsen ohne Beanstandung.</p></div>`;
+    }
+
+    // Autor-Einschätzung
+    html += `<div class="card" style="cursor:default;margin-top:14px">`;
+    html += `<h3>Autor-Einschätzung <span style="font-size:11px;color:var(--text-dim);font-weight:400">(Stilometrie · kein Beweis)</span></h3>`;
+    html += `<div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">`;
+    for (const a of b.autor.slice(0, 3)) {
+      const pct = Math.round(a.konfidenz * 100);
+      html += `<div>`;
+      html += `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">`;
+      html += `<span>${escapeHtml(a.rolle)}</span>`;
+      html += `<span style="font-family:var(--font-mono);color:var(--text-dim)">Δ=${a.distanz.toFixed(2)} · ${pct}%</span>`;
+      html += `</div>`;
+      html += `<div style="height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden">`;
+      html += `<div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--green-dim),var(--green))"></div>`;
+      html += `</div></div>`;
+    }
+    html += `</div></div>`;
+
+    // Vorbehalt
+    html += `<p style="margin-top:18px;font-size:11.5px;color:var(--text-mute);line-height:1.5;font-style:italic">`;
+    html += `Deterministische Heuristik. Precision-Guard aktiv — kein Regel darf korrektes Wort flaggen.`;
+    html += ` Typ-Zuordnung beruht auf angenommenen Archetyp-Schwellwerten, kein trainiertes Modell, kein Beweis.`;
+    html += ` Keine Rechtsberatung.</p>`;
+
+    return html;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+  }
+
+  // ---------- Event-Handler ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    const $ = id => document.getElementById(id);
+
+    // Datei laden
+    $('rv-file').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => { $('rv-input').value = ev.target.result; };
+      reader.readAsText(file, 'utf-8');
+    });
+
+    // Prüfen
+    $('rv-run').addEventListener('click', () => {
+      const text = $('rv-input').value;
+      if (!text.trim()) {
+        $('rv-result').innerHTML = '<div class="card" style="cursor:default"><p>Kein Text eingegeben.</p></div>';
+        return;
+      }
+      const b = analysiere('Eingabe (Browser)', text);
+      $('rv-result').innerHTML = render(b);
+      console.log('[Richter-Validator]', b);
+    });
+
+    // Leeren
+    $('rv-clear').addEventListener('click', () => {
+      $('rv-input').value = '';
+      $('rv-result').innerHTML = '';
+      $('rv-file').value = '';
+    });
+
+    // --- Signatur-Check (Text-Marker-Ebene) ---
+    const SIGNATUR_LEXIKON = {
+      durchsuchungsbeschluss: { pflicht:true, wer:'Richter', norm:'§ 35 StPO i.V.m. § 105 Abs. 1 StPO, Art. 13 Abs. 2 GG' },
+      anklageschrift:         { pflicht:true, wer:'Staatsanwalt', norm:'§ 200 StPO' },
+      beschluss:              { pflicht:true, wer:'Richter', norm:'§ 35 StPO' },
+      urteil:                 { pflicht:true, wer:'Alle Richter', norm:'§ 275 StPO' },
+      haftbefehl:             { pflicht:true, wer:'Richter', norm:'§ 114 StPO' },
+      protokoll:              { pflicht:true, wer:'Alle Beteiligten', norm:'je Verfahrensart' },
+      belehrung_beschuldigter_nrw: { pflicht:true, wer:'Beamter + Beschuldigter', norm:'§ 136 StPO' },
+      ed_anordnung_nrw:       { pflicht:true, wer:'Anordnender Beamter', norm:'§ 81b StPO' },
+      dna_anordnung_nrw:      { pflicht:true, wer:'Richter', norm:'§ 81f StPO' },
+      verwaltungsakt:         { pflicht:false, wer:'—', norm:'§ 37 Abs. 2 VwVfG' },
+    };
+
+    const TEXT_MARKER = [/gez\.?\s/i, /gezeichnet/i, /\(Unterschrift\)/i,
+      /Unterschrift[:\s]/i, /Unterschrift\s+des/i, /Unterschrift\s+der/i,
+      /Unterschrift\s+Betroffene/i, /Unterschrift\s+Beschuldigte/i,
+      /Unterschrift\s+Beamte/i, /Unterschrift\s+Zeuge/i, /_{5,}/];
+    const LEER_MARKER = [/Unterschrift[:\s]*$/im, /Unterschrift\s*Betroffene[r]?[:\s]*$/im,
+      /Unterschrift\s*Beschuldigte[r]?[:\s]*$/im, /\(keine Unterschrift\)/i,
+      /ohne\s+Unterschrift/i, /nicht\s+unterschrieben/i];
+
+    $('sig-run').addEventListener('click', () => {
+      const text = $('sig-input').value;
+      const typ = $('sig-typ').value;
+      const lex = SIGNATUR_LEXIKON[typ] || { pflicht:null };
+      const hatLeer = LEER_MARKER.some(re => re.test(text));
+      const hatMarker = TEXT_MARKER.some(re => re.test(text));
+
+      let vorhanden, sicherheit, begruendung, verdikt;
+      if (hatLeer && !hatMarker) {
+        vorhanden = false; sicherheit = 'HOCH';
+        begruendung = 'Leer-Marker gefunden.';
+      } else if (hatMarker) {
+        vorhanden = true; sicherheit = 'MITTEL';
+        begruendung = 'Text-Marker gefunden.';
+      } else {
+        vorhanden = false; sicherheit = 'MITTEL';
+        begruendung = 'Weder Marker noch Leer-Marker gefunden.';
+      }
+      if (!lex.pflicht) verdikt = 'NICHT_ERFORDERLICH';
+      else if (vorhanden === true) verdikt = 'KONFORM';
+      else if (vorhanden === false) verdikt = 'MANGEL_FEHLT';
+      else verdikt = 'MANGEL_UNSICHER';
+
+      const cls = verdikt === 'KONFORM' || verdikt === 'NICHT_ERFORDERLICH' ? 'ok'
+                : verdikt === 'MANGEL_FEHLT' ? 'alert' : 'warn';
+
+      let html = `<div class="card" style="cursor:default;margin-top:14px">`;
+      html += `<h3>Ergebnis <span class="tag ${cls}">${verdikt}</span></h3>`;
+      html += `<p style="margin-top:10px;line-height:1.7">`;
+      html += `<strong>Pflicht:</strong> ${lex.pflicht ? 'JA' : 'NEIN'}<br>`;
+      if (lex.pflicht) {
+        html += `<strong>Wer:</strong> ${lex.wer}<br>`;
+        html += `<strong>Norm:</strong> ${lex.norm}<br>`;
+      }
+      html += `<strong>Vorhanden:</strong> ${vorhanden === true ? 'JA' : vorhanden === false ? 'NEIN' : 'UNSICHER'}<br>`;
+      html += `<strong>Sicherheit:</strong> ${sicherheit}<br>`;
+      html += `<strong>Begründung:</strong> ${begruendung}`;
+      html += `</p></div>`;
+      $('sig-result').innerHTML = html;
+    });
+  });
+
+  // Expose für Konsole
+  window.RichterValidator = { analysiere, render };
+})();
+</script>
 <!DOCTYPE html>
 <html lang="de">
 <head>
