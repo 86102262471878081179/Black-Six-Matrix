@@ -1,6 +1,315 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <meta charset="utf-8">
+  <title>RICHTER-VALIDATOR Suite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #050608;
+      --card: #11141a;
+      --accent: #00e676;
+      --accent-soft: rgba(0, 230, 118, 0.25);
+      --text: #e5e9f0;
+      --muted: #9fa6b2;
+      --border: #1f2933;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top, #111827 0, #020309 55%);
+      color: var(--text);
+    }
+
+    .shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #0b1016, #05070b);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 14px 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.35);
+      margin-bottom: 10px;
+    }
+
+    .badge span.icon {
+      font-size: 12px;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px;
+      font-size: 12px;
+    }
+
+    .list li {
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .list li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #05070b;
+      color: var(--text);
+      font-size: 11px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .btn span.icon {
+      font-size: 12px;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid #1f2937;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="title">RICHTER-VALIDATOR · Suite</div>
+      <div class="subtitle">
+        Vollausbau: Engine · API · Module · Konsole · deterministische Justiz-Tools
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- 1. Kompletter neuer Richter-Validator-Code -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">◬</span>
+            <span>Modul: Core-Validator</span>
+          </div>
+          <div class="card-title">Neuer Richter-Validator (Code)</div>
+          <div class="card-sub">
+            Achsen-Engine, Befundmodell, Merkmalsextraktion, Stilometrie – portiert und modularisiert.
+          </div>
+          <ul class="list">
+            <li><strong>Achsen:</strong> Rechtschreibung, Grammatik, Logik, Kongruenz, Vorlage, Autor-Typ</li>
+            <li><strong>Struktur:</strong> <code>engine/</code>, <code>axes/</code>, <code>report/</code></li>
+            <li><strong>Status:</strong> deterministisch, Precision-Guard, HART/WEICH-Befunde</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">▤</span>
+              Code-Layout anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⤵</span>
+              Als Modul exportieren
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. API-Spezifikation -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">⧉</span>
+            <span>Modul: API / Schema</span>
+          </div>
+          <div class="card-title">API-Spezifikation (JSON / HTTP)</div>
+          <div class="card-sub">
+            Validator als Service: Request/Response, Versionierung, Schema-Validierung, Status-Codes.
+          </div>
+          <ul class="list">
+            <li><strong>Schema:</strong> <code>RichterValidatorReport</code> (JSON-Schema 2020-12)</li>
+            <li><strong>Endpunkte:</strong> <code>POST /analyse</code>, <code>GET /schema</code></li>
+            <li><strong>Integrationen:</strong> Justiz-UI, Batch-Checks, Forensik-Pipeline</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">{ }</span>
+              JSON-Schema öffnen
+            </button>
+            <button class="btn">
+              <span class="icon">⇆</span>
+              API-Flow skizzieren
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Modul-Framework -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">☷</span>
+            <span>Modul: Framework</span>
+          </div>
+          <div class="card-title">Modul-Framework (Axes & Engine)</div>
+          <div class="card-sub">
+            Plug-in-Architektur für Achsen, Regeln, Reporter und Konfiguration.
+          </div>
+          <ul class="list">
+            <li><strong>Module:</strong> <code>axes.rechtschreibung</code>, <code>axes.logik</code>, …</li>
+            <li><strong>Engine:</strong> Pipeline, Rule-Interface, Matcher, Reporter</li>
+            <li><strong>Konfiguration:</strong> YAML/JSON für Aktivierung, Schwellwerte, Vorlagen</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">⚙</span>
+              Framework-Struktur anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⊕</span>
+              Neue Achse hinzufügen
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4. Engine-Konsole -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="badge">
+            <span class="icon">⌘</span>
+            <span>Modul: Konsole / UI</span>
+          </div>
+          <div class="card-title">Engine-Konsole (Richter-UI)</div>
+          <div class="card-sub">
+            Interaktive Oberfläche für Dokument-Upload, Achsen-Status, Befund-Ansicht, Export.
+          </div>
+          <ul class="list">
+            <li><strong>Views:</strong> Dashboard, Achsen-Detail, Befund-Tabelle, Stilometrie-Panel</li>
+            <li><strong>Interaktion:</strong> Textfeld, Datei-Upload, Filter, Export (JSON/CSV)</li>
+            <li><strong>Modus:</strong> Precision-Guard, HART/WEICH-Highlighting</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn primary">
+              <span class="icon">▮▮▮</span>
+              Konsole-Layout anzeigen
+            </button>
+            <button class="btn">
+              <span class="icon">⇪</span>
+              Befund-Export testen
+            </button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      LAW 10 · FAIL_CLOSED_BINARY_STATE · kein HART-Befund → OHNE_HARTEN_BEFUND · ≥1 HART-Befund → BEFUND_HART
+    </footer>
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
