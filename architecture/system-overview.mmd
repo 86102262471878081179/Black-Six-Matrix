@@ -1,0 +1,52 @@
+flowchart TB
+  subgraph TARGET["DOKUMENTIERTES ZIELBILD · laut README, noch nicht vollständig im Repository implementiert"]
+    direction TB
+    INPUT["Nutzereingaben<br/>Web · E-Mail · Notebook"] --> FRONT["Frontend<br/>Vercel / Next.js"]
+    FRONT --> API["AI Governance Proxy<br/>Go-Backend · API"]
+
+    subgraph CORE["Core-Systeme · vorgesehene Module"]
+      direction LR
+      GOV["Runtime Governance<br/>Policy Engine · Regelprüfung<br/>125+ Regeln laut README"]
+      MESH["Mesh Security<br/>mTLS · Tokenprüfung<br/>Agenten-Isolation"]
+      REASON["DeepSeek Engine<br/>Reasoning · Kernel<br/>Policy Monitoring"]
+      MEMORY["Cosmic Memory<br/>WORM-Ledger · Audit Trail<br/>SQLite · SHA-256"]
+    end
+
+    API --> GOV
+    API --> MESH
+    API --> REASON
+    GOV --> MEMORY
+    REASON --> GOV
+    GOV --> RESULT["Governance-Entscheidung<br/>und Compliance-Nachweis"]
+    MEMORY --> AUDIT["Unveränderlicher<br/>Entscheidungs-/Audit-Log"]
+    API <--> MODEL["Externe LLMs<br/>Gemini · OpenAI (README)"]
+
+    PRODUCTS["12 Produktbereiche<br/>Governance · Security · Legal Tech<br/>Quantum · Compliance · Threat Intel<br/>Sovereign Cloud · Data Fabric<br/>Regulatory · Evidence · Policy<br/>Orchestration Fabric"]
+    AGENTS["Agenten-Tiers<br/>Tier 1 Governance · Tier 2 Security<br/>Tier 3 Analysis<br/>bis zu 458 Agenten als README-Ziel"]
+    INFRA["Betriebsinfrastruktur<br/>Kubernetes / Helm · Docker · Terraform"]
+    QUALITY["Qualität & Zusammenarbeit<br/>Unit-/Integrations-/Security-Tests<br/>Docs · Beispiele · GitHub Actions"]
+    API -. nutzt .-> PRODUCTS
+    API -. orchestriert .-> AGENTS
+    INFRA -. betreibt .-> API
+    QUALITY -. sichert & dokumentiert .-> API
+  end
+
+  subgraph CURRENT["TATSÄCHLICHER REPOSITORY-STAND · aktuell vorhanden"]
+    direction LR
+    SITE["Statische Website im Root<br/>index.html · index_2.html<br/>index.json · Bild/Dateien"]
+    REG["Agentenregister · Python + JSON<br/>agents/registry.py<br/>agent_registry.json + Schema<br/>1 Eintrag: Status planned"]
+    TEST["5 Unit-Tests<br/>tests/unit/test_agent_registry.py"]
+    SCAFFOLD["Ordnergerüst vorhanden,<br/>Core-/Backend-/Produktordner<br/>noch ohne Implementierung"]
+    REG --> TEST
+  end
+
+  TARGET -. "Sollbild – nicht als implementiert behauptet" .-> CURRENT
+
+  classDef target fill:#eef2ff,stroke:#5965a8,stroke-width:1px,stroke-dasharray:5 4,color:#18213a;
+  classDef current fill:#e9f7ef,stroke:#27834a,stroke-width:2px,color:#153b25;
+  classDef io fill:#fff7df,stroke:#b88716,color:#342706;
+  class INPUT,FRONT,API,GOV,MESH,REASON,MEMORY,RESULT,AUDIT,MODEL,PRODUCTS,AGENTS,INFRA,QUALITY target;
+  class SITE,REG,TEST,SCAFFOLD current;
+  class INPUT,MODEL io;
+  style TARGET fill:#f7f8ff,stroke:#5965a8,stroke-width:2px,stroke-dasharray:7 5
+  style CURRENT fill:#f4fbf6,stroke:#27834a,stroke-width:2px
