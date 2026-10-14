@@ -1,6 +1,584 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <meta charset="utf-8">
+  <title>BLACK SIX MATRIX // Judgement Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --bg: #02030a;
+      --bg-alt: #050818;
+      --accent: #00ff9c;
+      --accent-soft: rgba(0, 255, 156, 0.25);
+      --accent-strong: #00ffa8;
+      --text-main: #e6f7ff;
+      --text-muted: #7f9bb5;
+      --danger: #ff3366;
+      --border-soft: rgba(255, 255, 255, 0.08);
+      --shadow-strong: 0 0 40px rgba(0, 255, 156, 0.35);
+      --shadow-soft: 0 0 20px rgba(0, 255, 156, 0.18);
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, #0b1220 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, #020617 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #0f172a 0, transparent 55%),
+        radial-gradient(circle at 0% 100%, #020617 0, transparent 55%),
+        linear-gradient(135deg, #020617 0%, #02030a 50%, #000000 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .matrix-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.18) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mix-blend-mode: screen;
+    }
+
+    .glow-orbit {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 255, 156, 0.18) 0, transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.18) 0, transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.6;
+    }
+
+    .shell {
+      position: relative;
+      max-width: 1200px;
+      width: 100%;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.92)),
+        radial-gradient(circle at 0% 0%, rgba(0, 255, 156, 0.08), transparent 60%);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow:
+        0 40px 120px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9),
+        var(--shadow-soft);
+      backdrop-filter: blur(24px);
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(0, 255, 156, 0.18);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .shell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 30% 30%, #22c55e 0, transparent 55%),
+        radial-gradient(circle at 70% 70%, #0ea5e9 0, transparent 55%),
+        radial-gradient(circle at 50% 50%, #22c55e 0, #0f172a 65%);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "6";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #020617;
+      text-shadow: 0 0 12px rgba(15, 23, 42, 0.8);
+      mix-blend-mode: screen;
+    }
+
+    .brand-text-main {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at 0% 0%, rgba(0, 255, 156, 0.18), transparent 60%);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(0, 255, 156, 0.8);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(0, 255, 156, 0.12), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.12), transparent 60%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(0, 255, 156, 0.12);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .panel-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+    }
+
+    .code-block {
+      font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      border-radius: var(--radius-md);
+      padding: 12px 12px 10px;
+      background: radial-gradient(circle at 0% 0%, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(30, 64, 175, 0.6);
+      color: #cbd5f5;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block::before {
+      content: "JUDGEMENT_JSON";
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.7);
+    }
+
+    .code-key {
+      color: #7dd3fc;
+    }
+
+    .code-string {
+      color: #a5b4fc;
+    }
+
+    .code-number {
+      color: #f97316;
+    }
+
+    .code-comment {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .matrix-stream {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      mix-blend-mode: screen;
+      background-image:
+        linear-gradient(
+          to bottom,
+          rgba(34, 197, 94, 0.0) 0%,
+          rgba(34, 197, 94, 0.4) 40%,
+          rgba(34, 197, 94, 0.0) 80%
+        );
+      background-size: 2px 120px;
+      background-repeat: repeat-x;
+      animation: matrix-fall 8s linear infinite;
+    }
+
+    @keyframes matrix-fall {
+      from { background-position-y: 0; }
+      to   { background-position-y: 120px; }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-card {
+      border-radius: var(--radius-md);
+      padding: 10px 10px 8px;
+      background: radial-gradient(circle at 0% 0%, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-strong);
+    }
+
+    .stat-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .timeline {
+      margin-top: 12px;
+      border-radius: var(--radius-md);
+      padding: 10px 10px 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .timeline-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .timeline-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(0, 255, 156, 0.7);
+    }
+
+    .timeline-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .timeline-time {
+      color: var(--text-main);
+    }
+
+    .footer {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .footer-left {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at 0% 0%, rgba(0, 255, 156, 0.12), transparent 60%);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+    }
+
+    .chip-danger {
+      border-color: rgba(248, 113, 113, 0.7);
+      color: var(--danger);
+      background: radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.18), transparent 60%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="matrix-grid"></div>
+  <div class="glow-orbit"></div>
+
+  <main class="shell">
+    <header class="shell-header">
+      <div class="brand">
+        <div class="brand-logo"></div>
+        <div>
+          <div class="brand-text-main">BLACK SIX MATRIX</div>
+          <div class="brand-text-sub">JUDGEMENT ENGINE // XJUSTIZ // ERV SAFE</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>LIVE COMPILE // SUBSUMTION</span>
+      </div>
+    </header>
+
+    <section class="grid">
+      <section class="panel">
+        <div class="matrix-stream"></div>
+
+        <header class="panel-header">
+          <div class="panel-title">Case Core // Zivil</div>
+          <div class="panel-tag">JSON → XJUSTIZ → PDF</div>
+        </header>
+
+        <pre class="code-block"><span class="code-comment">// Werklohn – Bauvertrag – vollautomatische Normenkette</span>
+{
+  <span class="code-key">"meta"</span>: {
+    <span class="code-key">"uuid"</span>: <span class="code-string">"b4b9f4c0-7f2a-4b9a-9c3a-123456789abc"</span>,
+    <span class="code-key">"dokumenttyp"</span>: <span class="code-string">"Urteil"</span>,
+    <span class="code-key">"verfahrenstyp"</span>: <span class="code-string">"zivil"</span>,
+    <span class="code-key">"aktenzeichen"</span>: <span class="code-string">"3 O 245/26"</span>,
+    <span class="code-key">"gericht"</span>: <span class="code-string">"Landgericht Musterstadt"</span>,
+    <span class="code-key">"spruchkoerper"</span>: <span class="code-string">"Zivilkammer 3"</span>,
+    <span class="code-key">"datum"</span>: <span class="code-string">"2026-10-14"</span>
+  },
+
+  <span class="code-key">"tenor"</span>: {
+    <span class="code-key">"haupt"</span>: <span class="code-string">"Der Beklagte wird verurteilt, an die Klägerin 12.450,00 EUR zu zahlen."</span>,
+    <span class="code-key">"neben"</span>: [
+      <span class="code-string">"Der Beklagte trägt die Kosten des Rechtsstreits."</span>
+    ],
+    <span class="code-key">"vollstreckbarkeit"</span>: <span class="code-string">"Das Urteil ist vorläufig vollstreckbar."</span>
+  },
+
+  <span class="code-key">"auto_normenkette"</span>: [
+    <span class="code-string">"§ 631 BGB"</span>,
+    <span class="code-string">"§ 650a BGB"</span>,
+    <span class="code-string">"§ 634 BGB"</span>,
+    <span class="code-string">"§ 286 BGB"</span>,
+    <span class="code-string">"§ 288 BGB"</span>,
+    <span class="code-string">"§ 253 ZPO"</span>
+  ],
+
+  <span class="code-key">"subsumtion"</span>: [
+    {
+      <span class="code-key">"norm"</span>: <span class="code-string">"§ 631 BGB"</span>,
+      <span class="code-key">"ergebnis"</span>: <span class="code-string">"Tatbestand erfüllt"</span>,
+      <span class="code-key">"hammer"</span>: <span class="code-string">"BLACK_HAMMER"</span>
+    }
+  ]
+}</pre>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Normen</div>
+            <div class="stat-value">6</div>
+            <div class="stat-sub">2× Black // 2× Grey // 2× White</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Beweise</div>
+            <div class="stat-value">3</div>
+            <div class="stat-sub">Matrix konsistent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Compile</div>
+            <div class="stat-value">OK</div>
+            <div class="stat-sub">Subsumtion stabil</div>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-title">ERV // SAFE // QES</div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">CREATED</span>
+            <span class="timeline-time">2026‑10‑14 // 22:25</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">QES APPLIED</span>
+            <span class="timeline-time">2026‑10‑14 // 22:28</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">ERV SENT</span>
+            <span class="timeline-time">2026‑10‑14 // 22:29</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <header class="panel-header">
+          <div class="panel-title">Engine Status // BLACK SIX</div>
+          <div class="panel-tag">HAMMER // MATRIX // SAFE</div>
+        </header>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Hammer</div>
+            <div class="stat-value">BLACK</div>
+            <div class="stat-sub">Anspruch voll getragen</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Risk</div>
+            <div class="stat-value">12%</div>
+            <div class="stat-sub">Berufungserfolg</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Mode</div>
+            <div class="stat-value">CERTIFY</div>
+            <div class="stat-sub">Operator: Richterin</div>
+          </div>
+        </div>
+
+        <div class="timeline" style="margin-top: 12px;">
+          <div class="timeline-title">Subsumtion Trace</div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">§ 631 BGB</span>
+            <span class="timeline-time">Werkvertrag // Werklohn</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">§ 650a BGB</span>
+            <span class="timeline-time">Bauvertrag // geprüft</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-label">§ 253 ZPO</span>
+            <span class="timeline-time">Form // OK</span>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="footer-left">BLACK SIX MATRIX // JUDGEMENT ENGINE</div>
+          <div class="footer-right">
+            <span class="chip">XJUSTIZ 1.5</span>
+            <span class="chip">ERV SAFE</span>
+            <span class="chip chip-danger">NO SHADOW DECISION</span>
+          </div>
+        </footer>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
