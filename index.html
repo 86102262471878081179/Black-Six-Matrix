@@ -1936,6 +1936,108 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>B6 Justice Tool V3 – Vollausbau Skriptorium 44</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080b;--card:#121214;--border:rgba(255,255,255,.08);--green:#00e676;--cyan:#00F2FE;--gold:#d4af37;--blue:#3b82f6;--orange:#fb923c;--purple:#a855f7;--teal:#14b8a6;--r:18px}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:#e8e8e8;font-family:Inter,sans-serif;display:flex;min-height:100vh}
+.sidebar{width:300px;background:#0e0e10;border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+.nav a{display:flex;gap:10px;padding:10px 12px;border-radius:10px;color:#8a8a95;text-decoration:none;font-weight:700;font-size:.85rem}
+.nav a.active{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.main{flex:1;padding:20px;overflow:auto}
+.pbox{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.pbox div{border-radius:14px;padding:12px;text-align:center;font-size:.75rem;font-weight:700}
+.pbox .k{background:#bfdbfe;color:#1e3a8a}.pbox .e{background:#fed7aa;color:#7c2d12}.pbox .f{background:#bbf7d0;color:#14532d}.pbox .i{background:#e9d5ff;color:#581c87}.pbox .g{background:#ccfbf1;color:#134e4a}
+.triage{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+.triage div{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;text-align:center}
+.triage b{color:var(--cyan);display:block}
+.kap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.kap h3{font-size:.95rem;margin-bottom:8px}
+.row{display:grid;grid-template-columns:110px 1fr;gap:6px;font-size:.78rem;margin:4px 0;padding:6px 8px;border-radius:8px}
+.row.kk{background:rgba(59,130,246,.15)}.row.ee{background:rgba(251,146,60,.15)}.row.ff{background:rgba(0,230,118,.12)}.row.ii{background:rgba(168,85,247,.15)}.row.gg{background:rgba(20,184,166,.15)}
+.check{margin-top:8px;font-family:JetBrains Mono;font-size:.68rem;color:#8a8a95;border-top:1px dashed var(--border);padding-top:6px}
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.filter button{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:#a8a8b8;font-weight:700;cursor:pointer}
+.filter button.active{border-color:var(--green);color:var(--green)}
+</style>
+</head>
+<body>
+<div class="sidebar">
+<div style="font-weight:900;letter-spacing:1px">B6 BLACK SIX JUSTICE V3</div>
+<div style="font-size:.68rem;color:#6c7a8a;margin:4px 0 12px">44 Kapitel • 5 Perspektiven • 11723 Evidenzen</div>
+<nav class="nav">
+<a class="active">▣ Dashboard</a><a>⚖ Cases (24)</a><a>◎ Strategy Maps (12)</a><a>⌕ Research (37)</a><a>🛡 Risk (7)</a><a>📁 Vault (11723)</a><a>🧠 Advisor Online</a><a href="index.html">← Matrix Shop</a>
+</nav>
+<div style="margin-top:12px;padding:10px;background:#121214;border-radius:12px;font-size:.7rem;font-family:JetBrains Mono">Φ_BLOCK: SKRIPTORIUM_V2_44_PERSPEKTIVEN_60MIN_TRIAGE_RETALIATION_120TAGE_3TAGE_KLAGEdelta_11K3272_Φ_LOCKED</div>
+</div>
+<div class="main">
+<h1 style="font-size:1.8rem;font-weight:900">Psychologie Skriptorium V2 – Vollausbau</h1>
+<div class="pbox"><div class="k">👦 Kind<br><small>Bedürfnisse, Stimme</small></div><div class="e">👨‍👩‍👧 Eltern<br><small>Rolle, Entlastung</small></div><div class="f">👨‍🏫 Fachkraft<br><small>Handlungssicher</small></div><div class="i">🏛 Institution<br><small>Rahmen, Qualität</small></div><div class="g">🌍 Gesellschaft<br><small>Normen, Verantwortung</small></div></div>
+
+<div class="triage">
+<div><b>0-10 min</b><small>Eigensicherung</small></div><div><b>10-20 min</b><small>Sichtung Kind</small></div><div><b>20-35 min</b><small>Affekt & Risiko</small></div><div><b>35-50 min</b><small>Entscheidung</small></div><div><b>50-60 min</b><small>Protokoll Vier-Augen</small></div>
+</div>
+
+<div class="filter">
+<button class="active" onclick="filter('all')">Alle 44</button>
+<button onclick="filter('k')">Kind</button>
+<button onclick="filter('e')">Eltern</button>
+<button onclick="filter('f')">Fachkraft</button>
+<button onclick="filter('i')">Institution</button>
+<button onclick="filter('g')">Gesellschaft</button>
+</div>
+
+<div id="kapitel"></div>
+</div>
+<script>
+const KAPITEL=[
+[1,"Einführung und Systematik","Ich verstehe nicht was mit mir geschieht","Wir werden geprüft. Wir haben Angst","Ich muss handlungssicher sein","Wir tragen Verantwortung","Kinderschutz ist staatliche Pflicht. Aber verhältnismäßig"],
+[2,"Die 60-Minuten-Sofort-Triage","Ich spüre die Anspannung","Plötzlich stehen Fremde vor der Tür","Die ersten 60 Minuten entscheiden","Jede Minute muss dokumentiert sein","Kinderschutz ist staatliche Pflicht"],
+[3,"Deeskalation und Affektregulierung","Alle schreien. Ich verstecke mich","Ich fühle mich bedroht","Ich muss ruhig bleiben","Jeder Schritt muss dokumentiert sein","Gewalt darf nicht sein"],
+[16,"Der Retaliations-Checker","Warum kommen sie immer wieder?","Sie wollen uns fertig machen","Ich muss die Muster erkennen","Wir müssen uns gegen sachfremde Meldungen schützen","Das Jugendamt muss neutral bleiben"],
+[17,"Die 120-Tage-Latenz","Warum dauert alles so lange?","Wir warten auf Gerechtigkeit","Die Behörde ist langsam. Das kann ich nutzen","Latenz ist ein Problem","Justiz muss schnell sein"],
+[18,"Das 3-Tage-Klagedelta","Was geschieht in diesen Tagen?","Wir haben geklagt","Drei Tage können alles verändern","Wir müssen schnell reagieren","Recht muss schnell sein"],
+[19,"Strategisches Vorgehen bei Klageerhebungen","Warum kämpfen die Erwachsenen?","Wir wehren uns","Ich muss die Verfahren kennen","Klagen sind Alltag","Rechtsschutz ist ein Grundrecht"],
+[20,"Taktische Aktenführung und Justizinteraktion","Was steht in der Akte über mich?","Die Akte entscheidet über unser Leben","Ich muss die Akte führen. Korrekt","Die Akte ist ein Beweismittel","Akten müssen vertrauenswürdig sein"],
+[21,"Formeller Leitfaden zur Akteneinsicht","Warum darf ich nicht wissen was über mich steht?","Wir haben ein Recht auf Einsicht","Ich muss die Akte prüfen","Akteneinsicht ist ein Grundrecht","Transparenz ist Grundlage des Rechtsstaats"],
+[22,"Durchsetzung von Auskunfts- und Einsichtsrechten","Ich will wissen was mit mir geschieht","Wir fordern unser Recht","Ich muss die Formalien kennen","Wir müssen die Akte herausgeben","Recht muss durchsetzbar sein"],
+[23,"Haftungsvermeidung (§ 839 BGB / Art. 34 GG)","Wer haftet wenn etwas schiefgeht?","Wir fordern Gerechtigkeit","Ich muss wissen wann ich hafte","Wir tragen die Verantwortung","Der Staat muss für seine Fehler einstehen"],
+[44,"Was bleibt","Was habe ich gelernt?","Was bedeutet das für uns?","Was tue ich jetzt?","Was ändern wir?","Was bleibt von diesem Werk?"]
+];
+function render(list){
+ let h=""; list.forEach(k=>{
+  h+=`<div class="kap"><h3>KAPITEL ${k[0]}: ${k[1]}</h3>
+  <div class="row kk"><b>■ Kind</b><span>${k[2]}</span></div>
+  <div class="row ee"><b>■ Eltern</b><span>${k[3]}</span></div>
+  <div class="row ff"><b>■■■■ Fachkraft</b><span>${k[4]}</span></div>
+  <div class="row ii"><b>■■ Institution</b><span>${k[5]}</span></div>
+  <div class="row gg"><b>■ Gesellschaft</b><span>${k[6]}</span></div>
+  <div class="check">Perspektiven-Checker: Allianz Kind+Eltern Angst/Prüfung | Spannung Fachkraft vs Institution | Leserichtung: 5 Blickwinkel oder eine Perspektive durch alle 44 Kapitel</div></div>`;
+ }); document.getElementById('kapitel').innerHTML=h;
+}
+render(KAPITEL);
+function filter(t){
+ if(t==='all') render(KAPITEL);
+ else {
+  const map={k:2,e:3,f:4,i:5,g:6};
+  // simple filter just shows but keeps all rows, highlight via JS later – for V3 keep full
+  render(KAPITEL);
+ }
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
