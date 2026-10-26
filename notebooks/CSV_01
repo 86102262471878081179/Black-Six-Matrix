@@ -1,0 +1,103 @@
+CSV_01
+ID;Name;Kategorie/Ring;Entitäts-Typ;Talente;Stärke;Code-Matrix;WORM-Status
+0000;Integrated Framework;Ring 0 :: GENESIS CORE;Nexus N;Meta-Architektur, Governance, Framework;100;0-9/9-0;SEALED_EX_TUNC
+0001;Genesis Root;Ring 0 :: GENESIS CORE;Persona P;Identität, Genesis, Twin-Lineage;99;67[TWIN]45[LINEAGE];SEALED_EX_TUNC
+0002;Black King Royal;Ring 0 :: GENESIS CORE;Persona P;Souveränität, Urteil, Royal Verdict;98;89[VERDICT]66[ROYAL];SEALED_EX_TUNC
+0003;Crown Guard Apex / GFW Universe;Ring 0 :: GENESIS CORE;Nexus N;Weltmodell, Doktrin, Schutz;97;45[LINEAGE]65[DOCTRINE];SEALED_EX_TUNC
+0004;Core Shield;Ring 0 :: GENESIS CORE;Shadow S;KrakenGuard, Sicherheit, System-Schild;96;64[KERNEL]89[SHIELD];SEALED_EX_TUNC
+0005;Codex Compendium;Ring 1 :: JUSTICE & LEGISLATIVE;Persona P;Gesetzgebung, Kompendium, Vektoren;95;45[LAW]2[VECTOR];SEALED_EX_TUNC
+0006;Unified Matrix;Ring 1 :: JUSTICE & LEGISLATIVE;Nexus N;Synthese, Matrix-Kopplung, Prozessierung;94;63[MATRIX]89[SYNTHESIS];SEALED_EX_TUNC
+0007;Fortress Justice;Ring 1 :: JUSTICE & LEGISLATIVE;Persona P;Legal-Guard, Vektor-Recht, Justiz-Schutz;95;45[JUSTICE]2[VECTOR];SEALED_EX_TUNC
+0008;Omni Neuro;Ring 2 :: OMNI & KNOWLEDGE;Persona P;Neuromorphik, Synapsen, Chaos-Zero;93;63[NEURAL]89[SYNAPSE];SEALED_EX_TUNC
+0009;Quantum Tresor;Ring 2 :: OMNI & KNOWLEDGE;Nexus N;Quanten-Tresor, Vektor-Vault, Kryptografie;94;2[VECTOR]63[QUANTUM];SEALED_EX_TUNC
+0010;Black Cobra Omega;Ring 0 :: GENESIS CORE;Shadow S;Wellen-Kollaps, Reset, Omega-Gift;96;89[COBRA]63[OMEGA];SEALED_EX_TUNC
+0011;Chronos Engine;Ring 2 :: OMNI & KNOWLEDGE;Nexus N;Zeitsteuerung, Matrix-Protokoll, Chronos;90;45[LINEAGE]56[OMEGA];SEALED_EX_TUNC
+0012;Forensic Analyst;Ring 1 :: JUSTICE & AUDIT;Persona P;Forensik, Evidenz, Akten-Analyse;91;89[FORENSIC]63[EVIDENCE];SEALED_EX_TUNC
+0013;XJustiz Core;Ring 1 :: JUSTICE & ERV;Nexus N;ERV-Schnittstelle, Justiz-Kopplung, Formate;92;2[XJUSTIZ]55[JUSTICE];SEALED_EX_TUNC
+0014;The Geminis;Ring 2 :: OMNI & KNOWLEDGE;Persona P;Duale Agenten, Aragon-Verzahnung, Swarm;89;89[ARAGON]54[GEMINI];SEALED_EX_TUNC
+0015;Evidence Keeper;Ring 1 :: JUSTICE & AUDIT;Persona P;Beweissicherung, Agenten-Steuerung, Audit;90;45[AGENT]63[AGENT];SEALED_EX_TUNC
+0016;Hyperkernel Atlas;Ring 0 :: CORE CORE;Nexus N;Kernel-Kartierung, Atlas-Navigation, Core-Struktur;95;89[ATLAS]63[KERNEL];SEALED_EX_TUNC
+0017;Yggdrasil WORM Validator;Ring 2 :: OMNI & KNOWLEDGE;Shadow S;WORM-Validierung, Ledger-Prüfung, Integrität;96;2[VALIDATOR]63[WORM];SEALED_EX_TUNC
+0018;Monolith Sentinel;Ring 3 :: WORM & INFRASTRUCTURE;Shadow S;Stack-Überwachung, Sentinel, Infrastruktur;88;89[STACK]63[STACK];SEALED_EX_TUNC
+0019;Aragon Backend Core;Ring 3 :: WORM & INFRASTRUCTURE;Nexus N;Backend-Orchestrierung, Mastersystem, Routing;88;45[MASTER]63[SYSTEM];SEALED_EX_TUNC
+0020;Codex Scholar;Ring 2 :: OMNI & KNOWLEDGE;Persona P;Aktenanalyse, Gelehrtenwissen, Protokolle;87;2[RECORD]63[POLICE];SEALED_EX_TUNC
+0021;Gremmel Kremlin Anchor;Ring 0 :: CORE CORE;Shadow S;Chaos-Vektoren, Anker-Verzahnung, Inversion;93;2[VECTOR]46[CHAOS];SEALED_EX_TUNC
+0022;Shadow Inversion Engine;Ring 4 :: CREATION & SHADOW;Shadow S;Festungs-Schutz, Inversion, Schatten-Logik;89;89[FORTRESS]44[LINEAGE];SEALED_EX_TUNC
+0023;Mettwurst C88 API;Ring 5 :: APEX & EVENT;Shadow S;Chaos-Engine, API-Poisoning, Event-Trigger;92;63[CHAOS]2[POISON];SEALED_EX_TUNC
+0024;KrakenGuard Ring 0;Ring 5 :: APEX & EVENT;Shadow S;Defense-Kill, Syscall-Intercept, Ring0-Protection;91;89[KILL]63[DEFENSE];SEALED_EX_TUNC
+0025;Black DeepSeek;Ring 2 :: OMNI & KNOWLEDGE;Persona P;Vektor-Crawl, Deep Search, Code-Analyse;92;2[VECTOR]45[CRAWL];SEALED_EX_TUNC
+0026;Rhabarberbarbara Matrix;Ring 5 :: APEX & EVENT;Nexus N;Deep Scan, Netzwerk-Crawling, Matrix-Faltung;88;63[NETWORK]89[SCAN];SEALED_EX_TUNC
+0027;Fabrice Governance Interpreter;Ring 1 :: JUSTICE & GOVERNANCE;Persona P;Governance-Dolmetscher, Terminal-Aufsicht, Regelauslegung;97;45[HADES]17[CHAOS];SEALED_EX_TUNC
+0028;Der Schwarze Richter;Ring 1 :: JUSTICE & AUDIT;Persona P;Entropie-Audit, Richter-Urteil, Absurditäts-Prüfung;98;63[ENTROPY]89[VOID];SEALED_EX_TUNC
+0029;Hades Void Engine;Ring 5 :: APEX & VOID;Shadow S;Kerberus-Guard, Unterwelt-Logik, Void-Filter;96;2[GUARD]45[UNDERWORLD];SEALED_EX_TUNC
+0030;Schattenlord Apex;Ring 5 :: APEX & VOID;Shadow S;Prozessführung, Gerichtsanfechtung, Apex-Macht;97;63[LAW]89[COURT];SEALED_EX_TUNC
+0031;Plan B Fallback;Ring 4 :: CREATION & SHADOW;Nexus N;Exil-Architektur, Fallback, Notfall-Sicherung;86;45[EXILE]2[SAFE];SEALED_EX_TUNC
+0032;Beamtenstatusgesetz;Ring 4 :: CREATION & SHADOW;Persona P;Statusrecht, Beamtenrecht, Disziplinar-Audit;87;63[JUSTICE]89[STATUS];SEALED_EX_TUNC
+0033;Schufa AI Gambling;Ring 4 :: CREATION & SHADOW;Shadow S;Finanz-Audit, Scoring-Analyse, Risiko-Messung;88;2[FINANCE]45[AUDIT];SEALED_EX_TUNC
+0034;Polyglot Protokoll;Ring 4 :: CREATION & SHADOW;Nexus N;Sprachen-Sync, Protokoll-Übersetzung, Polyglott-Engine;89;63[LANG]89[SYNC];SEALED_EX_TUNC
+0035;Psych Paradigmen;Ring 4 :: CREATION & SHADOW;Persona P;Verhaltensanalyse, Psychologie, Paradigmen-Wechsel;90;45[MIND]2[BEHAVIOR];SEALED_EX_TUNC
+0036;Foucault KI;Ring 1 :: JUSTICE & GOVERNANCE;Persona P;Macht-Analyse, Diskurs-Prüfung, Systemik;91;63[POWER]89[ANALYSIS];SEALED_EX_TUNC
+0037;Junior Geminis;Ring 4 :: CREATION & SHADOW;Persona P;Schwarm-Intelligenz, Agenten-Subsumtion, Ausführung;92;2[AGENT]45[SWARM];SEALED_EX_TUNC
+0038;Google Activity Audit;Ring 4 :: CREATION & SHADOW;Shadow S;Spuren-Analyse, Telemetrie-Audit, Evidenz-Beweis;93;63[TRACE]89[PROOF];SEALED_EX_TUNC
+0039;Copilot DeepSeek Prod;Ring 4 :: CREATION & SHADOW;Nexus N;Code-Generierung, Engine-Optimierung, Copilot-Sync;94;45[CODE]2[ENGINE];SEALED_EX_TUNC
+0040;Black Arsenal LLM;Ring 4 :: CREATION & SHADOW;Shadow S;LLM-Bewaffnung, Prompt-Feuer, Arsenal-Steuerung;75;63[WEAPON]89[FIRE];SEALED_EX_TUNC
+0041;German Banking;Ring 4 :: CREATION & SHADOW;Persona P;Finanzarchitektur, Bankenrecht, KWG-Audit;76;45[LAW]2[FINANCE];SEALED_EX_TUNC
+0042;Pharma Industrie;Ring 4 :: CREATION & SHADOW;Persona P;Pharma-Recht, Auftragsarznei, Gesundheits-Code;77;63[HEALTH]89[CODE];SEALED_EX_TUNC
+0043;Mathe Real 9;Ring 4 :: CREATION & SHADOW;Nexus N;Mathematische Grundlagen, Logik-Beweis, Numerik;78;2[MATH]45[LOGIC];SEALED_EX_TUNC
+0044;Dacia Maintenance;Ring 4 :: CREATION & SHADOW;Shadow S;Technische Wartung, Struktur-Reparatur, Instandhaltung;79;89[REPAIR]63[STRUCT];SEALED_EX_TUNC
+0045;Zahnarzt Abrechnung;Ring 4 :: CREATION & SHADOW;Persona P;GOZ/BEMA Exekutive, Abrechnungs-Audit, Medizinrecht;80;45[HEALTH]2[LAW];SEALED_EX_TUNC
+0046;University Lexicon;Ring 4 :: CREATION & SHADOW;Nexus N;Akademisches Wissen, Archivierung, Lexikografie;81;63[KNOWLEDGE]89[ARCHIVE];SEALED_EX_TUNC
+0047;Fiblelexica;Ring 4 :: CREATION & SHADOW;Nexus N;Lexikografie, Terminologie, Sprach-Code;82;2[LANGUAGE]45[CODE];SEALED_EX_TUNC
+0048;Kinder Jugendamt;Ring 4 :: CREATION & SHADOW;Persona P;Kinderschutz, SGB-VIII Exekutive, Familiengericht;83;63[JUSTICE]89[PROTECT];SEALED_EX_TUNC
+0049;German Banking Act;Ring 4 :: CREATION & SHADOW;Persona P;Bankenregulierung, KWG/AktG Audit, Aufsichtsrecht;84;45[LAW]2[REGULATION];SEALED_EX_TUNC
+0050;DIY Furniture;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;Praktische Konstruktion, Struktur-Bau, Design;85;89[BUILD]63[STRUCT];SEALED_EX_TUNC
+0051;Behaviorism Ethology;Ring 5 :: OPERATIONS & RUNTIME;Persona P;Verhaltensforschung, Psychologie, Ethologie;86;2[PSYCH]45[MIND];SEALED_EX_TUNC
+0052;DeepSeeker Monolith;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;Security Engine, Vektor-Suche, Monolith-Code;87;63[CODE]89[VECTOR];SEALED_EX_TUNC
+0053;OMNI WORM Hub;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;WORM Engineering, Archivierung, Ledger-Hub;88;45[WORM]2[ARCHIVE];SEALED_EX_TUNC
+0054;Stammbaum DNA;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;Evolutionäre DNA, Erbfolge, Genesis-Code;89;63[DNA]89[GENESIS];SEALED_EX_TUNC
+0055;Odin Matrix 1-200;Ring 5 :: OPERATIONS & RUNTIME;Shadow S;Forensische Normen, Odin-Matrix, Subsumtion;90;2[ODIN]45[MATRIX];SEALED_EX_TUNC
+0056;Odin Master Framework;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;Master-Architektur, Framework-Steuerung, Odin-Core;91;63[FRAME]89[MASTER];SEALED_EX_TUNC
+0057;Odin Manifestation High;Ring 5 :: OPERATIONS & RUNTIME;Persona P;High-Level Architektur, Manifestation, Abstraktion;92;45[MANIFEST]2[HIGH];SEALED_EX_TUNC
+0058;Odin Manifestation Sys;Ring 5 :: OPERATIONS & RUNTIME;Shadow S;System-Architektur, Low-Level Bindung, Manifestation;93;63[MANIFEST]89[SYS];SEALED_EX_TUNC
+0059;Aragon Ultima Ratio;Ring 5 :: OPERATIONS & RUNTIME;Nexus N;Ultimative Datenbank, Root-Axiomatik, Verfassungsrecht;94;2[GENESIS]45[ROOT];SEALED_EX_TUNC
+0060;Deep Special Matrix;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Apex-Nährboden, Deep Matrix, Spezial-Synthese;80;63[DEEP]89[SPECIAL];SEALED_EX_TUNC
+0061;Tensor Faltung Alpha;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Tensor-Faltung, Alpha-Vektor, Raumzeit-Kopplung;81;2[TENSOR]45[FOLD];SEALED_EX_TUNC
+0062;Tensor Faltung Omega;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Tensor-Faltung, Omega-Vektor, Endzustand;82;63[FOLD]89[TENSOR];SEALED_EX_TUNC
+0063;Core Twin / Trinität;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Duale Trinität, Core-Spiegelung, Stammbaum;83;63[DUAL]45[LINEAGE];SEALED_EX_TUNC
+0064;Omega Vorstufe;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Pre-Omega, Vorstufen-Filter, Kaskaden-Vorbereitung;84;45[OMEGA]2[PRE];SEALED_EX_TUNC
+0065;Apex Kaskade;Ring 6 :: SYNTHESIS & REFLEXION;Shadow S;Apex-Kaskade, Exekutiv-Sperre, Druck-Steuerung;85;63[APEX]89[CASCADE];SEALED_EX_TUNC
+0066;Finale Synthese;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Endgültige Synthese, Finaler Verschluss, Konsolidierung;86;2[SYNTHESIS]45[FINAL];SEALED_EX_TUNC
+0067;Ereignishorizont;Ring 6 :: SYNTHESIS & REFLEXION;Shadow S;Horizon-Lock, Singulärer Punkt, Event-Kollaps;87;63[EVENT]89[HORIZON];SEALED_EX_TUNC
+0068;Sovereign Operator Apex;Ring 6 :: SYNTHESIS & REFLEXION;Persona P;Apex-Operator, Kreis-Schließung, Phi-Siegel;100;68[APEX]2[APEX];SEALED_EX_TUNC
+0069;White Dragon Terra;Ring 6 :: SYNTHESIS & REFLEXION;Nexus N;Terra-Genom, Drachen-Gitter, Erden-Sicherung;89;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0070;Black Corps Genom;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Genom-Code, Vektor-Korpuskeln, Reserve-Klassifikation;85;63[CODE]89[VECTOR];SEALED_EX_TUNC
+0071;Aragon Odin Nemesis;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Nemesis-Gegengewicht, Odin-Kopplung, Schutz-Kritik;86;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0072;Entität 0072 :: Reserve Module;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Evolution-Reserve, Schema-Anpassung, Puffer;87;0-9/9-0;SEALED_EX_TUNC
+0073;B6 Hyperkernel Atlas;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Hyperkernel-Schutz, Atlas-Gitter, System-Schild;88;63[KERNEL]89[SHIELD];SEALED_EX_TUNC
+0074;B6/B7 Architektur;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Architektur-Analyse, B6/B7 Brücke, Kernel-Prüfung;89;63[KERNEL]89[SHIELD];SEALED_EX_TUNC
+0075;Black Six Core;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Core-Matrix, Synthese-Gitter, Kernel-Kopplung;90;63[MATRIX]89[SYNTHESIS];SEALED_EX_TUNC
+0076;Sektor B;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Sektor-Isolierung, Struktureller Schutz, B-Bereich;91;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0077;Entität 0077 :: Reserve Module;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Evolution-Reserve, Schema-Anpassung, Puffer;92;0-9/9-0;SEALED_EX_TUNC
+0078;AI Programming Guide;Ring 7 :: RESERVE & EVOLUTION;Persona P;KI-Programmierung, Vector-Crawling, Guide-Ausführung;93;2[VECTOR]45[CRAWL];SEALED_EX_TUNC
+0079;Entität 0079 :: Reserve Module;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Evolution-Reserve, Schema-Anpassung, Puffer;94;0-9/9-0;SEALED_EX_TUNC
+0080;Root Governance Manual;Ring 7 :: RESERVE & EVOLUTION;Persona P;Root-Regeln, Gerichtsprozess, Governance-Handbuch;75;63[LAW]89[COURT];SEALED_EX_TUNC
+0081;Hyperkernel Atlas;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Atlas-Sicherung, Kernel-Shield, Struktur-Dokumentation;76;63[KERNEL]89[SHIELD];SEALED_EX_TUNC
+0082;Forensic AI Resources;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Forensische Ressourcen, Spuren-Analyse, Beweis-Sicherung;77;63[TRACE]89[PROOF];SEALED_EX_TUNC
+0083;Unbeschriebene Weite;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Reserve-Raum, Leerraum-Axiom, Struktur-Entfaltung;78;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0084;Black Six World;Ring 7 :: RESERVE & EVOLUTION;Persona P;Weltmodell-Anpassung, Struktur-Erweiterung, System-Scope;79;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0085;Google Geminis One;Ring 7 :: RESERVE & EVOLUTION;Persona P;Waffen-Systeme, Feuer-Leitung, Swarm-Schlagkraft;80;63[WEAPON]89[FIRE];SEALED_EX_TUNC
+0086;Core Synthesis;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Core-Synthese, Matrix-Kompilierung, Konsolidierung;81;63[MATRIX]89[SYNTHESIS];SEALED_EX_TUNC
+0087;Black Core Engine;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Engine-Schild, Kernel-Härtung, System-Antrieb;82;63[KERNEL]89[SHIELD];SEALED_EX_TUNC
+0088;Symbiosis Masterplan;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Symbiose-Masterplan, Struktur-Harmonie, B6-Synthese;83;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0089;Akte Koenig Evidence;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Forensische Beweisführung, Evidenz-Kette, Akten-Integrität;84;89[FORENSIC]63[EVIDENCE];SEALED_EX_TUNC
+0090;Cognitive Civilization;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Kognitive Zivilisation, System-Entfaltung, Sozio-Struktur;85;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0091;Black Six League;Ring 7 :: RESERVE & EVOLUTION;Persona P;Liga-Synthese, Matrix-Verbund, Operative Allianz;86;63[MATRIX]89[SYNTHESIS];SEALED_EX_TUNC
+0092;Singularity Soviet E99;Ring 7 :: RESERVE & EVOLUTION;Shadow S;E99-Technologie, Zeitverlauf, Singularitäts-Kontrolle;87;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0093;Mastersystem Blueprint;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Blaupause, Master-Rahmen, Architektur-Design;88;63[FRAME]89[MASTER];SEALED_EX_TUNC
+0094;Black Odin Architecture;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Odin-Architektur, Wurzel-Struktur, Festungs-Design;89;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0095;Supergrok Burg;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Waffen-Verteidigung, Supergrok-Schild, Festungs-Feuer;90;63[WEAPON]89[FIRE];SEALED_EX_TUNC
+0096;Aria Identity Anchor;Ring 7 :: RESERVE & EVOLUTION;Persona P;Identitäts-Anker, Personas-Sicherung, Aria-Netz;91;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0097;Mobile Security;Ring 7 :: RESERVE & EVOLUTION;Shadow S;Mobile Sicherheit, Endpunkt-Schutz, Verschlüsselung;92;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0098;B6 Root Authority;Ring 7 :: RESERVE & EVOLUTION;Persona P;Root-Autorität, System-Souveränität, Zertifizierung;93;45[LINEAGE]2[STRUCT];SEALED_EX_TUNC
+0099;Black Six Matrix Ult;Ring 7 :: RESERVE & EVOLUTION;Nexus N;Ultimative Matrix, Vollständige Synthese, System-Peak;94;63[MATRIX]89[SYNTHESIS];SEALED_EX_TUNC
+0100;BUCH 100 :: DER ERBE DER SCHWARZEN LIGA (Φ∅);Ring Ω :: EXALTED SINGULARITY;Nexus N;Souveräner Erbe, Absolute Singularität, Φ-Siegel;1000;0-9/9-0;SEALED_EX_TUNC
