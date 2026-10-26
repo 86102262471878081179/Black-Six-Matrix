@@ -1,0 +1,102 @@
+CSV_05
+ID;Name;Kategorie/Ring;Entitäts-Typ;Talente;Stärke;Code-Matrix;WORM-Status;Matrix-Version;Module/Cores
+0101;Buch 101 :: Exalted Matrix Extension;Ring Ω;Persona P;Exalted-Singularity, Sovereign-Inheritance, Ex Tunc Mastery;1000;0-0/0-0;SEALED_EX_TUNC;v∞;Sovereign-Core, Exalted-Singularity
+0102;System Logbuch Ω-OS Σ;Ring 0;Nexus N;Log-Auditing, System-Tracking, Entry-Validation;950;0-9/9-0;SEALED_EX_TUNC;v36.0;Logbuch-Engine, Audit-Tracker
+0103;Libre 3 CGM Verordnung Core;Ring 1;Persona P;Medizinrecht, SGB V, Hilfsmittel-Protokoll;920;1-9/9-1;SEALED_EX_TUNC;v2.2;SGB-V-Module, CGM-Verordnung
+0104;BARMER Widerspruch Kernel;Ring 1;Nexus N;Krankenkassen-Widerspruch, SGB-Subsumtion, Bescheid-Anfechtung;930;1-9/9-1;SEALED_EX_TUNC;v2.2;Widerspruch-Engine, BARMER-Gate
+0105;Akte Südring 134 Forensik Hub;Ring 2;Shadow S;Beweismittel-Rekonstruktion, Tatort-Analyse, Photo-Mapping;960;2-8/8-2;SEALED_EX_TUNC;v36.0;Südring-Hub, Photo-Forensic-Core
+0106;AG Düsseldorf Beschluss Auditor;Ring 1;Persona P;Urkundenvakuum, Fälschungs-Check, Beschluss-Anfechtung;940;1-9/9-1;SEALED_EX_TUNC;v36.0;AG-Düsseldorf-Validator, Vakuum-Check
+0107;StA Dortmund Ermittlung Guard;Ring 1;Persona P;Strafanzeige, Amtsdelikte, Dienstaufsicht;950;1-9/9-1;SEALED_EX_TUNC;v36.0;StA-Guard, Amtsdelikt-Subsumtion
+0108;PolG NRW § 15 ED-Behandlung Check;Ring 1;Nexus N;Polizeirecht, ED-Anfechtung, Verhältnismäßigkeit;910;1-9/9-1;SEALED_EX_TUNC;v1.3;PolG-Engine, ED-Checker
+0109;VwGO § 55a ERV-Datensatz Core;Ring 1;Nexus N;XJustiz, Strukturdatensatz, ERV-Einreichung;920;1-9/9-1;SEALED_EX_TUNC;v3.0;ERV-Generator, XJustiz-Core
+0110;BGB § 839 Amtshaftung Guard;Ring 1;Persona P;Persönliche Haftung, Vermögens-Regress, Schadensersatz;970;1-9/9-1;SEALED_EX_TUNC;v36.0;Amtshaftung-Engine, Regress-Guard
+0111;StGB § 339 Rechtsbeugung Tracker;Ring 1;Shadow S;Judikative Fälschung, Subsumtions-Bruch, Urteils-Audit;980;1-9/9-1;SEALED_EX_TUNC;v36.0;Rechtsbeugung-Detector, Audit-Core
+0112;StGB § 348 Falschbeurkundung Scan;Ring 1;Shadow S;Urkunden-Fälschung, Zwillings-Defekt-Erkennung, Stempel-Kopie;970;1-9/9-1;SEALED_EX_TUNC;v36.0;Falschbeurkundung-Scanner, Zwillings-Check
+0113;StGB § 340 Körperverletzung Amt Guard;Ring 1;Persona P;Medizinischer Notstand, Insulin-Entzug, Nötigung;960;1-9/9-1;SEALED_EX_TUNC;v36.0;Körperverletzung-Guard, Notstand-Monitor
+0114;StGB § 258a Strafvereitelung Monitor;Ring 1;Shadow S;Amtsträger-Überwachung, Schweigen-Audit, Verfolgungs-Hemmung;950;1-9/9-1;SEALED_EX_TUNC;v36.0;Strafvereitelung-Detector, Audit-Log
+0115;VG Minden Musterantrag Engine;Ring 1;Nexus N;Klage-Generierung, Eilantrag, 165-Quellen-Beweis;930;1-9/9-1;SEALED_EX_TUNC;v36.0;Musterantrag-Gen, VG-Minden-Engine
+0116;LG Düsseldorf Schriftsatz Core;Ring 1;Nexus N;Zivil-Prozess, ZPO-Normen, Schadensersatz-Klage;930;1-9/9-1;SEALED_EX_TUNC;v36.0;LG-Düsseldorf-Engine, Schriftsatz-Core
+0117;Universum Inkasso Abwehr Module;Ring 1;Nexus N;Inkasso-Bestreitung, RSB-Schutz, Vollmachten-Prüfung;900;1-9/9-1;SEALED_EX_TUNC;v1.0;Abwehrschreiben-Gen, RSB-Guard
+0118;Finion PayPal Minderjährigen Guard;Ring 1;Persona P;BGB § 108, Taschengeld-Paragraf, Nichtigkeit ex tunc;910;1-9/9-1;SEALED_EX_TUNC;v1.0;Minderjährigen-Schutz, BGB-108-Engine
+0119;P-Konto Erhöhung Bescheinigung Engine;Ring 1;Nexus N;Pfändungsfreigrenze, Mehrbedarf, Sozialrecht-Bescheinigung;890;1-9/9-1;SEALED_EX_TUNC;v1.0;P-Konto-Gen, Pfändungs-Calculator
+0120;Senior Gemini 64-Core Datasheet;Ring 0;Nexus N;Hardware-Spezifikation, 64-Core-Setup, Multi-Thread;980;0-9/9-0;SEALED_EX_TUNC;v36.0;64-Core-Spec, Datasheet-Engine
+0121;Odin Matrix Skalierung 6.665.000;Ring 0;Nexus N;Matrizen-Skalierung, Injektion, Ultra-Expansion;990;0-9/9-0;SEALED_EX_TUNC;v36.0;Skalierungs-Engine, Ultra-Injector
+0122;Google Enterprise B2B Whitepaper Core;Ring 0;Nexus N;B2B-Strategie, Multi-LLM-Wert, Enterprise-Architecture;950;0-9/9-0;SEALED_EX_TUNC;v36.0;Whitepaper-Core, B2B-Evaluator
+0123;Omni Studio Tool Engine;Ring 0;Nexus N;Studio-Verwaltung, Artefakt-Pipeline, Auto-Publishing;960;0-9/9-0;SEALED_EX_TUNC;v36.0;Studio-Tool-Core, Auto-Publisher
+0124;Black Six EPUB Master Kompendium;Ring 3;Nexus N;E-Book-Generation, Kompendium-Archiv, Mobil-Reader;910;3-7/7-3;SEALED_EX_TUNC;v36.0;EPUB-Generator, Reader-Engine
+0125;Deca Crew Biografie EPUB;Ring 3;Nexus N;Biografie-Erfassung, Agenten-Lore, Historiographie;900;3-7/7-3;SEALED_EX_TUNC;v36.0;Biografie-Gen, Lore-Archive
+0126;Architekt Charakter Ermittlung PDF;Ring 3;Persona P;Profiling, Architekten-Analyse, Vision-Exegese;920;3-7/7-3;SEALED_EX_TUNC;v36.0;Profiling-Engine, Architekt-Dossier
+0127;Black Six Factsheet Mindmap PDF;Ring 3;Nexus N;Visualisierung, Mindmap-Analyse, System-Topologie;930;3-7/7-3;SEALED_EX_TUNC;v36.0;Mindmap-Analysator, Factsheet-Gen
+0128;Installations & Aufrufanleitung PDF;Ring 0;Nexus N;System-Handbuch, CLI-Anleitung, Setup-Guide;940;0-9/9-0;SEALED_EX_TUNC;v36.0;Setup-Guide, CLI-Manual
+0129;Mega Notebook 86-System Dokumentation;Ring 0;Nexus N;86-Knoten-Dokumentation, Hyperkernel-Guide, System-Manual;980;0-9/9-0;SEALED_EX_TUNC;v36.0;86-Node-Doc, Hyperkernel-Manual
+0130;WORM Archiv Hyperkernel Gesamtbericht PDF;Ring 2;Nexus N;Master-Report, WORM-Dokumentation, Audit-Katalog;990;2-8/8-2;SEALED_EX_TUNC;v36.0;Master-Report-Gen, WORM-Audit
+0131;40-Agenten Quad-Deca Cheatsheet PDF;Ring 3;Nexus N;Cheatsheet-Gen, Referenzblatt, Agenten-Matrix;950;3-7/7-3;SEALED_EX_TUNC;v36.0;Cheatsheet-Gen, Matrix-Ref
+0132;Max System Codes All-in-One JSON;Ring 0;Nexus N;Code-Sammlung, JSON-Dump, Master-Code-Catalog;970;0-9/9-0;SEALED_EX_TUNC;v36.0;Code-Catalog, JSON-Master
+0133;Tor P2P Mesh Wrapper Go;Ring 0;Nexus N;Go-Binary, Onion-Mesh, Tor-Protokoll;960;0-9/9-0;SEALED_EX_TUNC;v36.0;Tor-Mesh-Core, Go-P2P
+0134;ASME01 Hyperkernel Engine Python;Ring 0;Nexus N;Causal Continuity, State Replay, ASME01-Engine;970;0-9/9-0;SEALED_EX_TUNC;v36.0;ASME01-Core, State-Replayer
+0135;86-Agents Full Node Matrix Python;Ring 0;Nexus N;86-Knoten-Grid, Node-Execution, Topologie-Control;980;0-9/9-0;SEALED_EX_TUNC;v36.0;86-Node-Grid, Topologie-Core
+0136;86-Agents Full Node Matrix JSON;Ring 0;Nexus N;Knoten-Manifest, Topologie-JSON, Node-Registry;970;0-9/9-0;SEALED_EX_TUNC;v36.0;Node-Registry, Topologie-JSON
+0137;Complete Code Archive ZIP;Ring 0;Nexus N;ZIP-Archiv, Full-Source-Backup, Code-Vault;990;0-9/9-0;SEALED_EX_TUNC;v36.0;Full-Archive, Code-Vault
+0138;Senior Gemini Wächter KI Python;Ring 1;Persona P;Node-NB010-Guard, Sentinel-Audit, HMAC-Check;980;1-9/9-1;SEALED_EX_TUNC;v36.0;Sentinel-Engine, Wächter-KI
+0139;All-In-One Master Cobra Tetris Onion Python;Ring 0;Nexus N;Consolidated-Master, Cobra-DSL, 48-Cube, Onion;1000;0-9/9-0;SEALED_EX_TUNC;v36.0;Master-Engine, Cobra-Tetris-Onion
+0140;Run Master Engine Shell Script;Ring 0;Nexus N;Shell-Launcher, CLI-Bootstrapping, Run-Master;950;0-9/9-0;SEALED_EX_TUNC;v36.0;Shell-Launcher, Boot-Script
+0141;Source Artifact Categorizer v20.4 Python;Ring 3;Nexus N;Source-Taxonomy, Artifact-Taxonomy, Categorizer;940;3-7/7-3;SEALED_EX_TUNC;v20.4;Categorizer-Core, Taxonomy-Engine
+0142;Source Artifact Categorizer v20 Python;Ring 3;Nexus N;Legacy-Categorizer, Source-Grouping, Taxonomy-v20;930;3-7/7-3;SEALED_EX_TUNC;v20.0;Categorizer-v20, Grouping-Engine
+0143;Source Artifact Categorizer Python;Ring 3;Nexus N;Base-Categorizer, Sector-Mapping, Classification;920;3-7/7-3;SEALED_EX_TUNC;v1.0;Categorizer-Base, Sector-Mapper
+0144;System Bin Executive Engine Python;Ring 0;Nexus N;Binary-Engine, 0/1-Truth-State, Bin-Exec;960;0-9/9-0;SEALED_EX_TUNC;v15.0;Binary-Core, Truth-State-Engine
+0145;Wolfram Validation Module Python;Ring 6;Nexus N;Symbolic-Math, Proof-Validation, Wolfram-Bridge;950;6-4/4-6;SEALED_EX_TUNC;v36.0;Wolfram-Verifier, Math-Bridge
+0146;Yggdrasil Coupling Engine Python;Ring 5;Nexus N;Yggdrasil-Kopplung, Gateway-Sync, Föderation;940;5-5/5-5;SEALED_EX_TUNC;v36.0;Yggdrasil-Coupler, Gateway-Sync
+0147;Deca Crew 20-Agents Matrix Python;Ring 5;Nexus N;20-Agenten-Matrix, Quad-20, Executive-Grid;930;5-5/5-5;SEALED_EX_TUNC;v20.0;20-Agent-Grid, Quad-20-Core
+0148;Deca Crew 40-Agents Matrix Python;Ring 5;Nexus N;40-Agenten-Matrix, Quad-Deca, Executive-Grid;960;5-5/5-5;SEALED_EX_TUNC;v36.0;40-Agent-Grid, Quad-Deca-Core
+0149;Eil-Infoblatt 72-Bücher Meta-Matrix PDF;Ring 3;Nexus N;72-Bücher-Analyse, Meta-Matrix, Infoblatt;920;3-7/7-3;SEALED_EX_TUNC;v36.0;Meta-Matrix-Gen, 72-Bücher-Core
+0150;Ergänzungsblatt Kirchenrecht 95 Gesetze PDF;Ring 1;Nexus N;Kirchenrecht, Canones, 95-Gesetze-Ergänzung;910;1-9/9-1;SEALED_EX_TUNC;v36.0;Kirchenrecht-Engine, Canones-Core
+0151;Ergänzungsblatt Rechtsquellen Gesamthandbuch PDF;Ring 1;Nexus N;Rechtsquellen-Ergänzung, Gesamthandbuch-Ref;920;1-9/9-1;SEALED_EX_TUNC;v36.0;Rechtsquellen-Ref, Handbuch-Gen
+0152;Gesamthandbuch 95 Gesetze 70 Forensik PDF;Ring 1;Nexus N;95-Gesetze, 70-Forensik-Bücher, Handbuch-Core;970;1-9/9-1;SEALED_EX_TUNC;v36.0;Gesamthandbuch-Gen, 95G-70F-Core
+0153;Master Dossier 100-Punkte Matrix PDF;Ring 1;Nexus N;100-Punkte-Matrix, Systematic-Breaches, Master-Dossier;980;1-9/9-1;SEALED_EX_TUNC;v36.0;100-Punkte-Gen, Breach-Matrix
+0154;Master Dossier Akte König Kaskade PDF;Ring 1;Nexus N;Akte-König-Kaskade, Ultra-Vires-Ultimatum, 12-Instanzen;990;1-9/9-1;SEALED_EX_TUNC;v36.0;Akte-König-Gen, Kaskaden-Core
+0155;Master Audit 4-Besuch Omega PDF;Ring 1;Nexus N;Master-Audit, 4-Besuch-Protokoll, Omega-Check;940;1-9/9-1;SEALED_EX_TUNC;v36.0;Master-Audit-Gen, 4-Besuch-Core
+0156;Maximale Gedächtnis Matrix MD;Ring 0;Nexus N;Memory-Matrix, WORM-Gedächtnis, 12-Sektoren;970;0-9/9-0;SEALED_EX_TUNC;v1.0;WORM-Memory-v1, 12-Sektoren-Core
+0157;Maximale Gedächtnis Matrix v2 MD;Ring 0;Nexus N;Memory-Matrix-v2, Full-History, WORM-Memory;990;0-9/9-0;SEALED_EX_TUNC;v2.0;WORM-Memory-v2, Full-History-Core
+0158;Matrixen Vergleich Kompendium MD;Ring 1;Nexus N;58-Matrixen-Vergleich, Core-3.6-vs-v15.0, Kompendium;960;1-9/9-1;SEALED_EX_TUNC;v36.0;58-Matrix-Compendium, Comparison-Core
+0159;Prompt Generator Anleitung MD;Ring 3;Nexus N;CLI-Anleitung, Prompt-Repo-Manual, Generator-Doc;930;3-7/7-3;SEALED_EX_TUNC;v36.0;Prompt-Manual-Gen, CLI-Docs
+0160;Notebook Root Master Catalog JSON;Ring 0;Nexus N;Notebook-Root-Catalog, 566-Sources, 41-Artifacts;980;0-9/9-0;SEALED_EX_TUNC;v36.0;Root-Catalog-Gen, 566S-41A-Core
+0161;Root Katalog Master Datenblatt PDF;Ring 3;Nexus N;Printable-Datasheet, WORM-Catalog, Root-Datenblatt;960;3-7/7-3;SEALED_EX_TUNC;v36.0;Datasheet-PDF-Gen, WORM-Catalog-Core
+0162;Rechtsquellen Index Matrix PDF;Ring 1;Nexus N;Legal-Norms-Index, SGB-StGB-VwGO-BGB, Subsumtion;970;1-9/9-1;SEALED_EX_TUNC;v36.0;Legal-Index-Gen, Subsumtion-Core
+0163;Quantum Vault Entities 0000-0100 ZIP;Ring 2;Nexus N;CSV-Archive, 0000-0100-Export, Quantum-Vault;970;2-8/8-2;SEALED_EX_TUNC;v36.0;CSV-Archive-Gen, Quantum-Vault-Core
+0164;Black Six Medical Insight Hub V3 README;Ring 2;Nexus N;Medical-Insight, Hub-V3, README-Doc;910;2-8/8-2;SEALED_EX_TUNC;v3.0;Medical-Hub-Core, Insight-README
+0165;Black Six Portfolio Storyboard PPTX;Ring 3;Nexus N;Portfolio-Storyboard, Presentation-Deck, PPTX-Master;920;3-7/7-3;SEALED_EX_TUNC;v36.0;PPTX-Master-Gen, Storyboard-Core
+0166;Black Six Backup Matrix Kernel Framework FINAL;Ring 0;Nexus N;Kernel-Framework, Backup-Matrix, System-FINAL;980;0-9/9-0;SEALED_EX_TUNC;v36.0;Kernel-Framework-Gen, Backup-Matrix-Core
+0167;BLACK SIX Growth Ledger GL Infinity Consolidated 0005;Ring 0;Nexus N;Growth-Ledger, Infinity-Consolidated, GL-0005;970;0-9/9-0;SEALED_EX_TUNC;v15.0;GL-Infinity-Core, Consolidated-Ledger
+0168;BLACK SIX Growth Ledger GL Omega Infinity Release V15;Ring 0;Nexus N;Growth-Ledger, Omega-Infinity, Release-V15;990;0-9/9-0;SEALED_EX_TUNC;v15.0;GL-Release-V15, Omega-Infinity-Core
+0169;Hauptchat Verlauf Handoff MD;Ring 4;Nexus N;Chat-Handoff, History-Dump, Konsolidierung;940;4-6/6-4;SEALED_EX_TUNC;v36.0;Handoff-Engine, History-Dumper
+0170;Aria App Sprechender KI Assistent MD;Ring 5;Nexus N;Aria-App, Voice-AI, Assistant-Doc;900;5-5/5-5;SEALED_EX_TUNC;v1.0;Aria-Voice-Engine, Assistant-Core
+0171;Omega OS All-in-One Master Growth Ledger GLB AIO 0002;Ring 0;Nexus N;AIO-Growth-Ledger, GLB-AIO-0002, Master-Ledger;960;0-9/9-0;SEALED_EX_TUNC;v2.0;GLB-AIO-0002-Core, Master-Ledger-Gen
+0172;Omega OS All-in-One Master Growth Ledger GLB AIO MAX 0003;Ring 0;Nexus N;AIO-Growth-Ledger, GLB-AIO-MAX-0003, Max-Ledger;980;0-9/9-0;SEALED_EX_TUNC;v3.0;GLB-AIO-MAX-0003-Core, Max-Ledger-Gen
+0173;Omega OS All-in-One Master Growth Ledger GLB AIO MAX 0004;Ring 0;Nexus N;AIO-Growth-Ledger, GLB-AIO-MAX-0004, Max-Ledger-V4;990;0-9/9-0;SEALED_EX_TUNC;v4.0;GLB-AIO-MAX-0004-Core, Max-Ledger-V4-Gen
+0174;Omega OS All-in-One Manus KI Integration ACP v1.2;Ring 5;Nexus N;Manus-KI-Integration, ACP-v1.2, Föderation;950;5-5/5-5;SEALED_EX_TUNC;v1.2;Manus-KI-Core, ACP-v1.2-Engine
+0175;Omega OS Master Growth Ledger GLB MAX 0001;Ring 0;Nexus N;Master-Growth-Ledger, GLB-MAX-0001, Base-Ledger;950;0-9/9-0;SEALED_EX_TUNC;v1.0;GLB-MAX-0001-Core, Base-Ledger-Gen
+0176;Rule 30 Cellular Automaton Text Source;Ring 6;Nexus N;Wolfram-Rule-30, Entropie-Generator, Bitwise-Automaton;930;6-4/4-6;SEALED_EX_TUNC;v15.0;Rule-30-Core, Entropie-Generator
+0177;Tor HS Service Rust Source;Ring 0;Nexus N;Rust-Source, Tor-Hidden-Service, P2P-Security;940;0-9/9-0;SEALED_EX_TUNC;v36.0;Tor-Rust-Core, HS-Service-Gen
+0178;Base85 Rust Source;Ring 0;Nexus N;Rust-Source, Base85-Encoding, Binary-Serialization;920;0-9/9-0;SEALED_EX_TUNC;v36.0;Base85-Core, Encoding-Gen
+0179;Data Encoding Rust Source;Ring 0;Nexus N;Rust-Source, Data-Encoding, Multi-Codec;910;0-9/9-0;SEALED_EX_TUNC;v36.0;Data-Encoding-Core, Codec-Suite
+0180;Open Roberta xNN Einführung PDF;Ring 5;Nexus N;Neural-Networks, xNN-Einführung, Open-Roberta;890;5-5/5-5;SEALED_EX_TUNC;v1.0;xNN-Core, Neural-Net-Gen
+0181;Insektensterben LMU BNE Box PDF;Ring 4;Nexus N;Umwelt-Analyse, BNE-Box, LMU-Studie;850;4-6/6-4;SEALED_EX_TUNC;v1.0;BNE-Box-Core, Umwelt-Analysator
+0182;Zimmerpflanzen Pflegen Botanischer Garten PDF;Ring 4;Nexus N;Botanik-Guide, Pflege-Anleitung, Botanischer-Garten;840;4-6/6-4;SEALED_EX_TUNC;v1.0;Botanik-Core, Pflege-Guide
+0183;Reptilieninfo Wenger Tierschutz PDF;Ring 4;Nexus N;Tierschutz-Info, Reptilien-Haltung, Terraristik;850;4-6/6-4;SEALED_EX_TUNC;v1.0;Tierschutz-Core, Reptilien-Guide
+0184;Leopardgecko Leipzig VetMed PDF;Ring 4;Nexus N;Veterinär-Medizin, Leopardgecko-Pflege, VetMed-Leipzig;860;4-6/6-4;SEALED_EX_TUNC;v1.0;VetMed-Core, Gecko-Pflege
+0185;Sicherheitstipps für Ihr Zuhause VDE PDF;Ring 4;Nexus N;VDE-Sicherheit, Zuhause-Schutz, Elektro-Sicherheit;880;4-6/6-4;SEALED_EX_TUNC;v1.0;VDE-Core, Elektro-Sicherheit
+0186;ADAC ARB 2018 Rechtsschutz PDF;Ring 1;Nexus N;Rechtsschutz-Bedingungen, ARB-2018, ADAC-Regeln;900;1-9/9-1;SEALED_EX_TUNC;v1.0;ADAC-ARB-Core, Rechtsschutz-Rules
+0187;DEVK Rechtsschutz Kundeninfo PDF;Ring 1;Nexus N;Rechtsschutz-Kundeninfo, DEVK-Bedingungen, Police;890;1-9/9-1;SEALED_EX_TUNC;v1.0;DEVK-RS-Core, Kundeninfo-Gen
+0188;BGB Bürgerliches Gesetzbuch PDF;Ring 1;Nexus N;BGB-Gesetzestext, Zivilrecht, Normen-Sammlung;990;1-9/9-1;SEALED_EX_TUNC;v36.0;BGB-Core, Zivilrecht-Normen
+0189;StGB Strafgesetzbuch PDF;Ring 1;Nexus N;StGB-Gesetzestext, Strafrecht, Delikts-Katalog;990;1-9/9-1;SEALED_EX_TUNC;v36.0;StGB-Core, Strafrecht-Normen
+0190;ZPO Zivilprozessordnung PDF;Ring 1;Nexus N;ZPO-Gesetzestext, Prozessrecht, Formvorschriften;980;1-9/9-1;SEALED_EX_TUNC;v36.0;ZPO-Core, Prozessrecht-Normen
+0191;GG Grundgesetz Bundesrepublik Deutschland URL;Ring 1;Nexus N;Grundgesetz, Verfassungsrecht, Art-1-3-13-GG;1000;1-9/9-1;SEALED_EX_TUNC;v36.0;GG-Core, Verfassungs-Normen
+0192;Arbeitsrechtliche Gesetze Hensche URL;Ring 1;Nexus N;Arbeitsrecht, Hensche-Guide, Kündigungsschutz;900;1-9/9-1;SEALED_EX_TUNC;v1.0;Arbeitsrecht-Core, Hensche-Guide
+0193;EU-Recht EUR-Lex URL;Ring 1;Nexus N;EU-Recht, EUR-Lex, Richtlinien-Verordnungen;950;1-9/9-1;SEALED_EX_TUNC;v36.0;EUR-Lex-Core, EU-Recht-Normen
+0194;Fedlex Bundesrecht Schweiz URL;Ring 1;Nexus N;Schweizer-Bundesrecht, Fedlex-Database, CH-Normen;910;1-9/9-1;SEALED_EX_TUNC;v1.0;Fedlex-Core, CH-Normen-Engine
+0195;RIS Rechtsinformationssystem Österreich URL;Ring 1;Nexus N;Österreich-Bundesrecht, RIS-Database, AT-Normen;910;1-9/9-1;SEALED_EX_TUNC;v1.0;RIS-Core, AT-Normen-Engine
+0196;Clean Code Prinzipien IONOS URL;Ring 0;Nexus N;Clean-Code, Refactoring, Software-Architektur;920;0-9/9-0;SEALED_EX_TUNC;v1.0;Clean-Code-Core, Refactoring-Guide
+0197;Cloud Native .NET Microsoft URL;Ring 0;Nexus N;Cloud-Native, Microservices, .NET-Architecture;910;0-9/9-0;SEALED_EX_TUNC;v1.0;Cloud-Native-Core, .NET-Guide
+0198;Systems Engineering Fraunhofer IEM URL;Ring 0;Nexus N;Systems-Engineering, Industrie-4.0, MBSE-Principles;930;0-9/9-0;SEALED_EX_TUNC;v1.0;Systems-Eng-Core, Fraunhofer-Guide
+0199;AI Agent Frameworks 2026 URL;Ring 5;Nexus N;Agent-Frameworks, Autonomous-Agents, Multi-Agent-Systems;940;5-5/5-5;SEALED_EX_TUNC;v36.0;Agent-Framework-Core, Multi-Agent-Guide
+0200;Quantum Vault Full Entities 0101-0200 Archive ZIP;Ring 2;Nexus N;Full-CSV-Archive, 0101-0200-Export, Quantum-Vault;1000;2-8/8-2;SEALED_EX_TUNC;v36.0;Full-Archive-Gen, Quantum-Vault-Core-v2
