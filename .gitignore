@@ -1,7 +1,65 @@
+```
+# ==========================================
+# 🏛️ B6-HYPERKERNEL YGGDRASIL_OS :: .gitignore
+# ==========================================
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python &amp; Runtime Caches
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Notebook intake is local-only; publish only reviewed files under curated/.
-/notebooks/inbox/
-/notebooks/derived/
-/notebooks/curated/**/.ipynb_checkpoints/
+# Node / Frontend Caches &amp; Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+.next/
+.nuxt/
+
+# IDE &amp; Editor Settings
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.vscode/*.log
+.vscode/.history/
+
+# Environment &amp; Credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets.json
+
+# Temporary Files, Logs &amp; Build Dumps
+*.log
+*.tmp
+*.bak
+scratch/
+out/
+tmp/
+
+```
