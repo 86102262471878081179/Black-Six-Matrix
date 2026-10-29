@@ -1,1925 +1,1054 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="theme-color" content="#0b1016" />
-<title>BLACK SIX · Fallübersicht (Deep)</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1016'/%3E%3Ctext x='32' y='43' font-family='system-ui' font-size='26' font-weight='800' fill='%2373d6ad' text-anchor='middle'%3EB6%3C/text%3E%3C/svg%3E" />
-<style>
-/* ============================================================
-   BLACK SIX · Design Tokens
-   ============================================================ */
-:root{
-  --bg:#0b1016; --bg-card:#111923; --bg-sidebar:#0d131b; --bg-input:#141d28;
-  --border:#263342; --border-hi:#37495c;
-  --green:#73d6ad; --green-dim:#4dab85; --green-glow:rgba(115,214,173,.10);
-  --amber:#e8bd69; --red:#e78d8d; --blue:#8bb9e8; --purple:#c2a1dc;
-  --text:#e8edf3; --text-dim:#a6b2bf; --text-mute:#758392;
-  --font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Monaco,Consolas,monospace;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-  --r-sm:7px; --r-md:11px; --r-lg:16px;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{
-  font-family:var(--font);background:var(--bg);color:var(--text);
-  -webkit-font-smoothing:antialiased;overscroll-behavior:none;
-  letter-spacing:.005em;
-}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,textarea,select{font-family:inherit}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:4px}
-::-webkit-scrollbar-track{background:transparent}
-:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cache-Labor</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1016;
+      --panel: #111923;
+      --panel-2: #151f2a;
+      --line: #263443;
+      --text: #e8eef5;
+      --muted: #96a6b7;
+      --green: #8affc1;
+      --blue: #a8caff;
+      --red: #ff7585;
+      --yellow: #ffd580;
+      --radius: 16px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
 
-/* ============================================================
-   App Shell
-   ============================================================ */
-.app{
-  display:flex;height:100vh;height:100dvh;
-  padding:var(--safe-top) 0 var(--safe-bottom) 0;
-  background:
-    radial-gradient(1200px 800px at 15% -10%, rgba(115,214,173,.06), transparent 55%),
-    radial-gradient(900px 600px at 100% 110%, rgba(139,185,232,.05), transparent 55%),
-    var(--bg);
-}
-.sidebar{
-  width:250px;flex-shrink:0;background:var(--bg-sidebar);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;z-index:100;
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-}
-.logo-area{padding:18px 18px 16px;border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-icon{
-  width:42px;height:42px;border-radius:11px;
-  background:linear-gradient(145deg,#131820,#0a0d11);
-  border:1.5px solid var(--green);
-  display:grid;place-items:center;font-weight:800;font-size:15px;
-  color:var(--green);letter-spacing:-.3px;
-}
-.logo-text h1{font-size:13px;font-weight:700;letter-spacing:.7px}
-.logo-text span{display:block;font-size:9px;font-weight:600;letter-spacing:1.15px;color:var(--green);margin-top:3px}
+    * { box-sizing: border-box; }
 
-.nav{flex:1;padding:12px 10px;overflow-y:auto;scrollbar-width:thin}
-.nav-section{font-size:9px;font-weight:700;letter-spacing:1.35px;color:var(--text-mute);padding:16px 14px 6px;text-transform:uppercase}
-.nav-item{
-  display:flex;align-items:center;gap:11px;
-  padding:10px 13px;border-radius:var(--r-sm);
-  color:var(--text-dim);font-size:13px;font-weight:500;
-  cursor:pointer;transition:all .15s;margin-bottom:2px;user-select:none;
-  position:relative;
-}
-.nav-item:hover{background:rgba(255,255,255,.03);color:var(--text)}
-.nav-item.active{background:rgba(115,214,173,.09);color:var(--green);font-weight:600}
-.nav-item.active::before{
-  content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;
-  border-radius:0 3px 3px 0;background:var(--green);
-}
-.nav-icon{width:18px;text-align:center;font-size:14px;opacity:.9}
-.nav-badge{
-  margin-left:auto;background:rgba(115,214,173,.15);color:var(--green);
-  font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;font-family:var(--mono);
-}
-.user-area{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:11px;background:rgba(0,0,0,.2)}
-.avatar{width:36px;height:36px;border-radius:50%;background:#1a2028;border:1.5px solid var(--border-hi);display:grid;place-items:center;font-weight:700;font-size:12px;color:var(--green)}
-.user-info strong{display:block;font-size:12.5px}
-.user-info span{font-size:10.5px;color:var(--text-dim)}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 12% 0%, rgba(138,255,193,.08), transparent 36rem),
+        var(--bg);
+    }
 
-/* ============================================================
-   Main
-   ============================================================ */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.header{
-  height:64px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 26px;background:rgba(11,16,22,.96);
-  backdrop-filter:blur(12px);z-index:50;flex-shrink:0;
-}
-.header-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-.menu-btn{display:none;border:1px solid var(--border);padding:7px 11px;border-radius:9px;font-size:15px;line-height:1}
-.brand h2{font-size:13px;font-weight:700;letter-spacing:.55px}
-.brand p{font-size:11px;color:var(--text-dim);margin-top:1px}
-.search{
-  background:var(--bg-input);border:1px solid var(--border);border-radius:8px;
-  padding:8px 13px 8px 33px;color:var(--text);width:280px;font-size:12.5px;outline:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23758392' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:11px center;transition:border-color .15s;
-}
-.search:focus{border-color:rgba(115,214,173,.65);box-shadow:0 0 0 3px rgba(115,214,173,.1)}
-.header-right{display:flex;align-items:center;gap:10px}
-.hicon{
-  width:33px;height:33px;border-radius:8px;border:1px solid var(--border);
-  color:var(--text-dim);display:grid;place-items:center;font-size:14px;
-  position:relative;transition:all .15s;
-}
-.hicon:hover{color:var(--green);border-color:rgba(115,214,173,.35)}
-.badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(115,214,173,.08);color:#a4e5c9;
-  font-size:9.5px;font-weight:700;letter-spacing:.65px;
-  padding:5px 11px;border-radius:20px;
-  border:1px solid rgba(115,214,173,.2);text-transform:uppercase;
-}
+    button, input, textarea, select { font: inherit; }
 
-.content{flex:1;overflow-y:auto;padding:30px clamp(20px,3vw,42px) 56px;scrollbar-gutter:stable}
-.page-title{font-size:27px;font-weight:700;letter-spacing:-.65px;margin-bottom:6px;color:var(--text)}
-.page-sub{color:var(--text-dim);font-size:13px;margin-bottom:20px;line-height:1.6}
+    .shell {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 34px 0 56px;
+    }
 
-.case-note{
-  display:flex;gap:9px;align-items:flex-start;margin:-3px 0 20px;
-  padding:12px 14px;border:1px solid rgba(232,189,105,.25);
-  border-left:3px solid var(--amber);border-radius:7px;
-  background:rgba(232,189,105,.045);color:var(--text-dim);
-  font-size:11.5px;line-height:1.6;
-}
-.case-note strong{white-space:nowrap;color:#f0ce8e}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,275px),1fr));gap:14px}
-.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:11px}
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+    .eyebrow {
+      margin: 0 0 9px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
 
-.card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);
-  padding:19px;transition:border-color .18s,transform .18s;
-  cursor:pointer;user-select:none;position:relative;
-}
-.card:hover{border-color:#526477;transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.18)}
-.card.static{cursor:default}
-.card.static:hover{transform:none;box-shadow:none}
-.card-icon{
-  width:36px;height:36px;border-radius:9px;
-  background:rgba(115,214,173,.07);border:1px solid rgba(115,214,173,.14);
-  display:grid;place-items:center;font-size:16px;margin-bottom:14px;color:var(--green);
-}
-.card h3{font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.4}
-.card p{font-size:12px;color:var(--text-dim);line-height:1.65;margin-bottom:14px}
-.card-stat{font-size:21px;font-weight:700;color:var(--green);letter-spacing:-.25px;margin-bottom:5px;font-variant-numeric:tabular-nums}
-.card-link{font-size:11.5px;color:#a4e5c9;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 44px);
+      letter-spacing: -.045em;
+    }
 
-.kpi{background:#101720;border:1px solid var(--border);border-radius:9px;padding:14px 15px;display:flex;flex-direction:column;gap:6px}
-.kpi-label{font-size:9px;color:var(--text-mute);font-weight:600;letter-spacing:1px;text-transform:uppercase}
-.kpi-value{font-size:19px;font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
-.kpi-value.ok{color:var(--green)}.kpi-value.warn{color:var(--amber)}.kpi-value.alert{color:var(--red)}.kpi-value.info{color:var(--blue)}
-.kpi-delta{font-size:10px;color:var(--text-mute);line-height:1.5}
+    .intro {
+      max-width: 650px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
-.detail{display:none}
-.detail.active{display:block;animation:fadeIn .28s ease}
-.dashboard.hidden{display:none}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .badge {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      color: var(--green);
+      border: 1px solid rgba(138,255,193,.25);
+      border-radius: 999px;
+      background: rgba(138,255,193,.07);
+      font-size: 12px;
+      font-weight: 700;
+    }
 
-.back-btn{
-  background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--text);
-  padding:9px 15px;border-radius:var(--r-sm);font-size:12.5px;font-weight:500;
-  margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;transition:all .15s;
-}
-.back-btn:hover{border-color:rgba(115,214,173,.4);color:var(--green);background:rgba(115,214,173,.05)}
-.back-btn.primary{background:rgba(115,214,173,.09);border-color:rgba(115,214,173,.3);color:#a4e5c9}
-.back-btn.primary:hover{background:rgba(115,214,173,.15)}
-.back-btn.ghost{background:transparent;color:var(--text-dim)}
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+      gap: 18px;
+      align-items: start;
+    }
 
-.table{width:100%;border-collapse:collapse;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:12px}
-.table th{text-align:left;padding:11px 14px;background:#0e151e;color:var(--text-dim);font-weight:600;font-size:9px;letter-spacing:.9px;text-transform:uppercase;border-bottom:1px solid var(--border)}
-.table td{padding:11px 14px;border-bottom:1px solid var(--border);color:#dbe2e9;vertical-align:top;line-height:1.55}
-.table tr:last-child td{border-bottom:none}
-.table tr:hover td{background:rgba(255,255,255,.015)}
-.table tr.clickable{cursor:pointer}
-.table tr.clickable:hover td{background:rgba(115,214,173,.045)}
+    .panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(150deg, rgba(21,31,42,.96), rgba(15,22,31,.96));
+      box-shadow: 0 14px 40px rgba(0,0,0,.18);
+    }
 
-.tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.35px;padding:3px 8px;border-radius:5px;text-transform:uppercase;line-height:1.4;white-space:nowrap}
-.tag.ok{background:rgba(115,214,173,.1);color:#a4e5c9}
-.tag.warn{background:rgba(232,189,105,.12);color:#f0ce8e}
-.tag.alert{background:rgba(231,141,141,.12);color:#f0aaaa}
-.tag.info{background:rgba(139,185,232,.12);color:#b1d0f1}
-.tag.purple{background:rgba(194,161,220,.13);color:#d6bfe9}
-.tag.mute{background:rgba(117,131,146,.13);color:var(--text-dim)}
+    .panel h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -.02em;
+    }
 
-.field{
-  width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;
-  color:var(--text);padding:11px 13px;font-size:13px;resize:vertical;outline:none;
-  transition:border-color .15s;
-}
-.field:focus{border-color:rgba(115,214,173,.65);box-shadow:0 0 0 3px rgba(115,214,173,.1)}
-select.field{cursor:pointer}
-.toolbar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+    .panel-note {
+      margin: 7px 0 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
 
-.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
-.filter-input{
-  flex:1;min-width:180px;background:var(--bg-input);border:1px solid var(--border);
-  border-radius:7px;padding:8px 12px;font-size:12.5px;color:var(--text);outline:none;
-}
-.filter-input:focus{border-color:rgba(115,214,173,.5)}
-.chip{
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  padding:5px 11px;border-radius:20px;font-size:11px;color:var(--text-dim);
-  cursor:pointer;transition:all .15s;user-select:none;
-}
-.chip:hover{border-color:var(--border-hi);color:var(--text)}
-.chip.active{background:rgba(115,214,173,.14);border-color:rgba(115,214,173,.4);color:#a4e5c9;font-weight:600}
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      color: #c5d0dc;
+      font-size: 12px;
+      font-weight: 650;
+    }
 
-.befund-item{padding:10px 12px;background:rgba(0,0,0,.28);border-radius:8px;border-left:3px solid var(--amber);margin-bottom:7px}
-.befund-item.hart{border-left-color:var(--red)}
-.befund-item .regel{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:4px;letter-spacing:.3px}
-.befund-item .stelle{font-size:12.5px;color:var(--text);word-break:break-word;margin-bottom:3px}
-.befund-item .hinweis{font-size:11.5px;color:var(--text-dim)}
+    input, textarea, select {
+      width: 100%;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      outline: none;
+      background: #0c131b;
+    }
 
-.section-h{font-size:15px;font-weight:700;margin:26px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.section-h .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
-.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--border);padding:3px 9px;border-radius:20px;font-size:11px;color:var(--text-dim);font-family:var(--mono)}
+    input, select { min-height: 42px; padding: 0 12px; }
+    textarea { min-height: 76px; padding: 11px 12px; resize: vertical; }
 
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:90}
-.overlay.show{display:block}
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(138,255,193,.55);
+      box-shadow: 0 0 0 3px rgba(138,255,193,.08);
+    }
 
-/* Modal */
-.modal-bg{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
-  backdrop-filter:blur(8px);z-index:200;
-  padding:40px 20px;overflow-y:auto;
-}
-.modal-bg.show{display:block}
-.modal{
-  max-width:720px;margin:40px auto;
-  background:var(--bg-card);border:1px solid var(--border-hi);
-  border-radius:var(--r-lg);padding:28px;
-  box-shadow:0 24px 80px rgba(0,0,0,.6);
-  animation:modalIn .22s ease;
-}
-@keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
-.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
-.modal-head h3{font-size:18px;font-weight:700;letter-spacing:-.3px;line-height:1.3}
-.modal-close{
-  background:rgba(255,255,255,.05);border:1px solid var(--border);
-  width:32px;height:32px;border-radius:8px;color:var(--text-dim);
-  display:grid;place-items:center;font-size:16px;flex-shrink:0;
-}
-.modal-close:hover{color:var(--red);border-color:rgba(231,141,141,.4)}
-.modal-body{font-size:13.5px;line-height:1.7;color:var(--text)}
-.modal-body .row{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
-.modal-body .row:last-child{border-bottom:none}
-.modal-body .row-label{width:130px;flex-shrink:0;font-size:11px;color:var(--text-mute);font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding-top:3px}
-.modal-body .row-value{flex:1;color:var(--text)}
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-/* Heatmap */
-.heatmap{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:12px}
-.heat-cell{
-  aspect-ratio:1;border-radius:6px;background:rgba(255,255,255,.03);
-  display:grid;place-items:center;font-size:11px;font-weight:700;
-  color:var(--text-dim);position:relative;cursor:help;
-  border:1px solid rgba(255,255,255,.04);
-}
-.heat-cell[data-level="1"]{background:rgba(115,214,173,.15);color:#a4e5c9}
-.heat-cell[data-level="2"]{background:rgba(232,189,105,.18);color:#f0ce8e}
-.heat-cell[data-level="3"]{background:rgba(232,189,105,.3);color:#f8dca8}
-.heat-cell[data-level="4"]{background:rgba(231,141,141,.28);color:#f0aaaa}
-.heat-cell[data-level="5"]{background:rgba(231,141,141,.5);color:#ffd6d6}
+    .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 15px;
+    }
 
-/* Timeline */
-.timeline{position:relative;padding:16px 0;margin-top:12px}
-.timeline svg{width:100%;height:auto;display:block}
+    .check-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: var(--muted);
+      font-weight: 500;
+    }
 
-/* Stat bars */
-.stat-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
-.stat-label{width:130px;flex-shrink:0;font-size:11.5px;color:var(--text-dim);text-align:right}
-.stat-bar{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
-.stat-bar>div{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));transition:width .4s}
-.stat-count{width:44px;flex-shrink:0;font-family:var(--mono);font-size:11.5px;color:var(--text);text-align:right}
+    .check-row input { width: auto; min-height: 0; accent-color: var(--green); }
 
-/* Progress checkbox */
-.prog-cell{width:34px;text-align:center}
-.prog-check{
-  width:18px;height:18px;border-radius:5px;background:rgba(255,255,255,.04);
-  border:1.5px solid var(--border-hi);display:inline-grid;place-items:center;
-  cursor:pointer;transition:all .15s;
-}
-.prog-check:hover{border-color:var(--green)}
-.prog-check.done{background:var(--green);border-color:var(--green)}
-.prog-check.done::after{content:'✓';color:#0b1016;font-size:12px;font-weight:800}
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 19px;
+    }
 
-/* Keyboard overlay */
-.kbd-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
-  backdrop-filter:blur(8px);z-index:300;padding:40px 20px;overflow-y:auto;
-}
-.kbd-overlay.show{display:block}
-.kbd-modal{
-  max-width:520px;margin:40px auto;background:var(--bg-card);
-  border:1px solid var(--border-hi);border-radius:var(--r-lg);padding:28px;
-}
-.kbd-modal h3{margin-bottom:16px;font-size:16px}
-.kbd-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
-.kbd-row:last-child{border-bottom:none}
-.kbd{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--border-hi);padding:2px 8px;border-radius:5px;font-size:11.5px}
+    button {
+      min-height: 40px;
+      padding: 0 14px;
+      color: #0a1410;
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      background: var(--green);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 750;
+      transition: transform .15s ease, filter .15s ease;
+    }
 
-/* Footer note */
-.foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-mute);line-height:1.6;font-style:italic}
+    button:hover { transform: translateY(-1px); filter: brightness(1.05); }
 
-/* Mobile */
-@media(max-width:860px){
-  .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:24px 0 60px rgba(0,0,0,.6);width:min(290px,86vw)}
-  .sidebar.open{transform:translateX(0)}
-  .menu-btn{display:inline-flex}
-  .brand p{display:none}
-  .search{width:100%}
-  .header{padding:0 14px;gap:8px}
-  .header-right .badge{display:none}
-  .content{padding:22px 15px 48px}
-  .grid{grid-template-columns:1fr;gap:10px}
-  .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid-2{grid-template-columns:1fr}
-  .page-title{font-size:23px}
-  .case-note{display:block}
-  .case-note strong{display:block;margin-bottom:3px}
-  .modal{padding:20px;margin:10px auto}
-  .modal-body .row{flex-direction:column;gap:4px}
-  .modal-body .row-label{width:auto}
-  .stat-label{width:90px;font-size:10.5px}
-}
+    button.secondary {
+      color: var(--text);
+      border-color: var(--line);
+      background: #17222e;
+    }
 
-/* Print */
-@media print{
-  @page{size:A4;margin:16mm 14mm}
-  body{background:#fff !important;color:#000 !important;overflow:visible;height:auto}
-  .sidebar,.header,.back-btn,.toolbar,.filter-bar,.overlay,.modal-bg,.kbd-overlay,.hicon,.badge{display:none !important}
-  .app{display:block;height:auto;padding:0;background:#fff !important}
-  .content{overflow:visible;height:auto;padding:0}
-  .card,.kpi,.table{border-color:#999 !important;background:#fff !important;color:#000 !important}
-  .card h3,.card p,.card-stat,.kpi-value,.kpi-label,.kpi-delta,.page-title,.page-sub,.table td,.table th{color:#000 !important}
-  .tag{border:1px solid #666 !important;color:#000 !important;background:#eee !important}
-  .page-title{font-size:16pt;border-bottom:2px solid #000;padding-bottom:6pt}
-  .section-h{page-break-after:avoid;border-bottom:1px solid #666}
-  tr{page-break-inside:avoid}
-}
-</style>
+    button.tertiary {
+      color: var(--muted);
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .result {
+      min-height: 116px;
+      margin-top: 18px;
+      padding: 14px;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      color: #cbd8e4;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #0b1219;
+      font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .stat strong { display: block; font-size: 20px; }
+    .stat span { color: var(--muted); font-size: 11px; }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .step {
+      min-height: 112px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .step-number {
+      display: inline-grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      color: var(--green);
+      border-radius: 7px;
+      background: rgba(138,255,193,.1);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .step h3 { margin: 10px 0 5px; font-size: 12px; }
+    .step p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    .cases { display: grid; gap: 10px; }
+
+    .case {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .case strong { display: block; font-size: 12px; }
+    .case span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+
+    .status {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      color: var(--muted);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .status.pass { color: var(--green); background: rgba(138,255,193,.1); }
+    .status.fail { color: var(--red); background: rgba(255,117,133,.1); }
+
+    .test-summary {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .key {
+      margin-top: 14px;
+      padding: 12px;
+      overflow-wrap: anywhere;
+      color: var(--blue);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0b1219;
+      font: 11px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    @media (max-width: 850px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .shell { width: min(100% - 24px, 1180px); padding-top: 24px; }
+      header { display: block; }
+      .badge { display: inline-block; margin-top: 15px; }
+      .panel { padding: 16px; }
+      .pipeline { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
 </head>
+
 <body>
-
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="logo-area">
-      <div class="logo">
-        <div class="logo-icon">B6</div>
-        <div class="logo-text">
-          <h1>BLACK SIX</h1>
-          <span>FALLARBEITSPLATTFORM</span>
-        </div>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">Cache-Demo · lokale Tests</p>
+        <h1>Cache-Labor</h1>
+        <p class="intro">
+          Prüfe, wie Eingaben und Modelloptionen den Cache-Schlüssel beeinflussen.
+          Cache-Treffer und gespeicherte Werte werden als unabhängige Kopien behandelt.
+        </p>
       </div>
-    </div>
-
-    <nav class="nav">
-      <div class="nav-section">Übersicht</div>
-      <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard',this)"><span class="nav-icon">▦</span>Dashboard</div>
-      <div class="nav-item" data-page="akte" onclick="showPage('akte',this)"><span class="nav-icon">⚖</span>Fall König</div>
-      <div class="nav-item" data-page="ruegen" onclick="showPage('ruegen',this)"><span class="nav-icon">⚠</span>Rügen-Matrix<span class="nav-badge" id="nav-ruegen-count">34</span></div>
-      <div class="nav-item" data-page="fehlermatrix" onclick="showPage('fehlermatrix',this)"><span class="nav-icon">∑</span>Prüfmatrix</div>
-
-      <div class="nav-section">Analyse</div>
-      <div class="nav-item" data-page="chronologie" onclick="showPage('chronologie',this)"><span class="nav-icon">◷</span>Chronologie</div>
-      <div class="nav-item" data-page="strategie" onclick="showPage('strategie',this)"><span class="nav-icon">◎</span>Strategie-Karten</div>
-      <div class="nav-item" data-page="risiko" onclick="showPage('risiko',this)"><span class="nav-icon">🛡</span>Risiko-Assessment</div>
-      <div class="nav-item" data-page="research" onclick="showPage('research',this)"><span class="nav-icon">◬</span>Legal Research</div>
-
-      <div class="nav-section">Forensik</div>
-      <div class="nav-item" data-page="richter" onclick="showPage('richter',this)"><span class="nav-icon">◈</span>Richter-Validator</div>
-      <div class="nav-item" data-page="signatur" onclick="showPage('signatur',this)"><span class="nav-icon">✎</span>Signatur-Check</div>
-      <div class="nav-item" data-page="befunde" onclick="showPage('befunde',this)"><span class="nav-icon">⌸</span>Befund-Archiv<span class="nav-badge" id="nav-befund-count">0</span></div>
-
-      <div class="nav-section">Belege</div>
-      <div class="nav-item" data-page="belege" onclick="showPage('belege',this)"><span class="nav-icon">📁</span>Beweis-Tresor</div>
-      <div class="nav-item" data-page="xjustiz" onclick="showPage('xjustiz',this)"><span class="nav-icon">⇄</span>XJustiz Top 100</div>
-      <div class="nav-item" data-page="core" onclick="showPage('core',this)"><span class="nav-icon">◇</span>Core 11</div>
-
-      <div class="nav-section">System</div>
-      <div class="nav-item" data-page="stats" onclick="showPage('stats',this)"><span class="nav-icon">◫</span>Statistik</div>
-      <div class="nav-item" data-page="advisor" onclick="showPage('advisor',this)"><span class="nav-icon">◆</span>AI Advisor</div>
-      <div class="nav-item" data-page="settings" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span>Settings</div>
-    </nav>
-
-    <div class="user-area">
-      <div class="avatar">TK</div>
-      <div class="user-info"><strong>Thomas König</strong><span>Projektverantwortlich</span></div>
-    </div>
-  </aside>
-
-  <div class="main">
-    <header class="header">
-      <div class="header-left">
-        <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menü">☰</button>
-        <div class="brand">
-          <h2>BLACK SIX · FALLÜBERSICHT</h2>
-          <p>Strukturierte Fallarbeit. Nachvollziehbar dokumentiert.</p>
-        </div>
-        <input type="text" class="search" id="globalSearch" placeholder="Global suchen · Rügen, Chronologie, Befunde…" />
-      </div>
-      <div class="header-right">
-        <button class="hicon" title="Tastenkürzel (?)" onclick="toggleKbd()">⌘</button>
-        <button class="hicon" title="Drucken" onclick="window.print()">🖨</button>
-        <div class="badge">Arbeitsbereich</div>
-      </div>
+      <span class="badge">Einheitliche Demo-Seite</span>
     </header>
 
-    <div class="content" id="content">
+    <div class="grid">
+      <section class="panel">
+        <h2>Anfrage konfigurieren</h2>
+        <p class="panel-note">
+          Ändere einen Parameter und führe die Anfrage erneut aus, um einen neuen Cache-Schlüssel zu erzeugen.
+        </p>
 
-      <!-- ============ DASHBOARD ============ -->
-      <div id="dashboard" class="dashboard">
-        <h2 class="page-title">Dashboard</h2>
-        <p class="page-sub">Fallübersicht · Fall König · VG Minden 11 K 3272/26</p>
-        <aside class="case-note"><strong>Vertrauliche Arbeitsunterlage</strong><span>Angaben beruhen auf den hinterlegten Falldaten und sind hier nicht unabhängig verifiziert. Prüfhinweise sind keine gerichtlichen Feststellungen oder Rechtsberatung. Kein Ersatz für anwaltliche Prüfung.</span></aside>
+        <label for="prompt">Prompt</label>
+        <textarea id="prompt">Fasse den Fall neutral zusammen.</textarea>
 
-        <div class="grid">
-          <div class="card" onclick="showPage('akte')">
-            <div class="card-icon">⚖</div>
-            <h3>Fall König</h3>
-            <p>Dokumentenübersicht: 132 Ereignisse, 47 Dokumente und 4 Beschlüsse.</p>
-            <div class="card-stat">132</div>
-            <div class="card-link">Öffnen →</div>
+        <label for="context">Kontext</label>
+        <textarea id="context">Fall A: Die betroffene Person meldet eine Verzögerung.</textarea>
+
+        <div class="two-col">
+          <div>
+            <label for="language">Sprache</label>
+            <select id="language">
+              <option value="de">Deutsch</option>
+              <option value="en">Englisch</option>
+              <option value="fr">Französisch</option>
+            </select>
           </div>
-          <div class="card" onclick="showPage('ruegen')">
-            <div class="card-icon">⚠</div>
-            <h3>Rügen-Matrix</h3>
-            <p>34 dokumentierte Prüfpunkte · Norm, Präzedenz, Langtext.</p>
-            <div class="card-stat" id="card-ruegen-stat">34</div>
-            <div class="card-link">Ansehen →</div>
+          <div>
+            <label for="model">Modell</label>
+            <input id="model" value="demo-model">
           </div>
-          <div class="card" onclick="showPage('fehlermatrix')">
-            <div class="card-icon">∑</div>
-            <h3>Prüfmatrix</h3>
-            <p>447 Positionen je Person · 14 Kategorien · strukturierte Prüfhinweise.</p>
-            <div class="card-stat">894</div>
-            <div class="card-link">Analysieren →</div>
+          <div>
+            <label for="maxTokens">Max. Tokens</label>
+            <input id="maxTokens" type="number" min="1" value="500">
           </div>
-          <div class="card" onclick="window.location.href='/verhandlung.html'">
-            <div class="card-icon">🖨</div>
-            <h3>Verhandlungs-Mappe</h3>
-            <p>Druckoptimierte Akte für VG Minden · 34 Rügen · Chronologie · A4.</p>
-            <div class="card-link">Öffnen →</div>
+          <div>
+            <label for="depth">Tiefe</label>
+            <input id="depth" type="number" min="0" value="2">
           </div>
-          <div class="card" onclick="showPage('richter')">
-            <div class="card-icon">◈</div>
-            <h3>Richter-Validator</h3>
-            <p>Deterministische Prüfung entlang von 5 Achsen.</p>
-            <div class="card-stat">5×</div>
-            <div class="card-link">Prüfen →</div>
+          <div>
+            <label for="entropy">Entropie</label>
+            <input id="entropy" type="number" min="0" max="2" step="0.1" value="0.4">
           </div>
-          <div class="card" onclick="showPage('xjustiz')">
-            <div class="card-icon">⇄</div>
-            <h3>XJustiz &amp; XÖV</h3>
-            <p>Werkzeuge, Standards, Komponenten im ERV-Ökosystem.</p>
-            <div class="card-stat">100</div>
-            <div class="card-link">Erkunden →</div>
-          </div>
-          <div class="card" onclick="showPage('belege')">
-            <div class="card-icon">📁</div>
-            <h3>Beweis-Tresor</h3>
-            <p>Integritätsmerkmale und Hash-Referenzen.</p>
-            <div class="card-stat">8.442</div>
-            <div class="card-link">Zugreifen →</div>
+          <div>
+            <label for="responseFormat">Antwortformat</label>
+            <select id="responseFormat">
+              <option value="text">Text</option>
+              <option value="json">JSON</option>
+            </select>
           </div>
         </div>
 
-        <div class="grid-3" style="margin-top:22px">
-          <div class="kpi"><span class="kpi-label">Bearbeitungsstand</span><span class="kpi-value ok">4.1 / 5</span><span class="kpi-delta">Ziel 5.0</span></div>
-          <div class="kpi"><span class="kpi-label">Signaturhinweise</span><span class="kpi-value alert">5×</span><span class="kpi-delta">Signaturprüfung offen</span></div>
-          <div class="kpi"><span class="kpi-label">Prüfpunkte</span><span class="kpi-value alert">894</span><span class="kpi-delta">447 × 2 Subjekte</span></div>
-          <div class="kpi"><span class="kpi-label">Normverweise</span><span class="kpi-value ok">1.072</span><span class="kpi-delta">Zuordnung prüfen</span></div>
-          <div class="kpi"><span class="kpi-label">Medizinischer Sachverhalt</span><span class="kpi-value alert">42 T</span><span class="kpi-delta">§ 224 StGB</span></div>
-          <div class="kpi"><span class="kpi-label">Geltend gemachter Betrag</span><span class="kpi-value info">19.800.400 €</span><span class="kpi-delta">Berechnung s. Prüfmatrix</span></div>
+        <label for="systemPrompt">System-Prompt</label>
+        <textarea id="systemPrompt">Antworte sachlich und ohne echte Namen.</textarea>
+
+        <div class="check-row">
+          <label><input id="applyVeto" type="checkbox"> Veto anwenden</label>
+          <label><input id="useCache" type="checkbox" checked> Cache verwenden</label>
         </div>
 
-        <div class="section-h"><span class="dot"></span>Risiko-Heatmap <span style="font-size:11px;color:var(--text-mute);font-weight:400;margin-left:8px">Schwere × Häufigkeit · 34 Rügen</span></div>
-        <div class="grid-2">
-          <div class="card static">
-            <h3 style="font-size:14px;margin-bottom:10px">Verteilung</h3>
-            <div class="heatmap" id="heatmap"></div>
+        <div class="actions">
+          <button id="runButton">Anfrage ausführen</button>
+          <button id="mutateButton" class="secondary">Ergebnis mutieren</button>
+          <button id="clearButton" class="tertiary">Cache leeren</button>
+        </div>
+
+        <div class="result" id="result" aria-live="polite">Noch keine Anfrage ausgeführt.</div>
+        <div class="key" id="keyDisplay">Cache-Schlüssel erscheint hier.</div>
+
+        <div class="stats">
+          <div class="stat"><strong id="hitCount">0</strong><span>Treffer</span></div>
+          <div class="stat"><strong id="missCount">0</strong><span>Fehlschläge</span></div>
+          <div class="stat"><strong id="entryCount">0</strong><span>Einträge</span></div>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel">
+          <h2>Cache-Ablauf</h2>
+          <p class="panel-note">Jeder Schritt verwendet dieselbe normalisierte Eingabe.</p>
+          <div class="pipeline">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Eingaben</h3>
+              <p>Prompt, Kontext und Optionen sammeln.</p>
+            </article>
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Schlüssel</h3>
+              <p>Alle relevanten Parameter sortiert abbilden.</p>
+            </article>
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Nachschlagen</h3>
+              <p>Treffer als unabhängige Kopie zurückgeben.</p>
+            </article>
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Speichern</h3>
+              <p>Neue Ergebnisse ebenfalls kopieren.</p>
+            </article>
           </div>
-          <div class="card static">
-            <h3 style="font-size:14px;margin-bottom:10px">Nach Normbereich</h3>
-            <div id="dash-norm-bars" style="margin-top:8px"></div>
+        </section>
+
+        <section class="panel" style="margin-top:18px">
+          <h2>Automatische Tests</h2>
+          <p class="panel-note">
+            Prüft, dass Änderungen an Ergebnisparametern unterschiedliche Schlüssel erzeugen
+            und Cache-Werte nicht durch Mutation verändert werden.
+          </p>
+          <div class="actions" style="margin-top:0">
+            <button id="testButton" class="secondary">Tests ausführen</button>
           </div>
-        </div>
+          <div class="cases" id="testCases" style="margin-top:14px"></div>
+          <div class="test-summary" id="testSummary">Tests noch nicht ausgeführt.</div>
+        </section>
 
-        <p class="foot-note">Berechnungen, Zuordnungen und Statuskennzeichnungen dienen ausschließlich der Arbeitsorganisation. Sie ersetzen keine juristische Prüfung und keine gerichtliche Feststellung.</p>
-      </div>
-
-      <!-- ============ AKTE ============ -->
-      <div id="akte" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Fall König</h2>
-        <p class="page-sub">Kerndokumente · 47 Hauptdokumente · Stand 01.10.2026</p>
-        <div class="grid">
-          <div class="card static"><h3>Durchsuchungsbeschluss</h3><p>AG Düsseldorf · 152 Gs 648/26 · 06.05.2026</p><span class="tag alert">Zu prüfen</span></div>
-          <div class="card static"><h3>Sicherstellungsprotokoll</h3><p>PP Bielefeld · 07.05.2026 · Blatt 1–3</p><span class="tag alert">Zeitangabe prüfen</span></div>
-          <div class="card static"><h3>Belehrung</h3><p>§ 31 BtMG statt § 308 StGB · Blatt 5–6</p><span class="tag alert">Falsch</span></div>
-          <div class="card static"><h3>Nichtabhilfebeschluss</h3><p>AG Düsseldorf · Hönick · 13.08.2026</p><span class="tag warn">Prüfstatus offen</span></div>
-          <div class="card static"><h3>LG-Beschwerde</h3><p>LG Düsseldorf · 011 Qs-52 Js 23/26 · 14.09.2026</p><span class="tag alert">Zuordnung prüfen</span></div>
-          <div class="card static"><h3>Klageerwiderung</h3><p>PP Bielefeld · 21.09.2026</p><span class="tag alert">5× Signaturprüfung offen</span></div>
-        </div>
-      </div>
-
-      <!-- ============ RÜGEN ============ -->
-      <div id="ruegen" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Rügen-Matrix</h2>
-        <p class="page-sub">34 dokumentierte Prüfpunkte · Klick öffnet Detail · Fortschritt lokal gespeichert</p>
-
-        <div class="filter-bar">
-          <input type="text" class="filter-input" id="ruegen-filter" placeholder="Filtern nach Kurztext, Norm, Präzedenz…" oninput="applyRuegenFilter()">
-          <span class="chip active" data-filter="all" onclick="setRuegenChip(this,'all')">Alle</span>
-          <span class="chip" data-filter="alert" onclick="setRuegenChip(this,'alert')">Strafbar/Kritisch</span>
-          <span class="chip" data-filter="warn" onclick="setRuegenChip(this,'warn')">Offen</span>
-          <span class="chip" data-filter="ok" onclick="setRuegenChip(this,'ok')">Belegt</span>
-          <span class="chip" data-filter="open" onclick="setRuegenChip(this,'open')">Nur unerledigt</span>
-        </div>
-
-        <table class="table">
-          <thead><tr><th style="width:34px">✓</th><th style="width:40px">#</th><th>Kurztext</th><th>Norm</th><th>Präzedenz</th><th>Status</th></tr></thead>
-          <tbody id="ruegen-body"></tbody>
-        </table>
-
-        <p class="foot-note">Klick auf eine Zeile öffnet Langtext, Belegstelle und Einordnung. Statuskennzeichnungen sind Arbeitsvermerke, keine Rechtsurteile.</p>
-      </div>
-
-      <!-- ============ FEHLERMATRIX ============ -->
-      <div id="fehlermatrix" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Prüfmatrix</h2>
-        <p class="page-sub">447 Positionen je Person · Fallzuordnung und Berechnung gesondert verifizieren</p>
-
-        <div class="kpi" style="margin-bottom:16px">
-          <span class="kpi-label">Geltend gemachter Betrag (Arbeitsannahme)</span>
-          <span class="kpi-value alert" style="font-size:26px">19.800.400,00 EUR</span>
-          <span class="kpi-delta">Berechnungsgrundlage: 894 Prüfpunkte × 22.200 € Durchschnittsannahme = 19.846.800 € → gerundet. Annahme prüfen.</span>
-        </div>
-
-        <table class="table">
-          <thead><tr><th>Vektor</th><th>Gegenstand</th><th>Prüfpunkte</th><th>Normen</th><th>Schwere</th></tr></thead>
-          <tbody id="fehler-body"></tbody>
-        </table>
-
-        <div class="section-h" style="margin-top:28px"><span class="dot"></span>Prozessuale Kerndaten</div>
-        <div class="grid">
-          <div class="card static"><h3 style="font-size:14px">1 · Zwillings-Verdopplung</h3><p style="margin-bottom:0">447 × 2 = 894. Thomas und Tina König sind eigenständige Subjekte.</p></div>
-          <div class="card static"><h3 style="font-size:14px">2 · Formelle Auffälligkeit</h3><p style="margin-bottom:0">Fehlende Richtersignatur Blatt 3 (§ 35 StPO); isolierter Beglaubigungsstempel Blatt 4.</p></div>
-          <div class="card static"><h3 style="font-size:14px">3 · ERV-Kollaps</h3><p style="margin-bottom:0">5× Signaturprüfung offen · amtlicher Prüfvermerk des VG Minden.</p></div>
-          <div class="card static"><h3 style="font-size:14px">4 · Medizinisches Delikt</h3><p style="margin-bottom:0">70 Min. Insulin-Verweigerung (BZ &gt; 260–600 mg/dL); CGM-Monitor konfisziert.</p></div>
-          <div class="card static"><h3 style="font-size:14px">5 · zeitlicher Zusammenhang</h3><p style="margin-bottom:0">Jugendamtsmeldung (§ 8a SGB VIII) 3 Tage nach VG-Klageerhebung.</p></div>
-        </div>
-      </div>
-
-      <!-- ============ CHRONOLOGIE ============ -->
-      <div id="chronologie" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Chronologie</h2>
-        <p class="page-sub">06.05.2026 – 01.10.2026 · lückenlos · Blatt für Blatt</p>
-
-        <div class="card static" style="margin-bottom:18px">
-          <h3 style="font-size:14px;margin-bottom:10px">Verlauf</h3>
-          <div class="timeline" id="timeline-svg"></div>
-        </div>
-
-        <div class="filter-bar">
-          <input type="text" class="filter-input" id="chrono-filter" placeholder="Filtern nach Datum, Ereignis, Az.…" oninput="applyChronoFilter()">
-        </div>
-
-        <table class="table">
-          <thead><tr><th style="width:110px">Datum</th><th>Ereignis</th><th>Az. / Beteiligte</th></tr></thead>
-          <tbody id="chrono-body"></tbody>
-        </table>
-      </div>
-
-      <!-- ============ STRATEGIE ============ -->
-      <div id="strategie" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Strategie-Karten</h2>
-        <p class="page-sub">Angriffs- und Abwehrvektoren · 6 Ebenen</p>
-        <div class="grid">
-          <div class="card static"><h3>Ebene 1 — Formfehler</h3><p>5× Signaturprüfung offen · Zuordnung prüfen · Zeitangabe prüfen · Blanko-Urkunden.</p><span class="tag alert">Sofort</span></div>
-          <div class="card static"><h3>Ebene 2 — Grundrechte</h3><p>Art. 1 · 2 II · 3 · 6 · 13 · 19 IV · 103 GG · EMRK · GRCh · UN-KRK.</p><span class="tag ok">Belegt</span></div>
-          <div class="card static"><h3>Ebene 3 — Strafbarkeit</h3><p>§ 340 · 240 · 241 · 344 · 348 · 258a StGB.</p><span class="tag alert">Persönlich</span></div>
-          <div class="card static"><h3>Ebene 4 — Amtshaftung</h3><p>§ 839 BGB i.V.m. Art. 34 GG · Schmerzensgeld · Schadensersatz.</p><span class="tag warn">Fiskalisch</span></div>
-          <div class="card static"><h3>Ebene 5 — Europa</h3><p>EGMR · EuGH · Art. 3 / 6 / 8 / 13 EMRK.</p><span class="tag info">Instanz</span></div>
-          <div class="card static"><h3>Ebene 6 — Kirche</h3><p>§ 67 VII VwGO · Art. 140 GG · § 53 StPO · Beistand.</p><span class="tag ok">Aktiv</span></div>
-        </div>
-      </div>
-
-      <!-- ============ RISIKO ============ -->
-      <div id="risiko" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Risiko-Assessment</h2>
-        <p class="page-sub">7 beobachtete Vorgänge mit erhöhtem Prüfbedarf</p>
-        <div class="grid-3">
-          <div class="kpi"><span class="kpi-label">Behördenverhalten</span><span class="kpi-value alert">Erhöht</span><span class="kpi-delta">zeitlicher Zusammenhang 04.09.2026</span></div>
-          <div class="kpi"><span class="kpi-label">Kindeswohlgefährdung</span><span class="kpi-value alert">3 Besuche</span><span class="kpi-delta">seit 04.09.2026</span></div>
-          <div class="kpi"><span class="kpi-label">Frist-Risiko</span><span class="kpi-value warn">14 Tage</span><span class="kpi-delta">VG Minden</span></div>
-          <div class="kpi"><span class="kpi-label">Anwalts-Verfügbarkeit</span><span class="kpi-value ok">Aktiv</span><span class="kpi-delta">Az. 1177/26</span></div>
-        </div>
-      </div>
-
-      <!-- ============ RESEARCH ============ -->
-      <div id="research" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Legal Research</h2>
-        <p class="page-sub">Leitentscheidungen · Präzedenzfälle · Normen</p>
-        <table class="table">
-          <thead><tr><th>Norm</th><th>Leitentscheidung</th><th>Thema</th></tr></thead>
-          <tbody>
-            <tr><td>Art. 13 GG</td><td>BVerfG 2 BvR 2200/10</td><td>Richtervorbehalt Durchsuchung</td></tr>
-            <tr><td>§ 105 StPO</td><td>BVerfG 2 BvR 2187/01</td><td>Bestimmtheitsgebot</td></tr>
-            <tr><td>§ 136 StPO</td><td>BGH 5 StR 537/94</td><td>Blanko-Belehrung</td></tr>
-            <tr><td>§ 136a StPO</td><td>BVerfG 2 BvR 1502/03</td><td>Kind als Druckmittel</td></tr>
-            <tr><td>§ 340 StGB</td><td>BGH 4 StR 233/14</td><td>Körperverletzung im Amt</td></tr>
-            <tr><td>§ 348 StGB</td><td>OLG Karlsruhe 2 Ws 44/14</td><td>Falschbeurkundung</td></tr>
-            <tr><td>§ 44 BeurkG</td><td>OLG Hamm 15 W 422/15</td><td>Blanko-Beglaubigung</td></tr>
-            <tr><td>§ 107 StPO</td><td>LG Köln 105 Qs 33/19</td><td>Asservaten-Verzeichnis</td></tr>
-            <tr><td>§ 8a SGB VIII</td><td>BVerwG 5 B 12/21</td><td>Meldung bei Kindeswohlgefährdung</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ============ RICHTER-VALIDATOR ============ -->
-      <div id="richter" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Richter-Validator</h2>
-        <p class="page-sub">Deterministische Prüfung · 5 Achsen · Hinweise können unvollständig sein</p>
-
-        <div class="card static" style="margin-bottom:16px">
-          <h3>Dokument einfügen oder laden</h3>
-          <p>Text einfügen oder .txt-Datei wählen. PDFs vorher in Text umwandeln.</p>
-          <textarea id="rv-input" class="field" style="margin-top:10px;height:180px;font-family:var(--mono);font-size:12px" placeholder="Dokumenttext hier einfügen…"></textarea>
-          <div class="toolbar">
-            <label class="back-btn" style="margin:0">
-              📎 Datei wählen
-              <input type="file" id="rv-file" accept=".txt,.md,.csv,.log" style="display:none">
-            </label>
-            <button class="back-btn primary" id="rv-run" style="margin:0">▬ Prüfen</button>
-            <button class="back-btn" id="rv-clear" style="margin:0">✕ Leeren</button>
-            <button class="back-btn" id="rv-demo" style="margin:0">▸ Demo laden</button>
-            <button class="back-btn" id="rv-export" style="margin:0;border-color:rgba(115,214,173,.4);color:var(--green)" disabled>💾 Befund speichern</button>
-          </div>
-        </div>
-
-        <div id="rv-result"></div>
-      </div>
-
-      <!-- ============ SIGNATUR ============ -->
-      <div id="signatur" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Signatur-Check</h2>
-        <p class="page-sub">Pflicht + Ist-Zustand · Text-Marker-Scan</p>
-
-        <div class="card static">
-          <h3>Dokumenttyp wählen</h3>
-          <select id="sig-typ" class="field" style="margin-top:10px">
-            <option value="durchsuchungsbeschluss">Durchsuchungsbeschluss</option>
-            <option value="anklageschrift">Anklageschrift</option>
-            <option value="beschluss">Beschluss</option>
-            <option value="urteil">Urteil</option>
-            <option value="haftbefehl">Haftbefehl</option>
-            <option value="protokoll">Protokoll</option>
-            <option value="belehrung_beschuldigter_nrw">Belehrung</option>
-            <option value="ed_anordnung_nrw">ED-Anordnung</option>
-            <option value="dna_anordnung_nrw">DNA-Anordnung</option>
-            <option value="verwaltungsakt">Verwaltungsakt</option>
-          </select>
-          <textarea id="sig-input" class="field" style="margin-top:10px;height:140px;font-family:var(--mono);font-size:12px" placeholder="Dokumenttext einfügen…"></textarea>
-          <button class="back-btn primary" id="sig-run" style="margin-top:12px;margin-bottom:0">▬ Signatur prüfen</button>
-        </div>
-        <div id="sig-result"></div>
-      </div>
-
-      <!-- ============ BEFUND-ARCHIV ============ -->
-      <div id="befunde" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Befund-Archiv</h2>
-        <p class="page-sub">Gespeicherte Richter-Validator-Läufe · lokal in diesem Browser</p>
-
-        <div class="filter-bar">
-          <button class="back-btn" style="margin:0" onclick="exportBefunde()">⬇ Export JSON</button>
-          <button class="back-btn" style="margin:0" onclick="importBefunde()">⬆ Import JSON</button>
-          <button class="back-btn" style="margin:0;border-color:rgba(231,141,141,.3);color:#f0aaaa" onclick="clearBefunde()">✕ Alle löschen</button>
-        </div>
-
-        <div id="befund-list"></div>
-      </div>
-
-      <!-- ============ BELEGE ============ -->
-      <div id="belege" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Beweis-Tresor</h2>
-        <p class="page-sub">WORM · Hash-Chain · Merkle-Root · 8.442 Objekte</p>
-        <div class="grid">
-          <div class="card static"><h3>Hash-Chain</h3><p>HMAC-SHA-256 · append-only · unveränderbar seit 06.05.2026.</p><div class="card-stat">8.442</div><span class="tag ok">Verifiziert</span></div>
-          <div class="card static"><h3>Merkle-Root</h3><p>Aktueller Wurzel-Hash über alle Blöcke.</p><div class="card-link" style="font-family:var(--mono);font-size:11px;word-break:break-all">a7f2…9b3c…4e81</div></div>
-          <div class="card static"><h3>Benecke-Vereinbarung</h3><p>Forensische Fallunterlagen · Dr. Mark Benecke · verbleiben beim Sachverständigen.</p><span class="tag ok">Gesichert</span></div>
-        </div>
-      </div>
-
-      <!-- ============ XJUSTIZ ============ -->
-      <div id="xjustiz" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">XJustiz &amp; XÖV Top 100</h2>
-        <p class="page-sub">Werkzeuge, Standards &amp; Komponenten im deutschen ERV-Ökosystem</p>
-
-        <div class="filter-bar">
-          <input type="text" class="filter-input" id="xj-filter" placeholder="Filtern nach Name, Kategorie, Funktion…" oninput="applyXjFilter()">
-          <span class="chip active" data-cat="all" onclick="setXjChip(this,'all')">Alle</span>
-          <span class="chip" data-cat="Basis" onclick="setXjChip(this,'Basis')">Basis</span>
-          <span class="chip" data-cat="Infra" onclick="setXjChip(this,'Infra')">Infra</span>
-          <span class="chip" data-cat="Postfach" onclick="setXjChip(this,'Postfach')">Postfach</span>
-          <span class="chip" data-cat="Werkzeug" onclick="setXjChip(this,'Werkzeug')">Werkzeug</span>
-          <span class="chip" data-cat="Kanzlei" onclick="setXjChip(this,'Kanzlei')">Kanzlei</span>
-          <span class="chip" data-cat="Sicherheit" onclick="setXjChip(this,'Sicherheit')">Sicherheit</span>
-          <span class="chip" data-cat="DMS" onclick="setXjChip(this,'DMS')">DMS</span>
-          <span class="chip" data-cat="Dev" onclick="setXjChip(this,'Dev')">Dev</span>
-        </div>
-
-        <table class="table">
-          <thead><tr><th style="width:44px">#</th><th>Kategorie</th><th>Name / Komponente</th><th>Funktion</th></tr></thead>
-          <tbody id="xj-body"></tbody>
-        </table>
-      </div>
-
-      <!-- ============ CORE 11 ============ -->
-      <div id="core" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Core 11</h2>
-        <p class="page-sub">NotebookLM-Kernanker der B6-Engine</p>
-        <table class="table">
-          <thead><tr><th>Node</th><th>Code-Tag</th><th>Ring</th><th>Domain</th></tr></thead>
-          <tbody id="core-body"></tbody>
-        </table>
-      </div>
-
-      <!-- ============ STATISTIK ============ -->
-      <div id="stats" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Statistik</h2>
-        <p class="page-sub">Verteilungen über Rügen, Normen, Status</p>
-
-        <div class="grid-2">
-          <div class="card static">
-            <h3 style="font-size:14px;margin-bottom:10px">Status-Verteilung</h3>
-            <div id="stat-status"></div>
-          </div>
-          <div class="card static">
-            <h3 style="font-size:14px;margin-bottom:10px">Normbereiche</h3>
-            <div id="stat-norm"></div>
-          </div>
-        </div>
-
-        <div class="section-h"><span class="dot"></span>Fortschritt</div>
-        <div class="grid-3">
-          <div class="kpi"><span class="kpi-label">Erledigt</span><span class="kpi-value ok" id="stat-done">0</span><span class="kpi-delta">von 34 Rügen</span></div>
-          <div class="kpi"><span class="kpi-label">Offen</span><span class="kpi-value warn" id="stat-open">34</span><span class="kpi-delta">Bearbeitung</span></div>
-          <div class="kpi"><span class="kpi-label">Quote</span><span class="kpi-value info" id="stat-pct">0%</span><span class="kpi-delta">Fortschritt</span></div>
-        </div>
-
-        <p class="foot-note">Statistik dient der Arbeitsorganisation. Sie ist keine juristische Bewertung und keine Erfolgsprognose.</p>
-      </div>
-
-      <!-- ============ ADVISOR ============ -->
-      <div id="advisor" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">AI Advisor</h2>
-        <p class="page-sub">Forensischer Beistand · Strategie · Schriftsatz</p>
-        <div class="card static">
-          <h3>Anfrage an den Beistand</h3>
-          <p>Beschreibe den Sachverhalt oder eine konkrete Rechtsfrage. <strong>Hinweis:</strong> Dieses Feld ist derzeit nicht an einen externen Dienst angebunden.</p>
-          <textarea class="field" style="margin-top:10px;height:120px" placeholder="z. B. Wie formuliere ich die Rüge zum Numerus-Bruch auf Blatt 2?"></textarea>
-          <button class="back-btn primary" style="margin-top:12px;margin-bottom:0">Anfrage senden →</button>
-        </div>
-      </div>
-
-      <!-- ============ SETTINGS ============ -->
-      <div id="settings" class="detail">
-        <button class="back-btn" onclick="showPage('dashboard')">← Zurück</button>
-        <h2 class="page-title">Settings</h2>
-        <div class="grid-2">
-          <div class="card static">
-            <h3>System-Status</h3>
-            <p>
-              Session-Verschlüsselung: <strong>AES-256</strong><br>
-              Signatur: <strong>rauschfrei.zertifiziert_by_b6fortress</strong><br>
-              Reality-Lock: <strong>PHI_LOCKED</strong><br>
-              Memory: <strong>FROZEN</strong>
-            </p>
-          </div>
-          <div class="card static">
-            <h3>Lokale Daten</h3>
-            <p>Fortschritt und Befunde werden ausschließlich in diesem Browser gespeichert (localStorage). Kein Server, keine Übertragung.</p>
-            <div class="toolbar">
-              <button class="back-btn" style="margin:0" onclick="exportAll()">⬇ Alles exportieren</button>
-              <button class="back-btn" style="margin:0;border-color:rgba(231,141,141,.3);color:#f0aaaa" onclick="resetAll()">✕ Lokale Daten löschen</button>
+        <section class="panel" style="margin-top:18px">
+          <h2>Neutrale Fallbeispiele</h2>
+          <p class="panel-note">Demo-Texte verwenden ausschließlich neutrale Bezeichnungen.</p>
+          <div class="cases">
+            <div class="case">
+              <div><strong>Fall A</strong><span>Verzögerung bei einer Anfrage</span></div>
+              <span class="status">Demo</span>
+            </div>
+            <div class="case">
+              <div><strong>Fall B</strong><span>Rückfrage zu einem Vorgang</span></div>
+              <span class="status">Demo</span>
+            </div>
+            <div class="case">
+              <div><strong>Fall C</strong><span>Abweichung in einer Zusammenfassung</span></div>
+              <span class="status">Demo</span>
             </div>
           </div>
-        </div>
-      </div>
-
+        </section>
+      </aside>
     </div>
-  </div>
-</div>
+  </main>
 
-<!-- ============================================================
-     MODAL: Rüge-Detail
-     ============================================================ -->
-<div class="modal-bg" id="ruegen-modal" onclick="if(event.target===this)closeRuegenModal()">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="rm-title">Rüge</h3>
-      <button class="modal-close" onclick="closeRuegenModal()">✕</button>
-    </div>
-    <div class="modal-body" id="rm-body"></div>
-  </div>
-</div>
+  <script>
+    "use strict";
 
-<!-- ============================================================
-     OVERLAY: Tastenkürzel
-     ============================================================ -->
-<div class="kbd-overlay" id="kbd" onclick="if(event.target===this)toggleKbd()">
-  <div class="kbd-modal">
-    <h3>Tastenkürzel</h3>
-    <div class="kbd-row"><span>Globale Suche</span><span class="kbd">/</span></div>
-    <div class="kbd-row"><span>Diese Hilfe</span><span class="kbd">?</span></div>
-    <div class="kbd-row"><span>Schließen / Zurück</span><span class="kbd">Esc</span></div>
-    <div class="kbd-row"><span>Drucken / PDF</span><span class="kbd">⌘ / Ctrl + P</span></div>
-    <div class="kbd-row"><span>Zum Dashboard</span><span class="kbd">⌘ / Ctrl + 0</span></div>
-    <div class="kbd-row"><span>Rügen-Matrix</span><span class="kbd">⌘ / Ctrl + 1</span></div>
-    <div class="kbd-row"><span>Chronologie</span><span class="kbd">⌘ / Ctrl + 2</span></div>
-    <div class="kbd-row"><span>Statistik</span><span class="kbd">⌘ / Ctrl + 3</span></div>
-  </div>
-</div>
+    // Sortiert Objekt-Schlüssel rekursiv, damit die Reihenfolge im JSON stabil bleibt.
+    function stableValue(value) {
+      if (Array.isArray(value)) return value.map(stableValue);
 
-<script>
-/* ============================================================
-   DATA
-   ============================================================ */
-const RUEGEN = [
-  { nr:'01', kurz:'Asservaten-Übergabe leer', norm:'§ 107 StPO', prae:'BVerfG 2 BvR 1319/01', tag:'ok', status:'Belegt',
-    langtext:'Das Übergabeverzeichnis der sichergestellten Gegenstände ist leer. Eine lückenlose Zuordnung der Asservate ist damit nicht gewährleistet.',
-    beleg:'Blatt 3, Zeile 4', schwere:3 },
-  { nr:'02', kurz:'GdB 70 % verschwiegen', norm:'Art. 3 III GG', prae:'BVerfG 2 BvR 1924/16', tag:'ok', status:'Belegt',
-    langtext:'Der anerkannte Grad der Behinderung (70 %) wurde im Verfahren nicht berücksichtigt. Verstoß gegen das Benachteiligungsverbot.',
-    beleg:'BezReg-Bescheid 53S0487031', schwere:2 },
-  { nr:'03', kurz:'Insulin-Entzug 70 Min.', norm:'§ 340 StGB', prae:'BGH 4 StR 233/14', tag:'alert', status:'Rechtliche Bewertung offen',
-    langtext:'Über 70 Minuten wurde einer insulinpflichtigen Person der Zugang zum Medikament verweigert. Blutzuckerwerte über 260–600 mg/dL.',
-    beleg:'Protokoll Blatt 2 + Zeugenaussage', schwere:5 },
-  { nr:'04', kurz:'Waffendrohung Schwerkranker', norm:'§ 240 StGB', prae:'BVerfG 2 BvR 1111/06', tag:'alert', status:'Rechtliche Bewertung offen',
-    langtext:'Einsatz einer Dienstwaffe gegenüber einer erkennbar schwer erkrankten Person.',
-    beleg:'Protokoll Blatt 2', schwere:5 },
-  { nr:'05', kurz:'Waffe vor Kind (8 J.)', norm:'Art. 6 GG', prae:'BVerfG 2 BvR 1899/20', tag:'alert', status:'Belegt',
-    langtext:'Eine Schusswaffe wurde im Beisein eines achtjährigen Kindes eingesetzt.',
-    beleg:'Zeugenaussage Kind', schwere:5 },
-  { nr:'06', kurz:'Kind isoliert beim Umziehen', norm:'Art. 1 I GG', prae:'BVerfG 1 BvR 2120/18', tag:'ok', status:'Belegt',
-    langtext:'Isolation eines Kindes beim Umkleiden ohne sachlichen Grund.',
-    beleg:'Protokoll Blatt 4', schwere:3 },
-  { nr:'07', kurz:'Spuren-GAU ohne Handschuhe', norm:'§ 107 StPO', prae:'BGH 3 StR 198/13', tag:'warn', status:'Belegt',
-    langtext:'Sicherstellung ohne Handschuhe. Spurenverunreinigung nicht auszuschließen.',
-    beleg:'Protokoll Blatt 1', schwere:3 },
-  { nr:'08', kurz:'Kind als Druckmittel', norm:'§ 136a StPO', prae:'BVerfG 2 BvR 1502/03', tag:'alert', status:'Belegt',
-    langtext:'Drohung mit Konsequenzen für das Kind zur Erlangung von Aussagen.',
-    beleg:'Protokoll Blatt 3', schwere:5 },
-  { nr:'09', kurz:'Tacker-Kaskade (Urkunde)', norm:'§ 44 BeurkG', prae:'LG Aachen 6 Qs 11/11', tag:'ok', status:'Belegt',
-    langtext:'Mehrfach getackerte Urkunde ohne Verbindungsvermerk.',
-    beleg:'Blatt 2', schwere:2 },
-  { nr:'10', kurz:'Schwarz-Stempel statt Siegel', norm:'§ 317 ZPO', prae:'BGH XII ZB 132/09', tag:'ok', status:'Belegt',
-    langtext:'Beglaubigung durch einfachen schwarzen Stempel statt Prägesiegel.',
-    beleg:'Blatt 4', schwere:2 },
-  { nr:'11', kurz:'Blanko-Beglaubigung', norm:'§ 44 BeurkG', prae:'OLG Hamm 15 W 422/15', tag:'ok', status:'Belegt',
-    langtext:'Beglaubigung eines Blankoformulars ohne Bezug zum Inhalt.',
-    beleg:'Blatt 4', schwere:3 },
-  { nr:'12', kurz:'Sammel-Mischprotokoll', norm:'§ 107 StPO', prae:'LG Hamburg 604 Qs 44/12', tag:'warn', status:'Belegt',
-    langtext:'Zwei verschiedene Maßnahmen wurden in einem Mischprotokoll zusammengeführt.',
-    beleg:'Blatt 1–3', schwere:3 },
-  { nr:'13', kurz:'Grüner Textmarker', norm:'§ 44 BeurkG', prae:'OLG Celle 2 Ws 11/16', tag:'warn', status:'Belegt',
-    langtext:'Nachträgliche Markierung im Originalprotokoll ohne Änderungsvermerk.',
-    beleg:'Blatt 5', schwere:2 },
-  { nr:'14', kurz:'Fahrzeugfarbe nicht genannt', norm:'§ 160 II StPO', prae:'BVerfG 2 BvR 2139/05', tag:'warn', status:'Belegt',
-    langtext:'Fahrzeugbeschreibung ohne Farbe – Identifizierung erschwert.',
-    beleg:'Blatt 2', schwere:2 },
-  { nr:'15', kurz:'Fallakte 2 fehlt', norm:'§ 105 StPO', prae:'BVerfG 2 BvR 2187/01', tag:'warn', status:'Belegt',
-    langtext:'Eine zweite Fallakte wurde nicht vorgelegt.',
-    beleg:'Aktenauskunft', schwere:3 },
-  { nr:'16', kurz:'Tatvorwurf-Ausweitung', norm:'§ 27 StGB', prae:'BVerfG 2 BvR 414/11', tag:'warn', status:'Belegt',
-    langtext:'Ausweitung des Tatvorwurfs ohne Gehörsgewährung.',
-    beleg:'Blatt 6', schwere:3 },
-  { nr:'17', kurz:'Blanko-Belehrung', norm:'§ 136 StPO', prae:'BGH 5 StR 537/94', tag:'alert', status:'Belegt',
-    langtext:'Belehrung als Blankoformular ohne konkreten Tatbezug.',
-    beleg:'Blatt 5', schwere:4 },
-  { nr:'18', kurz:'Zeugen-Vakuum', norm:'§ 106 StPO', prae:'LG Berlin 506 Qs 12/18', tag:'warn', status:'Belegt',
-    langtext:'Keine unabhängigen Zeugen der Maßnahme dokumentiert.',
-    beleg:'Protokoll Blatt 1', schwere:3 },
-  { nr:'19', kurz:'Gänsefüßchen-Fiktion', norm:'§ 107 StPO', prae:'BVerfG 2 BvR 211/08', tag:'warn', status:'Belegt',
-    langtext:'Wörtliche Rede in Anführungszeichen ohne Quelle.',
-    beleg:'Blatt 2', schwere:2 },
-  { nr:'20', kurz:'Ortslosigkeit Asservate', norm:'§ 107 StPO', prae:'LG Köln 105 Qs 33/19', tag:'warn', status:'Belegt',
-    langtext:'Asservate ohne Fundortangabe.',
-    beleg:'Blatt 3', schwere:2 },
-  { nr:'21', kurz:'Kfz-Durchsuchung o. Titel', norm:'Art. 13 GG', prae:'BVerfG 2 BvR 2200/10', tag:'warn', status:'Belegt',
-    langtext:'Durchsuchung eines Kraftfahrzeugs ohne richterliche Anordnung.',
-    beleg:'Protokoll Blatt 2', schwere:4 },
-  { nr:'22', kurz:'Tina Blanko-Belehrung', norm:'§ 136 StPO', prae:'BGH 3 StR 104/07', tag:'alert', status:'Belegt',
-    langtext:'Blanko-Belehrung der Mitbeschuldigten Tina König.',
-    beleg:'Blatt 5', schwere:4 },
-  { nr:'23', kurz:'Zeugenausschaltung (3×)', norm:'§ 106 StPO', prae:'LG Frankfurt 5/2 Qs 4/15', tag:'warn', status:'Belegt',
-    langtext:'Drei unabhängige Zeugen wurden ausgeschlossen.',
-    beleg:'Protokoll Blatt 3', schwere:3 },
-  { nr:'24', kurz:'Messer fehlt im Protokoll', norm:'§ 107 StPO', prae:'OLG München 3 Ws 902/16', tag:'warn', status:'Belegt',
-    langtext:'Ein bei der Maßnahme sichergestelltes Messer fehlt im Protokoll.',
-    beleg:'Fundstück-Liste', schwere:3 },
-  { nr:'25', kurz:'§ 308 vs. Liegenlassen', norm:'Art. 13 GG', prae:'BVerfG 2 BvR 119/06', tag:'warn', status:'Belegt',
-    langtext:'Widerspruch zwischen behauptetem § 308-Fund und dokumentiertem Liegenlassen.',
-    beleg:'Blatt 2 vs. Blatt 4', schwere:3 },
-  { nr:'26', kurz:'„Diverse Pillen"', norm:'§ 107 StPO', prae:'BGH 5 StR 44/12', tag:'warn', status:'Belegt',
-    langtext:'Asservat als „diverse Pillen" ohne Einzelaufstellung.',
-    beleg:'Blatt 3', schwere:2 },
-  { nr:'27', kurz:'Nachheftung Akte', norm:'Art. 103 I GG', prae:'BGH 1 StR 512/12', tag:'warn', status:'Belegt',
-    langtext:'Nachträgliche Heftung ohne Revisionsvermerk.',
-    beleg:'Akteneinsicht', schwere:3 },
-  { nr:'28', kurz:'Kinder-Datenträger', norm:'Art. 13 GG', prae:'BVerfG 2 BvR 1287/17', tag:'alert', status:'Belegt',
-    langtext:'Sicherstellung von Datenträgern der Kinder.',
-    beleg:'Blatt 2', schwere:4 },
-  { nr:'29', kurz:'Anwaltslüge', norm:'§ 137 StPO', prae:'BGH 4 StR 126/92', tag:'alert', status:'Belegt',
-    langtext:'Falsche Angabe zur Erreichbarkeit eines Verteidigers.',
-    beleg:'Protokoll Blatt 3', schwere:4 },
-  { nr:'30', kurz:'Messer am Spiegel übersehen', norm:'§ 244 II StPO', prae:'—', tag:'info', status:'Belegt',
-    langtext:'Ein am Spiegel befestigtes Messer wurde nicht dokumentiert.',
-    beleg:'Fotomaterial', schwere:2 },
-  { nr:'31', kurz:'Deeskalation verletzt', norm:'§ 2 BPolG', prae:'—', tag:'info', status:'Belegt',
-    langtext:'Deeskalationspflicht wurde nicht beachtet.',
-    beleg:'Protokoll Blatt 2', schwere:3 },
-  { nr:'32', kurz:'Ort der Maßnahme leer', norm:'§ 107 StPO', prae:'LG Bremen 2 Qs 55/15', tag:'warn', status:'Belegt',
-    langtext:'Ortsangabe der Maßnahme fehlt im Protokoll.',
-    beleg:'Blatt 1', schwere:2 },
-  { nr:'33', kurz:'Zeitangabe prüfen 06:26 / 08:15', norm:'§ 348 StGB', prae:'OLG Karlsruhe 2 Ws 44/14', tag:'alert', status:'Rechtliche Bewertung offen',
-    langtext:'Unterschrift dokumentiert 06:26 Uhr, Maßnahme läuft laut Protokoll bis 08:15 Uhr.',
-    beleg:'Blatt 3 vs. Blatt 1', schwere:4 },
-  { nr:'34', kurz:'Geburtsort Tina falsch', norm:'§ 107 StPO', prae:'LG Magdeburg 25 Qs 18/17', tag:'warn', status:'Belegt',
-    langtext:'Geburtsort der Mitbeschuldigten Tina König weicht von Personalausweis ab.',
-    beleg:'Blatt 1', schwere:2 }
-];
+      if (value && typeof value === "object") {
+        return Object.keys(value)
+          .sort()
+          .reduce((result, key) => {
+            result[key] = stableValue(value[key]);
+            return result;
+          }, {});
+      }
 
-const FEHLER = [
-  ['A','Beschluss — Formelle Mängel','21 × 2 = 42','§ 35 StPO, § 267 StGB','alert','Hoch/Kritisch'],
-  ['B','Beschluss — Materielle & Logische Mängel','21 × 2 = 42','§ 105 StPO, Art. 13 GG','alert','Hoch/Kritisch'],
-  ['C','Protokoll — Formelle Mängel','24 × 2 = 48','§ 107 StPO, § 348 StGB','warn','Mittel/Hoch'],
-  ['D','Protokoll — Chronologische Mängel','13 × 2 = 26','§ 348 StGB, § 418 ZPO','alert','Kritisch'],
-  ['E','Medizinische Nötigung & Körperverletzung','24 × 2 = 48','§ 340 StGB, § 13 StGB','alert','Extrem/Lebensgefahr'],
-  ['F','Kindeswohl & Schutzbefohlene','28 × 2 = 56','Art. 6 GG, UN-KRK Art. 19','alert','Hoch'],
-  ['G','Nötigung & Erpressung','16 × 2 = 32','§ 240 StGB, § 56 VwVfG','warn','Hoch'],
-  ['H','Sicherstellung & Asservate','24 × 2 = 48','§ 98 StPO, § 33 SGB V','warn','Hoch'],
-  ['I','Belehrung & Beschuldigtenrechte','20 × 2 = 40','§ 136 StPO, § 136a StPO','alert','Absolut'],
-  ['J','Identität & Personaldaten','9 × 2 = 18','§ 107 StPO, Art. 3 GG','warn','Mittel'],
-  ['K','Systemische Mängel & Gehörsbrüche','17 × 2 = 34','§ 170 StPO, Art. 103 GG','warn','Hoch'],
-  ['NEU 1','Formular-Chaos GGO & Revisionsmängel','16 × 2 = 32','§ 107 StPO, § 348 StGB','warn','Mittel/Hoch'],
-  ['NEU 2','Tina Singular/Plural (Willkür-Kopien)','20 × 2 = 40','Art. 3 GG, Art. 13 GG','alert','Kritisch'],
-  ['X','Zuordnung prüfen, ERV-Kollaps, Latenz','194 × 2 = 388','§ 55a VwGO, § 8a SGB VIII','alert','Systemisch']
-];
-
-const CHRONO = [
-  ['06.05.2026','Erlass Durchsuchungsbeschluss','152 Gs 648/26 · AG Düsseldorf'],
-  ['06.05.2026','Vordatierte ED-Anordnung','NRW 2342/2343 · PP Bielefeld'],
-  ['07.05.2026','Durchsuchung Südring 134 (06:00–08:15)','PP Bielefeld'],
-  ['07.05.2026','Unterschrift KHK Feierabend 06:26 Uhr','Zeitangabe prüfen'],
-  ['07.05.2026','70-Minuten-Insulin-Entzug','Art. 2 II GG · § 340 StGB'],
-  ['07.05.2026','Drei Kinder anwesend — nicht dokumentiert','§ 106 StPO · Art. 6 GG'],
-  ['08.06.2026','Feierabend-Schreiben: 50 € Koppelung','§ 240 StGB'],
-  ['16.06.2026','DNA-Einverständnis','NRW 2361/1'],
-  ['17.06.2026','ED-Behandlung · iPhone herausgegeben','Nach 42 Tagen ohne CGM'],
-  ['18.07.2026','Dienstaufsichtsbeschwerden','2 AR 806/26 · 3 AR 883/26'],
-  ['22.07.2026','Klageerhebung VG Minden (FFK)','11 K 3272/26'],
-  ['23.07.2026','Klattenberg: Sachbeantwortung verweigert','52 Js 23/26'],
-  ['13.08.2026','Nichtabhilfebeschluss (Hönick)','152 Gs 648/26'],
-  ['24.08.2026','GStA Düsseldorf: Einstellung (Heger)','2 AR 806/26'],
-  ['01.09.2026','Klageerhebung Hauptsache','11 K 3272/26'],
-  ['04.09.2026','PP Bielefeld: Jugendamtsmeldung','§ 8a SGB VIII · zeitlicher Zusammenhang'],
-  ['08.09.2026','Jugendamt: unangekündigter Hausbesuch','512/14984'],
-  ['14.09.2026','LG-Beschwerde + AG-Anhörung','011 Qs-52 Js 23/26 / 152 Gs 1128/26'],
-  ['15.09.2026','BezReg Münster: GdB-Bescheid','53S0487031 · G, H, B'],
-  ['21.09.2026','Klageerwiderung + ERV-Prüfvermerk','5× Signaturprüfung offen'],
-  ['01.10.2026','Dritter Jugendamt-Besuch','Rode / Hohaus']
-];
-
-const CORE = [
-  ['NB-001','CORE_SHIELD','RING 0','Kernel DNA'],
-  ['NB-002','XJUSTIZ_CORE','RING 1','XJustiz ERV'],
-  ['NB-004','GOVERNANCE_CORE','RING 0','System Doctrine'],
-  ['NB-005','CODEX_COMPENDIUM','RING 0','Universe Compendium'],
-  ['NB-006','FORTRESS_JUSTICE','RING 1','Verfassung 11K'],
-  ['NB-007','UNIFIED_MATRIX','RING 0','Matrix Engine'],
-  ['NB-008','OMNI_NEURO','RING 3','Neuromorphic Gov'],
-  ['NB-009','QUANTUM_TRESOR','RING 2','WORM Quantum'],
-  ['NB-010','SENIOR_GEMINIS','RING 1','Senior AI'],
-  ['NB-011','PSYCH_PARADIGMS','RING 4','Psychologie'],
-  ['NB-080','ODIN_MATRIX 1-200','RING 1','200 Normen · LOCKED']
-];
-
-const XJ = [
-  [1,'Basis','XJustiz','Zentraler Justizstandard für Strukturdaten im ERV.'],
-  [2,'Basis','xdomea','E-Government-Standard für Akten und Dokumente.'],
-  [3,'Basis','XAusländer','Standard für Ausländerwesen und Migrationsdaten.'],
-  [4,'Basis','XMeld','Standard für Meldewesen.'],
-  [5,'Basis','XPersonenstand','Standard für Personenstandswesen.'],
-  [6,'Basis','XGewerbeanzeige','Austausch von Gewerbedaten.'],
-  [7,'Basis','XBauverfahren','Abläufe in Bauaufsichtsbehörden.'],
-  [8,'Basis','XTrinkwasser','Übermittlung von Trinkwasserdaten.'],
-  [9,'Basis','XBestaetigung','Behördliche Bestätigungen.'],
-  [10,'Basis','XPlanung','Geodaten der Raumordnung.'],
-  [11,'Basis','XBreitband','Netzausbauverfahren.'],
-  [12,'Basis','XVergabe','Elektronische Vergabeplattformen.'],
-  [13,'Basis','XInneres','Rahmenstandard Innenverwaltung.'],
-  [14,'Basis','XSozialhilfe','Sozialhilfedaten.'],
-  [15,'Basis','XKFZ','Fahrzeugzulassung.'],
-  [16,'Basis','Steuer-XML','Elster-basiertes XML-Format.'],
-  [17,'Basis','DIN 91379','Zeichensätze in XÖV.'],
-  [18,'Basis','KoSIT-Spezifikation','Richtlinien für XÖV-Standards.'],
-  [19,'Basis','XÖV-Profilator','UML-Werkzeug.'],
-  [20,'Basis','XRepository','Plattform für XÖV-Standards.'],
-  [21,'Infra','OSCI-Transport','Kern-Übertragungsprotokoll im ERV.'],
-  [22,'Infra','XTA','Standardisierte Transportarchitektur.'],
-  [23,'Infra','SAFE-Verzeichnis','Identitätsmanagement.'],
-  [24,'Infra','VHN-Infrastruktur','Vertrauenswürdiger Herkunftsnachweis.'],
-  [25,'Infra','Governikus COM VNA','Middleware für EGVP.'],
-  [26,'Infra','EGVP-Intermediär','Server-Knotenpunkt.'],
-  [27,'Infra','FIT-Connect','API-Infrastruktur des IT-Planungsrats.'],
-  [28,'Infra','AS4','Internationaler e-Delivery-Standard.'],
-  [29,'Infra','XÖV-Codelisten-Server','Kennzahlen.'],
-  [30,'Infra','DVDV','Verwaltungsdiensteverzeichnis.'],
-  [31,'Postfach','EGVP','Elektronisches Gerichts- und Verwaltungspostfach.'],
-  [32,'Postfach','beA','Anwaltspostfach.'],
-  [33,'Postfach','beN','Notarpostfach.'],
-  [34,'Postfach','beSt','Steuerberaterpostfach.'],
-  [35,'Postfach','eBO','Bürger- und Organisationenpostfach.'],
-  [36,'Postfach','Mahn-EGVP','Automatisierte Mahnanträge.'],
-  [37,'Postfach','Mein Justizpostfach','Bürgerpostfach.'],
-  [38,'Postfach','Governikus Communicator','Client-Software.'],
-  [39,'Postfach','De-Mail','Sicherer Mail-Weg.'],
-  [40,'Postfach','SPOC','Single Point of Contact.'],
-  [41,'Werkzeug','eEB-Browser','Elektronische Empfangsbekenntnisse.'],
-  [42,'Werkzeug','Strukturdatensatz-Generator','XJustiz-XML erstellen.'],
-  [43,'Werkzeug','TeT-XJustiz','Text-Templates.'],
-  [44,'Werkzeug','xdomea Mapping','Konvertierung xdomea ↔ XJustiz.'],
-  [45,'Werkzeug','XJustiz-Validator','XML-Schema-Prüfung.'],
-  [46,'Werkzeug','XJustiz PDF-Renderer','XSLT XML → PDF.'],
-  [47,'Werkzeug','XJustiz-Migration','Versions-Transformation.'],
-  [48,'Werkzeug','XJustiz Message Builder','Java-Bibliothek.'],
-  [49,'Werkzeug','Modul xjustiz_cl','Codelisten.'],
-  [50,'Werkzeug','Modul xjustiz_kern','Kerndatensatz.'],
-  [51,'Werkzeug','Modul xjustiz_mahn','Mahnverfahren.'],
-  [52,'Werkzeug','Modul xjustiz_straf','Strafverfahren.'],
-  [53,'Werkzeug','Modul xjustiz_zivil','Zivilprozesse.'],
-  [54,'Werkzeug','Modul xjustiz_fam','Familiensachen.'],
-  [55,'Werkzeug','Modul xjustiz_gundb','Grundbuchamt.'],
-  [56,'Werkzeug','Modul xjustiz_reg','Handelsregister.'],
-  [57,'Werkzeug','Modul xjustiz_insolvenz','Insolvenzdaten.'],
-  [58,'Werkzeug','Modul xjustiz_fg','Freiwillige Gerichtsbarkeit.'],
-  [59,'Werkzeug','Modul xjustiz_kasse','Zahlungsverkehr.'],
-  [60,'Werkzeug','Modul xjustiz_sozial','Sozialgerichtsbarkeit.'],
-  [61,'Kanzlei','RA-Micro','Kanzleisoftware.'],
-  [62,'Kanzlei','Datev Anwalt','Kanzleimanagement.'],
-  [63,'Kanzlei','NoRA Advanced','Notariatssoftware mit beN/beA.'],
-  [64,'Kanzlei','AdvoWare','ERV-Teilnahme.'],
-  [65,'Kanzlei','ReNoStar','Komplettlösung.'],
-  [66,'Kanzlei','TriNotar','Notariat mit Strukturdatenprüfung.'],
-  [67,'Kanzlei','jupis / e²A','Fachverfahren Justizverwaltung.'],
-  [68,'Kanzlei','EUREKA','Gerichte in Bundesländern.'],
-  [69,'Kanzlei','ForumSTAR','Text- und Fachsystem.'],
-  [70,'Kanzlei','Judica / TSJ','Fachverfahren ordentliche Gerichtsbarkeit.'],
-  [71,'Sicherheit','Governikus Signer','Qualifizierte Signaturen.'],
-  [72,'Sicherheit','Governikus DataSafe','Langzeitarchivierung.'],
-  [73,'Sicherheit','Schematron','Semantische Prüfung.'],
-  [74,'Sicherheit','XSD-Validatoren','Strukturelle Prüfung.'],
-  [75,'Sicherheit','SecSigner','Kryptografische Signaturen.'],
-  [76,'Sicherheit','OpenLimit SignCubes','qeS.'],
-  [77,'Sicherheit','BNetzA TSL','Zertifikatsverifikation.'],
-  [78,'Sicherheit','BSI TR-03125','Langzeitarchivierung.'],
-  [79,'Sicherheit','eIDAS-Prüftools','Digitale Identitäten.'],
-  [80,'Sicherheit','KoSIT Codelisten-Validator','Codelisten-Schlüssel.'],
-  [81,'DMS','d.velop eAkte','DMS mit XJustiz-Zuweisung.'],
-  [82,'DMS','Fabasoft eGov-Suite','DMS öffentlicher Dienst.'],
-  [83,'DMS','Optimal Systems enaio','ECM mit ERV.'],
-  [84,'DMS','Regisafe','DMS Kommunen.'],
-  [85,'DMS','Vischer eAkte','Elektronische Gerichtsakten.'],
-  [86,'DMS','PDV VIS-Suite','Aktenführung.'],
-  [87,'DMS','Ceyoniq nscale','Informationsmanagement.'],
-  [88,'DMS','Windream','XML-Import.'],
-  [89,'DMS','ELO Digital Office','ECM Posteingang.'],
-  [90,'DMS','Kira (Justiz-KI)','Klageschriften-Klassifizierung.'],
-  [91,'Dev','Notepad++ XML Tools','XML-Sichtung.'],
-  [92,'Dev','Oxygen XML Editor','XML-IDE.'],
-  [93,'Dev','Altova XMLSpy','XÖV-XSD.'],
-  [94,'Dev','BaseX','XML-Datenbank.'],
-  [95,'Dev','Saxon XSLT','Visualisierungs-Stylesheets.'],
-  [96,'Dev','Apache Xerces','XML-Parser.'],
-  [97,'Dev','Eclipse XML Tools','Java-APIs.'],
-  [98,'Dev','Visual Studio Code XML','Instanzen.'],
-  [99,'Dev','Jackson XML Module','Java-Serialisierung.'],
-  [100,'Dev','JAXB','Java-Klassen aus XSDs.']
-];
-
-/* ============================================================
-   STATE
-   ============================================================ */
-const LS_KEYS = { prog:'b6_progress', befund:'b6_befunde' };
-let progress = {};
-let ruegenFilter = 'all';
-let ruegenQuery = '';
-let chronoQuery = '';
-let xjCat = 'all';
-let xjQuery = '';
-
-function loadProgress(){
-  try { progress = JSON.parse(localStorage.getItem(LS_KEYS.prog) || '{}'); } catch(e){ progress = {}; }
-}
-function saveProgress(){
-  try { localStorage.setItem(LS_KEYS.prog, JSON.stringify(progress)); } catch(e){}
-}
-function loadBefunde(){
-  try { return JSON.parse(localStorage.getItem(LS_KEYS.befund) || '[]'); } catch(e){ return []; }
-}
-function saveBefunde(list){
-  try { localStorage.setItem(LS_KEYS.befund, JSON.stringify(list)); updateBefundBadge(); } catch(e){}
-}
-function updateBefundBadge(){
-  const n = loadBefunde().length;
-  const el = document.getElementById('nav-befund-count');
-  if (el) el.textContent = n;
-}
-
-/* ============================================================
-   RENDER TABLES
-   ============================================================ */
-function renderRuegen(){
-  const tbody = document.getElementById('ruegen-body');
-  const list = RUEGEN.filter(r => {
-    if (ruegenFilter === 'open' && progress[r.nr]) return false;
-    if (ruegenFilter !== 'all' && ruegenFilter !== 'open' && r.tag !== ruegenFilter) return false;
-    if (ruegenQuery){
-      const q = ruegenQuery.toLowerCase();
-      if (!(r.kurz.toLowerCase().includes(q) || r.norm.toLowerCase().includes(q) ||
-            r.prae.toLowerCase().includes(q) || r.status.toLowerCase().includes(q))) return false;
+      return value;
     }
-    return true;
-  });
-  tbody.innerHTML = list.map(r => `
-    <tr class="clickable" onclick="openRuegenModal('${r.nr}')">
-      <td class="prog-cell" onclick="event.stopPropagation();toggleProgress('${r.nr}')">
-        <span class="prog-check ${progress[r.nr]?'done':''}"></span>
-      </td>
-      <td style="font-family:var(--mono);color:var(--text-mute)">${r.nr}</td>
-      <td>${esc(r.kurz)}</td>
-      <td style="font-family:var(--mono);font-size:11px;color:var(--text-dim)">${esc(r.norm)}</td>
-      <td style="font-family:var(--mono);font-size:11px;color:var(--text-dim)">${esc(r.prae)}</td>
-      <td><span class="tag ${r.tag}">${esc(r.status)}</span></td>
-    </tr>
-  `).join('');
 
-  const done = Object.values(progress).filter(Boolean).length;
-  const cardStat = document.getElementById('card-ruegen-stat');
-  if (cardStat) cardStat.textContent = `${done}/34`;
-  const navBadge = document.getElementById('nav-ruegen-count');
-  if (navBadge) navBadge.textContent = `${done}/34`;
-}
-
-function renderFehler(){
-  document.getElementById('fehler-body').innerHTML = FEHLER.map(f => `
-    <tr>
-      <td><strong>${esc(f[0])}</strong></td>
-      <td>${esc(f[1])}</td>
-      <td style="font-family:var(--mono);color:var(--green)">${esc(f[2])}</td>
-      <td style="font-size:11.5px">${esc(f[3])}</td>
-      <td><span class="tag ${f[4]}">${esc(f[5])}</span></td>
-    </tr>`).join('');
-}
-
-function renderChrono(){
-  const list = CHRONO.filter(c => {
-    if (!chronoQuery) return true;
-    const q = chronoQuery.toLowerCase();
-    return (c[0]+c[1]+c[2]).toLowerCase().includes(q);
-  });
-  document.getElementById('chrono-body').innerHTML = list.map(c => `
-    <tr>
-      <td style="font-family:var(--mono);color:var(--green)">${esc(c[0])}</td>
-      <td>${esc(c[1])}</td>
-      <td style="color:var(--text-dim);font-size:11.5px">${esc(c[2])}</td>
-    </tr>`).join('');
-}
-
-function renderCore(){
-  document.getElementById('core-body').innerHTML = CORE.map(c => `
-    <tr>
-      <td>${esc(c[0])}</td>
-      <td><span class="pill">${esc(c[1])}</span></td>
-      <td>${esc(c[2])}</td>
-      <td>${esc(c[3])}</td>
-    </tr>`).join('');
-}
-
-function renderXj(){
-  const list = XJ.filter(x => {
-    if (xjCat !== 'all' && x[1] !== xjCat) return false;
-    if (xjQuery){
-      const q = xjQuery.toLowerCase();
-      return (x[2]+x[3]+x[1]).toLowerCase().includes(q);
+    function stableStringify(value) {
+      return JSON.stringify(stableValue(value));
     }
-    return true;
-  });
-  document.getElementById('xj-body').innerHTML = list.map(x => `
-    <tr>
-      <td style="color:var(--text-mute);font-family:var(--mono)">${x[0]}</td>
-      <td><span class="tag info">${esc(x[1])}</span></td>
-      <td><strong>${esc(x[2])}</strong></td>
-      <td style="color:var(--text-dim);font-size:11.5px">${esc(x[3])}</td>
-    </tr>`).join('');
-}
 
-/* ============================================================
-   FILTER / CHIPS
-   ============================================================ */
-function applyRuegenFilter(){
-  ruegenQuery = document.getElementById('ruegen-filter').value;
-  renderRuegen();
-}
-function setRuegenChip(el, val){
-  document.querySelectorAll('.filter-bar .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  ruegenFilter = val;
-  renderRuegen();
-}
-function applyChronoFilter(){
-  chronoQuery = document.getElementById('chrono-filter').value;
-  renderChrono();
-}
-function applyXjFilter(){
-  xjQuery = document.getElementById('xj-filter').value;
-  renderXj();
-}
-function setXjChip(el, val){
-  document.querySelectorAll('#xjustiz .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  xjCat = val;
-  renderXj();
-}
-
-/* ============================================================
-   PROGRESS
-   ============================================================ */
-function toggleProgress(nr){
-  progress[nr] = !progress[nr];
-  saveProgress();
-  renderRuegen();
-  renderStats();
-}
-function renderStats(){
-  const done = Object.values(progress).filter(Boolean).length;
-  const open = 34 - done;
-  const pct = Math.round((done/34)*100);
-  const $ = id => document.getElementById(id);
-  if ($('stat-done')) $('stat-done').textContent = done;
-  if ($('stat-open')) $('stat-open').textContent = open;
-  if ($('stat-pct')) $('stat-pct').textContent = pct + '%';
-
-  // Status-Verteilung
-  const byStatus = {};
-  RUEGEN.forEach(r => { byStatus[r.tag] = (byStatus[r.tag]||0)+1; });
-  const maxS = Math.max(...Object.values(byStatus), 1);
-  const labels = { ok:'Belegt (ok)', warn:'Offen (warn)', alert:'Kritisch (alert)', info:'Info' };
-  if ($('stat-status')) {
-    $('stat-status').innerHTML = Object.entries(byStatus).map(([k,v]) => `
-      <div class="stat-row">
-        <span class="stat-label">${labels[k]||k}</span>
-        <span class="stat-bar"><div style="width:${(v/maxS)*100}%"></div></span>
-        <span class="stat-count">${v}</span>
-      </div>`).join('');
-  }
-
-  // Normbereiche (grobe Einteilung nach Anfang der Norm)
-  const groups = { 'StPO':0, 'StGB':0, 'GG':0, 'BeurkG':0, 'ZPO':0, 'Sonst':0 };
-  RUEGEN.forEach(r => {
-    const n = r.norm;
-    if (/StPO/.test(n)) groups['StPO']++;
-    else if (/StGB/.test(n)) groups['StGB']++;
-    else if (/GG/.test(n)) groups['GG']++;
-    else if (/BeurkG/.test(n)) groups['BeurkG']++;
-    else if (/ZPO/.test(n)) groups['ZPO']++;
-    else groups['Sonst']++;
-  });
-  const maxN = Math.max(...Object.values(groups), 1);
-  if ($('stat-norm')) {
-    $('stat-norm').innerHTML = Object.entries(groups).map(([k,v]) => `
-      <div class="stat-row">
-        <span class="stat-label">${k}</span>
-        <span class="stat-bar"><div style="width:${(v/maxN)*100}%"></div></span>
-        <span class="stat-count">${v}</span>
-      </div>`).join('');
-  }
-  if ($('dash-norm-bars')) {
-    $('dash-norm-bars').innerHTML = Object.entries(groups).map(([k,v]) => `
-      <div class="stat-row">
-        <span class="stat-label">${k}</span>
-        <span class="stat-bar"><div style="width:${(v/maxN)*100}%"></div></span>
-        <span class="stat-count">${v}</span>
-      </div>`).join('');
-  }
-}
-
-/* ============================================================
-   HEATMAP
-   ============================================================ */
-function renderHeatmap(){
-  const counts = {};
-  RUEGEN.forEach(r => { counts[r.schwere] = (counts[r.schwere]||0)+1; });
-  const max = Math.max(...Object.values(counts), 1);
-  const el = document.getElementById('heatmap');
-  if (!el) return;
-  const tags = ['ok','warn','alert','info','mute'];
-  let html = '';
-  for (let s = 5; s >= 1; s--){
-    for (const t of tags){
-      const cell = RUEGEN.filter(r => r.schwere === s && r.tag === t).length;
-      const level = cell === 0 ? 0 : Math.min(5, Math.ceil((cell / Math.max(...Object.values(counts), 1)) * 5) + 1);
-      html += `<div class="heat-cell" data-level="${Math.min(level,5)}" title="Schwere ${s}, ${t}: ${cell} Rügen">${cell || ''}</div>`;
+    function deepCopy(value) {
+      if (typeof structuredClone === "function") {
+        return structuredClone(value);
+      }
+      return JSON.parse(JSON.stringify(value));
     }
-  }
-  el.innerHTML = html;
-}
 
-/* ============================================================
-   TIMELINE SVG
-   ============================================================ */
-function renderTimeline(){
-  const el = document.getElementById('timeline-svg');
-  if (!el) return;
-  const months = {};
-  CHRONO.forEach(c => {
-    const m = c[0].slice(3, 10);
-    months[m] = (months[m]||0)+1;
-  });
-  const keys = Object.keys(months).sort((a,b) => {
-    const [ma,ya] = a.split('.'); const [mb,yb] = b.split('.');
-    return (ya+ma) > (yb+mb) ? 1 : -1;
-  });
-  const W = 800, H = 120, pad = 30;
-  const step = (W - pad*2) / Math.max(keys.length-1, 1);
-  const maxV = Math.max(...Object.values(months), 1);
-  let dots = '';
-  let line = '';
-  keys.forEach((k, i) => {
-    const x = pad + i*step;
-    const y = H - pad - (months[k]/maxV) * (H - pad*2);
-    dots += `<circle cx="${x}" cy="${y}" r="5" fill="#73d6ad"/>`;
-    dots += `<text x="${x}" y="${H-8}" text-anchor="middle" fill="#758392" font-size="9" font-family="monospace">${k}</text>`;
-    dots += `<text x="${x}" y="${y-10}" text-anchor="middle" fill="#a4e5c9" font-size="10" font-family="monospace">${months[k]}</text>`;
-    if (i > 0){
-      const px = pad + (i-1)*step;
-      const py = H - pad - (months[keys[i-1]]/maxV) * (H - pad*2);
-      line += `<line x1="${px}" y1="${py}" x2="${x}" y2="${y}" stroke="#4dab85" stroke-width="1.5"/>`;
-    }
-  });
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    ${line}${dots}
-  </svg>`;
-}
+    class ResultCache {
+      constructor() {
+        this.entries = new Map();
+        this.hits = 0;
+        this.misses = 0;
+      }
 
-/* ============================================================
-   MODAL: Rüge-Detail
-   ============================================================ */
-function openRuegenModal(nr){
-  const r = RUEGEN.find(x => x.nr === nr);
-  if (!r) return;
-  document.getElementById('rm-title').textContent = `Rüge ${r.nr} · ${r.kurz}`;
-  document.getElementById('rm-body').innerHTML = `
-    <div class="row"><span class="row-label">Status</span><span class="row-value"><span class="tag ${r.tag}">${esc(r.status)}</span></span></div>
-    <div class="row"><span class="row-label">Norm</span><span class="row-value" style="font-family:var(--mono);font-size:12.5px">${esc(r.norm)}</span></div>
-    <div class="row"><span class="row-label">Präzedenz</span><span class="row-value" style="font-family:var(--mono);font-size:12.5px">${esc(r.prae)}</span></div>
-    <div class="row"><span class="row-label">Schwere</span><span class="row-value">${'●'.repeat(r.schwere)}${'○'.repeat(5-r.schwere)} <span style="color:var(--text-mute);font-size:11px;margin-left:6px">(${r.schwere}/5)</span></span></div>
-    <div class="row"><span class="row-label">Belegstelle</span><span class="row-value">${esc(r.beleg)}</span></div>
-    <div class="row"><span class="row-label">Langtext</span><span class="row-value">${esc(r.langtext)}</span></div>
-    <div class="row"><span class="row-label">Erledigt</span><span class="row-value">
-      <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-        <span class="prog-check ${progress[r.nr]?'done':''}" onclick="toggleProgress('${r.nr}');openRuegenModal('${r.nr}')"></span>
-        <span>${progress[r.nr] ? 'Als erledigt markiert' : 'Als erledigt markieren'}</span>
-      </label>
-    </span></div>
-    <p style="margin-top:16px;font-size:11px;color:var(--text-mute);font-style:italic;line-height:1.55">
-      Einträge sind Arbeitsvermerke. Sie sind keine Rechtsfeststellung.
-    </p>
-  `;
-  document.getElementById('ruegen-modal').classList.add('show');
-}
-function closeRuegenModal(){
-  document.getElementById('ruegen-modal').classList.remove('show');
-}
+      makeKey(input) {
+        return stableStringify(input);
+      }
 
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
-function showPage(pageId, navEl){
-  document.getElementById('dashboard').classList.add('hidden');
-  document.querySelectorAll('.detail').forEach(el => el.classList.remove('active'));
-  if (pageId === 'dashboard'){
-    document.getElementById('dashboard').classList.remove('hidden');
-  } else {
-    const el = document.getElementById(pageId);
-    if (el) el.classList.add('active');
-  }
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-  if (navEl) navEl.classList.add('active');
-  else {
-    const m = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-    if (m) m.classList.add('active');
-  }
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-  document.getElementById('content').scrollTop = 0;
+      get(input) {
+        const key = this.makeKey(input);
 
-  if (pageId === 'befunde') renderBefunde();
-  if (pageId === 'stats') renderStats();
-}
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-function toggleKbd(){
-  document.getElementById('kbd').classList.toggle('show');
-}
-
-/* ============================================================
-   GLOBAL SEARCH
-   ============================================================ */
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape'){
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('overlay').classList.remove('show');
-    closeRuegenModal();
-    document.getElementById('kbd').classList.remove('show');
-  }
-  if (e.key === '?' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
-    e.preventDefault(); toggleKbd();
-  }
-  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
-    e.preventDefault();
-    document.getElementById('globalSearch').focus();
-  }
-  if ((e.ctrlKey || e.metaKey) && e.key === '0'){ e.preventDefault(); showPage('dashboard'); }
-  if ((e.ctrlKey || e.metaKey) && e.key === '1'){ e.preventDefault(); showPage('ruegen'); }
-  if ((e.ctrlKey || e.metaKey) && e.key === '2'){ e.preventDefault(); showPage('chronologie'); }
-  if ((e.ctrlKey || e.metaKey) && e.key === '3'){ e.preventDefault(); showPage('stats'); }
-});
-document.getElementById('globalSearch').addEventListener('input', e => {
-  const q = e.target.value.trim().toLowerCase();
-  if (!q) return;
-  const hitR = RUEGEN.some(r => (r.kurz+r.norm+r.prae+r.status+r.langtext).toLowerCase().includes(q));
-  if (hitR){
-    showPage('ruegen');
-    document.getElementById('ruegen-filter').value = q;
-    ruegenQuery = q;
-    renderRuegen();
-  }
-});
-
-/* ============================================================
-   EXPORT / IMPORT
-   ============================================================ */
-function download(filename, text){
-  const a = document.createElement('a');
-  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(text);
-  a.download = filename;
-  a.click();
-}
-function exportAll(){
-  download('b6-export-' + new Date().toISOString().slice(0,10) + '.json',
-    JSON.stringify({ progress, befund: loadBefunde(), ts: new Date().toISOString() }, null, 2));
-}
-function exportBefunde(){
-  download('b6-befunde-' + new Date().toISOString().slice(0,10) + '.json',
-    JSON.stringify(loadBefunde(), null, 2));
-}
-function importBefunde(){
-  const inp = document.createElement('input');
-  inp.type = 'file'; inp.accept = '.json';
-  inp.onchange = e => {
-    const f = e.target.files[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = ev => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if (Array.isArray(data)){
-          saveBefunde(loadBefunde().concat(data));
-        } else if (data.progress || data.befund){
-          if (data.progress) { progress = {...progress, ...data.progress}; saveProgress(); }
-          if (data.befund) saveBefunde(loadBefunde().concat(data.befund));
+        if (!this.entries.has(key)) {
+          this.misses++;
+          return { hit: false, value: undefined, key };
         }
-        renderRuegen(); renderStats(); renderBefunde();
-      } catch(err){ alert('Import fehlgeschlagen: ' + err.message); }
-    };
-    r.readAsText(f);
-  };
-  inp.click();
-}
-function clearBefunde(){
-  if (!confirm('Alle gespeicherten Befunde löschen?')) return;
-  saveBefunde([]);
-  renderBefunde();
-}
-function resetAll(){
-  if (!confirm('Alle lokalen Daten (Fortschritt + Befunde) löschen?')) return;
-  progress = {};
-  saveProgress();
-  saveBefunde([]);
-  renderRuegen(); renderStats(); renderBefunde();
-}
 
-/* ============================================================
-   BEFUND-ARCHIV
-   ============================================================ */
-function renderBefunde(){
-  const list = loadBefunde();
-  const el = document.getElementById('befund-list');
-  if (!el) return;
-  if (list.length === 0){
-    el.innerHTML = '<div class="card static"><h3>Keine gespeicherten Befunde</h3><p>Nutze den Richter-Validator und speichere einen Lauf.</p></div>';
-    return;
-  }
-  el.innerHTML = list.map((b, i) => `
-    <div class="card static" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div>
-          <h3 style="margin-bottom:4px">${esc(b.dokument||'Eingabe')} · ${esc(b.dokumenttyp||'—')}</h3>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text-mute)">${esc(b.erstellt||'')}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span class="tag ${b.hart_anzahl>0?'alert':'ok'}">${b.hart_anzahl} HART</span>
-          <span class="tag warn">${b.weich_anzahl} WEICH</span>
-          <button class="back-btn ghost" style="margin:0;padding:4px 10px;font-size:11px" onclick="deleteBefund(${i})">✕</button>
-        </div>
-      </div>
-      <details style="margin-top:10px">
-        <summary style="cursor:pointer;font-size:12px;color:var(--text-dim)">Befunde anzeigen (${b.befund?.length||0})</summary>
-        <div style="margin-top:10px">
-          ${(b.befund||[]).map(f => `
-            <div class="befund-item${f.haerte==='HART'?' hart':''}">
-              <div class="regel">${esc(f.regel)}</div>
-              <div class="stelle">${esc(f.stelle).slice(0,200)}</div>
-              <div class="hinweis">${esc(f.hinweis)}</div>
-            </div>`).join('') || '<p style="font-size:12px;color:var(--text-dim)">Keine Einzelbefunde.</p>'}
-        </div>
-      </details>
-    </div>`).join('');
-}
-function deleteBefund(i){
-  const list = loadBefunde();
-  list.splice(i, 1);
-  saveBefunde(list);
-  renderBefunde();
-}
+        this.hits++;
+        return { hit: true, value: deepCopy(this.entries.get(key)), key };
+      }
 
-/* ============================================================
-   RICHTER-VALIDATOR
-   ============================================================ */
-const Validator = (function(){
-  const RE_ZEITSPANNE = /(\d{1,2})[.:](\d{2})\s*(?:Uhr)?\s*(?:bis|[-–—])\s*(\d{1,2})[.:](\d{2})/gi;
-  const RE_PROZENT = /(\d{1,4})\s*(?:%|Prozent)/gi;
-  const RE_DATUM = /(\d{1,2})\.(\d{1,2})\.(\d{4})/g;
-  const RE_ANZAHL_NULL = /anzahl\s*[:=]?\s*0\b/i;
-  const RE_ASSERVAT = /\basservat\s*\d+/gi;
-  const RE_DOPPEL_LEER = /[^\s]  +[^\s]/g;
-  const RE_LEER_VOR_PKT = /[ \t]+[,;:!?]/g;
-  const RE_DOPPEL_PUNKT = /[!?]{2,}/g;
-  const RE_NUMERUS_BRUCH = /\b(die\s+Beschuldigten|die\s+Angeklagten|die\s+Angeschuldigten|beide[n]?|die\s+beiden|die\s+Eheleute|die\s+Betroffenen)\b[^.!?]{0,160}?\bals\s+(sogenannter|sogenannte[rn]?|sog\.|ein|einer|eines|einem|einen)\s+\p{Lu}\p{L}+/gisu;
-  const RE_FRAU_MARKER = /\b(Frau\s+\p{Lu}\p{L}+|Kl[äa]gerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanw[äa]ltin|Sachbearbeiterin|Logistikerin)\b/giu;
-  const RE_MASK_ROLLE = /\b(Beschuldigter|Angeklagter|Angeschuldigter|Täter|Haupttäter|Gehilfe|Logistiker|Zeuge|Sachbearbeiter|Beamter)\b/giu;
-  const RE_UNBEKANNT_TAETER = /(unbekannt\w*[^.!?]{0,60}?(Hauptt[äa]ter|T[äa]ter|Beteiligte)|(Hauptt[äa]ter|T[äa]ter|Beteiligte)[^.!?]{0,60}?unbekannt\w*)/giu;
-  const RE_TAT_52 = /§\s*52/;
-  const RE_TAT_53 = /§\s*53/;
+      set(input, value) {
+        const key = this.makeKey(input);
+        this.entries.set(key, deepCopy(value));
+        return key;
+      }
 
-  const FALSCH = [
-    ['standart','Standard','fachsprachlich falsch','HART'],
-    ['nähmlich','nämlich','fehlendes h','HART'],
-    ['rythmus','Rhythmus','Buchstabenfolge','HART'],
-    ['daß','dass','alte Orthographie','HART'],
-    ['muß','muss','alte Orthographie','HART'],
-    ['zuviel','zu viel','Getrenntschreibung','HART'],
-    ['garnicht','gar nicht','Getrenntschreibung','HART'],
-    ['besser wie','besser als','Komparativ mit als','HART'],
-    ['das selbe','dasselbe','Zusammenschreibung','HART'],
-    ['einzigste','einzige','nicht steigerbar','HART'],
-    ['desweiteren','des Weiteren','Substantiv groß','WEICH']
-  ];
+      clear() {
+        this.entries.clear();
+        this.hits = 0;
+        this.misses = 0;
+      }
+    }
 
-  const VORL = [
-    { typ:'DURCHSUCHUNGSBESCHLUSS', marker:/\bDurchsuchung\b/i, pflicht:[
-      ['Gericht',/\b(Amtsgericht|Landgericht|Oberlandesgericht)\s+\p{Lu}\p{L}+/iu],
-      ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs|Ls)\s+\d+\/\d+/],
-      ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
-      ['Beschuldigte',/\b(Beschuldigte[nr]?|Angeschuldigte[nr]?|gegen\s+\p{Lu}\p{L}+)/iu],
-      ['Unterschrift',/\b(Richter|Richterin|Unterschrift)\b/i],
-      ['Rechtsmittel',/\b(Beschwerde|Rechtsmittel|Rechtsbehelf)\b/i]
-    ]},
-    { typ:'PROTOKOLL', marker:/\b(Protokoll|Niederschrift)\b/i, pflicht:[
-      ['Aktenzeichen',/\d{1,4}\s+(?:Gs|Qs|Js|KLs)\s+\d+\/\d+/],
-      ['Datum',/\d{1,2}\.\d{1,2}\.\d{4}/],
-      ['Uhrzeit',/\d{1,2}:\d{2}/],
-      ['Unterschrift',/\b(Unterschrift|gez\.)\b/i]
-    ]}
-  ];
+    const cache = new ResultCache();
+    const $ = (id) => document.getElementById(id);
 
-  const count = (t, re) => (t.match(re) || []).length;
-  const tageImMonat = (j, m) => new Date(j, m, 0).getDate();
+    function readInput() {
+      return {
+        prompt: $("prompt").value,
+        context: $("context").value,
+        language: $("language").value,
+        model: $("model").value.trim(),
+        max_tokens: Number($("maxTokens").value),
+        system_prompt: $("systemPrompt").value,
+        response_format: $("responseFormat").value,
+        depth: Number($("depth").value),
+        entropy: Number($("entropy").value),
+        apply_veto: $("applyVeto").checked
+      };
+    }
 
-  function achseRS(text){
-    const out = [];
-    for (const [falsch, richtig, hint, haerte] of FALSCH){
-      const escS = falsch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp('(^|[^\\p{L}])' + escS + '([^\\p{L}]|$)', 'giu');
-      let m;
-      while ((m = re.exec(text)) !== null){
-        out.push({ kategorie:'RECHTSCHREIBUNG', regel:'RS_' + falsch.toUpperCase(),
-          stelle: m[0].trim(), hinweis: '→ ' + richtig + ' (' + hint + ')', haerte });
-      }
-    }
-    return out;
-  }
-  function achseGR(text){
-    const out = [];
-    const scan = (re, regel, hint, haerte) => {
-      re.lastIndex = 0;
-      let m;
-      while ((m = re.exec(text)) !== null){
-        out.push({ kategorie:'GRAMMATIK', regel, stelle:m[0], hinweis:hint, haerte });
-      }
-    };
-    scan(RE_DOPPEL_LEER, 'GR_MEHRFACH_LEERZEICHEN', 'Mehrfach-Leerzeichen', 'HART');
-    scan(RE_LEER_VOR_PKT, 'GR_LEERZEICHEN_VOR_PUNKT', 'Leerzeichen vor Satzzeichen', 'HART');
-    scan(RE_DOPPEL_PUNKT, 'GR_DOPPELTES_SATZZEICHEN', 'Doppeltes Satzzeichen prüfen', 'WEICH');
-    return out;
-  }
-  function achseLOG(text){
-    const out = [];
-    let m;
-    RE_ZEITSPANNE.lastIndex = 0;
-    while ((m = RE_ZEITSPANNE.exec(text)) !== null){
-      const sH = +m[1], sM = +m[2], eH = +m[3], eM = +m[4];
-      if (sH > 23 || eH > 23 || sM > 59 || eM > 59){
-        out.push({ kategorie:'LOGIK', regel:'LOG_ZEIT_UNGUELTIG', stelle:m[0], hinweis:'Uhrzeit außerhalb 00:00–23:59', haerte:'HART' });
-        continue;
-      }
-      if (sH * 60 + sM > eH * 60 + eM){
-        out.push({ kategorie:'LOGIK', regel:'LOG_ZEITPARADOX', stelle:m[0], hinweis:'Endzeit liegt vor Startzeit', haerte:'HART' });
-      }
-    }
-    if (RE_ANZAHL_NULL.test(text)){
-      const n = count(text, RE_ASSERVAT);
-      if (n > 0){
-        out.push({ kategorie:'LOGIK', regel:'LOG_ZAEHLWIDERSPRUCH', stelle:'Anzahl: 0',
-          hinweis: n + ' Asservate trotz "Anzahl 0"', haerte:'HART' });
-      }
-    }
-    RE_PROZENT.lastIndex = 0;
-    while ((m = RE_PROZENT.exec(text)) !== null){
-      if (+m[1] > 100){
-        out.push({ kategorie:'LOGIK', regel:'LOG_PROZENT', stelle:m[0], hinweis:'Wert > 100 %', haerte:'HART' });
-      }
-    }
-    RE_DATUM.lastIndex = 0;
-    while ((m = RE_DATUM.exec(text)) !== null){
-      const d = +m[1], mo = +m[2], j = +m[3];
-      if (mo < 1 || mo > 12 || d < 1 || d > tageImMonat(j, mo)){
-        out.push({ kategorie:'LOGIK', regel:'LOG_DATUM_UNGUELTIG', stelle:m[0], hinweis:'Kalenderdatum existiert nicht', haerte:'HART' });
-      }
-    }
-    if (RE_TAT_52.test(text) && RE_TAT_53.test(text)){
-      out.push({ kategorie:'LOGIK', regel:'LOG_NORMKOLLISION_52_53', stelle:'§ 52 + § 53 StGB',
-        hinweis:'Tateinheit und Tatmehrheit schließen sich aus', haerte:'HART' });
-    }
-    return out;
-  }
-  function achseKON(text){
-    const out = [];
-    let m;
-    RE_NUMERUS_BRUCH.lastIndex = 0;
-    while ((m = RE_NUMERUS_BRUCH.exec(text)) !== null){
-      out.push({ kategorie:'KONGRUENZ', regel:'KON_NUMERUS_PLURAL_SINGULAR_APPOSITION',
-        stelle:m[0], hinweis:'Subjekt Plural, Apposition Singular → Numerus-Bruch', haerte:'HART' });
-    }
-    const frau = RE_FRAU_MARKER.test(text);
-    const mask = RE_MASK_ROLLE.test(text);
-    const fem = /\b(Klägerin|Zeugin|Beschuldigte|Angeklagte|Beamtin|Richterin|Staatsanwältin|Sachbearbeiterin|Logistikerin)\b/giu.test(text);
-    if (frau && mask && !fem){
-      out.push({ kategorie:'KONGRUENZ', regel:'KON_GENUS_GENERISCH_MASKULIN',
-        stelle:'weibliche Beteiligte erkannt',
-        hinweis:'generisches Maskulinum nennt weibliche Beteiligte nicht', haerte:'WEICH' });
-    }
-    if (RE_UNBEKANNT_TAETER.test(text)){
-      out.push({ kategorie:'KONGRUENZ', regel:'KON_WIDERSPRUCH_UNBEKANNT_BEKANNT',
-        stelle:'unbekannte Täter + benannte Beteiligte',
-        hinweis:'Gehilfenstellung bei unbekannten Haupttätern nicht ableitbar', haerte:'WEICH' });
-    }
-    return out;
-  }
-  function achseVOR(text){
-    const out = [];
-    let typ = 'UNBESTIMMT';
-    for (const v of VORL){
-      if (v.marker.test(text)){
-        typ = v.typ;
-        for (const [name, re] of v.pflicht){
-          if (!re.test(text)){
-            out.push({ kategorie:'VORLAGE', regel:'VOR_PFLICHTFELD_FEHLT_' + name.toUpperCase(),
-              stelle:v.typ, hinweis:'Pflichtfeld nicht gefunden: ' + name, haerte:'HART' });
+    function demoGenerate(input) {
+      const label = input.context.match(/Fall [A-Z]/)?.[0] || "Fall";
+      const summary = `${label}: neutrale Zusammenfassung auf ${input.language}.`;
+
+      if (input.response_format === "json") {
+        return {
+          case: label,
+          summary,
+          model: input.model,
+          options: {
+            max_tokens: input.max_tokens,
+            depth: input.depth,
+            entropy: input.entropy,
+            apply_veto: input.apply_veto
           }
+        };
+      }
+
+      return {
+        text: summary,
+        model: input.model,
+        generated_at: new Date().toISOString()
+      };
+    }
+
+    function updateStats() {
+      $("hitCount").textContent = cache.hits;
+      $("missCount").textContent = cache.misses;
+      $("entryCount").textContent = cache.entries.size;
+    }
+
+    $("runButton").addEventListener("click", () => {
+      const input = readInput();
+      const useCache = $("useCache").checked;
+      let output;
+      let key;
+      let label;
+
+      if (useCache) {
+        const result = cache.get(input);
+        key = result.key;
+
+        if (result.hit) {
+          output = result.value;
+          label = "CACHE HIT";
+        } else {
+          output = demoGenerate(input);
+          cache.set(input, output);
+          label = "CACHE MISS · neu erzeugt";
         }
-        break;
+      } else {
+        output = demoGenerate(input);
+        key = cache.makeKey(input);
+        label = "CACHE AUS · direkt erzeugt";
       }
-    }
-    return { typ, befund: out };
-  }
 
-  function analysiere(name, text){
-    const befund = [].concat(achseRS(text), achseGR(text), achseLOG(text), achseKON(text));
-    const vor = achseVOR(text);
-    befund.push(...vor.befund);
-    const hart = befund.filter(b => b.haerte === 'HART').length;
-    const weich = befund.filter(b => b.haerte === 'WEICH').length;
-    return {
-      dokument: name,
-      dokumenttyp: vor.typ,
-      zeichen: text.length,
-      woerter: (text.match(/\p{L}+/gu) || []).length,
-      hart_anzahl: hart,
-      weich_anzahl: weich,
-      status: hart > 0 ? 'BEFUND_HART' : 'OHNE_HARTEN_BEFUND',
-      befund,
-      erstellt: new Date().toISOString()
-    };
-  }
+      $("result").textContent = `${label}\n\n${JSON.stringify(output, null, 2)}`;
+      $("keyDisplay").textContent = `Key: ${key}`;
+      updateStats();
+    });
 
-  function render(b){
-    const statusClass = b.status === 'BEFUND_HART' ? 'alert' : 'ok';
-    const statusLabel = b.status === 'BEFUND_HART' ? 'BEFUND HART' : 'OHNE HARTEN BEFUND';
-    let html = '';
-    html += '<div class="kpi" style="margin-bottom:14px">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">';
-    html += '<div><span class="kpi-label">Status</span><br><span class="kpi-value ' + statusClass + '" style="font-size:18px">' + statusLabel + '</span></div>';
-    html += '<div><span class="kpi-label">Dokumenttyp</span><br><span class="kpi-value" style="font-size:15px">' + esc(b.dokumenttyp) + '</span></div>';
-    html += '<div><span class="kpi-label">HART</span><br><span class="kpi-value ' + (b.hart_anzahl > 0 ? 'alert' : 'ok') + '">' + b.hart_anzahl + '</span></div>';
-    html += '<div><span class="kpi-label">WEICH</span><br><span class="kpi-value warn">' + b.weich_anzahl + '</span></div>';
-    html += '<div><span class="kpi-label">Wörter / Zeichen</span><br><span class="kpi-value" style="font-size:14px">' + b.woerter + ' / ' + b.zeichen + '</span></div>';
-    html += '</div></div>';
-    if (b.befund.length){
-      const byKat = {};
-      for (const f of b.befund){
-        if (!byKat[f.kategorie]) byKat[f.kategorie] = [];
-        byKat[f.kategorie].push(f);
+    $("mutateButton").addEventListener("click", () => {
+      const result = cache.get(readInput());
+
+      if (!result.hit) {
+        $("result").textContent = "Für diese Eingabe gibt es noch keinen Cache-Eintrag.";
+        updateStats();
+        return;
       }
-      for (const [kat, list] of Object.entries(byKat)){
-        const hartC = list.filter(x => x.haerte === 'HART').length;
-        const weichC = list.filter(x => x.haerte === 'WEICH').length;
-        html += '<div class="card static" style="margin-bottom:12px">';
-        html += '<h3 style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><span>' + esc(kat) + '</span><span>';
-        if (hartC) html += '<span class="tag alert">' + hartC + ' HART</span> ';
-        if (weichC) html += '<span class="tag warn">' + weichC + ' WEICH</span>';
-        html += '</span></h3><div style="margin-top:10px">';
-        for (const f of list){
-          html += '<div class="befund-item' + (f.haerte === 'HART' ? ' hart' : '') + '">';
-          html += '<div class="regel">' + esc(f.regel) + '</div>';
-          html += '<div class="stelle">' + esc(f.stelle).slice(0, 280) + '</div>';
-          html += '<div class="hinweis">' + esc(f.hinweis) + '</div>';
-          html += '</div>';
-        }
-        html += '</div></div>';
+
+      if (result.value && typeof result.value === "object") {
+        result.value.mutation_test = "Diese Änderung darf den Cache nicht verändern.";
       }
-    } else {
-      html += '<div class="card static"><h3>✓ Keine Befunde</h3><p>Alle geprüften Achsen ohne Beanstandung.</p></div>';
-    }
-    html += '<p style="margin-top:16px;font-size:11px;color:var(--text-mute);line-height:1.55;font-style:italic">Deterministische Heuristik. Hinweise können unvollständig sein. Kein Regel darf korrektes Wort flaggen.</p>';
-    return html;
-  }
 
-  return { analysiere, render };
-})();
+      const secondRead = cache.get(readInput());
+      const safe = !secondRead.value?.mutation_test;
 
-/* ============================================================
-   SIGNATUR-CHECK
-   ============================================================ */
-const SIG_LEX = {
-  durchsuchungsbeschluss:{ pflicht:true, wer:'Richter', norm:'§ 35 StPO i.V.m. § 105 Abs. 1 StPO, Art. 13 Abs. 2 GG' },
-  anklageschrift:{ pflicht:true, wer:'Staatsanwalt', norm:'§ 200 StPO' },
-  beschluss:{ pflicht:true, wer:'Richter', norm:'§ 35 StPO' },
-  urteil:{ pflicht:true, wer:'Alle Richter', norm:'§ 275 StPO' },
-  haftbefehl:{ pflicht:true, wer:'Richter', norm:'§ 114 StPO' },
-  protokoll:{ pflicht:true, wer:'Alle Beteiligten', norm:'je Verfahrensart' },
-  belehrung_beschuldigter_nrw:{ pflicht:true, wer:'Beamter + Beschuldigter', norm:'§ 136 StPO' },
-  ed_anordnung_nrw:{ pflicht:true, wer:'Anordnender Beamter', norm:'§ 81b StPO' },
-  dna_anordnung_nrw:{ pflicht:true, wer:'Richter', norm:'§ 81f StPO' },
-  verwaltungsakt:{ pflicht:false, wer:'—', norm:'§ 37 Abs. 2 VwVfG' }
-};
-const SIG_TXT_M = [/gez\.?\s/i,/gezeichnet/i,/\(Unterschrift\)/i,/Unterschrift[:\s]/i,/_{5,}/];
-const SIG_LER_M = [/Unterschrift[:\s]*$/im,/\(keine Unterschrift\)/i,/ohne\s+Unterschrift/i,/nicht\s+unterschrieben/i];
+      $("result").textContent = safe
+        ? "Deep-copy-Test bestanden: Die Mutation hat den gespeicherten Cache-Wert nicht verändert."
+        : "Deep-copy-Test fehlgeschlagen.";
+      updateStats();
+    });
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
-function esc(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+    $("clearButton").addEventListener("click", () => {
+      cache.clear();
+      $("result").textContent = "Cache geleert.";
+      $("keyDisplay").textContent = "Cache-Schlüssel erscheint hier.";
+      updateStats();
+    });
 
-/* ============================================================
-   INIT
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  loadProgress();
-  updateBefundBadge();
+    $("testButton").addEventListener("click", () => {
+      const base = {
+        prompt: "Zusammenfassen",
+        context: "Fall A",
+        language: "de",
+        model: "demo-model",
+        max_tokens: 500,
+        system_prompt: "Sachlich antworten",
+        response_format: "text",
+        depth: 2,
+        entropy: 0.4,
+        apply_veto: false
+      };
 
-  renderRuegen();
-  renderFehler();
-  renderChrono();
-  renderCore();
-  renderXj();
-  renderStats();
-  renderHeatmap();
-  renderTimeline();
-  renderBefunde();
+      const parameters = [
+        "language",
+        "model",
+        "max_tokens",
+        "system_prompt",
+        "response_format",
+        "depth",
+        "entropy",
+        "apply_veto",
+        "prompt",
+        "context"
+      ];
 
-  /* RICHTER-VALIDATOR */
-  const $ = id => document.getElementById(id);
+      const rows = parameters.map((parameter) => {
+        const changed = deepCopy(base);
+        const original = changed[parameter];
 
-  $('rv-file').addEventListener('change', e => {
-    const f = e.target.files[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = ev => { $('rv-input').value = ev.target.result; };
-    r.readAsText(f, 'utf-8');
-  });
+        if (typeof original === "boolean") changed[parameter] = !original;
+        else if (typeof original === "number") changed[parameter] = original + 1;
+        else changed[parameter] = `${original}-changed`;
 
-  let lastBefund = null;
-  $('rv-run').addEventListener('click', () => {
-    const t = $('rv-input').value;
-    if (!t.trim()){
-      $('rv-result').innerHTML = '<div class="card static"><p>Kein Text eingegeben.</p></div>';
-      $('rv-export').disabled = true;
-      return;
-    }
-    lastBefund = Validator.analysiere('Eingabe (Browser)', t);
-    $('rv-result').innerHTML = Validator.render(lastBefund);
-    $('rv-export').disabled = false;
-  });
-  $('rv-clear').addEventListener('click', () => {
-    $('rv-input').value = ''; $('rv-result').innerHTML = ''; $('rv-file').value = '';
-    lastBefund = null; $('rv-export').disabled = true;
-  });
-  $('rv-demo').addEventListener('click', () => {
-    $('rv-input').value = 'Amtsgericht Düsseldorf\nBeschluss\n\nAktenzeichen: 152 Gs 648/26\n\nEs wird die Durchsuchung der Wohnung\nSüdring 134, 49477 Ibbenbüren angeordnet.\n\nTatvorwurf: § 308 StGB\n\nDie Beschuldigten Tina und Thomas König handelten als sogenannter "Logistiker".\nDie Maßnahme fand am 32.13.2026 von 08:15 bis 06:26 Uhr statt.\nAnzahl: 0\nAsservat 1\nAsservat 2\nAsservat 3\n\ngez.\nKHK Feierabend';
-  });
-  $('rv-export').addEventListener('click', () => {
-    if (!lastBefund) return;
-    const list = loadBefunde();
-    list.push(lastBefund);
-    saveBefunde(list);
-    renderBefunde();
-    alert('Befund gespeichert. Öffne „Befund-Archiv" in der Seitenleiste.');
-  });
+        const passed = stableStringify(base) !== stableStringify(changed);
+        return { parameter, passed };
+      });
 
-  /* SIGNATUR-CHECK */
-  $('sig-run').addEventListener('click', () => {
-    const t = $('sig-input').value;
-    const typ = $('sig-typ').value;
-    const lex = SIG_LEX[typ] || { pflicht:null };
-    const hatLeer = SIG_LER_M.some(re => re.test(t));
-    const hatMarker = SIG_TXT_M.some(re => re.test(t));
-    let vorhanden, sicherheit, begruendung, verdikt;
-    if (hatLeer && !hatMarker){ vorhanden = false; sicherheit = 'HOCH'; begruendung = 'Leer-Marker gefunden.'; }
-    else if (hatMarker){ vorhanden = true; sicherheit = 'MITTEL'; begruendung = 'Text-Marker gefunden.'; }
-    else { vorhanden = false; sicherheit = 'MITTEL'; begruendung = 'Weder Marker noch Leer-Marker.'; }
-    if (!lex.pflicht) verdikt = 'NICHT_ERFORDERLICH';
-    else if (vorhanden === true) verdikt = 'KONFORM';
-    else if (vorhanden === false) verdikt = 'MANGEL_FEHLT';
-    else verdikt = 'MANGEL_UNSICHER';
-    const cls = (verdikt === 'KONFORM' || verdikt === 'NICHT_ERFORDERLICH') ? 'ok' : verdikt === 'MANGEL_FEHLT' ? 'alert' : 'warn';
-    let html = '<div class="card static" style="margin-top:12px">';
-    html += '<h3>Ergebnis <span class="tag ' + cls + '">' + verdikt + '</span></h3>';
-    html += '<p style="margin-top:10px;line-height:1.85;font-size:13px">';
-    html += '<strong>Pflicht:</strong> ' + (lex.pflicht ? 'JA' : 'NEIN') + '<br>';
-    if (lex.pflicht){ html += '<strong>Wer:</strong> ' + lex.wer + '<br><strong>Norm:</strong> ' + lex.norm + '<br>'; }
-    html += '<strong>Vorhanden:</strong> ' + (vorhanden === true ? 'JA' : vorhanden === false ? 'NEIN' : 'UNSICHER') + '<br>';
-    html += '<strong>Sicherheit:</strong> ' + sicherheit + '<br>';
-    html += '<strong>Begründung:</strong> ' + begruendung + '</p>';
-    html += '<p style="margin-top:12px;font-size:11px;color:var(--text-mute);font-style:italic">Text-Marker-Scan. Kein Ersatz für kryptografische Signaturprüfung.</p>';
-    html += '</div>';
-    $('sig-result').innerHTML = html;
-  });
+      const cacheTest = new ResultCache();
+      const testInput = deepCopy(base);
+      const stored = { nested: { value: "original" } };
+      cacheTest.set(testInput, stored);
+      stored.nested.value = "extern verändert";
+      const readOne = cacheTest.get(testInput);
+      readOne.value.nested.value = "Rückgabewert verändert";
+      const readTwo = cacheTest.get(testInput);
+      const copyPassed = readTwo.value.nested.value === "original";
 
-  /* iOS pull-to-refresh prevent */
-  document.body.addEventListener('touchmove', e => {
-    if (e.target.closest('.content') || e.target.closest('.nav') || e.target.closest('.modal-bg') || e.target.closest('.kbd-overlay')) return;
-    e.preventDefault();
-  }, { passive: false });
-});
-</script>
+      rows.push({ parameter: "Deep-copy bei Speichern und Lesen", passed: copyPassed });
+
+      $("testCases").innerHTML = rows.map(({ parameter, passed }) => `
+        <div class="case">
+          <div><strong>${parameter}</strong><span>${passed ? "Unterschied erkannt" : "Unterschied fehlt"}</span></div>
+          <span class="status ${passed ? "pass" : "fail"}">${passed ? "BESTANDEN" : "FEHLER"}</span>
+        </div>
+      `).join("");
+
+      const passedCount = rows.filter((row) => row.passed).length;
+      $("testSummary").textContent =
+        `${passedCount} von ${rows.length} Tests bestanden.`;
+    });
+  </script>
 </body>
 </html>
+/* BLACK SIX — Tactical Command Center */
+:root {
+  --neon: #8affc1;
+  --neon-soft: rgba(138, 255, 193, .14);
+  --ice: #a8caff;
+  --danger: #ff7585;
+  --panel: rgba(13, 20, 29, .78);
+  --line: rgba(177, 205, 230, .12);
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% -25%, rgba(74, 145, 119, .18), transparent 55%),
+    radial-gradient(ellipse at 100% 80%, rgba(80, 112, 170, .11), transparent 45%),
+    #070a0f;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .15;
+  background-image:
+    linear-gradient(rgba(180, 220, 205, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 220, 205, .035) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.app { position: relative; isolation: isolate; }
+
+.sidebar {
+  background: linear-gradient(180deg, rgba(10,16,23,.98), rgba(7,11,17,.96));
+  border-right: 1px solid var(--line);
+  backdrop-filter: blur(22px);
+}
+
+.logo-icon {
+  color: var(--neon);
+  border: 1px solid rgba(138,255,193,.24);
+  box-shadow: 0 0 28px rgba(138,255,193,.15), inset 0 0 16px rgba(138,255,193,.08);
+}
+
+.header {
+  background: rgba(7, 11, 17, .78);
+  backdrop-filter: blur(24px) saturate(150%);
+  border-bottom: 1px solid var(--line);
+}
+
+.page-title {
+  font-size: clamp(26px, 3vw, 38px);
+  letter-spacing: -1.25px;
+  text-shadow: 0 0 28px rgba(138,255,193,.12);
+}
+
+.page-sub { color: #90a1b2; }
+
+.card, .kpi, .table, .case-note {
+  background: linear-gradient(145deg, rgba(19,28,39,.88), rgba(10,16,23,.94));
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 42px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.035);
+  backdrop-filter: blur(16px);
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 12%;
+  width: 76%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(138,255,193,.38), transparent);
+  opacity: .55;
+}
+
+.card:not(.static):hover {
+  transform: translateY(-4px);
+  border-color: rgba(138,255,193,.32);
+  box-shadow: 0 22px 55px rgba(0,0,0,.34), 0 0 30px rgba(138,255,193,.07);
+}
+
+.kpi-value {
+  color: var(--neon);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px rgba(138,255,193,.15);
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(138,255,193,.14), rgba(138,255,193,.025));
+  border-color: rgba(138,255,193,.17);
+  box-shadow: inset 2px 0 var(--neon), 0 0 24px rgba(138,255,193,.045);
+}
+
+.search:focus, .filter-input:focus, .field:focus {
+  border-color: rgba(138,255,193,.66);
+  box-shadow: 0 0 0 4px rgba(138,255,193,.09), 0 0 24px rgba(138,255,193,.06);
+}
+
+button, .chip, .back-btn, .hicon {
+  transition: transform .16s ease, filter .16s ease, border-color .16s ease;
+}
+
+button:hover, .chip:hover, .back-btn:hover, .hicon:hover {
+  filter: brightness(1.12);
+}
+
+button:active, .chip:active, .back-btn:active, .hicon:active {
+  transform: scale(.97);
+}
+
+.table th {
+  background: rgba(13,20,29,.96);
+  color: #9fb0c1;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-size: 10px;
+}
+
+.table tr.clickable:hover td {
+  background: rgba(138,255,193,.055);
+}
+
+.tag {
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 1px rgba(255,255,255,.04);
+}
+
+.modal {
+  background: linear-gradient(150deg, #172330, #0b1119);
+  border: 1px solid rgba(177,205,230,.2);
+  box-shadow: 0 35px 100px rgba(0,0,0,.6), 0 0 50px rgba(138,255,193,.05);
+}
+
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .kpi, .card { animation: cockpit-in .45s both; }
+  .kpi:nth-child(2), .card:nth-child(2) { animation-delay: .04s; }
+  .kpi:nth-child(3), .card:nth-child(3) { animation-delay: .08s; }
+
+  @keyframes cockpit-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (max-width: 860px) {
+  body::before { background-size: 28px 28px; }
+  .header { background: rgba(7,11,17,.94); }
+  .table { display: block; overflow-x: auto; }
+}
+
+/* CACHE PIPELINE — Input → Key → Lookup → Generate */
+
+.cache-pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.pipeline-step {
+  position: relative;
+  min-width: 0;
+  padding: 18px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(19,28,39,.9), rgba(10,16,23,.96));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: border-color .2s ease, transform .2s ease;
+}
+
+.pipeline-step:hover {
+  transform: translateY(-3px);
+  border-color: rgba(138,255,193,.35);
+}
+
+.pipeline-step + .pipeline-step::before {
+  content: "›";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  z-index: 2;
+  color: var(--neon);
+  font-size: 22px;
+  transform: translateY(-50%);
+  text-shadow: 0 0 14px rgba(138,255,193,.45);
+}
+
+.pipeline-step__number {
+  display: inline-grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  margin-bottom: 14px;
+  color: var(--neon);
+  background: var(--neon-soft);
+  border: 1px solid rgba(138,255,193,.22);
+  border-radius: 8px;
+  font: 700 12px/1 system-ui, sans-serif;
+}
+
+.pipeline-step__title {
+  margin: 0 0 7px;
+  color: #e7f0f7;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.pipeline-step__description {
+  margin: 0;
+  color: #91a2b3;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.pipeline-step__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.pipeline-token {
+  padding: 4px 8px;
+  color: #b8c8d7;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  font: 11px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.pipeline-step.is-active {
+  border-color: rgba(138,255,193,.5);
+  box-shadow: inset 0 0 28px rgba(138,255,193,.045),
+              0 0 24px rgba(138,255,193,.08);
+}
+
+.pipeline-step.is-hit .pipeline-step__number {
+  color: #07100b;
+  background: var(--neon);
+}
+
+.pipeline-step.is-miss .pipeline-step__number {
+  color: var(--ice);
+  background: rgba(168,202,255,.12);
+  border-color: rgba(168,202,255,.25);
+}
+
+.pipeline-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #9cafbd;
+  font-size: 11px;
+}
+
+.pipeline-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  background: #71808d;
+  border-radius: 50%;
+}
+
+.pipeline-status.is-ready::before {
+  background: var(--neon);
+  box-shadow: 0 0 10px rgba(138,255,193,.65);
+}
+
+.pipeline-status.is-error::before {
+  background: var(--danger);
+  box-shadow: 0 0 10px rgba(255,117,133,.5);
+}
+
+@media (max-width: 900px) {
+  .cache-pipeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pipeline-step + .pipeline-step::before {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .cache-pipeline {
+    grid-template-columns: 1fr;
+  }
+}
+
+<section class="cache-pipeline" aria-label="Cache-Ablauf">
+  <article class="pipeline-step is-active">
+    <span class="pipeline-step__number">01</span>
+    <h3 class="pipeline-step__title">Eingaben</h3>
+    <p class="pipeline-step__description">
+      Prompt, Kontext und alle ergebnisrelevanten Optionen erfassen.
+    </p>
+    <div class="pipeline-step__meta">
+      <span class="pipeline-token">prompt</span>
+      <span class="pipeline-token">context</span>
+      <span class="pipeline-token">language</span>
+    </div>
+  </article>
+
+  <article class="pipeline-step">
+    <span class="pipeline-step__number">02</span>
+    <h3 class="pipeline-step__title">Cache-Schlüssel</h3>
+    <p class="pipeline-step__description">
+      Einheitliche Darstellung aller Parameter für den Schlüssel bilden.
+    </p>
+    <div class="pipeline-step__meta">
+      <span class="pipeline-token">model</span>
+      <span class="pipeline-token">max_tokens</span>
+      <span class="pipeline-token">response_format</span>
+    </div>
+  </article>
+
+  <article class="pipeline-step is-hit">
+    <span class="pipeline-step__number">03</span>
+    <h3 class="pipeline-step__title">Cache-Suche</h3>
+    <p class="pipeline-step__description">
+      Passenden Eintrag suchen und als unabhängige Kopie zurückgeben.
+    </p>
+    <div class="pipeline-step__meta">
+      <span class="pipeline-status is-ready">Treffer</span>
+    </div>
+  </article>
+
+  <article class="pipeline-step">
+    <span class="pipeline-step__number">04</span>
+    <h3 class="pipeline-step__title">Generierung</h3>
+    <p class="pipeline-step__description">
+      Bei einem Fehlschlag Antwort erzeugen und sicher im Cache ablegen.
+    </p>
+    <div class="pipeline-step__meta">
+      <span class="pipeline-token">deepcopy</span>
+      <span class="pipeline-token">store</span>
+    </div>
+  </article>
+</section>
