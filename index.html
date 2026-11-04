@@ -1,3 +1,33 @@
+Ich nehme **das letzte Architektur-Cockpit** als Basis. Deine Nachricht enthält mehrere vollständige HTML-Dokumente hintereinander; die dürfen nicht zu einer Datei zusammengeklebt werden. Den folgenden eigenständigen Block kannst du **vor dem letzten `</body>`** des Cockpits einfügen. Er ergänzt eine anhängbare Blocker- und Nachweisübersicht, ohne den bestehenden JavaScript-Code zu verändern.
+
+```html
+<!-- B6+ ANHANG: Blocker- und Nachweisübersicht -->
+<style>
+  .b6-appendix {
+    width: min(1100px, calc(100% - 32px));
+    margin: 24px auto;
+    padding: 20px;
+    color: #eef2ff;
+    background: #111522;
+    border: 1px solid #293149;
+    border-radius: 13px;
+    font: 14px/1.5 Inter, system-ui, sans-serif;
+  }
+  .b6-appendix h2 { margin: 0 0 8px; font-size: 18px; }
+  .b6-appendix p { color: #9ba6bf; }
+  .b6-appendix .b6-blockers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .b6-appendix .b6-blocker {
+    padding: 12px;
+    background: #171c2b;
+    border: 1px solid #293149;
+    border-radius: 9px;
+  }
+  .
 <!DOCTYPE html>
 <html lang="de">
 <head>
