@@ -338,3 +338,278 @@ const prior=new Date(today); prior.setDate(prior.getDate()-30); $("dateFrom").va
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b12">
+  <title>BLACK SIX — Architektur-Cockpit</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090b12;
+      --panel: #111522;
+      --panel-2: #171c2b;
+      --line: #293149;
+      --text: #eef2ff;
+      --muted: #9ba6bf;
+      --cyan: #32d7ff;
+      --green: #39e6a1;
+      --amber: #ffbd59;
+      --red: #ff657a;
+      --violet: #bd83ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    button, input { font: inherit; }
+
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 290px 1fr; }
+    aside {
+      padding: 24px 16px; background: #0d1019;
+      border-right: 1px solid var(--line);
+    }
+    .brand { padding: 4px 10px 24px; border-bottom: 1px solid var(--line); }
+    .brand strong { display: block; letter-spacing: .18em; font-size: 18px; }
+    .brand span { color: var(--muted); font-size: 12px; }
+    .nav-title { margin: 22px 10px 9px; color: var(--muted); font-size: 11px; letter-spacing: .14em; }
+    nav { display: grid; gap: 5px; }
+    nav button {
+      width: 100%; text-align: left; color: var(--text); cursor: pointer;
+      background: transparent; border: 1px solid transparent; border-radius: 9px;
+      padding: 10px 11px;
+    }
+    nav button:hover, nav button.active { background: var(--panel-2); border-color: var(--line); }
+    .nav-icon { display: inline-block; width: 25px; }
+    main { min-width: 0; padding: 28px clamp(18px, 4vw, 56px); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .eyebrow { color: var(--cyan); font-size: 11px; letter-spacing: .16em; }
+    h1 { margin: 7px 0 5px; font-size: clamp(25px, 4vw, 38px); }
+    h2 { margin: 0 0 15px; font-size: 18px; }
+    .sub { margin: 0; color: var(--muted); }
+    .search {
+      width: min(300px, 38vw); color: var(--text); background: var(--panel);
+      border: 1px solid var(--line); border-radius: 9px; padding: 11px 13px;
+    }
+    .statusbar { display: flex; flex-wrap: wrap; gap: 9px; margin: 24px 0; }
+    .pill, .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 6px 10px; color: var(--muted); font-size: 12px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .card {
+      min-width: 0; background: var(--panel); border: 1px solid var(--line);
+      border-radius: 13px; padding: 18px;
+    }
+    .wide { grid-column: span 12; }
+    .half { grid-column: span 6; }
+    .third { grid-column: span 4; }
+    .metric { color: var(--cyan); font-size: 27px; font-weight: 700; }
+    .muted { color: var(--muted); }
+    .module-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .module {
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px;
+      background: var(--panel-2); border: 1px solid var(--line); border-radius: 9px;
+    }
+    .module .icon { font-size: 19px; }
+    .module strong { display: block; font-size: 13px; }
+    .module small { display: block; margin-top: 4px; color: var(--muted); }
+    .badge { margin-top: 7px; padding: 3px 8px; font-size: 10px; }
+    .verified { color: var(--green); border-color: #24664e; }
+    .unknown { color: var(--amber); border-color: #76572c; }
+    .planned { color: var(--violet); border-color: #574075; }
+    .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .layer { border-left: 2px solid var(--cyan); padding: 8px 12px; background: var(--panel-2); }
+    .layer strong { display: block; margin-bottom: 5px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 11px 9px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 500; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .note { border-left: 3px solid var(--amber); padding: 11px 13px; color: var(--muted); background: #191711; }
+    footer { margin-top: 26px; color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 850px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--line); padding: 14px; }
+      nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .nav-title { margin-top: 14px; }
+      main { padding-top: 20px; }
+      .third, .half { grid-column: span 12; }
+    }
+    @media (max-width: 520px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .search { width: 100%; }
+      .module-list, .flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <strong>BLACK SIX</strong>
+        <span>Architektur-Cockpit · B6+</span>
+      </div>
+
+      <div class="nav-title">ANSICHTEN</div>
+      <nav aria-label="Hauptnavigation">
+        <button class="active" data-target="overview"><span class="nav-icon">◈</span>Systemübersicht</button>
+        <button data-target="routes"><span class="nav-icon">⇄</span>Routen-Vertrag</button>
+        <button data-target="lexicon"><span class="nav-icon">⌘</span>Säulen &amp; Lexika</button>
+        <button data-target="modules"><span class="nav-icon">▦</span>Modulkatalog</button>
+      </nav>
+
+      <div class="nav-title">ABLAGEGRENZEN</div>
+      <nav aria-label="Ablagebereiche">
+        <button data-target="overview"><span class="nav-icon">①</span>01_STABLE</button>
+        <button data-target="modules"><span class="nav-icon">②</span>02_SANDBOX</button>
+        <button data-target="lexicon"><span class="nav-icon">③</span>03_LORE</button>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">BLACK SIX / CONTROL PLANE</div>
+          <h1>Architektur-Cockpit</h1>
+          <p class="sub">Implementierung, Prüfung und Roadmap getrennt sichtbar.</p>
+        </div>
+        <input id="search" class="search" type="search" placeholder="Module durchsuchen…" aria-label="Module durchsuchen">
+      </header>
+
+      <div class="statusbar" aria-label="Statuslegende">
+        <span class="pill"><i class="dot" style="background:var(--green)"></i>VERIFIZIERT · Beleg erforderlich</span>
+        <span class="pill"><i class="dot"></i>IM CODE · ungeprüft</span>
+        <span class="pill"><i class="dot" style="background:var(--violet)"></i>GEPLANT</span>
+        <span class="pill"><i class="dot" style="background:var(--red)"></i>BLOCKIERT</span>
+      </div>
+
+      <section id="overview" class="section active">
+        <div class="grid">
+          <article class="card third">
+            <div class="muted">Angezeigte Entitäten</div>
+            <div class="metric">201</div>
+            <small class="muted">UI-Angabe aus Screenshot · nicht als Funktionszahl verifiziert</small>
+          </article>
+          <article class="card third">
+            <div class="muted">Prüfstatus</div>
+            <div class="metric" style="color:var(--amber)">OFFEN</div>
+            <small class="muted">Repository und Tests hier nicht verfügbar</small>
+          </article>
+          <article class="card third">
+            <div class="muted">CALM-Commit</div>
+            <div class="metric" style="color:var(--red)">BLOCKIERT</div>
+            <small class="muted">Screenshot meldet einen CALM-Verstoß</small>
+          </article>
+
+          <article class="card wide">
+            <h2>Systemgrenzen</h2>
+            <div class="flow">
+              <div class="layer"><strong>01_STABLE</strong><span class="muted">Nur geprüfter, belegter Code</span></div>
+              <div class="layer" style="border-color:var(--amber)"><strong>02_SANDBOX</strong><span class="muted">Experimente und ungeprüfte Module</span></div>
+              <div class="layer" style="border-color:var(--violet)"><strong>03_LORE</strong><span class="muted">Konzepte, Namen, Roadmap und Diagramme</span></div>
+            </div>
+          </article>
+
+          <article class="card wide">
+            <h2>Arbeitsstand aus den vorliegenden Screenshots</h2>
+            <p class="note">Sichtbar sind eine Streamlit-Navigation, die Dateien <code>app.py</code>, <code>b6_calm_validator.py</code> und <code>b6_mapping_gen…</code> sowie ein abgebrochener Commit. Das Cockpit kennzeichnet diese Angaben als Screenshot-Belege; es behauptet keine erfolgreiche Laufzeitprüfung.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="routes" class="section">
+        <div class="card">
+          <h2>Routen-Vertrag</h2>
+          <p class="muted">Mit den Screenshots sind keine konkreten HTTP-Routen, Methoden, Auth-Regeln oder Handler belegbar. Ergänze diese Tabelle nach Prüfung des Backends.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Methode</th><th>Pfad</th><th>Auth</th><th>Handler</th><th>Status</th><th>Beleg</th></tr></thead>
+              <tbody>
+                <tr><td>—</td><td>—</td><td>—</td><td>Im Repository ermitteln</td><td><span class="badge unknown">UNGEPRÜFT</span></td><td>Backend-Datei fehlt</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="lexicon" class="section">
+        <div class="grid">
+          <article class="card half">
+            <h2>Fünf Säulen</h2>
+            <p class="muted">Als B6+-Struktur vorgesehen; konkrete Zuordnung zu Code ist noch offen.</p>
+            <ol>
+              <li>Vision</li><li>Intelligence</li><li>Execution</li><li>Security</li><li>Legacy</li>
+            </ol>
+            <span class="badge planned">KONZEPT / ZU VALIDIEREN</span>
+          </article>
+          <article class="card half">
+            <h2>22 Lexika</h2>
+            <p class="muted">Namens- und Transformationsschicht. Keine erfundenen Einträge: hier werden die tatsächlichen Lexika aus dem Mapping übernommen.</p>
+            <span class="badge planned">MAPPING-DATEI BENÖTIGT</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="modules" class="section">
+        <div class="card">
+          <h2>Modulkatalog</h2>
+          <p class="muted">Namen aus der sichtbaren App-Navigation. Status bleibt ungeprüft, bis Code und Aufrufpfad belegt sind.</p>
+          <div id="moduleList" class="module-list"></div>
+        </div>
+      </section>
+
+      <footer>BLACK SIX · Statusangaben werden erst durch Code-, Routen- und Testbelege zu verifizierten Aussagen.</footer>
+    </main>
+  </div>
+
+  <script>
+    const modules = [
+      ["🏴‍☠️","Omni-Shooter"],["🗺️","Rat der Schwarzen Liga"],
+      ["🌀","L.S.S. Neuro-Core"],["🔐","DNA Security"],
+      ["🎨","Got(sha) ColorSphere"],["🦠","Rule 30 Automaton"],
+      ["💀","eBPF Hulk Smash"],["🌐","Sovereign Browser"],
+      ["⚡","API Live Interface"],["🧬","APEX Graph Engine"],
+      ["📚","201+ Entitäten Explorer"],["📖","L.S.S. Codex"],
+      ["👻","King_Ghost Vault"],["🧠","DeepSeek Booster"],
+      ["🗳️","Council-Voting"],["🔒","WORM Ledger Audit"],
+      ["📅","WORM-Chronik"],["🎯","Feindregister"],
+      ["📊","Live-Metriken"],["🌐","Peer-Swarm"],
+      ["🚨","Notfall-Kill-Switch"],["💾","Sovereign Export"],
+      ["🧬","Architektur-Matrix"]
+    ];
+
+    const list = document.getElementById("moduleList");
+    modules.forEach(([icon, name]) => {
+      const item = document.createElement("article");
+      item.className = "module";
+      item.dataset.search = name.toLowerCase();
+      item.innerHTML = `<span class="icon">${icon}</span><div><strong></strong><small>Implementierung nicht durch Screenshot verifiziert</small><span class="badge unknown">IM CODE? · UNGEPRÜFT</span></div>`;
+      item.querySelector("strong").textContent = name;
+      list.appendChild(item);
+    });
+
+    document.querySelectorAll("nav button[data-target]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".section").forEach(section => section.classList.remove("active"));
+        document.querySelectorAll("nav button").forEach(item => item.classList.remove("active"));
+        document.getElementById(button.dataset.target).classList.add("active");
+        button.classList.add("active");
+      });
+    });
+
+    document.getElementById("search").addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      document.querySelectorAll(".module").forEach(item => {
+        item.hidden = !item.dataset.search.includes(query);
+      });
+    });
+  </script>
+</body>
+</html>
