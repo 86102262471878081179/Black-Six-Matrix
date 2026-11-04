@@ -1,1 +1,74 @@
-
+{
+  "schemaVersion": "1.0",
+  "project": "BLACK SIX / b6_sys",
+  "updated": null,
+  "statusDefinitions": {
+    "VERIFIZIERT": "Durch konkreten Datei- und Testnachweis belegt",
+    "KONFIGURIERT": "Konfiguration ist dokumentiert, Funktion aber nicht vollständig geprüft",
+    "GEPLANT": "Konzept oder Roadmap; Implementierung nicht belegt",
+    "UNGEPRÜFT": "Artefakt wird behauptet oder liegt vor, wurde aber nicht validiert",
+    "BLOCKIERT": "Kann wegen fehlender Voraussetzungen derzeit nicht geprüft oder integriert werden"
+  },
+  "modules": [
+    {
+      "id": "symmetry-core",
+      "name": "48×48 Symmetrie-Kern",
+      "layer": "geometry",
+      "type": "concept",
+      "status": "UNGEPRÜFT",
+      "path": null,
+      "source": "Architekturgespräch",
+      "evidence": [],
+      "dependsOn": [],
+      "notes": "Geometrisches Modell; keine Code- oder Testergebnisse hinterlegt."
+    },
+    {
+      "id": "state-space-72",
+      "name": "72-Zustandsraum",
+      "layer": "information",
+      "type": "concept",
+      "status": "UNGEPRÜFT",
+      "path": null,
+      "source": "Architekturgespräch",
+      "evidence": [],
+      "dependsOn": ["symmetry-core"],
+      "notes": "Zuordnung und Invarianten müssen spezifiziert und getestet werden."
+    },
+    {
+      "id": "universal-emulator",
+      "name": "B6 Universal Emulator",
+      "layer": "runtime",
+      "type": "prototype",
+      "status": "UNGEPRÜFT",
+      "path": "/workspace/scratch/polyglot/b6_universal_emulator.py",
+      "source": "Vom Nutzer übermittelter Transcript",
+      "evidence": [],
+      "dependsOn": [],
+      "notes": "Transcript-Beschreibung ist kein Nachweis, dass Datei, Netzwerk-Listener oder Codegenerator aktuell funktionieren."
+    },
+    {
+      "id": "tcp-json-bridge",
+      "name": "TCP/JSON Bridge",
+      "layer": "integration",
+      "type": "prototype",
+      "status": "BLOCKIERT",
+      "path": null,
+      "source": "Vom Nutzer übermittelter Transcript",
+      "evidence": [],
+      "dependsOn": ["universal-emulator"],
+      "notes": "Vor Integration Isolation, Authentisierung, Eingabevalidierung und Netzwerkzugriff prüfen."
+    },
+    {
+      "id": "neo4j-adapter",
+      "name": "Neo4j-Adapter",
+      "layer": "integration",
+      "type": "roadmap",
+      "status": "GEPLANT",
+      "path": null,
+      "source": "Architekturentwurf",
+      "evidence": [],
+      "dependsOn": [],
+      "notes": "Keine Verbindung oder Implementierung belegt."
+    }
+  ]
+}
