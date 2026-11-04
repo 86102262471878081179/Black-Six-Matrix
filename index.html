@@ -3,561 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VISIONÄR KORTEX // B6-OMNI 2050</title>
+    <title>B6-OMNI CORE // VISIONÄR KORTEX 2050</title>
     <style>
-        /* ============================================================
-           VISIONÄR KORTEX 2050 - DESIGN TOKENS
-           ============================================================ */
         :root {
-            --bg-deep: #020305;
-            --bg-panel: rgba(8, 12, 20, 0.75);
+            --bg: #05080f;
+            --panel: rgba(13, 20, 31, 0.85);
             --cyan: #00f0ff;
-            --cyan-glow: rgba(0, 240, 255, 0.4);
+            --cyan-glow: rgba(0, 240, 255, 0.3);
             --gold: #ffcc00;
-            --magenta: #ff0055;
+            --red: #ff0055;
             --green: #00ff41;
-            --text-main: #e0f0ff;
-            --text-dim: #7a8f9f;
-            --border-tech: rgba(0, 240, 255, 0.2);
-            --font-hud: 'Courier New', Courier, monospace;
+            --text: #e0f0ff;
+            --muted: #7a8f9f;
+            --border: rgba(0, 240, 255, 0.2);
             --font-ui: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-code: 'Courier New', Courier, monospace;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
+            background: var(--bg);
+            color: var(--text);
             font-family: var(--font-ui);
-            overflow: hidden;
             height: 100vh;
-            /* 2050 Holographic Grid Background */
+            overflow: hidden;
+            display: flex;
+            /* 2050 Grid Background */
             background-image: 
                 linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
-            background-position: center center;
         }
 
-        /* Scanline Effect */
-        body::after {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* ============================================================
-           BOOT SEQUENCE
-           ============================================================ */
-        #boot-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-deep);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: var(--font-hud);
-            color: var(--cyan);
-            transition: opacity 0.8s ease;
-        }
-        .boot-text {
-            font-size: 14px;
-            line-height: 2;
-            text-align: left;
-            text-shadow: 0 0 5px var(--cyan-glow);
-            width: 400px;
-        }
-        .boot-cursor {
-            display: inline-block;
-            width: 10px;
-            height: 15px;
-            background: var(--cyan);
-            animation: blink 1s step-end infinite;
-            vertical-align: bottom;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* ============================================================
-           LAYOUT
-           ============================================================ */
-        .hud-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            height: 100vh;
-        }
-
-        /* SIDEBAR */
+        /* --- SIDEBAR --- */
         .sidebar {
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border-tech);
-            backdrop-filter: blur(20px);
-            padding: 30px 20px;
+            width: 260px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            backdrop-filter: blur(15px);
             display: flex;
             flex-direction: column;
-            position: relative;
+            padding: 20px 0;
+            z-index: 10;
         }
-        /* Angled cut corner */
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0; right: -20px;
-            width: 20px; height: 100%;
-            background: var(--bg-panel);
-            clip-path: polygon(0 0, 100% 0, 0 100%);
-        }
-
         .brand {
-            font-family: var(--font-hud);
+            padding: 0 20px 20px;
+            font-family: var(--font-code);
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 900;
             color: var(--cyan);
-            letter-spacing: 2px;
             text-shadow: 0 0 10px var(--cyan-glow);
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
         }
         .brand span { color: var(--gold); }
-
-        .nav-item {
-            font-family: var(--font-hud);
+        
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: var(--font-code);
             font-size: 13px;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            color: var(--text-dim);
-            border-left: 2px solid transparent;
+            text-align: left;
+            padding: 15px 25px;
             cursor: pointer;
+            border-left: 3px solid transparent;
             transition: all 0.2s;
-            display: flex;
-            justify-content: space-between;
         }
-        .nav-item:hover, .nav-item.active {
+        .nav-btn:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.05); }
+        .nav-btn.active {
             color: var(--cyan);
             border-left-color: var(--cyan);
-            background: linear-gradient(90deg, rgba(0, 240, 255, 0.1) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(0,240,255,0.1) 0%, transparent 100%);
             text-shadow: 0 0 8px var(--cyan-glow);
         }
 
-        .user-profile {
+        .user-area {
             margin-top: auto;
-            border-top: 1px solid var(--border-tech);
-            padding-top: 20px;
-            font-family: var(--font-hud);
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            font-family: var(--font-code);
         }
-        .user-name {
-            color: var(--gold);
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .user-role {
-            font-size: 10px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-        }
+        .user-area h4 { color: var(--gold); font-size: 14px; margin-bottom: 4px; }
+        .user-area p { color: var(--muted); font-size: 10px; }
 
-        /* MAIN CONTENT */
-        .main-content {
-            padding: 40px;
-            overflow-y: auto;
-            position: relative;
+        /* --- MAIN CONTENT --- */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-
-        /* HEADER */
-        .hud-header {
+        .header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--border-tech);
-            padding-bottom: 20px;
-        }
-        .page-title {
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-        .page-subtitle {
-            font-family: var(--font-hud);
-            font-size: 12px;
-            color: var(--cyan);
-            margin-top: 5px;
-        }
-        .status-indicator {
-            font-family: var(--font-hud);
-            font-size: 12px;
-            color: var(--green);
-            display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        .pulse-dot {
-            width: 8px; height: 8px;
-            background: var(--green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--green);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* GRID & CARDS */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 20px;
-        }
-        
-        .panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border-tech);
-            border-radius: 4px;
-            padding: 25px;
-            position: relative;
+            background: rgba(5, 8, 15, 0.8);
             backdrop-filter: blur(10px);
-            box-shadow: inset 0 0 30px rgba(0, 240, 255, 0.05);
         }
-        /* Tech accents on corners */
-        .panel::before, .panel::after {
-            content: ''; position: absolute; width: 10px; height: 10px; border: 2px solid var(--cyan);
-        }
-        .panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-        .panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+        .header h1 { font-size: 24px; font-weight: 300; letter-spacing: 2px; }
+        .status { font-family: var(--font-code); font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 8px; }
+        .status::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green); }
 
-        .panel-title {
-            font-family: var(--font-hud);
-            font-size: 14px;
-            color: var(--cyan);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
-            padding-bottom: 10px;
-        }
+        .content { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
 
-        /* SPECIFIC PANELS */
-        .col-span-4 { grid-column: span 4; }
-        .col-span-8 { grid-column: span 8; }
-        .col-span-12 { grid-column: span 12; }
+        /* --- SECTIONS (Tabs) --- */
+        .tab-section { display: none; animation: fadeIn 0.3s ease; }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* KPI CARDS */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-        .kpi-card {
-            background: rgba(0, 240, 255, 0.05);
-            border: 1px solid rgba(0, 240, 255, 0.15);
+        /* --- UI COMPONENTS --- */
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             padding: 20px;
-            text-align: center;
-            border-radius: 4px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
-        .kpi-label {
-            font-family: var(--font-hud);
-            font-size: 11px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .kpi-value {
-            font-family: var(--font-hud);
-            font-size: 28px;
-            color: var(--gold);
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-        }
+        .panel-title { font-family: var(--font-code); color: var(--cyan); font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid rgba(0,240,255,0.1); padding-bottom: 8px; }
 
-        /* FORENSIC TABLE */
-        .hud-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-ui);
-            font-size: 13px;
-        }
-        .hud-table th {
-            text-align: left;
-            padding: 12px;
-            font-family: var(--font-hud);
-            font-size: 11px;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border-tech);
-            text-transform: uppercase;
-        }
-        .hud-table td {
-            padding: 15px 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            color: var(--text-main);
-            vertical-align: top;
-        }
-        .hud-table tr:hover td {
-            background: rgba(0, 240, 255, 0.03);
-        }
-        
-        .badge {
-            font-family: var(--font-hud);
-            font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 2px;
-            text-transform: uppercase;
-        }
-        .badge-critical { background: rgba(255, 0, 85, 0.15); color: var(--magenta); border: 1px solid rgba(255,0,85,0.3); }
-        .badge-warn { background: rgba(255, 204, 0, 0.15); color: var(--gold); border: 1px solid rgba(255,204,0,0.3); }
-        .badge-ok { background: rgba(0, 255, 65, 0.15); color: var(--green); border: 1px solid rgba(0,255,65,0.3); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .kpi { background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0,240,255,0.15); padding: 20px; border-radius: 4px; text-align: center; }
+        .kpi-val { font-family: var(--font-code); font-size: 28px; color: var(--gold); margin-top: 10px; text-shadow: 0 0 10px rgba(255,204,0,0.3); }
+        .kpi-lbl { font-family: var(--font-code); font-size: 11px; color: var(--muted); text-transform: uppercase; }
 
-        /* TERMINAL WINDOW */
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; padding: 10px; font-family: var(--font-code); color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+        td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover td { background: rgba(0, 240, 255, 0.03); }
+
+        /* Badges */
+        .badge { font-family: var(--font-code); font-size: 10px; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
+        .b-red { background: rgba(255,0,85,0.15); color: var(--red); border: 1px solid rgba(255,0,85,0.3); }
+        .b-gold { background: rgba(255,204,0,0.15); color: var(--gold); border: 1px solid rgba(255,204,0,0.3); }
+        .b-green { background: rgba(0,255,65,0.15); color: var(--green); border: 1px solid rgba(0,255,65,0.3); }
+
+        /* Terminal */
         .terminal {
             background: #000;
-            border: 1px solid var(--border-tech);
-            font-family: var(--font-hud);
+            border: 1px solid var(--border);
+            font-family: var(--font-code);
             font-size: 12px;
             color: var(--green);
-            padding: 20px;
-            height: 200px;
+            padding: 15px;
+            height: 150px;
             overflow-y: auto;
-            box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1);
+            border-radius: 4px;
         }
-        .terminal-line { margin-bottom: 5px; }
-        .terminal-line span { color: var(--cyan); }
+        .log-line { margin-bottom: 4px; }
+        .log-line span { color: var(--cyan); }
 
-        /* ANIMATIONS */
-        .fade-in { animation: fadeIn 0.5s ease forwards; opacity: 0; }
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        @keyframes fadeIn { to { opacity: 1; } }
+        /* Inputs & Buttons */
+        input[type="text"], textarea, select {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px;
+            font-family: var(--font-code);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+        
+        button.action-btn {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: 10px 20px;
+            font-family: var(--font-code);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        button.action-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan-glow); }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-deep); }
-        ::-webkit-scrollbar-thumb { background: var(--border-tech); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+        /* Filter Buttons */
+        .filter-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .filter-btn {
+            background: transparent; border: 1px solid var(--border); color: var(--muted);
+            padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: var(--font-code); font-size: 11px;
+        }
+        .filter-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,240,255,0.1); }
+
+        /* Result Box */
+        .result-box { margin-top: 15px; padding: 15px; border: 1px dashed var(--border); background: rgba(0,0,0,0.2); border-radius: 4px; font-family: var(--font-code); font-size: 12px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
 
-    <!-- BOOT SEQUENCE -->
-    <div id="boot-screen">
-        <div class="boot-text" id="boot-text"></div>
-    </div>
-
-    <!-- MAIN HUD -->
-    <div class="hud-container" id="hud" style="opacity: 0;">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">◈ B6<span>KORTEX</span></div>
+        <button class="nav-btn active" onclick="nav('dashboard', this)">[ 01 ] OVERVIEW</button>
+        <button class="nav-btn" onclick="nav('ruegen', this)">[ 02 ] RÜGEN-MATRIX</button>
+        <button class="nav-btn" onclick="nav('validator', this)">[ 03 ] FORENSIC VALIDATOR</button>
+        <button class="nav-btn" onclick="nav('cache', this)">[ 04 ] CACHE-LABOR</button>
         
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="brand">
-                ◈ VISIONÄR <span>KORTEX</span>
-            </div>
+        <div class="user-area">
+            <h4>Dr. T.K.</h4>
+            <p>ODIN ULTRA ROOT // B6 OPS</p>
+        </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="main">
+        <header class="header">
+            <h1 id="page-title">SYSTEM OVERVIEW</h1>
+            <div class="status">TERMINATED_CLEAN</div>
+        </header>
+
+        <div class="content">
             
-            <div class="nav-item active">[ 01 ] OVERVIEW</div>
-            <div class="nav-item">[ 02 ] FORENSIC AUDIT</div>
-            <div class="nav-item">[ 03 ] RÜGEN-MATRIX</div>
-            <div class="nav-item">[ 04 ] TIMELINE SYNC</div>
-            <div class="nav-item">[ 05 ] WORM LEDGER</div>
-            <div class="nav-item">[ 06 ] SYSTEM DOCTRINE</div>
-
-            <div class="user-profile">
-                <div class="user-name">Dr. T.K.</div>
-                <div class="user-role">ODIN ULTRA ROOT // B6 OPS</div>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main class="main-content">
-            
-            <header class="hud-header fade-in">
-                <div>
-                    <h1 class="page-title">System Command</h1>
-                    <div class="page-subtitle">// B6-OMNI CORE v16.0-Ω // YEAR 2050 PROTOCOL</div>
-                </div>
-                <div class="status-indicator">
-                    <div class="pulse-dot"></div>
-                    <div>TERMINATED_CLEAN</div>
-                </div>
-            </header>
-
-            <div class="grid-layout">
-                
-                <!-- KPI PANEL -->
-                <div class="panel col-span-12 fade-in delay-1">
-                    <div class="panel-title">Telemetry & Integrity</div>
-                    <div class="kpi-grid">
-                        <div class="kpi-card">
-                            <div class="kpi-label">Active Nodes</div>
-                            <div class="kpi-value">127</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-label">WORM Hash</div>
-                            <div class="kpi-value" style="font-size: 16px; padding-top: 10px;">850b2ef0...</div>
-                        </div>
-                        <div class="kpi-card">
-                            <div class="kpi-label">Threat Level</div>
-                            <div class="kpi-value" style="color: var(--green);">ZERO</div>
-                        </div>
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard" class="tab-section active">
+                <div class="grid-3" style="margin-bottom: 20px;">
+                    <div class="kpi">
+                        <div class="kpi-lbl">WORM Integrity</div>
+                        <div class="kpi-val" style="font-size: 16px; padding-top: 10px;">850b2ef0...</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-lbl">Active Nodes</div>
+                        <div class="kpi-val">127</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-lbl">AWI Score</div>
+                        <div class="kpi-val" style="color: var(--green);">0.99</div>
                     </div>
                 </div>
 
-                <!-- FORENSIC RULES (RÜGEN) -->
-                <div class="panel col-span-8 fade-in delay-1">
-                    <div class="panel-title">Forensic Rule Engine (Rügen-Matrix)</div>
-                    <table class="hud-table">
+                <div class="panel">
+                    <div class="panel-title">Kernel Trace Log</div>
+                    <div class="terminal" id="terminal-output">
+                        <div class="log-line"><span>[SYS]</span> Booting B6 OMNI-CORE v16.0-Ω...</div>
+                        <div class="log-line"><span>[OK]</span> WORM-Ledger mounted (SHA3-512).</div>
+                        <div class="log-line"><span>[OK]</span> PQC Armor (Kyber/Dilithium) initialized.</div>
+                        <div class="log-line"><span>[SYS]</span> Awaiting operator input...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: RÜGEN (FILTERBAR) -->
+            <section id="tab-ruegen" class="tab-section">
+                <div class="panel">
+                    <div class="panel-title">Forensische Rügen-Matrix</div>
+                    
+                    <div class="filter-group">
+                        <button class="filter-btn active" onclick="filterRuegen('all', this)">ALLE</button>
+                        <button class="filter-btn" onclick="filterRuegen('critical', this)">KRITISCH</button>
+                        <button class="filter-btn" onclick="filterRuegen('warn', this)">OFFEN</button>
+                        <button class="filter-btn" onclick="filterRuegen('ok', this)">BELEGT</button>
+                    </div>
+
+                    <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Violation / Anomaly</th>
-                                <th>Target</th>
+                                <th>Verstoß / Anomalie</th>
+                                <th>Ziel</th>
                                 <th>Norm</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td style="color: var(--cyan);">R-01</td>
-                                <td>Zwillingskopie-Splicing (Grüner Textmarker)</td>
-                                <td>T.K.</td>
-                                <td>Art. 3 GG</td>
-                                <td><span class="badge badge-critical">CRITICAL</span></td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--cyan);">R-02</td>
-                                <td>70-Minuten Insulin-Entzug (LADA)</td>
-                                <td>Dr. T.K.</td>
-                                <td>§ 340 StGB</td>
-                                <td><span class="badge badge-critical">CRITICAL</span></td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--cyan);">R-03</td>
-                                <td>174-Tage-Latenz (§ 98 StPO)</td>
-                                <td>System</td>
-                                <td>Art. 13 GG</td>
-                                <td><span class="badge badge-warn">WARN</span></td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--cyan);">R-04</td>
-                                <td>Pkw-Durchsuchung (während Kindertransport)</td>
-                                <td>Dr. T.K.</td>
-                                <td>Art. 6 GG</td>
-                                <td><span class="badge badge-critical">CRITICAL</span></td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--cyan);">R-05</td>
-                                <td>89-Tage-Paradoxon (iPhone bestätigt)</td>
-                                <td>LG Düsseldorf</td>
-                                <td>§ 105 StPO</td>
-                                <td><span class="badge badge-warn">WARN</span></td>
-                            </tr>
+                        <tbody id="ruegen-body">
+                            <!-- JS populated -->
                         </tbody>
                     </table>
                 </div>
+            </section>
 
-                <!-- SYSTEM TERMINAL -->
-                <div class="panel col-span-4 fade-in delay-2">
-                    <div class="panel-title">Kernel Trace Log</div>
-                    <div class="terminal" id="terminal-log">
-                        <div class="terminal-line"><span>[OK]</span> INITIALIZING B6-OMNI CORE...</div>
-                        <div class="terminal-line"><span>[OK]</span> MOUNTING WORM LEDGER (SHA3-512)...</div>
-                        <div class="terminal-line"><span>[OK]</span> KRAKENGUARD eBPF SHIELD ACTIVE.</div>
-                        <div class="terminal-line"><span>[OK]</span> AWI GATE SCORE: 0.98 (PASS)</div>
-                        <div class="terminal-line"><span>[OK]</span> SYNCING 127 NODES...</div>
-                        <div class="terminal-line"><span>[OK]</span> TARGET: T.K. / DR. T.K. CONFIRMED.</div>
-                        <div class="terminal-line"><span>[SYS]</span> AWAITING OPERATOR INPUT...</div>
+            <!-- TAB 3: VALIDATOR (FUNKTIONAL) -->
+            <section id="tab-validator" class="tab-section">
+                <div class="panel">
+                    <div class="panel-title">Richter-Validator (Text-Scan)</div>
+                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Füge einen Behördenbescheid ein. Der Algorithmus prüft auf Zeitparadoxien, Numerus-Brüche und fehlende Unterschriften.</p>
+                    
+                    <textarea id="val-input" rows="6" placeholder="z.B. Aktenzeichen: 152 Gs 648/26. Die Beschuldigten... als sogenannter Logistiker. Unterschrift: KHK Feierabend um 06:26 Uhr. Maßnahme bis 08:15 Uhr..."></textarea>
+                    
+                    <button class="action-btn" onclick="runValidator()">▬ SCAN STARTEN</button>
+                    
+                    <div id="val-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- TAB 4: CACHE-LABOR (FUNKTIONAL) -->
+            <section id="tab-cache" class="tab-section">
+                <div class="panel">
+                    <div class="panel-title">Cache-Key Generator (B6 Memory)</div>
+                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Simuliert die deterministische Hash-Generierung für das B6-Ledger. Jede Textänderung erzeugt einen neuen Hash.</p>
+                    
+                    <input type="text" id="cache-input" placeholder="Text für Hash-Generierung eingeben..." oninput="generateHash()">
+                    
+                    <div class="result-box" style="display: block;">
+                        <strong>Berechneter Hash-Key:</strong><br>
+                        <span id="cache-hash" style="color: var(--gold); font-size: 14px;">Warte auf Eingabe...</span>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="action-btn" onclick="logToTerminal('CACHE_WRITE', 'Daten in WORM-Ledger geschrieben.')">IN LEDGER SCHREIBEN</button>
                     </div>
                 </div>
+            </section>
 
-                <!-- NEXT GEN VISUALIZATION (Placeholder for Three.js / Infinity) -->
-                <div class="panel col-span-12 fade-in delay-2" style="height: 150px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 60%);">
-                    <div style="text-align: center; font-family: var(--font-hud); color: var(--text-dim);">
-                        <div style="font-size: 24px; color: var(--cyan); margin-bottom: 10px;">♾️</div>
-                        INFINITY CORE // AWAITING RENDER
-                    </div>
-                </div>
-
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
-        // Boot Sequence Logic
-        const bootText = [
-            "SYSTEM BOOT INITIATED...",
-            "LOADING VISIONÄR KORTEX OS v2050...",
-            "CHECKING KRAKENGUARD eBPF INTEGRITY... [OK]",
-            "DECRYPTING WORM LEDGER (850b2ef0...)... [OK]",
-            "VERIFYING RÜGEN MATRIX...",
-            "OPERATOR IDENTIFIED: DR. T.K.",
-            "ACCESS GRANTED."
+        // --- DATEN ---
+        const RUEGEN_DATA = [
+            { id: 'R-01', text: 'Zwillingskopie-Splicing (Grüner Textmarker)', target: 'T.K.', norm: 'Art. 3 GG', status: 'critical' },
+            { id: 'R-02', text: '70-Minuten Insulin-Entzug (LADA)', target: 'Dr. T.K.', norm: '§ 340 StGB', status: 'critical' },
+            { id: 'R-03', text: '174-Tage-Latenz (§ 98 StPO)', target: 'System', norm: 'Art. 13 GG', status: 'warn' },
+            { id: 'R-04', text: 'Pkw-Durchsuchung während Kindertransport', target: 'Dr. T.K.', norm: 'Art. 6 GG', status: 'critical' },
+            { id: 'R-05', text: '89-Tage-Paradoxon (iPhone bestätigt)', target: 'LG Düsseldorf', norm: '§ 105 StPO', status: 'warn' },
+            { id: 'R-06', text: '5x fehlende qeS Signatur', target: 'PP Bielefeld', norm: '§ 55a VwGO', status: 'ok' },
+            { id: 'R-07', text: '8-fache Vermutungskaskade', target: 'Ri. Weber', norm: '§ 152 StPO', status: 'critical' }
         ];
 
-        const bootScreen = document.getElementById('boot-screen');
-        const bootTextEl = document.getElementById('boot-text');
-        const hud = document.getElementById('hud');
-        let lineIndex = 0;
+        // --- NAVIGATION LOGIK ---
+        function nav(tabId, btn) {
+            // Hide all sections
+            document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            // Show selected
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
 
-        function typeBootLine() {
-            if (lineIndex < bootText.length) {
-                const line = document.createElement('div');
-                line.innerHTML = bootText[lineIndex];
-                bootTextEl.appendChild(line);
-                lineIndex++;
-                setTimeout(typeBootLine, Math.random() * 300 + 100); // Random typing speed
+            // Update Header Title
+            const titles = {
+                'dashboard': 'SYSTEM OVERVIEW',
+                'ruegen': 'FORENSIC RÜGEN-MATRIX',
+                'validator': 'AUTONOMOUS VALIDATOR',
+                'cache': 'DETERMINISTIC MEMORY LAB'
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+
+            // Log action
+            logToTerminal('NAV_EVENT', `Module [${tabId.toUpperCase()}] geladen.`);
+        }
+
+        // --- RÜGEN TABELLE ---
+        function renderRuegen(filter = 'all') {
+            const tbody = document.getElementById('ruegen-body');
+            tbody.innerHTML = '';
+            
+            RUEGEN_DATA.filter(r => filter === 'all' || r.status === filter).forEach(r => {
+                let badgeClass = '';
+                if (r.status === 'critical') badgeClass = 'b-red';
+                else if (r.status === 'warn') badgeClass = 'b-gold';
+                else badgeClass = 'b-green';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="color: var(--cyan); font-family: var(--font-code);">${r.id}</td>
+                        <td>${r.text}</td>
+                        <td>${r.target}</td>
+                        <td style="font-family: var(--font-code); font-size: 11px;">${r.norm}</td>
+                        <td><span class="badge ${badgeClass}">${r.status}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filterRuegen(filter, btn) {
+            document.querySelectorAll('#tab-ruegen .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderRuegen(filter);
+        }
+
+        // --- VALIDATOR LOGIK (RegEx Scan) ---
+        function runValidator() {
+            const text = document.getElementById('val-input').value;
+            const resultBox = document.getElementById('val-result');
+            
+            if (!text.trim()) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = 'FEHLER: Kein Text eingegeben.';
+                return;
+            }
+
+            let findings = [];
+
+            // 1. Zeitparadoxon prüfen (Regex für HH:MM bis HH:MM)
+            const timeRegex = /(\d{1,2})[:.](\d{2})\s*(?:bis|[-–—])\s*(\d{1,2})[:.](\d{2})/g;
+            let match;
+            while ((match = timeRegex.exec(text)) !== null) {
+                const start = parseInt(match[1]) * 60 + parseInt(match[2]);
+                const end = parseInt(match[3]) * 60 + parseInt(match[4]);
+                if (start > end) {
+                    findings.push(`[KRITISCH] Zeitparadoxon: Startzeit (${match[0].split(' ')[0]}) liegt nach Endzeit.`);
+                }
+            }
+
+            // 2. Numerus-Bruch (Plural + Singular)
+            if (/die\s+Beschuldigten/i.test(text) && /als\s+sogenannter/i.test(text)) {
+                findings.push(`[KRITISCH] Numerus-Bruch: Plural ("die Beschuldigten") mit Singular ("als sogenannter") kombiniert.`);
+            }
+
+            // 3. Fehlende Unterschrift
+            if (!/Unterschrift/i.test(text) && !/gez\./i.test(text)) {
+                findings.push(`[WARNUNG] Formfehler: Keine Signatur ("gez." oder "Unterschrift") im Text gefunden.`);
             } else {
-                // Boot complete
-                setTimeout(() => {
-                    bootScreen.style.opacity = '0';
-                    hud.style.opacity = '1';
-                    setTimeout(() => {
-                        bootScreen.style.display = 'none';
-                        startTerminalLog();
-                    }, 800);
-                }, 500);
+                findings.push(`[OK] Signatur-Marker gefunden.`);
+            }
+
+            // Ergebnis ausgeben
+            resultBox.style.display = 'block';
+            if (findings.length > 0) {
+                resultBox.innerHTML = findings.join('<br>');
+                logToTerminal('FORENSIC_SCAN', `${findings.length} Anomalien gefunden.`);
+            } else {
+                resultBox.innerHTML = 'Keine offensichtlichen Anomalien gefunden. (Manuelle Prüfung empfohlen)';
+                logToTerminal('FORENSIC_SCAN', 'Scan sauber.');
             }
         }
 
-        // Terminal Live Logging
-        const terminal = document.getElementById('terminal-log');
-        const logs = [
-            "ACCESSING NODE 001...",
-            "VERIFYING HASH...",
-            "AUDIT: NO ANOMALIES.",
-            "SYNCING WITH SYSTEM DOCTRINE...",
-            "FIREWALL ACTIVE.",
-            "MONITORING ART. 80 GG COMPLIANCE..."
-        ];
+        // --- CACHE LABOR (Hash Generator) ---
+        // Einfache Hash-Simulation (DJ B2 Hash Algorithmus)
+        function generateHash() {
+            const input = document.getElementById('cache-input').value;
+            const hashDisplay = document.getElementById('cache-hash');
+            
+            if (!input) {
+                hashDisplay.innerText = "Warte auf Eingabe...";
+                return;
+            }
 
-        function startTerminalLog() {
-            setInterval(() => {
-                const line = document.createElement('div');
-                line.className = 'terminal-line';
-                line.innerHTML = `<span>[AUDIT]</span> ${logs[Math.floor(Math.random() * logs.length)]}`;
-                terminal.appendChild(line);
-                terminal.scrollTop = terminal.scrollHeight;
-                
-                // Keep terminal clean
-                if (terminal.childElementCount > 15) {
-                    terminal.removeChild(terminal.firstChild);
-                }
-            }, 3000);
+            let hash = 5381;
+            for (let i = 0; i < input.length; i++) {
+                hash = ((hash << 5) + hash) + input.charCodeAt(i);
+            }
+            // In Hex umwandeln und auf 8 Zeichen kürzen für die Optik
+            const hexHash = (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+            
+            hashDisplay.innerText = `B6_HASH_${hexHash}`;
         }
 
-        // Start the sequence when page loads
+        // --- TERMINAL LOGGER ---
+        function logToTerminal(type, message) {
+            const term = document.getElementById('terminal-output');
+            const time = new Date().toLocaleTimeString('de-DE');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.innerHTML = `<span>[${type}]</span> (${time}) ${message}`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight; // Auto-scroll
+        }
+
+        // --- INITIALISIERUNG ---
         window.onload = () => {
-            setTimeout(typeBootLine, 500);
+            renderRuegen('all');
+            logToTerminal('SYS', 'Interface rendered. All systems nominal.');
         };
+
     </script>
 </body>
 </html>
