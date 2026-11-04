@@ -1,3 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <title>BLACK SIX / b6_sys — Symmetry Kernel</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --panel: #101624;
+      --panel-2: #151d2c;
+      --line: #27344a;
+      --text: #e8eef8;
+      --muted: #95a3b9;
+      --cyan: #40d9ff;
+      --green: #46dda5;
+      --amber: #ffc366;
+      --violet: #c19aff;
+      --red: #ff7185;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    button, input, select { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    .layout { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0,1fr); }
+    aside { padding: 22px 14px; background: #0c111b; border-right: 1px solid var(--line); }
+    .brand { padding: 5px 10px 20px; border-bottom: 1px solid var(--line); }
+    .brand b { display: block; letter-spacing: .16em; font-size: 17px; }
+    .brand small, .muted { color: var(--muted); }
+    .nav-label { margin: 21px 10px 8px; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
+    nav { display: grid; gap: 5px; }
+    nav button {
+      text-align: left; padding: 10px; border: 1px solid transparent;
+      border-radius: 8px; background: transparent;
+    }
+    nav button:hover, nav button.active { background: var(--panel-2); border-color: var(--line); }
+    main { min-width: 0; padding: 28px clamp(16px, 4vw, 52px); }
+    .top { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+    .kicker { color: var(--cyan); font-size: 11px; letter-spacing: .17em; }
+    h1 { margin: 6px 0; font-size: clamp(25px, 4vw, 38px); }
+    h2 { margin: 0 0 14px; font-size: 18px; }
+    h3 { margin: 0 0 8px; font-size: 14px; }
+    p { line-height: 1.55; }
+    .search { width: min(320px, 38vw); padding: 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text); }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0; }
+    .badge { display: inline-block; padding: 4px 8px; border: 1px solid var(--line); border-radius: 999px; font-size: 10px; letter-spacing: .04em; }
+    .verified { color: var(--green); border-color: #246b51; }
+    .concept { color: var(--violet); border-color: #594580; }
+    .unverified { color: var(--amber); border-color: #785a2e; }
+    .blocked { color: var(--red); border-color: #743746; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 13px; }
+    .card { min-width: 0; padding: 17px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; }
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+    .stat { color: var(--cyan); font-size: 27px; font-weight: 750; margin: 7px 0; }
+    .callout { padding: 12px; border-left: 3px solid var(--amber); background: #1a1813; color: #d9d2c3; }
+    .module-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+    .module { padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); }
+    .module strong { display: block; }
+    .module small { display: block; margin: 5px 0 8px; color: var(--muted); line-height: 1.4; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 14px; }
+    .toolbar button, .toolbar select {
+      padding: 8px 10px; color: var(--text); background: var(--panel-2);
+      border: 1px solid var(--line); border-radius: 7px;
+    }
+    .cube-wrap { display: grid; grid-template-columns: minmax(220px,1fr) minmax(240px,1fr); gap: 16px; align-items: center; }
+    #cube { display: block; width: 100%; max-height: 330px; }
+    .matrix-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 3px; }
+    .matrix-grid button { padding: 5px 1px; border: 1px solid var(--line); background: var(--panel-2); border-radius: 3px; font-size: 9px; }
+    .matrix-grid button.rotation { color: var(--cyan); }
+    .matrix-grid button.improper { color: var(--amber); }
+    .table-wrap { max-height: 480px; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 8px; border: 1px solid var(--line); text-align: left; }
+    th { position: sticky; top: 0; background: #172032; }
+    code { color: var(--cyan); }
+    footer { margin: 24px 0 8px; color: var(--muted); font-size: 11px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { border-right: 0; border-bottom: 1px solid var(--line); padding: 12px; }
+      nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .span-8,.span-6,.span-4 { grid-column: span 12; }
+      .top { align-items: stretch; flex-direction: column; }
+      .search { width: 100%; }
+    }
+    @media (max-width: 560px) {
+      .module-list,.cube-wrap { grid-template-columns: 1fr; }
+      .matrix-grid { grid-template-columns: repeat(8,minmax(0,1fr)); }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">
+      <b>BLACK SIX / b6_sys</b>
+      <small>Würfel-Symmetrie-Handbuch · Edition 2.0</small>
+    </div>
+    <div class="nav-label">SYSTEMANSICHTEN</div>
+    <nav>
+      <button class="active" data-view="overview">◈ Übersicht</button>
+      <button data-view="symmetry">⬡ Symmetrie-Kern</button>
+      <button data-view="modules">▦ Module &amp; Status</button>
+      <button data-view="handbook">⌘ Handbuch-Struktur</button>
+    </nav>
+    <div class="nav-label">MODELLGRENZEN</div>
+    <p class="muted" style="padding:0 10px;font-size:12px">
+      Geometrie, Informationsmodell und Lore bleiben getrennt.
+      Ein Konzeptstatus ist kein Implementierungsnachweis.
+    </p>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div>
+        <div class="kicker">B6_SYS / ARCHITECTURE WORKBENCH</div>
+        <h1>Symmetry Kernel Handbook</h1>
+        <div class="muted">Datenmodell, Symmetrien, Module und Nachweisstatus</div>
+      </div>
+      <input id="search" class="search" type="search" placeholder="Module oder Begriffe suchen…" aria-label="Suche">
+    </header>
+
+    <div class="legend">
+      <span class="badge verified">MATHEMATISCH VERIFIZIERT</span>
+      <span class="badge concept">KONZEPT / MODELL</span>
+      <span class="badge unverified">CODE UNGEPRÜFT</span>
+      <span class="badge blocked">BLOCKIERT / FEHLT</span>
+    </div>
+
+    <section id="overview" class="view active">
+      <div class="grid">
+        <article class="card span-4">
+          <div class="muted">Würfelrotationen</div><div class="stat">24</div>
+          <span class="badge verified">PROPER ROTATIONS</span>
+        </article>
+        <article class="card span-4">
+          <div class="muted">Vollständige Würfelgruppe</div><div class="stat">48</div>
+          <span class="badge verified">SIGNED PERMUTATIONS</span>
+        </article>
+        <article class="card span-4">
+          <div class="muted">4096 als Kantenbelegungen</div><div class="stat">2¹²</div>
+          <span class="badge concept">INFORMATIONSRAUM</span>
+        </article>
+
+        <article class="card span-8">
+          <h2>Systemgrenze</h2>
+          <p>Der Symmetrie-Kern berechnet die 48 Würfelisometrien als signierte Permutationsmatrizen. Das ist von den zusätzlich definierten 24 internen Zuständen, dem 4096-Core-Modell sowie RAG, eBPF, Go-Bridge und Bio-Quanten-Lore getrennt.</p>
+          <p class="callout"><strong>Wichtige Korrektur:</strong> Die Spiegelungen bilden zusammen mit den Rotationen die Gruppe §O_h!§; die „24 Spiegelungen“ sind die 24 orientierungsumkehrenden Elemente, nicht eine zusätzliche Rotationsgruppe.</p>
+        </article>
+
+        <article class="card span-4">
+          <h2>Beleglage</h2>
+          <p><span class="badge unverified">REPOSITORY NICHT GEPRÜFT</span></p>
+          <p class="muted">Die vorliegenden Texte spezifizieren Architektur und Codeideen. Sie belegen weder laufende Dienste noch echte API-Routen, Schlüssel, Ledger oder Deployment.</p>
+        </article>
+
+        <article class="card span-12">
+          <h2>Modelltrennung</h2>
+          <div class="grid">
+            <div class="card span-4"><h3>Geometrie</h3><span class="muted">Würfelgruppe, Matrizen, Komposition</span></div>
+            <div class="card span-4"><h3>Informationsmodell</h3><span class="muted">12 Kantenbits → 4096 mögliche Bitmuster</span></div>
+            <div class="card span-4"><h3>Erweiterte Konzepte</h3><span class="muted">Anker, Portale, Resonanz, Bio-/Quanten-Lore</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="symmetry" class="view">
+      <div class="grid">
+        <article class="card span-12">
+          <h2>Würfelsymmetrie-Kern</h2>
+          <p class="muted">Die Engine erzeugt alle signierten Permutationsmatrizen der Koordinatenachsen. Determinante +1 kennzeichnet Rotationen; −1 kennzeichnet orientierungsumkehrende Symmetrien.</p>
+          <div class="toolbar">
+            <label for="operation">Operation:</label>
+            <select id="operation"></select>
+            <button id="exportCsv">48×48-Tabelle als CSV exportieren</button>
+            <span id="symmetryCount" class="badge verified"></span>
+          </div>
+          <div class="cube-wrap">
+            <svg id="cube" viewBox="0 0 420 320" role="img" aria-label="Würfelgraph mit transformierten Eckpunkten"></svg>
+            <div>
+              <h3 id="operationTitle">Identität</h3>
+              <pre id="matrixOutput" class="card" style="overflow:auto"></pre>
+              <p id="operationInfo" class="muted"></p>
+            </div>
+          </div>
+        </article>
+        <article class="card span-12">
+          <h2>Verknüpfungstabelle §O_h!§</h2>
+          <p class="muted">Jede Zelle enthält den Index von §S_i @customBackSlashcirc S_j!§. Tabellenwerte werden aus den tatsächlichen Matrizen berechnet, nicht per Modulo-Näherung.</p>
+          <div id="cayley" class="matrix-grid" aria-label="48 mal 48 Cayley-Tabelle"></div>
+          <p id="cellInfo" class="muted">Wähle eine Zelle, um die beiden Faktoren und das Ergebnis zu sehen.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="modules" class="view">
+      <article class="card">
+        <h2>Modulkatalog</h2>
+        <p class="muted">Status folgt dem übermittelten Dokument: Konzeptangaben sind nicht automatisch implementierter oder sicherheitsgeprüfter Code.</p>
+        <div id="moduleList" class="module-list"></div>
+      </article>
+    </section>
+
+    <section id="handbook" class="view">
+      <div class="grid">
+        <article class="card span-6">
+          <h2>Würfelmodell — überprüfbare Aussagen</h2>
+          <ul>
+            <li>8 Ecken, 12 Kanten, 6 Flächen; §8-12+6=2!§.</li>
+            <li>24 orientierungserhaltende Rotationen.</li>
+            <li>48 Symmetrien insgesamt; davon 24 mit Determinante −1.</li>
+            <li>12 unabhängige Kanten-Bits ergeben §2^{12}=4096!§ Bitmuster.</li>
+            <li>Ein 48×48-Verknüpfungsschema hat 2304 Zellen.</li>
+          </ul>
+        </article>
+        <article class="card span-6">
+          <h2>Modellannahmen — keine Würfelfakten</h2>
+          <ul>
+            <li>72 Zustände: 48 Würfelsymmetrien plus 24 selbst definierte interne Zustände.</li>
+            <li>48ⁿ zählt Folgen von n frei gewählten Gruppenelementen, nicht eindeutige Orientierungen.</li>
+            <li>6 Flächen × 8 Ecken = 48 definierte Paare, nicht 48 klassische Würfeleigenschaften.</li>
+            <li>4096 × 48 = 196608 Kombinationen, falls beide Mengen unabhängig kombiniert werden.</li>
+          </ul>
+        </article>
+        <article class="card span-12">
+          <h2>Resonanz &amp; Tombstone — Implementierungshinweis</h2>
+          <p>Ein kryptografischer Hash ist nicht als Ähnlichkeitsmaß gedacht: kleine Änderungen am Inhalt erzeugen typischerweise stark veränderte Hashes. Deshalb sollte ein Hamming-Abstand zwischen gewöhnlichen Hashes nicht als Zugangsberechtigung dienen. Trenne Ähnlichkeitssuche, Authentifizierung und Integritätsprüfung.</p>
+          <p>Ein Hash-Verweis allein macht ein Ledger nicht unveränderlich. Append-only-Regeln, Zugriffsschutz, externe Prüfpunkte und ein definiertes Bedrohungsmodell müssen separat umgesetzt und getestet werden.</p>
+          <p class="callout"><strong>Stand der Laufzeit:</strong> Dieses HTML berechnet den Symmetrie-Kern lokal im Browser. Es startet keine FastAPI-, Go-, eBPF-, Neo4j-, Kubernetes-, Reactor- oder Meshy-Dienste und enthält keine API-Schlüssel.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>BLACK SIX / b6_sys · Einzeldatei · Lokale Browserberechnung · Konzept- und Code-Status ausdrücklich getrennt</footer>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+const modules = [
+  ["b6_sys.runtime", "Laufzeit und Modulstartpunkt", "KONZEPT"],
+  ["b6_sys.symmetry_core", "Würfelgruppe aus 48 signierten Permutationsmatrizen", "MATHEMATISCH VERIFIZIERT"],
+  ["b6_sys.relation_engine", "Komposition der Symmetrieoperatoren; Cayley-Tabelle", "LOKAL IMPLEMENTIERT"],
+  ["b6_sys.vector_space", "Vektoren und Zustandsraum-Abstraktion", "KONZEPT"],
+  ["b6_sys.recursion_core", "Pfadraum und Rekursionsregeln", "KONZEPT"],
+  ["b6_sys.entropy_core", "Entropie- und Gewichtungsmodell", "KONZEPT"],
+  ["b6_sys.audit_engine", "Audit- und Tombstone-Datenmodell", "KONZEPT"],
+  ["b6_sys.orchestrator", "Ablaufkoordination", "KONZEPT"],
+  ["b6_sys.event_chain", "Verkettete Ereignisstruktur", "KONZEPT"],
+  ["b6_sys.kernel_guard", "Policy- und Host-Schutzkonzept", "KONZEPT"],
+  ["b6_sys.rule_compiler", "Regeln und Grenzverträge", "KONZEPT"],
+  ["b6_sys.secure_transport", "Transportadapter", "KONZEPT"],
+  ["b6_sys.state_compressor", "Pfadraum- zu Zustandsraumverdichtung", "KONZEPT"],
+  ["b6_sys.matrix_scheduler", "4096-Core-Aufgabenverteilung", "KONZEPT"],
+  ["b6_sys.quantum_core", "Bio-/Quanten-Erweiterung", "LORE / KONZEPT"],
+  ["b6_sys.neural_matrix", "Bioneurales Modell", "LORE / KONZEPT"],
+  ["b6_sys.cipher_core", "Chiffre- und Serialisierungsschicht", "KONZEPT"],
+  ["rag_engine.py", "RAG / ChromaDB-Architektur", "CODE UNGEPRÜFT"],
+  ["b6_matrix.py", "6×6-Matrix und Invarianten", "CODE UNGEPRÜFT"],
+  ["threat_sentinel.py", "Anfrageprüfung", "CODE UNGEPRÜFT"],
+  ["omni_core_master_engine.py", "Python-Orchestrierung", "CODE UNGEPRÜFT"],
+  ["iso_42001_audit.py", "Audit- und Tombstone-Konzept", "CODE UNGEPRÜFT"],
+  ["api_main.py", "FastAPI-Orchestrator; Routen im Repository prüfen", "CODE UNGEPRÜFT"],
+  ["krakenguard_core.c", "eBPF-Kernelkomponente", "CODE UNGEPRÜFT"],
+  ["policy_manager.py", "eBPF-Policy-Lader", "CODE UNGEPRÜFT"],
+  ["Go Bridge", "Parallele Aufrufe und Konsenskonzept", "CODE UNGEPRÜFT"],
+  ["Infinity Engine", "Guard, Expander und Controller", "KONZEPT"],
+  ["Neo4j Graph Fusion", "Graphschema und Governance-Abfragen", "KONZEPT"],
+  ["B6 Universal Calculator", "MCP-Tools: Zinsen, Token-Schätzung, Entropie", "CODE UNGEPRÜFT"],
+  ["Carbon-Argon Visual", "Three.js-Visualisierung", "VISUAL / KONZEPT"],
+  ["Reactor Adapter", "Echtzeit-Video-Adapter", "EXTERN / UNGEPRÜFT"],
+  ["Meshy Adapter", "3D-Generierungsadapter", "EXTERN / UNGEPRÜFT"]
+];
+
+const permute = (a) => {
+  if (a.length <= 1) return [a];
+  return a.flatMap((x, i) => permute(a.filter((_, j) => j !== i)).map(p => [x, ...p]));
+};
+const permutations = permute([0,1,2]);
+const symmetries = [];
+for (const p of permutations) {
+  for (const sx of [-1,1]) for (const sy of [-1,1]) for (const sz of [-1,1]) {
+    const m = [
+      [0,0,0], [0,0,0], [0,0,0]
+    ];
+    m[0][p[0]] = sx; m[1][p[1]] = sy; m[2][p[2]] = sz;
+    const det =
+      m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1]) -
+      m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0]) +
+      m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+    symmetries.push({m, det});
+  }
+}
+const keyOf = m => m.flat().join(",");
+const indexOf = new Map(symmetries.map((s,i) => [keyOf(s.m), i]));
+const multiply = (a,b) => a.map((row,i) =>
+  b[0].map((_,j) => row.reduce((sum,v,k) => sum + v*b[k][j], 0))
+);
+const compose = symmetries.map(a =>
+  symmetries.map(b => indexOf.get(keyOf(multiply(a.m,b.m))))
+);
+
+document.getElementById("symmetryCount").textContent =
+  `${symmetries.filter(s => s.det === 1).length} Rotationen · ${symmetries.filter(s => s.det === -1).length} orientierungsumkehrend`;
+
+const operationSelect = document.getElementById("operation");
+symmetries.forEach((s,i) => {
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = `S${String(i).padStart(2,"0")} · det ${s.det}`;
+  operationSelect.append(option);
+});
+
+const corners = [];
+for (const x of [-1,1]) for (const y of [-1,1]) for (const z of [-1,1]) corners.push([x,y,z]);
+const edges = [];
+for (let i=0;i<corners.length;i++) for (let j=i+1;j<corners.length;j++) {
+  const distance = corners[i].reduce((sum,v,k) => sum + Math.abs(v-corners[j][k]), 0);
+  if (distance === 2) edges.push([corners[i],corners[j]]);
+}
+function drawCube(index) {
+  const m = symmetries[index].m;
+  const points = corners.map(v => m.map(row => row.reduce((sum,x,k) => sum+x*v[k],0)));
+  const project = ([x,y,z]) => [210 + (x-z)*54, 158 + (x+z)*27 - y*62];
+  const svg = document.getElementById("cube");
+  svg.replaceChildren();
+  for (const [a,b] of edges) {
+    const pa=project(m.map(row=>row.reduce((s,x,k)=>s+x*a[k],0)));
+    const pb=project(m.map(row=>row.reduce((s,x,k)=>s+x*b[k],0)));
+    const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1",pa[0]); line.setAttribute("y1",pa[1]);
+    line.setAttribute("x2",pb[0]); line.setAttribute("y2",pb[1]);
+    line.setAttribute("stroke","#40d9ff"); line.setAttribute("stroke-width","2");
+    svg.append(line);
+  }
+  points.forEach((p,i) => {
+    const [x,y]=project(p);
+    const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("cx",x); c.setAttribute("cy",y); c.setAttribute("r","5");
+    c.setAttribute("fill","#ffc366"); svg.append(c);
+    const t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",x+7); t.setAttribute("y",y-6);
+    t.setAttribute("fill","#95a3b9"); t.setAttribute("font-size","9"); t.textContent=String(i);
+    svg.append(t);
+  });
+  const s=symmetries[index];
+  document.getElementById("operationTitle").textContent =
+    `S${String(index).padStart(2,"0")} · ${s.det === 1 ? "Rotation" : "orientierungsumkehrende Symmetrie"}`;
+  document.getElementById("matrixOutput").textContent = s.m.map(row => `[ ${row.join("  ")} ]`).join("\n");
+  document.getElementById("operationInfo").textContent =
+    `Determinante ${s.det}. Die Matrix bildet Würfelecken (x,y,z) mit x,y,z ∈ {−1,+1} auf Würfelecken ab.`;
+}
+operationSelect.addEventListener("change", () => drawCube(Number(operationSelect.value)));
+drawCube(0);
+
+const cayley = document.getElementById("cayley");
+symmetries.forEach((s,i) => {
+  const row = document.createElement("div");
+  row.className = "matrix-grid";
+  compose[i].forEach((result,j) => {
+    const cell=document.createElement("button");
+    cell.textContent=String(result).padStart(2,"0");
+    cell.className=symmetries[result].det===1 ? "rotation" : "improper";
+    cell.title=`S${i} ∘ S${j} = S${result}`;
+    cell.addEventListener("click", () => {
+      document.getElementById("cellInfo").textContent =
+        `S${i} ∘ S${j} = S${result} · Determinante des Ergebnisses: ${symmetries[result].det}`;
+    });
+    row.append(cell);
+  });
+  cay.append(row);
+});
+
+document.getElementById("exportCsv").addEventListener("click", () => {
+  const csv = ["left," + symmetries.map((_,i)=>`S${i}`).join(",")];
+  compose.forEach((row,i) => csv.push(`S${i},${row.join(",")}`));
+  const blob = new Blob([csv.join("\n")], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download="b6_sys_Oh_48x48.csv"; a.click();
+  URL.revokeObjectURL(url);
+});
+
+const moduleList = document.getElementById("moduleList");
+const statusClass = status => status.includes("VERIFIZIERT") || status.includes("IMPLEMENTIERT")
+  ? "verified" : status.includes("UNGEPRÜFT") ? "unverified" : "concept";
+modules.forEach(([name,description,status]) => {
+  const article=document.createElement("article");
+  article.className="module";
+  article.dataset.search=(name+" "+description+" "+status).toLowerCase();
+  const strong=document.createElement("strong"); strong.textContent=name;
+  const small=document.createElement("small"); small.textContent=description;
+  const badge=document.createElement("span"); badge.className=`badge ${statusClass(status)}`; badge.textContent=status;
+  article.append(strong,small,badge); moduleList.append(article);
+});
+
+document.getElementById("search").addEventListener("input", event => {
+  const query=event.target.value.trim().toLowerCase();
+  document.querySelectorAll(".module").forEach(item => {
+    item.hidden=!item.dataset.search.includes(query);
+  });
+});
+
+document.querySelectorAll("nav button[data-view]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    document.querySelectorAll("nav button").forEach(nav => nav.classList.remove("active"));
+    document.getElementById(button.dataset.view).classList.add("active");
+    button.classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
 <!doctype html>
 <html lang="de">
 <head>
