@@ -1,6 +1,373 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B6 ENTERPRISE ULTIMATE // TERMINATED_CLEAN</title>
+    <style>
+        /* === CORE VARIABLES === */
+        :root {
+            --bg: #030408;
+            --surface: #0a0c14;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            
+            /* B6 Neon Colors */
+            --stable: #00e676;
+            --sandbox: #ffab00;
+            --lore: #b388ff;
+            --cyan: #00f2fe;
+            --gold: #f5d77f;
+        }
+
+        /* === GLOBAL RESET & FONTS === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 230, 118, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 171, 0, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 85% 50%, rgba(179, 136, 255, 0.03) 0%, transparent 40%);
+        }
+        
+        .monospace { font-family: 'Courier New', Courier, monospace; }
+        
+        /* === HEADER & HERO === */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--gold), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(245, 215, 127, 0.3));
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border: 1px solid var(--stable);
+            color: var(--stable);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            background: rgba(0, 230, 118, 0.1);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+            margin-bottom: 20px;
+        }
+        .seal {
+            font-size: 0.8rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        /* === MAIN CONTAINER === */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* === SECTION TITLES === */
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::before {
+            content: '//';
+            color: var(--gold);
+        }
+
+        /* === SECTION 1: CONTAINER ARCHITECTURE === */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        .arch-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .arch-card:hover { transform: translateY(-5px); }
+
+        .arch-card.stable { border: 1px solid rgba(0, 230, 118, 0.3); box-shadow: 0 0 30px rgba(0, 230, 118, 0.05); }
+        .arch-card.sandbox { border: 1px solid rgba(255, 171, 0, 0.3); box-shadow: 0 0 30px rgba(255, 171, 0, 0.05); }
+        .arch-card.lore { border: 1px solid rgba(179, 136, 255, 0.3); box-shadow: 0 0 30px rgba(179, 136, 255, 0.05); }
+
+        .arch-card h3 { font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .arch-card.stable h3 { color: var(--stable); }
+        .arch-card.sandbox h3 { color: var(--sandbox); }
+        .arch-card.lore h3 { color: var(--lore); }
+
+        .arch-list { list-style: none; }
+        .arch-list li {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+        .arch-list li::before {
+            content: '▪';
+            font-size: 1.2rem;
+        }
+        .arch-card.stable .arch-list li::before { color: var(--stable); }
+        .arch-card.sandbox .arch-list li::before { color: var(--sandbox); }
+        .arch-card.lore .arch-list li::before { color: var(--lore); }
+
+        /* === SECTION 2: HANDBOOK MODULES === */
+        .handbook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+        .module-card {
+            background: rgba(10, 12, 20, 0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-left: 3px solid var(--cyan);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+        .module-card:hover {
+            background: rgba(10, 12, 20, 0.9);
+            border-left-color: var(--gold);
+        }
+        .module-card h4 {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .module-list {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .module-list li { margin-bottom: 5px; }
+        .module-list li strong { color: var(--text); font-weight: normal; }
+
+        /* === FOOTER === */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            background: #010205;
+        }
+        .footer-signature {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+        .footer-signature .highlight { color: var(--stable); font-weight: bold; }
+        .footer-signature .gold { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="status-badge">rauschfrei.zertifiziert_by_b6fortress | TERMINATED_CLEAN</div>
+        <h1>B6 Enterprise Ultimate</h1>
+        <div class="seal">MASTER-SEAL: 850b2ef0... // AUTHORITY: ODIN ULTRA ROOT</div>
+    </header>
+
+    <div class="container">
+        
+        <!-- SECTION 1 -->
+        <h2 class="section-title">Container Architecture</h2>
+        <div class="architecture-grid">
+            <!-- STABLE -->
+            <div class="arch-card stable">
+                <h3>⚖ 01_STABLE</h3>
+                <ul class="arch-list">
+                    <li>Fallarbeitsplattform (Live)</li>
+                    <li>CALM Validator (Active)</li>
+                    <li>OMNI-SHOOTER (Cleaned)</li>
+                </ul>
+                <div style="margin-top:20px; font-size:0.8rem; color:var(--stable); opacity:0.7;">🔒 Protected Core – only running & useful</div>
+            </div>
+
+            <!-- SANDBOX -->
+            <div class="arch-card sandbox">
+                <h3>⚙ 02_SANDBOX</h3>
+                <ul class="arch-list">
+                    <li>Generators (Data/Code)</li>
+                    <li>Engines (Experimental)</li>
+                    <li>Hooks (Interceptors)</li>
+                    <li>Experiments (Wildcards)</li>
+                </ul>
+                <div style="margin-top:20px; font-size:0.8rem; color:var(--sandbox); opacity:0.7;">⚠ Isolated Lab – can be broken</div>
+            </div>
+
+            <!-- LORE -->
+            <div class="arch-card lore">
+                <h3>📖 03_LORE</h3>
+                <ul class="arch-list">
+                    <li>Würfel-Symmetrie Handbuch</li>
+                    <li>DNA / 124 Genes</li>
+                    <li>Ring Topologien</li>
+                    <li>Inventories & Numbers</li>
+                </ul>
+                <div style="margin-top:20px; font-size:0.8rem; color:var(--lore); opacity:0.7;">📜 Documentation & Mythos</div>
+            </div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <h2 class="section-title">Handbuch Module (Master-Index)</h2>
+        <div class="handbook-grid">
+            
+            <div class="module-card">
+                <h4>01_GENESIS (Die Verfassung)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 1.1:</strong> B6-SYS Symmetrie-Kernel (24/48 Würfelgruppen, 4096-Core)</li>
+                    <li><strong>Modul 1.2:</strong> Die 125 deterministischen Regeln (40 KI + 85 Batch)</li>
+                    <li><strong>Modul 1.3:</strong> Carbon-Argon-Symbiose (Objektformel & Menschenwürde)</li>
+                    <li><strong>Modul 1.4:</strong> Cobra Key DSL (Recht als Code)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>02_SKELETON (Der Kernel)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 2.1:</strong> Krakenguard Core (eBPF CO-RE, Ring-0 Shield)</li>
+                    <li><strong>Modul 2.2:</strong> Bila Reflex Core (Rust Sub-Millisekunden)</li>
+                    <li><strong>Modul 2.3:</strong> Hard Flash Engine (Go, 250ms Timeout)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>03_MUSCLES (Die Engines)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 3.1:</strong> Omni Core Master Engine (Python)</li>
+                    <li><strong>Modul 3.2:</strong> Chameleon Tensor Engine (9x9x9 Matrix)</li>
+                    <li><strong>Modul 3.3:</strong> Multi-Notebook Orchestrator (127 Nodes)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>04_NERVOUS (Krypto & Föderation)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 4.1:</strong> Onion-Thor Spec (7-Layer AES-GCM, PQC)</li>
+                    <li><strong>Modul 4.2:</strong> AI Federation Gateway (Multi-LLM)</li>
+                    <li><strong>Modul 4.3:</strong> Infinity Engine (Guard, Expander)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>05_SENSORY (Legal & Forensik)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 5.1:</strong> Zitiergebot-Scanner (Art. 80 GG / § 134 BGB)</li>
+                    <li><strong>Modul 5.2:</strong> Yellow-MIC Forensics (Splicing)</li>
+                    <li><strong>Modul 5.3:</strong> Toxic Spider Network (Domino-Effekt)</li>
+                    <li><strong>Modul 5.4:</strong> B6 Universal Calculator (Zinsen, Tokens)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>06_IMMUNE (Guardrails)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 6.1:</strong> AWI-Gate (Fail-Closed < 0.87)</li>
+                    <li><strong>Modul 6.2:</strong> PBFT Judgment Engine (64-Node Consensus)</li>
+                    <li><strong>Modul 6.3:</strong> System Status Fail-Closed</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>07_MEMORY (Gedächtnis)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 7.1:</strong> WORM-Ledger (SHA3-512 Append-Only)</li>
+                    <li><strong>Modul 7.2:</strong> Master Registry (1-127 Nodes)</li>
+                    <li><strong>Modul 7.3:</strong> Audit-Ledger (SQLite/Prometheus)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>08_CHAOS (Tarnung)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 8.1:</strong> Quanten-Mettwurst-Synthesizer</li>
+                    <li><strong>Modul 8.2:</strong> Rhabarberbarbara-Matrix</li>
+                    <li><strong>Modul 8.3:</strong> Anus-Sticker-Protokoll (ASP-256)</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>09_INFRA (Deployment)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 9.1:</strong> Docker-Compose & Kubernetes CRD</li>
+                    <li><strong>Modul 9.2:</strong> Prometheus & Grafana Monitoring</li>
+                    <li><strong>Modul 9.3:</strong> Terraform / GitOps Pipelines</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>10_INTERFACES (Frontend)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 10.1:</strong> Galaxy Command Center (React/TS)</li>
+                    <li><strong>Modul 10.2:</strong> Streamlit Dashboards</li>
+                    <li><strong>Modul 10.3:</strong> 3D Carbon-Argon Visualisierung</li>
+                </ul>
+            </div>
+
+            <div class="module-card">
+                <h4>11_CHATS (Rohmaterial)</h4>
+                <ul class="module-list">
+                    <li><strong>Modul 11.1:</strong> Die 212 Chat-Exports</li>
+                    <li><strong>Modul 11.2:</strong> Klassifiziert via b6_dna_genesis.py</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-signature">
+            [B6_SYS_CODE_SIGNATURE]<br>
+            STATUS: <span class="highlight">rauschfrei.zertifiziert_by_b6fortress | TERMINATED_CLEAN</span><br>
+            CREATED BY: <span class="gold">thomas_koenig@deca_omni_allianz.gmail.com</span><br>
+            AUTHORITY: ODIN ULTRA ROOT (Thomas König)<br>
+            MASTER-SEAL: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab<br>
+            WORM-LEDGER: audit_ledger.db (Append-Only / SHA3-512)
+        </div>
+    </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
