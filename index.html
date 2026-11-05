@@ -1,485 +1,3 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>B6 TOOL LAB // VISIONÄR KORTEX 2050</title>
-    <style>
-        :root {
-            --bg: #030508;
-            --panel: rgba(8, 12, 20, 0.9);
-            --cyan: #00f0ff;
-            --cyan-glow: rgba(0, 240, 255, 0.3);
-            --gold: #ffcc00;
-            --red: #ff0055;
-            --green: #00ff41;
-            --text: #e0f0ff;
-            --muted: #7a8f9f;
-            --border: rgba(0, 240, 255, 0.15);
-            --font-code: 'Courier New', Courier, monospace;
-            --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
-            --r-sm: 4px; --r-md: 8px;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: var(--font-ui);
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        /* Layout */
-        .sidebar {
-            width: 260px; background: var(--panel); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; backdrop-filter: blur(20px); z-index: 10;
-        }
-        .brand {
-            padding: 20px; font-family: var(--font-code); font-size: 20px; font-weight: 900;
-            color: var(--cyan); border-bottom: 1px solid var(--border); letter-spacing: 2px;
-        }
-        .brand span { color: var(--gold); }
-        
-        .nav-menu { flex: 1; padding: 15px 0; }
-        .nav-item {
-            padding: 12px 20px; color: var(--muted); font-family: var(--font-code);
-            font-size: 13px; cursor: pointer; border-left: 2px solid transparent;
-            transition: all 0.2s; user-select: none; display: flex; align-items: center; gap: 10px;
-        }
-        .nav-item:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.05); }
-        .nav-item.active {
-            color: var(--cyan); border-left-color: var(--cyan);
-            background: linear-gradient(90deg, rgba(0,240,255,0.1) 0%, transparent 100%);
-        }
-
-        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .header {
-            padding: 20px 30px; border-bottom: 1px solid var(--border);
-            background: rgba(3, 5, 8, 0.8); backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .header h1 { font-size: 22px; font-weight: 300; letter-spacing: 2px; }
-        .status { font-family: var(--font-code); font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 8px; }
-        .status::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green); }
-
-        .scroll-area { flex: 1; overflow-y: auto; padding: 30px; }
-
-        /* Panels & Tools */
-        .tool-section { display: none; animation: fadeIn 0.3s; }
-        .tool-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .panel {
-            background: var(--panel); border: 1px solid var(--border);
-            border-radius: var(--r-md); padding: 25px; margin-bottom: 20px; backdrop-filter: blur(10px);
-        }
-        .panel-title {
-            font-family: var(--font-code); color: var(--cyan); font-size: 14px;
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(0,240,255,0.1);
-            padding-bottom: 10px; margin-bottom: 20px;
-        }
-
-        /* Inputs & Buttons */
-        label { display: block; font-family: var(--font-code); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-        input[type="text"], input[type="number"], textarea, select {
-            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-            color: var(--text); padding: 12px; font-family: var(--font-code);
-            border-radius: var(--r-sm); margin-bottom: 15px; font-size: 13px;
-        }
-        input:focus, textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
-        
-        .btn {
-            background: rgba(0, 240, 255, 0.1); color: var(--cyan); border: 1px solid var(--cyan);
-            padding: 10px 20px; font-family: var(--font-code); cursor: pointer;
-            text-transform: uppercase; font-weight: bold; border-radius: var(--r-sm);
-            transition: all 0.2s;
-        }
-        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan-glow); }
-        .btn.danger { border-color: var(--red); color: var(--red); background: rgba(255,0,85,0.1); }
-        .btn.danger:hover { background: var(--red); color: #fff; }
-
-        /* Result Boxes */
-        .result-box {
-            margin-top: 15px; padding: 15px; border: 1px dashed var(--border);
-            background: rgba(0,0,0,0.3); border-radius: var(--r-sm);
-            font-family: var(--font-code); font-size: 13px; line-height: 1.6;
-            white-space: pre-wrap; word-break: break-all;
-        }
-        .result-box .error { color: var(--red); font-weight: bold; }
-        .result-box .success { color: var(--green); font-weight: bold; }
-        .result-box .highlight { color: var(--gold); }
-
-        /* Grids */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-
-        /* Specific Tool CSS */
-        .log-entry { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; }
-        .log-entry:last-child { border-bottom: none; }
-        
-        .tag { font-family: var(--font-code); font-size: 10px; padding: 2px 6px; border-radius: 3px; background: rgba(0,240,255,0.1); color: var(--cyan); }
-    </style>
-</head>
-<body>
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="brand">◈ B6<span>TOOLS</span></div>
-        <div class="nav-menu">
-            <div class="nav-item active" onclick="nav('validator', this)"><span>⌕</span> Forensik-Validator</div>
-            <div class="nav-item" onclick="nav('hash', this)"><span>#</span> SHA-256 Hasher</div>
-            <div class="nav-item" onclick="nav('calc', this)"><span>∑</span> Calculator</div>
-            <div class="nav-item" onclick="nav('entropy', this)"><span>∿</span> Entropie-Scanner</div>
-            <div class="nav-item" onclick="nav('sorter', this)"><span>⇄</span> Text-Sortierer</div>
-            <div class="nav-item" onclick="nav('tokens', this)"><span>◈</span> Token-Estimator</div>
-        </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main">
-        <header class="header">
-            <h1 id="page-title">FORENSIK-VALIDATOR</h1>
-            <div class="status">LOCAL EXECUTION</div>
-        </header>
-
-        <div class="scroll-area">
-            
-            <!-- TOOL 1: VALIDATOR -->
-            <section id="tool-validator" class="tool-section active">
-                <div class="panel">
-                    <div class="panel-title">Forensischer Text-Scanner (Akte T.K.)</div>
-                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
-                        Prüft Text auf Zeitparadoxien (Start > Ende), Numerus-Brüche (Plural/Substantiv), fehlende Unterschriften und ungültige Datumsformate.
-                    </p>
-                    <textarea id="val-input" rows="8" placeholder="Füge hier den Behördenbescheid ein..."></textarea>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn" onclick="runValidator()">▶ SCAN AUSFÜHREN</button>
-                        <button class="btn danger" onclick="document.getElementById('val-input').value=''; document.getElementById('val-result').style.display='none';">✕ RESET</button>
-                    </div>
-                    <div id="val-result" class="result-box" style="display: none;"></div>
-                </div>
-            </section>
-
-            <!-- TOOL 2: HASH -->
-            <section id="tool-hash" class="tool-section">
-                <div class="panel">
-                    <div class="panel-title">Kryptografischer SHA-256 Hasher</div>
-                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
-                        Erzeugt einen echten SHA-256 Hash via Web Crypto API. Wird für den WORM-Ledger (Datenintegrität) genutzt.
-                    </p>
-                    <textarea id="hash-input" rows="4" placeholder="Text für Hash-Generierung eingeben..."></textarea>
-                    <button class="btn" onclick="generateSHA256()">▶ HASH BERECHNEN</button>
-                    <div id="hash-result" class="result-box" style="display: none;"></div>
-                </div>
-            </section>
-
-            <!-- TOOL 3: CALCULATOR -->
-            <section id="tool-calc" class="tool-section">
-                <div class="panel">
-                    <div class="panel-title">Universal Calculator</div>
-                    <div class="grid-2">
-                        <div>
-                            <h3 style="color:var(--gold); font-family:var(--font-code); font-size:14px; margin-bottom:10px;">Zins-Guillotine (§ 288 BGB)</h3>
-                            <label>Hauptforderung (€)</label>
-                            <input type="number" id="calc-amount" value="1000000">
-                            <label>Tage</label>
-                            <input type="number" id="calc-days" value="174">
-                            <label>Zinssatz p.a. (%)</label>
-                            <input type="number" id="calc-rate" value="6.27">
-                            <button class="btn" onclick="calcInterest()">▶ BERECHNEN</button>
-                            <div id="calc-result" class="result-box" style="display: none;"></div>
-                        </div>
-                        <div>
-                            <h3 style="color:var(--gold); font-family:var(--font-code); font-size:14px; margin-bottom:10px;">Aktenzeichen-Splitter</h3>
-                            <p style="color:var(--muted); font-size:12px;">Zerlegt ein Aktenzeichen in seine Bestandteile.</p>
-                            <label>Aktenzeichen</label>
-                            <input type="text" id="az-input" value="152 Gs 648/26">
-                            <button class="btn" onclick="splitAZ()">▶ SPLITTEN</button>
-                            <div id="az-result" class="result-box" style="display: none;"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TOOL 4: ENTROPY -->
-            <section id="tool-entropy" class="tool-section">
-                <div class="panel">
-                    <div class="panel-title">Shannon-Entropie-Scanner</div>
-                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
-                        Misst die Informationsdichte (Bit/Zeichen). Niedrige Werte (< 3.5) deuten oft auf Copy-Paste-Muster oder repetitive Textbausteine hin.
-                    </p>
-                    <textarea id="entropy-input" rows="6" placeholder="Text eingeben..."></textarea>
-                    <button class="btn" onclick="calcEntropy()">▶ ENTROPIE BERECHNEN</button>
-                    <div id="entropy-result" class="result-box" style="display: none;"></div>
-                </div>
-            </section>
-
-            <!-- TOOL 5: SORTER -->
-            <section id="tool-sorter" class="tool-section">
-                <div class="panel">
-                    <div class="panel-title">Text-Sortierer & Classifier</div>
-                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
-                        Sortiert Zeilen alphabetisch, entfernt Duplikate und klassifiziert nach Dokumententyp (Bescheid, Protokoll, Schriftsatz).
-                    </p>
-                    <textarea id="sort-input" rows="8" placeholder="Eine Information pro Zeile...&#10;Bescheid vom 01.01.2026&#10;Protokoll KHK Feierabend&#10;Klageerhebung VG Minden"></textarea>
-                    <div style="display:flex; gap:20px; margin-bottom:15px;">
-                        <label><input type="checkbox" id="sort-dedupe" checked> Duplikate entfernen</label>
-                        <label><input type="checkbox" id="sort-case"> Groß/Klein beachten</label>
-                    </div>
-                    <button class="btn" onclick="runSorter()">▶ SORTIEREN</button>
-                    <div id="sort-result" class="result-box" style="display: none;"></div>
-                </div>
-            </section>
-
-            <!-- TOOL 6: TOKENS -->
-            <section id="tool-tokens" class="tool-section">
-                <div class="panel">
-                    <div class="panel-title">Token-Estimator</div>
-                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
-                        Schätzt die Anzahl an Tokens (basierend auf Zeichen ÷ 4). Ideal für das API-Kosten-Management.
-                    </p>
-                    <textarea id="token-input" rows="6" placeholder="Text eingeben..."></textarea>
-                    <button class="btn" onclick="estimateTokens()">▶ SCHÄTZEN</button>
-                    <div id="token-result" class="result-box" style="display: none;"></div>
-                </div>
-            </section>
-
-        </div>
-    </main>
-
-    <script>
-        // Navigation Logic
-        function nav(toolId, el) {
-            document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById('tool-' + toolId).classList.add('active');
-            el.classList.add('active');
-
-            const titles = {
-                'validator': 'FORENSIK-VALIDATOR',
-                'hash': 'SHA-256 HASHER',
-                'calc': 'UNIVERSAL CALCULATOR',
-                'entropy': 'ENTROPIE-SCANNER',
-                'sorter': 'TEXT-SORTIERER',
-                'tokens': 'TOKEN-ESTIMATOR'
-            };
-            document.getElementById('page-title').innerText = titles[toolId];
-        }
-
-        // 1. VALIDATOR (RegEx Logic)
-        function runValidator() {
-            const text = document.getElementById('val-input').value;
-            const res = document.getElementById('val-result');
-            
-            if(!text.trim()) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text eingegeben.</span>'; return; }
-            
-            let findings = [];
-            
-            // Zeitparadoxon
-            const timeRegex = /(\d{1,2})[:.](\d{2})\s*(?:bis|[-–—])\s*(\d{1,2})[:.](\d{2})/g;
-            let match;
-            while ((match = timeRegex.exec(text)) !== null) {
-                const start = parseInt(match[1])*60 + parseInt(match[2]);
-                const end = parseInt(match[3])*60 + parseInt(match[4]);
-                if (start > end) findings.push(`<span class="error">[KRITISCH]</span> Zeitparadoxon: Start (${match[0].split(' ')[0]}) liegt nach Ende.`);
-            }
-
-            // Numerus-Bruch
-            if (/die\s+Beschuldigten/i.test(text) && /als\s+sogenannter/i.test(text)) {
-                findings.push(`<span class="error">[KRITISCH]</span> Numerus-Bruch: Plural ("die Beschuldigten") mit Singular ("als sogenannter").`);
-            }
-
-            // Datums-Check
-            const dateRegex = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g;
-            while ((match = dateRegex.exec(text)) !== null) {
-                const d = parseInt(match[1]), m = parseInt(match[2]), y = parseInt(match[3]);
-                const date = new Date(y, m-1, d);
-                if (date.getDate() !== d || date.getMonth() !== m-1) {
-                    findings.push(`<span class="error">[KRITISCH]</span> Ungültiges Datum: ${match[0]}`);
-                }
-            }
-
-            // Fehlende Unterschrift
-            if (!/Unterschrift/i.test(text) && !/gez\./i.test(text)) {
-                findings.push(`<span class="highlight">[WARNUNG]</span> Formfehler: Kein Signatur-Marker ("gez." oder "Unterschrift") gefunden.`);
-            } else {
-                findings.push(`<span class="success">[OK]</span> Signatur-Marker gefunden.`);
-            }
-
-            res.style.display = 'block';
-            res.innerHTML = findings.length ? findings.join('<br>') : '<span class="success">[OK] Keine Anomalien gefunden.</span>';
-        }
-
-        // 2. HASH (Web Crypto API)
-        async function generateSHA256() {
-            const text = document.getElementById('hash-input').value;
-            const res = document.getElementById('hash-result');
-            
-            if(!text) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text.</span>'; return; }
-            if(!crypto.subtle) { res.style.display='block'; res.innerHTML='<span class="error">Web Crypto nicht verfügbar (HTTPS benötigt).</span>'; return; }
-
-            const msgBuffer = new TextEncoder().encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-            res.style.display = 'block';
-            res.innerHTML = `<span class="success">SHA-256 Hash:</span><br><span class="highlight">${hashHex}</span>`;
-        }
-
-        // 3. CALCULATOR (Interest & AZ Split)
-        function calcInterest() {
-            const amount = parseFloat(document.getElementById('calc-amount').value);
-            const days = parseInt(document.getElementById('calc-days').value);
-            const rate = parseFloat(document.getElementById('calc-rate').value);
-            const res = document.getElementById('calc-result');
-
-            if (isNaN(amount) || isNaN(days) || isNaN(rate)) {
-                res.style.display = 'block'; res.innerHTML = '<span class="error">FEHLER: Ungültige Eingabe.</span>'; return;
-            }
-
-            const interest = amount * (rate / 100) * (days / 365);
-            const total = amount + interest;
-
-            res.style.display = 'block';
-            res.innerHTML = `
-                <span class="success">Zinsberechnung (§ 288 BGB)</span><br>
-                Hauptforderung: ${amount.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}<br>
-                Zinssatz: ${rate}% p.a.<br>
-                Tage: ${days}<br>
-                Zinsen: <span class="highlight">${interest.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span><br>
-                Gesamt: <span class="highlight">${total.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span>
-            `;
-        }
-
-        function splitAZ() {
-            const az = document.getElementById('az-input').value.trim();
-            const res = document.getElementById('az-result');
-            const regex = /^(\d+)\s+([A-Za-z]+)\s+(\d+)\/(\d+)$/;
-            const match = az.match(regex);
-
-            res.style.display = 'block';
-            if (match) {
-                res.innerHTML = `
-                    <span class="success">Aktenzeichen zerlegt:</span><br>
-                    Abteilung/Nr: <span class="highlight">${match[1]}</span><br>
-                    Registerzeichen: <span class="highlight">${match[2]}</span><br>
-                    Laufende Nummer: <span class="highlight">${match[3]}</span><br>
-                    Jahr: <span class="highlight">20${match[4]}</span>
-                `;
-            } else {
-                res.innerHTML = '<span class="error">Format nicht erkannt (Erwartet z.B. "152 Gs 648/26").</span>';
-            }
-        }
-
-        // 4. ENTROPY (Shannon)
-        function calcEntropy() {
-            const text = document.getElementById('entropy-input').value;
-            const res = document.getElementById('entropy-result');
-
-            if(!text) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text.</span>'; return; }
-
-            const len = text.length;
-            const freqs = {};
-            for (let i = 0; i < len; i++) {
-                const char = text[i];
-                freqs[char] = (freqs[char] || 0) + 1;
-            }
-
-            let entropy = 0;
-            for (let char in freqs) {
-                const p = freqs[char] / len;
-                entropy -= p * Math.log2(p);
-            }
-
-            res.style.display = 'block';
-            let status = entropy < 3.5 ? '<span class="error">[WARNUNG] Sehr niedrige Entropie. Möglicher Copy-Paste-Text.</span>' : '<span class="success">[OK] Entropie im normalen Bereich.</span>';
-            
-            res.innerHTML = `
-                <span class="success">Shannon-Entropie:</span><br>
-                Wert: <span class="highlight">${entropy.toFixed(4)} Bit/Zeichen</span><br>
-                Zeichen: ${len}<br>
-                Einzigartige Zeichen: ${Object.keys(freqs).length}<br><br>
-                ${status}
-            `;
-        }
-
-        // 5. SORTER (Classifier)
-        function runSorter() {
-            const text = document.getElementById('sort-input').value;
-            const dedupe = document.getElementById('sort-dedupe').checked;
-            const caseSensitive = document.getElementById('sort-case').checked;
-            const res = document.getElementById('sort-result');
-
-            let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            
-            if (dedupe) {
-                const seen = new Set();
-                lines = lines.filter(l => {
-                    const key = caseSensitive ? l : l.toLowerCase();
-                    if (seen.has(key)) return false;
-                    seen.add(key);
-                    return true;
-                });
-            }
-
-            lines.sort((a, b) => a.localeCompare(b, 'de', { sensitivity: caseSensitive ? 'variant' : 'base' }));
-
-            const groups = {
-                'Bescheid / Verwaltungsakt': [],
-                'Protokoll': [],
-                'Schriftsatz / Klage': [],
-                'Beleg / Anlage': [],
-                'Sonstiges': []
-            };
-
-            lines.forEach(line => {
-                if (/bescheid|verwaltungsakt|verfügung/i.test(line)) groups['Bescheid / Verwaltungsakt'].push(line);
-                else if (/protokoll|niederschrift/i.test(line)) groups['Protokoll'].push(line);
-                else if (/klage|beschwerde|schriftsatz|antrag/i.test(line)) groups['Schriftsatz / Klage'].push(line);
-                else if (/beleg|anlage|nachweis|quittung/i.test(line)) groups['Beleg / Anlage'].push(line);
-                else groups['Sonstiges'].push(line);
-            });
-
-            let html = `<span class="success">Sortierung abgeschlossen. (${lines.length} Zeilen)</span><br><br>`;
-            for (const [group, items] of Object.entries(groups)) {
-                if (items.length > 0) {
-                    html += `<span class="highlight">[${group}]</span><br>`;
-                    html += items.map(i => `- ${i}`).join('<br>') + '<br><br>';
-                }
-            }
-
-            res.style.display = 'block';
-            res.innerHTML = html;
-        }
-
-        // 6. TOKENS
-        function estimateTokens() {
-            const text = document.getElementById('token-input').value;
-            const res = document.getElementById('token-result');
-            
-            const chars = text.length;
-            const tokens = Math.ceil(chars / 4); // Grobe Schätzung
-
-            res.style.display = 'block';
-            res.innerHTML = `
-                <span class="success">Token-Schätzung:</span><br>
-                Zeichen: ${chars}<br>
-                Geschätzte Tokens: <span class="highlight">${tokens}</span><br><br>
-                <span style="color:var(--muted); font-size:11px;">Hinweis: Dies ist eine grobe Näherung (Zeichen / 4). Die tatsächliche Token-Anzahl hängt vom verwendeten Modell ab.</span>
-            `;
-        }
-    </script>
-</body>
-</html>
 <!doctype html>
 <html lang="de">
 <head>
@@ -2161,6 +1679,488 @@ $("downloadPlan").addEventListener("click",()=>{
 const today=new Date(); $("dateTo").value=today.toISOString().slice(0,10);
 const prior=new Date(today); prior.setDate(prior.getDate()-30); $("dateFrom").value=prior.toISOString().slice(0,10);
 </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>B6 TOOL LAB // VISIONÄR KORTEX 2050</title>
+    <style>
+        :root {
+            --bg: #030508;
+            --panel: rgba(8, 12, 20, 0.9);
+            --cyan: #00f0ff;
+            --cyan-glow: rgba(0, 240, 255, 0.3);
+            --gold: #ffcc00;
+            --red: #ff0055;
+            --green: #00ff41;
+            --text: #e0f0ff;
+            --muted: #7a8f9f;
+            --border: rgba(0, 240, 255, 0.15);
+            --font-code: 'Courier New', Courier, monospace;
+            --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+            --r-sm: 4px; --r-md: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Layout */
+        .sidebar {
+            width: 260px; background: var(--panel); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; backdrop-filter: blur(20px); z-index: 10;
+        }
+        .brand {
+            padding: 20px; font-family: var(--font-code); font-size: 20px; font-weight: 900;
+            color: var(--cyan); border-bottom: 1px solid var(--border); letter-spacing: 2px;
+        }
+        .brand span { color: var(--gold); }
+        
+        .nav-menu { flex: 1; padding: 15px 0; }
+        .nav-item {
+            padding: 12px 20px; color: var(--muted); font-family: var(--font-code);
+            font-size: 13px; cursor: pointer; border-left: 2px solid transparent;
+            transition: all 0.2s; user-select: none; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-item:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.05); }
+        .nav-item.active {
+            color: var(--cyan); border-left-color: var(--cyan);
+            background: linear-gradient(90deg, rgba(0,240,255,0.1) 0%, transparent 100%);
+        }
+
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .header {
+            padding: 20px 30px; border-bottom: 1px solid var(--border);
+            background: rgba(3, 5, 8, 0.8); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header h1 { font-size: 22px; font-weight: 300; letter-spacing: 2px; }
+        .status { font-family: var(--font-code); font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 8px; }
+        .status::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green); }
+
+        .scroll-area { flex: 1; overflow-y: auto; padding: 30px; }
+
+        /* Panels & Tools */
+        .tool-section { display: none; animation: fadeIn 0.3s; }
+        .tool-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .panel {
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: var(--r-md); padding: 25px; margin-bottom: 20px; backdrop-filter: blur(10px);
+        }
+        .panel-title {
+            font-family: var(--font-code); color: var(--cyan); font-size: 14px;
+            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(0,240,255,0.1);
+            padding-bottom: 10px; margin-bottom: 20px;
+        }
+
+        /* Inputs & Buttons */
+        label { display: block; font-family: var(--font-code); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+            color: var(--text); padding: 12px; font-family: var(--font-code);
+            border-radius: var(--r-sm); margin-bottom: 15px; font-size: 13px;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+        
+        .btn {
+            background: rgba(0, 240, 255, 0.1); color: var(--cyan); border: 1px solid var(--cyan);
+            padding: 10px 20px; font-family: var(--font-code); cursor: pointer;
+            text-transform: uppercase; font-weight: bold; border-radius: var(--r-sm);
+            transition: all 0.2s;
+        }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan-glow); }
+        .btn.danger { border-color: var(--red); color: var(--red); background: rgba(255,0,85,0.1); }
+        .btn.danger:hover { background: var(--red); color: #fff; }
+
+        /* Result Boxes */
+        .result-box {
+            margin-top: 15px; padding: 15px; border: 1px dashed var(--border);
+            background: rgba(0,0,0,0.3); border-radius: var(--r-sm);
+            font-family: var(--font-code); font-size: 13px; line-height: 1.6;
+            white-space: pre-wrap; word-break: break-all;
+        }
+        .result-box .error { color: var(--red); font-weight: bold; }
+        .result-box .success { color: var(--green); font-weight: bold; }
+        .result-box .highlight { color: var(--gold); }
+
+        /* Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+        /* Specific Tool CSS */
+        .log-entry { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; }
+        .log-entry:last-child { border-bottom: none; }
+        
+        .tag { font-family: var(--font-code); font-size: 10px; padding: 2px 6px; border-radius: 3px; background: rgba(0,240,255,0.1); color: var(--cyan); }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">◈ B6<span>TOOLS</span></div>
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="nav('validator', this)"><span>⌕</span> Forensik-Validator</div>
+            <div class="nav-item" onclick="nav('hash', this)"><span>#</span> SHA-256 Hasher</div>
+            <div class="nav-item" onclick="nav('calc', this)"><span>∑</span> Calculator</div>
+            <div class="nav-item" onclick="nav('entropy', this)"><span>∿</span> Entropie-Scanner</div>
+            <div class="nav-item" onclick="nav('sorter', this)"><span>⇄</span> Text-Sortierer</div>
+            <div class="nav-item" onclick="nav('tokens', this)"><span>◈</span> Token-Estimator</div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <header class="header">
+            <h1 id="page-title">FORENSIK-VALIDATOR</h1>
+            <div class="status">LOCAL EXECUTION</div>
+        </header>
+
+        <div class="scroll-area">
+            
+            <!-- TOOL 1: VALIDATOR -->
+            <section id="tool-validator" class="tool-section active">
+                <div class="panel">
+                    <div class="panel-title">Forensischer Text-Scanner (Akte T.K.)</div>
+                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
+                        Prüft Text auf Zeitparadoxien (Start > Ende), Numerus-Brüche (Plural/Substantiv), fehlende Unterschriften und ungültige Datumsformate.
+                    </p>
+                    <textarea id="val-input" rows="8" placeholder="Füge hier den Behördenbescheid ein..."></textarea>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn" onclick="runValidator()">▶ SCAN AUSFÜHREN</button>
+                        <button class="btn danger" onclick="document.getElementById('val-input').value=''; document.getElementById('val-result').style.display='none';">✕ RESET</button>
+                    </div>
+                    <div id="val-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- TOOL 2: HASH -->
+            <section id="tool-hash" class="tool-section">
+                <div class="panel">
+                    <div class="panel-title">Kryptografischer SHA-256 Hasher</div>
+                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
+                        Erzeugt einen echten SHA-256 Hash via Web Crypto API. Wird für den WORM-Ledger (Datenintegrität) genutzt.
+                    </p>
+                    <textarea id="hash-input" rows="4" placeholder="Text für Hash-Generierung eingeben..."></textarea>
+                    <button class="btn" onclick="generateSHA256()">▶ HASH BERECHNEN</button>
+                    <div id="hash-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- TOOL 3: CALCULATOR -->
+            <section id="tool-calc" class="tool-section">
+                <div class="panel">
+                    <div class="panel-title">Universal Calculator</div>
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="color:var(--gold); font-family:var(--font-code); font-size:14px; margin-bottom:10px;">Zins-Guillotine (§ 288 BGB)</h3>
+                            <label>Hauptforderung (€)</label>
+                            <input type="number" id="calc-amount" value="1000000">
+                            <label>Tage</label>
+                            <input type="number" id="calc-days" value="174">
+                            <label>Zinssatz p.a. (%)</label>
+                            <input type="number" id="calc-rate" value="6.27">
+                            <button class="btn" onclick="calcInterest()">▶ BERECHNEN</button>
+                            <div id="calc-result" class="result-box" style="display: none;"></div>
+                        </div>
+                        <div>
+                            <h3 style="color:var(--gold); font-family:var(--font-code); font-size:14px; margin-bottom:10px;">Aktenzeichen-Splitter</h3>
+                            <p style="color:var(--muted); font-size:12px;">Zerlegt ein Aktenzeichen in seine Bestandteile.</p>
+                            <label>Aktenzeichen</label>
+                            <input type="text" id="az-input" value="152 Gs 648/26">
+                            <button class="btn" onclick="splitAZ()">▶ SPLITTEN</button>
+                            <div id="az-result" class="result-box" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOOL 4: ENTROPY -->
+            <section id="tool-entropy" class="tool-section">
+                <div class="panel">
+                    <div class="panel-title">Shannon-Entropie-Scanner</div>
+                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
+                        Misst die Informationsdichte (Bit/Zeichen). Niedrige Werte (< 3.5) deuten oft auf Copy-Paste-Muster oder repetitive Textbausteine hin.
+                    </p>
+                    <textarea id="entropy-input" rows="6" placeholder="Text eingeben..."></textarea>
+                    <button class="btn" onclick="calcEntropy()">▶ ENTROPIE BERECHNEN</button>
+                    <div id="entropy-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- TOOL 5: SORTER -->
+            <section id="tool-sorter" class="tool-section">
+                <div class="panel">
+                    <div class="panel-title">Text-Sortierer & Classifier</div>
+                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
+                        Sortiert Zeilen alphabetisch, entfernt Duplikate und klassifiziert nach Dokumententyp (Bescheid, Protokoll, Schriftsatz).
+                    </p>
+                    <textarea id="sort-input" rows="8" placeholder="Eine Information pro Zeile...&#10;Bescheid vom 01.01.2026&#10;Protokoll KHK Feierabend&#10;Klageerhebung VG Minden"></textarea>
+                    <div style="display:flex; gap:20px; margin-bottom:15px;">
+                        <label><input type="checkbox" id="sort-dedupe" checked> Duplikate entfernen</label>
+                        <label><input type="checkbox" id="sort-case"> Groß/Klein beachten</label>
+                    </div>
+                    <button class="btn" onclick="runSorter()">▶ SORTIEREN</button>
+                    <div id="sort-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- TOOL 6: TOKENS -->
+            <section id="tool-tokens" class="tool-section">
+                <div class="panel">
+                    <div class="panel-title">Token-Estimator</div>
+                    <p style="color:var(--muted); font-size:12px; margin-bottom:15px;">
+                        Schätzt die Anzahl an Tokens (basierend auf Zeichen ÷ 4). Ideal für das API-Kosten-Management.
+                    </p>
+                    <textarea id="token-input" rows="6" placeholder="Text eingeben..."></textarea>
+                    <button class="btn" onclick="estimateTokens()">▶ SCHÄTZEN</button>
+                    <div id="token-result" class="result-box" style="display: none;"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Navigation Logic
+        function nav(toolId, el) {
+            document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('tool-' + toolId).classList.add('active');
+            el.classList.add('active');
+
+            const titles = {
+                'validator': 'FORENSIK-VALIDATOR',
+                'hash': 'SHA-256 HASHER',
+                'calc': 'UNIVERSAL CALCULATOR',
+                'entropy': 'ENTROPIE-SCANNER',
+                'sorter': 'TEXT-SORTIERER',
+                'tokens': 'TOKEN-ESTIMATOR'
+            };
+            document.getElementById('page-title').innerText = titles[toolId];
+        }
+
+        // 1. VALIDATOR (RegEx Logic)
+        function runValidator() {
+            const text = document.getElementById('val-input').value;
+            const res = document.getElementById('val-result');
+            
+            if(!text.trim()) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text eingegeben.</span>'; return; }
+            
+            let findings = [];
+            
+            // Zeitparadoxon
+            const timeRegex = /(\d{1,2})[:.](\d{2})\s*(?:bis|[-–—])\s*(\d{1,2})[:.](\d{2})/g;
+            let match;
+            while ((match = timeRegex.exec(text)) !== null) {
+                const start = parseInt(match[1])*60 + parseInt(match[2]);
+                const end = parseInt(match[3])*60 + parseInt(match[4]);
+                if (start > end) findings.push(`<span class="error">[KRITISCH]</span> Zeitparadoxon: Start (${match[0].split(' ')[0]}) liegt nach Ende.`);
+            }
+
+            // Numerus-Bruch
+            if (/die\s+Beschuldigten/i.test(text) && /als\s+sogenannter/i.test(text)) {
+                findings.push(`<span class="error">[KRITISCH]</span> Numerus-Bruch: Plural ("die Beschuldigten") mit Singular ("als sogenannter").`);
+            }
+
+            // Datums-Check
+            const dateRegex = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g;
+            while ((match = dateRegex.exec(text)) !== null) {
+                const d = parseInt(match[1]), m = parseInt(match[2]), y = parseInt(match[3]);
+                const date = new Date(y, m-1, d);
+                if (date.getDate() !== d || date.getMonth() !== m-1) {
+                    findings.push(`<span class="error">[KRITISCH]</span> Ungültiges Datum: ${match[0]}`);
+                }
+            }
+
+            // Fehlende Unterschrift
+            if (!/Unterschrift/i.test(text) && !/gez\./i.test(text)) {
+                findings.push(`<span class="highlight">[WARNUNG]</span> Formfehler: Kein Signatur-Marker ("gez." oder "Unterschrift") gefunden.`);
+            } else {
+                findings.push(`<span class="success">[OK]</span> Signatur-Marker gefunden.`);
+            }
+
+            res.style.display = 'block';
+            res.innerHTML = findings.length ? findings.join('<br>') : '<span class="success">[OK] Keine Anomalien gefunden.</span>';
+        }
+
+        // 2. HASH (Web Crypto API)
+        async function generateSHA256() {
+            const text = document.getElementById('hash-input').value;
+            const res = document.getElementById('hash-result');
+            
+            if(!text) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text.</span>'; return; }
+            if(!crypto.subtle) { res.style.display='block'; res.innerHTML='<span class="error">Web Crypto nicht verfügbar (HTTPS benötigt).</span>'; return; }
+
+            const msgBuffer = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            res.style.display = 'block';
+            res.innerHTML = `<span class="success">SHA-256 Hash:</span><br><span class="highlight">${hashHex}</span>`;
+        }
+
+        // 3. CALCULATOR (Interest & AZ Split)
+        function calcInterest() {
+            const amount = parseFloat(document.getElementById('calc-amount').value);
+            const days = parseInt(document.getElementById('calc-days').value);
+            const rate = parseFloat(document.getElementById('calc-rate').value);
+            const res = document.getElementById('calc-result');
+
+            if (isNaN(amount) || isNaN(days) || isNaN(rate)) {
+                res.style.display = 'block'; res.innerHTML = '<span class="error">FEHLER: Ungültige Eingabe.</span>'; return;
+            }
+
+            const interest = amount * (rate / 100) * (days / 365);
+            const total = amount + interest;
+
+            res.style.display = 'block';
+            res.innerHTML = `
+                <span class="success">Zinsberechnung (§ 288 BGB)</span><br>
+                Hauptforderung: ${amount.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}<br>
+                Zinssatz: ${rate}% p.a.<br>
+                Tage: ${days}<br>
+                Zinsen: <span class="highlight">${interest.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span><br>
+                Gesamt: <span class="highlight">${total.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span>
+            `;
+        }
+
+        function splitAZ() {
+            const az = document.getElementById('az-input').value.trim();
+            const res = document.getElementById('az-result');
+            const regex = /^(\d+)\s+([A-Za-z]+)\s+(\d+)\/(\d+)$/;
+            const match = az.match(regex);
+
+            res.style.display = 'block';
+            if (match) {
+                res.innerHTML = `
+                    <span class="success">Aktenzeichen zerlegt:</span><br>
+                    Abteilung/Nr: <span class="highlight">${match[1]}</span><br>
+                    Registerzeichen: <span class="highlight">${match[2]}</span><br>
+                    Laufende Nummer: <span class="highlight">${match[3]}</span><br>
+                    Jahr: <span class="highlight">20${match[4]}</span>
+                `;
+            } else {
+                res.innerHTML = '<span class="error">Format nicht erkannt (Erwartet z.B. "152 Gs 648/26").</span>';
+            }
+        }
+
+        // 4. ENTROPY (Shannon)
+        function calcEntropy() {
+            const text = document.getElementById('entropy-input').value;
+            const res = document.getElementById('entropy-result');
+
+            if(!text) { res.style.display='block'; res.innerHTML='<span class="error">FEHLER: Kein Text.</span>'; return; }
+
+            const len = text.length;
+            const freqs = {};
+            for (let i = 0; i < len; i++) {
+                const char = text[i];
+                freqs[char] = (freqs[char] || 0) + 1;
+            }
+
+            let entropy = 0;
+            for (let char in freqs) {
+                const p = freqs[char] / len;
+                entropy -= p * Math.log2(p);
+            }
+
+            res.style.display = 'block';
+            let status = entropy < 3.5 ? '<span class="error">[WARNUNG] Sehr niedrige Entropie. Möglicher Copy-Paste-Text.</span>' : '<span class="success">[OK] Entropie im normalen Bereich.</span>';
+            
+            res.innerHTML = `
+                <span class="success">Shannon-Entropie:</span><br>
+                Wert: <span class="highlight">${entropy.toFixed(4)} Bit/Zeichen</span><br>
+                Zeichen: ${len}<br>
+                Einzigartige Zeichen: ${Object.keys(freqs).length}<br><br>
+                ${status}
+            `;
+        }
+
+        // 5. SORTER (Classifier)
+        function runSorter() {
+            const text = document.getElementById('sort-input').value;
+            const dedupe = document.getElementById('sort-dedupe').checked;
+            const caseSensitive = document.getElementById('sort-case').checked;
+            const res = document.getElementById('sort-result');
+
+            let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            if (dedupe) {
+                const seen = new Set();
+                lines = lines.filter(l => {
+                    const key = caseSensitive ? l : l.toLowerCase();
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+            }
+
+            lines.sort((a, b) => a.localeCompare(b, 'de', { sensitivity: caseSensitive ? 'variant' : 'base' }));
+
+            const groups = {
+                'Bescheid / Verwaltungsakt': [],
+                'Protokoll': [],
+                'Schriftsatz / Klage': [],
+                'Beleg / Anlage': [],
+                'Sonstiges': []
+            };
+
+            lines.forEach(line => {
+                if (/bescheid|verwaltungsakt|verfügung/i.test(line)) groups['Bescheid / Verwaltungsakt'].push(line);
+                else if (/protokoll|niederschrift/i.test(line)) groups['Protokoll'].push(line);
+                else if (/klage|beschwerde|schriftsatz|antrag/i.test(line)) groups['Schriftsatz / Klage'].push(line);
+                else if (/beleg|anlage|nachweis|quittung/i.test(line)) groups['Beleg / Anlage'].push(line);
+                else groups['Sonstiges'].push(line);
+            });
+
+            let html = `<span class="success">Sortierung abgeschlossen. (${lines.length} Zeilen)</span><br><br>`;
+            for (const [group, items] of Object.entries(groups)) {
+                if (items.length > 0) {
+                    html += `<span class="highlight">[${group}]</span><br>`;
+                    html += items.map(i => `- ${i}`).join('<br>') + '<br><br>';
+                }
+            }
+
+            res.style.display = 'block';
+            res.innerHTML = html;
+        }
+
+        // 6. TOKENS
+        function estimateTokens() {
+            const text = document.getElementById('token-input').value;
+            const res = document.getElementById('token-result');
+            
+            const chars = text.length;
+            const tokens = Math.ceil(chars / 4); // Grobe Schätzung
+
+            res.style.display = 'block';
+            res.innerHTML = `
+                <span class="success">Token-Schätzung:</span><br>
+                Zeichen: ${chars}<br>
+                Geschätzte Tokens: <span class="highlight">${tokens}</span><br><br>
+                <span style="color:var(--muted); font-size:11px;">Hinweis: Dies ist eine grobe Näherung (Zeichen / 4). Die tatsächliche Token-Anzahl hängt vom verwendeten Modell ab.</span>
+            `;
+        }
+    </script>
 </body>
 </html>
 <!DOCTYPE html>
