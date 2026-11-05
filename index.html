@@ -1,4 +1,169 @@
 <!doctype html>
+<html lang="de" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meine Seite</title>
+
+  <script>
+    // Gespeicherte Auswahl anwenden, bevor die Seite dargestellt wird
+    try {
+      document.documentElement.dataset.theme =
+        localStorage.getItem("theme") || "system";
+    } catch {}
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6fb;
+      --surface: #fff;
+      --text: #172033;
+      --muted: #5d6880;
+      --border: #dce2ec;
+      --accent: #315eea;
+      --radius: 16px;
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101827;
+      --surface: #1b2638;
+      --text: #edf2ff;
+      --muted: #b0bad0;
+      --border: #344158;
+      --accent: #9bb4ff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root[data-theme="system"] {
+        color-scheme: dark;
+        --bg: #101827;
+        --surface: #1b2638;
+        --text: #edf2ff;
+        --muted: #b0bad0;
+        --border: #344158;
+        --accent: #9bb4ff;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 2rem;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, sans-serif;
+      transition: background-color 180ms, color 180ms;
+    }
+
+    header,
+    main {
+      width: min(100%, 760px);
+      margin-inline: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      line-height: 1.15;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    .theme-picker,
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .theme-picker {
+      padding: 0.6rem 0.8rem;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .card {
+      padding: clamp(1.5rem, 5vw, 3rem);
+      box-shadow: 0 12px 36px rgb(0 0 0 / 8%);
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 1rem;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Meine Seite</h1>
+
+    <label>
+      Farbschema
+      <select class="theme-picker" id="theme-picker">
+        <option value="system">System</option>
+        <option value="light">Hell</option>
+        <option value="dark">Dunkel</option>
+      </select>
+    </label>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Willkommen</h2>
+      <p>
+        Diese Seite passt ihre Farben der Geräteeinstellung an.
+        Über das Menü kannst du Hell oder Dunkel auch selbst auswählen.
+      </p>
+      <a href="#mehr">Mehr erfahren</a>
+    </section>
+  </main>
+
+  <script>
+    const picker = document.querySelector("#theme-picker");
+    const root = document.documentElement;
+
+    picker.value = root.dataset.theme;
+
+    picker.addEventListener("change", () => {
+      const theme = picker.value;
+      root.dataset.theme = theme;
+
+      try {
+        localStorage.setItem("theme", theme);
+      } catch {}
+    });
+  </script>
+</body>
+</html>
+<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
