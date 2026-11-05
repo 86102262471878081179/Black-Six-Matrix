@@ -3,6 +3,455 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="B6 Enterprise Systemarchitektur: Zero-Trust, eBPF KrakenGuard, PBFT und WORM-Ledger.">
+  <title>B6 Enterprise – Systemarchitektur 2050</title>
+  
+  <style>
+    /* ============================================================
+       B6 VISIONÄR KORTEX DESIGN SYSTEM
+       ============================================================ */
+    :root {
+      --bg: #030508;
+      --panel: rgba(10, 16, 25, 0.85);
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.25);
+      --gold: #ffcc00;
+      --red: #ff0055;
+      --green: #00ff41;
+      --text: #e0f0ff;
+      --muted: #7a8f9f;
+      --border: rgba(0, 240, 255, 0.15);
+      --font-code: 'Courier New', Courier, monospace;
+      --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scanline Effect */
+    body::after {
+      content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+      z-index: 999; background-size: 100% 4px; pointer-events: none;
+    }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      position: relative;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-family: var(--font-code);
+      font-size: 12px;
+      color: var(--green);
+      border: 1px solid rgba(0,255,65,0.3);
+      padding: 5px 15px;
+      border-radius: 20px;
+      background: rgba(0,255,65,0.05);
+      text-shadow: 0 0 10px var(--green);
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 50px var(--cyan-glow);
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-family: var(--font-code);
+      color: var(--cyan);
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       PANELS & SECTIONS
+       ============================================================ */
+    section {
+      margin-bottom: 50px;
+      animation: fadeIn 0.8s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    h2 {
+      font-family: var(--font-code);
+      font-size: 20px;
+      color: var(--cyan);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2::before {
+      content: '//';
+      color: var(--gold);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 30px;
+      backdrop-filter: blur(15px);
+      position: relative;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .panel:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.05);
+    }
+
+    /* Corner Accents */
+    .panel::before, .panel::after {
+      content: ''; position: absolute; width: 10px; height: 10px; border: 2px solid var(--cyan); opacity: 0.6;
+    }
+    .panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .panel h3 {
+      font-size: 18px;
+      color: var(--gold);
+      margin-bottom: 15px;
+      font-family: var(--font-code);
+    }
+
+    .panel p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+
+    .panel ul {
+      list-style: none;
+      font-family: var(--font-code);
+      font-size: 13px;
+      color: var(--text);
+    }
+    .panel ul li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+    .panel ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    /* ============================================================
+       COMPARISON TABLE
+       ============================================================ */
+    .table-container {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(0, 240, 255, 0.05);
+      font-family: var(--font-code);
+      font-size: 12px;
+      color: var(--cyan);
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: rgba(0, 240, 255, 0.02);
+    }
+
+    .highlight-row td {
+      background: rgba(255, 204, 0, 0.05);
+      border-left: 2px solid var(--gold);
+    }
+
+    .tag-b6 {
+      font-family: var(--font-code);
+      font-size: 10px;
+      background: rgba(255,204,0,0.15);
+      color: var(--gold);
+      padding: 3px 8px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,204,0,0.3);
+    }
+
+    /* ============================================================
+       TERMINAL
+       ============================================================ */
+    .terminal {
+      background: #000;
+      border: 1px solid var(--border);
+      font-family: var(--font-code);
+      font-size: 13px;
+      color: var(--green);
+      padding: 20px;
+      height: 200px;
+      overflow-y: auto;
+      border-radius: 8px;
+      box-shadow: inset 0 0 20px rgba(0,255,65,0.05);
+      margin-top: 30px;
+    }
+
+    .log-line { margin-bottom: 8px; }
+    .log-line span { color: var(--cyan); }
+    .log-line.cmd { color: #fff; }
+    .log-line.err { color: var(--red); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="status-badge">rauschfrei.zertifiziert_by_b6fortress | TERMINATED_CLEAN</div>
+      <h1>B6 Enterprise</h1>
+      <p>Systemarchitektur // Hyperkernel Ω // 2050 Edition</p>
+    </header>
+
+    <main>
+      <!-- SEKTION 1: ARCHITEKTUR -->
+      <section aria-labelledby="architektur">
+        <h2 id="architektur">Die 6-Ring-Topologie</h2>
+        <div class="grid">
+          
+          <article class="panel">
+            <h3>Ring 0: Core Kernel</h3>
+            <p>Das absolute Herzstück. Hier liegt die Root Authority und der Master Seal Anchor.</p>
+            <ul>
+              <li>Master Seal: 850b2ef0...</li>
+              <li>Invarianten I1 bis I8 (Fail-Closed)</li>
+              <li>AWI Gate: Score ≥ 0.87 (Automated Wisdom Index)</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <h3>Ring 1: Justice & EDB</h3>
+            <p>Die forensische Waffe für die Akte König.</p>
+            <ul>
+              <li>Legal Compliance Engine</li>
+              <li>XJustiz 4.1.0 eJustice-Standard</li>
+              <li>§ 288 BGB Zinsrechner</li>
+              <li>§ 134 BGB Text-Entropie-Analyse</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <h3>Ring 2: Quantum Vault</h3>
+            <p>Schutz gegen zukünftige Bedrohungen (Harvest-Now-Decrypt-Later).</p>
+            <ul>
+              <li>NIST FIPS 203 (ML-KEM)</li>
+              <li>NIST FIPS 204 (ML-DSA)</li>
+              <li>Kyber-1024 / Dilithium-5</li>
+            </ul>
+          </article>
+
+          <article class="panel">
+            <h3>Ring 5: Pipeline & KrakenGuard</h3>
+            <p>Die eBPF-Ausführungsgrenze im Linux-Kernel (Ring 0).</p>
+            <ul>
+              <li>eBPF LSM Shield (< 66 ns Latenz)</li>
+              <li>SIGKILL bei unauthorized execve</li>
+              <li>FastAPI REST-Endpunkte</li>
+            </ul>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- SEKTION 2: VERGLEICH -->
+      <section aria-labelledby="vergleich">
+        <h2 id="vergleich">Architektur-Vergleichsmatrix</h2>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Microsoft Clean Architecture</th>
+                <th>AWS Cloud Patterns</th>
+                <th>B6 Enterprise System</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Primärer Fokus</strong></td>
+                <td>Domänenisolation, Wartbarkeit (Dependency Inversion).</td>
+                <td>Mikrodienst-Resilienz, Cloud-Skalierung.</td>
+                <td><span class="tag-b6">B6</span> In-Kernel Zero-Trust & deterministische Governance.</td>
+              </tr>
+              <tr>
+                <td><strong>Topologie</strong></td>
+                <td>Konzentrische Zwiebel-Schichten.</td>
+                <td>Polyglotte Mikrodienste, Event-Driven.</td>
+                <td><span class="tag-b6">B6</span> 6-Ring-Topologie (Ring 0 Core bis Ring 5 Executor).</td>
+              </tr>
+              <tr>
+                <td><strong>Sicherheit</strong></td>
+                <td>Userspace-Middleware, JWT, Controller-Filter.</td>
+                <td>Perimeter API Gateways, IAM, Sidecar-Proxies.</td>
+                <td><span class="tag-b6">B6</span> eBPF KrakenGuard im Kernel (< 66 ns SIGKILL).</td>
+              </tr>
+              <tr class="highlight-row">
+                <td><strong>Konsens</strong></td>
+                <td>In-Memory Domain Events.</td>
+                <td>Sagas, Circuit Breaker, CQRS.</td>
+                <td><span class="tag-b6">B6</span> PBFT-Schwarmrat (4/5 Quorum) mit Fail-Closed-Veto.</td>
+              </tr>
+              <tr>
+                <td><strong>Audit & Integrität</strong></td>
+                <td>Applikations-Logdateien, SQL/NoSQL.</td>
+                <td>Event Sourcing, CDC.</td>
+                <td><span class="tag-b6">B6</span> Kryptographischer SHA3-512 WORM Ledger + Tombstones.</td>
+              </tr>
+              <tr>
+                <td><strong>Deployment</strong></td>
+                <td>Azure App Services, Docker.</td>
+                <td>AWS EKS mit Cilium eBPF.</td>
+                <td><span class="tag-b6">B6</span> 7-Service Docker Mesh (Nginx, FastAPI, Neo4j).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SEKTION 3: LIVE TERMINAL -->
+      <section aria-labelledby="terminal-section">
+        <h2 id="terminal-section">System Trace Log</h2>
+        <div class="terminal" id="sys-terminal">
+          <div class="log-line"><span>[SYS]</span> Booting B6 Enterprise Architecture...</div>
+          <div class="log-line"><span>[OK]</span> Master Seal Anchor 850b2ef0... verified.</div>
+          <div class="log-line"><span>[OK]</span> eBPF KrakenGuard Shield mounted on /sys/fs/bpf/b6_contract_warden_map.</div>
+          <div class="log-line"><span>[OK]</span> PBFT Swarm Council initialized (5 Pillars).</div>
+          <div class="log-line"><span>[OK]</span> WORM Ledger (SHA3-512) is ready.</div>
+          <div class="log-line cmd">> _</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Simuliert Live-Logs im Terminal, um das System "lebendig" wirken zu lassen
+    const terminal = document.getElementById('sys-terminal');
+    const logs = [
+      "[AUDIT] Checking Ring 1 eJustice compliance... PASS.",
+      "[CACHE] Generated deterministic hash: B6_HASH_8F3A2B1C",
+      "[KERNEL] KrakenGuard intercepted unauthorized sys_execve. SIGKILL sent.",
+      "[QUORUM] Pillar TRIX, AUDIT, STRAT, ANKER voted APPROVED (4/5).",
+      "[WORM] New Block appended: SHA3-512_9B3C4E81...",
+      "[SYS] Memory footprint stable. No anomalies detected."
+    ];
+
+    let logIndex = 0;
+
+    function addLog() {
+      // Entferne den Cursor am Ende
+      const cursorLine = terminal.querySelector('.cmd');
+      if (cursorLine) cursorLine.remove();
+
+      // Füge neue Log-Zeile hinzu
+      const newLine = document.createElement('div');
+      newLine.className = 'log-line';
+      
+      // Zufälliges Präfix für Realismus
+      const parts = logs[logIndex].split(']');
+      newLine.innerHTML = `<span>${parts[0]}]</span>${parts[1]}`;
+      
+      terminal.appendChild(newLine);
+
+      // Füge Cursor wieder hinzu
+      const newCursor = document.createElement('div');
+      newCursor.className = 'log-line cmd';
+      newCursor.innerHTML = '> _';
+      terminal.appendChild(newCursor);
+
+      // Auto-scroll
+      terminal.scrollTop = terminal.scrollHeight;
+
+      logIndex = (logIndex + 1) % logs.length;
+    }
+
+    // Alle 3 Sekunden einen neuen Log-Eintrag generieren
+    setInterval(addLog, 3000);
+  </script>
+</body>
+</html>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Überblick über die B6-Systemarchitektur und ihre Architekturprinzipien">
   <title>B6 Enterprise – Systemarchitektur</title>
 </head>
