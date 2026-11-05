@@ -1,3 +1,465 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020408">
+  <title>B6 OMNI-MONSTER DOCK</title>
+
+  <style>
+    :root {
+      --bg: #020408;
+      --bg-panel: rgba(8, 12, 20, .92);
+      --bg-input: rgba(0, 240, 255, .04);
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, .4);
+      --gold: #ffcc00;
+      --red: #ff386b;
+      --green: #00ff75;
+      --text: #e0f0ff;
+      --muted: #91a3b2;
+      --border: rgba(0, 240, 255, .18);
+      --font-code: "Courier New", Courier, monospace;
+      --font-ui: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(0,240,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--text);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .app { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 280px;
+      flex: 0 0 280px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .brand {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      color: var(--cyan);
+      font: 900 22px var(--font-code);
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+    .brand span { color: var(--gold); }
+    .nav-menu { flex: 1; padding: 15px 0; overflow-y: auto; }
+    .nav-section {
+      padding: 15px 24px 5px;
+      color: var(--muted);
+      font: 10px var(--font-code);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 24px;
+      border: 0;
+      border-left: 2px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      font: 13px var(--font-code);
+      cursor: pointer;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: var(--cyan);
+      background: rgba(0,240,255,.06);
+    }
+    .nav-item.active { border-left-color: var(--cyan); }
+    .nav-badge { margin-left: auto; color: var(--gold); font-size: 10px; }
+    .user-area { padding: 20px 24px; border-top: 1px solid var(--border); font-family: var(--font-code); }
+    .user-area h4 { margin: 0 0 4px; color: var(--gold); font-size: 14px; }
+    .user-area p { margin: 0; color: var(--muted); font-size: 10px; }
+
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(2,4,8,.88);
+    }
+    .page-title { margin: 0; color: #fff; font-size: clamp(19px, 3vw, 28px); font-weight: 300; letter-spacing: 2px; }
+    .page-sub { margin-top: 5px; color: var(--cyan); font: 11px var(--font-code); }
+    .status-indicator {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 1px solid rgba(0,255,117,.35);
+      border-radius: 20px;
+      color: var(--green);
+      font: 12px var(--font-code);
+    }
+    .status-indicator::before { content: "●"; margin-right: 8px; }
+    .scroll-area { flex: 1; padding: 28px 32px; overflow: auto; }
+
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn .2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+    .panel {
+      position: relative;
+      margin-bottom: 22px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-panel);
+    }
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--cyan);
+      font: 14px var(--font-code);
+      text-transform: uppercase;
+    }
+    .grid-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .kpi-card { padding: 18px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,240,255,.03); text-align: center; }
+    .kpi-label { margin-bottom: 8px; color: var(--muted); font: 11px var(--font-code); text-transform: uppercase; }
+    .kpi-value { color: var(--gold); font: 25px var(--font-code); overflow-wrap: anywhere; }
+    .kpi-value.green { color: var(--green); }
+    .kpi-value.red { color: var(--red); }
+
+    .table-wrap { overflow-x: auto; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { padding: 11px; border-bottom: 1px solid var(--border); color: var(--muted); text-align: left; font: 11px var(--font-code); text-transform: uppercase; }
+    .data-table td { padding: 12px 11px; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+    .data-table tr:hover td { background: rgba(0,240,255,.025); }
+
+    .tag { display: inline-block; padding: 4px 8px; border: 1px solid; border-radius: 3px; font: 10px var(--font-code); text-transform: uppercase; }
+    .tag.red { color: var(--red); border-color: rgba(255,56,107,.4); background: rgba(255,56,107,.1); }
+    .tag.gold { color: var(--gold); border-color: rgba(255,204,0,.4); background: rgba(255,204,0,.1); }
+    .tag.green { color: var(--green); border-color: rgba(0,255,117,.4); background: rgba(0,255,117,.1); }
+    .tag.cyan { color: var(--cyan); border-color: rgba(0,240,255,.4); background: rgba(0,240,255,.1); }
+
+    .terminal, .result-box {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #000;
+      font: 12px/1.6 var(--font-code);
+      overflow-wrap: anywhere;
+    }
+    .terminal { height: 200px; overflow: auto; color: var(--green); }
+    .log-line { margin-bottom: 6px; }
+    .log-line span { color: var(--cyan); }
+    .result-box { margin-top: 14px; white-space: pre-wrap; }
+    .log-line, .result-box { overflow-wrap: anywhere; }
+
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      margin: 0 0 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg-input);
+      color: var(--text);
+      font: 13px var(--font-code);
+    }
+    textarea { resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+    .btn, .chip {
+      padding: 9px 14px;
+      border: 1px solid var(--cyan);
+      border-radius: 4px;
+      background: rgba(0,240,255,.08);
+      color: var(--cyan);
+      cursor: pointer;
+      font: 12px var(--font-code);
+    }
+    .btn:hover, .chip:hover, .chip.active { background: rgba(0,240,255,.18); }
+    .btn.secondary { border-color: var(--muted); color: var(--muted); background: transparent; }
+    .filter-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+    .prog-check {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      background: transparent;
+      color: #001;
+      cursor: pointer;
+    }
+    .prog-check.done { border-color: var(--green); background: var(--green); }
+    .detail-link { padding: 0; border: 0; background: transparent; color: var(--text); text-align: left; text-decoration: underline; cursor: pointer; }
+
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    .arch-card { padding: 18px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,.2); }
+    .arch-card h3 { margin: 0 0 10px; color: var(--gold); font: 16px var(--font-code); }
+    .arch-card p { color: var(--muted); font-size: 12px; }
+    .arch-card ul { padding-left: 18px; color: var(--muted); font: 12px/1.7 var(--font-code); }
+
+    .modal-bg { display: none; position: fixed; inset: 0; z-index: 10; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,.82); }
+    .modal-bg.show { display: flex; }
+    .modal { position: relative; width: min(600px, 100%); max-height: 85vh; overflow: auto; padding: 26px; border: 1px solid var(--cyan); border-radius: 10px; background: #08101a; }
+    .modal-close { position: absolute; top: 12px; right: 14px; border: 0; background: transparent; color: var(--muted); font-size: 24px; cursor: pointer; }
+    .modal h3 { padding-right: 30px; color: var(--cyan); font-weight: 400; }
+    .modal-row { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .modal-label { flex: 0 0 115px; color: var(--muted); font: 11px var(--font-code); text-transform: uppercase; }
+    .modal-value { min-width: 0; overflow-wrap: anywhere; }
+
+    @media (max-width: 760px) {
+      .app { display: block; }
+      .sidebar { width: 100%; min-height: 0; border-right: 0; border-bottom: 1px solid var(--border); }
+      .brand { padding: 14px 18px; }
+      .nav-menu { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; }
+      .nav-section { display: none; }
+      .nav-item { width: auto; padding: 9px 10px; border-left: 0; border-radius: 4px; font-size: 11px; }
+      .user-area { display: none; }
+      .header { padding: 16px; }
+      .scroll-area { padding: 16px; }
+      .panel { padding: 16px; }
+    }
+    @media (max-width: 480px) {
+      .status-indicator { font-size: 0; padding: 8px; }
+      .status-indicator::before { margin: 0; font-size: 12px; }
+      .page-title { letter-spacing: 1px; }
+      .modal-row { display: block; }
+      .modal-label { margin-bottom: 5px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">◈ B6<span>MONSTER</span></div>
+    <nav class="nav-menu" aria-label="Hauptnavigation">
+      <div class="nav-section">Command Center</div>
+      <button class="nav-item active" data-tab="dashboard"><span>▦</span> System Dashboard</button>
+      <button class="nav-item" data-tab="ruegen"><span>⚠</span> Rügen-Matrix <span class="nav-badge" id="nav-ruegen">0/34 erledigt</span></button>
+      <button class="nav-item" data-tab="chrono"><span>◷</span> Chronologie</button>
+      <div class="nav-section">Forensik &amp; Tools</div>
+      <button class="nav-item" data-tab="validator"><span>◈</span> Richter-Validator</button>
+      <button class="nav-item" data-tab="hash"><span>∑</span> Cache-Engine</button>
+      <button class="nav-item" data-tab="calc"><span>€</span> Zinsrechner</button>
+      <div class="nav-section">Architektur</div>
+      <button class="nav-item" data-tab="arch"><span>⬡</span> 6-Ring Topologie</button>
+      <button class="nav-item" data-tab="matrix"><span>⚖</span> Vergleichs-Matrix</button>
+      <div class="nav-section">System</div>
+      <button class="nav-item" data-tab="settings"><span>⚙</span> Status &amp; Daten</button>
+    </nav>
+    <div class="user-area"><h4>DR. T.K.</h4><p>ODIN ULTRA ROOT // B6 OPS</p></div>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <div>
+        <h1 class="page-title" id="page-title">SYSTEM DASHBOARD</h1>
+        <div class="page-sub">B6-OMNI MONSTER DOCK // DEMO-OBERFLÄCHE</div>
+      </div>
+      <div class="status-indicator">LOKALE DEMO</div>
+    </header>
+
+    <div class="scroll-area">
+      <section id="tab-dashboard" class="view-section active">
+        <div class="grid-kpi">
+          <div class="kpi-card"><div class="kpi-label">Forensische Rügen</div><div class="kpi-value" id="kpi-ruegen">34</div></div>
+          <div class="kpi-card"><div class="kpi-label">Erledigt</div><div class="kpi-value green" id="kpi-done">0</div></div>
+          <div class="kpi-card"><div class="kpi-label">Prüfpunkte</div><div class="kpi-value red">894</div></div>
+          <div class="kpi-card"><div class="kpi-label">Geltend gemachter Betrag</div><div class="kpi-value">19.800.400 €</div></div>
+        </div>
+        <div class="panel"><div class="panel-title">Lokales Aktivitätsprotokoll</div><div class="terminal" id="terminal-log" aria-live="polite"></div></div>
+      </section>
+
+      <section id="tab-ruegen" class="view-section">
+        <div class="panel">
+          <div class="panel-title">Rügen-Matrix</div>
+          <div class="filter-group" aria-label="Rügen filtern">
+            <button class="chip active" data-filter="all">ALLE</button>
+            <button class="chip" data-filter="alert">KRITISCH</button>
+            <button class="chip" data-filter="warn">OFFEN / HINWEIS</button>
+            <button class="chip" data-filter="ok">BELEGT</button>
+            <button class="chip" data-filter="open">UNERLEDIGT</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Erledigt</th><th>ID</th><th>Verstoß / Anomalie</th><th>Norm</th><th>Status</th></tr></thead>
+              <tbody id="ruegen-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-chrono" class="view-section">
+        <div class="panel"><div class="panel-title">Chronologie (06.05.2026 – 01.10.2026)</div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Datum</th><th>Ereignis</th><th>Beteiligte / Az.</th></tr></thead><tbody id="chrono-body"></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="tab-validator" class="view-section">
+        <div class="panel">
+          <div class="panel-title">Textprüfer (heuristische Demo)</div>
+          <p>Prüft beispielhaft auf Zeitangaben, mögliche Numerus-Widersprüche und Signaturbegriffe. Das Ergebnis ist keine rechtliche Bewertung.</p>
+          <textarea id="val-input" rows="6" placeholder="Text zur Prüfung einfügen…"></textarea>
+          <button class="btn" id="scan-btn">SCAN STARTEN</button>
+          <button class="btn secondary" id="clear-validator">LEEREN</button>
+          <div id="val-result" class="result-box" hidden></div>
+        </div>
+      </section>
+
+      <section id="tab-hash" class="view-section">
+        <div class="panel">
+          <div class="panel-title">Cache-Key-Demo</div>
+          <p>Demo-Fingerprint, nicht kryptografisch sicher und nicht als Integritätssiegel geeignet.</p>
+          <input type="text" id="cache-input" placeholder="Text eingeben…">
+          <div class="result-box"><strong>Demo-Fingerprint:</strong><br><span id="cache-hash">Warte auf Eingabe…</span></div>
+        </div>
+      </section>
+
+      <section id="tab-calc" class="view-section">
+        <div class="panel">
+          <div class="panel-title">Zinsrechner – unverbindliche Beispielrechnung</div>
+          <p>Der Zinssatz ist ein frei einstellbarer Beispielwert, keine Feststellung des gesetzlichen oder geschuldeten Zinssatzes.</p>
+          <div style="max-width:520px">
+            <label for="calc-amount">Hauptforderung (€)</label>
+            <input type="number" id="calc-amount" min="0" step="0.01" value="1000000">
+            <label for="calc-days">Tage</label>
+            <input type="number" id="calc-days" min="0" step="1" value="30">
+            <label for="calc-rate">Beispielzinssatz (% p.a.)</label>
+            <input type="number" id="calc-rate" min="0" step="0.01" value="6.27">
+            <button class="btn" id="calc-btn">BERECHNEN</button>
+            <div id="calc-res" class="result-box" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-arch" class="view-section">
+        <div class="panel"><div class="panel-title">6-Ring-Topologie – Konzeptdarstellung</div><div class="arch-grid">
+          <article class="arch-card"><h3>Ring 0: Core Kernel</h3><p>Konzeptuelle Kernkomponenten.</p><ul><li>Master Seal: Beispielwert</li><li>Invarianten: zu spezifizieren</li><li>AWI Gate: nicht verifiziert</li></ul></article>
+          <article class="arch-card"><h3>Ring 1: Justice &amp; EDB</h3><p>Vorgesehene Dokumenten- und Prüfwerkzeuge.</p><ul><li>Compliance-Prüfungen</li><li>Formatintegration: zu verifizieren</li><li>Zinsrechner: Beispielrechnung</li></ul></article>
+          <article class="arch-card"><h3>Ring 2: Quantum Vault</h3><p>Kryptografische Konzeptkomponenten.</p><ul><li>Algorithmen nur nach tatsächlicher Implementierung nutzbar</li><li>Schlüsselverwaltung erforderlich</li><li>Sicherheit muss unabhängig geprüft werden</li></ul></article>
+          <article class="arch-card"><h3>Ring 5: KrakenGuard</h3><p>Vorgesehene Linux-/eBPF-Komponente.</p><ul><li>Leistung nicht gemessen</li><li>Kernel-Schutz nicht aktiv</li><li>API-Anbindung nicht konfiguriert</li></ul></article>
+        </div></div>
+      </section>
+
+      <section id="tab-matrix" class="view-section">
+        <div class="panel"><div class="panel-title">Architektur-Vergleich – Konzeptwerte, nicht verifiziert</div>
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Dimension</th><th>Clean Architecture</th><th>Cloud-Patterns</th><th>B6-Konzept</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Fokus</strong></td><td>Abhängigkeitsregeln</td><td>Skalierung und Resilienz</td><td>Geplante Sicherheitskomponenten</td></tr>
+              <tr><td><strong>Sicherheit</strong></td><td>Architekturprinzip, kein Sicherheitsprodukt</td><td>Abhängig vom konkreten Aufbau</td><td>eBPF-Konzept, nicht als aktiv bestätigt</td></tr>
+              <tr><td><strong>Konsens</strong></td><td>Nicht festgelegt</td><td>Abhängig vom Muster</td><td>Algorithmus und Fehlermodell zu spezifizieren</td></tr>
+              <tr><td><strong>Audit</strong></td><td>Abhängig von Implementierung</td><td>Abhängig von Implementierung</td><td>Ledger-Konzept, Unveränderlichkeit nicht belegt</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <section id="tab-settings" class="view-section">
+        <div class="panel">
+          <div class="panel-title">Systemstatus &amp; lokale Daten</div>
+          <p>Diese statische Oberfläche bestätigt keine Verschlüsselung, Signaturen, Kernel-Überwachung oder tatsächliche Systemzustände.</p>
+          <hr style="border-color:var(--border); margin:20px 0">
+          <button class="btn secondary" id="reset-btn">LOKALE FORTSCHRITTE LÖSCHEN</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="modal-bg" id="ruegen-modal" role="dialog" aria-modal="true" aria-labelledby="rm-title">
+  <div class="modal">
+    <button class="modal-close" id="modal-close" aria-label="Dialog schließen">×</button>
+    <h3 id="rm-title">Rüge-Detail</h3>
+    <div id="rm-body"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const RUEGEN = [
+  {nr:"01",kurz:"Asservaten-Übergabe leer",norm:"§ 107 StPO",tag:"ok",status:"Belegt",schwere:3,lang:"Das Übergabeverzeichnis ist leer."},
+  {nr:"02",kurz:"GdB 70 % verschwiegen",norm:"Art. 3 III GG",tag:"ok",status:"Belegt",schwere:2,lang:"Grad der Behinderung nicht berücksichtigt."},
+  {nr:"03",kurz:"Insulin-Entzug 70 Min.",norm:"§ 340 StGB",tag:"alert",status:"Offen",schwere:5,lang:"70 Minuten Zugang zu Medikament verweigert."},
+  {nr:"04",kurz:"Waffendrohung Schwerkranker",norm:"§ 240 StGB",tag:"alert",status:"Offen",schwere:5,lang:"Waffe gegen erkrankte Person."},
+  {nr:"05",kurz:"Waffe vor Kind (8 J.)",norm:"Art. 6 GG",tag:"alert",status:"Belegt",schwere:5,lang:"Schusswaffe im Beisein des Kindes."},
+  {nr:"06",kurz:"Kind isoliert beim Umziehen",norm:"Art. 1 I GG",tag:"ok",status:"Belegt",schwere:3,lang:"Isolation des Kindes."},
+  {nr:"07",kurz:"Spuren-GAU ohne Handschuhe",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Sicherstellung ohne Handschuhe."},
+  {nr:"08",kurz:"Kind als Druckmittel",norm:"§ 136a StPO",tag:"alert",status:"Belegt",schwere:5,lang:"Drohung mit Konsequenzen für Kind."},
+  {nr:"09",kurz:"Tacker-Kaskade (Urkunde)",norm:"§ 44 BeurkG",tag:"ok",status:"Belegt",schwere:2,lang:"Mehrfach getackerte Urkunde."},
+  {nr:"10",kurz:"Schwarz-Stempel statt Siegel",norm:"§ 317 ZPO",tag:"ok",status:"Belegt",schwere:2,lang:"Einfacher schwarzer Stempel."},
+  {nr:"11",kurz:"Blanko-Beglaubigung",norm:"§ 44 BeurkG",tag:"ok",status:"Belegt",schwere:3,lang:"Beglaubigung eines Blankoformulars."},
+  {nr:"12",kurz:"Sammel-Mischprotokoll",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Zwei Maßnahmen in einem Protokoll."},
+  {nr:"13",kurz:"Grüner Textmarker",norm:"§ 44 BeurkG",tag:"warn",status:"Belegt",schwere:2,lang:"Nachträgliche Markierung im Original."},
+  {nr:"14",kurz:"Fahrzeugfarbe nicht genannt",norm:"§ 160 II StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Neon-Grün verschwiegen."},
+  {nr:"15",kurz:"Fallakte 2 fehlt",norm:"§ 105 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Zweite Akte nicht vorgelegt."},
+  {nr:"16",kurz:"Tatvorwurf-Ausweitung",norm:"§ 27 StGB",tag:"warn",status:"Belegt",schwere:3,lang:"Ausweitung ohne Gehör."},
+  {nr:"17",kurz:"Blanko-Belehrung",norm:"§ 136 StPO",tag:"alert",status:"Belegt",schwere:4,lang:"Belehrung ohne Tatbezug."},
+  {nr:"18",kurz:"Zeugen-Vakuum",norm:"§ 106 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Keine unabhängigen Zeugen."},
+  {nr:"19",kurz:"Gänsefüßchen-Fiktion",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Wörtliche Rede ohne Quelle."},
+  {nr:"20",kurz:"Ortslosigkeit Asservate",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Asservate ohne Fundort."},
+  {nr:"21",kurz:"Kfz-Durchsuchung o. Titel",norm:"Art. 13 GG",tag:"warn",status:"Belegt",schwere:4,lang:"Durchsuchung ohne richterliche Anordnung."},
+  {nr:"22",kurz:"Tina Blanko-Belehrung",norm:"§ 136 StPO",tag:"alert",status:"Belegt",schwere:4,lang:"Blanko-Belehrung T.K."},
+  {nr:"23",kurz:"Zeugenausschaltung (3×)",norm:"§ 106 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Drei Zeugen ausgeschlossen."},
+  {nr:"24",kurz:"Messer fehlt im Protokoll",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:3,lang:"Messer fehlt."},
+  {nr:"25",kurz:"§ 308 vs. Liegenlassen",norm:"Art. 13 GG",tag:"warn",status:"Belegt",schwere:3,lang:"Widerspruch im Fund."},
+  {nr:"26",kurz:"„Diverse Pillen“",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Pillen ohne Aufstellung."},
+  {nr:"27",kurz:"Nachheftung Akte",norm:"Art. 103 I GG",tag:"warn",status:"Belegt",schwere:3,lang:"Nachträgliche Heftung."},
+  {nr:"28",kurz:"Kinder-Datenträger",norm:"Art. 13 GG",tag:"alert",status:"Belegt",schwere:4,lang:"Datenträger der Kinder."},
+  {nr:"29",kurz:"Anwaltslüge",norm:"§ 137 StPO",tag:"alert",status:"Belegt",schwere:4,lang:"Falsche Angabe zum Verteidiger."},
+  {nr:"30",kurz:"Messer am Spiegel übersehen",norm:"§ 244 II StPO",tag:"info",status:"Belegt",schwere:2,lang:"Messer nicht dokumentiert."},
+  {nr:"31",kurz:"Deeskalation verletzt",norm:"§ 2 BPolG",tag:"info",status:"Belegt",schwere:3,lang:"Deeskalation missachtet."},
+  {nr:"32",kurz:"Ort der Maßnahme leer",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Ort fehlt."},
+  {nr:"33",kurz:"Zeitangabe prüfen 06:26 / 08:15",norm:"§ 348 StGB",tag:"alert",status:"Offen",schwere:4,lang:"Zeitangabe 06:26 gegenüber 08:15 prüfen."},
+  {nr:"34",kurz:"Geburtsort T.K. falsch",norm:"§ 107 StPO",tag:"warn",status:"Belegt",schwere:2,lang:"Geburtsort weicht ab."}
+];
+
+const CHRONO = [
+  ["06.05.2026","Erlass Durchsuchungsbeschluss","152 Gs 648/26"],
+  ["07.05.2026","Durchsuchung Südring 134 (06:00–08:15)","PP Bielefeld"],
+  ["07.05.2026","Insulin-Entzug Dr. T.K. (70 Min.)","Art. 2 II GG"],
+  ["01.09.2026","Klageerhebung Hauptsache","11 K 3272/26"],
+  ["04.09.2026","Jugendamtsmeldung","§ 8a SGB VIII"],
+  ["14.09.2026","LG-Beschwerde + AG-Anhörung","011 Qs-52 Js 23/26"],
+  ["01.10.2026","Dritter Jugendamt-Besuch","Rode / Hohaus"]
+];
+
+const $ = id => document.getElementById(id);
+const titles = {
+  dashboard:"SYSTEM DASHBOARD", ruegen:"RÜGEN-MATRIX", chrono:"CHRONOLOGIE",
+  validator:"TEXTPRÜFER", hash:"CACHE-ENGINE", calc:"ZINSRECHNER",
+  arch:"6-RING-TOPOLOGIE", matrix:"VERGLEICHS-MATRIX", settings:"SYSTEMSTATUS"
+};
+
+function loadProgress() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem("b6_progress") || "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch { return {}; }
+}
+let progress =
 <!doctype html>
 <html lang="de">
 <head>
