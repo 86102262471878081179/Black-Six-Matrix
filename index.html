@@ -3,343 +3,1211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>B6 VISIONÄR KORTEX // FINAL COCKPIT</title>
+    <meta name="theme-color" content="#020408">
+    <title>B6 SOVEREIGN FORTRESS // OMNI-CORE 2050</title>
+    
     <style>
-        /* ============================================================
-           B6 COCKPIT DESIGN SYSTEM (ISOLIERT)
-           ============================================================ */
+        /* ==========================================================================
+           B6 SOVEREIGN FORTRESS DESIGN SYSTEM
+           ========================================================================== */
+        
         :root {
-            --bg: #020408;
-            --panel: rgba(8, 12, 20, 0.95);
+            /* Basis Farben */
+            --bg-deep: #020408;
+            --bg-panel: rgba(10, 16, 26, 0.85);
+            --bg-panel-hover: rgba(15, 25, 40, 0.95);
+            --bg-input: rgba(0, 0, 0, 0.5);
+            
+            /* Neon Akzente */
             --cyan: #00f0ff;
-            --cyan-glow: rgba(0, 240, 255, 0.3);
+            --cyan-dim: rgba(0, 240, 255, 0.2);
+            --cyan-glow: rgba(0, 240, 255, 0.4);
+            
             --gold: #ffcc00;
+            --gold-dim: rgba(255, 204, 0, 0.2);
+            --gold-glow: rgba(255, 204, 0, 0.4);
+            
             --red: #ff0055;
+            --red-dim: rgba(255, 0, 85, 0.2);
+            --red-glow: rgba(255, 0, 85, 0.4);
+            
             --green: #00ff41;
-            --text: #e0f0ff;
-            --muted: #7a8f9f;
+            --green-dim: rgba(0, 255, 65, 0.2);
+            --green-glow: rgba(0, 255, 65, 0.4);
+            
+            --violet: #b388ff;
+            
+            /* Text & Ränder */
+            --text-main: #e0f0ff;
+            --text-muted: #7a8f9f;
+            --text-dark: #4a5b6b;
             --border: rgba(0, 240, 255, 0.15);
+            --border-solid: #00f0ff;
+            
+            /* Typografie */
             --font-code: 'Courier New', Courier, monospace;
-            --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
-            --r-sm: 4px; --r-md: 8px;
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            
+            /* Layout */
+            --dock-height: 70px;
+            --r-sm: 4px;
+            --r-md: 8px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             font-family: var(--font-ui);
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            
+            /* Holographic Grid */
             background-image: 
                 linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 50px 50px;
+            background-position: center center;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ============================================================
-           DOCK BAR
-           ============================================================ */
+        /* Scanline & Vignette */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+            z-index: 9999;
+            background-size: 100% 4px, 100% 100%;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* ==========================================================================
+           BOOT SEQUENCE OVERLAY
+           ========================================================================== */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-code);
+            color: var(--green);
+            font-size: 16px;
+            transition: opacity 0.8s ease;
+        }
+
+        .boot-text {
+            width: 400px;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .boot-cursor {
+            display: inline-block;
+            width: 10px; height: 18px;
+            background: var(--green);
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ==========================================================================
+           DOCK BAR (Navigation)
+           ========================================================================== */
         .dock-bar {
             display: flex;
             align-items: center;
-            background: var(--panel);
+            background: var(--bg-panel);
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            height: 60px;
-            padding: 0 20px;
-            z-index: 1000;
+            backdrop-filter: blur(25px);
+            height: var(--dock-height);
+            padding: 0 25px;
+            z-index: 100;
             flex-shrink: 0;
-            overflow-x: auto;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.6);
         }
 
         .brand {
             font-family: var(--font-code);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 900;
             color: var(--cyan);
-            margin-right: 30px;
-            white-space: nowrap;
+            letter-spacing: 3px;
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 0 15px var(--cyan-glow);
         }
-        .brand span { color: var(--gold); }
+        
+        .brand span {
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
 
-        .dock-items { display: flex; gap: 5px; }
+        .dock-items {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .dock-items::-webkit-scrollbar { display: none; }
 
         .dock-btn {
             background: transparent;
             border: 1px solid transparent;
-            color: var(--muted);
+            color: var(--text-muted);
             font-family: var(--font-code);
-            font-size: 12px;
-            padding: 8px 15px;
+            font-size: 13px;
+            padding: 10px 20px;
             border-radius: var(--r-sm);
             cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .dock-btn:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.05); }
-        .dock-btn.active {
-            color: var(--cyan);
-            border-color: var(--border);
-            background: rgba(0, 240, 255, 0.1);
-            box-shadow: inset 0 -2px 0 var(--cyan);
+            user-select: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* ============================================================
-           CONTENT AREA & DIE EISERNE LAYER-REGEL
-           ============================================================ */
+        .dock-btn:hover {
+            color: var(--cyan);
+            background: rgba(0, 240, 255, 0.05);
+            border-color: var(--border);
+        }
+
+        .dock-btn.active {
+            color: var(--cyan);
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--cyan);
+            box-shadow: inset 0 -3px 0 var(--cyan), 0 0 20px var(--cyan-glow);
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .sys-status {
+            margin-left: auto;
+            font-family: var(--font-code);
+            font-size: 12px;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 25px;
+            border-left: 1px solid var(--border);
+            white-space: nowrap;
+            text-shadow: 0 0 10px var(--green-glow);
+            letter-spacing: 1px;
+        }
+
+        .sys-status::before {
+            content: '';
+            width: 10px; height: 10px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ==========================================================================
+           CONTENT AREA
+           ========================================================================== */
         .content-area {
             flex: 1;
             overflow-y: auto;
-            padding: 30px;
+            padding: 40px;
             position: relative;
-            /* Verhindert, dass absolut positionierte Elemente ausbrechen */
-            isolation: isolate; 
+            isolation: isolate;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
         }
 
-        /* JEDES Modul ist standardmäßig hart versteckt. */
-        .module { 
-            display: none !important; 
+        .content-area::-webkit-scrollbar { width: 8px; }
+        .content-area::-webkit-scrollbar-track { background: transparent; }
+        .content-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        .content-area::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+        /* EISERNE LAYER-REGEL */
+        .module { display: none !important; }
+        .module.active { display: block !important; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* NUR das aktive Modul wird angezeigt. */
-        .module.active { 
-            display: block !important; 
-            animation: fadeIn 0.3s ease; 
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ============================================================
-           UI ELEMENTS
-           ============================================================ */
+        /* ==========================================================================
+           UI KOMPONENTEN
+           ========================================================================== */
         .page-header {
-            margin-bottom: 25px;
+            margin-bottom: 35px;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
-        .page-header h1 { font-size: 24px; font-weight: 300; letter-spacing: 2px; color: #fff; }
-        .page-header p { font-family: var(--font-code); color: var(--cyan); font-size: 12px; margin-top: 5px; }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 300;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .page-header p {
+            font-family: var(--font-code);
+            color: var(--cyan);
+            font-size: 14px;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
 
         .panel {
-            background: var(--panel); 
+            background: var(--bg-panel);
             border: 1px solid var(--border);
-            border-radius: var(--r-md); 
-            padding: 25px; 
-            margin-bottom: 20px;
+            border-radius: var(--r-md);
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(15px);
+            position: relative;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 15px 50px rgba(0, 240, 255, 0.05);
+        }
+
+        /* Tech-Ecken */
+        .panel::before, .panel::after {
+            content: '';
+            position: absolute;
+            width: 15px; height: 15px;
+            border: 2px solid var(--cyan);
+            opacity: 0.5;
+            transition: opacity 0.3s ease, border-color 0.3s ease;
         }
         
+        .panel:hover::before, .panel:hover::after {
+            opacity: 1;
+            border-color: var(--gold);
+        }
+        
+        .panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
         .panel-title {
-            font-family: var(--font-code); color: var(--cyan); font-size: 14px;
-            text-transform: uppercase; border-bottom: 1px solid rgba(0,240,255,0.1);
-            padding-bottom: 10px; margin-bottom: 20px;
+            font-family: var(--font-code);
+            color: var(--cyan);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         /* Inputs */
-        input, textarea, select {
-            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-            color: var(--text); padding: 12px; font-family: var(--font-code);
-            border-radius: var(--r-sm); margin-bottom: 15px; font-size: 13px;
+        label {
+            display: block;
+            font-family: var(--font-code);
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--cyan); }
-        
-        .btn {
-            background: rgba(0, 240, 255, 0.1); color: var(--cyan); border: 1px solid var(--cyan);
-            padding: 10px 20px; font-family: var(--font-code); cursor: pointer;
-            font-weight: bold; border-radius: var(--r-sm); transition: all 0.2s;
-        }
-        .btn:hover { background: var(--cyan); color: #000; }
-        
-        .result-box {
-            margin-top: 15px; padding: 15px; border: 1px dashed var(--border);
-            background: rgba(0,0,0,0.3); border-radius: var(--r-sm);
-            font-family: var(--font-code); font-size: 13px; line-height: 1.6; white-space: pre-wrap;
-        }
-        
-        /* Grid Layouts */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 
-        /* Spezifisch für Handbuch/Lore */
-        .lore-card { background: rgba(255, 204, 0, 0.05); border: 1px solid rgba(255, 204, 0, 0.2); padding: 15px; border-radius: var(--r-sm); margin-bottom: 10px; }
-        .lore-card h3 { color: var(--gold); font-family: var(--font-code); font-size: 14px; margin-bottom: 5px; }
-        .lore-card p { color: var(--muted); font-size: 12px; }
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 15px;
+            font-family: var(--font-code);
+            border-radius: var(--r-sm);
+            margin-bottom: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-glow);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: 12px 25px;
+            font-family: var(--font-code);
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: var(--r-sm);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background: var(--cyan);
+            color: var(--bg-deep);
+            box-shadow: 0 0 25px var(--cyan-glow);
+        }
+
+        .btn.danger { border-color: var(--red); color: var(--red); background: rgba(255, 0, 85, 0.1); }
+        .btn.danger:hover { background: var(--red); color: #fff; box-shadow: 0 0 25px var(--red-glow); }
+
+        .btn.gold { border-color: var(--gold); color: var(--gold); background: rgba(255, 204, 0, 0.1); }
+        .btn.gold:hover { background: var(--gold); color: var(--bg-deep); box-shadow: 0 0 25px var(--gold-glow); }
+
+        /* Results */
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed var(--border);
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--r-sm);
+            font-family: var(--font-code);
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: none;
+        }
+
+        .result-box .error { color: var(--red); font-weight: bold; }
+        .result-box .success { color: var(--green); font-weight: bold; }
+        .result-box .highlight { color: var(--gold); font-weight: bold; }
+        .result-box .muted { color: var(--text-muted); font-size: 12px; }
+
+        /* Grid Layouts */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+        /* KPI Cards */
+        .kpi-card {
+            background: rgba(0, 240, 255, 0.02);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            padding: 25px;
+            border-radius: var(--r-sm);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover { background: rgba(0, 240, 255, 0.05); border-color: var(--cyan); }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.5;
+        }
+
+        .kpi-label {
+            font-family: var(--font-code);
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-family: var(--font-code);
+            font-size: 32px;
+            color: var(--gold);
+            text-shadow: 0 0 25px var(--gold-glow);
+            font-weight: bold;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 15px;
+            font-family: var(--font-code);
+            color: var(--cyan);
+            background: rgba(0, 240, 255, 0.05);
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            vertical-align: top;
+        }
+
+        .data-table tr:hover td { background: rgba(0, 240, 255, 0.02); }
+
+        .tag {
+            font-family: var(--font-code);
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .tag.red { background: rgba(255, 0, 85, 0.15); color: var(--red); border: 1px solid rgba(255, 0, 85, 0.3); }
+        .tag.gold { background: rgba(255, 204, 0, 0.15); color: var(--gold); border: 1px solid rgba(255, 204, 0, 0.3); }
+        .tag.green { background: rgba(0, 255, 65, 0.15); color: var(--green); border: 1px solid rgba(0, 255, 65, 0.3); }
+        .tag.cyan { background: rgba(0, 240, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+
+        /* Terminal */
+        .terminal {
+            background: #000000;
+            border: 1px solid var(--border);
+            font-family: var(--font-code);
+            font-size: 13px;
+            color: var(--green);
+            padding: 25px;
+            height: 300px;
+            overflow-y: auto;
+            border-radius: var(--r-sm);
+            box-shadow: inset 0 0 40px rgba(0, 255, 65, 0.05);
+        }
+
+        .terminal::-webkit-scrollbar { width: 6px; }
+        .terminal::-webkit-scrollbar-thumb { background: var(--green); opacity: 0.3; }
+
+        .log-line { margin-bottom: 8px; opacity: 0.9; line-height: 1.4; }
+        .log-line span { color: var(--cyan); margin-right: 10px; font-weight: bold; }
+        .log-line.cmd { color: #ffffff; }
+        .log-line.err { color: var(--red); }
+
+        /* Architecture View */
+        .arch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .arch-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: var(--r-sm);
+            border-left: 3px solid var(--cyan);
+        }
+        
+        .arch-card h3 {
+            color: var(--gold);
+            font-family: var(--font-code);
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .arch-card ul {
+            list-style: none;
+            font-family: var(--font-code);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .arch-card ul li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .arch-card ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4, .arch-grid { grid-template-columns: 1fr; }
+            .dock-bar { padding: 0 15px; height: auto; flex-wrap: wrap; }
+            .brand { width: 100%; margin-bottom: 10px; margin-top: 10px; }
+            .sys-status { display: none; }
+            .content-area { padding: 20px; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .page-header h1 { font-size: 28px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- BOOT SEQUENCE -->
+    <div id="boot-screen">
+        <div class="boot-text" id="boot-text"></div>
+    </div>
+
     <!-- DOCK BAR -->
     <header class="dock-bar">
-        <div class="brand">◈ B6<span>KORTEX</span></div>
+        <div class="brand">◈ B6<span>FORTRESS</span></div>
         <div class="dock-items">
             <button class="dock-btn active" onclick="nav('dashboard', this)">▦ Dashboard</button>
-            <button class="dock-btn" onclick="nav('handbook', this)">📖 Handbuch</button>
             <button class="dock-btn" onclick="nav('ruegen', this)">⚠ Rügen</button>
+            <button class="dock-btn" onclick="nav('chrono', this)">◷ Chronik</button>
             <button class="dock-btn" onclick="nav('validator', this)">⌕ Validator</button>
             <button class="dock-btn" onclick="nav('hash', this)"># SHA-256</button>
+            <button class="dock-btn" onclick="nav('calc', this)">∑ Calculator</button>
+            <button class="dock-btn" onclick="nav('entropy', this)">∿ Entropie</button>
+            <button class="dock-btn" onclick="nav('sorter', this)">⇄ Sorter</button>
+            <button class="dock-btn" onclick="nav('arch', this)">⬡ Architektur</button>
+            <button class="dock-btn" onclick="nav('xj', this)">⇄ XJustiz</button>
         </div>
+        <div class="sys-status">TERMINATED_CLEAN</div>
     </header>
 
-    <!-- CONTENT AREA -->
+    <!-- MAIN CONTENT -->
     <main class="content-area">
 
-        <!-- ================= 1. DASHBOARD ================= -->
+        <!-- ================= MODUL 1: DASHBOARD ================= -->
         <section id="module-dashboard" class="module active">
             <div class="page-header">
-                <h1>SYSTEM DASHBOARD</h1>
-                <p>B6-OMNI CORE // TERMINATED_CLEAN</p>
-            </div>
-            <div class="grid-3">
-                <div class="panel" style="text-align:center;">
-                    <div class="panel-title">Status</div>
-                    <div style="font-family:var(--font-code); font-size:20px; color:var(--green);">ACTIVE</div>
-                </div>
-                <div class="panel" style="text-align:center;">
-                    <div class="panel-title">Rügen</div>
-                    <div style="font-family:var(--font-code); font-size:20px; color:var(--red);">34</div>
-                </div>
-                <div class="panel" style="text-align:center;">
-                    <div class="panel-title">Nodes</div>
-                    <div style="font-family:var(--font-code); font-size:20px; color:var(--cyan);">127</div>
+                <div>
+                    <h1>SYSTEM DASHBOARD</h1>
+                    <p>B6-OMNI CORE // DR. T.K. / T.K. // 2050</p>
                 </div>
             </div>
-        </section>
 
-        <!-- ================= 2. HANDBUCH (03_LORE) ================= -->
-        <section id="module-handbook" class="module">
-            <div class="page-header">
-                <h1>03_LORE // HANDBUCH</h1>
-                <p>Die Verfassung & Architektur der B6-Matrix</p>
+            <div class="grid-4">
+                <div class="kpi-card">
+                    <div class="kpi-label">Forensische Rügen</div>
+                    <div class="kpi-value" id="kpi-ruegen">34</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Erledigt</div>
+                    <div class="kpi-value" id="kpi-done" style="color:var(--green); text-shadow:0 0 25px var(--green-glow);">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Prüfpunkte</div>
+                    <div class="kpi-value" style="color:var(--red); text-shadow:0 0 25px var(--red-glow);">894</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Streitwert</div>
+                    <div class="kpi-value" style="font-size:24px;">19.8M €</div>
+                </div>
             </div>
+
             <div class="panel">
-                <div class="lore-card">
-                    <h3>01_GENESIS (Die Verfassung)</h3>
-                    <p>Die 125 deterministischen Regeln. Die Carbon-Argon-Symbiose. Die 6 Master-Säulen (StPO, BGB, etc.).</p>
-                </div>
-                <div class="lore-card">
-                    <h3>02_SKELETON (Der Kernel)</h3>
-                    <p>Krakenguard eBPF CO-RE, Ring-0 Shield, Bila Reflex Core (Rust).</p>
-                </div>
-                <div class="lore-card">
-                    <h3>05_SENSORY (Legal & Forensik)</h3>
-                    <p>Zitiergebot-Scanner (Art. 80 GG), Yellow-MIC Forensics, Toxic Spider Network.</p>
+                <div class="panel-title">Kernel Trace Log (Live)</div>
+                <div class="terminal" id="terminal-log">
+                    <div class="log-line"><span>[SYS]</span> BOOTING B6 SOVEREIGN FORTRESS...</div>
+                    <div class="log-line"><span>[OK]</span> WORM-LEDGER MOUNTED (SHA3-512).</div>
+                    <div class="log-line"><span>[OK]</span> KRAKENGUARD eBPF SHIELD ACTIVE.</div>
+                    <div class="log-line"><span>[OK]</span> TARGET IDENTIFIED: DR. T.K. / T.K.</div>
+                    <div class="log-line cmd">> _</div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= 3. RÜGEN ================= -->
+        <!-- ================= MODUL 2: RÜGEN ================= -->
         <section id="module-ruegen" class="module">
             <div class="page-header">
-                <h1>FORENSISCHE RÜGEN</h1>
-                <p>Akte T.K. / Dr. T.K.</p>
+                <div>
+                    <h1>FORENSISCHE RÜGEN</h1>
+                    <p>Akte Dr. T.K. / T.K. // 34 Prüfpunkte</p>
+                </div>
             </div>
+
             <div class="panel">
-                <table style="width:100%; text-align:left; border-collapse:collapse;">
-                    <tr style="border-bottom:1px solid #333;">
-                        <th style="padding:10px;">ID</th>
-                        <th style="padding:10px;">Verstoß</th>
-                        <th style="padding:10px;">Norm</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px; color:var(--cyan);">01</td>
-                        <td style="padding:10px;">Insulin-Entzug 70 Min.</td>
-                        <td style="padding:10px;">§ 340 StGB</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px; color:var(--cyan);">02</td>
-                        <td style="padding:10px;">174-Tage-Latenz</td>
-                        <td style="padding:10px;">Art. 13 GG</td>
-                    </tr>
-                </table>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width:50px">✓</th>
+                                <th>ID</th>
+                                <th>Verstoß / Anomalie</th>
+                                <th>Norm</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ruegen-body"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- ================= 4. VALIDATOR ================= -->
+        <!-- ================= MODUL 3: CHRONOLOGIE ================= -->
+        <section id="module-chrono" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>CHRONOLOGIE</h1>
+                    <p>Ereignis-Historie // 06.05.2026 – 01.10.2026</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Ereignis</th>
+                                <th>Beteiligte / Az.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chrono-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 4: VALIDATOR ================= -->
         <section id="module-validator" class="module">
             <div class="page-header">
-                <h1>RICHTER-VALIDATOR</h1>
-                <p>Text-Scan auf Zeitparadoxien</p>
+                <div>
+                    <h1>RICHTER-VALIDATOR</h1>
+                    <p>Text-Scan auf Zeitparadoxien, Numerus & Signaturen</p>
+                </div>
             </div>
+
             <div class="panel">
-                <textarea id="val-input" rows="6" placeholder="Text hier einfügen..."></textarea>
-                <button class="btn" onclick="runValidator()">▶ SCAN</button>
-                <div id="val-result" class="result-box" style="display:none;"></div>
+                <label>Dokumententext einfügen</label>
+                <textarea id="val-input" rows="8" placeholder="Füge hier den Behördenbescheid ein..."></textarea>
+                <div style="display:flex; gap:15px;">
+                    <button class="btn" onclick="runValidator()">▶ SCAN AUSFÜHREN</button>
+                    <button class="btn danger" onclick="document.getElementById('val-input').value=''; document.getElementById('val-result').style.display='none';">✕ LEEREN</button>
+                </div>
+                <div id="val-result" class="result-box"></div>
             </div>
         </section>
 
-        <!-- ================= 5. HASH ================= -->
+        <!-- ================= MODUL 5: HASH ================= -->
         <section id="module-hash" class="module">
             <div class="page-header">
-                <h1>SHA-256 HASHER</h1>
-                <p>WORM-Ledger Integrität</p>
+                <div>
+                    <h1>SHA-256 HASHER</h1>
+                    <p>WORM-Ledger Integrität // Kryptografischer Fingerabdruck</p>
+                </div>
             </div>
+
             <div class="panel">
-                <textarea id="hash-input" rows="4" placeholder="Text eingeben..."></textarea>
+                <label>Text eingeben</label>
+                <textarea id="hash-input" rows="5" placeholder="Text für Hash-Generierung..."></textarea>
                 <button class="btn" onclick="generateSHA256()">▶ HASH BERECHNEN</button>
-                <div id="hash-result" class="result-box" style="display:none;"></div>
+                <div id="hash-result" class="result-box"></div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 6: CALCULATOR ================= -->
+        <section id="module-calc" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>UNIVERSAL CALCULATOR</h1>
+                    <p>Zinsen & Aktenzeichen-Splitter</p>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-title">Zins-Guillotine (§ 288 BGB)</div>
+                    <label>Hauptforderung (€)</label>
+                    <input type="number" id="calc-amount" value="1000000">
+                    <label>Tage</label>
+                    <input type="number" id="calc-days" value="174">
+                    <label>Zinssatz p.a. (%)</label>
+                    <input type="number" id="calc-rate" value="6.27">
+                    <button class="btn" onclick="calcInterest()">▶ BERECHNEN</button>
+                    <div id="calc-result" class="result-box"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">Aktenzeichen-Splitter</div>
+                    <label>Aktenzeichen</label>
+                    <input type="text" id="az-input" value="152 Gs 648/26">
+                    <button class="btn" onclick="splitAZ()">▶ SPLITTEN</button>
+                    <div id="az-result" class="result-box"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 7: ENTROPIE ================= -->
+        <section id="module-entropy" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>ENTROPIE SCANNER</h1>
+                    <p>Shannon-Entropie // Erkennung von Copy-Paste-Mustern</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <label>Text eingeben</label>
+                <textarea id="entropy-input" rows="6" placeholder="Text eingeben..."></textarea>
+                <button class="btn" onclick="calcEntropy()">▶ ENTROPIE BERECHNEN</button>
+                <div id="entropy-result" class="result-box"></div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 8: SORTER ================= -->
+        <section id="module-sorter" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>TEXT SORTER</h1>
+                    <p>Sortierung & Klassifizierung (Bescheid, Protokoll, Klage)</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <label>Eine Information pro Zeile</label>
+                <textarea id="sort-input" rows="8" placeholder="Bescheid vom 01.01.2026&#10;Protokoll KHK Feierabend&#10;Klageerhebung VG Minden"></textarea>
+                <button class="btn" onclick="runSorter()">▶ SORTIEREN</button>
+                <div id="sort-result" class="result-box"></div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 9: ARCHITEKTUR ================= -->
+        <section id="module-arch" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>ARCHITEKTUR</h1>
+                    <p>6-Ring-Topologie // Enterprise Skeleton</p>
+                </div>
+            </div>
+
+            <div class="arch-grid">
+                <div class="arch-card">
+                    <h3>Ring 0: Core Kernel</h3>
+                    <ul>
+                        <li>Master Seal: 850b2ef0...</li>
+                        <li>Invarianten I1-I8 (Fail-Closed)</li>
+                        <li>AWI Gate: Score ≥ 0.87</li>
+                        <li>Hard Flash Engine (250ms Timeout)</li>
+                    </ul>
+                </div>
+                <div class="arch-card">
+                    <h3>Ring 1: Justice & EDB</h3>
+                    <ul>
+                        <li>Legal Compliance Engine</li>
+                        <li>XJustiz 4.1.0 Standard</li>
+                        <li>§ 288 BGB Zinsrechner</li>
+                        <li>§ 134 BGB Text-Entropie-Analyse</li>
+                    </ul>
+                </div>
+                <div class="arch-card">
+                    <h3>Ring 2: Quantum Vault</h3>
+                    <ul>
+                        <li>NIST FIPS 203 (ML-KEM)</li>
+                        <li>NIST FIPS 204 (ML-DSA)</li>
+                        <li>Kyber-1024 / Dilithium-5</li>
+                        <li>Harvest-Now-Decrypt-Later Schutz</li>
+                    </ul>
+                </div>
+                <div class="arch-card">
+                    <h3>Ring 5: KrakenGuard</h3>
+                    <ul>
+                        <li>eBPF LSM Shield (< 66 ns Latenz)</li>
+                        <li>SIGKILL bei unauthorized execve</li>
+                        <li>FastAPI REST-Endpunkte</li>
+                        <li>Streamlit HUD-Schnittstellen</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MODUL 10: XJUSTIZ ================= -->
+        <section id="module-xj" class="module">
+            <div class="page-header">
+                <div>
+                    <h1>XJUSTIZ TOP 100</h1>
+                    <p>ERV & XÖV Standards // Filterbar</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <input type="text" id="xj-filter" placeholder="Nach Name oder Funktion filtern..." oninput="filterXJ()">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kategorie</th>
+                                <th>Name / Komponente</th>
+                                <th>Funktion</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xj-body"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
     </main>
 
+    <!-- ==========================================================================
+         JAVASCRIPT LOGIK (DIE MASCHINE)
+         ========================================================================== -->
     <script>
-        // --- DIE EISERNE NAVIGATION ---
-        function nav(moduleId, btnElement) {
-            // 1. Verstecke ALLE Module
-            const allModules = document.querySelectorAll('.module');
-            allModules.forEach(mod => {
-                mod.classList.remove('active');
-            });
+        // ----------------------------------------------------------------------
+        // BOOT SEQUENCE LOGIK
+        // ----------------------------------------------------------------------
+        const bootLines = [
+            "INITIALIZING B6 SOVEREIGN FORTRESS...",
+            "LOADING KERNEL MODULES... [OK]",
+            "MOUNTING WORM-LEDGER (SHA3-512)... [OK]",
+            "VERIFYING MASTER SEAL (850b2ef0)... [OK]",
+            "ACTIVATING KRAKENGUARD eBPF SHIELD... [OK]",
+            "CONNECTING TO PBFT SWARM... [OK]",
+            "SYSTEM STATUS: TERMINATED_CLEAN.",
+            "WELCOME, DR. T.K."
+        ];
+        
+        let bootIndex = 0;
+        const bootScreen = document.getElementById('boot-screen');
+        const bootText = document.getElementById('boot-text');
 
-            // 2. Entferne 'active' von allen Buttons
-            const allBtns = document.querySelectorAll('.dock-btn');
-            allBtns.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // 3. Zeige NUR das gewählte Modul
-            const targetModule = document.getElementById('module-' + moduleId);
-            if (targetModule) {
-                targetModule.classList.add('active');
-            }
-
-            // 4. Markiere den geklickten Button
-            if (btnElement) {
-                btnElement.classList.add('active');
+        function typeBoot() {
+            if (bootIndex < bootLines.length) {
+                const line = document.createElement('div');
+                line.innerHTML = bootLines[bootIndex];
+                bootText.appendChild(line);
+                bootIndex++;
+                setTimeout(typeBoot, Math.random() * 200 + 50);
+            } else {
+                setTimeout(() => {
+                    bootScreen.style.opacity = '0';
+                    setTimeout(() => bootScreen.style.display = 'none', 800);
+                }, 500);
             }
         }
+        
+        window.addEventListener('load', () => setTimeout(typeBoot, 300));
 
-        // --- TOOLS LOGIK ---
+        // ----------------------------------------------------------------------
+        // DATEN-ARRAYS
+        // ----------------------------------------------------------------------
+        const RUEGEN_DATA = [
+            { nr:'01', kurz:'Asservaten-Übergabe leer', norm:'§ 107 StPO', tag:'ok', status:'Belegt' },
+            { nr:'02', kurz:'GdB 70 % verschwiegen', norm:'Art. 3 III GG', tag:'ok', status:'Belegt' },
+            { nr:'03', kurz:'Insulin-Entzug 70 Min.', norm:'§ 340 StGB', tag:'alert', status:'Offen' },
+            { nr:'04', kurz:'Waffendrohung Schwerkranker', norm:'§ 240 StGB', tag:'alert', status:'Offen' },
+            { nr:'05', kurz:'Waffe vor Kind (8 J.)', norm:'Art. 6 GG', tag:'alert', status:'Belegt' },
+            { nr:'06', kurz:'Kind isoliert beim Umziehen', norm:'Art. 1 I GG', tag:'ok', status:'Belegt' },
+            { nr:'07', kurz:'Spuren-GAU ohne Handschuhe', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'08', kurz:'Kind als Druckmittel', norm:'§ 136a StPO', tag:'alert', status:'Belegt' },
+            { nr:'09', kurz:'Tacker-Kaskade (Urkunde)', norm:'§ 44 BeurkG', tag:'ok', status:'Belegt' },
+            { nr:'10', kurz:'Schwarz-Stempel statt Siegel', norm:'§ 317 ZPO', tag:'ok', status:'Belegt' },
+            { nr:'11', kurz:'Blanko-Beglaubigung', norm:'§ 44 BeurkG', tag:'ok', status:'Belegt' },
+            { nr:'12', kurz:'Sammel-Mischprotokoll', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'13', kurz:'Grüner Textmarker', norm:'§ 44 BeurkG', tag:'warn', status:'Belegt' },
+            { nr:'14', kurz:'Fahrzeugfarbe nicht genannt', norm:'§ 160 II StPO', tag:'warn', status:'Belegt' },
+            { nr:'15', kurz:'Fallakte 2 fehlt', norm:'§ 105 StPO', tag:'warn', status:'Belegt' },
+            { nr:'16', kurz:'Tatvorwurf-Ausweitung', norm:'§ 27 StGB', tag:'warn', status:'Belegt' },
+            { nr:'17', kurz:'Blanko-Belehrung', norm:'§ 136 StPO', tag:'alert', status:'Belegt' },
+            { nr:'18', kurz:'Zeugen-Vakuum', norm:'§ 106 StPO', tag:'warn', status:'Belegt' },
+            { nr:'19', kurz:'Gänsefüßchen-Fiktion', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'20', kurz:'Ortslosigkeit Asservate', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'21', kurz:'Kfz-Durchsuchung o. Titel', norm:'Art. 13 GG', tag:'warn', status:'Belegt' },
+            { nr:'22', kurz:'Tina Blanko-Belehrung', norm:'§ 136 StPO', tag:'alert', status:'Belegt' },
+            { nr:'23', kurz:'Zeugenausschaltung (3×)', norm:'§ 106 StPO', tag:'warn', status:'Belegt' },
+            { nr:'24', kurz:'Messer fehlt im Protokoll', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'25', kurz:'§ 308 vs. Liegenlassen', norm:'Art. 13 GG', tag:'warn', status:'Belegt' },
+            { nr:'26', kurz:'„Diverse Pillen"', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'27', kurz:'Nachheftung Akte', norm:'Art. 103 I GG', tag:'warn', status:'Belegt' },
+            { nr:'28', kurz:'Kinder-Datenträger', norm:'Art. 13 GG', tag:'alert', status:'Belegt' },
+            { nr:'29', kurz:'Anwaltslüge', norm:'§ 137 StPO', tag:'alert', status:'Belegt' },
+            { nr:'30', kurz:'Messer am Spiegel übersehen', norm:'§ 244 II StPO', tag:'info', status:'Belegt' },
+            { nr:'31', kurz:'Deeskalation verletzt', norm:'§ 2 BPolG', tag:'info', status:'Belegt' },
+            { nr:'32', kurz:'Ort der Maßnahme leer', norm:'§ 107 StPO', tag:'warn', status:'Belegt' },
+            { nr:'33', kurz:'Zeitangabe prüfen 06:26 / 08:15', norm:'§ 348 StGB', tag:'alert', status:'Offen' },
+            { nr:'34', kurz:'Geburtsort T.K. falsch', norm:'§ 107 StPO', tag:'warn', status:'Belegt' }
+        ];
+
+        const CHRONO_DATA = [
+            ['06.05.2026','Erlass Durchsuchungsbeschluss','152 Gs 648/26'],
+            ['06.05.2026','Vordatierte ED-Anordnung','PP Bielefeld'],
+            ['07.05.2026','Durchsuchung Südring 134 (06:00–08:15)','PP Bielefeld'],
+            ['07.05.2026','Insulin-Entzug Dr. T.K. (70 Min.)','Art. 2 II GG'],
+            ['07.05.2026','Drei Kinder anwesend — nicht dokumentiert','§ 106 StPO'],
+            ['08.06.2026','Feierabend-Schreiben: 50 € Koppelung','§ 240 StGB'],
+            ['16.06.2026','DNA-Einverständnis','NRW 2361/1'],
+            ['17.06.2026','ED-Behandlung · iPhone herausgegeben','Nach 42 Tagen'],
+            ['18.07.2026','Dienstaufsichtsbeschwerden','2 AR 806/26'],
+            ['22.07.2026','Klageerhebung VG Minden (FFK)','11 K 3272/26'],
+            ['23.07.2026','Klattenberg: Sachbeantwortung verweigert','52 Js 23/26'],
+            ['13.08.2026','Nichtabhilfebeschluss (Hönick)','152 Gs 648/26'],
+            ['24.08.2026','GStA Düsseldorf: Einstellung (Heger)','2 AR 806/26'],
+            ['01.09.2026','Klageerhebung Hauptsache','11 K 3272/26'],
+            ['04.09.2026','PP Bielefeld: Jugendamtsmeldung','§ 8a SGB VIII'],
+            ['08.09.2026','Jugendamt: unangekündigter Hausbesuch','512/14984'],
+            ['14.09.2026','LG-Beschwerde + AG-Anhörung','011 Qs-52 Js 23/26'],
+            ['15.09.2026','BezReg Münster: GdB-Bescheid','53S0487031'],
+            ['21.09.2026','Klageerwiderung + ERV-Prüfvermerk','5× qeS: NEIN'],
+            ['01.10.2026','Dritter Jugendamt-Besuch','Rode / Hohaus']
+        ];
+
+        const XJ_DATA = [
+            [1,'Basis','XJustiz','Zentraler Justizstandard für Strukturdaten im ERV.'],
+            [2,'Basis','xdomea','E-Government-Standard für Akten und Dokumente.'],
+            [3,'Basis','XAusländer','Standard für Ausländerwesen und Migrationsdaten.'],
+            [4,'Basis','XMeld','Standard für Meldewesen.'],
+            [5,'Basis','XPersonenstand','Standard für Personenstandswesen.'],
+            [6,'Basis','XGewerbeanzeige','Austausch von Gewerbedaten.'],
+            [7,'Basis','XBauverfahren','Abläufe in Bauaufsichtsbehörden.'],
+            [8,'Basis','XTrinkwasser','Übermittlung von Trinkwasserdaten.'],
+            [9,'Basis','XBestaetigung','Behördliche Bestätigungen.'],
+            [10,'Basis','XPlanung','Geodaten der Raumordnung.'],
+            [21,'Infra','OSCI-Transport','Kern-Übertragungsprotokoll im ERV.'],
+            [22,'Infra','XTA','Standardisierte Transportarchitektur.'],
+            [23,'Infra','SAFE-Verzeichnis','Identitätsmanagement.'],
+            [24,'Infra','VHN-Infrastruktur','Vertrauenswürdiger Herkunftsnachweis.'],
+            [31,'Postfach','EGVP','Elektronisches Gerichts- und Verwaltungspostfach.'],
+            [32,'Postfach','beA','Anwaltspostfach.'],
+            [33,'Postfach','beN','Notarpostfach.'],
+            [34,'Postfach','beSt','Steuerberaterpostfach.'],
+            [71,'Sicherheit','Governikus Signer','Qualifizierte Signaturen.'],
+            [72,'Sicherheit','Governikus DataSafe','Langzeitarchivierung.']
+        ];
+
+        // ----------------------------------------------------------------------
+        // STATE & INITIALISIERUNG
+        // ----------------------------------------------------------------------
+        let progress = JSON.parse(localStorage.getItem('b6_progress') || '{}');
+
+        window.addEventListener('load', () => {
+            // Nur ausführen, wenn Boot-Screen vorbei ist
+            setTimeout(() => {
+                renderRuegen();
+                renderChrono();
+                renderXJ();
+                updateKPI();
+                logTerminal('SYS', 'FORTRESS INTERFACE READY.');
+                startTerminalLoop();
+            }, 2000); 
+        });
+
+        // ----------------------------------------------------------------------
+        // NAVIGATION (Die eiserne Layer-Regel)
+        // ----------------------------------------------------------------------
+        function nav(moduleId, btnElement) {
+            // 1. Verstecke alle Module
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            // 2. Entferne active von Buttons
+            document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
+
+            // 3. Zeige Ziel
+            document.getElementById('module-' + moduleId).classList.add('active');
+            // 4. Markiere Button
+            if (btnElement) btnElement.classList.add('active');
+
+            // 5. Logge
+            logTerminal('NAV', `Module [${moduleId.toUpperCase()}] loaded.`);
+        }
+
+        // ----------------------------------------------------------------------
+        // RÜGEN
+        // ----------------------------------------------------------------------
+        function renderRuegen() {
+            const tbody = document.getElementById('ruegen-body');
+            if (!tbody) return;
+            
+            tbody.innerHTML = RUEGEN_DATA.map(r => {
+                let tagClass = r.tag === 'alert' ? 'red' : (r.tag === 'warn' ? 'gold' : 'green');
+                let isDone = progress[r.nr] ? 'checked' : '';
+                
+                return `
+                    <tr>
+                        <td><input type="checkbox" ${isDone} onchange="toggleProgress('${r.nr}')"></td>
+                        <td style="color:var(--cyan); font-family:var(--font-code);">${r.nr}</td>
+                        <td>${r.kurz}</td>
+                        <td style="font-family:var(--font-code); font-size:12px; color:var(--text-muted);">${r.norm}</td>
+                        <td><span class="tag ${tagClass}">${r.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function toggleProgress(nr) {
+            progress[nr] = !progress[nr];
+            localStorage.setItem('b6_progress', JSON.stringify(progress));
+            renderRuegen();
+            updateKPI();
+            logTerminal('DB', `Status für Rüge ${nr} aktualisiert.`);
+        }
+
+        function updateKPI() {
+            const done = Object.values(progress).filter(Boolean).length;
+            const kpiDone = document.getElementById('kpi-done');
+            if (kpiDone) kpiDone.innerText = done;
+        }
+
+        // ----------------------------------------------------------------------
+        // CHRONO & XJUSTIZ
+        // ----------------------------------------------------------------------
+        function renderChrono() {
+            const tbody = document.getElementById('chrono-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = CHRONO_DATA.map(c => `
+                <tr>
+                    <td style="color:var(--cyan); font-family:var(--font-code);">${c[0]}</td>
+                    <td>${c[1]}</td>
+                    <td style="color:var(--text-muted);">${c[2]}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderXJ(filter = '') {
+            const tbody = document.getElementById('xj-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = XJ_DATA.filter(x => 
+                (x[2] + x[3]).toLowerCase().includes(filter.toLowerCase())
+            ).map(x => `
+                <tr>
+                    <td style="color:var(--text-muted);">${x[0]}</td>
+                    <td><span class="tag cyan">${x[1]}</span></td>
+                    <td><strong>${x[2]}</strong></td>
+                    <td style="color:var(--text-muted); font-size:12px;">${x[3]}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterXJ() {
+            const query = document.getElementById('xj-filter').value;
+            renderXJ(query);
+        }
+
+        // ----------------------------------------------------------------------
+        // TOOL 1: VALIDATOR (RegEx)
+        // ----------------------------------------------------------------------
         function runValidator() {
             const text = document.getElementById('val-input').value;
             const res = document.getElementById('val-result');
+            
+            if(!text.trim()) {
+                res.style.display='block';
+                res.innerHTML='<span class="error">FEHLER: Kein Text eingegeben.</span>';
+                return;
+            }
+            
             let findings = [];
-
-            // Zeitparadoxon Check
+            
+            // 1. Zeitparadoxon (Start > Ende)
             const timeRegex = /(\d{1,2})[:.](\d{2})\s*(?:bis|[-–—])\s*(\d{1,2})[:.](\d{2})/g;
             let match;
             while ((match = timeRegex.exec(text)) !== null) {
                 const start = parseInt(match[1])*60 + parseInt(match[2]);
                 const end = parseInt(match[3])*60 + parseInt(match[4]);
-                if (start > end) findings.push(`[KRITISCH] Zeitparadoxon: ${match[0]}`);
+                if (start > end) {
+                    findings.push(`<span class="error">[KRITISCH]</span> Zeitparadoxon: Start (${match[0].split(' ')[0]}) liegt nach Ende (${match[0].split(' ')[2]}).`);
+                }
             }
 
-            // Unterschrift Check
+            // 2. Numerus-Bruch (Plural + Singular)
+            if (/die\s+Beschuldigten/i.test(text) && /als\s+sogenannter/i.test(text)) {
+                findings.push(`<span class="error">[KRITISCH]</span> Numerus-Bruch: Plural ("die Beschuldigten") mit Singular ("als sogenannter").`);
+            }
+
+            // 3. Datums-Check
+            const dateRegex = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g;
+            while ((match = dateRegex.exec(text)) !== null) {
+                const d = parseInt(match[1]), m = parseInt(match[2]), y = parseInt(match[3]);
+                const date = new Date(y, m-1, d);
+                if (date.getDate() !== d || date.getMonth() !== m-1) {
+                    findings.push(`<span class="error">[KRITISCH]</span> Ungültiges Datum: ${match[0]}`);
+                }
+            }
+
+            // 4. Unterschrift Check
             if (!/Unterschrift/i.test(text) && !/gez\./i.test(text)) {
-                findings.push(`[WARNUNG] Keine Unterschrift ("gez.") gefunden.`);
+                findings.push(`<span class="highlight">[WARNUNG]</span> Formfehler: Kein Signatur-Marker ("gez." oder "Unterschrift") gefunden.`);
+            } else {
+                findings.push(`<span class="success">[OK]</span> Signatur-Marker gefunden.`);
             }
 
             res.style.display = 'block';
-            res.innerHTML = findings.length ? findings.join('<br>') : 'Keine Anomalien gefunden.';
+            res.innerHTML = findings.length ? findings.join('<br>') : '<span class="success">[OK] Keine Anomalien gefunden.</span>';
+            logTerminal('SCAN', `Validator ausgeführt. ${findings.length} Befunde.`);
         }
 
+        // ----------------------------------------------------------------------
+        // TOOL 2: SHA-256 (Web Crypto)
+        // ----------------------------------------------------------------------
         async function generateSHA256() {
             const text = document.getElementById('hash-input').value;
             const res = document.getElementById('hash-result');
-            if(!text) return;
+            
+            if(!text) {
+                res.style.display='block';
+                res.innerHTML='<span class="error">FEHLER: Kein Text.</span>';
+                return;
+            }
+            
+            if(!crypto.subtle) {
+                res.style.display='block';
+                res.innerHTML='<span class="error">Web Crypto nicht verfügbar (HTTPS benötigt).</span>';
+                return;
+            }
 
             const msgBuffer = new TextEncoder().encode(text);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -347,7 +1215,183 @@
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
             res.style.display = 'block';
-            res.innerHTML = `<strong>SHA-256:</strong><br>${hashHex}`;
+            res.innerHTML = `<span class="success">SHA-256 Hash:</span><br><span class="highlight">${hashHex}</span>`;
+            logTerminal('HASH', `SHA-256 generiert: ${hashHex.substring(0, 16)}...`);
+        }
+
+        // ----------------------------------------------------------------------
+        // TOOL 3: CALCULATOR
+        // ----------------------------------------------------------------------
+        function calcInterest() {
+            const amount = parseFloat(document.getElementById('calc-amount').value);
+            const days = parseInt(document.getElementById('calc-days').value);
+            const rate = parseFloat(document.getElementById('calc-rate').value);
+            const res = document.getElementById('calc-result');
+
+            if (isNaN(amount) || isNaN(days) || isNaN(rate)) {
+                res.style.display = 'block';
+                res.innerHTML = '<span class="error">FEHLER: Ungültige Eingabe.</span>';
+                return;
+            }
+
+            const interest = amount * (rate / 100) * (days / 365);
+            const total = amount + interest;
+
+            res.style.display = 'block';
+            res.innerHTML = `
+                <span class="success">Zinsberechnung (§ 288 BGB)</span><br>
+                Hauptforderung: ${amount.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}<br>
+                Zinssatz: ${rate}% p.a.<br>
+                Tage: ${days}<br>
+                Zinsen: <span class="highlight">${interest.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span><br>
+                Gesamt: <span class="highlight">${total.toLocaleString('de-DE', {style:'currency', currency:'EUR'})}</span>
+            `;
+            logTerminal('CALC', 'Zinsberechnung durchgeführt.');
+        }
+
+        function splitAZ() {
+            const az = document.getElementById('az-input').value.trim();
+            const res = document.getElementById('az-result');
+            const regex = /^(\d+)\s+([A-Za-z]+)\s+(\d+)\/(\d+)$/;
+            const match = az.match(regex);
+
+            res.style.display = 'block';
+            if (match) {
+                res.innerHTML = `
+                    <span class="success">Aktenzeichen zerlegt:</span><br>
+                    Abteilung: <span class="highlight">${match[1]}</span><br>
+                    Register: <span class="highlight">${match[2]}</span><br>
+                    Nummer: <span class="highlight">${match[3]}</span><br>
+                    Jahr: <span class="highlight">20${match[4]}</span>
+                `;
+            } else {
+                res.innerHTML = '<span class="error">Format nicht erkannt (Erwartet z.B. "152 Gs 648/26").</span>';
+            }
+        }
+
+        // ----------------------------------------------------------------------
+        // TOOL 4: ENTROPIE
+        // ----------------------------------------------------------------------
+        function calcEntropy() {
+            const text = document.getElementById('entropy-input').value;
+            const res = document.getElementById('entropy-result');
+
+            if(!text) {
+                res.style.display='block';
+                res.innerHTML='<span class="error">FEHLER: Kein Text.</span>';
+                return;
+            }
+
+            const len = text.length;
+            const freqs = {};
+            for (let i = 0; i < len; i++) {
+                const char = text[i];
+                freqs[char] = (freqs[char] || 0) + 1;
+            }
+
+            let entropy = 0;
+            for (let char in freqs) {
+                const p = freqs[char] / len;
+                entropy -= p * Math.log2(p);
+            }
+
+            res.style.display = 'block';
+            let status = entropy < 3.5 ? '<span class="error">[WARNUNG] Sehr niedrige Entropie. Möglicher Copy-Paste-Text.</span>' : '<span class="success">[OK] Entropie im normalen Bereich.</span>';
+            
+            res.innerHTML = `
+                <span class="success">Shannon-Entropie:</span><br>
+                Wert: <span class="highlight">${entropy.toFixed(4)} Bit/Zeichen</span><br>
+                Zeichen: ${len}<br>
+                Einzigartige Zeichen: ${Object.keys(freqs).length}<br><br>
+                ${status}
+            `;
+            logTerminal('ENTROPY', `Entropie berechnet: ${entropy.toFixed(4)}`);
+        }
+
+        // ----------------------------------------------------------------------
+        // TOOL 5: SORTER
+        // ----------------------------------------------------------------------
+        function runSorter() {
+            const text = document.getElementById('sort-input').value;
+            const res = document.getElementById('sort-result');
+
+            let lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            lines.sort((a, b) => a.localeCompare(b, 'de'));
+
+            const groups = {
+                'Bescheid / Verwaltungsakt': [],
+                'Protokoll': [],
+                'Schriftsatz / Klage': [],
+                'Beleg / Anlage': [],
+                'Sonstiges': []
+            };
+
+            lines.forEach(line => {
+                if (/bescheid|verwaltungsakt|verfügung/i.test(line)) groups['Bescheid / Verwaltungsakt'].push(line);
+                else if (/protokoll|niederschrift/i.test(line)) groups['Protokoll'].push(line);
+                else if (/klage|beschwerde|schriftsatz|antrag/i.test(line)) groups['Schriftsatz / Klage'].push(line);
+                else if (/beleg|anlage|nachweis|quittung/i.test(line)) groups['Beleg / Anlage'].push(line);
+                else groups['Sonstiges'].push(line);
+            });
+
+            let html = `<span class="success">Sortierung abgeschlossen. (${lines.length} Zeilen)</span><br><br>`;
+            for (const [group, items] of Object.entries(groups)) {
+                if (items.length > 0) {
+                    html += `<span class="highlight">[${group}]</span><br>`;
+                    html += items.map(i => `- ${i}`).join('<br>') + '<br><br>';
+                }
+            }
+
+            res.style.display = 'block';
+            res.innerHTML = html;
+            logTerminal('SORT', `${lines.length} Zeilen sortiert.`);
+        }
+
+        // ----------------------------------------------------------------------
+        // TERMINAL LOGGER
+        // ----------------------------------------------------------------------
+        function logTerminal(type, msg) {
+            const term = document.getElementById('terminal-log');
+            if (!term) return;
+            
+            const time = new Date().toLocaleTimeString('de-DE');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.innerHTML = `<span>[${type}]</span> (${time}) ${msg}`;
+            
+            // Cursor entfernen
+            const cursor = term.querySelector('.cmd');
+            if (cursor) cursor.remove();
+            
+            term.appendChild(line);
+            
+            // Cursor anhängen
+            const newCursor = document.createElement('div');
+            newCursor.className = 'log-line cmd';
+            newCursor.innerHTML = '> _';
+            term.appendChild(newCursor);
+            
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // Simulierter System-Fluss
+        function startTerminalLoop() {
+            const logs = [
+                "[AUDIT] Checking Ring 1 eJustice compliance... PASS.",
+                "[CACHE] Generated deterministic hash: B6_HASH_8F3A2B1C",
+                "[KERNEL] KrakenGuard intercepted unauthorized sys_execve. SIGKILL sent.",
+                "[QUORUM] Pillar TRIX, AUDIT, STRAT, ANKER voted APPROVED (4/5).",
+                "[WORM] New Block appended: SHA3-512_9B3C4E81...",
+                "[SYS] Memory footprint stable. No anomalies detected."
+            ];
+            
+            setInterval(() => {
+                if (document.getElementById('module-dashboard').classList.contains('active')) {
+                    const randomLog = logs[Math.floor(Math.random() * logs.length)];
+                    const parts = randomLog.split(']');
+                    logTerminal(parts[0].replace('[', ''), parts[1]);
+                }
+            }, 6000);
         }
     </script>
 </body>
