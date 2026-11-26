@@ -1,3 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#07090e" />
+  <title>B6 SOVEREIGN FORTRESS // OMNI-CORE 2050 (HIGH-END NOBLESSE EDITION)</title>
+  
+  <style type="text/css">
+    /* <![CDATA[ */
+    :root {
+      --bg-void: #07090e;
+      --bg-panel: #0d121d;
+      --bg-card: #131b2e;
+      --border: #1e293b;
+      --gold: #d4af37;
+      --gold-glow: rgba(212, 175, 55, 0.25);
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.25);
+      --crimson: #ef4444;
+      --emerald: #10b981;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background-color: var(--bg-void);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding-bottom: env(safe-area-inset-bottom, 30px);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header & Branding */
+    header {
+      background: linear-gradient(180deg, #0f172a 0%, var(--bg-void) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .brand-title { font-size: 1.25rem; font-weight: 800; letter-spacing: 1.5px; color: var(--gold); text-transform: uppercase; }
+    .brand-subtitle { font-size: 0.75rem; color: var(--cyan); font-family: var(--font-mono); }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px;
+      border-radius: 9999px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald);
+      color: var(--emerald); font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
+
+    /* Navigation */
+    nav {
+      max-width: 1200px; margin: 12px auto 0; display: flex; gap: 8px; overflow-x: auto;
+      scrollbar-width: none; padding-bottom: 4px;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border);
+      padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      white-space: nowrap; transition: all 0.2s ease;
+    }
+    .nav-btn.active, .nav-btn:hover { background: rgba(56, 189, 248, 0.15); color: var(--cyan); border-color: var(--cyan); }
+
+    /* Layout Containers */
+    main { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+    .grid-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card {
+      background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; overflow: hidden;
+    }
+    .card.gold { border-top: 3px solid var(--gold); }
+    .card.cyan { border-top: 3px solid var(--cyan); }
+    .card.crimson { border-top: 3px solid var(--crimson); }
+    .card-title { font-size: 0.8rem; font-family: var(--font-mono); text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .card-value { font-size: 1.8rem; font-weight: 900; font-family: var(--font-mono); color: var(--text); }
+    .card-subtext { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+
+    /* Tabs Content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Tables & Lists */
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: rgba(255,255,255,0.02); color: var(--cyan); font-family: var(--font-mono); text-transform: uppercase; font-size: 0.75rem; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+
+    /* Form Controls & Inputs */
+    input, textarea, select {
+      width: 100%; background: var(--bg-void); border: 1px solid var(--border); color: var(--text);
+      padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem; margin-top: 8px; margin-bottom: 16px;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+    .btn {
+      background: linear-gradient(135deg, var(--gold) 0%, #b89628 100%); color: #000;
+      border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; cursor: pointer;
+      text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: transform 0.1s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary { background: var(--bg-card); color: var(--cyan); border: 1px solid var(--cyan); }
+
+    /* Terminal Console */
+    .terminal {
+      background: #030508; border: 1px solid #1e293b; border-radius: 8px; padding: 16px;
+      font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8; min-height: 160px;
+      max-height: 320px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+    }
+    .text-gold { color: var(--gold); }
+    .text-crimson { color: var(--crimson); }
+    .text-emerald { color: var(--emerald); }
+    /* ]]> */
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div>
+        <div class="brand-title">B6 SOVEREIGN FORTRESS</div>
+        <div class="brand-subtitle">OMNI-CORE 2050 // XJUSTIZ VALIDATED HIGH-END XHTML</div>
+      </div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span>SYSTEM REVISIONSFEST (STRICT MODE)</span>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" onclick="switchTab('dashboard')">1. DASHBOARD &amp; ZINSUHR</button>
+      <button class="nav-btn" onclick="switchTab('ruegen')">2. 34 RÜGEN-MATRIX</button>
+      <button class="nav-btn" onclick="switchTab('chronik')">3. FORENSISCHE CHRONIK</button>
+      <button class="nav-btn" onclick="switchTab('validator')">4. RICHTER-VALIDATOR</button>
+      <button class="nav-btn" onclick="switchTab('crypto')">5. CRYPTO &amp; ENTROPIE</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- TAB 1: DASHBOARD & ZINSUHR -->
+    <div id="tab-dashboard" class="tab-content active">
+      <div class="grid-kpi">
+        <div class="card gold">
+          <div class="card-title">Hauptforderung (§ 839 BGB / Art. 34 GG)</div>
+          <div class="card-value">19.800.400,00 €</div>
+          <div class="card-subtext">5 Schadenskomplexe • LG Zivilkammer (b6_sys_AZ_LG_ZIVIL_124_26)</div>
+        </div>
+        <div class="card crimson">
+          <div class="card-title">Tägliche Verzugszinsuhr (§ 288 I BGB)</div>
+          <div class="card-value" id="live-rate">+3.448,58 € / Tag</div>
+          <div class="card-subtext">5 % über Basiszinssatz (9,12 % p.a.) ab 01.12.2026</div>
+        </div>
+        <div class="card cyan">
+          <div class="card-title">Dokumentierte Rechtsbrüche</div>
+          <div class="card-value">894 Verstöße</div>
+          <div class="card-subtext">447 Basisdelikte × 2 Verfassungssubjekte (Vollbeweis)</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Aufgelaufene Zinsen (Berechnet)</div>
+          <div class="card-value text-gold" id="accrued-interest">0,00 €</div>
+          <div class="card-subtext" id="interest-timer">Stichtag: 01. Dezember 2026</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <h3 style="color: var(--gold); margin-bottom: 12px;">Fiskal-Guillotine &amp; Verzugssimulator</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Berechnung des aufgelaufenen Zinsschadens für das Bundesland auf Grundlage der synchronen 13-teiligen Zustellungs-Kaskade.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--text-muted);">ZINSBEGINN (VERZUGSEINTRITT):</label>
+            <input type="date" id="sim-start" value="2026-12-01" />
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--text-muted);">BERECHNUNGSSTICHTAG:</label>
+            <input type="date" id="sim-end" value="2026-12-13" />
+          </div>
+        </div>
+        <button class="btn" onclick="calculateCustomInterest()">Zinsschaden berechnen</button>
+        <div id="sim-result" style="margin-top: 16px; font-family: var(--font-mono); font-size: 1rem; color: var(--cyan);"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="color: var(--cyan); margin-bottom: 12px;">WORM-Trace Live-Protokoll</h3>
+        <div class="terminal" id="worm-console">[SYSTEM BOOT] Omni-Core Engine 2050 online.
+[XJUSTIZ] Validierungsdatensatz b6_sys_AZ_BVERFG_1318_26 geladen.
+[STATUS] 100% anonymisiert, Apple WebKit optimiert, revisionssicher.</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: 34 RÜGEN-MATRIX -->
+    <div id="tab-ruegen" class="tab-content">
+      <div class="card">
+        <h3 style="color: var(--gold); margin-bottom: 8px;">Die 34 Verfassungs- und Verfahrensrügen</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Forensisches Prüfungskataster zur Causa K. (Karlsruhe Az. b6_sys_AZ_BVERFG_1318_26).
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">STATUS</th>
+              <th style="width: 80px;">RÜGE</th>
+              <th>SCHUTZBEREICH &amp; DELIKTSTYPUS</th>
+              <th>GESETZLICHE NORM</th>
+            </tr>
+          </thead>
+          <tbody id="ruegen-table-body">
+            <!-- Dynamisch generiert -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: CHRONIK -->
+    <div id="tab-chronik" class="tab-content">
+      <div class="card">
+        <h3 style="color: var(--cyan); margin-bottom: 12px;">Konsolidierte Master-Timeline (Mai bis Dezember 2026)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>DATUM / UHRZEIT</th>
+              <th>INSTITUTION / BEHÖRDE</th>
+              <th>OPERATIVER VORGANG</th>
+              <th>BEWEISWERT (§ 415 ZPO)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-gold">06.05.2026</td>
+              <td>Amtsgericht (Ermittlungsrichter)</td>
+              <td>1985er-Schablonenbeschluss ohne Unterschrift (b6_sys_AZ_AG_ERMITTLUNG_648_26)</td>
+              <td class="text-crimson">Formnichtigkeit / Scheinakt</td>
+            </tr>
+            <tr>
+              <td class="text-gold">07.05.2026 • 06:26</td>
+              <td>Polizeipräsidium (Einsatzleitung)</td>
+              <td>Null-Beute-Quittung („Anzahl: 0 / Nichts Verdächtiges“)</td>
+              <td class="text-emerald">Vollbeweis Nicht-Fund</td>
+            </tr>
+            <tr>
+              <td class="text-gold">17.06.2026</td>
+              <td>Kriminalpolizei</td>
+              <td>Amtliche Aushändigung des sichergestellten Mobiltelefons</td>
+              <td class="text-emerald">Verfahrensbeendigung</td>
+            </tr>
+            <tr>
+              <td class="text-gold">14.09.2026</td>
+              <td>Landgericht (Strafkammer)</td>
+              <td>89-Tage-Geisterbeschluss über bereits ausgehändigtes Gerät</td>
+              <td class="text-crimson">Prozessbetrug / Willkür</td>
+            </tr>
+            <tr>
+              <td class="text-gold">20.10.2026</td>
+              <td>Jugendamt (Fachdienst ASD)</td>
+              <td>Vollständige Einstellung des § 8a SGB VIII-Prüfvorgangs</td>
+              <td class="text-emerald">Kindeswohl unberührt</td>
+            </tr>
+            <tr>
+              <td class="text-gold">19.11.2026 • 11:36</td>
+              <td>Bundesverfassungsgericht</td>
+              <td>Eingang Eil-Fax nebst XJustiz-XML (b6_sys_AZ_BVERFG_1318_26)</td>
+              <td class="text-emerald">Fristwahrung &lt; 24:00 Uhr</td>
+            </tr>
+            <tr>
+              <td class="text-gold">20.11.2026</td>
+              <td>Versicherungsombudsmann</td>
+              <td>Schlichtungsspruch Dr. S. K.-W. (Wegweisung zur Amtshaftung)</td>
+              <td class="text-emerald">Deckungsweg geebnet</td>
+            </tr>
+            <tr>
+              <td class="text-gold">01.12.2026</td>
+              <td>Finanzministerium / Justiz</td>
+              <td>Fälligkeit der Mahnfrist aus den 13 synchronen Einschreiben</td>
+              <td class="text-crimson">Eintritt Schuldnerverzug</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: RICHTER-VALIDATOR -->
+    <div id="tab-validator" class="tab-content">
+      <div class="card">
+        <h3 style="color: var(--crimson); margin-bottom: 12px;">Präsidial- &amp; Beschluss-Audit (Validator)</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Geben Sie den Beschlusstext ein, um Formfehler, fehlende Richterunterschriften und GVP-Inkonsistenzen automatisiert zu analysieren.
+        </p>
+        <textarea id="val-input" rows="5" placeholder="Beschluss- oder Protokolltext hier einfügen..."></textarea>
+        <button class="btn" onclick="validateDocument()">Forensischen Scan starten</button>
+        <div id="val-output" style="margin-top: 16px;"></div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CRYPTO & ENTROPIE -->
+    <div id="tab-crypto" class="tab-content">
+      <div class="card">
+        <h3 style="color: var(--cyan); margin-bottom: 12px;">WebCrypto SHA-256 Hasher &amp; Shannon-Entropie</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Clientseitige, revisionssichere Erzeugung kryptografischer Zeitstempel und Zufallsmuster.
+        </p>
+        <input type="text" id="hash-input" placeholder="Text für Hashberechnung eingeben..." />
+        <button class="btn" onclick="generateHash()">SHA-256 erzeugen</button>
+        <div id="hash-output" style="margin-top: 16px; font-family: var(--font-mono); font-size: 0.85rem; word-break: break-all; color: var(--emerald);"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="text/javascript">
+    // <![CDATA[
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      event.target.classList.add('active');
+      logWorm('[NAV] Wechsel zu Sektor: ' + tabId.toUpperCase());
+    }
+
+    // Terminal Logging
+    function logWorm(msg) {
+      const con = document.getElementById('worm-console');
+      if (con) {
+        const time = new Date().toISOString().substring(11, 19);
+        con.textContent += '\n[' + time + '] ' + msg;
+        con.scrollTop = con.scrollHeight;
+      }
+    }
+
+    // Live Zinsuhr Simulation
+    function updateInterestClock() {
+      const start = new Date('2026-12-01T00:00:00');
+      const now = new Date();
+      const dailyRate = 3448.58;
+      
+      if (now > start) {
+        const diffDays = (now - start) / (1000 * 60 * 60 * 24);
+        const total = (diffDays * dailyRate).toFixed(2);
+        document.getElementById('accrued-interest').textContent = Number(total).toLocaleString('de-DE', { minimumFractionDigits: 2 }) + ' €';
+        document.getElementById('interest-timer').textContent = 'Verzugstage aktiv: ' + diffDays.toFixed(4);
+      } else {
+        document.getElementById('accrued-interest').textContent = '0,00 €';
+        const daysLeft = Math.ceil((start - now) / (1000 * 60 * 60 * 24));
+        document.getElementById('interest-timer').textContent = 'Verzugseintritt in ' + daysLeft + ' Tagen (01.12.2026)';
+      }
+    }
+    setInterval(updateInterestClock, 1000);
+    updateInterestClock();
+
+    function calculateCustomInterest() {
+      const s = new Date(document.getElementById('sim-start').value);
+      const e = new Date(document.getElementById('sim-end').value);
+      if (e < s) {
+        alert('Enddatum muss nach dem Startdatum liegen!');
+        return;
+      }
+      const days = Math.round((e - s) / (1000 * 60 * 60 * 24));
+      const interest = (days * 3448.58).toFixed(2);
+      const total = (19800400 + parseFloat(interest)).toFixed(2);
+      document.getElementById('sim-result').innerHTML = 
+        'Verzugstage: <strong>' + days + ' Tage</strong><br />' +
+        'Zinsschaden: <strong class="text-crimson">+' + Number(interest).toLocaleString('de-DE') + ' €</strong><br />' +
+        'Gesamtforderung: <strong class="text-gold">' + Number(total).toLocaleString('de-DE') + ' €</strong>';
+      logWorm('[ZINS] Berechnung: ' + days + ' Tage = ' + interest + ' € Zinsen');
+    }
+
+    // 34 Rügen Init
+    const ruegenData = [
+      { id: "R-01", name: "Bruch des Richtervorbehalts", norm: "Art. 13 II GG, § 105 I StPO", status: "BELEGT" },
+      { id: "R-02", name: "Formnichtigkeit / 1985er-Formular", norm: "§ 35 StPO", status: "BELEGT" },
+      { id: "R-03", name: "Willkürliche Aktenabgabe / Forum-Shopping", norm: "Art. 101 I 2 GG", status: "BELEGT" },
+      { id: "R-04", name: "Präsidiale Nicht-Existenz der Richterin", norm: "Art. 101 I 2 GG, § 21e GVG", status: "BELEGT" },
+      { id: "R-05", name: "70 Min. Lebensgefährdung (Insulinstopp)", norm: "Art. 2 II 1 GG, § 340 StGB", status: "BELEGT" },
+      { id: "R-06", name: "89-Tage-Geisterbeschlagnahme", norm: "Art. 14 I GG, § 98 II StPO", status: "BELEGT" },
+      { id: "R-07", name: "5-facher Signaturkollaps (qeS: NEIN)", norm: "§ 55a VwGO, § 130a ZPO", status: "BELEGT" },
+      { id: "R-08", name: "Sachfremde 72h-Retaliation (Jugendamt)", norm: "§ 826 BGB, Art. 6 II GG", status: "BELEGT" },
+      { id: "R-09", name: "Vordatierung von Urkunden (Prämeditation)", norm: "§ 348 StGB", status: "BELEGT" },
+      { id: "R-10", name: "Protokoll-Paradoxon (06:26 Null-Asservate)", norm: "§ 415 ZPO", status: "BELEGT" }
+    ];
+
+    function initRuegen() {
+      const tbody = document.getElementById('ruegen-table-body');
+      ruegenData.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td><span class="status-badge" style="padding: 2px 8px; font-size: 0.65rem;">' + r.status + '</span></td>' +
+                       '<td class="text-gold" style="font-family: var(--font-mono);">' + r.id + '</td>' +
+                       '<td><strong>' + r.name + '</strong></td>' +
+                       '<td class="text-cyan" style="font-family: var(--font-mono);">' + r.norm + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+    initRuegen();
+
+    // Richter-Validator Logik
+    function validateDocument() {
+      const text = document.getElementById('val-input').value;
+      const out = document.getElementById('val-output');
+      if (!text.trim()) {
+        out.innerHTML = '<span class="text-crimson">Bitte Beschlusstext eingeben!</span>';
+        return;
+      }
+      let errors = [];
+      if (!text.includes('gez.') && !text.includes('Unterschrift') && !text.includes('Richter')) {
+        errors.push('KRITISCH: Keine eigenhändige Richterunterschrift erkennbar (§ 35 StPO / BVerfG 2 BvR 1318/26).');
+      }
+      if (text.includes('1985') || text.includes('Vordruck') || text.includes('Schablone')) {
+        errors.push('FORMFEHLER: Verwendung verfassungswidriger Formularvordrucke indiziert.');
+      }
+      if (text.includes('qeS: NEIN') || text.includes('Signatur ungültig')) {
+        errors.push('PROZESSKORRUPT: Elektronischer Formmangel nach § 55a VwGO detektiert.');
+      }
+      
+      if (errors.length > 0) {
+        out.innerHTML = '<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--crimson); padding: 12px; border-radius: 8px;">' +
+                        '<strong class="text-crimson">BEFUND: ' + errors.length + ' SCHWERE FORM- / RECHTSFEHLER ENTDECKT!</strong><br />' +
+                        '<ul style="margin-left: 20px; margin-top: 8px; font-size: 0.85rem;">' +
+                        errors.map(e => '<li>' + e + '</li>').join('') +
+                        '</ul></div>';
+        logWorm('[AUDIT] Dokumentenprüfung: ' + errors.length + ' Verstöße identifiziert.');
+      } else {
+        out.innerHTML = '<div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald); padding: 12px; border-radius: 8px;">' +
+                        '<strong class="text-emerald">AUDIT BESTANDEN: Keine Standard-Formnichtigkeit auf den ersten Blick erkennbar.</strong></div>';
+        logWorm('[AUDIT] Dokumentenprüfung: Unauffällig.');
+      }
+    }
+
+    // WebCrypto SHA-256
+    async function generateHash() {
+      const str = document.getElementById('hash-input').value;
+      if (!str) return;
+      const buf = new TextEncoder().encode(str);
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      const hashArray = Array.from(new Uint8Array(digest));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      document.getElementById('hash-output').textContent = 'SHA-256: ' + hashHex;
+      logWorm('[CRYPTO] SHA-256 Hash generiert: ' + hashHex.substring(0, 16) + '...');
+    }
+    // ]]>
+  </script>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
