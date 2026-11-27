@@ -3,182 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>B6 // SUPREME SOVEREIGN COMMAND CENTER – Master Dock</title>
+  <title>B6 SOUVEREIGN FORTRESS // ALL-IN-ONE MASTER COCKPIT</title>
   
   <style>
     :root {
-      --bg-dark: #040508;
-      --card-bg: #090d14;
-      --card-border: #162030;
+      --bg-dark: #05070b;
+      --card-bg: #0b1017;
+      --card-border: #162232;
       --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* TOP DOCKING BAR */
-    header {
-      background: linear-gradient(180deg, #101622 0%, #06090e 100%);
-      border-bottom: 2px solid var(--card-border);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      z-index: 2000;
-    }
-
-    .brand-wrap { display: flex; align-items: center; gap: 0.6rem; }
-    .b6-logo { width: 36px; height: 36px; }
-
-    .hub-switcher {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      background: #04060a;
-      padding: 0.25rem;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-    }
-
-    .hub-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-muted);
-      padding: 0.45rem 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      font-weight: 700;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .hub-btn:hover { color: #fff; border-color: var(--card-border); }
-    .hub-btn.active {
-      background: rgba(0, 229, 255, 0.12);
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-    .hub-btn.active.gold {
-      background: rgba(212, 175, 55, 0.12);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    /* DOCKING VIEWPORT */
-    #viewport {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background: #06080d;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="brand-wrap">
-      <svg class="b6-logo" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="4"/>
-        <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="3"/>
-        <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">B6</text>
-      </svg>
-      <div>
-        <div style="font-size:0.68rem; color:var(--cyan); font-weight:800; letter-spacing:0.08em;" id="masterCaseBadge">VORGANG #B6-00001</div>
-        <div style="font-size:0.95rem; font-weight:800; color:#fff;">MASTER DOCK // 5 HUBS</div>
-      </div>
-    </div>
-
-    <!-- DIE 5 SOUVERÄNEN DOCK-SCHALTER -->
-    <nav class="hub-switcher">
-      <button class="hub-btn active gold" onclick="switchDock('hub1_justiz.html', this)">
-        🏛️ Hub 1: Justiz (14 Module)
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub2_medizin_pflege.html', this)">
-        🩺 Hub 2: Medizin &amp; Pflege
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub3_soziales_familie.html', this)">
-        🛡️ Hub 3: Existenz &amp; Schule
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub4_finanzen_inkasso.html', this)">
-        💳 Hub 4: Finanzen &amp; Inkasso
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub5_rechtsprechung_ki.html', this)">
-        🧠 Hub 5: Urteile &amp; KI
-      </button>
-    </nav>
-
-    <div style="display:flex; gap:0.4rem;">
-      <button style="background:#111827; border:1px solid #374151; color:#9ca3af; padding:0.35rem 0.65rem; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="newMasterCase()">
-        Neuer Vorgang (+1)
-      </button>
-    </div>
-  </header>
-
-  <!-- DAS ECHTE DOCKING-FENSTER -->
-  <iframe id="viewport" src="hub1_justiz.html"></iframe>
-
-  <script>
-    function updateMasterBadge() {
-      let c = parseInt(localStorage.getItem('b6_case_seq') || '1', 10);
-      const formatted = 'B6-' + String(c).padStart(5, '0');
-      document.getElementById('masterCaseBadge').innerText = 'VORGANG #' + formatted;
-    }
-
-    function switchDock(file, btn) {
-      document.querySelectorAll('.hub-btn').forEach(b => b.classList.remove('active', 'gold'));
-      btn.classList.add('active');
-      if (file.includes('hub1')) btn.classList.add('gold');
-      document.getElementById('viewport').src = file;
-    }
-
-    function newMasterCase() {
-      let c = parseInt(localStorage.getItem('b6_case_seq') || '1', 10);
-      c += 1;
-      localStorage.setItem('b6_case_seq', c.toString());
-      updateMasterBadge();
-
-      // Viewport neu laden, damit die neue ID im aktiven Hub sofort ankommt
-      const vp = document.getElementById('viewport');
-      vp.src = vp.src;
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      updateMasterBadge();
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HUB 1 // DER SOUVERÄN – Justiz & Hoheitlicher Eingriffsschutz</title>
-  
-  <style>
-    :root {
-      --bg-dark: #06080d;
-      --card-bg: #0c1017;
-      --card-border: #182232;
-      --text-main: #e2e8f0;
       --text-muted: #8493a8;
       --gold: #d4af37;
       --cyan: #00e5ff;
@@ -195,36 +27,62 @@
       color: var(--text-main);
       font-family: var(--font-stack);
       line-height: 1.5;
-      padding-bottom: 90px;
+      padding-bottom: 80px;
     }
 
+    /* MASTER NAVIGATION & HEADER */
     header {
-      background: linear-gradient(180deg, #121824 0%, #06080d 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.25rem 1rem;
-      text-align: center;
+      background: linear-gradient(180deg, #101622 0%, #06090e 100%);
+      border-bottom: 2px solid var(--card-border);
+      padding: 0.85rem 1rem;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      z-index: 3000;
+      backdrop-filter: blur(12px);
     }
-    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .b6-svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-weight: 700;
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 0.65rem; }
+    .b6-svg { width: 40px; height: 40px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
+
+    .hub-switcher {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      background: #04060a;
+      padding: 0.3rem;
+      border-radius: 8px;
       border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text-muted);
     }
-    .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-    .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
+    .hub-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .hub-tab:hover { color: #fff; border-color: var(--card-border); }
+    .hub-tab.active {
+      background: rgba(0, 229, 255, 0.12);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .hub-tab.active.gold {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
     .proverb-bar {
       background: #080c13;
@@ -237,8 +95,13 @@
     }
     .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
 
-    .container { max-width: 1040px; margin: 1.5rem auto; padding: 0 1rem; }
+    .container { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; }
 
+    /* SEKTIONEN-STEUERUNG (SPA) */
+    .hub-section { display: none; }
+    .hub-section.active { display: block; }
+
+    /* KARTEN & ELEMENTE */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -256,11 +119,10 @@
     }
     .card-title.cyan { color: var(--cyan); }
 
-    /* CONTROLS */
     textarea, select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
       width: 100%;
       padding: 0.65rem 0.85rem;
-      background: #05070a;
+      background: #040609;
       border: 1px solid var(--card-border);
       color: #fff;
       border-radius: 6px;
@@ -283,6 +145,7 @@
       transition: background 0.15s ease;
     }
     .btn.btn-cyan { background: var(--cyan); color: #000; }
+    .btn.btn-purple { background: var(--purple); color: #000; }
     .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
     .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
 
@@ -297,7 +160,7 @@
     }
 
     .form-preview {
-      background: #040508;
+      background: #030406;
       border: 1px dashed var(--card-border);
       padding: 1rem;
       border-radius: 6px;
@@ -310,2618 +173,495 @@
       overflow-y: auto;
     }
 
-    /* AMPEL GRID */
+    .ai-terminal {
+      background: linear-gradient(145deg, #0e1422 0%, #080c14 100%);
+      border: 1px solid var(--purple);
+      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
+    }
+
     .ampel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
     .ampel-box { border: 1px solid var(--card-border); border-radius: 6px; padding: 0.85rem; background: rgba(0,0,0,0.3); }
     .ampel-box.rot { border-left: 4px solid var(--crimson); }
     .ampel-box.gelb { border-left: 4px solid var(--amber); }
     .ampel-box.gruen { border-left: 4px solid var(--emerald); }
-    .ampel-title { font-weight: 700; font-size: 0.82rem; margin-bottom: 0.35rem; }
-    .rot .ampel-title { color: var(--crimson); }
-    .gelb .ampel-title { color: var(--amber); }
-    .gruen .ampel-title { color: var(--emerald); }
-
-    /* AI TERMINAL */
-    .ai-terminal {
-      background: linear-gradient(145deg, #0f1624 0%, #080c14 100%);
-      border: 1px solid var(--purple);
-      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
-    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER MIT DOCKING-KOMPATIBLER VORGANGS-SYNC -->
+  <!-- MASTER HEADER MIT GLOBALEM EVENTBUS -->
   <header>
     <div class="header-inner">
-      <div class="brand-block">
+      <div class="brand-wrap">
         <svg class="b6-svg" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
           <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
+          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">B6</text>
         </svg>
         <div>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">HUB 1: JUSTIZ</span>
-            <span class="badge">14 MODULE</span>
-          </div>
-          <h1 style="font-size:1.15rem; color:#fff;">Der Souverän – Hoheitlicher Eingriffsschutz</h1>
+          <div style="font-size:0.68rem; color:var(--cyan); font-weight:800; letter-spacing:0.08em;" id="globalCaseBadge">VORGANG #B6-00001</div>
+          <div style="font-size:0.95rem; font-weight:800; color:#fff;">MASTER COCKPIT // 5 HUBS</div>
         </div>
       </div>
+
+      <!-- DIE TABS ZUM BLITZSCHNELLEN WECHSELN -->
+      <nav class="hub-switcher">
+        <button class="hub-tab active gold" onclick="openHub('hub1', this)">🏛️ Hub 1: Justiz</button>
+        <button class="hub-tab" onclick="openHub('hub2', this)">🩺 Hub 2: Medizin</button>
+        <button class="hub-tab" onclick="openHub('hub3', this)">🛡️ Hub 3: Existenz</button>
+        <button class="hub-tab" onclick="openHub('hub4', this)">💳 Hub 4: Finanzen</button>
+        <button class="hub-tab" onclick="openHub('hub5', this)">🧠 Hub 5: Urteile/KI</button>
+      </nav>
+
       <div style="display:flex; gap:0.4rem;">
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="b6EventBus.newCase()">Neuer Vorgang (+1)</button>
+        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="newGlobalCase()">Vorgang (+1)</button>
         <button class="btn btn-outline" style="font-size:0.75rem;" onclick="window.print()">🖨️ Drucken</button>
       </div>
     </div>
   </header>
 
   <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Al is de leugen nog zo snel, de waarheid achterhaalt haar wel.“ – <em>Recht door zee gaan.</em>
+    <span>Nederlands Kanzlei-Prinzip:</span> „Al is de leugen nog zo snel, de waarheid achterhaalt haar wel.“ – <em>De jure et de facto.</em>
   </div>
 
   <main class="container">
 
     <!-- ===================================================================
-         KI-FORENSIK-TERMINAL (STANDARD-SLOT FÜR DIESEN HUB)
+         HUB 1: DER SOUVERÄN – JUSTIZ & HOHEITLICHER EINGRIFFSSCHUTZ
          =================================================================== -->
-    <div class="card ai-terminal">
-      <h2 class="card-title" style="color:var(--purple);">🧠 Hub 1: KI-Forensik &amp; Beschluss-Scanner (Zero-Edge)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Lokale Zero-Knowledge Vorbereitung zur Prüfung von Durchsuchungsbeschlüssen, Aktenvermerken oder Vernehmungsprotokollen:
-      </p>
-      <select id="aiMode">
-        <option value="beschluss">Durchsuchungsbeschluss auf Formnichtigkeit &amp; Richtervorbehalt prüfen</option>
-        <option value="gefaehrdung">Vermutungsbegründung auf unzulässige Ausforschung analysieren</option>
-        <option value="beistand">Behördliche Verweigerung eines Beistands rechtlich zerlegen</option>
-      </select>
-      <textarea id="aiInput" placeholder="Auszug aus dem Behördenbrief oder Aktenvermerk hier einfügen..."></textarea>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn" style="background:var(--purple); color:#000;" onclick="runAiForensic()">Forensischen Prüf-Prompt kompilieren</button>
-        <button class="btn btn-outline" onclick="copyAiPrompt()">In Zwischenablage kopieren</button>
-      </div>
-      <div id="aiOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 1: SOVEREIGN STOP (ART. 13 GG) -->
-    <div class="card">
-      <h2 class="card-title">🚨 Modul 1: „Sovereign Stop“ – 3-Stufen Haustür-Navigator (Art. 13 GG)</h2>
-      <div class="ampel-grid">
-        <div class="ampel-box rot">
-          <div class="ampel-title">STUFE 1: FORM-FILTER</div>
-          <p style="font-size:0.8rem; color:#cbd5e1;">Richtername vollständig lesbar? Reine Schablonen, Faksimile oder unleserliche Paraphen sofort als formnichtig rügen (§ 105 StPO)!</p>
-        </div>
-        <div class="ampel-box gelb">
-          <div class="ampel-title">STUFE 2: DEESKALATION</div>
-          <p style="font-size:0.8rem; color:#cbd5e1;">Kein körperlicher Widerstand, kein freiwilliger Zutritt: <em>„Ich widerspreche der Maßnahme ausdrücklich. Betreten erfolgt nur unter Zwang.“</em></p>
-        </div>
-        <div class="ampel-box gruen">
-          <div class="ampel-title">STUFE 3: PROTOKOLL</div>
-          <p style="font-size:0.8rem; color:#cbd5e1;">Gemeindezeugen rufen (§ 106 StPO). Dienstausweise notieren. Vollständiges Verzeichnis gem. § 107 StPO verlangen.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODUL 2: FORMNICHTIGKEITS-FILTER -->
-    <div class="card">
-      <h2 class="card-title">📋 Modul 2: Formnichtigkeits-Filter (§ 44 VwVfG / BGH IX ZB 198/11)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Prüft, ob der vorgelegte hoheitliche Beschluss den Mindestanforderungen an die richterliche Eigenhändigkeit genügt:
-      </p>
-      <select id="formCheckType">
-        <option value="paraphe">Flüchtiger Kringel / Paraphe ohne lesbaren Richternamen</option>
-        <option value="beglaubigt">Nur 'Beglaubigt / Ausgefertigt' durch Urkundsbeamten ohne Richteroriginal</option>
-        <option value="blanko">Vorgedruckte Blanko-Schablone ohne Begründung des Einzelfalls</option>
-      </select>
-      <button class="btn btn-cyan" onclick="runFormCheck()">Formnichtigkeit rügen</button>
-      <div id="formCheckOut" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3: DEONTISCHER DEZIMAL-PFAD-RECHNER -->
-    <div class="card">
-      <h2 class="card-title">⚡ Modul 3: Deontischer Dezimal-Pfad-Rechner (§ 105.n.n.n.n)</h2>
-      <div style="background:#040508; border:1px solid var(--card-border); padding:0.6rem 1rem; border-radius:6px; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.8rem; color:var(--text-muted);">Prüfungs-Vektor:</span>
-        <code id="tensorDisplay" style="color:var(--cyan); font-weight:700;">§ 105.1.1.1.1</code>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:0.5rem;">
-        <select id="n1" onchange="runTensor()">
-          <option value="1">Knoten 1 (.1): Konkrete Tatsachen begründen Tatverdacht</option>
-          <option value="0">Knoten 1 (.0): Reine Vermutung / Unzulässige Ausforschung</option>
+    <section id="hub1" class="hub-section active">
+      <div class="card ai-terminal">
+        <h2 class="card-title" style="color:var(--purple);">🧠 Hub 1: KI-Forensik &amp; Beschluss-Scanner (Zero-Edge)</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
+          Prüfung von Durchsuchungsbeschlüssen, Aktenvermerken oder Vernehmungsprotokollen:
+        </p>
+        <select id="aiMode1">
+          <option value="beschluss">Durchsuchungsbeschluss auf Formnichtigkeit &amp; Richtervorbehalt prüfen</option>
+          <option value="ausforschung">Reine Behauptungen / unzulässige Ausforschung entlarven</option>
+          <option value="beistand">Behördliche Ablehnung eines Beistands rechtlich zerlegen</option>
         </select>
-        <select id="n2" onchange="runTensor()">
-          <option value="1">Knoten 2 (.1): Richterlicher Durchsuchungsbeschluss liegt vor</option>
-          <option value="0">Knoten 2 (.0): Umgehung des Richtervorbehalts (Art. 13 Abs. 2 GG)</option>
+        <textarea id="aiInput1" placeholder="Auszug aus dem Behördenbrief oder Aktenvermerk hier einfügen..."></textarea>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="runAi1()">Forensischen Prüf-Prompt kompilieren</button>
+          <button class="btn btn-outline" onclick="copyBox('aiOut1')">Kopieren</button>
+        </div>
+        <div id="aiOut1" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">🚨 Modul 1: „Sovereign Stop“ – 3-Stufen Haustür-Navigator (Art. 13 GG)</h2>
+        <div class="ampel-grid">
+          <div class="ampel-box rot">
+            <div style="font-weight:700; color:var(--crimson); font-size:0.8rem; margin-bottom:0.3rem;">STUFE 1: FORM-FILTER</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Richtername vollständig lesbar? Reine Schablonen, Faksimile oder unleserliche Paraphen sofort als formnichtig rügen (§ 105 StPO)!</p>
+          </div>
+          <div class="ampel-box gelb">
+            <div style="font-weight:700; color:var(--amber); font-size:0.8rem; margin-bottom:0.3rem;">STUFE 2: DEESKALATION</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Kein körperlicher Widerstand, kein freiwilliger Zutritt: <em>„Ich widerspreche der Maßnahme ausdrücklich. Betreten erfolgt nur unter Zwang.“</em></p>
+          </div>
+          <div class="ampel-box gruen">
+            <div style="font-weight:700; color:var(--emerald); font-size:0.8rem; margin-bottom:0.3rem;">STUFE 3: PROTOKOLL</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Gemeindezeugen rufen (§ 106 StPO). Dienstausweise notieren. Vollständiges Verzeichnis gem. § 107 StPO verlangen.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">📋 Modul 2: Formnichtigkeits-Filter (§ 44 VwVfG / BGH IX ZB 198/11)</h2>
+        <select id="formCheckSelect">
+          <option value="paraphe">Flüchtiger Kringel / Paraphe ohne lesbaren Richternamen</option>
+          <option value="beglaubigt">Nur 'Beglaubigt' durch Urkundsbeamten ohne Richteroriginal</option>
+          <option value="blanko">Vorgedruckte Blanko-Schablone ohne Einzelfallbegründung</option>
         </select>
-        <select id="n3" onchange="runTensor()">
-          <option value="1">Knoten 3 (.1): Richtername voll lesbar &amp; unterschrieben</option>
-          <option value="2">Knoten 3 (.2): Unleserliche Paraphe ohne Vertretungsvermerk</option>
-          <option value="0">Knoten 3 (.0): 1985er-Schablone ohne jede Unterschrift</option>
+        <button class="btn btn-cyan" onclick="runFormCheck()">Formnichtigkeit rügen</button>
+        <div id="formCheckOut" class="result-box" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">⚖️ Modul 4: Kautelar-Schmiede: Beistands-Vollmacht (§ 14 VwVfG / § 13 SGB X)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="bName1" style="flex:1;" placeholder="Dein vollständiger Name">
+          <input type="text" id="beistandName1" style="flex:1;" placeholder="Name des Beistands (Zeuge / Bekannter)">
+        </div>
+        <button class="btn btn-cyan" onclick="genBeistand()">Förmliche Beistandserklärung erzeugen</button>
+        <div id="beistandDoc1" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">📦 Modul 6: Beschlagnahmeverzeichnis-Erzwinger (§ 107 StPO)</h2>
+        <button class="btn btn-cyan" onclick="genNullBeute()">Förmliche Aufforderung &amp; Null-Beute-Quittung erzeugen</button>
+        <div id="beuteDoc1" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">🔐 Modul 11: Digitale Beweissicherung (SHA-256 WORM-Hasher)</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">Berechnet unveränderlichen Prüf-Hash direkt im Browser (kein Upload!):</p>
+        <input type="file" id="hashFile" onchange="calcHash()">
+        <div id="hashResult" class="result-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         HUB 2: MEDIZIN, PFLEGE & TEILHABE (CARE GOVERNANCE)
+         =================================================================== -->
+    <section id="hub2" class="hub-section">
+      <div class="card ai-terminal">
+        <h2 class="card-title" style="color:var(--purple);">🧠 Hub 2: KI-Forensik &amp; Pflegegutachten-Scanner</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
+          Prüfung von MD-Gutachten auf Zirkelschlüsse und unzulässige Punktabzüge:
+        </p>
+        <select id="aiMode2">
+          <option value="modul4">Modul 4 (Selbstversorgung) gegen BRi-Richtlinien prüfen</option>
+          <option value="hilfsmittel">Hilfsmittelablehnung (§ 33 SGB V) auf Fristverletzung prüfen</option>
+          <option value="gdb">GdB-Feststellungsbescheid auf Unterbewertung prüfen</option>
         </select>
-        <select id="n4" onchange="runTensor()">
-          <option value="1">Knoten 4 (.1): Verzeichnis gem. § 107 StPO ausgehändigt</option>
-          <option value="0">Knoten 4 (.0): Verzeichnis verweigert / Null-Beute nicht quittiert</option>
+        <textarea id="aiInput2" placeholder="Auszug aus dem Pflegegutachten oder Ablehnungsbescheid einfügen..."></textarea>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="runAi2()">Forensischen Prüf-Prompt kompilieren</button>
+          <button class="btn btn-outline" onclick="copyBox('aiOut2')">Kopieren</button>
+        </div>
+        <div id="aiOut2" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">🏥 Modul 2.1: Gesetzlicher NBA-Pflegegradrechner (§ 15 SGB XI)</h2>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 1: Mobilität (10 %):</label>
+            <select id="m1" onchange="calcPflege()">
+              <option value="0">Selbstständig (0 Pkt)</option>
+              <option value="5">Größtenteils selbstständig / unsicher (5 Pkt)</option>
+              <option value="10">Erheblich beeinträchtigt / Gehhilfe (10 Pkt)</option>
+              <option value="15">Schwerste Beeinträchtigung / Bettlägerig (15 Pkt)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 2 &amp; 3: Kognition &amp; Verhalten (15 %):</label>
+            <select id="m2" onchange="calcPflege()">
+              <option value="0">Keine Beeinträchtigung (0 Pkt)</option>
+              <option value="7.5">Geringe Beeinträchtigung / Vergesslichkeit (7.5 Pkt)</option>
+              <option value="11.25">Erhebliche Beeinträchtigung / Unruhe (11.25 Pkt)</option>
+              <option value="15">Schwere Beeinträchtigung / ständige Begleitung (15 Pkt)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; color:var(--gold);"><strong>Modul 4: Selbstversorgung (40 % – KARDINAL-HEBEL):</strong></label>
+            <select id="m4" onchange="calcPflege()">
+              <option value="0">Selbstständig (0 Pkt)</option>
+              <option value="15">Teilweise Hilfe erforderlich (15 Pkt)</option>
+              <option value="30">Überwiegende Hilfe erforderlich (30 Pkt)</option>
+              <option value="40">Vollständige Übernahme durch Dritte (40 Pkt)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 5: Therapiebedingte Belastungen (20 %):</label>
+            <select id="m5" onchange="calcPflege()">
+              <option value="0">Keine Unterstützung (0 Pkt)</option>
+              <option value="10">Tägliche Medikamentengabe / Wundkontrolle (10 Pkt)</option>
+              <option value="20">Hoher Aufwand (Injektionen, Dialyse, Absaugen) (20 Pkt)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-cyan" style="margin-top:0.75rem;" onclick="calcPflege()">Pflegegrad berechnen</button>
+        <div id="pflegeResult" class="result-box" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">📝 Modul 2.3: Fristwahrender Pflegegrad-Widerspruch (§ 84 SGG)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="wVers2" style="flex:1;" placeholder="Name der/des Versicherten">
+          <input type="text" id="wKasse2" style="flex:1;" placeholder="Pflegekasse (z. B. AOK, Barmer, TK)">
+        </div>
+        <button class="btn btn-cyan" onclick="genWiderspruch2()">Fristwahrenden Kassen-Widerspruch erzeugen</button>
+        <div id="wDoc2" class="form-preview" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         HUB 3: EXISTENZSICHERUNG, FAMILIE & BILDUNG (SOCIAL SHIELD)
+         =================================================================== -->
+    <section id="hub3" class="hub-section">
+      <div class="card ai-terminal">
+        <h2 class="card-title" style="color:var(--purple);">🧠 Hub 3: KI-Forensik &amp; Bescheid-Zerleger</h2>
+        <select id="aiMode3">
+          <option value="sanktion">Bürgergeld-Sanktion auf Verfassungswidrigkeit (BVerfG 1 BvL 7/16) prüfen</option>
+          <option value="kdu">Kostensenkungsaufforderung KdU (§ 22 SGB II) zurückweisen</option>
+          <option value="schule">Schulpflichtrüge / Attest-Verweigerung (§ 42 SchulG NRW) entkräften</option>
         </select>
-      </div>
-      <button class="btn btn-cyan" style="margin-top:0.75rem;" onclick="runTensor()">Rechtsfolge ableiten</button>
-      <div id="tensorOut" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4: BEISTANDS-VOLLMACHT -->
-    <div class="card">
-      <h2 class="card-title">⚖️ Modul 4: Kautelar-Schmiede: Beistands-Vollmacht (§ 14 VwVfG / § 13 SGB X)</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="bName" style="flex:1; min-width:200px;" placeholder="Dein vollständiger Name">
-        <input type="text" id="beistandName" style="flex:1; min-width:200px;" placeholder="Name des Beistands (z. B. Bekannter/Zeuge)">
-      </div>
-      <button class="btn btn-cyan" onclick="generateBeistand()">Förmliche Beistandserklärung erzeugen</button>
-      <div id="beistandDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 5: GEDÄCHTNISPROTOKOLL -->
-    <div class="card">
-      <h2 class="card-title">📝 Modul 5: Revisionssicheres Gedächtnisprotokoll (§ 415 ZPO)</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="protOrt" style="flex:1; min-width:200px;" placeholder="Ereignisort (z. B. Wohnungsschwelle)">
-        <input type="text" id="protBeamte" style="flex:1; min-width:200px;" placeholder="Name / Dienstnummer der Amtsträger">
-      </div>
-      <textarea id="protDetails" placeholder="Präzise Schilderung: Wortlaute, Androhungen, Uhrzeiten, Zeugen..."></textarea>
-      <button class="btn btn-cyan" onclick="generateProtokoll()">Gerichtsfestes Protokoll mit Zeitstempel kompilieren</button>
-      <div id="protDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 6: BESCHLAGNAHMEVERZEICHNIS -->
-    <div class="card">
-      <h2 class="card-title">📦 Modul 6: Beschlagnahmeverzeichnis-Erzwinger (§ 107 StPO)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Verpflichtet Beamte zur sofortigen Quittierung aller mitgenommenen Gegenstände oder zur schriftlichen Bestätigung der <strong>Null-Beute</strong>:
-      </p>
-      <button class="btn btn-cyan" onclick="generateNullBeute()">Förmliche Aufforderung &amp; Null-Beute-Quittung erzeugen</button>
-      <div id="beuteDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 7: EILRECHTSSCHUTZ -->
-    <div class="card">
-      <h2 class="card-title">⚡ Modul 7: Eilrechtsschutz-Kompilierer (§ 304 StPO / § 80 Abs. 5 VwGO)</h2>
-      <input type="text" id="eilGericht" placeholder="Zuständiges Gericht (z. B. Amtsgericht / Verwaltungsgericht...)">
-      <input type="text" id="eilAz" placeholder="Aktenzeichen des angefochtenen Beschlusses">
-      <button class="btn btn-cyan" onclick="generateEilantrag()">Sofortige Beschwerde / Eilantrag generieren</button>
-      <div id="eilDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 8: UNTÄTIGKEITSKLAGE -->
-    <div class="card">
-      <h2 class="card-title">⏳ Modul 8: Dienstaufsicht &amp; Untätigkeitsklage (§ 75 VwGO / § 88 SGG)</h2>
-      <input type="text" id="untAmt" placeholder="Behörde, die die Bearbeitung verschleppt">
-      <input type="date" id="untDate" placeholder="Datum des ursprünglichen Antrags">
-      <button class="btn btn-cyan" onclick="generateUntaetigkeit()">Fristensetzende Sachstandsanfrage mit Klageandrohung erzeugen</button>
-      <div id="untDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 9: AMTSHAFTUNG & REGRESS -->
-    <div class="card">
-      <h2 class="card-title">💥 Modul 9: Amtshaftungs- &amp; Regress-Aktivierer (§ 839 BGB / Art. 34 GG)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Aktiviert die persönliche Beamtenhaftung und Durchbrechung des Haftungsprivilegs bei vorsätzlicher Grundrechtsverletzung:
-      </p>
-      <input type="text" id="haftBeamter" placeholder="Name des schädigenden Amtsträgers">
-      <input type="text" id="haftDienststelle" placeholder="Dienststelle / Dienstherr (z. B. Land NRW)">
-      <button class="btn btn-cyan" onclick="generateHaftung()">Schadensersatz- &amp; Regressanzeige generieren</button>
-      <div id="haftDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 10: AUDITIVE KONTER-MATRIX -->
-    <div class="card">
-      <h2 class="card-title">🎙️ Modul 10: Auditive Konter-Matrix (Deeskalation an der Schwelle)</h2>
-      <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.82rem;">
-        <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:4px; border-left:3px solid var(--cyan);">
-          <strong>Behörde sagt:</strong> „Wir wollen uns nur kurz umsehen.“<br>
-          <span style="color:var(--gold);">Souveräner Konter:</span> <em>„Ein ‚Umsehen‘ ist ein verfassungsrechtlicher Eingriff in Art. 13 GG. Ohne richterlichen Beschluss verwehre ich den Zutritt.“</em>
+        <textarea id="aiInput3" placeholder="Auszug aus Jobcenter- oder Schulbescheid einfügen..."></textarea>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="runAi3()">Forensischen Prüf-Prompt kompilieren</button>
+          <button class="btn btn-outline" onclick="copyBox('aiOut3')">Kopieren</button>
         </div>
-        <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:4px; border-left:3px solid var(--cyan);">
-          <strong>Behörde sagt:</strong> „Wenn Sie uns nicht reinlassen, machen Sie sich verdächtig.“<br>
-          <span style="color:var(--gold);">Souveräner Konter:</span> <em>„Die Wahrnehmung verfassungsrechtlicher Grundrechte begründet nach ständiger Rechtsprechung des BVerfG niemals einen Anfangsverdacht.“</em>
+        <div id="aiOut3" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">💶 Modul 3.1: Notfall-Barvorschuss (§ 42 Abs. 1 Satz 1 SGB I)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="vName3" style="flex:1;" placeholder="Dein Name">
+          <input type="text" id="vAmt3" style="flex:1;" placeholder="Behörde (Jobcenter / Sozialamt)">
+          <input type="number" id="vBetrag3" style="width:140px;" placeholder="Betrag (€)" value="350">
         </div>
-        <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:4px; border-left:3px solid var(--cyan);">
-          <strong>Behörde sagt:</strong> „Ein Beistand ist heute nicht zugelassen.“<br>
-          <span style="color:var(--gold);">Souveräner Konter:</span> <em>„Das Recht auf einen Beistand ist in § 14 VwVfG / § 13 SGB X gesetzlich garantiert. Eine Zurückweisung bedarf eines schriftlichen Verwaltungsaktes.“</em>
+        <button class="btn btn-cyan" onclick="genVorschuss3()">Eilantrag auf sofortige Barauszahlung am heutigen Tag erzeugen</button>
+        <div id="vDoc3" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title cyan">🎓 Modul 3.4: Schulpflicht-, Inklusions- &amp; Förderschutz (§ 42 SchulG NRW)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="sKind3" style="flex:1;" placeholder="Name des Schülers">
+          <input type="text" id="sSchule3" style="flex:1;" placeholder="Name der Schule">
         </div>
+        <button class="btn btn-cyan" onclick="genSchulschutz3()">Schutzanzeige &amp; Nachteilsausgleichsantrag generieren</button>
+        <div id="sDoc3" class="form-preview" style="display:none;"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- MODUL 11: WORM BEWEISSICHERUNG (SHA-256) -->
-    <div class="card">
-      <h2 class="card-title">🔐 Modul 11: Digitale Beweissicherung (SHA-256 WORM-Hasher)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Erzeuge einen unveränderlichen kryptographischen Hash eines Bescheids oder Fotos direkt im Browser (kein Upload!):
-      </p>
-      <input type="file" id="hashFile" onchange="calcFileHash()">
-      <div id="hashResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 12: JUGENDAMTS-SCHUTZSCHIRM -->
-    <div class="card">
-      <h2 class="card-title">🛡️ Modul 12: Jugendamts-Schutzschirm (§ 8a SGB VIII / § 25 SGB X)</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="jAmt" style="flex:1; min-width:200px;" placeholder="Name des Jugendamts">
-        <input type="text" id="jSB" style="flex:1; min-width:200px;" placeholder="Name des Sachbearbeiters">
+    <!-- ===================================================================
+         HUB 4: FINANZEN, BANKEN & INKASSO-ABWEHR
+         =================================================================== -->
+    <section id="hub4" class="hub-section">
+      <div class="card ai-terminal">
+        <h2 class="card-title" style="color:var(--purple);">🧠 Hub 4: KI-Forensik &amp; Inkasso-Zerleger</h2>
+        <select id="aiMode4">
+          <option value="gebuehren">Inkassokosten auf Verstoß gegen § 4 Abs. 5 RDGEG analysieren</option>
+          <option value="schufa">Drohung mit SCHUFA-Meldung bei bestrittener Forderung (§ 31 BDSG) entkräften</option>
+        </select>
+        <textarea id="aiInput4" placeholder="Auszug aus Mahnung oder Inkassobrief einfügen..."></textarea>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="runAi4()">Forensischen Prüf-Prompt kompilieren</button>
+          <button class="btn btn-outline" onclick="copyBox('aiOut4')">Kopieren</button>
+        </div>
+        <div id="aiOut4" class="form-preview" style="display:none;"></div>
       </div>
-      <input type="text" id="jAZ" placeholder="Aktenzeichen des Jugendamts">
-      <button class="btn btn-cyan" onclick="generateJugendamt()">Akteneinsicht (§ 25 SGB X) &amp; Betretungswiderspruch generieren</button>
-      <div id="jDoc" class="form-preview" style="display:none;"></div>
-    </div>
 
-    <!-- MODUL 13: 13-NADELSTICHE-ZUSTELLKATASTER -->
-    <div class="card">
-      <h2 class="card-title">📬 Modul 13: 13-Nadelstiche-Zustellkataster (Einschreiben &amp; Fristen)</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="sendNr" style="flex:1; min-width:200px;" placeholder="DHL / Deutsche Post Sendungsnummer">
-        <input type="text" id="sendEmpf" style="flex:1; min-width:200px;" placeholder="Empfänger (z. B. Justizministerium NRW)">
-      </div>
-      <button class="btn btn-cyan" onclick="addSendung()">Sendung im WORM-Kataster registrieren</button>
-      <div id="sendOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 14: VERFASSUNGS-RÜGE-RADAR -->
-    <div class="card">
-      <h2 class="card-title cyan">⚖️ Modul 14: Verfassungs-Rüge-Radar (§ 90 BVerfGG / Art. 103 GG)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Sichert die Rüge der Verletzung rechtlichen Gehörs (§ 321a ZPO) vor Gang zum Bundesverfassungsgericht in Karlsruhe:
-      </p>
-      <button class="btn btn-cyan" onclick="generateVerfassungsRuege()">Gehörsrüge &amp; Rechtswegerschöpfung kompilieren</button>
-      <div id="ruegeDoc" class="form-preview" style="display:none;"></div>
-    </div>
-
-  </main>
-
-  <!-- JAVASCRIPT: EVENTBUS & DOCKING LOGIK -->
-  <script>
-    const b6EventBus = {
-      getCaseId() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        if (c === 0) { c = 1; localStorage.setItem('b6_case_seq', '1'); }
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        return formatted;
-      },
-      newCase() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        c += 1;
-        localStorage.setItem('b6_case_seq', c.toString());
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        this.updateBadge();
-        window.dispatchEvent(new CustomEvent('b6:case-sync', { detail: { caseId: formatted } }));
-        alert('Neuer Vorgang aktiv: #' + formatted);
-      },
-      updateBadge() {
-        const id = this.getCaseId();
-        const b = document.getElementById('caseBadge');
-        if (b) b.innerText = 'VORGANG #' + id;
-      }
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      b6EventBus.updateBadge();
-    });
-
-    /* KI-FORENSIK PROMPT KOMPILIERER */
-    function runAiForensic() {
-      const mode = document.getElementById('aiMode').value;
-      const input = document.getElementById('aiInput').value.trim() || '[BEHÖRDEN-TEXT HIER]';
-      const caseId = b6EventBus.getCaseId();
-
-      let p = `DU BIST DER B6-KANZLEIPRÜFER (Vorgang #${caseId}).\n` +
-              `Analysiere den folgenden hoheitlichen Vorgang streng deterministisch:\n\n` +
-              `TEXT-AUSZUG:\n"${input}"\n\n`;
-
-      if (mode === 'beschluss') {
-        p += `AUFGABE:\n1. Prüfe, ob Richtername und eigenhändige Unterschrift vorliegen (BGH IX ZB 198/11).\n` +
-             `2. Suche nach Formulierungen, die unzulässige Ausforschung begründen.\n` +
-             `3. Formuliere 3 Rüge-Sätze gem. § 304 StPO für das Gedächtnisprotokoll.`;
-      } else if (mode === 'gefaehrdung') {
-        p += `AUFGABE:\n1. Zerlege angebliche Tatsachen in 'Verdachtsmomente' vs. 'Reine Behauptungen'.\n` +
-             `2. Prüfe Verstoß gegen den Grundsatz der Verhältnismäßigkeit (Art. 20 Abs. 3 GG).\n` +
-             `3. Zeige auf, wie die Beweislastverteilung zugunsten des Bürgers umgekehrt wird.`;
-      } else {
-        p += `AUFGABE:\n1. Formuliere die Feststellungsklage gem. § 43 VwGO gegen die Beistandsverweigerung.\n` +
-             `2. Zitiere § 14 VwVfG / § 13 SGB X und die Nichtigkeit formloser mündlicher Ablehnungen.\n` +
-             `3. Bereite den Befangenheitsantrag gegen den Amtsträger vor.`;
-      }
-
-      const out = document.getElementById('aiOut');
-      out.style.display = 'block';
-      out.innerText = p;
-    }
-
-    function copyAiPrompt() {
-      const txt = document.getElementById('aiOut').innerText;
-      if (!txt) { alert('Bitte zuerst Prompt generieren!'); return; }
-      navigator.clipboard.writeText(txt).then(() => alert('Prompt in Zwischenablage kopiert!'));
-    }
-
-    /* FORMNICHTIGKEITS-RÜGE */
-    function runFormCheck() {
-      const t = document.getElementById('formCheckType').value;
-      const out = document.getElementById('formCheckOut');
-      out.style.display = 'block';
-
-      if (t === 'paraphe') {
-        out.innerHTML = `🚨 <strong>FORM-NICHTIGKEIT (§ 44 VwVfG / BGH IX ZB 198/11):</strong><br>` +
-          `Eine bloße Paraphe oder unleserlicher Namenszug ohne vollen Richternamen wahrt die gesetzliche Schriftform nicht. Die Maßnahme ist absolut unwirksam!`;
-      } else if (t === 'beglaubigt') {
-        out.innerHTML = `⚠️ <strong>RÜGE URKUNDENSPALTUNG:</strong><br>` +
-          `Eine Beglaubigung ersetzt nicht das richterliche Original (§ 105 StPO). Vorlage des Originals zur Einsichtnahme verlangen!`;
-      } else {
-        out.innerHTML = `🚨 <strong>BLANKO-SCHABLONE:</strong><br>` +
-          `Vorgefertigte Formblätter ohne Einzelfallbegründung verletzen das Willkürverbot (Art. 3 Abs. 1 GG). Sofortige Beschwerde (§ 304 StPO).`;
-      }
-    }
-
-    /* TENSOR-PFAD */
-    function runTensor() {
-      const n1 = document.getElementById('n1').value;
-      const n2 = document.getElementById('n2').value;
-      const n3 = document.getElementById('n3').value;
-      const n4 = document.getElementById('n4').value;
-      document.getElementById('tensorDisplay').innerText = `§ 105.${n1}.${n2}.${n3}.${n4}`;
-
-      const out = document.getElementById('tensorOut');
-      out.style.display = 'block';
-
-      if (n1 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n1=0):</strong> Unzulässige Ausforschung. Verfassungsbeschwerde (Art. 13 GG).`;
-      else if (n2 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n2=0):</strong> Umgehung des Richtervorbehalts. Beweisverwertungsverbot!`;
-      else if (n3 === "0") out.innerHTML = `🚨 <strong>KARDINAL-NICHTIGKEIT (n3=0):</strong> Formnichtigkeit (§ 44 VwVfG). Amtshaftung gem. § 839 BGB!`;
-      else if (n3 === "2") out.innerHTML = `🟡 <strong>ZWEIFELSFALL (n3=2):</strong> Paraphe rügen. Akteneinsicht (§ 147 StPO).`;
-      else if (n4 === "0") out.innerHTML = `🔴 <strong>VERSTOSS (n4=0):</strong> Verletzung § 107 StPO. Antrag gem. § 98 Abs. 2 StPO stellen.`;
-      else out.innerHTML = `🟢 <strong>DETERMINISTISCH ORDNUNGSGEMÄSS (1.1.1.1):</strong> Form gewahrt. Beistand hinzuziehen.`;
-    }
-
-    /* FORMULARE GENERIEREN */
-    function generateBeistand() {
-      const n1 = document.getElementById('bName').value || '[DEIN NAME]';
-      const n2 = document.getElementById('beistandName').value || '[NAME BEISTAND]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `BEISTANDSERKLÄRUNG (§ 14 VwVfG / § 13 Abs. 4 SGB X)\nVORGANG: #${caseId} | Datum: ${new Date().toLocaleDateString('de-DE')}\n\nHiermit bestelle ich ${n2} zu meinem Beistand. Das von ihm Vorgetragene gilt als von mir vorgebracht. Eine Zurückweisung bedarf eines schriftlichen Verwaltungsaktes.\n\nUnterschrift: ___________________________`;
-      document.getElementById('beistandDoc').style.display = 'block';
-      document.getElementById('beistandDoc').innerText = txt;
-    }
-
-    function generateProtokoll() {
-      const ort = document.getElementById('protOrt').value || '[ORT]';
-      const b = document.getElementById('protBeamte').value || '[BEAMTE]';
-      const d = document.getElementById('protDetails').value || '[DETAILS]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `GEDÄCHTNISPROTOKOLL (§ 415 ZPO)\nVORGANG: #${caseId} | Zeitstempel: ${new Date().toISOString()}\nOrt: ${ort} | Amtsträger: ${b}\n\nHERGANG:\n${d}\n\nUnterschrift Protokollführer: ___________________________`;
-      document.getElementById('protDoc').style.display = 'block';
-      document.getElementById('protDoc').innerText = txt;
-    }
-
-    function generateNullBeute() {
-      const caseId = b6EventBus.getCaseId();
-      const txt = `VERZEICHNIS GEMÄSS § 107 StPO / NULL-BEUTE-BESTÄTIGUNG\nVORGANG: #${caseId} | Datum: ${new Date().toLocaleDateString('de-DE')}\n\nHiermit wird amtlich bestätigt, dass im Rahmen der heutigen Durchsuchungsmaßnahme keinerlei beweiserhebliche Gegenstände oder Datenträger aufgefunden oder beschlagnahmt wurden (Null-Beute).\n\nUnterschrift Einsatzleiter: ___________________________`;
-      document.getElementById('beuteDoc').style.display = 'block';
-      document.getElementById('beuteDoc').innerText = txt;
-    }
-
-    function generateEilantrag() {
-      const g = document.getElementById('eilGericht').value || '[GERICHT]';
-      const az = document.getElementById('eilAz').value || '[AKTENZEICHEN]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `SOFORTIGE BESCHWERDE (§ 304 StPO) / ANTRAG GEM. § 80 ABS. 5 VwGO\nVORGANG: #${caseId}\nAn das ${g}\nIn der Sache Az.: ${az}\n\nwird gegen die Anordnung unverzüglich Rechtsmittel eingelegt. Die Maßnahme beruht auf schwerwiegenden Rechts- und Formfehlern. Vollziehung ist unverzüglich auszusetzen.\n\nUnterschrift: ___________________________`;
-      document.getElementById('eilDoc').style.display = 'block';
-      document.getElementById('eilDoc').innerText = txt;
-    }
-
-    function generateUntaetigkeit() {
-      const a = document.getElementById('untAmt').value || '[BEHÖRDE]';
-      const d = document.getElementById('untDate').value || '[DATUM ANTRAG]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `FÖRMLICHE SACHSTANDSANFRAGE & KLAGEANDROHUNG (§ 75 VwGO)\nVORGANG: #${caseId}\nAn: ${a}\n\nAuf meinen Antrag vom ${d} ist bis heute keine Entscheidung ergangen. Ich setze hiermit letztmalig Frist von zwei Wochen bis zum [DATUM + 14 TAGE]. Nach Fristablauf wird Untätigkeitsklage erhoben.\n\nUnterschrift: ___________________________`;
-      document.getElementById('untDoc').style.display = 'block';
-      document.getElementById('untDoc').innerText = txt;
-    }
-
-    function generateHaftung() {
-      const b = document.getElementById('haftBeamter').value || '[BEAMTER]';
-      const d = document.getElementById('haftDienststelle').value || '[DIENSTSTELLE]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `SCHADENSERSATZ- & REGRESSANZEIGE (§ 839 BGB i.V.m. Art. 34 GG)\nVORGANG: #${caseId}\nAn: ${d} | Zu Händen: ${b}\n\nHiermit zeige ich den durch Ihre vorsätzliche Amtspflichtverletzung entstandenen Schaden an. Das persönliche Regressprivileg entfällt bei Vorsatz und grober Fahrlässigkeit.\n\nUnterschrift: ___________________________`;
-      document.getElementById('haftDoc').style.display = 'block';
-      document.getElementById('haftDoc').innerText = txt;
-    }
-
-    function generateJugendamt() {
-      const a = document.getElementById('jAmt').value || '[JUGENDAMT]';
-      const sb = document.getElementById('jSB').value || '[SACHBEARBEITER]';
-      const az = document.getElementById('jAZ').value || '[AKTENZEICHEN]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `ANTRAG AUF AKTENEINSICHT (§ 25 SGB X) & WIDERSPRUCH ART. 13 GG\nVORGANG: #${caseId}\nAn: ${a} | Zu Händen: ${sb} | Az.: ${az}\n\nBeantrage vollständige Akteneinsicht. Unangekündigtem Betreten der Wohnung wird widersprochen. Gespräche nur mit Beistand (§ 13 SGB X).\n\nUnterschrift: ___________________________`;
-      document.getElementById('jDoc').style.display = 'block';
-      document.getElementById('jDoc').innerText = txt;
-    }
-
-    function addSendung() {
-      const nr = document.getElementById('sendNr').value || '[SENDUNGSNUMMER]';
-      const empf = document.getElementById('sendEmpf').value || '[EMPFÄNGER]';
-      const caseId = b6EventBus.getCaseId();
-      const txt = `ZUSTELL-REGISTRIERUNG IM WORM-KATASTER:\nVorgang: #${caseId}\nSendungs-ID: ${nr}\nEmpfänger:   ${empf}\nStatus:      Eingeliefert / Fristenlauf aktiviert am ${new Date().toLocaleDateString('de-DE')}`;
-      document.getElementById('sendOut').style.display = 'block';
-      document.getElementById('sendOut').innerText = txt;
-    }
-
-    function generateVerfassungsRuege() {
-      const caseId = b6EventBus.getCaseId();
-      const txt = `RÜGE DER VERLETZUNG DES RECHTLICHEN GEHÖRS (Art. 103 Abs. 1 GG / § 321a ZPO)\nVORGANG: #${caseId}\n\nDas Gericht hat wesentlichen Kernvortrag übergangen. Die Gehörsrüge wird zur Erschöpfung des Rechtswegs für die Verfassungsbeschwerde nach § 90 BVerfGG erhoben.\n\nUnterschrift: ___________________________`;
-      document.getElementById('ruegeDoc').style.display = 'block';
-      document.getElementById('ruegeDoc').innerText = txt;
-    }
-
-    /* LOKALER SHA-256 HASHER (WORM) */
-    async function calcFileHash() {
-      const file = document.getElementById('hashFile').files[0];
-      if (!file) return;
-      const buffer = await file.arrayBuffer();
-      const hashBuf = await crypto.subtle.digest('SHA-256', buffer);
-      const hashHex = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
-      const r = document.getElementById('hashResult');
-      r.style.display = 'block';
-      r.innerHTML = `🔒 <strong>KRYPTOGRAPHISCHER SHA-256 BEWEIS-HASH:</strong><br>` +
-        `<code style="color:#fff; word-break:break-all;">${hashHex}</code><br>` +
-        `<small style="color:var(--text-muted);">Datei: ${file.name} (${file.size} Bytes) – 100% lokal im RAM verifiziert.</small>`;
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HUB 2 // MEDIZIN, PFLEGE & TEILHABE – Care Governance</title>
-  
-  <style>
-    :root {
-      --bg-dark: #06080d;
-      --card-bg: #0c1017;
-      --card-border: #182232;
-      --text-main: #e2e8f0;
-      --text-muted: #8493a8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --crimson: #ff3366;
-      --emerald: #00e676;
-      --amber: #ffab00;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      line-height: 1.5;
-      padding-bottom: 90px;
-    }
-
-    header {
-      background: linear-gradient(180deg, #121824 0%, #06080d 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .b6-svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-weight: 700;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text-muted);
-    }
-    .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-    .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
-
-    .proverb-bar {
-      background: #080c13;
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.35rem 1rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
-
-    .container { max-width: 1040px; margin: 1.5rem auto; padding: 0 1rem; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .card-title {
-      font-size: 1.15rem;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card-title.cyan { color: var(--cyan); }
-
-    textarea, select, input[type="text"], input[type="date"], input[type="number"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      background: #05070a;
-      border: 1px solid var(--card-border);
-      color: #fff;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      font-size: 0.88rem;
-      font-family: inherit;
-    }
-    textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
-    textarea { min-height: 85px; resize: vertical; }
-
-    .btn {
-      background: var(--gold);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: background 0.15s ease;
-    }
-    .btn.btn-cyan { background: var(--cyan); color: #000; }
-    .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
-    .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
-
-    .result-box {
-      background: rgba(0, 229, 255, 0.05);
-      border: 1px solid var(--cyan);
-      padding: 1rem;
-      border-radius: 6px;
-      color: var(--cyan);
-      font-size: 0.88rem;
-      margin-top: 1rem;
-    }
-
-    .form-preview {
-      background: #040508;
-      border: 1px dashed var(--card-border);
-      padding: 1rem;
-      border-radius: 6px;
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      color: #cbd5e1;
-      margin-top: 1rem;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-
-    .ai-terminal {
-      background: linear-gradient(145deg, #0f1624 0%, #080c14 100%);
-      border: 1px solid var(--purple);
-      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
-    }
-  </style>
-</head>
-<body>
-
-  <!-- HEADER MIT DOCKING-KOMPATIBLER VORGANGS-SYNC -->
-  <header>
-    <div class="header-inner">
-      <div class="brand-block">
-        <svg class="b6-svg" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
-          <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
-        </svg>
-        <div>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">HUB 2: MEDIZIN &amp; PFLEGE</span>
-            <span class="badge">CARE GOVERNANCE</span>
+      <div class="card">
+        <h2 class="card-title">📉 Modul 4.1: Gesetzlicher Inkassokosten-Kürzer (§ 4 Abs. 5 RDGEG)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <div style="flex:1;">
+            <label style="font-size:0.8rem; color:var(--text-muted);">Hauptforderung (€):</label>
+            <input type="number" id="hf4" value="120">
           </div>
-          <h1 style="font-size:1.15rem; color:#fff;">Medizin, Pflege &amp; Teilhabe – SGB V / XI / IX</h1>
-        </div>
-      </div>
-      <div style="display:flex; gap:0.4rem;">
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="b6EventBus.newCase()">Neuer Vorgang (+1)</button>
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="window.print()">🖨️ Drucken</button>
-      </div>
-    </div>
-  </header>
-
-  <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Geduld is een schone zaak, maar het recht duldt geen uitstel.“ – <em>Zorgplicht is heilig.</em>
-  </div>
-
-  <main class="container">
-
-    <!-- KI-FORENSIK-TERMINAL: MEDIZIN & PFLEGEGUTACHTEN -->
-    <div class="card ai-terminal">
-      <h2 class="card-title" style="color:var(--purple);">🧠 Hub 2: KI-Forensik &amp; MD-Gutachten-Scanner</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Lokale Prüfung von Pflegegutachten des Medizinischen Dienstes (MD) auf Zirkelschlüsse, Punktabzüge und Widersprüche:
-      </p>
-      <select id="aiMedMode">
-        <option value="selbstversorgung">Modul 4 (Selbstversorgung) gegen BRi-Richtlinien prüfen</option>
-        <option value="hilfsmittel">Ablehnung von Hilfsmitteln (§ 33 SGB V) auf Rechtsfehler zerlegen</option>
-        <option value="gdb">GdB-Feststellungsbescheid nach VersMedV auf Unterbewertung prüfen</option>
-      </select>
-      <textarea id="aiMedInput" placeholder="Auszug aus dem Gutachten oder Ablehnungsbescheid der Kasse einfügen..."></textarea>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn" style="background:var(--purple); color:#000;" onclick="runAiMedForensic()">Forensischen Prüf-Prompt kompilieren</button>
-        <button class="btn btn-outline" onclick="copyAiMedPrompt()">In Zwischenablage kopieren</button>
-      </div>
-      <div id="aiMedOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 2.1: VOLLWERTIGER 6-MODUL-NBA-RECHNER -->
-    <div class="card">
-      <h2 class="card-title">🏥 Modul 2.1: Gesetzlicher NBA-Pflegegradrechner (§ 15 SGB XI)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-        Berechnung nach dem Neuen Begutachtungsinstrument (NBA) mit gesetzlicher Modul-Gewichtung. Den Zustand am <strong>schlechtesten Tag</strong> ansetzen:
-      </p>
-
-      <div style="display:flex; flex-direction:column; gap:0.6rem;">
-        <div>
-          <label style="font-size:0.8rem; color:var(--text-muted);">Modul 1: Mobilität (Gewichtung 10 %) – <em>Aufstehen, Treppensteigen, Positionswechsel</em>:</label>
-          <select id="m1Score" onchange="calcPflegegrad()">
-            <option value="0">Selbstständig (0 Pkt)</option>
-            <option value="5">Größtenteils selbstständig / unsicher (5 Pkt)</option>
-            <option value="10">Erheblich beeinträchtigt / Gehhilfe nötig (10 Pkt)</option>
-            <option value="15">Schwerste Beeinträchtigung / Bettlägerig (15 Pkt)</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:0.8rem; color:var(--text-muted);">Modul 2 &amp; 3: Kognition &amp; Verhaltensweisen (Gewichtung 15 %) – <em>Orientierung, Unruhe, Ängste</em>:</label>
-          <select id="m2Score" onchange="calcPflegegrad()">
-            <option value="0">Keine Beeinträchtigung (0 Pkt)</option>
-            <option value="7.5">Geringe Beeinträchtigung / Vergesslichkeit (7.5 Pkt)</option>
-            <option value="11.25">Erhebliche Beeinträchtigung / nächtliche Unruhe (11.25 Pkt)</option>
-            <option value="15">Schwere Beeinträchtigung / ständige Begleitung nötig (15 Pkt)</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:0.8rem; color:var(--gold);"><strong>Modul 4: Selbstversorgung (Gewichtung 40 % – KARDINAL-HEBEL) – <em>Waschen, Anziehen, Mahlzeiten</em>:</strong></label>
-          <select id="m4Score" onchange="calcPflegegrad()">
-            <option value="0">Selbstständig (0 Pkt)</option>
-            <option value="15">Teilweise Hilfe erforderlich (15 Pkt)</option>
-            <option value="30">Überwiegende Hilfe erforderlich (30 Pkt)</option>
-            <option value="40">Vollständige Übernahme durch Dritte (40 Pkt)</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:0.8rem; color:var(--text-muted);">Modul 5: Krankheits- &amp; therapiebedingte Belastungen (Gewichtung 20 %) – <em>Medikation, Verbände, Injektionen</em>:</label>
-          <select id="m5Score" onchange="calcPflegegrad()">
-            <option value="0">Keine Unterstützung nötig (0 Pkt)</option>
-            <option value="10">Tägliche Medikamentengabe / Wundkontrolle (10 Pkt)</option>
-            <option value="20">Hoher Aufwand (Injektionen, Katheter, Dialyse, Absaugen) (20 Pkt)</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:0.8rem; color:var(--text-muted);">Modul 6: Gestaltung des Alltagslebens (Gewichtung 15 %) – <em>Tagesstruktur, soziale Kontakte</em>:</label>
-          <select id="m6Score" onchange="calcPflegegrad()">
-            <option value="0">Selbstständig (0 Pkt)</option>
-            <option value="5">Geringe Hilfe (5 Pkt)</option>
-            <option value="10">Erhebliche Unterstützung (10 Pkt)</option>
-            <option value="15">Vollständige Strukturierung durch Dritte (15 Pkt)</option>
-          </select>
-        </div>
-      </div>
-
-      <button class="btn btn-cyan" style="margin-top:1rem;" onclick="calcPflegegrad()">Pflegegrad deterministisch berechnen</button>
-      <div id="pflegeResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 2.2: MDK-RAFFINESSEN-PLANER -->
-    <div class="card">
-      <h2 class="card-title">🔍 Modul 2.2: Begutachtungs-Raffinessen-Planer (BRi-Fangfragen-Entlarver)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Gutachter nutzen oft scheinbar harmlose Plauderfragen, um Selbstständigkeit zu fingieren. So wird korrekt reagiert:
-      </p>
-      <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.82rem;">
-        <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:4px; border-left:3px solid var(--crimson);">
-          <strong>Fangfrage:</strong> „Können Sie sich morgens noch selbst einen Kaffee kochen?“<br>
-          <span style="color:var(--cyan);">Hintergrund:</span> Modul 4 wird auf 0 gesetzt, wenn man bejaht.<br>
-          <span style="color:var(--gold);">Souveräne Antwort:</span> <em>„Nein, das Hantieren mit heißem Wasser ist wegen Tremor/Sturzgefahr zu gefährlich. Die Tasse muss angereicht und vorbereitet werden.“</em>
-        </div>
-        <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:4px; border-left:3px solid var(--crimson);">
-          <strong>Fangfrage:</strong> „Sie sehen heute aber fit und gut gekleidet aus!“<br>
-          <span style="color:var(--cyan);">Hintergrund:</span> Scham lässt viele nicken. Der Gutachter notiert: ‚Gepflegtes Äußeres, keine Hilfe nötig‘.<br>
-          <span style="color:var(--gold);">Souveräne Antwort:</span> <em>„Das täuscht. Das Ankleiden und Waschen hat heute früh unter Schmerzen 45 Minuten gedauert und war nur mit vollständiger Hilfe meiner Begleitperson möglich.“</em>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODUL 2.3: WIDERSPRUCHS-GENERATOR -->
-    <div class="card">
-      <h2 class="card-title">📝 Modul 2.3: Fristwahrender Pflegegrad-Widerspruch (§ 84 SGG)</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="wVersicherter" style="flex:1; min-width:200px;" placeholder="Name der/des Versicherten">
-        <input type="text" id="wKasse" style="flex:1; min-width:200px;" placeholder="Pflegekasse (z. B. AOK, Barmer, TK)">
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="wBescheidDatum" style="flex:1; min-width:200px;" placeholder="Datum des Ablehnungsbescheides">
-        <input type="text" id="wVersicherungsNr" style="flex:1; min-width:200px;" placeholder="Versicherungsnummer">
-      </div>
-      <button class="btn btn-cyan" onclick="generatePflegeWiderspruch()">Fristwahrenden Kassen-Widerspruch erzeugen</button>
-      <div id="widerspruchOutput" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 2.4: HILFSMITTEL-SCHUTZ -->
-    <div class="card">
-      <h2 class="card-title">🦽 Modul 2.4: Hilfsmittel-Schutz &amp; Eilversorgung (§ 33 SGB V)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Verhindert Kassen-Verschleppung bei Rollstühlen, Pflegebetten, Sensoren oder Prothesen:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="hmGeraet" style="flex:1; min-width:200px;" placeholder="Verordnetes Hilfsmittel (z. B. Aktiv-Rollstuhl / Pflegebett)">
-        <input type="text" id="hmArzt" style="flex:1; min-width:200px;" placeholder="Verordnender Facharzt">
-      </div>
-      <button class="btn btn-cyan" onclick="generateHilfsmittelAntrag()">Eil-Durchsetzungsantrag mit 3-Wochen-Frist (§ 13 Abs. 3a SGB V) kompilieren</button>
-      <div id="hmOutput" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 2.5: GDB & SCHWERBEHINDERTEN-NAVIGATOR -->
-    <div class="card">
-      <h2 class="card-title cyan">♿ Modul 2.5: GdB- &amp; Schwerbehinderten-Navigator (§§ 2, 152 SGB IX)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Ermittlung von Nachteilsausgleichen, Kündigungsschutz und Steuerfreibeträgen nach Versorgungsmedizin-Verordnung:
-      </p>
-      <select id="gdbSelect" onchange="checkGdbBenefits()">
-        <option value="30">GdB 30: Gleichstellung gem. § 2 Abs. 3 SGB IX möglich</option>
-        <option value="50">GdB 50: Schwerbehinderteneigenschaft (Zusatzurlaub, Kündigungsschutz)</option>
-        <option value="70">GdB 70: Erheblicher Nachteilsausgleich, steuerlicher Pauschbetrag</option>
-        <option value="100">GdB 100: Maximaler Pauschbetrag, voller Schutz</option>
-      </select>
-      <div id="gdbResult" class="result-box" style="display:none;"></div>
-    </div>
-
-  </main>
-
-  <script>
-    const b6EventBus = {
-      getCaseId() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        if (c === 0) { c = 1; localStorage.setItem('b6_case_seq', '1'); }
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        return formatted;
-      },
-      newCase() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        c += 1;
-        localStorage.setItem('b6_case_seq', c.toString());
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        this.updateBadge();
-        window.dispatchEvent(new CustomEvent('b6:case-sync', { detail: { caseId: formatted } }));
-        alert('Neuer Vorgang aktiv: #' + formatted);
-      },
-      updateBadge() {
-        const id = this.getCaseId();
-        const b = document.getElementById('caseBadge');
-        if (b) b.innerText = 'VORGANG #' + id;
-      }
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      b6EventBus.updateBadge();
-      checkGdbBenefits();
-    });
-
-    /* KI-FORENSIK FÜR MEDIZIN & GUTACHTEN */
-    function runAiMedForensic() {
-      const mode = document.getElementById('aiMedMode').value;
-      const input = document.getElementById('aiMedInput').value.trim() || '[GUTACHTEN-TEXT HIER]';
-      const caseId = b6EventBus.getCaseId();
-
-      let p = `DU BIST DER B6-MEDIZIN- UND PFLEGEGUTACHTEN-PRÜFER (Vorgang #${caseId}).\n` +
-              `Analysiere das folgende Gutachten / den Bescheid streng nach SGB V / XI / IX:\n\n` +
-              `TEXT-AUSZUG:\n"${input}"\n\n`;
-
-      if (mode === 'selbstversorgung') {
-        p += `AUFGABE:\n1. Prüfe, ob bei Modul 4 (Selbstversorgung) der tatsächliche Aufwand unterschlagen wurde.\n` +
-             `2. Gleiche die Feststellungen mit den Begutachtungs-Richtlinien (BRi) ab.\n` +
-             `3. Formuliere die Rüge zur fehlerhaften Punktevergabe für den Widerspruch nach § 84 SGG.`;
-      } else if (mode === 'hilfsmittel') {
-        p += `AUFGABE:\n1. Prüfe, ob die Kasse die 3-Wochen-Genehmigungsfiktion nach § 13 Abs. 3a SGB V verletzt hat.\n` +
-             `2. Zerlege das Argument der 'fehlenden Wirtschaftlichkeit' anhand § 33 SGB V.\n` +
-             `3. Formuliere den Antrag auf einstweilige Anordnung beim Sozialgericht gem. § 86b SGG.`;
-      } else {
-        p += `AUFGABE:\n1. Prüfe die Festsetzung des GdB nach den Versorgungsmedizinischen Grundsätzen.\n` +
-             `2. Weise nach, dass Einzel-GdB-Werte nicht bloß addiert, sondern in ihrer Gesamtwirkung erfasst werden müssen.\n` +
-             `3. Formuliere den Antrag auf Zuerkennung der Merkzeichen (G, aG, B oder H).`;
-      }
-
-      const out = document.getElementById('aiMedOut');
-      out.style.display = 'block';
-      out.innerText = p;
-    }
-
-    function copyAiMedPrompt() {
-      const txt = document.getElementById('aiMedOut').innerText;
-      if (!txt) { alert('Bitte zuerst Prompt generieren!'); return; }
-      navigator.clipboard.writeText(txt).then(() => alert('Prompt in Zwischenablage kopiert!'));
-    }
-
-    /* NBA-BERECHNUNG */
-    function calcPflegegrad() {
-      const m1 = parseFloat(document.getElementById('m1Score').value) || 0;
-      const m2 = parseFloat(document.getElementById('m2Score').value) || 0;
-      const m4 = parseFloat(document.getElementById('m4Score').value) || 0;
-      const m5 = parseFloat(document.getElementById('m5Score').value) || 0;
-      const m6 = parseFloat(document.getElementById('m6Score').value) || 0;
-
-      const total = m1 + m2 + m4 + m5 + m6;
-      let grad = 0, geld = 0, sach = 0;
-
-      if (total >= 90) { grad = 5; geld = 947; sach = 2200; }
-      else if (total >= 70) { grad = 4; geld = 765; sach = 1778; }
-      else if (total >= 47.5) { grad = 3; geld = 573; sach = 1432; }
-      else if (total >= 27) { grad = 2; geld = 332; sach = 761; }
-      else if (total >= 12.5) { grad = 1; geld = 0; sach = 125; }
-
-      const res = document.getElementById('pflegeResult');
-      res.style.display = 'block';
-
-      if (grad === 0) {
-        res.innerHTML = `📊 <strong>Errechnete Gesamtpunkte:</strong> ${total.toFixed(1)} von 100 Pkt.<br>` +
-          `❌ <strong>Ergebnis:</strong> Unter 12,5 Punkten. Bei Begutachtung unbedingt den Zustand am schlechtesten Tag dokumentieren!`;
-      } else {
-        res.innerHTML = `🎖️ <strong>Gesetzlicher Anspruch:</strong> <span style="color:#fff; font-size:1.15rem; font-weight:800;">PFLEGEGRAD ${grad}</span> (${total.toFixed(1)} Pkt)<br>` +
-          `💰 <strong>Monatliches Pflegegeld (§ 37 SGB XI):</strong> ${geld} € / Monat<br>` +
-          `🩺 <strong>Pflegesachleistung (§ 36 SGB XI):</strong> bis zu ${sach} € / Monat<br>` +
-          `💡 <strong>Zusatzansprüche:</strong> 125 € Entlastungsbetrag (§ 45b) + bis zu 4.000 € Wohnumfeldverbesserung (§ 40 SGB XI).`;
-      }
-    }
-
-    /* WIDERSPRUCH */
-    function generatePflegeWiderspruch() {
-      const name = document.getElementById('wVersicherter').value || '[NAME VERSICHERTER]';
-      const kasse = document.getElementById('wKasse').value || '[PFLEGEKASSE]';
-      const bescheidDate = document.getElementById('wBescheidDatum').value || '[DATUM DES BESCHEIDS]';
-      const versNr = document.getElementById('wVersicherungsNr').value || '[VERSICHERUNGSNUMMER]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-                    FÖRMLICHER WIDERSPRUCH GEGEN PFLEGEBESCHEID
-                          gemäß § 84 Sozialgerichtsgesetz (SGG)
-================================================================================
-VORGANGS-ID:        ${caseId} // REVISIONS-ZEITSTEMPEL: ${new Date().toISOString()}
-Datum:              ${today}
-An Pflegekasse:     ${kasse}
-Versicherte(r):     ${name} | Vers.-Nr.: ${versNr}
-
-WIDERSPRUCH gegen Einstufungsbescheid vom: ${bescheidDate}
-
-Sehr geehrte Damen und Herren,
-
-gegen den oben genannten Bescheid über die Feststellung bzw. Ablehnung des Pflegegrades 
-lege ich hiermit form- und fristgerecht
-
-                                W I D E R S P R U C H
-
-ein.
-
-BEGRÜNDUNG (BRi & § 15 SGB XI):
-Die Begutachtung durch den Medizinischen Dienst (MD) spiegelt den tatsächlichen täglichen 
-Hilfebedarf in den Modulen des SGB XI nicht zutreffend wider. Insbesondere in Modul 4 
-(Selbstversorgung) sowie Modul 5 (krankheitsbedingte Anforderungen) wurden wesentliche 
-Einschränkungen unberücksichtigt gelassen oder unzulässig kleingerechnet.
-
-ANTRÄGE ZUR VERFAHRENSWAHRUNG:
-1. Die unverzügliche Übersendung des vollständigen MD-Pflegegutachtens in Kopie.
-2. Die Einräumung einer Nachbegründungsfrist von vier Wochen nach Zugang des Gutachtens.
-3. Die Veranlassung einer Zweitbegutachtung durch einen unabhängigen Gutachter.
-
-Mit freundlichen Grüßen,
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('widerspruchOutput');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* HILFSMITTEL-ANTRAG */
-    function generateHilfsmittelAntrag() {
-      const g = document.getElementById('hmGeraet').value || '[HILFSMITTEL]';
-      const arzt = document.getElementById('hmArzt').value || '[ARZT]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-           EILANTRAG AUF VERSORGUNG MIT HILFSMITTELN GEMÄSS § 33 SGB V
-              Rüge der Fristüberschreitung gem. § 13 Abs. 3a SGB V
-================================================================================
-VORGANGS-ID: ${caseId} | Datum: ${today}
-
-Beantragtes Hilfsmittel: ${g}
-Verordnender Facharzt:   ${arzt}
-
-Sehr geehrte Damen und Herren,
-
-das oben genannte Hilfsmittel ist medizinisch unabweisbar zur Sicherung des Erfolgs der 
-Krankenbehandlung und zum Ausgleich einer Behinderung erforderlich.
-
-Ich weise auf die gesetzliche Frist von drei Wochen gem. § 13 Abs. 3a SGB V hin. Nach Ablauf 
-dieser Frist gilt der Antrag kraft Gesetzes als genehmigt (Genehmigungsfiktion). 
-Bei weiterer Verzögerung wird Beschaffung auf Kassenkosten vorgenommen sowie Eilantrag 
-beim Sozialgericht gem. § 86b SGG gestellt.
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('hmOutput');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* GDB BENEFITS */
-    function checkGdbBenefits() {
-      const v = document.getElementById('gdbSelect').value;
-      const res = document.getElementById('gdbResult');
-      res.style.display = 'block';
-
-      if (v === "30") {
-        res.innerHTML = `📘 <strong>GdB 30:</strong> Gleichstellungsantrag bei der Bundesagentur für Arbeit (§ 2 Abs. 3 SGB IX) zum Kündigungsschutz. Steuerlicher Pauschbetrag gem. § 33b EStG.`;
-      } else if (v === "50") {
-        res.innerHTML = `🛡️ <strong>GdB 50 (Schwerbehinderung):</strong> 5 Tage Zusatzurlaub (§ 208 SGB IX), besonderer Kündigungsschutz (§ 168 SGB IX), 2 Jahre früherer Renteneintritt ohne Abschläge möglich.`;
-      } else if (v === "70") {
-        res.innerHTML = `🎖️ <strong>GdB 70:</strong> Hohe steuerliche Entlastung, Prüfung Merkzeichen 'G' (erhebliche Gehbehinderung) für Wertmarke / Kfz-Steuerermäßigung.`;
-      } else {
-        res.innerHTML = `👑 <strong>GdB 100:</strong> Maximaler Steuerpauschbetrag (bis zu 2.840 € bzw. Merkzeichen 'H' 7.400 €), voller Nachteilsausgleich.`;
-      }
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HUB 3 // EXISTENZSICHERUNG, FAMILIE & BILDUNG – Social Shield</title>
-  
-  <style>
-    :root {
-      --bg-dark: #06080d;
-      --card-bg: #0c1017;
-      --card-border: #182232;
-      --text-main: #e2e8f0;
-      --text-muted: #8493a8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --crimson: #ff3366;
-      --emerald: #00e676;
-      --amber: #ffab00;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      line-height: 1.5;
-      padding-bottom: 90px;
-    }
-
-    header {
-      background: linear-gradient(180deg, #121824 0%, #06080d 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .b6-svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-weight: 700;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text-muted);
-    }
-    .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-    .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
-
-    .proverb-bar {
-      background: #080c13;
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.35rem 1rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
-
-    .container { max-width: 1040px; margin: 1.5rem auto; padding: 0 1rem; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .card-title {
-      font-size: 1.15rem;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card-title.cyan { color: var(--cyan); }
-
-    textarea, select, input[type="text"], input[type="date"], input[type="number"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      background: #05070a;
-      border: 1px solid var(--card-border);
-      color: #fff;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      font-size: 0.88rem;
-      font-family: inherit;
-    }
-    textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
-    textarea { min-height: 85px; resize: vertical; }
-
-    .btn {
-      background: var(--gold);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: background 0.15s ease;
-    }
-    .btn.btn-cyan { background: var(--cyan); color: #000; }
-    .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
-    .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
-
-    .result-box {
-      background: rgba(0, 229, 255, 0.05);
-      border: 1px solid var(--cyan);
-      padding: 1rem;
-      border-radius: 6px;
-      color: var(--cyan);
-      font-size: 0.88rem;
-      margin-top: 1rem;
-    }
-
-    .form-preview {
-      background: #040508;
-      border: 1px dashed var(--card-border);
-      padding: 1rem;
-      border-radius: 6px;
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      color: #cbd5e1;
-      margin-top: 1rem;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-
-    .ai-terminal {
-      background: linear-gradient(145deg, #0f1624 0%, #080c14 100%);
-      border: 1px solid var(--purple);
-      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
-    }
-  </style>
-</head>
-<body>
-
-  <!-- HEADER MIT B6-EVENTBUS INTEGRATION -->
-  <header>
-    <div class="header-inner">
-      <div class="brand-block">
-        <svg class="b6-svg" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
-          <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
-        </svg>
-        <div>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">HUB 3: SOZIALES &amp; FAMILIE</span>
-            <span class="badge">SOCIAL SHIELD</span>
+          <div style="flex:1;">
+            <label style="font-size:0.8rem; color:var(--crimson);">Geforderte Inkassogebühr (€):</label>
+            <input type="number" id="ik4" value="79">
           </div>
-          <h1 style="font-size:1.15rem; color:#fff;">Existenzsicherung, Familie &amp; Schule</h1>
         </div>
+        <button class="btn btn-cyan" onclick="calcInkasso4()">Gesetzliche Obergrenze berechnen</button>
+        <div id="ikResult4" class="result-box" style="display:none;"></div>
       </div>
-      <div style="display:flex; gap:0.4rem;">
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="b6EventBus.newCase()">Neuer Vorgang (+1)</button>
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="window.print()">🖨️ Drucken</button>
-      </div>
-    </div>
-  </header>
 
-  <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Het recht buigt wel, maar barst niet.“ – <em>Het bestaansminimum is onaantastbaar.</em>
-  </div>
-
-  <main class="container">
-
-    <!-- KI-FORENSIK-TERMINAL: SOZIAL- & SCHULRECHT -->
-    <div class="card ai-terminal">
-      <h2 class="card-title" style="color:var(--purple);">🧠 Hub 3: KI-Forensik &amp; Bescheid-Zerleger (Zero-Edge)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Lokale Prüfung von Sanktionsbescheiden, Kürzungsandrohungen oder schulischen Ordnungsmaßnahmen:
-      </p>
-      <select id="aiSozMode">
-        <option value="sanktion">Bürgergeld-Sanktionsbescheid auf Verfassungswidrigkeit (BVerfG 1 BvL 7/16) prüfen</option>
-        <option value="kdu">Kostensenkungsaufforderung KdU (§ 22 SGB II) auf Unwirtschaftlichkeit prüfen</option>
-        <option value="schule">Schulpflichtrüge / Bußgelddrohung (§ 42 SchulG NRW) bei Attestvorlage entkräften</option>
-      </select>
-      <textarea id="aiSozInput" placeholder="Auszug aus dem Bescheid des Jobcenters / Sozialamts oder der Schulleitung einfügen..."></textarea>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn" style="background:var(--purple); color:#000;" onclick="runAiSozForensic()">Forensischen Prüf-Prompt kompilieren</button>
-        <button class="btn btn-outline" onclick="copyAiSozPrompt()">In Zwischenablage kopieren</button>
-      </div>
-      <div id="aiSozOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3.1: NOTFALL-BARVORSCHUSS (§ 42 SGB I) -->
-    <div class="card">
-      <h2 class="card-title">💶 Modul 3.1: Eilantrag auf sofortige Barauszahlung (§ 42 Abs. 1 Satz 1 SGB I)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Wenn die Behörde die Antragsbearbeitung verschleppt und keine Mittel für Lebensmittel, Strom oder Miete vorhanden sind:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="vName" style="flex:1; min-width:200px;" placeholder="Dein vollständiger Name">
-        <input type="text" id="vAmt" style="flex:1; min-width:200px;" placeholder="Zuständige Behörde (Jobcenter / Sozialamt)">
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="vBG" style="flex:1; min-width:200px;" placeholder="Bedarfsgemeinschafts-Nr. / Aktenzeichen">
-        <input type="number" id="vBetrag" style="flex:1; min-width:200px;" placeholder="Geforderter Barbetrag (€, z. B. 350)" value="350">
-      </div>
-      <button class="btn btn-cyan" onclick="generateVorschuss()">Eilantrag auf sofortigen Barvorschuss am heutigen Tag erzeugen</button>
-      <div id="vorschussOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3.2: BÜRGERGELD-SANKTIONSABWEHR (§§ 31 FF. SGB II) -->
-    <div class="card">
-      <h2 class="card-title">🛡️ Modul 3.2: Bürgergeld-Sanktionsabwehr &amp; Kürzungs-Stopp (BVerfG 1 BvL 7/16)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Wehrt rechtswidrige Leistungsminderungen ab. Kürzungen über 30 % oder ohne persönliche Anhörung sind absolut verfassungswidrig [cite: 95]:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="sankBescheidDate" style="flex:1; min-width:200px;" placeholder="Datum des Kürzungs- / Anhörungsbriefs">
-        <input type="text" id="sankGrund" style="flex:1; min-width:200px;" placeholder="Angeblicher Pflichtverstoß (z. B. Meldetermin versäumt)">
-      </div>
-      <button class="btn btn-cyan" onclick="generateSanktionsWiderspruch()">Widerspruch &amp; Rüge der Verfassungswidrigkeit kompilieren</button>
-      <div id="sankOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3.3: KOSTEN DER UNTERKUNFT (KDU) & KOSTENSENKUNG (§ 22 SGB II) -->
-    <div class="card">
-      <h2 class="card-title">🏠 Modul 3.3: Kosten der Unterkunft (KdU) – Kostensenkungs-Abwehr</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Das Amt fordert zum Umzug oder zur Kostensenkung auf? Verweise auf Unzumutbarkeit, schwere Erkrankung oder fehlenden bezahlbaren Wohnraum [cite: 95]:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="kduFrist" style="flex:1; min-width:200px;" placeholder="Frist im Kostensenkungsschreiben">
-        <input type="text" id="kduGrund" style="flex:1; min-width:200px;" placeholder="Hinderungsgrund (z. B. Pflegebedarf, Schulbesuch Kinder, chronische Krankheit)">
-      </div>
-      <button class="btn btn-cyan" onclick="generateKduSchutz()">Zurückweisung der Kostensenkungsaufforderung erzeugen</button>
-      <div id="kduOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3.4: SCHULPFLICHT-, INKLUSIONS- & FÖRDERSCHUTZ (§ 42 SCHULG NRW) -->
-    <div class="card">
-      <h2 class="card-title cyan">🎓 Modul 3.4: Schulpflicht-, Inklusions- &amp; Förderschutz (§ 42 SchulG NRW)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Schutz vor Schulleitungs-Schikanen, unberechtigten Bußgelddrohungen und Durchsetzung des gesetzlichen Nachteilsausgleichs für chronisch kranke oder behinderte Schüler (z. B. bei GdB 70 / Pflegegrad):
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="schuelerName" style="flex:1; min-width:200px;" placeholder="Name des Schülers / Kindes">
-        <input type="text" id="schuleName" style="flex:1; min-width:200px;" placeholder="Name der Schule / Schulleitung">
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="schulDiagnose" style="flex:1; min-width:200px;" placeholder="Medizinische Indikation / GdB / Pflegegrad">
-        <input type="text" id="schulMassnahme" style="flex:1; min-width:200px;" placeholder="Erforderlicher Nachteilsausgleich (z. B. Zeitzuschlag, Ruheraum, Fernunterricht)">
-      </div>
-      <button class="btn btn-cyan" onclick="generateSchulSchutz()">Rechtssichere Schutzanzeige &amp; Nachteilsausgleichsantrag generieren</button>
-      <div id="schulOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 3.5: WOHNGELD-PLUS & KINDERZUSCHLAG-PRÜFER -->
-    <div class="card">
-      <h2 class="card-title">👨‍👩‍👧 Modul 3.5: Wohngeld-Plus &amp; KiZ-Rechner (Präventiv-Schutz)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Wer Wohngeld und Kinderzuschlag (bis zu 292 €/Kind) bezieht, ist komplett vor dem bürokratischen Zwang des Bürgergeldes geschützt:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Anzahl der Kinder im Haushalt:</label>
-          <input type="number" id="kizKinder" value="2" min="1" max="10">
+      <div class="card">
+        <h2 class="card-title cyan">🚫 Modul 4.4: SCHUFA-Löschungsantrag &amp; Drohungs-Abwehr (§ 31 BDSG)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="glaeubiger4" style="flex:1;" placeholder="Gläubiger / Inkassounternehmen">
+          <input type="text" id="az4" style="flex:1;" placeholder="Aktenzeichen / Rechnungsnummer">
         </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Warmmiete monatlich (€):</label>
-          <input type="number" id="wohngeldMiete" value="780" step="20">
-        </div>
+        <button class="btn btn-cyan" onclick="genSchufa4()">Forderungsbestreitung mit SCHUFA-Verbot erzeugen</button>
+        <div id="schufaDoc4" class="form-preview" style="display:none;"></div>
       </div>
-      <button class="btn btn-cyan" onclick="calcWohngeldPlus()">Präventiven Anspruch prüfen</button>
-      <div id="wohngeldResult" class="result-box" style="display:none;"></div>
-    </div>
+    </section>
+
+    <!-- ===================================================================
+         HUB 5: RECHTSPRECHUNG, JUSTIZ-REGISTER & KI-CORE
+         =================================================================== -->
+    <section id="hub5" class="hub-section">
+      <div class="card ai-terminal">
+        <h2 class="card-title" style="color:var(--purple);">🧠 Hub 5: Sovereign Master-Prompt &amp; DSGVO-Anonymisierer</h2>
+        <select id="aiMode5">
+          <option value="anonymize">DSGVO-Filter: Alle Klarnamen, Adressen und IBANs durch Tokens ersetzen</option>
+          <option value="subsumtion">Juristisches Gutachten (Obersatz, Definition, Subsumtion, Schluss)</option>
+        </select>
+        <textarea id="aiInput5" placeholder="Zu anonymisierenden oder zu prüfenden Sachverhalt hier einfügen..."></textarea>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-purple" onclick="runAi5()">Master-Synthese kompilieren</button>
+          <button class="btn btn-outline" onclick="copyBox('aiOut5')">Kopieren</button>
+        </div>
+        <div id="aiOut5" class="form-preview" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">⚖️ Modul 5.1: Höchstrichterliche Leitsatz-Datenbank</h2>
+        <select id="urteilSel" onchange="showUrteil5()">
+          <option value="art13">BVerfG – Art. 13 GG: Schutz der Wohnung vor reiner Ausforschung</option>
+          <option value="paraphe">BGH IX ZB 198/11: Formunwirksamkeit flüchtiger Paraphen</option>
+          <option value="sanktion">BVerfG 1 BvL 7/16: Verfassungswidrigkeit von Sanktionen über 30 %</option>
+          <option value="schlechter_tag">BSG – SGB XI: Maßgeblichkeit des schlechtesten Tages</option>
+          <option value="schufa">BGH – § 31 BDSG: Unzulässigkeit von SCHUFA-Meldungen bei Bestreiten</option>
+        </select>
+        <div id="urteilBox5" class="result-box"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">🏛️ Modul 5.2: Amtliche XJustiz-XML-Struktur</h2>
+        <button class="btn btn-cyan" onclick="genXml5()">Valides XJustiz-XML-Metadatenblatt generieren</button>
+        <div id="xmlDoc5" class="form-preview" style="display:none;"></div>
+      </div>
+    </section>
 
   </main>
 
-  <!-- JAVASCRIPT: EVENTBUS & RECHTSLOGIK -->
+  <!-- JAVASCRIPT: MASTER STEUERUNG (SPA + RECHNER) -->
   <script>
-    const b6EventBus = {
-      getCaseId() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        if (c === 0) { c = 1; localStorage.setItem('b6_case_seq', '1'); }
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        return formatted;
-      },
-      newCase() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        c += 1;
-        localStorage.setItem('b6_case_seq', c.toString());
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        this.updateBadge();
-        window.dispatchEvent(new CustomEvent('b6:case-sync', { detail: { caseId: formatted } }));
-        alert('Neuer Vorgang aktiv: #' + formatted);
-      },
-      updateBadge() {
-        const id = this.getCaseId();
-        const b = document.getElementById('caseBadge');
-        if (b) b.innerText = 'VORGANG #' + id;
-      }
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      b6EventBus.updateBadge();
-    });
-
-    /* KI-FORENSIK: SOZIAL- & SCHULRECHT */
-    function runAiSozForensic() {
-      const mode = document.getElementById('aiSozMode').value;
-      const input = document.getElementById('aiSozInput').value.trim() || '[BESCHEID-TEXT HIER]';
-      const caseId = b6EventBus.getCaseId();
-
-      let p = `DU BIST DER B6-SOZIAL- UND SCHULRECHTS-PRÜFER (Vorgang #${caseId}).\n` +
-              `Analysiere den folgenden Bescheid streng nach GG, SGB I, SGB II und SchulG NRW:\n\n` +
-              `TEXT-AUSZUG:\n"${input}"\n\n`;
-
-      if (mode === 'sanktion') {
-        p += `AUFGABE:\n1. Prüfe Verstoß gegen BVerfG 1 BvL 7/16 (Verbot von Kürzungsstrafen über 30 %).\n` +
-             `2. Suche nach Formfehlern in der Rechtsbehelfsbelehrung und fehlender persönlicher Härtefallprüfung.\n` +
-             `3. Formuliere die Anträge auf aufschiebende Wirkung gem. § 86b Abs. 1 SGG für das Sozialgericht.`;
-      } else if (mode === 'kdu') {
-        p += `AUFGABE:\n1. Prüfe, ob die KdU-Richtlinie der Kommune auf einem schlüssigen Konzept im Sinne des BSG beruht.\n` +
-             `2. Begründe die Unwirtschaftlichkeit eines Umzugs (Umzugskosten, Renovierungskosten, Mietkaution).\n` +
-             `3. Formuliere die Weigerungserklärung unter Schutz von Familie und Kindern (Art. 6 GG).`;
-      } else {
-        p += `AUFGABE:\n1. Prüfe, ob ärztliche Atteste rechtswidrig ignoriert oder amtsärztliche Zwangsuntersuchungen rechtswidrig angedroht wurden.\n` +
-             `2. Zitiere § 42 Abs. 1 SchulG NRW i.V.m. Art. 3 Abs. 3 Satz 2 GG (Verbot der Benachteiligung Behinderter).\n` +
-             `3. Formuliere die Dienstaufsichtsbeschwerde gegen die Schulleitung wegen Willkür und Nötigung.`;
-      }
-
-      const out = document.getElementById('aiSozOut');
-      out.style.display = 'block';
-      out.innerText = p;
-    }
-
-    function copyAiSozPrompt() {
-      const txt = document.getElementById('aiSozOut').innerText;
-      if (!txt) { alert('Bitte zuerst Prompt generieren!'); return; }
-      navigator.clipboard.writeText(txt).then(() => alert('Prompt in Zwischenablage kopiert!'));
-    }
-
-    /* FORMULARE: VORSCHUSS */
-    function generateVorschuss() {
-      const name = document.getElementById('vName').value || '[DEIN NAME]';
-      const amt = document.getElementById('vAmt').value || '[JOB-CENTER / SOZIALAMT]';
-      const bg = document.getElementById('vBG').value || '[BG-NUMMER / AZ]';
-      const betrag = document.getElementById('vBetrag').value || '350';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-          ANTRAG AUF UNVERZÜGLICHEN VORSCHUSS AUF BARAUSZAHLUNG
-                       gemäß § 42 Abs. 1 Satz 1 SGB I
-================================================================================
-VORGANGS-ID:        ${caseId} // ZEITSTEMPEL: ${new Date().toISOString()}
-Datum:              ${today}
-An Leistungsträger: ${amt}
-Beteiligte(r):      ${name} | BG-Nr. / Az.: ${bg}
-
-ANTRAG AUF SOFORTIGE BARAUSZAHLUNG EINES VORSCHUSSES IN HÖHE VON ${betrag} EURO
-
-Sehr geehrte Damen und Herren,
-
-mein Antrag auf existenzsichernde Leistungen liegt Ihnen vor. Bis zum heutigen Tag 
-ist weder ein förmlicher Bescheid ergangen noch eine Auszahlung erfolgt. 
-
-Ich erkläre hiermit an Eides statt:
-1. Ich verfüge über keinerlei liquide Barmittel mehr. Mein Kontoguthaben beträgt 0,00 Euro.
-2. Die Sicherung des verfassungsrechtlichen Existenzminimums (Art. 1 Abs. 1 i.V.m. Art. 20 Abs. 1 GG) 
-   für Nahrung, Hygiene und Medikamente ist akut vereitelt.
-
-Gemäß § 42 Abs. 1 Satz 1 SGB I HAT der Leistungsträger Vorschüsse zu zahlen, wenn ein Anspruch 
-auf Geldleistungen dem Grunde nach besteht und zur Feststellung seiner Höhe voraussichtlich 
-längere Zeit erforderlich ist. Ein Ermessen steht der Behörde nicht zu („gebundene Entscheidung“).
-
-Ich beantrage die sofortige Übergabe eines Barschecks oder Barauszahlung in Höhe von ${betrag} € 
-am heutigen Tage. Bei Weigerung wird um 12:00 Uhr Eilantrag beim zuständigen Sozialgericht 
-gemäß § 86b Abs. 2 SGG eingereicht.
-
-Mit vorzüglicher Hochachtung,
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('vorschussOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* FORMULARE: SANKTIONS-WIDERSPRUCH */
-    function generateSanktionsWiderspruch() {
-      const date = document.getElementById('sankBescheidDate').value || '[DATUM DES BESCHEIDS]';
-      const grund = document.getElementById('sankGrund').value || '[ANGEBLICHER GRUND]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-          FÖRMLICHER WIDERSPRUCH GEGEN SANKTIONS- / KÜRZUNGSBESCHEID
-         gemäß § 84 SGG / Rüge Verfassungsverstoß (BVerfG 1 BvL 7/16)
-================================================================================
-VORGANGS-ID: ${caseId} | Datum: ${today}
-
-WIDERSPRUCH gegen den Minderungsbescheid vom: ${date}
-Angeblicher Pflichtverstoß: ${grund}
-
-Sehr geehrte Damen und Herren,
-
-gegen den oben bezeichneten Kürzungs- bzw. Minderungsbescheid lege ich hiermit form- und 
-fristgerecht
-
-                                W I D E R S P R U C H
-
-ein und beantrage, die Vollziehung der Minderung unverzüglich auszusetzen.
-
-BEGRÜNDUNG:
-1. Nach dem Grundsatzurteil des BVerfG vom 05.11.2019 (1 BvL 7/16) darf eine Leistungskürzung 
-   niemals zu einer Verletzung der Menschenwürde führen. Sanktionen setzen eine lückenlose 
-   Verhältnismäßigkeitsprüfung im Einzelfall voraus, die hier völlig unterblieben ist.
-2. Es lag ein wichtiger Grund vor, der die Wahrnehmung des Termins bzw. der Pflicht unmöglich machte.
-3. Die Kürzung bedroht das physische Existenzminimum existentiell.
-
-Es wird beantragt, die einbehaltenen Beträge unverzüglich und vollständig nachzuzahlen.
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('sankOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* FORMULARE: KDU-SCHUTZ */
-    function generateKduSchutz() {
-      const frist = document.getElementById('kduFrist').value || '[FRISTDATUM]';
-      const grund = document.getElementById('kduGrund').value || '[BESONDERE HÄRTE / PFLEGEBEDARF]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-      ZURÜCKWEISUNG DER KOSTENSENKUNGSAUFFORDERUNG (UNZUMUTBARKEIT)
-                       gemäß § 22 Abs. 1 Satz 3 SGB II
-================================================================================
-VORGANGS-ID: ${caseId} | Datum: ${today}
-
-Ihre Kostensenkungsaufforderung mit Frist zum: ${frist}
-
-Sehr geehrte Damen und Herren,
-
-Ihrer Aufforderung zur Senkung der Unterkunftskosten wird ausdrücklich widersprochen. 
-Eine Kostensenkung durch Umzug ist im vorliegenden Fall subjektiv und objektiv UNZUMUTBAR:
-
-BESONDERE HÄRTEGRÜNDE:
-${grund}
-
-Darüber hinaus ist der lokale Wohnungsmarkt im unteren Preissegment erwiesenermaßen geräumt. 
-Ein Umzug würde zudem unwirtschaftliche Folgekosten (Umzugskosten, Kautionsübernahme, 
-Doppelmieten) auslösen, die der Leistungsträger gem. § 22 Abs. 6 SGB II voll tragen müsste.
-
-Ich fordere Sie auf, die tatsächlichen Kosten der Unterkunft weiterhin in voller Höhe zu 
-übernehmen.
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('kduOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* FORMULARE: SCHULPFLICHT- & FÖRDERSCHUTZ */
-    function generateSchulSchutz() {
-      const schueler = document.getElementById('schuelerName').value || '[NAME DES KINDES]';
-      const schule = document.getElementById('schuleName').value || '[SCHULE / SCHULLEITUNG]';
-      const diag = document.getElementById('schulDiagnose').value || '[MEDIZINISCHE INDIKATION / GDB]';
-      const massnahme = document.getElementById('schulMassnahme').value || '[NACHTEILSAUSGLEICH]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-     FÖRMLICHE SCHUTZANZEIGE & ANTRAG AUF GESETZLICHEN NACHTEILSAUSGLEICH
-          gemäß § 42 Schulgesetz NRW i.V.m. Art. 3 Abs. 3 Satz 2 GG
-================================================================================
-VORGANGS-ID: ${caseId} | Datum: ${today}
-An Schulleitung: ${schule}
-Betrifft Schüler(in): ${schueler}
-
-Sehr geehrte Schulleitung,
-
-hiermit wird für das oben genannte Kind der gesetzlich garantierte Anspruch auf Nachteilsausgleich 
-sowie Schutz vor Diskriminierung förmlich geltend gemacht.
-
-MEDIZINISCHE INDIKATION / STATUS:
-${diag}
-
-BEURKUNDETE ANTRÄGE:
-1. Gewährung folgender kompensatorischer Schutzmaßnahmen:
-   ${massnahme}
-2. Das Vorlegen ordnungsgemäßer ärztlicher Bescheinigungen erfüllt die gesetzliche Entschuldigungspflicht 
-   vollumfänglich. Jedwede Drohung mit Schulversäumnisanzeigen, Bußgeldverfahren oder der Einschaltung 
-   von Ordnungsbehörden wird als unzulässige Einschüchterung und Amtspflichtverletzung gerügt.
-3. Gemäß Art. 3 Abs. 3 Satz 2 GG darf niemand wegen seiner Behinderung benachteiligt werden. 
-   Dieser Schutz gilt unmittelbar für den gesamten Schulalltag.
-
-Diese Erklärung wird zu den Schülerakten gereicht.
-
-Mit freundlichen Grüßen,
-
-Erziehungsberechtigte(r): ____________________________________`;
-
-      const box = document.getElementById('schulOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* WOHNGELD & KIZ BERECHNUNG */
-    function calcWohngeldPlus() {
-      const kinder = parseInt(document.getElementById('kizKinder').value) || 1;
-      const miete = parseFloat(document.getElementById('wohngeldMiete').value) || 0;
-      const maxKiz = kinder * 292;
-      const geschWohn = Math.min(miete * 0.45, 420).toFixed(0);
-
-      const res = document.getElementById('wohngeldResult');
-      res.style.display = 'block';
-      res.innerHTML = `👨‍👩‍👧 <strong>ERMITTELTE SCHUTZ-LEISTUNGEN:</strong><br>` +
-        `• Maximaler monatlicher Kinderzuschlag (KiZ): <strong>bis zu ${maxKiz} €</strong> (${kinder} × 292 €)<br>` +
-        `• Geschätzter Wohngeld-Plus Zuschuss: <strong>ca. ${geschWohn} € / Monat</strong><br>` +
-        `💡 <strong>Bürger-Souveränitäts-Effekt:</strong> Bei Bewilligung dieser Leistungen entfällt die SGB-II-Bedürftigkeit vollständig. Zusätzlich besteht Anspruch auf Befreiung von Kita-Gebühren und kostenloses Schulessen!`;
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HUB 4 // FINANZEN, BANKEN & INKASSO-ABWEHR – Financial Fortress</title>
-  
-  <style>
-    :root {
-      --bg-dark: #06080d;
-      --card-bg: #0c1017;
-      --card-border: #182232;
-      --text-main: #e2e8f0;
-      --text-muted: #8493a8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --crimson: #ff3366;
-      --emerald: #00e676;
-      --amber: #ffab00;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      line-height: 1.5;
-      padding-bottom: 90px;
-    }
-
-    header {
-      background: linear-gradient(180deg, #121824 0%, #06080d 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .b6-svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-weight: 700;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text-muted);
-    }
-    .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-    .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
-
-    .proverb-bar {
-      background: #080c13;
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.35rem 1rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
-
-    .container { max-width: 1040px; margin: 1.5rem auto; padding: 0 1rem; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .card-title {
-      font-size: 1.15rem;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card-title.cyan { color: var(--cyan); }
-
-    textarea, select, input[type="text"], input[type="date"], input[type="number"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      background: #05070a;
-      border: 1px solid var(--card-border);
-      color: #fff;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      font-size: 0.88rem;
-      font-family: inherit;
-    }
-    textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
-    textarea { min-height: 85px; resize: vertical; }
-
-    .btn {
-      background: var(--gold);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: background 0.15s ease;
-    }
-    .btn.btn-cyan { background: var(--cyan); color: #000; }
-    .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
-    .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
-
-    .result-box {
-      background: rgba(0, 229, 255, 0.05);
-      border: 1px solid var(--cyan);
-      padding: 1rem;
-      border-radius: 6px;
-      color: var(--cyan);
-      font-size: 0.88rem;
-      margin-top: 1rem;
-    }
-
-    .form-preview {
-      background: #040508;
-      border: 1px dashed var(--card-border);
-      padding: 1rem;
-      border-radius: 6px;
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      color: #cbd5e1;
-      margin-top: 1rem;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-
-    .ai-terminal {
-      background: linear-gradient(145deg, #0f1624 0%, #080c14 100%);
-      border: 1px solid var(--purple);
-      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
-    }
-  </style>
-</head>
-<body>
-
-  <!-- HEADER MIT B6-EVENTBUS INTEGRATION -->
-  <header>
-    <div class="header-inner">
-      <div class="brand-block">
-        <svg class="b6-svg" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
-          <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
-        </svg>
-        <div>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">HUB 4: FINANZEN &amp; INKASSO</span>
-            <span class="badge">FINANCIAL FORTRESS</span>
-          </div>
-          <h1 style="font-size:1.15rem; color:#fff;">Finanzen, Banken &amp; Inkasso-Abwehr</h1>
-        </div>
-      </div>
-      <div style="display:flex; gap:0.4rem;">
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="b6EventBus.newCase()">Neuer Vorgang (+1)</button>
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="window.print()">🖨️ Drucken</button>
-      </div>
-    </div>
-  </header>
-
-  <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Wie betaalt bepaalt, maar wie het recht kent betaalt geen cent te veel.“ – <em>Geen woekerrente.</em>
-  </div>
-
-  <main class="container">
-
-    <!-- KI-FORENSIK-TERMINAL: FINANZ- & INKASSO-SCHREIBEN -->
-    <div class="card ai-terminal">
-      <h2 class="card-title" style="color:var(--purple);">🧠 Hub 4: KI-Forensik &amp; Inkasso-Schreiben-Zerleger (Zero-Edge)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Lokale Prüfung von Mahnungen, Inkassobriefen und Kündigungsandrohungen auf Phantasiegebühren und Drohszenarien:
-      </p>
-      <select id="aiFinMode">
-        <option value="gebuehren">Inkassokosten auf Verstoß gegen § 4 Abs. 5 RDGEG und RVG analysieren</option>
-        <option value="schufa_drohung">Drohung mit SCHUFA-Meldung bei bestrittener Forderung (§ 31 BDSG) entkräften</option>
-        <option value="titulierung">Vollstreckungsbescheid / Mahnbescheid auf Verjährung und Zinseszins prüfen</option>
-      </select>
-      <textarea id="aiFinInput" placeholder="Auszug aus dem Inkassoschreiben oder der Mahnung hier einfügen..."></textarea>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn" style="background:var(--purple); color:#000;" onclick="runAiFinForensic()">Forensischen Prüf-Prompt kompilieren</button>
-        <button class="btn btn-outline" onclick="copyAiFinPrompt()">In Zwischenablage kopieren</button>
-      </div>
-      <div id="aiFinOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4.1: GESETZLICHER INKASSOKOSTEN-KÜRZER -->
-    <div class="card">
-      <h2 class="card-title">📉 Modul 4.1: Gesetzlicher Inkassokosten-Kürzer (§ 4 Abs. 5 RDGEG / § 254 BGB)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Inkassobüros dürfen vom Schuldner nicht mehr verlangen, als ein Rechtsanwalt nach RVG abrechnen dürfte. Phantasiegebühren („Kontoführungsgebühren“, „Recherchepauschalen“) sind unzulässig [cite: 58]:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Tatsächliche Hauptforderung (€):</label>
-          <input type="number" id="ikHauptforderung" value="120" step="10">
-        </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--crimson);">Geforderte Inkassogebühr im Brief (€):</label>
-          <input type="number" id="ikGefordert" value="79" step="5">
-        </div>
-      </div>
-      <button class="btn btn-cyan" onclick="calcInkassoCap()">Gesetzliche Obergrenze berechnen</button>
-      <div id="ikResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4.2: VERZUGSZINS-ARITHMETIK & ZINSESZINSSPERRE -->
-    <div class="card">
-      <h2 class="card-title">⏱️ Modul 4.2: Verzugszins-Arithmetik &amp; Zinseszinssperre (§§ 288, 289 BGB)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Verbraucher zahlen maximal 5 Prozentpunkte über dem Basiszinssatz. Zinsen von Zinsen dürfen kraft Gesetzes nicht gefordert werden (§ 289 Satz 1 BGB) [cite: 125, 126]:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Hauptsumme (€):</label>
-          <input type="number" id="zinsBetrag" value="1000" step="100">
-        </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Verzugsdauer in Tagen:</label>
-          <input type="number" id="zinsTage" value="90" step="10">
-        </div>
-      </div>
-      <button class="btn btn-cyan" onclick="calcVerzugszins()">Gesetzlichen Höchstzins ermitteln</button>
-      <div id="zinsResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4.3: P-KONTO FREIBETRAGSRECHNER -->
-    <div class="card">
-      <h2 class="card-title">🏦 Modul 4.3: P-Konto-Freigaberechner &amp; Pfändungsschutz (§ 850k ZPO)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Berechnung des gesetzlich geschützten Mindestguthabens auf dem Pfändungsschutzkonto (Stand 2026):
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Unterhaltspflichtige Personen (Kinder / Partner):</label>
-          <input type="number" id="pkUnterhalt" value="1" min="0" max="6">
-        </div>
-        <div style="flex:1; min-width:200px;">
-          <label style="font-size:0.8rem; color:var(--text-muted);">Kindergeld / Pflegegeld auf diesem Konto (€):</label>
-          <input type="number" id="pkZusatz" value="250" step="50">
-        </div>
-      </div>
-      <button class="btn btn-cyan" onclick="calcPKonto()">Geschütztes Monatsguthaben berechnen</button>
-      <div id="pkResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4.4: SCHUFA-LÖSCHUNGSANTRAG -->
-    <div class="card">
-      <h2 class="card-title cyan">🚫 Modul 4.4: SCHUFA-Löschungsantrag &amp; Drohungs-Abwehr (Art. 17 DSGVO / § 31 BDSG)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Wird eine Forderung bestritten, ist jede Meldung an die SCHUFA oder Creditreform gesetzlich untersagt (§ 31 Abs. 2 BDSG). Ein bereits erfolgter Eintrag muss unverzüglich gelöscht werden:
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="schufaGlaeubiger" style="flex:1; min-width:200px;" placeholder="Name des Gläubigers / Inkassounternehmens">
-        <input type="text" id="schufaAz" style="flex:1; min-width:200px;" placeholder="Aktenzeichen / Rechnungsnummer">
-      </div>
-      <button class="btn btn-cyan" onclick="generateSchufaWiderruf()">Forderungsbestreitung mit SCHUFA-Verbot &amp; Löschungsantrag erzeugen</button>
-      <div id="schufaOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 4.5: KONTOKÜNDIGUNGS-SCHUTZ & BASISKONTO -->
-    <div class="card">
-      <h2 class="card-title">💳 Modul 4.5: Kontokündigungs-Schutz (§ 31 ZKG / Gesetzlicher Anspruch)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Banken kündigen bei Pfändung oft unrechtmäßig das Girokonto. Wehre die Kündigung ab oder erzwinge die Weiterführung als Basiskonto:
-      </p>
-      <input type="text" id="bankName" placeholder="Name der Bank / Sparkasse">
-      <input type="text" id="ibanNr" placeholder="IBAN des betroffenen Kontos">
-      <button class="btn btn-cyan" onclick="generateBankBeschwerde()">Widerspruch gegen Kontokündigung nach Zahlungskontengesetz erzeugen</button>
-      <div id="bankOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-  </main>
-
-  <!-- JAVASCRIPT: EVENTBUS & FINANZARITHMETIK -->
-  <script>
-    const b6EventBus = {
-      getCaseId() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        if (c === 0) { c = 1; localStorage.setItem('b6_case_seq', '1'); }
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        return formatted;
-      },
-      newCase() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        c += 1;
-        localStorage.setItem('b6_case_seq', c.toString());
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        this.updateBadge();
-        window.dispatchEvent(new CustomEvent('b6:case-sync', { detail: { caseId: formatted } }));
-        alert('Neuer Vorgang aktiv: #' + formatted);
-      },
-      updateBadge() {
-        const id = this.getCaseId();
-        const b = document.getElementById('caseBadge');
-        if (b) b.innerText = 'VORGANG #' + id;
-      }
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      b6EventBus.updateBadge();
-      calcInkassoCap();
-      calcPKonto();
-    });
-
-    /* KI-FORENSIK: FINANZ & INKASSO */
-    function runAiFinForensic() {
-      const mode = document.getElementById('aiFinMode').value;
-      const input = document.getElementById('aiFinInput').value.trim() || '[INKASSO-TEXT HIER]';
-      const caseId = b6EventBus.getCaseId();
-
-      let p = `DU BIST DER B6-FINANZ- UND INKASSO-FORENSIKER (Vorgang #${caseId}).\n` +
-              `Analysiere das Mahnschreiben / die Forderung streng nach BGB, RDGEG, RVG und BDSG:\n\n` +
-              `TEXT-AUSZUG:\n"${input}"\n\n`;
-
-      if (mode === 'gebuehren') {
-        p += `AUFGABE:\n1. Zerlege die Kostenaufstellung in Hauptforderung, Zinsen und Nebenkosten.\n` +
-             `2. Prüfe, ob Phantasiegebühren (z. B. Auslagenpauschale über RVG, Reaktivierungsgebühr) geltend gemacht werden.\n` +
-             `3. Berechne den Kürzungsbetrag nach § 4 Abs. 5 RDGEG i.V.m. § 254 BGB.`;
-      } else if (mode === 'schufa_drohung') {
-        p += `AUFGABE:\n1. Prüfe, ob die Drohung mit SCHUFA-Meldung als rechtswidrige Nötigung nach § 240 StGB zu werten ist.\n` +
-             `2. Begründe den Ausschluss der Einmeldung nach § 31 Abs. 2 Nr. 1 BDSG bei bestrittener Forderung.\n` +
-             `3. Formuliere die Beschwerde an die zuständige Landesdatenschutzbehörde.`;
-      } else {
-        p += `AUFGABE:\n1. Prüfe die Einrede der Verjährung (§§ 195, 199 BGB - 3 Jahre zum Jahresende).\n` +
-             `2. Prüfe Verstoß gegen die Zinseszinssperre (§ 289 BGB).\n` +
-             `3. Formuliere den Widerspruch gegen den gerichtlichen Mahnbescheid.`;
-      }
-
-      const out = document.getElementById('aiFinOut');
-      out.style.display = 'block';
-      out.innerText = p;
-    }
-
-    function copyAiFinPrompt() {
-      const txt = document.getElementById('aiFinOut').innerText;
-      if (!txt) { alert('Bitte zuerst Prompt generieren!'); return; }
-      navigator.clipboard.writeText(txt).then(() => alert('Prompt in Zwischenablage kopiert!'));
-    }
-
-    /* INKASSOKOSTEN-DECKELUNG */
-    function calcInkassoCap() {
-      const hf = parseFloat(document.getElementById('ikHauptforderung').value) || 0;
-      const gef = parseFloat(document.getElementById('ikGefordert').value) || 0;
-      
-      // Gesetzliche RVG-Deckelung für einfache Mahnschreiben (0.5 bis 0.9 Gebühr nach RDGEG)
-      let rvgSatz = 36.00; // Mindestsatz bis 50 €
-      if (hf > 50 && hf <= 500) rvgSatz = 49.00;
-      else if (hf > 500 && hf <= 1000) rvgSatz = 85.00;
-      else if (hf > 1000) rvgSatz = Math.max(85, hf * 0.08);
-
-      const auslagen = Math.min(rvgSatz * 0.2, 20.00);
-      const gesetzlichMax = (rvgSatz + auslagen) * 1.19; // inkl. MwSt
-      const differenz = Math.max(0, gef - gesetzlichMax);
-
-      const res = document.getElementById('ikResult');
-      res.style.display = 'block';
-      res.innerHTML = `⚖️ <strong>Gesetzliche Obergrenze nach § 4 Abs. 5 RDGEG:</strong> max. <strong>${gesetzlichMax.toFixed(2)} €</strong><br>` +
-        `❌ <strong>Überhöhte Phantasieforderung im Brief:</strong> ${gef.toFixed(2)} €<br>` +
-        `✂️ <strong>Sofortige Kürzung um:</strong> <span style="color:#fff; font-size:1.1rem; font-weight:800;">${differenz.toFixed(2)} €</span><br>` +
-        `💡 <strong>Rechtsfolge:</strong> Der Differenzbetrag ist wegen Verstoßes gegen die Schadensminderungspflicht (§ 254 BGB) rechtswidrig und wird nicht gezahlt!`;
-    }
-
-    /* VERZUGSZINS-RECHNER */
-    function calcVerzugszins() {
-      const b = parseFloat(document.getElementById('zinsBetrag').value) || 0;
-      const t = parseFloat(document.getElementById('zinsTage').value) || 0;
-      // Annahme Basiszinssatz ca. 3.37 % -> Verbraucherzins = Basis + 5 % = ca. 8.37 % p.a.
-      const zinssatz = 8.37;
-      const zinsen = (b * (zinssatz / 100) * (t / 365));
-
-      const res = document.getElementById('zinsResult');
-      res.style.display = 'block';
-      res.innerHTML = `📊 <strong>Zulässiger Verzugszins (§ 288 Abs. 1 BGB):</strong> <strong>${zinsen.toFixed(2)} €</strong> (${zinssatz} % p.a. für ${t} Tage)<br>` +
-        `🚫 <strong>Zinseszins-Verbot (§ 289 BGB):</strong> Zinsen dürfen nicht verzinst werden! Mahnspesen dürfen nicht in die Zinsbasis eingerechnet werden.`;
-    }
-
-    /* P-KONTO FREIBETRAG */
-    function calcPKonto() {
-      const u = parseInt(document.getElementById('pkUnterhalt').value) || 0;
-      const zusatz = parseFloat(document.getElementById('pkZusatz').value) || 0;
-
-      const grundfreibetrag = 1500.00; // Gesetzlicher Sockelbetrag
-      let unterhaltFrei = 0;
-      if (u >= 1) unterhaltFrei += 561.43; // 1. Person
-      if (u > 1) unterhaltFrei += (u - 1) * 312.78; // weitere Personen
-
-      const gesamt = grundfreibetrag + unterhaltFrei + zusatz;
-
-      const res = document.getElementById('pkResult');
-      res.style.display = 'block';
-      res.innerHTML = `🛡️ <strong>Gesetzlich unpfändbarer Freibetrag:</strong> <span style="color:#fff; font-size:1.15rem; font-weight:800;">${gesamt.toFixed(2)} € / Monat</span><br>` +
-        `• Sockelbetrag (§ 850k Abs. 1 ZPO): ${grundfreibetrag.toFixed(2)} €<br>` +
-        `• Zuschlag für ${u} Unterhaltspflichtige: +${unterhaltFrei.toFixed(2)} €<br>` +
-        `• Geschützte Sonderzahlungen (Kinder-/Pflegegeld): +${zusatz.toFixed(2)} €<br>` +
-        `Banken dürfen innerhalb dieses Rahmens keine Überweisungen sperren oder Lastschriften verweigern!`;
-    }
-
-    /* FORMULARE: SCHUFA-WIDERRUF */
-    function generateSchufaWiderruf() {
-      const gl = document.getElementById('schufaGlaeubiger').value || '[GLÄUBIGER / INKASSO]';
-      const az = document.getElementById('schufaAz').value || '[AKTENZEICHEN]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-     FORDERUNGSBESTREITUNG & UNTERSAGUNG DER DATENÜBERMITTLUNG (SCHUFA)
-      gemäß § 31 Abs. 2 BDSG i.V.m. Art. 17, 21 Datenschutz-Grundverordnung
-================================================================================
-VORGANGS-ID: ${caseId} // ZEITSTEMPEL: ${new Date().toISOString()}
-Datum:       ${today}
-An:          ${gl}
-Betrifft:    Forderung / Ihr Zeichen: ${az}
-
-Sehr geehrte Damen und Herren,
-
-in vorbezeichneter Angelegenheit teile ich Ihnen mit, dass die von Ihnen geltend gemachte 
-Forderung dem Grunde und der Höhe nach in vollem Umfang
-
-                                B E S T R I T T E N
-
-wird. Die geltend gemachten Fantasie- und Inkassogebühren entbehren jedweder Rechtsgrundlage.
-
-UNTERSAGUNG EINER DATENWEITERGABE AN AUSKUNFTEIEN (§ 31 BDSG):
-Ich untersage Ihnen hiermit ausdrücklich, Daten über diese bestrittene Forderung an 
-Wirtschaftsauskunfteien (SCHUFA Holding AG, Creditreform, CRIF etc.) zu übermitteln. 
-
-Gemäß § 31 Abs. 2 Satz 1 Nr. 1 BDSG ist eine Datenübermittlung nur zulässig, soweit die 
-Forderung NICHT bestritten wurde. Eine Einmeldung trotz Bestreitens stellt eine rechtswidrige 
-Datenverarbeitung dar, verletzt mein allgemeines Persönlichkeitsrecht und begründet 
-Schadensersatzansprüche nach Art. 82 DSGVO.
-
-Sollte bereits eine Meldung erfolgt sein, fordere ich Sie auf, diesen Eintrag unverzüglich, 
-spätestens binnen 7 Tagen, nach Art. 17 DSGVO zum Widerruf und zur Löschung zu bringen.
-
-Mit freundlichen Grüßen,
-
-Unterschrift: ____________________________________`;
-
-      const box = document.getElementById('schufaOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-
-    /* FORMULARE: BANK-BESCHWERDE */
-    function generateBankBeschwerde() {
-      const bank = document.getElementById('bankName').value || '[NAME DER BANK]';
-      const iban = document.getElementById('ibanNr').value || '[DE.. IBAN]';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toLocaleDateString('de-DE');
-
-      const txt = 
-`================================================================================
-           WIDERSPRUCH GEGEN DIE KÜNDIGUNG DES GIROKONTOS / ANSPRUCH
-                      gemäß §§ 31, 42 Zahlungskontengesetz (ZKG)
-================================================================================
-VORGANGS-ID: ${caseId} | Datum: ${today}
-An Vorstand / Rechtsabteilung: ${bank}
-Betrifft IBAN: ${iban}
-
-Sehr geehrte Damen und Herren,
-
-Ihrer Kündigung meines Zahlungskontos vom [DATUM] widerspreche ich hiermit ausdrücklich.
-
-1. Nach ständiger Rechtsprechung des BGH stellt der Eingang einer Pfändung oder die Umwandlung 
-   in ein P-Konto keinen sachlichen Grund für eine fristlose Kündigung dar.
-2. Ich mache hilfsweise meinen gesetzlichen Anspruch auf Führung eines Basiskontos gemäß 
-   § 31 ZKG geltend. Die Bank ist gesetzlich verpflichtet, mir den Zugang zum bargeldlosen 
-   Zahlungsverkehr zu gewährleisten.
-
-Ich fordere Sie auf, die Kündigung zurückzunehmen und das Konto ordnungsgemäß weiterzuführen. 
-Andernfalls wird unverzüglich Beschwerde bei der Bundesanstalt für Finanzdienstleistungsaufsicht 
-(BaFin) eingereicht.
-
-Mit freundlichen Grüßen,
-
-Kontoinhaber: ____________________________________`;
-
-      const box = document.getElementById('bankOut');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HUB 5 // RECHTSPRECHUNG, XÖV & KI-CORE – Intelligence & Clearing</title>
-  
-  <style>
-    :root {
-      --bg-dark: #06080d;
-      --card-bg: #0c1017;
-      --card-border: #182232;
-      --text-main: #e2e8f0;
-      --text-muted: #8493a8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --crimson: #ff3366;
-      --emerald: #00e676;
-      --amber: #ffab00;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      line-height: 1.5;
-      padding-bottom: 90px;
-    }
-
-    header {
-      background: linear-gradient(180deg, #121824 0%, #06080d 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-    .header-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .b6-svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      font-weight: 700;
-      border: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.02);
-      color: var(--text-muted);
-    }
-    .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-    .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
-
-    .proverb-bar {
-      background: #080c13;
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.35rem 1rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
-
-    .container { max-width: 1040px; margin: 1.5rem auto; padding: 0 1rem; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .card-title {
-      font-size: 1.15rem;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card-title.cyan { color: var(--cyan); }
-
-    textarea, select, input[type="text"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      background: #05070a;
-      border: 1px solid var(--card-border);
-      color: #fff;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      font-size: 0.88rem;
-      font-family: inherit;
-    }
-    textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
-    textarea { min-height: 85px; resize: vertical; }
-
-    .btn {
-      background: var(--gold);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: background 0.15s ease;
-    }
-    .btn.btn-cyan { background: var(--cyan); color: #000; }
-    .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
-    .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
-
-    .result-box {
-      background: rgba(0, 229, 255, 0.05);
-      border: 1px solid var(--cyan);
-      padding: 1rem;
-      border-radius: 6px;
-      color: var(--cyan);
-      font-size: 0.88rem;
-      margin-top: 1rem;
-    }
-
-    .form-preview {
-      background: #040508;
-      border: 1px dashed var(--card-border);
-      padding: 1rem;
-      border-radius: 6px;
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      color: #cbd5e1;
-      margin-top: 1rem;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-
-    .ai-terminal {
-      background: linear-gradient(145deg, #0f1624 0%, #080c14 100%);
-      border: 1px solid var(--purple);
-      box-shadow: 0 0 20px rgba(179, 136, 255, 0.1);
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="header-inner">
-      <div class="brand-block">
-        <svg class="b6-svg" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
-          <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
-        </svg>
-        <div>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">HUB 5: INTELLIGENCE</span>
-            <span class="badge">KI &amp; RECHTSPRECHUNG</span>
-          </div>
-          <h1 style="font-size:1.15rem; color:#fff;">Höchstrichterliche Rechtsprechung &amp; KI-Core</h1>
-        </div>
-      </div>
-      <div style="display:flex; gap:0.4rem;">
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="b6EventBus.newCase()">Neuer Vorgang (+1)</button>
-        <button class="btn btn-outline" style="font-size:0.75rem;" onclick="window.print()">🖨️ Drucken</button>
-      </div>
-    </div>
-  </header>
-
-  <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Kennis is macht, maar het toepassen van de wet is soevereiniteit.“ – <em>De jure et de facto.</em>
-  </div>
-
-  <main class="container">
-
-    <!-- KI-CORE MASTER-TERMINAL -->
-    <div class="card ai-terminal">
-      <h2 class="card-title" style="color:var(--purple);">🧠 Hub 5: Sovereign WebLLM &amp; Prompt-Schmiede (Zero-Edge)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Vollständige Anonymisierung nach DSGVO und Vorbereitung deterministischer juristischer Prüfaufträge:
-      </p>
-      <select id="aiMasterMode">
-        <option value="anonymize">Datenschutz-Filter: Alle Klarnamen, Adressen und IBANs durch Token ersetzen</option>
-        <option value="subsumtion">Klassische Subsumtion nach juristischem Gutachtenstil (Obersatz, Definition, Subsumtion, Schluss)</option>
-        <option value="widerspruch">Synthese aus Sachverhalt und Rechtsprechung zu einem fertigen Klagesatz</option>
-      </select>
-      <textarea id="aiMasterInput" placeholder="Zu prüfenden Sachverhalt oder Schriftsatz hier einfügen..."></textarea>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <button class="btn" style="background:var(--purple); color:#000;" onclick="runAiMaster()">Synthese ausführen</button>
-        <button class="btn btn-outline" onclick="copyAiMaster()">In Zwischenablage kopieren</button>
-      </div>
-      <div id="aiMasterOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 5.1: HÖCHSTRICHTERLICHE HILFSURTEILE -->
-    <div class="card">
-      <h2 class="card-title">⚖️ Modul 5.1: Höchstrichterliche Leitsatz-Datenbank (BVerfG, BGH, BSG)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Rechtssichere Zitate und Aktenzeichen der obersten Bundesgerichte zur sofortigen Übernahme in Schriftsätze:
-      </p>
-      <select id="urteilSelect" onchange="showUrteilDetails()">
-        <option value="art13">BVerfG – Art. 13 GG: Schutz der Wohnung vor reiner Ausforschung (2 BvR 1318/26 u.a.)</option>
-        <option value="paraphe">BGH IX ZB 198/11: Formunwirksamkeit flüchtiger Paraphen bei richterlichen Beschlüssen</option>
-        <option value="sanktion">BVerfG 1 BvL 7/16: Verfassungswidrigkeit von Leistungskürzungen über 30 %</option>
-        <option value="schlechter_tag">BSG – SGB XI: Maßgeblichkeit des schlechtesten Tages bei der Pflegebegutachtung</option>
-        <option value="schufa_bdsg">BGH – § 31 BDSG: Unzulässigkeit von SCHUFA-Meldungen bei bestrittenen Forderungen</option>
-      </select>
-      <div id="urteilBox" class="result-box"></div>
-    </div>
-
-    <!-- MODUL 5.2: XÖV & XJUSTIZ-STRUKTUR -->
-    <div class="card">
-      <h2 class="card-title">🏛️ Modul 5.2: Amtliche XJustiz- &amp; XÖV-Schnittstellenstruktur</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Konvertiert Sachverhalte in den bundeseinheitlichen Justiz-Standard für den elektronischen Rechtsverkehr (ERV / beA / beBPo):
-      </p>
-      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-        <input type="text" id="xInstanz" style="flex:1; min-width:200px;" placeholder="Gerichtscode / Instanz (z. B. AG Düsseldorf)">
-        <input type="text" id="xRubrum" style="flex:1; min-width:200px;" placeholder="Rubrum (Kläger ./. Beklagter)">
-      </div>
-      <button class="btn btn-cyan" onclick="generateXJustizXml()">Valides XJustiz-XML-Metadatenblatt generieren</button>
-      <div id="xJustizOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-    <!-- MODUL 5.3: BÜRGER-CLEARING & LOTSENDIENST -->
-    <div class="card">
-      <h2 class="card-title cyan">🤝 Modul 5.3: Neutrales Bürger-Clearing &amp; Beratungshilfe (§ 1 RDG / BerHG)</h2>
-      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-        Hilfe zur Selbsthilfe: Wie Bürger ohne Anwaltskosten einen Beratungshilfeschein beim Amtsgericht erhalten:
-      </p>
-      <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; font-size:0.85rem; border-left:3px solid var(--gold);">
-        <strong>Voraussetzungen für den Beratungshilfeschein (15 € Eigenanteil):</strong><br>
-        1. Geringes Einkommen (Bürgergeld, Wohngeld, geringe Rente, Pfändungsfreibetrag).<br>
-        2. Keine andere zumutbare Hilfsmöglichkeit (z. B. Rechtschutzversicherung, Gewerkschaft, VdK).<br>
-        3. Die Rechtswahrnehmung ist nicht mutwillig.<br><br>
-        <button class="btn btn-cyan" onclick="generateBerHgAntrag()">Vorbereiteten Antrag auf Beratungshilfe (Amtsgericht) ausgeben</button>
-      </div>
-      <div id="berHgOut" class="form-preview" style="display:none;"></div>
-    </div>
-
-  </main>
-
-  <script>
-    const b6EventBus = {
-      getCaseId() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        if (c === 0) { c = 1; localStorage.setItem('b6_case_seq', '1'); }
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        return formatted;
-      },
-      newCase() {
-        let c = parseInt(localStorage.getItem('b6_case_seq') || '0', 10);
-        c += 1;
-        localStorage.setItem('b6_case_seq', c.toString());
-        const formatted = 'B6-' + String(c).padStart(5, '0');
-        sessionStorage.setItem('current_b6_case', formatted);
-        this.updateBadge();
-        window.dispatchEvent(new CustomEvent('b6:case-sync', { detail: { caseId: formatted } }));
-        alert('Neuer Vorgang aktiv: #' + formatted);
-      },
-      updateBadge() {
-        const id = this.getCaseId();
-        const b = document.getElementById('caseBadge');
-        if (b) b.innerText = 'VORGANG #' + id;
-      }
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      b6EventBus.updateBadge();
-      showUrteilDetails();
-    });
-
-    /* KI-MASTER PROMPT */
-    function runAiMaster() {
-      const mode = document.getElementById('aiMasterMode').value;
-      const input = document.getElementById('aiMasterInput').value.trim() || '[SACHVERHALT HIER EINFÜGEN]';
-      const caseId = b6EventBus.getCaseId();
-
-      let p = `DU BIST DER B6-OBERSTE-JUSTIZPRÜFER & RECHTSINFORMATIKER (Vorgang #${caseId}).\n\n`;
-
-      if (mode === 'anonymize') {
-        p += `AUFGABE: DATENSCHUTZ-ANONYMISIERUNG NACH DSGVO\n` +
-             `Ersetze im folgenden Text alle personenbezogenen Daten deterministisch durch Tokens:\n` +
-             `- Vor- und Nachnamen -> [BETEILIGTER_1], [BEAMTER_A]\n` +
-             `- Anschriften / Straßen / Städte -> [ADRESSE_1], [STADT_X]\n` +
-             `- Aktenzeichen & Telefonnummern -> [AZ_INTERN], [RUFNUMMER]\n\n` +
-             `EINGABETEXT:\n"${input}"`;
-      } else if (mode === 'subsumtion') {
-        p += `AUFGABE: JURISTISCHES GUTACHTEN IM GUTACHTENSTIL\n` +
-             `Erstelle für den Sachverhalt eine formelle Prüfung:\n` +
-             `1. Obersatz: Anspruchsgrundlage oder Eingriffsnorm benennen.\n` +
-             `2. Definition der gesetzlichen Tatbestandsmerkmale.\n` +
-             `3. Subsumtion des konkreten Sachverhalts unter die Merkmale.\n` +
-             `4. Feststellung der Rechtsfolge (Nichtigkeit, Anspruch, Haftung).\n\n` +
-             `SACHVERHALT:\n"${input}"`;
-      } else {
-        p += `AUFGABE: SCHRIFTSATZ-SYNTHESE\n` +
-             `Formuliere aus dem folgenden Sachverhalt einen druckreifen Klageantrag oder eine Gehörsrüge mit präzisen Rügen und Verweisen auf BVerfG und BGH:\n\n` +
-             `SACHVERHALT:\n"${input}"`;
-      }
-
-      const out = document.getElementById('aiMasterOut');
-      out.style.display = 'block';
-      out.innerText = p;
-    }
-
-    function copyAiMaster() {
-      const txt = document.getElementById('aiMasterOut').innerText;
-      if (!txt) { alert('Bitte zuerst Synthese ausführen!'); return; }
-      navigator.clipboard.writeText(txt).then(() => alert('Prompt in Zwischenablage kopiert!'));
-    }
-
-    /* URTEILSDATENBANK */
-    function showUrteilDetails() {
-      const v = document.getElementById('urteilSelect').value;
-      const b = document.getElementById('urteilBox');
-
-      if (v === 'art13') {
-        b.innerHTML = `🏛️ <strong>BVerfG zu Art. 13 GG (Schutz der Wohnung):</strong><br>` +
-          `Eine Durchsuchung greift schwerwiegend in die Privatsphäre ein. Sie darf nicht der rein spekulativen Ausforschung dienen. Liegen keine konkreten Tatsachen vor, ist die Anordnung verfassungswidrig.`;
-      } else if (v === 'paraphe') {
-        b.innerHTML = `📜 <strong>BGH IX ZB 198/11 (Formstrenge richterlicher Beschlüsse):</strong><br>` +
-          `Ein flüchtiger Namenszug, der die Wiedergabe des Namens nicht einmal andeutungsweise erkennen lässt (Paraphe), wahrt die gesetzliche Schriftform nicht. Die Verfügung ist unwirksam.`;
-      } else if (v === 'sanktion') {
-        b.innerHTML = `🛡️ <strong>BVerfG 1 BvL 7/16 (Bürgergeld-Sanktionen):</strong><br>` +
-          `Leistungskürzungen zur Durchsetzung von Mitwirkungspflichten sind verfassungsrechtlich eng begrenzt. Eine Minderung über 30 % des maßgebenden Regelbedarfs ist mit dem Grundgesetz unvereinbar.`;
-      } else if (v === 'schlechter_tag') {
-        b.innerHTML = `🩺 <strong>BSG zur Pflegebegutachtung (§ 15 SGB XI):</strong><br>` +
-          `Schwankende Krankheitsverläufe dürfen nicht mit dem Bestzustand bewertet werden. Der Hilfebedarf muss die realen Erschwernisse und Belastungsspitzen im Alltag abbilden.`;
-      } else {
-        b.innerHTML = `🚫 <strong>BGH zu § 31 BDSG (SCHUFA & Inkasso):</strong><br>` +
-          `Die Übermittlung von Daten über eine fällige Forderung an eine Auskunftei ist unzulässig, sobald der Schuldner die Forderung substantiiert bestritten hat.`;
-      }
-    }
-
-    /* XJUSTIZ XML GENERATOR */
-    function generateXJustizXml() {
-      const inst = document.getElementById('xInstanz').value || 'AG_DUESSELDORF';
-      const rub = document.getElementById('xRubrum').value || 'BUERGER_VS_BEHOERDE';
-      const caseId = b6EventBus.getCaseId();
-      const today = new Date().toISOString().split('T')[0];
-
-      const xml = 
-`<?xml version="1.0" encoding="UTF-8"?>
-<xjustiz:nachricht xmlns:xjustiz="http://www.xjustiz.de" version="3.3.1">
-  <xjustiz:kopf>
-    <xjustiz:nachrichtenId>${caseId}-${Date.now()}</xjustiz:nachrichtenId>
-    <xjustiz:erstellungszeitpunkt>${new Date().toISOString()}</xjustiz:erstellungszeitpunkt>
-    <xjustiz:absender>B6_SOVEREIGN_CITIZEN_CORE</xjustiz:absender>
-    <xjustiz:empfaenger>${inst}</xjustiz:empfaenger>
-  </xjustiz:kopf>
-  <xjustiz:grunddaten>
-    <xjustiz:verfahren>
-      <xjustiz:rubrum>${rub}</xjustiz:rubrum>
-      <xjustiz:aktenzeichenBuerger>${caseId}</xjustiz:aktenzeichenBuerger>
-      <xjustiz:eingangsdatum>${today}</xjustiz:eingangsdatum>
-      <xjustiz:rechtsmittel>SOFORTIGE_BESCHWERDE_FORMFEHLER</xjustiz:rechtsmittel>
-    </xjustiz:verfahren>
-  </xjustiz:grunddaten>
-</xjustiz:nachricht>`;
-
-      const out = document.getElementById('xJustizOut');
-      out.style.display = 'block';
-      out.innerText = xml;
-    }
-
-    /* BERATUNGSHILFE ANTRAG */
-    function generateBerHgAntrag() {
-      const caseId = b6EventBus.getCaseId();
-      const txt = 
-`================================================================================
-          ANTRAG AUF BEWILLIGUNG VON BERATUNGSHILFE (§§ 1, 4 BerHG)
-================================================================================
-VORGANGS-ID: #${caseId} | Datum: ${new Date().toLocaleDateString('de-DE')}
-An die Rechtsantragstelle des Amtsgerichts
-
-Hiermit wird für die Wahrnehmung von Rechten außerhalb eines gerichtlichen 
-Verfahrens die Bewilligung von Beratungshilfe beantragt.
-
-1. GEGENSTAND DER BERATUNG:
-   Abwehr rechtswidriger behördlicher Eingriffe / Rüge von Formfehlern und 
-   Wahrung existenzsichernder Ansprüche.
-
-2. WIRTSCHAFTLICHE VORAUSSETZUNGEN:
-   Die Voraussetzungen für die Bewilligung von Prozesskostenhilfe ohne eigenen 
-   Beitrag zu den Kosten liegen vor (Nachweise über Einkommen/Miete anliegend).
-
-3. ERKLÄRUNG:
-   In derselben Angelegenheit wurde bisher weder ein Beratungshilfeschein bewilligt 
-   noch besteht anderweitiger Versicherungsschutz.
-
-Unterschrift Antragsteller: ____________________________________`;
-
-      const out = document.getElementById('berHgOut');
-      out.style.display = 'block';
-      out.innerText = txt;
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>B6 // SUPREME SOVEREIGN COMMAND CENTER – Master Dock</title>
-  
-  <style>
-    :root {
-      --bg-dark: #040508;
-      --card-bg: #090d14;
-      --card-border: #162030;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --gold: #d4af37;
-      --cyan: #00e5ff;
-      --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-stack);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* TOP DOCKING BAR */
-    header {
-      background: linear-gradient(180deg, #101622 0%, #06090e 100%);
-      border-bottom: 2px solid var(--card-border);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      z-index: 2000;
-    }
-
-    .brand-wrap { display: flex; align-items: center; gap: 0.6rem; }
-    .b6-logo { width: 36px; height: 36px; }
-
-    .hub-switcher {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      background: #04060a;
-      padding: 0.25rem;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-    }
-
-    .hub-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-muted);
-      padding: 0.45rem 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      font-weight: 700;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .hub-btn:hover { color: #fff; border-color: var(--card-border); }
-    .hub-btn.active {
-      background: rgba(0, 229, 255, 0.12);
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-    .hub-btn.active.gold {
-      background: rgba(212, 175, 55, 0.12);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    /* DOCKING VIEWPORT */
-    #viewport {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background: #06080d;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="brand-wrap">
-      <svg class="b6-logo" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="4"/>
-        <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="3"/>
-        <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">B6</text>
-      </svg>
-      <div>
-        <div style="font-size:0.68rem; color:var(--cyan); font-weight:800; letter-spacing:0.08em;" id="masterCaseBadge">VORGANG #B6-00001</div>
-        <div style="font-size:0.95rem; font-weight:800; color:#fff;">MASTER DOCK // 5 HUBS</div>
-      </div>
-    </div>
-
-    <!-- DIE 5 SOUVERÄNEN DOCK-SCHALTER -->
-    <nav class="hub-switcher">
-      <button class="hub-btn active gold" onclick="switchDock('hub1_justiz.html', this)">
-        🏛️ Hub 1: Justiz (14 Module)
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub2_medizin_pflege.html', this)">
-        🩺 Hub 2: Medizin &amp; Pflege
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub3_soziales_familie.html', this)">
-        🛡️ Hub 3: Existenz &amp; Schule
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub4_finanzen_inkasso.html', this)">
-        💳 Hub 4: Finanzen &amp; Inkasso
-      </button>
-      <button class="hub-btn" onclick="switchDock('hub5_rechtsprechung_ki.html', this)">
-        🧠 Hub 5: Urteile &amp; KI
-      </button>
-    </nav>
-
-    <div style="display:flex; gap:0.4rem;">
-      <button style="background:#111827; border:1px solid #374151; color:#9ca3af; padding:0.35rem 0.65rem; border-radius:4px; font-size:0.75rem; cursor:pointer;" onclick="newMasterCase()">
-        Neuer Vorgang (+1)
-      </button>
-    </div>
-  </header>
-
-  <!-- DAS ECHTE DOCKING-FENSTER -->
-  <iframe id="viewport" src="hub1_justiz.html"></iframe>
-
-  <script>
-    function updateMasterBadge() {
+    /* GLOBALER VORGANGSZÄHLER */
+    function getCaseId() {
       let c = parseInt(localStorage.getItem('b6_case_seq') || '1', 10);
-      const formatted = 'B6-' + String(c).padStart(5, '0');
-      document.getElementById('masterCaseBadge').innerText = 'VORGANG #' + formatted;
+      return 'B6-' + String(c).padStart(5, '0');
     }
-
-    function switchDock(file, btn) {
-      document.querySelectorAll('.hub-btn').forEach(b => b.classList.remove('active', 'gold'));
-      btn.classList.add('active');
-      if (file.includes('hub1')) btn.classList.add('gold');
-      document.getElementById('viewport').src = file;
+    function updateBadge() {
+      document.getElementById('globalCaseBadge').innerText = 'VORGANG #' + getCaseId();
     }
-
-    function newMasterCase() {
+    function newGlobalCase() {
       let c = parseInt(localStorage.getItem('b6_case_seq') || '1', 10);
       c += 1;
       localStorage.setItem('b6_case_seq', c.toString());
-      updateMasterBadge();
+      updateBadge();
+      alert('Neuer Vorgang aktiv: #' + getCaseId());
+    }
 
-      // Viewport neu laden, damit die neue ID im aktiven Hub sofort ankommt
-      const vp = document.getElementById('viewport');
-      vp.src = vp.src;
+    /* TAB WECHSLER (SPA) */
+    function openHub(hubId, btn) {
+      document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.hub-tab').forEach(b => b.classList.remove('active', 'gold'));
+      
+      document.getElementById(hubId).classList.add('active');
+      btn.classList.add('active');
+      if (hubId === 'hub1') btn.classList.add('gold');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyBox(id) {
+      const txt = document.getElementById(id).innerText;
+      if (!txt) { alert('Kein Inhalt zum Kopieren vorhanden!'); return; }
+      navigator.clipboard.writeText(txt).then(() => alert('Text in Zwischenablage kopiert!'));
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      updateMasterBadge();
+      updateBadge();
+      showUrteil5();
+      calcPflege();
+      calcInkasso4();
     });
+
+    /* HUB 1 LOGIK */
+    function runAi1() {
+      const mode = document.getElementById('aiMode1').value;
+      const inp = document.getElementById('aiInput1').value.trim() || '[TEXT EINFÜGEN]';
+      const p = `DU BIST DER B6-KANZLEIPRÜFER (Vorgang #${getCaseId()}).\nModus: ${mode}\nTextauszug: "${inp}"\nPrüfe streng nach Art. 13 GG, § 105 StPO und § 44 VwVfG. Formuliere 3 konkrete Rügen für das Gedächtnisprotokoll.`;
+      const out = document.getElementById('aiOut1');
+      out.style.display = 'block'; out.innerText = p;
+    }
+    function runFormCheck() {
+      const v = document.getElementById('formCheckSelect').value;
+      const o = document.getElementById('formCheckOut'); o.style.display = 'block';
+      if (v === 'paraphe') o.innerHTML = `🚨 <strong>FORM-NICHTIGKEIT (BGH IX ZB 198/11):</strong> Flüchtiger Namenszug wahrt gesetzliche Schriftform nicht. Maßnahme absolut unwirksam!`;
+      else if (v === 'beglaubigt') o.innerHTML = `⚠️ <strong>RÜGE:</strong> Beglaubigung ersetzt kein Richteroriginal (§ 105 StPO). Vorlage des Originals erzwingen!`;
+      else o.innerHTML = `🚨 <strong>BLANKO-SCHABLONE:</strong> Verstoß gegen Willkürverbot (Art. 3 GG). Sofortige Beschwerde (§ 304 StPO).`;
+    }
+    function genBeistand() {
+      const n1 = document.getElementById('bName1').value || '[DEIN NAME]';
+      const n2 = document.getElementById('beistandName1').value || '[BEISTAND]';
+      const t = `BEISTANDSERKLÄRUNG (§ 14 VwVfG / § 13 SGB X)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\n\nHiermit bestelle ich ${n2} zu meinem Beistand. Zurückweisung bedarf eines schriftlichen Verwaltungsaktes.\n\nUnterschrift: ___________________________`;
+      const b = document.getElementById('beistandDoc1'); b.style.display = 'block'; b.innerText = t;
+    }
+    function genNullBeute() {
+      const t = `NULL-BEUTE-BESTÄTIGUNG (§ 107 StPO)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\n\nAmtliche Bestätigung: Bei der heutigen Maßnahme wurden keinerlei Gegenstände beschlagnahmt (Null-Beute).\n\nUnterschrift Einsatzleiter: ___________________________`;
+      const b = document.getElementById('beuteDoc1'); b.style.display = 'block'; b.innerText = t;
+    }
+    async function calcHash() {
+      const file = document.getElementById('hashFile').files;
+      if (!file) return;
+      const buf = await file.arrayBuffer();
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const r = document.getElementById('hashResult'); r.style.display = 'block';
+      r.innerHTML = `🔒 <strong>SHA-256 HASH:</strong><br><code style="color:#fff; word-break:break-all;">${hex}</code>`;
+    }
+
+    /* HUB 2 LOGIK */
+    function runAi2() {
+      const inp = document.getElementById('aiInput2').value.trim() || '[TEXT EINFÜGEN]';
+      const p = `DU BIST DER B6-MEDIZIN- UND GUTACHTENPRÜFER (Vorgang #${getCaseId()}).\nTextauszug: "${inp}"\nPrüfe Zirkelschlüsse und Punktabzüge gegen die Begutachtungs-Richtlinien (BRi) und § 15 SGB XI.`;
+      const out = document.getElementById('aiOut2'); out.style.display = 'block'; out.innerText = p;
+    }
+    function calcPflege() {
+      const total = parseFloat(document.getElementById('m1').value) + parseFloat(document.getElementById('m2').value) + parseFloat(document.getElementById('m4').value) + parseFloat(document.getElementById('m5').value);
+      let grad = 0, geld = 0;
+      if (total >= 90) { grad = 5; geld = 947; }
+      else if (total >= 70) { grad = 4; geld = 765; }
+      else if (total >= 47.5) { grad = 3; geld = 573; }
+      else if (total >= 27) { grad = 2; geld = 332; }
+      else if (total >= 12.5) { grad = 1; geld = 0; }
+      const res = document.getElementById('pflegeResult'); res.style.display = 'block';
+      res.innerHTML = `🎖️ <strong>Gesetzlicher Anspruch:</strong> PFLEGEGRAD ${grad} (${total.toFixed(1)} Pkt)<br>💰 <strong>Pflegegeld (§ 37 SGB XI):</strong> ${geld} € / Monat + 125 € Entlastungsbetrag.`;
+    }
+    function genWiderspruch2() {
+      const v = document.getElementById('wVers2').value || '[VERSICHERTER]';
+      const k = document.getElementById('wKasse2').value || '[PFLEGEKASSE]';
+      const t = `FÖRMLICHER WIDERSPRUCH (§ 84 SGG)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\nAn: ${k}\nVersicherte(r): ${v}\n\nHiermit lege ich gegen den Einstufungsbescheid form- und fristgerecht WIDERSPRUCH ein. Die Begutachtung unterschlägt wesentliche Hilfebedarfe in Modul 4.\n\nUnterschrift: ___________________________`;
+      const b = document.getElementById('wDoc2'); b.style.display = 'block'; b.innerText = t;
+    }
+
+    /* HUB 3 LOGIK */
+    function runAi3() {
+      const inp = document.getElementById('aiInput3').value.trim() || '[TEXT EINFÜGEN]';
+      const p = `DU BIST DER B6-EXISTENZSCHUTZ-PRÜFER (Vorgang #${getCaseId()}).\nTextauszug: "${inp}"\nPrüfe Verstoß gegen BVerfG 1 BvL 7/16 (Sanktionsgrenze 30 %) sowie § 42 Abs. 1 Satz 1 SGB I.`;
+      const out = document.getElementById('aiOut3'); out.style.display = 'block'; out.innerText = p;
+    }
+    function genVorschuss3() {
+      const n = document.getElementById('vName3').value || '[NAME]';
+      const a = document.getElementById('vAmt3').value || '[BEHÖRDE]';
+      const b = document.getElementById('vBetrag3').value || '350';
+      const t = `EILANTRAG AUF SOFORTIGEN BARVORSCHUSS (§ 42 SGB I)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\nAn: ${a} | Antragsteller: ${n}\n\nBeantrage die unverzügliche Barauszahlung von ${b} € am heutigen Tag. Kontoguthaben beträgt 0,00 €. Existenzminimum ist akut gefährdet.\n\nUnterschrift: ___________________________`;
+      const box = document.getElementById('vDoc3'); box.style.display = 'block'; box.innerText = t;
+    }
+    function genSchulschutz3() {
+      const k = document.getElementById('sKind3').value || '[SCHÜLER]';
+      const s = document.getElementById('sSchule3').value || '[SCHULE]';
+      const t = `SCHUTZANZEIGE & NACHTEILSAUSGLEICH (§ 42 SchulG NRW / Art. 3 GG)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\nAn: ${s} | Schüler: ${k}\n\nÄrztliche Atteste erfüllen die gesetzliche Entschuldigungspflicht vollumfänglich. Jedwede Drohung mit Bußgeldern wird als Amtsverletzung gerügt.\n\nErziehungsberechtigte: ___________________________`;
+      const box = document.getElementById('sDoc3'); box.style.display = 'block'; box.innerText = t;
+    }
+
+    /* HUB 4 LOGIK */
+    function runAi4() {
+      const inp = document.getElementById('aiInput4').value.trim() || '[TEXT EINFÜGEN]';
+      const p = `DU BIST DER B6-FINANZ- UND INKASSO-FORENSIKER (Vorgang #${getCaseId()}).\nTextauszug: "${inp}"\nPrüfe Inkassokosten nach § 4 Abs. 5 RDGEG und SCHUFA-Drohung nach § 31 BDSG.`;
+      const out = document.getElementById('aiOut4'); out.style.display = 'block'; out.innerText = p;
+    }
+    function calcInkasso4() {
+      const hf = parseFloat(document.getElementById('hf4').value) || 0;
+      const gef = parseFloat(document.getElementById('ik4').value) || 0;
+      const maxZul = Math.min(36 + (hf * 0.05), 58.31);
+      const diff = Math.max(0, gef - maxZul);
+      const res = document.getElementById('ikResult4'); res.style.display = 'block';
+      res.innerHTML = `⚖️ <strong>Gesetzliche Obergrenze (§ 4 Abs. 5 RDGEG):</strong> max. <strong>${maxZul.toFixed(2)} €</strong><br>✂️ <strong>Sofortige Kürzung um:</strong> ${diff.toFixed(2)} € (Verstoß Schadensminderungspflicht § 254 BGB).`;
+    }
+    function genSchufa4() {
+      const g = document.getElementById('glaeubiger4').value || '[GLÄUBIGER]';
+      const az = document.getElementById('az4').value || '[AZ]';
+      const t = `FORDERUNGSBESTREITUNG & SCHUFA-UNTERSAGUNG (§ 31 BDSG)\nVORGANG: #${getCaseId()} | Datum: ${new Date().toLocaleDateString('de-DE')}\nAn: ${g} | Zeichen: ${az}\n\nForderung wird dem Grunde und der Höhe nach BESTRITTEN. Jede Einmeldung an Auskunfteien ist gem. § 31 Abs. 2 BDSG gesetzlich untersagt!\n\nUnterschrift: ___________________________`;
+      const box = document.getElementById('schufaDoc4'); box.style.display = 'block'; box.innerText = t;
+    }
+
+    /* HUB 5 LOGIK */
+    function runAi5() {
+      const inp = document.getElementById('aiInput5').value.trim() || '[TEXT EINFÜGEN]';
+      const p = `DU BIST DER B6-MASTER-JURIST (Vorgang #${getCaseId()}).\nAnonymisiere den Text nach DSGVO (Tokens wie [PERSON_1], [ADRESSE_A]) und erstelle ein Gutachten im Gutachtenstil:\n"${inp}"`;
+      const out = document.getElementById('aiOut5'); out.style.display = 'block'; out.innerText = p;
+    }
+    function showUrteil5() {
+      const v = document.getElementById('urteilSel').value;
+      const b = document.getElementById('urteilBox5');
+      if (v === 'art13') b.innerHTML = `🏛️ <strong>BVerfG (Art. 13 GG):</strong> Durchsuchung darf nicht der spekulativen Ausforschung dienen. Ohne konkrete Tatsachen verfassungswidrig.`;
+      else if (v === 'paraphe') b.innerHTML = `📜 <strong>BGH IX ZB 198/11:</strong> Unleserliche Paraphen wahren Schriftform nicht. Beschluss unwirksam.`;
+      else if (v === 'sanktion') b.innerHTML = `🛡️ <strong>BVerfG 1 BvL 7/16:</strong> Bürgergeld-Kürzungen über 30 % sind verfassungswidrig.`;
+      else if (v === 'schlechter_tag') b.innerHTML = `🩺 <strong>BSG (§ 15 SGB XI):</strong> Hilfebedarf muss den schlechtesten Tag und Belastungsspitzen abbilden.`;
+      else b.innerHTML = `🚫 <strong>BGH (§ 31 BDSG):</strong> SCHUFA-Meldung bei bestrittenen Forderungen absolut unzulässig.`;
+    }
+    function genXml5() {
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<xjustiz:nachricht xmlns:xjustiz="http://www.xjustiz.de" version="3.3.1">\n  <xjustiz:kopf>\n    <xjustiz:nachrichtenId>${getCaseId()}-${Date.now()}</xjustiz:nachrichtenId>\n    <xjustiz:absender>B6_SOVEREIGN_CITIZEN_CORE</xjustiz:absender>\n  </xjustiz:kopf>\n  <xjustiz:grunddaten>\n    <xjustiz:aktenzeichenBuerger>${getCaseId()}</xjustiz:aktenzeichenBuerger>\n  </xjustiz:grunddaten>\n</xjustiz:nachricht>`;
+      const box = document.getElementById('xmlDoc5'); box.style.display = 'block'; box.innerText = xml;
+    }
   </script>
 </body>
 </html>
-
