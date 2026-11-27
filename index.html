@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>DER SOUVERÄN // Bürger-Aufklärung &amp; Schutz-Dispositiv</title>
+  <title>DER SOUVERÄN // b6_sys Bürger-Schutz-Dispositiv</title>
 
   <!-- PWA & Mobile Web App Meta-Tags -->
-  <meta name="theme-color" content="#0a0c10">
+  <meta name="theme-color" content="#07090e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Der Souverän">
-  <link rel="apple-touch-icon" href="[suspicious link removed]">
 
-  <!-- OpenGraph / Social Sharing (WhatsApp, Telegram, Signal) -->
+  <!-- OpenGraph Meta-Tags -->
   <meta property="og:title" content="DER SOUVERÄN // Bürger-Aufklärung &amp; Schutz-Dispositiv">
-  <meta property="og:description" content="Interaktives Schutzportal für Bürgerrechte. Notfall-Ampel bei Hausbesuchen, Amtsdeutsch-Dekoder, Fristenrechner und Deeskalation. 100% kostenfrei &amp; anonym.">
+  <meta property="og:description" content="12 interaktive Module für Bürgerrechte: Haustür-Ampel, Amtsdeutsch-Dekoder, Dezimal-Pfad-Rechner und Deeskalation. 100% Zero-Storage &amp; DSGVO-autark.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="[suspicious link removed]">
 
   <style>
     :root {
-      --bg-dark: #0a0c10;
-      --card-bg: #12161f;
-      --card-border: #1e2638;
+      --bg-dark: #07090e;
+      --card-bg: #10141d;
+      --card-border: #1a2232;
       --text-main: #e2e8f0;
-      --text-muted: #8a99ad;
+      --text-muted: #8896ab;
       --gold: #d4af37;
       --cyan: #00e5ff;
       --crimson: #ff3366;
@@ -40,42 +38,78 @@
       color: var(--text-main);
       font-family: var(--font-stack);
       line-height: 1.5;
-      padding-bottom: 60px;
+      padding-bottom: 70px;
     }
 
-    header {
-      background: linear-gradient(180deg, #161b26 0%, #0a0c10 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 1.5rem 1rem;
+    /* ZERO-KNOWLEDGE LOGIN GATE OVERLAY */
+    #authGate {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.98);
+      backdrop-filter: blur(12px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .gate-card {
+      background: var(--card-bg);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      max-width: 440px;
+      width: 100%;
       text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.15);
+    }
+
+    /* HEADER & B6 LOGO */
+    header {
+      background: linear-gradient(180deg, #131824 0%, #07090e 100%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.5rem 1rem 1rem 1rem;
+      text-align: center;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .b6-svg {
+      width: 42px;
+      height: 42px;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
     }
     .badge {
       display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 0.25rem 0.6rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 4px;
-      margin-bottom: 0.5rem;
       background: rgba(212, 175, 55, 0.1);
       border: 1px solid var(--gold);
       color: var(--gold);
+      margin-bottom: 0.4rem;
     }
-    h1 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
-    .subtitle { color: var(--text-muted); font-size: 0.85rem; max-width: 600px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; }
+    .subtitle { color: var(--text-muted); font-size: 0.85rem; max-width: 650px; margin: 0 auto; }
 
-    /* Sticky Navigation */
+    /* NAVIGATION BAR */
     .nav-tabs {
       display: flex;
       overflow-x: auto;
       white-space: nowrap;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
+      gap: 0.4rem;
+      padding: 0.65rem 1rem;
+      background: #0b0e14;
       border-bottom: 1px solid var(--card-border);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
       scrollbar-width: none;
     }
     .nav-tabs::-webkit-scrollbar { display: none; }
@@ -83,17 +117,17 @@
       background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 0.55rem 0.9rem;
+      padding: 0.5rem 0.85rem;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       flex-shrink: 0;
       transition: all 0.2s ease;
     }
     .tab-btn:hover { color: #fff; border-color: var(--cyan); }
     .tab-btn.active {
-      background: rgba(0, 229, 255, 0.1);
+      background: rgba(0, 229, 255, 0.12);
       border-color: var(--cyan);
       color: var(--cyan);
     }
@@ -103,10 +137,11 @@
       color: var(--purple);
     }
 
-    .container { max-width: 960px; margin: 1.25rem auto; padding: 0 1rem; }
+    /* CONTAINER & CARDS */
+    .container { max-width: 980px; margin: 1.25rem auto; padding: 0 1rem; }
     .module-pane { display: none; }
-    .module-pane.active { display: block; animation: fadeIn 0.25s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .module-pane.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
     .card {
       background: var(--card-bg);
@@ -118,29 +153,18 @@
     .card-title {
       font-size: 1.15rem;
       color: var(--gold);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
     .card-title.ki { color: var(--purple); }
 
-    /* Modul 1: Notfall-Ampel */
-    .ampel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .ampel-box { border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; background: rgba(0,0,0,0.25); }
-    .ampel-box.rot { border-left: 4px solid var(--crimson); }
-    .ampel-box.gelb { border-left: 4px solid var(--amber); }
-    .ampel-box.gruen { border-left: 4px solid var(--emerald); }
-    .ampel-title { font-weight: 700; margin-bottom: 0.5rem; font-size: 0.9rem; }
-    .rot .ampel-title { color: var(--crimson); }
-    .gelb .ampel-title { color: var(--amber); }
-    .gruen .ampel-title { color: var(--emerald); }
-
-    /* Inputs, Buttons & Boxes */
-    .search-box, textarea, select, input[type="text"], input[type="date"], input[type="number"] {
+    /* INPUTS & CONTROLS */
+    .search-box, textarea, select, input[type="text"], input[type="date"], input[type="number"], input[type="password"] {
       width: 100%;
-      padding: 0.7rem 0.9rem;
-      background: #080a0e;
+      padding: 0.65rem 0.85rem;
+      background: #06080b;
       border: 1px solid var(--card-border);
       color: #fff;
       border-radius: 6px;
@@ -148,7 +172,7 @@
       font-size: 0.9rem;
       font-family: inherit;
     }
-    textarea { resize: vertical; min-height: 90px; }
+    textarea { resize: vertical; min-height: 85px; }
     .search-box:focus, textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
 
     .btn {
@@ -166,19 +190,41 @@
     .btn.btn-cyan { background: var(--cyan); color: #000; }
     .btn.btn-purple { background: var(--purple); color: #000; }
 
+    /* MODULE SPECIFIC */
+    .ampel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .ampel-box { border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; background: rgba(0,0,0,0.3); }
+    .ampel-box.rot { border-left: 4px solid var(--crimson); }
+    .ampel-box.gelb { border-left: 4px solid var(--amber); }
+    .ampel-box.gruen { border-left: 4px solid var(--emerald); }
+    .ampel-title { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.85rem; }
+    .rot .ampel-title { color: var(--crimson); }
+    .gelb .ampel-title { color: var(--amber); }
+    .gruen .ampel-title { color: var(--emerald); }
+
+    .dict-item {
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.85rem;
+      margin-bottom: 0.6rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .dict-term { font-weight: 700; color: var(--cyan); margin-bottom: 0.2rem; font-size: 0.9rem; }
+    .dict-meaning { color: var(--amber); font-size: 0.85rem; margin-bottom: 0.2rem; }
+    .dict-action { color: var(--text-muted); font-size: 0.8rem; }
+
     .result-box {
-      background: rgba(0, 229, 255, 0.04);
+      background: rgba(0, 229, 255, 0.05);
       border: 1px solid var(--cyan);
       padding: 1rem;
       border-radius: 6px;
       color: var(--cyan);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       margin-top: 1rem;
     }
     .result-box.purple { border-color: var(--purple); color: #e9d5ff; background: rgba(179, 136, 255, 0.05); }
 
     .form-preview {
-      background: #050608;
+      background: #040508;
       border: 1px dashed var(--card-border);
       padding: 1rem;
       border-radius: 6px;
@@ -189,46 +235,71 @@
       margin-top: 1rem;
     }
 
-    .dict-item {
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 0.9rem;
-      margin-bottom: 0.6rem;
-      background: rgba(255,255,255,0.02);
-    }
-    .dict-term { font-weight: 700; color: var(--cyan); margin-bottom: 0.2rem; font-size: 0.9rem; }
-    .dict-meaning { color: var(--amber); font-size: 0.85rem; margin-bottom: 0.2rem; }
-    .dict-action { color: var(--text-muted); font-size: 0.8rem; }
-
     .disclaimer-bar {
       margin-top: 2rem;
       padding: 1rem;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       text-align: center;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
 
+  <!-- ZERO-KNOWLEDGE „READ & ANSWER“ SCHLEUSE -->
+  <div id="authGate">
+    <div class="gate-card">
+      <svg class="b6-svg" viewBox="0 0 100 100" style="margin: 0 auto 0.75rem auto; display:block;">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
+        <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
+      </svg>
+      <div class="badge">Sovereign Fortress // Zero-Storage</div>
+      <h2 style="color:#fff; font-size:1.3rem; margin-bottom:0.4rem;">DER SOUVERÄN</h2>
+      <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1.25rem;">
+        Reine flüchtige Client-Sitzung (§ 1 RDG / Art. 2 DSGVO). Es werden keine Konten, E-Mails oder IP-Adressen persistiert.
+      </p>
+
+      <input type="password" id="gatePass" placeholder="Passphrase eingeben (oder direkt Gast-Modus)..." style="text-align:center;">
+      <button class="btn btn-cyan" style="width:100%; margin-bottom:0.5rem;" onclick="unlockGate()">Sitzung starten (Vollzugang)</button>
+      <button class="btn" style="width:100%; background:transparent; border:1px solid var(--card-border); color:var(--text-muted);" onclick="guestUnlock()">Gast-Modus (Read &amp; Answer)</button>
+    </div>
+  </div>
+
+  <!-- HEADER MIT B6-LOGO -->
   <header>
-    <div class="badge">Bürger-Resilienz &amp; Aufklärung</div>
-    <h1>DER SOUVERÄN</h1>
-    <p class="subtitle">Interaktives Schutzportal für Bürgerrechte (§ 1 RDG / Art. 1, 13, 19 Abs. 4 GG). Standardisierte Methodenlehre &amp; Deeskalation.</p>
+    <div class="logo-container">
+      <svg class="b6-svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
+        <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
+      </svg>
+      <div style="text-align:left;">
+        <div class="badge">b6_sys sovereign architecture</div>
+        <h1>DER SOUVERÄN</h1>
+      </div>
+    </div>
+    <p class="subtitle">Interaktives Schutzportal für Bürgerrechte (§ 1 RDG / Art. 1, 13, 19 Abs. 4 GG). Mathematische Methodenlehre &amp; Deeskalation.</p>
   </header>
 
+  <!-- REITER-NAVIGATION (12 MODULE) -->
   <nav class="nav-tabs">
     <button class="tab-btn active" onclick="switchTab(this, 'tab-notfall')">🚨 1. Notfall-Ampel</button>
-    <button class="tab-btn" onclick="switchTab(this, 'tab-woerterbuch')">📖 2. Amtsdeutsch-Dekoder</button>
-    <button class="tab-btn" onclick="switchTab(this, 'tab-rechner')">⏱️ 3. Fristen- &amp; Zinsrechner</button>
-    <button class="tab-btn" onclick="switchTab(this, 'tab-formulare')">⚖️ 4. Formular-Schmiede</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-woerterbuch')">📖 2. Amtsdeutsch</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-rechner')">⏱️ 3. Fristen &amp; Zins</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-formulare')">⚖️ 4. Beistands-Vollmacht</button>
     <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-prompt')">🧠 5. KI-Akten-Prompt</button>
-    <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-entropie')">🕵️‍♂️ 6. Textbaustein-Scanner</button>
-    <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-simulator')">🛡️ 7. Deeskalations-Trainer</button>
+    <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-entropie')">🕵️‍♂️ 6. Copy-Paste-Detektor</button>
+    <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-simulator')">🛡️ 7. Deeskalation</button>
     <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-hasher')">🔐 8. Beweis-Hasher</button>
+    <button class="tab-btn ki-btn" onclick="switchTab(this, 'tab-tensor')">⚡ 9. Dezimal-Pfad</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-aktenzeichen')">🗂️ 10. AZ-Splitter</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-protokoll')">📝 11. Gedächtnisprotokoll</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-jugendamt')">🛡️ 12. Jugendamts-Radar</button>
   </nav>
 
   <div class="container">
@@ -237,17 +308,14 @@
     <section id="tab-notfall" class="module-pane active">
       <div class="card">
         <h2 class="card-title">🚨 Modul 1: „Sovereign Stop“ – Haustür-Navigator (Art. 13 GG)</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-          3-Stufen-Prüfpfad bei unangekündigtem Besuch von Polizei, Ordnungs- oder Jugendamt. Ruhe bewahren – Protokollieren statt Eskalieren.
-        </p>
         <div class="ampel-grid">
           <div class="ampel-box rot">
             <div class="ampel-title">STUFE 1: FORM-FILTER</div>
-            <p style="font-size:0.85rem;"><strong>Liegt ein richterlicher Beschluss vor?</strong></p>
+            <p style="font-size:0.85rem;"><strong>Richterlicher Beschluss vorhanden?</strong></p>
             <ul style="font-size:0.8rem; margin-top:0.4rem; padding-left:1.1rem; color:#cbd5e1;">
               <li>Name des Richters vollständig lesbar? (§ 105 StPO)</li>
               <li>Handschriftliche Unterschrift oder e-Signatur vorhanden?</li>
-              <li>Maschinen-Schablonen ohne Unterschrift sind sofort zu rügen!</li>
+              <li>Maschinen-Schablonen ohne Unterschrift sofort rügen!</li>
             </ul>
           </div>
           <div class="ampel-box gelb">
@@ -265,7 +333,7 @@
             <ul style="font-size:0.8rem; margin-top:0.4rem; padding-left:1.1rem; color:#cbd5e1;">
               <li>Gemeindezeugen oder Nachbarn rufen (§ 106 StPO).</li>
               <li>Beistand telefonisch zuschalten (§ 14 VwVfG / § 13 SGB X).</li>
-              <li>Sicherstellungsverzeichnis mitnehmen (§ 107 StPO).</li>
+              <li>Sicherstellungsverzeichnis aushändigen lassen (§ 107 StPO).</li>
             </ul>
           </div>
         </div>
@@ -276,22 +344,22 @@
     <section id="tab-woerterbuch" class="module-pane">
       <div class="card">
         <h2 class="card-title">📖 Modul 2: Wörterbuch Behördendeutsch – Der 6-Stufen-Dekoder</h2>
-        <input type="text" id="dictSearch" class="search-box" placeholder="Amtsfloskel filtern (z.B. anheimgeben, Mitwirkung, maschinell)..." onkeyup="filterDict()">
+        <input type="text" id="dictSearch" class="search-box" placeholder="Amtsfloskel filtern..." onkeyup="filterDict()">
         <div id="dictList">
           <div class="dict-item">
             <div class="dict-term">„Es wird anheimgegeben, sich zu erklären…“</div>
-            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Das Amt hat keine Rechtsgrundlage für Zwang. Reine Bitte.</div>
+            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Das Amt hat keine Rechtsgrundlage für Zwang. Reine unverbindliche Bitte.</div>
             <div class="dict-action">🎯 <strong>Konter:</strong> Schriftlich nach der konkreten Ermächtigungsgrundlage (§ 35 VwVfG) fragen.</div>
           </div>
           <div class="dict-item">
             <div class="dict-term">„Sie haben im Rahmen Ihrer gesetzlichen Mitwirkungspflichten…“</div>
-            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Grenzen der Mitwirkung gem. § 65 SGB I (Verhältnismäßigkeit) werden unterschlagen.</div>
-            <div class="dict-action">🎯 <strong>Konter:</strong> Verweis auf § 65 SGB I; bereits vorhandene Daten müssen nicht beigebracht werden.</div>
+            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Grenzen gem. § 65 SGB I (Verhältnismäßigkeit, Unzumutbarkeit) werden unterschlagen.</div>
+            <div class="dict-action">🎯 <strong>Konter:</strong> Verweis auf § 65 SGB I; Amtsermittlungspflicht einfordern (§ 20 SGB X).</div>
           </div>
           <div class="dict-item">
             <div class="dict-term">„Dieser Bescheid wurde maschinell erstellt und ist ohne Unterschrift gültig.“</div>
-            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Gilt nur für Massen-Routinen (§ 37 Abs. 5 VwVfG). Eingriffsakte bedürfen einer Unterschrift!</div>
-            <div class="dict-action">🎯 <strong>Konter:</strong> Formnichtigkeit nach § 44 VwVfG rügen.</div>
+            <div class="dict-meaning">💡 <strong>Bedeutung:</strong> Gilt nur für Massen-Routinen (§ 37 Abs. 5 VwVfG). Eingriffsakte bedürfen stets einer Unterschrift!</div>
+            <div class="dict-action">🎯 <strong>Konter:</strong> Rüge der Formnichtigkeit nach § 44 VwVfG.</div>
           </div>
         </div>
       </div>
@@ -303,15 +371,15 @@
         <h2 class="card-title">⏱️ Modul 3: Universal Calculator – Fristen- &amp; Verzugsschutz</h2>
         <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
           <div style="flex:1; min-width:200px;">
-            <label style="font-size:0.8rem; color:var(--text-muted);">Datum Zustellung / Umschlag:</label>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Zugangsdatum (Gelber Umschlag / Post):</label>
             <input type="date" id="postDate">
           </div>
           <div style="flex:1; min-width:200px;">
             <label style="font-size:0.8rem; color:var(--text-muted);">Fristart:</label>
             <select id="fristType">
-              <option value="1m_norm">1 Monat (Widerspruch / Klage mit Belehrung)</option>
-              <option value="1y_fehl">1 Jahr (§ 58 Abs. 2 VwGO – Belehrung fehlt/falsch)</option>
-              <option value="2w_eil">2 Wochen (Eilantrag / Beschwerde)</option>
+              <option value="1m_norm">1 Monat (Widerspruch / Klage mit Rechtsbehelfsbelehrung)</option>
+              <option value="1y_fehl">1 Jahr (§ 58 Abs. 2 VwGO – Belehrung fehlt/fehlerhaft)</option>
+              <option value="2w_eil">2 Wochen (Eilantrag / Sofortige Beschwerde)</option>
             </select>
           </div>
         </div>
@@ -323,14 +391,14 @@
         <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
           <div style="flex:1; min-width:200px;">
             <label style="font-size:0.8rem; color:var(--text-muted);">Offene Forderung (€):</label>
-            <input type="number" id="forderung" value="2500" step="50">
+            <input type="number" id="forderung" value="5000" step="100">
           </div>
           <div style="flex:1; min-width:200px;">
-            <label style="font-size:0.8rem; color:var(--text-muted);">Tage seit Fälligkeit:</label>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Verzugsdauer (Tage):</label>
             <input type="number" id="verzugTage" value="30">
           </div>
         </div>
-        <button class="btn" onclick="calcZinsen()">Verzugszinsen ermitteln (§ 288 BGB)</button>
+        <button class="btn" onclick="calcZinsen()">Verzugszinsen berechnen (§ 288 BGB)</button>
         <div id="zinsResult" class="result-box" style="display:none;"></div>
       </div>
     </section>
@@ -338,54 +406,44 @@
     <!-- MODUL 4: FORMULARE -->
     <section id="tab-formulare" class="module-pane">
       <div class="card">
-        <h2 class="card-title">⚖️ Modul 4: Kautelar-Schmiede – Hilfe zur Selbsthilfe</h2>
+        <h2 class="card-title">⚖️ Modul 4: Kautelar-Schmiede – Beistands-Vollmacht</h2>
         <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
           <input type="text" id="bName" style="flex:1; min-width:200px;" placeholder="Dein vollständiger Name">
-          <input type="text" id="beistandName" style="flex:1; min-width:200px;" placeholder="Name des Beistands (z.B. Zeuge/Bekannter)">
+          <input type="text" id="beistandName" style="flex:1; min-width:200px;" placeholder="Name des Beistands (z. B. Bekannter/Zeuge)">
         </div>
         <button class="btn" onclick="generateBeistand()">Beistandserklärung erzeugen (§ 13 Abs. 4 SGB X / § 14 VwVfG)</button>
         <div id="beistandDoc" class="form-preview" style="display:none;"></div>
       </div>
     </section>
 
-    <!-- MODUL 5: KI-PROMPT-GENERATOR (NEU) -->
+    <!-- MODUL 5: KI-PROMPT -->
     <section id="tab-prompt" class="module-pane">
       <div class="card">
         <h2 class="card-title ki">🧠 Modul 5: KI-Akten-Scanner – Prompt-Schmiede</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-          Erzeuge den perfekten Befehl für externe KIs (ChatGPT, Claude, Gemini), um unübersichtliche Behördenbescheide, OCR-Texte oder Akten sauber zu zerlegen.
-        </p>
-        <label style="font-size:0.8rem; color:var(--text-muted);">Art des Dokuments:</label>
         <select id="docType">
           <option value="bescheid">Eingriffsbescheid / Anhörung (Fristen, Paragraphen, Drohungen)</option>
           <option value="beschluss">Richterlicher Durchsuchungsbeschluss (Formfehler, Richtername)</option>
           <option value="abrechnung">Kosten- &amp; Gebührenfestsetzung (Rechnerische Prüfung)</option>
         </select>
-        <button class="btn btn-purple" onclick="generateAIPrompt()">Generiere Bereinigungs-Prompt</button>
+        <button class="btn btn-purple" onclick="generateAIPrompt()">Prompt für ChatGPT / Claude / Gemini erzeugen</button>
         <div id="promptOutput" class="form-preview" style="display:none;"></div>
       </div>
     </section>
 
-    <!-- MODUL 6: SHANNON-ENTROPIE (NEU) -->
+    <!-- MODUL 6: SHANNON-ENTROPIE -->
     <section id="tab-entropie" class="module-pane">
       <div class="card">
-        <h2 class="card-title ki">🕵️‍♂️ Modul 6: Behörden-Copy-Paste-Detektor</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-          Füge Text aus einem Ablehnungsbescheid ein. Die Shannon-Entropie H(X) analysiert die Informationsdichte und entlarvt starre Textbausteine.
-        </p>
+        <h2 class="card-title ki">🕵️‍♂️ Modul 6: Behörden-Copy-Paste-Detektor (Shannon-Entropie)</h2>
         <textarea id="entropyInput" placeholder="Hier Behördentext einfügen..."></textarea>
-        <button class="btn btn-purple" onclick="analyzeEntropy()">Text auf Schablonen-Muster scannen</button>
+        <button class="btn btn-purple" onclick="analyzeEntropy()">Text auf Textbaustein-Muster prüfen</button>
         <div id="entropyResult" class="result-box purple" style="display:none;"></div>
       </div>
     </section>
 
-    <!-- MODUL 7: DEESKALATIONS-TRAINER (NEU) -->
+    <!-- MODUL 7: DEESKALATION -->
     <section id="tab-simulator" class="module-pane">
       <div class="card">
         <h2 class="card-title ki">🛡️ Modul 7: Taktischer Deeskalations-Trainer</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-          Wie reagierst du souverän auf typische Fangfragen der Exekutive an der Haustür? Wähle das Szenario:
-        </p>
         <select id="simScenario" onchange="runSimulator()">
           <option value="1">„Haben Sie etwas zu verbergen, oder warum dürfen wir nicht kurz rein?“</option>
           <option value="2">„Kommen Sie doch eben freiwillig mit aufs Revier zur Klärung.“</option>
@@ -393,26 +451,105 @@
         </select>
         <div id="simFeedback" class="result-box purple" style="margin-top:0.75rem;">
           🎯 <strong>Richtige Reaktion:</strong><br>
-          <em>„Ich mache von meinem verfassungsrechtlichen Schutz der Wohnung (Art. 13 GG) Gebrauch. Ein Betreten ohne richterlichen Beschluss lehne ich ausdrücklich ab. Bitte teilen Sie mir Ihr Anliegen schriftlich mit.“</em>
+          <em>„Ich mache von meinem Grundrecht aus Art. 13 GG Gebrauch. Ohne richterlichen Beschluss gestatte ich keinen Zutritt. Bitte senden Sie mir Ihr Anliegen schriftlich zu.“</em>
         </div>
       </div>
     </section>
 
-    <!-- MODUL 8: BEWEIS-HASHER (NEU) -->
+    <!-- MODUL 8: BEWEIS-HASHER -->
     <section id="tab-hasher" class="module-pane">
       <div class="card">
-        <h2 class="card-title ki">🔐 Modul 8: Revisionssicherer Beweis-Hasher (WebCrypto)</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-          Berechne den unveränderlichen SHA-256-Fingerabdruck direkt im Browser-RAM. Es werden keine Daten an externe Server übertragen!
-        </p>
-        <textarea id="hashInput" placeholder="Text, Notiz, Protokollzeilen hier einfügen..."></textarea>
+        <h2 class="card-title ki">🔐 Modul 8: Revisionssicherer Beweis-Hasher (SHA-256)</h2>
+        <textarea id="hashInput" placeholder="Text, Notiz oder Protokollzeilen einfügen..."></textarea>
         <button class="btn btn-purple" onclick="generateHash()">Kryptographisches Siegel berechnen</button>
         <div id="hashResult" class="result-box purple" style="display:none; word-break:break-all;"></div>
       </div>
     </section>
 
-    <section> <div> <h2>⚡ Modul 9: Deontischer Dezimal-Pfad-Rechner (StPO / VwVfG)</h2> <p> Mathematische Prüfung hoheitlicher Eingriffsakte. Wähle die Parameter des behördlichen Handelns. Das System berechnet die dezimale Signatur und spuckt die deterministische Rechtsfolge aus. </p>  <div> <span>Aktueller Berechnungs-Vektor:</span> <code>§ 105</code> </div>  <div> <div>  <select> <option value="1">.1 – JA: Konkrete Tatsachen begründen Verdacht</option> <option value="0">.0 – NEIN: Reine Ausforschung / Bloße Vermutung</option> </select> </div> <div>  <select> <option value="1">.1 – JA: Richterlicher Beschluss liegt schriftlich vor</option> <option value="0">.0 – NEIN: Vorschieben von „Gefahr im Verzug“ ohne Eilbedürftigkeit</option> </select> </div> <div>  <select> <option value="1">.1 – JA: Richtername voll ausgeschrieben &amp; handschriftlich/qeS signiert</option> <option value="2">.2 – TEILWEISE: Unleserliche Paraphe / Zweifelhafte Vertretung</option> <option value="0">.0 – NEIN: Maschinenschablone von 1985 ohne jede Unterschrift / Stempel-Kollaps</option> </select> </div> <div>  <select> <option value="1">.1 – JA: Verzeichnis vollständig ausgehändigt, Beute dokumentiert</option> <option value="0">.0 – NEIN: Verzeichnis verweigert / Null-Beute quittiert / Übermaß</option> </select> </div> </div>   <div></div> </div> </section>
-    
+    <!-- MODUL 9: DEZIMAL-PFAD-RECHNER -->
+    <section id="tab-tensor" class="module-pane">
+      <div class="card">
+        <h2 class="card-title ki">⚡ Modul 9: Deontischer Dezimal-Pfad-Rechner (StPO / VwVfG)</h2>
+        <div style="background:#040508; border:1px solid var(--card-border); padding:0.6rem 1rem; border-radius:6px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Berechnungs-Vektor:</span>
+          <code id="tensorPathDisplay" style="color:var(--cyan); font-weight:700; font-size:1.05rem;">§ 105.1.1.1.1</code>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <select id="node1" onchange="calcTensorPath()">
+            <option value="1">Knoten 1: .1 – JA: Konkrete Tatsachen begründen Verdacht</option>
+            <option value="0">Knoten 1: .0 – NEIN: Reine Ausforschung / Bloße Vermutung</option>
+          </select>
+          <select id="node2" onchange="calcTensorPath()">
+            <option value="1">Knoten 2: .1 – JA: Richterlicher Beschluss liegt schriftlich vor</option>
+            <option value="0">Knoten 2: .0 – NEIN: Umgehung des Richtervorbehalts (Art. 13 GG)</option>
+          </select>
+          <select id="node3" onchange="calcTensorPath()">
+            <option value="1">Knoten 3: .1 – JA: Richtername voll lesbar &amp; unterschrieben</option>
+            <option value="2">Knoten 3: .2 – ZWEIFEL: Unleserliche Paraphe ohne Vertretung</option>
+            <option value="0">Knoten 3: .0 – NEIN: 1985er-Schablone ohne jede Unterschrift</option>
+          </select>
+          <select id="node4" onchange="calcTensorPath()">
+            <option value="1">Knoten 4: .1 – JA: Verzeichnis gem. § 107 StPO vollständig</option>
+            <option value="0">Knoten 4: .0 – NEIN: Verzeichnis verweigert / Null-Beute quittiert</option>
+          </select>
+        </div>
+        <button class="btn btn-purple" style="margin-top:0.75rem;" onclick="calcTensorPath()">Rechtsfolge ableiten</button>
+        <div id="tensorOutput" class="result-box purple" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- MODUL 10: AZ-SPLITTER -->
+    <section id="tab-aktenzeichen" class="module-pane">
+      <div class="card">
+        <h2 class="card-title">🗂️ Modul 10: Aktenzeichen-Splitter &amp; Justiz-Routing</h2>
+        <input type="text" id="azInput" class="search-box" placeholder="Aktenzeichen eingeben (z. B. 152 Gs 648/26, 52 Js 23/26, 11 K 3272/26, 5 O 124/26)...">
+        <button class="btn btn-cyan" onclick="splitAktenzeichen()">Aktenzeichen dekodieren</button>
+        <div id="azResult" class="result-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- MODUL 11: GEDÄCHTNISPROTOKOLL -->
+    <section id="tab-protokoll" class="module-pane">
+      <div class="card">
+        <h2 class="card-title">📝 Modul 11: Revisionssicherer Gedächtnisprotokoll-Generator</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="date" id="protDate" style="flex:1; min-width:180px;">
+          <input type="text" id="protTime" style="flex:1; min-width:180px;" placeholder="Uhrzeit (von – bis)">
+        </div>
+        <input type="text" id="protOrt" placeholder="Einsatzort (Adresse / Raum)">
+        <input type="text" id="protBeamte" placeholder="Anwesende Amtsträger (Name, Dienstgrad, Streifenwagen)">
+        <input type="text" id="protZeugen" placeholder="Zeugen / Beistände (§ 14 VwVfG / § 13 SGB X)">
+        <textarea id="protAblauf" placeholder="Wörtliche Aussagen &amp; Ablauf..."></textarea>
+        <button class="btn btn-cyan" onclick="generateProtokoll()">Gedächtnisprotokoll erzeugen (§ 415 ZPO)</button>
+        <div id="protOutput" class="form-preview" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- MODUL 12: JUGENDAMTS-RADAR -->
+    <section id="tab-jugendamt" class="module-pane">
+      <div class="card">
+        <h2 class="card-title">🛡️ Modul 12: Jugendamts-Begleiter &amp; § 8a-Präventions-Radar</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
+          Taktischer Leitfaden bei Ankündigung von Hausbesuchen oder Gefährdungseinschätzungen (§ 8a SGB VIII).
+        </p>
+        <div class="ampel-grid">
+          <div class="ampel-box rot">
+            <div class="ampel-title">KEIN BETRETUNGSRECHT</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Das Jugendamt hat kein eigenständiges Recht, die Wohnung gegen den Willen der Eltern zu betreten. Es gilt Art. 13 GG (Unverletzlichkeit der Wohnung)!</p>
+          </div>
+          <div class="ampel-box gelb">
+            <div class="ampel-title">BEISTANDSRECHT ERZWINGEN</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Niemals alleine sprechen. Gemäß § 13 Abs. 4 SGB X darf ein Beistand nicht willkürlich abgewiesen werden. Jedes Gespräch protokollieren!</p>
+          </div>
+          <div class="ampel-box gruen">
+            <div class="ampel-title">AKTENEINSICHT BEANTRAGEN</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Sofortigen Antrag auf vollständige Akteneinsicht nach § 25 SGB X stellen, um anonyme Denunziationen und Aktenmanipulationen offenzulegen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCLAIMER -->
     <div class="disclaimer-bar">
       ⚖️ <strong>Rechtlicher Hinweis gem. § 1 Abs. 1 Nr. 1 Rechtsdienstleistungsgesetz (RDG):</strong><br>
       Dieses Portal dient ausschließlich der staatsbürgerlichen Bildung, der Information über verfassungsrechtliche Grundsätze und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Es findet keine individuelle Rechtsberatung oder Vertretung im Einzelfall statt.
@@ -421,6 +558,32 @@
   </div>
 
   <script>
+    /* ZERO-KNOWLEDGE SCHLEUSE */
+    async function unlockGate() {
+      const pw = document.getElementById('gatePass').value.trim();
+      const enc = new TextEncoder();
+      const buf = await crypto.subtle.digest('SHA-256', enc.encode(pw));
+      const hashHex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+      // Passphrase "souveraen2026" oder "demo"
+      if (hashHex === "566ef7d383b4009f45e859bcf69a239b8bc734c56e309cb9f3f38bbd1c2557e4" || pw === "demo") {
+        document.getElementById('authGate').style.display = 'none';
+        sessionStorage.setItem('sovereign_auth', '1');
+      } else {
+        alert('Ungültiger Zugangsschlüssel!');
+      }
+    }
+    function guestUnlock() {
+      document.getElementById('authGate').style.display = 'none';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('sovereign_auth') === '1') {
+        const g = document.getElementById('authGate');
+        if (g) g.style.display = 'none';
+      }
+    });
+
+    /* NAVIGATION */
     function switchTab(btn, tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.module-pane').forEach(p => p.classList.remove('active'));
@@ -428,6 +591,7 @@
       document.getElementById(tabId).classList.add('active');
     }
 
+    /* MODUL 2: FILTER */
     function filterDict() {
       const q = document.getElementById('dictSearch').value.toLowerCase();
       document.querySelectorAll('.dict-item').forEach(it => {
@@ -435,6 +599,7 @@
       });
     }
 
+    /* MODUL 3: FRISTEN & ZINSEN */
     function calcFrist() {
       const pVal = document.getElementById('postDate').value;
       if (!pVal) { alert('Bitte Zugangsdatum angeben!'); return; }
@@ -453,7 +618,7 @@
     function calcZinsen() {
       const sum = parseFloat(document.getElementById('forderung').value) || 0;
       const days = parseInt(document.getElementById('verzugTage').value) || 0;
-      const rate = 0.0862; // 5 % über Basiszins gem. § 288 BGB
+      const rate = 0.0862; // 5 % über Basiszins § 288 BGB
       const zins = (sum * rate * (days / 365)).toFixed(2);
       const tag = (sum * rate / 365).toFixed(2);
 
@@ -462,6 +627,7 @@
       res.innerHTML = `💰 <strong>Verzugszinsen:</strong> ${zins} € | 📈 <strong>Zuwachs:</strong> ${tag} € / Tag`;
     }
 
+    /* MODUL 4: BEISTAND */
     function generateBeistand() {
       const n1 = document.getElementById('bName').value || '[DEIN NAME]';
       const n2 = document.getElementById('beistandName').value || '[NAME DES BEISTANDS]';
@@ -484,76 +650,155 @@ Unterschrift Beteiligter: ___________________________`;
       box.innerText = text;
     }
 
-    /* KI-Prompt-Generator */
+    /* MODUL 5: KI-PROMPT */
     function generateAIPrompt() {
       const type = document.getElementById('docType').value;
       let p = `Du bist ein präziser juristischer Aktenprüfer. Analysiere den folgenden Textauszug eines Behördendokuments streng neutral und sachlich:\n\n`;
       if (type === 'bescheid') {
-        p += `1. Isoliere alle gesetzten Fristen mit genauem Datum.\n2. Liste alle genannten Paragraphen und deren tatsächlichen Regelungsgehalt auf.\n3. Markiere psychologische Druckfloskeln ohne Rechtsbindung.\n4. Prüfe, ob eine ordnungsgemäße Rechtsbehelfsbelehrung vorliegt.`;
+        p += `1. Isoliere alle Fristen mit genauem Datum.\n2. Liste alle genannten Paragraphen und deren tatsächlichen Regelungsgehalt auf.\n3. Markiere Druckfloskeln ohne Rechtsbindung.\n4. Prüfe die Rechtsbehelfsbelehrung.`;
       } else if (type === 'beschluss') {
-        p += `1. Prüfe, ob der Name des Richters ausgeschrieben genannt wird oder nur eine unleserliche Paraphe vorliegt.\n2. Prüfe die genaue Begründung für die Durchsuchung (Tatsachenverdacht vs. Vermutung).\n3. Identifiziere, ob der Richtervorbehalt gem. Art. 13 Abs. 2 GG gewahrt wurde.`;
+        p += `1. Prüfe, ob der Richtername ausgeschrieben ist oder nur eine Paraphe vorliegt.\n2. Prüfe die Begründung für die Durchsuchung.\n3. Identifiziere, ob der Richtervorbehalt (Art. 13 Abs. 2 GG) gewahrt wurde.`;
       } else {
-        p += `1. Prüfe jede Gebührenposition auf ihre formelle Rechtsgrundlage im Verwaltungskostengesetz.\n2. Rechne die Gesamtsumme nach und decke Rechenfehler auf.`;
+        p += `1. Prüfe jede Gebühr auf ihre Rechtsgrundlage im Verwaltungskostengesetz.\n2. Rechne die Gesamtsumme nach.`;
       }
-      p += `\n\n[HIER DEINEN DOKUMENTENTEXT EINFÜGEN]`;
-
+      p += `\n\n[DOKUMENTENTEXT HIER EINFÜGEN]`;
       const box = document.getElementById('promptOutput');
       box.style.display = 'block';
       box.innerText = p;
     }
 
-    /* Shannon-Entropie-Scanner */
+    /* MODUL 6: SHANNON-ENTROPIE */
     function analyzeEntropy() {
       const str = document.getElementById('entropyInput').value;
       if (!str.trim()) { alert('Bitte Text eingeben!'); return; }
-
       const len = str.length;
       const freq = {};
       for (let c of str) freq[c] = (freq[c] || 0) + 1;
-
       let entropy = 0;
       for (let c in freq) {
         let p = freq[c] / len;
         entropy -= p * Math.log2(p);
       }
-
       const res = document.getElementById('entropyResult');
       res.style.display = 'block';
-      let bewertung = "";
-      if (entropy < 4.0) bewertung = "🔴 Sehr niedrige Entropie: Extrem hoher Verdacht auf starre, automatisierte Standard-Textbausteine ohne individuelle Sachverhaltswürdigung!";
-      else if (entropy < 4.6) bewertung = "🟡 Mittlere Entropie: Typischer Verwaltungsmix aus Standardfloskeln und wenigen manuellen Ergänzungen.";
-      else bewertung = "🟢 Hohe Entropie: Individuell formulierter Schriftsatz mit hoher Varianz.";
-
-      res.innerHTML = `📊 <strong>Shannon-Entropie:</strong> ${entropy.toFixed(3)} Bits/Zeichen<br>${bewertung}`;
+      let b = entropy < 4.0 ? "🔴 Sehr niedrige Entropie: Hoher Verdacht auf starre Standard-Textbausteine!" : (entropy < 4.6 ? "🟡 Mittlere Entropie: Typischer Verwaltungsmix." : "🟢 Hohe Entropie: Individuell formuliert.");
+      res.innerHTML = `📊 <strong>Shannon-Entropie:</strong> ${entropy.toFixed(3)} Bits/Zeichen<br>${b}`;
     }
 
-    /* Deeskalations-Trainer */
+    /* MODUL 7: DEESKALATION */
     function runSimulator() {
       const v = document.getElementById('simScenario').value;
       const box = document.getElementById('simFeedback');
       if (v === '1') {
         box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Ich mache von meinem Grundrecht aus Art. 13 GG Gebrauch. Ohne richterlichen Durchsuchungsbeschluss gestatte ich keinen Zutritt. Bitte senden Sie mir Ihr Anliegen schriftlich zu.“</em>`;
       } else if (v === '2') {
-        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Als Zeuge oder Betroffener bin ich zu einem freiwilligen Erscheinen auf dem Revier nicht verpflichtet (§ 163a StPO). Ich lehne die Mitfahrt ab. Sollte eine Vorladung der Staatsanwaltschaft erfolgen, werde ich diese schriftlich prüfen.“</em>`;
+        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Als Bürger bin ich zu einem freiwilligen Erscheinen auf dem Revier nicht verpflichtet (§ 163a StPO). Ich lehne die Mitfahrt ab. Eine förmliche Vorladung der Staatsanwaltschaft werde ich schriftlich prüfen.“</em>`;
       } else {
-        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Einer freiwilligen Herausgabe meines Smartphones widerspreche ich ausdrücklich. Falls Sie eine Beschlagnahme anordnen, verlange ich die schriftliche Anordnung und ein sofortiges Beschlagnahmeverzeichnis gem. § 107 StPO.“</em>`;
+        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Einer freiwilligen Herausgabe meines Smartphones widerspreche ich ausdrücklich. Falls Sie eine Beschlagnahme anordnen, verlange ich die schriftliche Anordnung und ein sofortiges Verzeichnis gem. § 107 StPO.“</em>`;
       }
     }
 
-    /* Lokaler WebCrypto Hasher */
+    /* MODUL 8: HASHER */
     async function generateHash() {
       const text = document.getElementById('hashInput').value;
       if (!text.trim()) { alert('Bitte Text eingeben!'); return; }
-
       const enc = new TextEncoder();
       const buf = await crypto.subtle.digest('SHA-256', enc.encode(text));
-      const hashArray = Array.from(new Uint8Array(buf));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
+      const hashHex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
       const res = document.getElementById('hashResult');
       res.style.display = 'block';
       res.innerHTML = `🔒 <strong>SHA-256 Prüfsiegel:</strong><br><code style="color:var(--emerald);">${hashHex}</code><br>` +
-        `<small style="color:var(--text-muted);">Zeitstempel: ${new Date().toISOString()} – Berechnet lokal im Browser-RAM.</small>`;
+        `<small style="color:var(--text-muted);">Zeitstempel: ${new Date().toISOString()} – Berechnet lokal im RAM.</small>`;
+    }
+
+    /* MODUL 9: DEZIMAL-PFAD */
+    function calcTensorPath() {
+      const n1 = document.getElementById('node1').value;
+      const n2 = document.getElementById('node2').value;
+      const n3 = document.getElementById('node3').value;
+      const n4 = document.getElementById('node4').value;
+      const fullPath = `§ 105.${n1}.${n2}.${n3}.${n4}`;
+      document.getElementById('tensorPathDisplay').innerText = fullPath;
+      const out = document.getElementById('tensorOutput');
+      out.style.display = 'block';
+
+      if (n1 === "0") {
+        out.innerHTML = `🔴 <strong>ABBRUCH (n1=0):</strong> Rechtswidrige Ausforschung. Verfassungsbeschwerde (Art. 13 GG), Beschwerde (§ 304 StPO).`;
+      } else if (n2 === "0") {
+        out.innerHTML = `🔴 <strong>ABBRUCH (n2=0):</strong> Umgehung des Richtervorbehalts. Absolutes Beweisverwertungsverbot!`;
+      } else if (n3 === "0") {
+        out.innerHTML = `🚨 <strong>KARDINAL-KOLLAPS (n3=0):</strong> FORM-NICHTIGKEIT (§ 44 VwVfG / BGH). Schein-Beschluss entfaltet keine Wirkung. Persönliche Haftung der Beamten gem. § 839 BGB / Art. 34 GG!`;
+      } else if (n3 === "2") {
+        out.innerHTML = `🟡 <strong>ZWEIFELSFALL (n3=2):</strong> Formmangel. Akteneinsicht (§ 147 StPO) und Original-Unterschriftenmappe anfordern.`;
+      } else if (n4 === "0") {
+        out.innerHTML = `🔴 <strong>VERSTOSS (n4=0):</strong> Verletzung § 107 StPO. Antrag auf gerichtliche Entscheidung (§ 98 Abs. 2 StPO).`;
+      } else {
+        out.innerHTML = `🟢 <strong>DETERMINISTISCHER VOLLZUG (1.1.1.1):</strong> Formell ordnungsgemäß. Widerspruch zu Protokoll geben und Beistand hinzuziehen.`;
+      }
+    }
+
+    /* MODUL 10: AZ-SPLITTER */
+    function splitAktenzeichen() {
+      const raw = document.getElementById('azInput').value.trim();
+      if (!raw) { alert('Bitte ein Aktenzeichen eingeben!'); return; }
+      const out = document.getElementById('azResult');
+      out.style.display = 'block';
+
+      const patterns = [
+        { regex: /\b(Gs)\b/i, name: "Gs – Ermittlungsrichter", gericht: "Amtsgericht", ordnung: "StPO", hinweis: "Eingriffsmaßnahmen (§ 105 StPO). Richtername und Unterschrift prüfen!" },
+        { regex: /\b(Js)\b/i, name: "Js – Ermittlungsverfahren", gericht: "Staatsanwaltschaft", ordnung: "StPO", hinweis: "Anklagebehörde. Akteneinsicht gem. § 147 StPO." },
+        { regex: /\b(K)\b/i, name: "K – Klageverfahren", gericht: "Verwaltungsgericht (VG)", ordnung: "VwGO", hinweis: "Klage gegen Verwaltungsakt. 1 Monat Klagefrist (§ 74 VwGO)." },
+        { regex: /\b(O)\b/i, name: "O – Zivilkammer", gericht: "Landgericht (LG)", ordnung: "ZPO", hinweis: "Streitwert > 5.000 € oder Amtshaftung (§ 839 BGB). Anwaltszwang!" },
+        { regex: /\b(BvR)\b/i, name: "BvR – Verfassungsbeschwerde", gericht: "Bundesverfassungsgericht", ordnung: "BVerfGG", hinweis: "Spezifische Grundrechtsverletzung (z. B. Art. 13, Art. 103 GG)." }
+      ];
+
+      let match = patterns.find(p => p.regex.test(raw));
+      if (match) {
+        out.innerHTML = `🏛️ <strong>Registerzeichen:</strong> <span style="color:#fff;">${match.name}</span><br>` +
+          `⚖️ <strong>Gericht/Instanz:</strong> ${match.gericht} (${match.ordnung})<br>` +
+          `💡 <strong>Taktischer Hinweis:</strong> ${match.hinweis}`;
+      } else {
+        out.innerHTML = `⚠️ Registerzeichen nicht eindeutig zuordenbar. Prüfe auf Gs, Js, K, O oder BvR.`;
+      }
+    }
+
+    /* MODUL 11: GEDÄCHTNISPROTOKOLL */
+    function generateProtokoll() {
+      const d = document.getElementById('protDate').value || '[DATUM]';
+      const t = document.getElementById('protTime').value || '[UHRZEIT]';
+      const ort = document.getElementById('protOrt').value || '[ORT]';
+      const beamte = document.getElementById('protBeamte').value || '[KEINE ANGABEN]';
+      const zeugen = document.getElementById('protZeugen').value || '[KEINE ZEUGEN]';
+      const ablauf = document.getElementById('protAblauf').value || '[KEIN TEXT]';
+      const created = new Date().toLocaleString('de-DE');
+
+      const txt = 
+`================================================================================
+                    FÖRMLICHES GEDÄCHTNISPROTOKOLL
+              gem. § 415 ZPO / Beweissicherung zur Causa
+================================================================================
+Erstellt am:        ${created} (zeitnah verfasst)
+Datum des Vorfalls: ${d} | Zeitraum: ${t}
+Einsatzort:         ${ort}
+
+BETEILIGTE AMTSTRÄGER / BEAMTE:
+${beamte}
+
+ANWESENDE ZEUGEN / BEISTÄNDE (§ 14 VwVfG / § 13 SGB X):
+${zeugen}
+
+CHRONOLOGISCHER HERGANG & WÖRTLICHE ÄUSSERUNGEN:
+${ablauf}
+
+BEWEISSICHERUNGSHINWEIS:
+Dient als Urkundenbeweis gem. § 415 ZPO für Verfassungsrügen und Amtshaftungsansprüche 
+nach § 839 BGB i.V.m. Art. 34 GG.
+
+Unterschrift des Protokollführers: ____________________________________`;
+
+      const box = document.getElementById('protOutput');
+      box.style.display = 'block';
+      box.innerText = txt;
     }
   </script>
 </body>
