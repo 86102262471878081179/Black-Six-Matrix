@@ -62,31 +62,25 @@
       --data-3: #b388ff;
       --data-4: #ff3366;
       --data-context: #475569;
-
       /* Print tokens */
       --print-bg: #ffffff;
       --print-ink: #111111;
       --print-border: #cccccc;
-
       /* Typografie */
       --font-headline: 'EB Garamond', Georgia, serif;
       --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
       --font-label: 'JetBrains Mono', monospace;
-
       --display-size: clamp(1.65rem, 1.35rem + 1.1vw, 2.25rem);
       --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.55rem);
       --subhead-size: clamp(1.05rem, 0.98rem + 0.25vw, 1.2rem);
       --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
       --label-size: 0.75rem;
-
       --heading-tracking: -0.015em;
       --label-tracking: 0.06em;
-
       /* Radii */
       --rounded: 0.25rem;
       --rounded-lg: 0.5rem;
       --rounded-full: 9999px;
-
       /* Spacing Scale */
       --space-xs: 0.25rem;
       --space-sm: 0.5rem;
@@ -94,7 +88,6 @@
       --space-lg: 1.5rem;
       --space-xl: 2.5rem;
       --space-2xl: 4rem;
-
       /* Motion */
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -102,7 +95,6 @@
       --dur-short: 220ms;
       --dur-long: 420ms;
     }
-
     /* Base Reset */
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
@@ -117,13 +109,11 @@
       -webkit-font-smoothing: antialiased;
     }
     header { position: static !important; }
-
     /* Focus Rings */
     :focus-visible {
       outline: 2px solid var(--focus);
       outline-offset: 2px;
     }
-
     /* Sticky Global Docking System (nav avoids header static override) */
     .sovereign-dock {
       position: sticky;
@@ -134,7 +124,6 @@
       border-bottom: var(--gold-border);
       box-shadow: var(--panel-highlight);
     }
-
     .dock-inner {
       max-width: 1380px;
       margin: 0 auto;
@@ -142,7 +131,6 @@
       display: grid;
       gap: var(--space-sm);
     }
-
     .dock-top-row {
       display: flex;
       flex-wrap: wrap;
@@ -150,14 +138,12 @@
       justify-content: space-between;
       gap: var(--space-md);
     }
-
     .brand-cluster {
       display: flex;
       align-items: center;
       gap: var(--space-md);
       min-width: 0;
     }
-
     .emblem-wrap {
       width: 42px;
       height: 42px;
@@ -168,13 +154,11 @@
       border: var(--gold-border);
       border-radius: var(--rounded);
     }
-
     .brand-titles {
       display: flex;
       flex-direction: column;
       min-width: 0;
     }
-
     .brand-name {
       font-family: var(--font-headline);
       font-size: 1.3rem;
@@ -183,13 +167,11 @@
       color: var(--on-surface);
       line-height: 1.1;
     }
-
     .brand-name em {
       color: var(--primary);
       font-style: italic;
       font-weight: 500;
     }
-
     .brand-sub {
       font-family: var(--font-label);
       font-size: var(--label-size);
@@ -198,14 +180,12 @@
       color: var(--secondary);
       margin-top: 2px;
     }
-
     .dock-controls {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: var(--space-sm);
     }
-
     .case-counter-box {
       display: inline-flex;
       align-items: center;
@@ -216,7 +196,6 @@
       padding: var(--space-xs) var(--space-sm);
       min-height: 44px;
     }
-
     .case-label {
       font-family: var(--font-label);
       font-size: var(--label-size);
@@ -224,7 +203,6 @@
       text-transform: uppercase;
       color: var(--on-surface-variant);
     }
-
     .case-id {
       font-family: var(--font-label);
       font-size: 0.9rem;
@@ -233,12 +211,10 @@
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.04em;
     }
-
     /* Buttons */
     button, input, select, textarea {
       font-family: inherit;
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -260,73 +236,60 @@
                   border-color var(--dur-micro) var(--ease-out),
                   color var(--dur-micro) var(--ease-out);
     }
-
     .btn:hover:not(:disabled) {
       background: var(--surface-container-high);
       border-color: var(--primary);
     }
-
     .btn:active:not(:disabled) {
       transform: translateY(1px);
     }
-
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-
     .btn-primary {
       background: var(--primary);
       color: var(--on-primary);
       border-color: var(--primary);
       font-weight: 600;
     }
-
     .btn-primary:hover:not(:disabled) {
       background: var(--on-primary-container);
       border-color: var(--on-primary-container);
       color: var(--on-primary);
     }
-
     .btn-cyan {
       background: var(--cyan-tint);
       color: var(--secondary);
       border: var(--cyan-border);
     }
-
     .btn-cyan:hover:not(:disabled) {
       background: color-mix(in srgb, var(--secondary) 22%, transparent);
       border-color: var(--secondary);
     }
-
     .btn-purple {
       background: var(--purple-tint);
       color: var(--tertiary);
       border: var(--purple-border);
     }
-
     .btn-purple:hover:not(:disabled) {
       background: color-mix(in srgb, var(--tertiary) 24%, transparent);
       border-color: var(--tertiary);
     }
-
     .btn-crimson {
       background: var(--crimson-tint);
       color: var(--error);
       border: var(--crimson-border);
     }
-
     .btn-crimson:hover:not(:disabled) {
       background: color-mix(in srgb, var(--error) 24%, transparent);
       border-color: var(--error);
     }
-
     .btn-sm {
       min-height: 36px;
       padding: 4px var(--space-sm);
       font-size: 0.72rem;
     }
-
     .btn-inc {
       min-height: 32px;
       padding: 2px var(--space-sm);
@@ -335,7 +298,6 @@
       border: var(--gold-border);
       font-weight: 600;
     }
-
     /* Hub Switcher Tabs */
     .hub-tabs {
       display: flex;
@@ -344,7 +306,6 @@
       padding-bottom: 2px;
       scrollbar-width: thin;
     }
-
     .hub-tab {
       flex: 1 0 auto;
       min-height: 44px;
@@ -367,19 +328,16 @@
                   color var(--dur-short) var(--ease-out),
                   border-color var(--dur-short) var(--ease-out);
     }
-
     .hub-tab:hover {
       background: var(--surface-container-high);
       color: var(--on-surface);
     }
-
     .hub-tab[aria-selected="true"] {
       background: var(--primary-container);
       color: var(--primary);
       border-color: var(--primary);
       box-shadow: var(--panel-highlight);
     }
-
     .hub-tab-num {
       display: inline-grid;
       place-items: center;
@@ -391,12 +349,10 @@
       font-size: 0.7rem;
       font-weight: 600;
     }
-
     .hub-tab[aria-selected="true"] .hub-tab-num {
       background: var(--primary);
       color: var(--on-primary);
     }
-
     /* Main Workspace */
     .page-grid {
       display: grid;
@@ -407,7 +363,6 @@
       overflow: hidden;
     }
     .page-grid * { min-width: 0; }
-
     /* Masthead / Overview Header */
     .hero-header {
       background-color: var(--surface-container-low);
@@ -421,7 +376,6 @@
       align-items: center;
       box-shadow: var(--panel-highlight);
     }
-
     .coord-label {
       font-family: var(--font-label);
       font-size: var(--label-size);
@@ -430,7 +384,6 @@
       color: var(--secondary);
       margin: 0 0 var(--space-xs) 0;
     }
-
     .hero-title {
       font-family: var(--font-headline);
       font-size: var(--display-size);
@@ -440,24 +393,20 @@
       margin: 0;
       color: var(--on-surface);
     }
-
     .hero-title em {
       color: var(--primary);
       font-style: italic;
     }
-
     .hero-lede {
       margin: var(--space-sm) 0 0 0;
       color: var(--on-surface-variant);
       max-width: 65ch;
     }
-
     .kpi-strip {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-sm);
     }
-
     .kpi-tile {
       background: var(--surface-container);
       border: var(--hairline);
@@ -465,7 +414,6 @@
       padding: var(--space-sm) var(--space-md);
       box-shadow: var(--panel-highlight);
     }
-
     .kpi-label {
       font-family: var(--font-label);
       font-size: 0.7rem;
@@ -473,7 +421,6 @@
       text-transform: uppercase;
       color: var(--on-surface-variant);
     }
-
     .kpi-value {
       font-family: var(--font-label);
       font-size: 1.1rem;
@@ -482,11 +429,9 @@
       font-variant-numeric: tabular-nums;
       margin-top: 2px;
     }
-
     .kpi-value.is-cyan { color: var(--secondary); }
     .kpi-value.is-purple { color: var(--tertiary); }
     .kpi-value.is-positive { color: var(--positive); }
-
     /* Status Toast */
     .status-banner {
       display: none;
@@ -2772,7 +2717,6 @@
       </article>
     </section>
 
-
     <!-- =================================================================== -->
     <!-- HUB 8: GEFECHTS-LAGEZENTRUM, MASTER-CHRONIK & 34ER-RÜGEN-MATRIX     -->
     <!-- =================================================================== -->
@@ -4661,7 +4605,6 @@
       }
     }
 
-    
     /* ========================================================================= */
     /* HUB 6 LOGIK: DIABOLI TWINS, VALIDATOR, ENTROPY, SORTER, RÜGEN             */
     /* ========================================================================= */
@@ -5099,6 +5042,58 @@ ${extraModules.join('\n')}
       if (out) out.value = promptText;
     }
 
+    function fallbackCopy(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch (e) {
+        console.warn('Fallback copy error', e);
+      }
+    }
+
+    function copyMasterPrompt() {
+      let out = document.getElementById('pgen-output');
+      if (!out || !out.value || !out.value.trim()) {
+        compileMasterPrompt();
+        out = document.getElementById('pgen-output');
+      }
+      const promptText = out ? out.value : '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(promptText).catch(() => fallbackCopy(promptText));
+      } else {
+        fallbackCopy(promptText);
+      }
+      showStatus('Master-Prompt erfolgreich in die Zwischenablage kopiert!');
+    }
+
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+      showStatus('Schutzformel erfolgreich in Zwischenablage kopiert!');
+    }
+
+    function insertSampleCase() {
+      const inp = document.getElementById('pgen-input');
+      if (inp) {
+        inp.value = "Vollstreckungsankündigung der Stadtkasse wegen angeblicher Rundfunkbeiträge ohne vollstreckbaren Grundlagenbescheid. Keine Rechtsbehelfsbelehrung beigefügt, unleserliche Paraphe statt eigenhändiger Richter- oder Beamtenunterschrift nach § 37 Abs. 3 VwVfG / BGH IX ZB 198/11.";
+        compileMasterPrompt();
+        showStatus('Muster-Sachverhalt in Prompt-Schmiede geladen!');
+      }
+    }
+
+    function showStatusBanner(msg, isErr) { showStatus(msg, isErr); }
+    function showGlobalStatus(msg, isErr) { showStatus(msg, isErr); }
+
     function dispatchToLLM(target) {
       copyMasterPrompt();
       const urls = {
@@ -5111,8 +5106,15 @@ ${extraModules.join('\n')}
         mistral: 'https://chat.mistral.ai'
       };
       const url = urls[target] || 'https://chatgpt.com';
-      window.open(url, '_blank');
-      showStatusBanner(`Prompt kopiert! Öffne ${target.toUpperCase()} im neuen Tab...`);
+      try {
+        const w = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!w || w.closed || typeof w.closed === 'undefined') {
+          window.location.href = url;
+        }
+      } catch (err) {
+        window.location.href = url;
+      }
+      showStatus(`Prompt kopiert! Öffne ${target.toUpperCase()}...`);
     }
 
     function copyOllamaBridge() {
@@ -5389,8 +5391,6 @@ ${extraModules.join('\n')}
         showGlobalStatus('Rüge ' + id + ' in die Zwischenablage kopiert!');
       });
     }
-
-
 
     /* =====================================================================
        HUB 9 JAVASCRIPT LOGIK — KANZLEI-WERKBANK & NOTFALL-NAVIGATOR
