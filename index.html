@@ -12,22 +12,18 @@
   <style>
     :root {
       color-scheme: dark;
-
       /* True-OLED Dark-Kanzleidesign (Nocturne-basiert nach Nutzerspezifikation) */
       --background: #06080d;
       --surface-container-low: #090c12;
       --surface-container: #0c1017;
       --surface-container-high: #131924;
       --surface-recessed: #04060a;
-
       /* Text */
       --on-surface: #eef2f8;
       --on-surface-variant: #9aa7bd;
-
       /* Rahmen & Linien */
       --outline: #33415c;
       --outline-variant: #1c2536;
-
       /* Kanzlei-Akzente */
       --primary: #d4af37;
       --on-primary: #06080d;
@@ -38,12 +34,10 @@
       --tertiary: #b388ff;
       --error: #ff3366;
       --on-error: #ffffff;
-
       /* Semantik */
       --positive: #2dd4bf;
       --warning: #f59e0b;
       --focus: #d4af37;
-
       /* Tints & Effects */
       --gold-tint: color-mix(in srgb, var(--primary) 14%, transparent);
       --cyan-tint: color-mix(in srgb, var(--secondary) 12%, transparent);
@@ -51,7 +45,6 @@
       --crimson-tint: color-mix(in srgb, var(--error) 14%, transparent);
       --positive-tint: color-mix(in srgb, var(--positive) 14%, transparent);
       --warning-tint: color-mix(in srgb, var(--warning) 14%, transparent);
-
       --hairline: 1px solid var(--outline-variant);
       --hairline-strong: 1px solid var(--outline);
       --gold-border: 1px solid color-mix(in srgb, var(--primary) 42%, transparent);
@@ -59,12 +52,10 @@
       --purple-border: 1px solid color-mix(in srgb, var(--tertiary) 38%, transparent);
       --crimson-border: 1px solid color-mix(in srgb, var(--error) 45%, transparent);
       --positive-border: 1px solid color-mix(in srgb, var(--positive) 40%, transparent);
-
       --panel-highlight: inset 0 1px 0 color-mix(in srgb, var(--on-surface) 6%, transparent);
       --brass-glow: radial-gradient(circle at 86% 14%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 46%);
       --cyan-glow: radial-gradient(circle at 12% 85%, color-mix(in srgb, var(--secondary) 7%, transparent), transparent 45%);
       --dock-backdrop: color-mix(in srgb, var(--background) 92%, transparent);
-
       /* Data series */
       --data-1: #d4af37;
       --data-2: #00e5ff;
@@ -6192,7 +6183,18 @@ GEFORDERTER AUFBAU:
               renderH9BriefLive();
             }
             if (Array.isArray(data.evidenceStore)) {
-
-</script>
+              h9EvidenceStore = data.evidenceStore;
+              renderH9EvidenceTable();
+            }
+            showGlobalStatus('Kanzlei-Backup erfolgreich wiederhergestellt!');
+          } catch (err) {
+            alert('Fehler beim Laden des Kanzlei-Backups: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+  </script>
 </body>
 </html>
