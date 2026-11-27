@@ -996,6 +996,9 @@
         <button type="button" role="tab" class="hub-tab" id="tab-hub6" aria-selected="false" aria-controls="panel-hub6" onclick="switchHub('hub6')">
           <span class="hub-tab-num">6</span> Advokatus Diaboli &amp; Tool-Marathon
         </button>
+        <button type="button" role="tab" class="hub-tab" id="tab-hub7" aria-selected="false" aria-controls="panel-hub7" onclick="switchHub('hub7')" style="border-color:var(--primary); color:var(--primary);">
+          <span class="hub-tab-num" style="background:var(--primary); color:#000;">7</span> 40er Matrix &amp; Prompt-Schmiede (GPT/Grok)
+        </button>
       </div>
     </div>
   </nav>
@@ -2632,6 +2635,141 @@
       </article>
 
     </section>
+
+    <!-- =================================================================== -->
+    <!-- HUB 7: 40ER SEKTOREN-MATRIX & UNIVERSAL LLM PROMPT-SCHMIEDE         -->
+    <!-- =================================================================== -->
+    <section id="panel-hub7" class="hub-section" role="tabpanel" aria-labelledby="tab-hub7">
+      <div class="hub-banner" style="border-bottom:2px solid var(--primary);">
+        <div>
+          <p class="deck-brass">HUB 7 // DIE 40 SEKTOREN-MATRIX // UNIVERSAL LLM PROMPT-SCHMIEDE</p>
+          <h2 class="hub-title" style="color:var(--primary);">40er Kompaktleiste &amp; LLM-Prompt-Generator</h2>
+          <p class="panel-desc">Kuratierte, duplikatfreie Kanzlei-Matrix und direkter Prompt-Kompilierer für ChatGPT, Grok 2/3, Claude 3.5 und Ad-Hoc-Verteidiger.</p>
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <button type="button" class="btn btn-sm btn-primary" onclick="scrollPromptGen()">⚡ Direkt zum Prompt-Generator</button>
+        </div>
+      </div>
+
+      <!-- TEIL A: DIE 40ER KOMPAKTLEISTE -->
+      <article class="panel" style="margin-bottom:1.5rem; background:var(--surface-container-low); border:var(--gold-border);">
+        <div class="panel-head" style="margin-bottom:0.75rem;">
+          <div>
+            <h3 class="panel-title" style="color:var(--primary);">📋 Die 40 B6-Kernsektoren (Kompaktleiste ohne Duplikate)</h3>
+            <p class="panel-desc">Filtern Sie nach Clustern oder durchsuchen Sie die 40 präzisen Funktionssparten. Klicken Sie auf „In Prompt laden“, um eine Sparte sofort in den Generator zu übertragen.</p>
+          </div>
+          <span class="badge badge-gold" id="k40-counter">40 Sektoren aktiv</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem; align-items:center;" class="chip-nav" id="k40-cluster-chips">
+            <button type="button" class="chip-btn is-active" onclick="filterK40('ALL', this)">Alle (40)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('ALPHA', this)">ALPHA: Justiz &amp; Bau (10)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('BETA', this)">BETA: Fiskus &amp; Zins (6)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('GAMMA', this)">GAMMA: Medizin &amp; Pflege (6)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('DELTA', this)">DELTA: Familie &amp; Schule (6)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('EPSILON', this)">EPSILON: DSGVO &amp; Beweis (5)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('OMEGA', this)">OMEGA: Sakral &amp; Verfassung (4)</button>
+            <button type="button" class="chip-btn" onclick="filterK40('SINGULARITÄT', this)">SINGULARITÄT: Tools (3)</button>
+          </div>
+
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="text" id="k40-search" style="flex:1; margin:0;" placeholder="🔍 Schnellsuche nach Sparte, Gesetz (GewO, SGB, StPO, BGB, SchulG) oder Stichwort..." oninput="searchK40()">
+            <button type="button" class="btn btn-outline" style="font-size:0.75rem;" onclick="resetK40()">Zurücksetzen</button>
+          </div>
+        </div>
+
+        <div id="k40-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:0.75rem; margin-top:1rem; max-height:480px; overflow-y:auto; padding-right:0.25rem;">
+          <!-- Wird per JavaScript aus B6_SECTORS_40 gerendert -->
+        </div>
+      </article>
+
+      <!-- TEIL B: DER UNIVERSAL LLM PROMPT-GENERATOR -->
+      <article class="panel panel-cyan" id="prompt-generator-section" style="background:var(--surface-container);">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title" style="color:var(--secondary);">🧠 Universal Kanzlei-Prompt-Generator (ChatGPT, Grok, Claude)</h3>
+            <p class="panel-desc">Kompiliert deterministische, hochgradig wirksame Prompts für externe KI-Modelle. Nutzt die Gesetzesnormen der 40er-Kompaktleiste und das B6-Kautelardispositiv.</p>
+          </div>
+          <span class="badge badge-cyan" id="target-model-badge">ZIEL: GROK 2/3 (FORENSIK)</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:0.75rem; margin-bottom:1rem;">
+          <div>
+            <label class="input-label">Ziel-Modell &amp; Persona wählen:</label>
+            <select id="pgen-model" onchange="updatePromptPersona()">
+              <option value="grok">⚡ Grok 2/3 (xAI) — Schonungslose Forensik &amp; Foucault-Panoptikum</option>
+              <option value="chatgpt">🏛️ ChatGPT (o1 / GPT-4o) — Höchstrichterlicher Gutachtenstil (BVerfG/BGH)</option>
+              <option value="claude">📜 Claude 3.5 Sonnet — Kautelar-Architekt, Schutzschriften &amp; Verträge</option>
+              <option value="ad_hoc">🚨 Universal-Strafverteidiger — Akut-Notfall an der Schwelle (Art. 13 GG)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="input-label">Gegner / Behördentyp:</label>
+            <select id="pgen-target">
+              <option value="Amtsgericht / Ermittlungsrichter">Amtsgericht / Ermittlungsrichter (§ 105 StPO)</option>
+              <option value="Polizei / Ermittlungsdienst">Polizei / Ermittlungsdienst (PolG / PDV 100)</option>
+              <option value="Pflegekasse / Medizinischer Dienst">Pflegekasse / Medizinischer Dienst (SGB XI)</option>
+              <option value="Jobcenter / Sozialamt">Jobcenter / Sozialamt (SGB II / SGB XII)</option>
+              <option value="Schulleitung / Schulamt">Schulleitung / Schulamt (§ 42 SchulG NRW)</option>
+              <option value="Inkassounternehmen / Gläubiger">Inkassounternehmen / Gläubiger (§ 4 RDGEG / BDSG)</option>
+              <option value="Jugendamt / Allgemeiner Sozialer Dienst">Jugendamt / ASD (§ 8a SGB VIII / SGB X)</option>
+              <option value="Bank / Sparkasse">Bank / Sparkasse (P-Konto / § 31 ZKG)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="input-label">Aktive Sparte aus 40er-Matrix:</label>
+            <select id="pgen-sparte">
+              <!-- Dynamisch aus den 40 Sparten befüllt -->
+            </select>
+          </div>
+
+          <div>
+            <label class="input-label">Vorgangs-ID / Aktenzeichen:</label>
+            <input type="text" id="pgen-case" value="B6-00001" style="font-family:var(--font-label); color:var(--primary);">
+          </div>
+        </div>
+
+        <div style="margin-bottom:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+            <label class="input-label">Behördentext / Bescheid-Auszug / Sachverhalt einfügen:</label>
+            <span style="font-size:0.7rem; color:var(--secondary); cursor:pointer;" onclick="insertSampleCase()">[Beispiel-Fall laden]</span>
+          </div>
+          <textarea id="pgen-input" placeholder="Fügen Sie hier den Text des Schreibens, die Rügepunkte oder den Sachverhalt ein..." style="min-height:90px;"></textarea>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin-bottom:1rem;">
+          <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.35rem; color:var(--on-surface);">
+            <input type="checkbox" id="pgen-opt-fiskus" checked> Fiskalische Inversion aktivieren (Amtshaftung &amp; Zinsen)
+          </label>
+          <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.35rem; color:var(--on-surface);">
+            <input type="checkbox" id="pgen-opt-form" checked> Formnichtigkeit &amp; Paraphen-Rüge (BGH IX ZB 198/11)
+          </label>
+          <label style="font-size:0.78rem; display:flex; align-items:center; gap:0.35rem; color:var(--on-surface);">
+            <input type="checkbox" id="pgen-opt-dsgvo" checked> DSGVO Art. 82 Schadensersatz-Sperre
+          </label>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:1rem;">
+          <button type="button" class="btn btn-primary" onclick="compileMasterPrompt()">⚡ Master-Prompt kompilieren</button>
+          <button type="button" class="btn btn-cyan" onclick="copyMasterPrompt()">📋 Prompt in Zwischenablage kopieren</button>
+          <button type="button" class="btn btn-outline" onclick="openTargetLLM('grok')">Grok öffnen ↗</button>
+          <button type="button" class="btn btn-outline" onclick="openTargetLLM('chatgpt')">ChatGPT öffnen ↗</button>
+          <button type="button" class="btn btn-outline" onclick="openTargetLLM('claude')">Claude öffnen ↗</button>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <span style="font-family:var(--font-label); font-size:0.75rem; color:var(--secondary);" id="pgen-stats">Bereit zur Kompilierung</span>
+            <span style="font-family:var(--font-label); font-size:0.7rem; color:var(--on-surface-variant);">100 % DETERMINISTISCHER PROMPT</span>
+          </div>
+          <div class="form-preview" id="pgen-output" style="max-height:420px; color:#e0f2fe; background:#020509; border:1px solid var(--secondary);">Klicken Sie auf „Master-Prompt kompilieren“, um den strukturierten Auftrag für Grok, ChatGPT oder Claude zu generieren.</div>
+        </div>
+      </article>
+    </section>
+
 </main>
 
   <api-shim></api-shim>
@@ -2799,14 +2937,15 @@
 
     function switchHub(hubId) {
       appState.activeHub = hubId;
-      const hubs = ['hub1', 'hub2', 'hub3', 'hub4', 'hub5', 'hub6'];
+      const hubs = ['hub1', 'hub2', 'hub3', 'hub4', 'hub5', 'hub6', 'hub7'];
       const hubLabels = {
         hub1: `HUB 1 · Justiz`,
         hub2: `HUB 2 · Pflege`,
         hub3: `HUB 3 · Soziales`,
         hub4: `HUB 4 · Finanzen`,
         hub5: `HUB 5 · KI & XJustiz`,
-        hub6: `HUB 6 · Diaboli & Tools`
+        hub6: `HUB 6 · Diaboli & Tools`,
+        hub7: `HUB 7 · 40er Matrix & Prompt-Schmiede`
       };
       hubs.forEach(function(h) {
         const tab = document.getElementById(`tab-${h}`);
@@ -4177,6 +4316,240 @@
     }
 
     document.addEventListener('DOMContentLoaded', initB6MasterDock);
-  </script>
+  
+    /* =====================================================================
+       HUB 7: DIE 40ER MATRIX & UNIVERSAL LLM PROMPT GENERATOR
+       ===================================================================== */
+    const B6_SECTORS_40 = [{"id": "SP-01", "nr": "0001", "cluster": "ALPHA", "badge": "badge-gold", "title": "Gewerbe- & Betriebserlaubnis", "norm": "GewO §§ 14, 35, VwVfG", "desc": "Konzessionsprüfungen, Abwehr unberechtigter Betriebsuntersagungen, Handwerksrolleneintragung und Gewerberegister."}, {"id": "SP-02", "nr": "0004", "cluster": "ALPHA", "badge": "badge-gold", "title": "Waffen-, Jagd- & Munitionsrecht", "norm": "WaffG §§ 4, 5, BVerwG", "desc": "Zuverlässigkeitsprüfungen, WBK-Widerrufsabwehr, Aufbewahrungskontrollen und Transportauflagen."}, {"id": "SP-03", "nr": "0006", "cluster": "ALPHA", "badge": "badge-gold", "title": "Bauplanung & Baustopp-Abwehr", "norm": "BauGB §§ 29-35, BauNVO, LBO", "desc": "Baugenehmigungsverfahren, Nutzungsänderungen, Stilllegungsverfügungen und Bestandsschutz im Außenbereich."}, {"id": "SP-04", "nr": "0011", "cluster": "ALPHA", "badge": "badge-gold", "title": "Güterkraftverkehr & BALM-Compliance", "norm": "GüKG §§ 3, 5, BALM-Prüfordnung", "desc": "EU-Gemeinschaftslizenzen, Mautkontrollen, Fahrtenschreiber-Prüfungen und Abwehr von Bußgeldbescheiden."}, {"id": "SP-05", "nr": "0016", "cluster": "ALPHA", "badge": "badge-gold", "title": "Mietrecht & Räumungsschutz", "norm": "BGB §§ 535, 573, 765a ZPO", "desc": "Abwehr fristloser Kündigungen, Mieterhöhungs-Deckel, Mängelbeseitigung und Vollstreckungsschutz bei Härtefällen."}, {"id": "SP-06", "nr": "0021", "cluster": "ALPHA", "badge": "badge-gold", "title": "Arbeitsvertrags- & Kündigungsschutz", "norm": "KSchG §§ 1, 4, BGB § 626", "desc": "Kündigungsschutzklagen binnen 3-Wochenfrist, Abfindungsverhandlungen, Abmahnungsentfernung und Zeugnisberichtigung."}, {"id": "SP-07", "nr": "0051", "cluster": "ALPHA", "badge": "badge-gold", "title": "Erbrecht & Nachlass-Sicherung", "norm": "BGB §§ 1922-2385, BeurkG", "desc": "Pflichtteilsabsicherung, Erbengemeinschafts-Auseinandersetzung, Testamentsvollstreckung und Nachlassinsolvenz."}, {"id": "SP-08", "nr": "0101", "cluster": "ALPHA", "badge": "badge-gold", "title": "Verwaltungsakt- & Ermessenskontrolle", "norm": "VwVfG §§ 35, 39, 44, VwGO § 114", "desc": "Rüge von Ermessensnichtgebrauch und Ermessensfehlern, Feststellung von Nichtigkeit und Anfechtungsklagen."}, {"id": "SP-09", "nr": "0105", "cluster": "ALPHA", "badge": "badge-gold", "title": "Strafprozess & Haustür-Souveränität", "norm": "StPO §§ 102, 105, 107, Art. 13 GG", "desc": "Durchsuchungsbeschluss-Filterung, Richtervorbehalt, 6-Monats-Verfall, Null-Beute-Quittung und Beistandsrecht."}, {"id": "SP-10", "nr": "0120", "cluster": "ALPHA", "badge": "badge-gold", "title": "Polizeirecht & Eingriffs-Deeskalation", "norm": "PolG NRW §§ 8-15, PDV 100", "desc": "Identitätsfeststellung, Platzverweise, Gewahrsam, Zwangsmittelprüfung und Dienstausweis-Legitimation."}, {"id": "SP-11", "nr": "0151", "cluster": "BETA", "badge": "badge-cyan", "title": "Seerecht & Logistik-Ketten", "norm": "HGB §§ 476 ff., Admiralty Law", "desc": "Frachtrecht, Reederhaftung, Flaggenzertifikate und internationale Handelsketten-Arbitrage."}, {"id": "SP-12", "nr": "0201", "cluster": "BETA", "badge": "badge-cyan", "title": "Urkunden- & Notariats-Validierung", "norm": "BeurkG, Haager Apostille 1961", "desc": "Internationale Legalisation, Apostillen-Authentifizierung, Formstrenge und öffentlicher Glaube."}, {"id": "SP-13", "nr": "0220", "cluster": "BETA", "badge": "badge-cyan", "title": "Inkassokosten-Kürzer & RDGEG", "norm": "RDGEG § 4 Abs. 5, RVG VV 2300, § 254 BGB", "desc": "Rückstutzung überhöhter Mahn- und Inkassospesen auf das gesetzliche Anwalts-Vergütungsniveau."}, {"id": "SP-14", "nr": "0240", "cluster": "BETA", "badge": "badge-cyan", "title": "Verzugszins-Arithmetik & Zinsessperre", "norm": "BGB §§ 288, 289 Satz 1", "desc": "5 Prozentpunkte über Basiszinssatz p.a., taggenaue act/365-Staffel und gesetzliches Zinseszins-Verbot."}, {"id": "SP-15", "nr": "0260", "cluster": "BETA", "badge": "badge-cyan", "title": "P-Konto & Vollstreckungsschutz", "norm": "ZPO §§ 850k, 850c, ZKG § 31", "desc": "Berechnung pfändungsfreier Monatsbeträge, Unterhaltszuschläge und Sicherung des Existenzminimums."}, {"id": "SP-16", "nr": "0280", "cluster": "BETA", "badge": "badge-cyan", "title": "SCHUFA-Einmeldeverbot & Löschung", "norm": "BDSG § 31 Abs. 2, Art. 17 DSGVO", "desc": "Gesetzliches Übermittlungsverbot bei bestrittener Forderung und Schadensersatz gem. Art. 82 DSGVO."}, {"id": "SP-17", "nr": "0301", "cluster": "GAMMA", "badge": "badge-positive", "title": "Patientenrechte & Behandlungsfehler", "norm": "BGB §§ 630a-630h, § 823 BGB", "desc": "Sofortige vollständige Patientenakteneinsicht (§ 630g), Aufklärungsmängel und Beweislastumkehr."}, {"id": "SP-18", "nr": "0330", "cluster": "GAMMA", "badge": "badge-positive", "title": "SGB XI Pflegegrade & NBA-Rechner", "norm": "SGB XI §§ 14, 15, BRi-Richtlinien", "desc": "Gewichtetes 6-Module-System mit Kardinal-Hebel Modul 4 (Selbstversorgung 40 %) und Höherstufung."}, {"id": "SP-19", "nr": "0360", "cluster": "GAMMA", "badge": "badge-positive", "title": "MDK-Fangfragen-Entlarvung", "norm": "SGB XI § 18, BRi, BSG-Rechtsprechung", "desc": "Abwehr von Aktenlage-Gutachten, Durchsetzung des 'schlechtesten Tages' und Widerspruchs-Formeln."}, {"id": "SP-20", "nr": "0400", "cluster": "GAMMA", "badge": "badge-positive", "title": "Hilfsmittel-Versorgung & Genehmigung", "norm": "SGB V § 33, § 13 Abs. 3a", "desc": "Eilbedarf, Rollstühle, Pflegebetten und Eintritt der gesetzlichen 3-Wochen-Genehmigungsfiktion."}, {"id": "SP-21", "nr": "0420", "cluster": "GAMMA", "badge": "badge-positive", "title": "CGM-Sensorik & Notfall-Insulinversorgung", "norm": "SGB V, StGB §§ 223, 340", "desc": "LADA-/Typ-1-Monitoring, sensorbasierte Glukosemessung und Schutz vor rechtswidrigem Entzug."}, {"id": "SP-22", "nr": "0440", "cluster": "GAMMA", "badge": "badge-positive", "title": "Schwerbehinderung & GdB-Feststellung", "norm": "SGB IX §§ 2, 152, VersMedV", "desc": "Grad der Behinderung, Merkzeichen (G, aG, B, H), Nachteilsausgleiche und Kündigungsschutz."}, {"id": "SP-23", "nr": "0451", "cluster": "DELTA", "badge": "badge-warning", "title": "Notfall-Barvorschuss & Barauszahlung", "norm": "SGB I § 42 Abs. 1 Satz 1", "desc": "Sofortige Barauszahlung am Tag der Antragstellung bei Mittellosigkeit zur Existenzsicherung."}, {"id": "SP-24", "nr": "0480", "cluster": "DELTA", "badge": "badge-warning", "title": "Bürgergeld-Sanktionsabwehr", "norm": "SGB II §§ 31, 31a, BVerfG 1 BvL 7/16", "desc": "Verfassungsrechtlicher Schutz des Existenzminimums, strikte 30 %-Grenze und Sanktionsnichtigkeit."}, {"id": "SP-25", "nr": "0500", "cluster": "DELTA", "badge": "badge-warning", "title": "Kosten der Unterkunft (KdU-Schutz)", "norm": "SGB II § 22, BSG-Rechtsprechung", "desc": "Abwehr von Kostensenkungsaufforderungen, Unwirtschaftlichkeit von Umzügen und Mietkostenübernahme."}, {"id": "SP-26", "nr": "0520", "cluster": "DELTA", "badge": "badge-warning", "title": "Schulpflicht & Attest-Rechtswahrung", "norm": "SchulG NRW §§ 42, 43, Art. 3 GG", "desc": "Facharzt-Atteste genügen zur Entschuldigung; Abwehr von Bußgelddrohungen und Schulpflicht-Willkür."}, {"id": "SP-27", "nr": "0540", "cluster": "DELTA", "badge": "badge-warning", "title": "Inklusion & Nachteilsausgleich", "norm": "SchulG NRW § 42, BGG, Art. 3 Abs. 3 GG", "desc": "Rechtsanspruch auf Zeitzugaben, Hilfsmittelverwendung und barrierefreie Prüfungsmodalitäten."}, {"id": "SP-28", "nr": "0580", "cluster": "DELTA", "badge": "badge-warning", "title": "Jugendamtsbegleitung & Beistandsrecht", "norm": "SGB VIII § 8a, SGB X § 13, Art. 6 GG", "desc": "Recht auf Hinzuziehung von Beiständen bei Gesprächen; Abwehr unbegründeter Inobhutnahmen."}, {"id": "SP-29", "nr": "0651", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Auskunft & Akten-Transparenz", "norm": "Art. 15 DSGVO, IFG NRW", "desc": "Vollständige Kopie aller Rohdaten, Metadaten, Empfängerlisten und behördlicher Vermerke."}, {"id": "SP-30", "nr": "0680", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Löschung & Schadensersatz", "norm": "Art. 17, 82 DSGVO, BAG / EuGH", "desc": "Löschung unzulässiger Daten und immaterieller Schadensersatz bei Kontrollverlust und Bloßstellung."}, {"id": "SP-31", "nr": "0710", "cluster": "EPSILON", "badge": "badge-purple", "title": "Beweissicherung & Gedächtnisprotokoll", "norm": "ZPO § 415, StPO § 107", "desc": "Echtzeit-Dokumentation behördlicher Übergriffe mit Zeugenunterschriften und Zeitstempeln."}, {"id": "SP-32", "nr": "0740", "cluster": "EPSILON", "badge": "badge-purple", "title": "Dienstaufsicht & Amtspflichtverletzung", "norm": "BGB § 839, Art. 34 GG, BeamtStG § 36", "desc": "Remonstration, Dienstaufsichtsbeschwerden und Durchgriff auf die persönliche Beamtenhaftung."}, {"id": "SP-33", "nr": "0780", "cluster": "EPSILON", "badge": "badge-purple", "title": "Untätigkeitsklage & Fristerzwingung", "norm": "VwGO § 75, SGG § 88", "desc": "Klageerhebung nach Ablauf von 3 bzw. 6 Monaten behördlichen Schweigens zur Urteilsbeschleunigung."}, {"id": "SP-34", "nr": "0801", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Kanonisches Recht & Jus Asyli", "norm": "Codex Iuris Canonici (CIC), Art. 140 GG", "desc": "Staatskirchenrechtliche Sonderstellung, kirchliche Schutzräume und Gewissensimmunität."}, {"id": "SP-35", "nr": "0850", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Verfassungsbeschwerde & Gehörsrüge", "norm": "BVerfGG § 90, ZPO § 321a, Art. 103 GG", "desc": "Substantiierte Rüge der Verletzung rechtlichen Gehörs und Willkürverbot (Art. 3 Abs. 1 GG)."}, {"id": "SP-36", "nr": "0890", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Einstweilige Anordnung vor dem BVerfG", "norm": "BVerfGG § 32, BVerfG-Präzedenz", "desc": "Dringlichkeitsanträge zur Abwendung schwerer Nachteile bei drohender irreversibler Grundrechtsverletzung."}, {"id": "SP-37", "nr": "0920", "cluster": "OMEGA", "badge": "badge-crimson", "title": "XJustiz & Elektronischer Rechtsverkehr", "norm": "XJustiz 3.3.1, beA / beBPo, § 130a ZPO", "desc": "Elektronische Formwirksamkeit, strukturierte XML-Datensätze und Prüfprotokoll-Validierung."}, {"id": "SP-38", "nr": "0955", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Shannon-Entropie-Scanner", "norm": "Informationstheorie, BVerfG 2 BvR 1318/26", "desc": "Messung der Bit/Zeichen-Dichte H(X) zur Entlarvung inhaltsleerer Copy-Paste-Gerichtsbeschlüsse."}, {"id": "SP-39", "nr": "0970", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "WORM-Ledger & SHA-256 Hasher", "norm": "WebCrypto API, BSI TR-03103, ZPO § 371a", "desc": "Unveränderbare kryptografische Zeitstempelung und Verkettung von Beweisdokumenten im Browser."}, {"id": "SP-40", "nr": "1000", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Diaboli Twins & Foucault-Panoptikum", "norm": "Luhmann-Systemtheorie, B6 Omni-Core", "desc": "Dekonstruktion zirkulärer Amtsakten, Inversionsberechnung und asymmetrische Gegenangriffs-Logik."}];
+
+    const k40State = {
+      activeCluster: 'ALL',
+      searchQuery: '',
+      selectedSectorId: 'SP-09'
+    };
+
+    function initHub7() {
+      renderK40Sectors();
+      populatePromptSparteDropdown();
+      updatePromptPersona();
+      compileMasterPrompt();
+    }
+
+    function renderK40Sectors() {
+      const grid = document.getElementById('k40-grid');
+      if (!grid) return;
+      const q = k40State.searchQuery.toLowerCase().trim();
+      const filtered = B6_SECTORS_40.filter(item => {
+        if (k40State.activeCluster !== 'ALL' && item.cluster !== k40State.activeCluster) return false;
+        if (!q) return true;
+        return item.title.toLowerCase().includes(q) ||
+               item.norm.toLowerCase().includes(q) ||
+               item.desc.toLowerCase().includes(q) ||
+               item.id.toLowerCase().includes(q) ||
+               item.nr.includes(q);
+      });
+
+      const counter = document.getElementById('k40-counter');
+      if (counter) counter.textContent = `${filtered.length} von 40 Sektoren aktiv`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:1.5rem; color:var(--on-surface-variant);">Keine Sektoren für diesen Filter gefunden.</div>';
+        return ground;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="panel" style="background:var(--surface-container); border:var(--hairline); padding:0.75rem; display:flex; flex-direction:column; justify-content:space-between; gap:0.4rem;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+              <span style="font-family:var(--font-label); font-weight:700; font-size:0.8rem; color:var(--primary);">${item.id} · #${item.nr}</span>
+              <span class="badge ${item.badge}">${item.cluster}</span>
+            </div>
+            <h4 style="font-family:var(--font-headline); font-size:1rem; color:var(--on-surface); margin:0.15rem 0;">${item.title}</h4>
+            <div style="font-family:var(--font-label); font-size:0.7rem; color:var(--secondary);">${item.norm}</div>
+            <p style="font-size:0.76rem; color:var(--on-surface-variant); line-height:1.35; margin-top:0.25rem;">${item.desc}</p>
+          </div>
+          <div style="display:flex; gap:0.35rem; margin-top:0.4rem;">
+            <button type="button" class="btn btn-sm btn-cyan" style="flex:1; font-size:0.72rem; padding:0.3rem 0.5rem;" onclick="loadSectorIntoPrompt('${item.id}')">⚡ In Prompt laden</button>
+            <button type="button" class="btn btn-sm btn-outline" style="font-size:0.72rem; padding:0.3rem 0.5rem;" onclick="copySectorCitation('${item.id}')">Kopieren</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterK40(cluster, btn) {
+      k40State.activeCluster = cluster;
+      document.querySelectorAll('#k40-cluster-chips .chip-btn').forEach(b => b.classList.remove('is-active'));
+      if (btn) btn.classList.add('is-active');
+      renderK40Sectors();
+    }
+
+    function searchK40() {
+      k40State.searchQuery = document.getElementById('k40-search').value || '';
+      renderK40Sectors();
+    }
+
+    function resetK40() {
+      k40State.activeCluster = 'ALL';
+      k40State.searchQuery = '';
+      const inp = document.getElementById('k40-search');
+      if (inp) inp.value = '';
+      document.querySelectorAll('#k40-cluster-chips .chip-btn').forEach(b => b.classList.remove('is-active'));
+      const allBtn = document.querySelector('#k40-cluster-chips .chip-btn');
+      if (allBtn) allBtn.classList.add('is-active');
+      renderK40Sectors();
+    }
+
+    function populatePromptSparteDropdown() {
+      const sel = document.getElementById('pgen-sparte');
+      if (!sel) return;
+      sel.innerHTML = B6_SECTORS_40.map(s => `
+        <option value="${s.id}">${s.id}: ${s.title} (${s.norm})</option>
+      `).join('');
+      sel.value = k40State.selectedSectorId;
+    }
+
+    function loadSectorIntoPrompt(id) {
+      k40State.selectedSectorId = id;
+      const sel = document.getElementById('pgen-sparte');
+      if (sel) sel.value = id;
+      scrollPromptGen();
+      compileMasterPrompt();
+      showStatusBanner(`Sparte ${id} in den Prompt-Generator geladen!`);
+    }
+
+    function copySectorCitation(id) {
+      const s = B6_SECTORS_40.find(x => x.id === id);
+      if (!s) return;
+      const cit = `[BLACK SIX MATRIX // SEKTOR ${s.id} - #${s.nr}]\n${s.title}\nNormierung: ${s.norm}\nAnwendung: ${s.desc}`;
+      navigator.clipboard.writeText(cit).then(() => showStatusBanner(`Sektor ${id} in Zwischenablage kopiert!`));
+    }
+
+    function scrollPromptGen() {
+      const el = document.getElementById('prompt-generator-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function updatePromptPersona() {
+      const model = document.getElementById('pgen-model').value;
+      const badge = document.getElementById('target-model-badge');
+      if (!badge) return;
+      if (model === 'grok') {
+        badge.textContent = 'ZIEL: GROK 2/3 (FORENSIK & PANOPTIKUM)';
+        badge.className = 'badge badge-purple';
+      } else if (model === 'chatgpt') {
+        badge.textContent = 'ZIEL: CHATGPT (SENATS-SUBSUMTION & BVerfG)';
+        badge.className = 'badge badge-gold';
+      } else if (model === 'claude') {
+        badge.textContent = 'ZIEL: CLAUDE 3.5 (KAUTELAR-SCHÜTZER)';
+        badge.className = 'badge badge-cyan';
+      } else {
+        badge.textContent = 'ZIEL: AD-HOC STRAFVERTEIDIGER (HAUSTÜR)';
+        badge.className = 'badge badge-crimson';
+      }
+    }
+
+    function insertSampleCase() {
+      const sample = `Am 14.11.2026 um 06:15 Uhr erschienen Beamte des Kriminalkommissariats mit einem auf den 15.04.2026 datierten Durchsuchungsbeschluss des Amtsgerichts (Az. 152 Gs 648/26). Auf dem Beschluss befindet sich lediglich ein flüchtiger Strich (Paraphe) ohne lesbaren Richternamen, versehen mit dem Stempel 'Beglaubigt'. Gleichzeitig wird mit Zwangsgeld und Datenübermittlung an die SCHUFA gedroht, obwohl der Anspruch vollumfänglich bestritten wurde.`;
+      const inp = document.getElementById('pgen-input');
+      if (inp) {
+        inp.value = sample;
+        compileMasterPrompt();
+        showStatusBanner('Beispiel-Sachverhalt eingefügt!');
+      }
+    }
+
+    function compileMasterPrompt() {
+      const model = document.getElementById('pgen-model').value;
+      const target = document.getElementById('pgen-target').value;
+      const sparteId = document.getElementById('pgen-sparte').value;
+      const caseId = (document.getElementById('pgen-case') ? document.getElementById('pgen-case').value : 'B6-00001') || 'B6-00001';
+      const inputTxt = (document.getElementById('pgen-input') ? document.getElementById('pgen-input').value.trim() : '') || '[SACHVERHALT HIER EINFÜGEN]';
+
+      const optFiskus = document.getElementById('pgen-opt-fiskus').checked;
+      const optForm = document.getElementById('pgen-opt-form').checked;
+      const optDsgvo = document.getElementById('pgen-opt-dsgvo').checked;
+
+      const sector = B6_SECTORS_40.find(s => s.id === sparteId) || B6_SECTORS_40[8];
+
+      let personaInstruction = '';
+      if (model === 'grok') {
+        personaInstruction = `DU AGIRST ALS GROK 2/3 IN DER ROLLE DES OBERSTEN FORENSIKERS DER B6-KANZLEI-ARCHITEKTUR (ADVOCATUS DIABOLI).
+Dein Stil ist unnachgiebig, analytisch brillant und entlarvt behördliche Selbstermächtigung, Textbaustein-Willkür und Disziplinarstrukturen (Foucault-Panoptikum). Du weichst keiner Gegenüberstellung aus und zerlegst die gegnerische Position dogmatisch in ihre Einzelteile.`;
+      } else if (model === 'chatgpt') {
+        personaInstruction = `DU AGIRST ALS CHATGPT (O1 / GPT-4O) IM MODUS DES HÖCHSTRICHTERLICHEN SENATSPRÜFERS.
+Erstelle ein formstrenges juristisches Gutachten im klassischen Gutachtenstil:
+1. Obersatz (Anspruchsgrundlage / Eingriffsnorm benennen)
+2. Definition der gesetzlichen Tatbestandsmerkmale
+3. Subsumtion des konkreten Sachverhalts unter die Merkmale
+4. Feststellung der Rechtsfolge (Nichtigkeit, Amtshaftung, Beweisverwertungsverbot)
+Zitiere einschlägige Leitentscheidungen von BVerfG, BGH und BSG mit Aktenzeichen.`;
+      } else if (model === 'claude') {
+        personaInstruction = `DU AGIRST ALS CLAUDE 3.5 SONNET ALS KAUTELAR-JURIST UND VERFASSUNGS-STRATEGE.
+Formuliere einen sofort druckreifen, rechtssicheren Schriftsatz an die Behörde/das Gericht. Dein Ton ist formell hochgradig distinguiert, unmissverständlich, preußisch-präzise und verankert sofortige Fristen, Warnhinweise auf persönliche Beamtenhaftung und Gehörsrügen.`;
+      } else {
+        personaInstruction = `DU AGIRST ALS AD-HOC STRAFVERTEIDIGER IM NOTFALL-EINSATZ AN DER HAUSTÜR.
+Gib dem Bürger eine sofort sprechbare, glasklare 3-Stufen-Verteidigungsformel an die Hand, um hoheitliche Willkür an der Schwelle sofort zu stoppen, Zeugen zu sichern und die Null-Beute-Quittung (§ 107 StPO) durchzusetzen.`;
+      }
+
+      let p = `================================================================================
+B6 MASTER-PROMPT // CLIENT-SIDE WEBSOVEREIGN COMPILER
+Vorgang: #${caseId} | Datum: ${new Date().toLocaleDateString('de-DE')} | Modell: ${model.toUpperCase()}
+Sektor: ${sector.id} — ${sector.title} (${sector.norm})
+Gegner: ${target}
+================================================================================
+
+${personaInstruction}
+
+KONKRETE GESETZLICHE NORMIERUNG DER MATRIX:
+- Sektor-ID: ${sector.id} (#${sector.nr} im B6-Gesamtkatalog)
+- Gesetzliche Grundlagen: ${sector.norm}
+- Funktionale Ausrichtung: ${sector.desc}
+
+AKTIVIERTE FORENSIK-MODULE:`;
+
+      if (optForm) {
+        p += `\n[X] FORMNICHTIGKEIT: Strikte Prüfung auf BGH IX ZB 198/11 (Flüchtige Paraphen wahren Schriftform nicht), § 44 VwVfG (Absolute Nichtigkeit) und BVerfG 2 BvR 2220/01 (6-Monats-Verfall von Durchsuchungsbeschlüssen).`;
+      }
+      if (optFiskus) {
+        p += `\n[X] FISKALISCHE INVERSION: Berechnung des Verzugszinses gem. § 288 BGB (5 Prozentpunkte über Basiszinssatz p.a.) ohne Zinseszins (§ 289 BGB) sowie persönliche Beamtenhaftung gem. § 839 BGB i.V.m. Art. 34 GG.`;
+      }
+      if (optDsgvo) {
+        p += `\n[X] DATENSCHUTZ-SPERRE: Striktes Einmeldeverbot bestrittener Forderungen gem. § 31 Abs. 2 BDSG; Schadensersatzforderung nach Art. 82 DSGVO und Löschungsantrag nach Art. 17 DSGVO.`;
+      }
+
+      p += `\n\nSACHVERHALT & BEHÖRDENVERMERK:\n"${inputTxt}"\n\nDEIN ARBEITSAUFTRAG:\n1. Analysiere den Sachverhalt auf eklatante Rechts- und Formfehler.\n2. Zerlege die Argumente der Behörde (${target}) mit den einschlägigen Normen (${sector.norm}).\n3. Formuliere eine unanfechtbare Erwiderung bzw. Rüge zur Aufnahme in das Protokoll.\n4. Schließe mit der Androhung der Dienstaufsichtsbeschwerde, Amtshaftungsklage und Strafanzeige bei fortgesetztem Amtsmissbrauch.`;
+
+      const out = document.getElementById('pgen-output');
+      if (out) out.textContent = p;
+
+      const stats = document.getElementById('pgen-stats');
+      if (stats) {
+        const chars = p.length;
+        const words = p.split(/\s+/).length;
+        const tokensEst = Math.round(chars / 3.8);
+        stats.textContent = `${chars.toLocaleString('de-DE')} Zeichen · ca. ${words} Wörter · ~${tokensEst} Tokens`;
+      }
+    }
+
+    function copyMasterPrompt() {
+      const out = document.getElementById('pgen-output');
+      if (!out || !out.textContent) return;
+      navigator.clipboard.writeText(out.textContent).then(() => {
+        showStatusBanner('Kompilierter Master-Prompt in Zwischenablage kopiert!');
+      }).catch(() => {
+        alert('Kopieren fehlgeschlagen. Bitte Text manuell markieren.');
+      });
+    }
+
+    function openTargetLLM(target) {
+      copyMasterPrompt();
+      let url = 'https://chatgpt.com';
+      if (target === 'grok') url = 'https://x.com/i/grok';
+      else if (target === 'claude') url = 'https://claude.ai';
+      window.open(url, '_blank');
+    }
+
+      window.addEventListener('DOMContentLoaded', initHub7);
+</script>
 </body>
 </html>
