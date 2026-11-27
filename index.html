@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>b6_sys_bürgerinfoplattform // Supreme Civic-Tech Command</title>
+  <title>b6_sys_bürgerinfoplattform // Civic-Tech Portal</title>
 
   <!-- PWA & Mobile Engine -->
   <meta name="theme-color" content="#07090e">
@@ -13,87 +13,72 @@
 
   <style>
     :root {
-      --bg-void: #05070a;
-      --bg-metal: linear-gradient(145deg, #0e131d 0%, #07090e 100%);
-      --card-bg: #0b0f17;
-      --card-border: #161e2e;
-      --card-border-glow: #24324c;
+      --bg-dark: #07090e;
+      --card-bg: #10141d;
+      --card-border: #1a2232;
       --text-main: #e2e8f0;
-      --text-muted: #7e8c9f;
+      --text-muted: #8896ab;
       --gold: #d4af37;
-      --gold-glow: rgba(212, 175, 55, 0.25);
       --cyan: #00e5ff;
-      --cyan-glow: rgba(0, 229, 255, 0.2);
       --crimson: #ff3366;
       --emerald: #00e676;
       --amber: #ffab00;
       --purple: #b388ff;
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-      background-color: var(--bg-void);
-      background-image:
-        radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.03) 0%, transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.02) 0%, transparent 40%);
+      background-color: var(--bg-dark);
       color: var(--text-main);
       font-family: var(--font-stack);
       line-height: 1.5;
-      padding-bottom: 90px;
+      padding-bottom: 80px;
     }
 
     /* AUTH GATE OVERLAY */
     #authGate {
       position: fixed;
       inset: 0;
-      background: rgba(5, 7, 10, 0.98);
-      backdrop-filter: blur(16px);
+      background: rgba(7, 9, 14, 0.98);
+      backdrop-filter: blur(12px);
       z-index: 99999;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.25rem;
+      padding: 1.5rem;
     }
     .gate-card {
-      background: var(--bg-metal);
+      background: var(--card-bg);
       border: 1px solid var(--gold);
       border-radius: 12px;
-      padding: 2.2rem 1.5rem;
+      padding: 2rem 1.5rem;
       max-width: 440px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px var(--gold-glow);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.15);
     }
 
-    /* B6 VECTOR LOGO */
-    .b6-svg {
-      width: 48px;
-      height: 48px;
-      filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.5));
-    }
-
-    /* HEADER */
+    /* HEADER & B6 LOGO */
     header {
-      background: var(--bg-metal);
+      background: linear-gradient(180deg, #131824 0%, #07090e 100%);
       border-bottom: 1px solid var(--card-border);
       padding: 1.25rem 1rem 0.85rem 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      text-align: center;
     }
-    .header-inner {
-      max-width: 1060px;
-      margin: 0 auto;
+    .logo-container {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 0.75rem;
+      margin-bottom: 0.4rem;
     }
-    .brand-block { display: flex; align-items: center; gap: 0.75rem; text-align: left; }
-    .badge-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .b6-svg {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
+    }
+    .badge-bar { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-bottom: 0.3rem; }
     .badge {
       font-size: 0.68rem;
       letter-spacing: 0.08em;
@@ -107,9 +92,10 @@
     }
     .badge.gold { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
     .badge.cyan { border-color: var(--cyan); color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
-    h1 { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: 0.03em; }
+    h1 { font-size: 1.35rem; font-weight: 800; color: #fff; letter-spacing: 0.03em; }
+    .subtitle { color: var(--text-muted); font-size: 0.82rem; max-width: 680px; margin: 0 auto; }
 
-    /* HOLLAND QUOTE BAR */
+    /* ATMOSPHÄRE: SPREEKWOORD */
     .proverb-bar {
       background: #080c13;
       border-bottom: 1px solid var(--card-border);
@@ -121,46 +107,45 @@
     }
     .proverb-bar span { color: var(--cyan); font-style: normal; font-weight: 600; }
 
-    /* HUB NAVIGATION */
+    /* LEBENSLAGEN-HUBS (OBERSTE FLIEßENDE EBENE) */
     .hub-nav {
       display: flex;
-      justify-content: flex-start;
-      gap: 0.4rem;
-      padding: 0.65rem 1rem;
-      background: #06090e;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: #090c12;
       border-bottom: 1px solid var(--card-border);
       overflow-x: auto;
       scrollbar-width: none;
     }
     .hub-nav::-webkit-scrollbar { display: none; }
     .hub-btn {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 0.5rem 0.9rem;
-      border-radius: 6px;
+      padding: 0.55rem 0.95rem;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       flex-shrink: 0;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
     .hub-btn:hover { color: #fff; border-color: var(--cyan); }
     .hub-btn.active {
-      background: rgba(0, 229, 255, 0.08);
+      background: rgba(0, 229, 255, 0.12);
       border-color: var(--cyan);
       color: var(--cyan);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
     }
 
-    /* CONTAINER & PANES */
-    .container { max-width: 1060px; margin: 1.25rem auto; padding: 0 1rem; }
-    .hub-pane { display: none; }
-    .hub-pane.active { display: block; animation: paneIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes paneIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    /* CONTAINER & CARDS */
+    .container { max-width: 980px; margin: 1.25rem auto; padding: 0 1rem; }
+    .hub-section { display: none; }
+    .hub-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
     .card {
       background: var(--card-bg);
@@ -168,10 +153,9 @@
       border-radius: 8px;
       padding: 1.25rem;
       margin-bottom: 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
     .card-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--gold);
       margin-bottom: 0.6rem;
       display: flex;
@@ -184,85 +168,80 @@
     textarea, select, input[type="text"], input[type="date"], input[type="number"], input[type="password"] {
       width: 100%;
       padding: 0.65rem 0.85rem;
-      background: #05070c;
+      background: #06080b;
       border: 1px solid var(--card-border);
       color: #fff;
       border-radius: 6px;
       margin-bottom: 0.75rem;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-family: inherit;
-      transition: border 0.15s ease;
     }
+    textarea { resize: vertical; min-height: 85px; }
     textarea:focus, select:focus, input:focus { border-color: var(--cyan); outline: none; }
-    textarea { min-height: 85px; resize: vertical; }
 
     .btn {
       background: var(--gold);
       color: #000;
       font-weight: 700;
       border: none;
-      padding: 0.6rem 1.15rem;
-      border-radius: 5px;
+      padding: 0.65rem 1.2rem;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 0.82rem;
-      transition: transform 0.1s ease, filter 0.15s ease;
+      font-size: 0.85rem;
+      transition: background 0.15s ease;
     }
-    .btn:active { transform: scale(0.98); }
+    .btn:hover { background: #e6c250; }
     .btn.btn-cyan { background: var(--cyan); color: #000; }
     .btn.btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
     .btn.btn-outline:hover { border-color: var(--cyan); color: #fff; }
 
     .result-box {
-      background: rgba(0, 229, 255, 0.04);
+      background: rgba(0, 229, 255, 0.05);
       border: 1px solid var(--cyan);
       padding: 1rem;
       border-radius: 6px;
       color: var(--cyan);
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       margin-top: 1rem;
     }
+
     .form-preview {
-      background: #030407;
-      border: 1px dashed var(--card-border-glow);
+      background: #040508;
+      border: 1px dashed var(--card-border);
       padding: 1rem;
       border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-      font-size: 0.78rem;
+      font-family: monospace;
+      font-size: 0.8rem;
       white-space: pre-wrap;
       color: #cbd5e1;
       margin-top: 1rem;
-      max-height: 480px;
-      overflow-y: auto;
     }
 
-    /* AMPEL GRID */
-    .ampel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-    .ampel-box { border: 1px solid var(--card-border); border-radius: 6px; padding: 0.85rem; background: rgba(0,0,0,0.3); }
+    .ampel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .ampel-box { border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; background: rgba(0,0,0,0.3); }
     .ampel-box.rot { border-left: 4px solid var(--crimson); }
     .ampel-box.gelb { border-left: 4px solid var(--amber); }
     .ampel-box.gruen { border-left: 4px solid var(--emerald); }
-    .ampel-title { font-weight: 700; font-size: 0.82rem; margin-bottom: 0.35rem; }
+    .ampel-title { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.85rem; }
     .rot .ampel-title { color: var(--crimson); }
     .gelb .ampel-title { color: var(--amber); }
     .gruen .ampel-title { color: var(--emerald); }
 
-    /* LINKS GRID */
-    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.65rem; margin-top: 0.85rem; }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
     .link-tile {
       display: block;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
-      padding: 0.8rem;
+      padding: 0.85rem;
       border-radius: 6px;
       text-decoration: none;
       color: var(--text-main);
       transition: all 0.15s ease;
     }
-    .link-tile:hover { border-color: var(--cyan); background: rgba(0, 229, 255, 0.04); }
-    .link-tile-title { font-weight: 700; color: var(--cyan); font-size: 0.82rem; margin-bottom: 0.2rem; }
-    .link-tile-desc { font-size: 0.73rem; color: var(--text-muted); }
+    .link-tile:hover { border-color: var(--cyan); background: rgba(0, 229, 255, 0.05); }
+    .link-tile-title { font-weight: 700; color: var(--cyan); font-size: 0.85rem; margin-bottom: 0.2rem; }
+    .link-tile-desc { font-size: 0.75rem; color: var(--text-muted); }
 
-    /* FOOTER */
     .disclaimer-bar {
       margin-top: 2rem;
       padding: 1rem;
@@ -272,7 +251,7 @@
       font-size: 0.72rem;
       color: var(--text-muted);
       text-align: center;
-      line-height: 1.45;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -286,10 +265,10 @@
         <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
         <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
       </svg>
-      <div class="badge gold" style="margin-bottom:0.4rem;">Zero-Storage // Civic Architecture</div>
+      <div class="badge gold" style="margin-bottom:0.4rem;">Zero-Storage // Civic-Tech</div>
       <h2 style="color:#fff; font-size:1.25rem; margin-bottom:0.4rem;">b6_sys_bürgerinfoplattform</h2>
       <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1.25rem;">
-        Flüchtige Client-Sitzung (§ 1 RDG / Art. 2 DSGVO). Keine Datenspeicherung. Fortlaufende Urkunden-Nummerierung ab #00001.
+        Flüchtige Client-Sitzung (§ 1 RDG / Art. 2 DSGVO). Keine Datenspeicherung. Fortlaufende Vorgangsnummerierung ab #00001.
       </p>
 
       <input type="password" id="gatePass" placeholder="Passphrase (souveraen2026 oder demo)..." autocapitalize="none" autocorrect="off" style="text-align:center;">
@@ -298,298 +277,202 @@
     </div>
   </div>
 
-  <!-- STICKY HEADER MIT B6 LOGO & DYNAMISCHEM VORGANGSZÄHLER -->
+  <!-- HEADER MIT B6-LOGO & DYNAMISCHEM VORGANGS-ZÄHLER -->
   <header>
-    <div class="header-inner">
-      <div class="brand-block">
-        <svg class="b6-svg" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
-          <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
-          <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
-        </svg>
-        <div>
-          <h1>b6_sys_bürgerinfoplattform</h1>
-          <div class="badge-bar">
-            <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
-            <span class="badge gold">100% RAM-ONLY</span>
-            <span class="badge">§ 1 RDG KONFORM</span>
-          </div>
+    <div class="logo-container">
+      <svg class="b6-svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <polygon points="50,15 80,75 20,75" fill="none" stroke="#00e5ff" stroke-width="2.5"/>
+        <text x="50" y="58" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="1">B6</text>
+      </svg>
+      <div style="text-align:left;">
+        <div class="badge-bar">
+          <span class="badge cyan" id="caseBadge">VORGANG #B6-00001</span>
+          <span class="badge gold">100% RAM-ONLY</span>
+          <span class="badge">§ 1 RDG</span>
         </div>
-      </div>
-      <div>
-        <button class="btn btn-outline" style="font-size:0.75rem; padding:0.35rem 0.65rem;" onclick="document.getElementById('authGate').style.display='flex'">🔒 Sperren</button>
+        <h1>b6_sys_bürgerinfoplattform</h1>
       </div>
     </div>
+    <p class="subtitle">Interaktive Aufklärungs- &amp; Schutzplattform für Bürgerrechte (§§ 13–15 SGB I / § 1 RDG / Art. 1, 13, 19 Abs. 4 GG).</p>
   </header>
 
-  <!-- ATMOSPHÄRE: NEDERLANDSE SPREEKWOORDEN -->
+  <!-- NEDERLANDS PRINCIPE -->
   <div class="proverb-bar">
-    <span>Nederlands Kanzlei-Prinzip:</span> „Al is de leugen nog zo snel, de waarheid achterhaalt haar wel.“ – <em>Kalmte kan je redden an jeder Schwelle.</em>
+    <span>Nederlands Kanzlei-Prinzip:</span> „Al is de leugen nog zo snel, de waarheid achterhaalt haar wel.“ – <em>Kalmte kan je redden.</em>
   </div>
 
-  <!-- HAUPT-HUBS (5 FACHBEREICHE) -->
+  <!-- DIE 4 KLAREN LEBENSLAGEN-HUBS (KEINE VERSCHACHTELUNG!) -->
   <nav class="hub-nav">
-    <button class="hub-btn active" onclick="switchHub('hub-pflege')">🏥 1. Pflege &amp; MDK (Kerstin)</button>
-    <button class="hub-btn" onclick="switchHub('hub-sozial')">💶 2. Existenz &amp; SGB-Vorschuss</button>
-    <button class="hub-btn" onclick="switchHub('hub-inkasso')">💳 3. Inkasso &amp; Verbraucher</button>
-    <button class="hub-btn" onclick="switchHub('hub-schild')">🛡️ 4. Behörden-Schild (12 Module)</button>
-    <button class="hub-btn" onclick="switchHub('hub-radar')">🔍 5. Urteile, KI &amp; Quellen</button>
+    <button class="hub-btn active" onclick="switchHub('hub-pflege')">🏥 Hub A: Gesundheit &amp; Pflege (Kerstin)</button>
+    <button class="hub-btn" onclick="switchHub('hub-sozial')">💶 Hub B: Existenz &amp; Soziales</button>
+    <button class="hub-btn" onclick="switchHub('hub-inkasso')">💳 Hub C: Banken &amp; Inkasso</button>
+    <button class="hub-btn" onclick="switchHub('hub-behoerde')">🛡️ Hub D: Behörden-Schild</button>
+    <button class="hub-btn" onclick="switchHub('hub-quellen')">🌐 Primärquellen &amp; XJustiz</button>
   </nav>
 
   <div class="container">
 
     <!-- =====================================================================
-         HUB 1: PFLEGEGRAD & MDK-RAFFINESSEN-PLANER (KERSTIN-KOMPLEX)
+         HUB A: GESUNDHEIT, PFLEGE & MDK (KERSTIN-KOMPLEX)
          ===================================================================== -->
-    <div id="hub-pflege" class="hub-pane active">
+    <div id="hub-pflege" class="hub-section active">
       <div class="card">
-        <h2 class="card-title">🏥 MDK-Raffinessen-Planer &amp; NBA-Rechner (§§ 14, 15 SGB XI)</h2>
+        <h2 class="card-title">🏥 Modul A1: Pflegegrad-Rechner &amp; MDK-Raffinessen-Planer (SGB XI)</h2>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-          Das Gesetz rechnet nach Punkten (0–100). Der MDK nutzt oft psychologische Schwellenfragen, um den Pflegegrad kleinzurechnen. Bestimme die realen Werte am schlechtesten Tag:
+          Das Gesetz rechnet nach Punkten (0–100). Bewerte den realen Zustand am schlechtesten Tag (nicht aus Scham die Selbstständigkeit schönreden!):
         </p>
 
-        <!-- 6 Gesetzliche Module nach NBA -->
-        <div style="display:flex; flex-direction:column; gap:0.75rem;">
-
-          <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; border:1px solid var(--card-border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-              <strong style="color:var(--cyan); font-size:0.85rem;">Modul 1: Mobilität (Gewichtung 10 %)</strong>
-              <small style="color:var(--amber);">Fangfrage: „Geht Treppensteigen noch?“</small>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Taktik: Zählt nur, wenn schmerz- und sturzfrei ohne fremde Hilfe möglich. Ein Herunterquälen am Vormittag ist keine gesetzliche Selbstständigkeit!
-            </p>
-            <select id="m1Score" onchange="calcPflege()">
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 1: Mobilität (Gewichtung 10 %) – <em>Treppensteigen, Aufstehen</em>:</label>
+            <select id="m1Score" onchange="calcPflegegrad()">
               <option value="0">Selbstständig (0 Pkt)</option>
-              <option value="5">Überwiegend selbstständig / Treppe unsicher (5 Pkt)</option>
-              <option value="10">Erheblich beeinträchtigt / Gehhilfe / Stützen nötig (10 Pkt)</option>
+              <option value="5">Größtenteils selbstständig / unsicher (5 Pkt)</option>
+              <option value="10">Erheblich beeinträchtigt / Gehhilfe nötig (10 Pkt)</option>
               <option value="15">Schwerste Beeinträchtigung / Bettlägerig (15 Pkt)</option>
             </select>
           </div>
-
-          <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; border:1px solid var(--card-border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-              <strong style="color:var(--cyan); font-size:0.85rem;">Modul 2 &amp; 3: Kognition &amp; Psyche (Gewichtung 15 %)</strong>
-              <small style="color:var(--amber);">Fangfrage: „Wissen Sie, welcher Tag heute ist?“</small>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Taktik: Das System wertet automatisch das höhere der beiden Module (Geistige Fähigkeiten vs. Verhaltensauffälligkeiten).
-            </p>
-            <select id="m2Score" onchange="calcPflege()">
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 2/3: Kognition &amp; Verhaltensweisen (Gewichtung 15 %) – <em>Orientierung, Unruhe</em>:</label>
+            <select id="m2Score" onchange="calcPflegegrad()">
               <option value="0">Keine Beeinträchtigung (0 Pkt)</option>
-              <option value="7.5">Gering (zeitweise Desorientierung, Vergesslichkeit) (7.5 Pkt)</option>
-              <option value="11.25">Erheblich (nächtliche Unruhe, Ängste, Weglauftendenz) (11.25 Pkt)</option>
-              <option value="15">Schwerste Beeinträchtigung (15 Pkt)</option>
+              <option value="7.5">Geringe Beeinträchtigung / Vergesslichkeit (7.5 Pkt)</option>
+              <option value="11.25">Erhebliche Beeinträchtigung / nächtliche Unruhe (11.25 Pkt)</option>
+              <option value="15">Schwere Beeinträchtigung / ständige Aufsicht nötig (15 Pkt)</option>
             </select>
           </div>
-
-          <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; border:1px solid var(--card-border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-              <strong style="color:var(--gold); font-size:0.85rem;">Modul 4: Selbstversorgung (Gewichtung 40 % – KARDINAL-HEBEL)</strong>
-              <small style="color:var(--amber);">Fangfrage: „Können Sie sich noch eine Tasse Kaffee kochen?“</small>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Taktik: Aus Stolz wird oft „Ja“ gesagt. Frage: Gelingt Waschen, Anziehen und Intimpflege ohne Schmerzen, Schwindel oder Verbrennungsgefahr?
-            </p>
-            <select id="m4Score" onchange="calcPflege()">
+          <div>
+            <label style="font-size:0.8rem; color:var(--gold);"><strong>Modul 4: Selbstversorgung (Gewichtung 40 % – KARDINAL-HEBEL) – <em>Waschen, Anziehen, Essen</em>:</strong></label>
+            <select id="m4Score" onchange="calcPflegegrad()">
               <option value="0">Selbstständig (0 Pkt)</option>
-              <option value="15">Teilweise Hilfe erforderlich (z. B. Rücken, Füße, Knöpfe) (15 Pkt)</option>
-              <option value="30">Überwiegende Hilfe beim Waschen &amp; Kleiden (30 Pkt)</option>
+              <option value="15">Teilweise Hilfe erforderlich (15 Pkt)</option>
+              <option value="30">Überwiegende Hilfe erforderlich (30 Pkt)</option>
               <option value="40">Vollständige Übernahme nötig (40 Pkt)</option>
             </select>
           </div>
-
-          <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; border:1px solid var(--card-border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-              <strong style="color:var(--cyan); font-size:0.85rem;">Modul 5: Therapien &amp; Medikamente (Gewichtung 20 %)</strong>
-              <small style="color:var(--amber);">Fokus: Fremdhilfe bei Injektionen / Verbänden</small>
-            </div>
-            <select id="m5Score" onchange="calcPflege()">
-              <option value="0">Selbstständig einnehmbar (0 Pkt)</option>
-              <option value="10">Medikamentenrichten &amp; Wundkontrolle durch Dritte (10 Pkt)</option>
-              <option value="20">Tägliche Injektionen, Katheter, Dialyse, Verbandswechsel (20 Pkt)</option>
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 5: Therapien &amp; Medikamente (Gewichtung 20 %) – <em>Injektionen, Verbände</em>:</label>
+            <select id="m5Score" onchange="calcPflegegrad()">
+              <option value="0">Keine Unterstützung nötig (0 Pkt)</option>
+              <option value="10">Tägliche Medikamentengabe / Wundkontrolle (10 Pkt)</option>
+              <option value="20">Hoher Aufwand (Injektionen, Katheter, Dialyse) (20 Pkt)</option>
             </select>
           </div>
-
-          <div style="background:rgba(255,255,255,0.02); padding:0.85rem; border-radius:6px; border:1px solid var(--card-border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-              <strong style="color:var(--cyan); font-size:0.85rem;">Modul 6: Gestaltung des Alltags (Gewichtung 15 %)</strong>
-              <small style="color:var(--amber);">Fokus: Tagesstrukturierung &amp; Isolation</small>
-            </div>
-            <select id="m6Score" onchange="calcPflege()">
+          <div>
+            <label style="font-size:0.8rem; color:var(--text-muted);">Modul 6: Gestaltung des Alltagslebens (Gewichtung 15 %) – <em>Tagesstruktur</em>:</label>
+            <select id="m6Score" onchange="calcPflegegrad()">
               <option value="0">Selbstständig (0 Pkt)</option>
-              <option value="5">Geringe Unterstützung nötig (5 Pkt)</option>
-              <option value="10">Erhebliche Hilfe bei Tagesstruktur nötig (10 Pkt)</option>
-              <option value="15">Vollständige Hilflosigkeit im Alltag (15 Pkt)</option>
+              <option value="5">Geringe Hilfe (5 Pkt)</option>
+              <option value="10">Erhebliche Unterstützung (10 Pkt)</option>
+              <option value="15">Vollständige Strukturierung durch Dritte (15 Pkt)</option>
             </select>
           </div>
-
         </div>
 
-        <button class="btn btn-cyan" style="margin-top:1rem;" onclick="calcPflege()">Pflegegrad deterministisch berechnen</button>
-        <div id="pflegeOut" class="result-box" style="display:none;"></div>
+        <button class="btn btn-cyan" style="margin-top:1rem;" onclick="calcPflegegrad()">Pflegegrad deterministisch berechnen</button>
+        <div id="pflegeResult" class="result-box" style="display:none;"></div>
       </div>
 
-      <!-- Widerspruchs-Schmiede für Kerstin -->
       <div class="card">
-        <h2 class="card-title">📝 Kautelar-Generator: Förmlicher Widerspruch gegen MDK-Bescheid (§ 84 SGG)</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <input type="text" id="wName" style="flex:1; min-width:180px;" placeholder="Name der/des Versicherten (z. B. Kerstin ...)">
-          <input type="text" id="wKasse" style="flex:1; min-width:180px;" placeholder="Pflegekasse (z. B. AOK, Barmer, TK)">
+        <h2 class="card-title">📝 Modul A2: MDK/MD-Widerspruchsgenerator (§ 84 SGG)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="wVersicherter" style="flex:1; min-width:200px;" placeholder="Name der/des Versicherten (z. B. Kerstin ...)">
+          <input type="text" id="wKasse" style="flex:1; min-width:200px;" placeholder="Pflegekasse (z. B. AOK, Barmer, TK)">
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <input type="text" id="wBescheidDate" style="flex:1; min-width:180px;" placeholder="Datum des Ablehnungsbescheids">
-          <input type="text" id="wVersNr" style="flex:1; min-width:180px;" placeholder="Versichertennummer">
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="wBescheidDatum" style="flex:1; min-width:200px;" placeholder="Datum des Ablehnungsbescheides">
+          <input type="text" id="wVersicherungsNr" style="flex:1; min-width:200px;" placeholder="Versicherungsnummer">
         </div>
-        <button class="btn btn-cyan" onclick="generatePflegeWiderspruch()">Fristwahrenden Widerspruch mit Vorgangs-Stempel generieren</button>
-        <div id="pflegeDoc" class="form-preview" style="display:none;"></div>
-      </div>
-
-      <!-- Offizielle Links Pflege -->
-      <div class="card">
-        <h3 style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">⚖️ Primärquellen &amp; Normen (SGB XI &amp; Begutachtungs-Richtlinien):</h3>
-        <div class="links-grid">
-          <a href="https://www.gesetze-im-internet.de/sgb_11/__14.html" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">📜 § 14 SGB XI</div>
-            <div class="link-tile-desc">Amtliche Definition der Pflegebedürftigkeit.</div>
-          </a>
-          <a href="https://www.gesetze-im-internet.de/sgb_11/__15.html" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">📐 § 15 SGB XI</div>
-            <div class="link-tile-desc">Gesetzliche Ermittlung &amp; Punkte-Matrix (NBA).</div>
-          </a>
-          <a href="https://www.mds-ev.de" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">📋 BRi Begutachtungs-Richtlinien</div>
-            <div class="link-tile-desc">Verbindliche Richtlinien des GKV-Spitzenverbandes.</div>
-          </a>
-          <a href="https://www.zqp.de" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">🛡️ Stiftung Zentrum für Qualität in der Pflege</div>
-            <div class="link-tile-desc">Neutrale Standards für pflegende Angehörige.</div>
-          </a>
-        </div>
+        <button class="btn btn-cyan" onclick="generatePflegeWiderspruch()">Fristwahrenden Widerspruch mit Vorgangs-Stempel erzeugen</button>
+        <div id="widerspruchOutput" class="form-preview" style="display:none;"></div>
       </div>
     </div>
 
     <!-- =====================================================================
-         HUB 2: EXISTENZSICHERUNG & VORSCHUSSANTRAEGE
+         HUB B: EXISTENZSICHERUNG & SOZIALLEISTUNGEN
          ===================================================================== -->
-    <div id="hub-sozial" class="hub-pane">
+    <div id="hub-sozial" class="hub-section">
       <div class="card">
-        <h2 class="card-title">💶 Notfall-Vorschuss auf sofortige Barauszahlung (§ 42 SGB I)</h2>
+        <h2 class="card-title">💶 Modul B1: Notfall-Vorschussantrag auf Barauszahlung (§ 42 SGB I)</h2>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-          Wird die Bearbeitung von Bürgergeld oder Wohngeld verschleppt und am Monatsanfang fehlen liquide Mittel für Nahrung oder Miete, ist der Leistungsträger nach § 42 Abs. 1 Satz 1 SGB I gesetzlich zur unverzüglichen Barzahlung verpflichtet.
+          Wenn das Jobcenter oder Sozialamt den Bescheid verschleppt und am Monatsanfang kein Geld für Miete und Lebensmittel vorhanden ist:
         </p>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <input type="text" id="vName" style="flex:1; min-width:180px;" placeholder="Dein Name">
-          <input type="text" id="vAmt" style="flex:1; min-width:180px;" placeholder="Zuständige Behörde (z. B. Jobcenter / Sozialamt)">
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="sozName" style="flex:1; min-width:200px;" placeholder="Dein Name">
+          <input type="text" id="sozAmt" style="flex:1; min-width:200px;" placeholder="Zuständige Behörde (Jobcenter / Sozialamt)">
         </div>
-        <button class="btn btn-cyan" onclick="generateVorschuss()">Revisionsfesten Eil-Antrag auf Barauszahlung kompilieren</button>
-        <div id="vorschussDoc" class="form-preview" style="display:none;"></div>
-      </div>
-
-      <div class="card">
-        <h3 style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">⚖️ Amtliche Quellen Existenzsicherung:</h3>
-        <div class="links-grid">
-          <a href="https://www.gesetze-im-internet.de/sgb_1/__42.html" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">📜 § 42 SGB I</div>
-            <div class="link-tile-desc">Gesetzlicher Rechtsanspruch auf Vorschuss.</div>
-          </a>
-          <a href="https://www.gesetze-im-internet.de/sgb_2/" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">🏛️ SGB II (Bürgergeld)</div>
-            <div class="link-tile-desc">Grundsicherung für Arbeitsuchende.</div>
-          </a>
-          <a href="https://www.gesetze-im-internet.de/wogg/" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">🏠 Wohngeldgesetz (WoGG)</div>
-            <div class="link-tile-desc">Vorschriften zum Wohngeld-Plus.</div>
-          </a>
-        </div>
+        <button class="btn btn-cyan" onclick="generateVorschuss()">Eilantrag auf sofortigen Barvorschuss generieren</button>
+        <div id="sozOutput" class="form-preview" style="display:none;"></div>
       </div>
     </div>
 
     <!-- =====================================================================
-         HUB 3: BANKEN, INKASSO & VERBRAUCHERSCHUTZ
+         HUB C: BANKEN, INKASSO & VERBRAUCHERSCHUTZ
          ===================================================================== -->
-    <div id="hub-inkasso" class="hub-pane">
+    <div id="hub-inkasso" class="hub-section">
       <div class="card">
-        <h2 class="card-title">💳 Inkasso-Kosten-Kürzer (§ 4 Abs. 5 RDGEG / § 254 BGB)</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
-          Rechnerische Prüfung überhöhter Inkassogebühren bei Standard-Mahnschreiben:
-        </p>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <div style="flex:1; min-width:180px;">
-            <label style="font-size:0.78rem; color:var(--text-muted);">Hauptforderung (€):</label>
-            <input type="number" id="inHaupt" value="95" step="5">
+        <h2 class="card-title">💳 Modul C1: Inkassogebühren-Kürzer (§ 4 Abs. 5 RDGEG / § 254 BGB)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <div style="flex:1; min-width:200px;">
+            <label style="font-size:0.8rem; color:var(--text-muted);">Tatsächliche Hauptforderung (€):</label>
+            <input type="number" id="inkassoHaupt" value="120" step="10">
           </div>
-          <div style="flex:1; min-width:180px;">
-            <label style="font-size:0.78rem; color:var(--text-muted);">Geforderte Inkassokosten (€):</label>
-            <input type="number" id="inKosten" value="68" step="2">
+          <div style="flex:1; min-width:200px;">
+            <label style="font-size:0.8rem; color:var(--text-muted);">Geforderte Inkassokosten (€):</label>
+            <input type="number" id="inkassoKosten" value="75" step="5">
           </div>
         </div>
-        <button class="btn btn-cyan" onclick="calcInkasso()">Kostenlimit prüfen &amp; Zurückweisung generieren</button>
-        <div id="inResult" class="result-box" style="display:none;"></div>
-      </div>
-
-      <div class="card">
-        <h3 style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">⚖️ Primärquellen Verbraucherschutz:</h3>
-        <div class="links-grid">
-          <a href="https://www.gesetze-im-internet.de/rdgeg/__4.html" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">📜 § 4 RDGEG</div>
-            <div class="link-tile-desc">Gesetzliche Deckelung von Inkassogebühren.</div>
-          </a>
-          <a href="https://www.gesetze-im-internet.de/zpo/__850k.html" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">🛡️ § 850k ZPO</div>
-            <div class="link-tile-desc">Pfändungsschutzkonto (P-Konto Freibeträge).</div>
-          </a>
-          <a href="https://www.verbraucherzentrale.de" target="_blank" rel="noopener noreferrer" class="link-tile">
-            <div class="link-tile-title">🔍 Verbraucherzentrale Bundesverband</div>
-            <div class="link-tile-desc">Schwarzliste unlauterer Inkassobüros.</div>
-          </a>
-        </div>
+        <button class="btn btn-cyan" onclick="calcInkasso()">Kosten prüfen &amp; Zurückweisung erzeugen</button>
+        <div id="inkassoResult" class="result-box" style="display:none;"></div>
       </div>
     </div>
 
     <!-- =====================================================================
-         HUB 4: BEHÖRDEN-SCHILD (DIE 12 RECHTSWAHRUNGS-MODULE)
+         HUB D: BEHÖRDEN-SCHILD (DIE BEWÄHRTEN RECHTSWAHRUNGS-WERKZEUGE)
          ===================================================================== -->
-    <div id="hub-schild" class="hub-pane">
+    <div id="hub-behoerde" class="hub-section">
+
+      <!-- 1. NOTFALL-AMPEL -->
       <div class="card">
-        <h2 class="card-title">🚨 Modul 1: „Sovereign Stop“ – Haustür-Navigator (Art. 13 GG)</h2>
+        <h2 class="card-title">🚨 Notfall-Ampel: Haustür-Navigator (Art. 13 GG)</h2>
         <div class="ampel-grid">
           <div class="ampel-box rot">
             <div class="ampel-title">STUFE 1: FORM-FILTER</div>
-            <p style="font-size:0.82rem; color:#cbd5e1;">Richterbeschluss vollständig lesbar unterschrieben? Paraphen ohne Richtername sofort als formnichtig rügen (§ 105 StPO)!</p>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Richtername vollständig lesbar unterschrieben? Reine Schablonen oder Paraphen ohne Vertretungsanzeige sofort als formnichtig rügen (§ 105 StPO)!</p>
           </div>
           <div class="ampel-box gelb">
             <div class="ampel-title">STUFE 2: DEESKALATION</div>
-            <p style="font-size:0.82rem; color:#cbd5e1;">Kein Zutritt ohne Beschluss. Dienstausweise notieren: <em>„Ich widerspreche der Maßnahme ausdrücklich.“</em></p>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Kein körperlicher Widerstand, kein freiwilliger Zutritt: <em>„Ich widerspreche der Maßnahme ausdrücklich.“</em></p>
           </div>
           <div class="ampel-box gruen">
             <div class="ampel-title">STUFE 3: PROTOKOLL</div>
-            <p style="font-size:0.82rem; color:#cbd5e1;">Gemeindezeugen rufen (§ 106 StPO). Verzeichnis über beschlagnahmte Gegenstände verlangen (§ 107 StPO).</p>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Gemeindezeugen hinzuziehen (§ 106 StPO). Beschlagnahmeverzeichnis (§ 107 StPO) aushändigen lassen.</p>
           </div>
         </div>
       </div>
 
-      <!-- Kautelar-Vollmacht -->
+      <!-- 2. BEISTANDS-VOLLMACHT -->
       <div class="card">
-        <h2 class="card-title">⚖️ Modul 4: Beistands-Vollmacht (§ 13 Abs. 4 SGB X / § 14 VwVfG)</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <input type="text" id="bName" style="flex:1; min-width:180px;" placeholder="Dein Name">
-          <input type="text" id="beistandName" style="flex:1; min-width:180px;" placeholder="Name des Beistands (z. B. Bekannter)">
+        <h2 class="card-title">⚖️ Kautelar-Schmiede: Beistands-Vollmacht (§ 13 Abs. 4 SGB X / § 14 VwVfG)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="bName" style="flex:1; min-width:200px;" placeholder="Dein vollständiger Name">
+          <input type="text" id="beistandName" style="flex:1; min-width:200px;" placeholder="Name des Beistands (z. B. Bekannter/Zeuge)">
         </div>
         <button class="btn btn-cyan" onclick="generateBeistand()">Förmliche Beistandserklärung erzeugen</button>
         <div id="beistandDoc" class="form-preview" style="display:none;"></div>
       </div>
 
-      <!-- Dezimal-Pfad-Rechner -->
+      <!-- 3. DEZIMAL-PFAD-RECHNER -->
       <div class="card">
-        <h2 class="card-title">⚡ Modul 9: Deontischer Dezimal-Pfad-Rechner (StPO / VwVfG)</h2>
-        <div style="background:#030508; border:1px solid var(--card-border); padding:0.6rem 0.85rem; border-radius:6px; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.78rem; color:var(--text-muted);">Berechnungsvektor:</span>
+        <h2 class="card-title">⚡ Deontischer Dezimal-Pfad-Rechner (StPO / VwVfG)</h2>
+        <div style="background:#040508; border:1px solid var(--card-border); padding:0.6rem 1rem; border-radius:6px; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Berechnungs-Vektor:</span>
           <code id="tensorDisplay" style="color:var(--cyan); font-weight:700;">§ 105.1.1.1.1</code>
         </div>
         <div style="display:flex; flex-direction:column; gap:0.5rem;">
           <select id="n1" onchange="runTensor()">
-            <option value="1">Knoten 1 (.1): Konkrete Tatsachen für Tatverdacht vorhanden</option>
+            <option value="1">Knoten 1 (.1): Konkrete Tatsachen begründen Tatverdacht</option>
             <option value="0">Knoten 1 (.0): Reine Vermutung / Unzulässige Ausforschung</option>
           </select>
           <select id="n2" onchange="runTensor()">
@@ -597,12 +480,12 @@
             <option value="0">Knoten 2 (.0): Umgehung des Richtervorbehalts (Art. 13 Abs. 2 GG)</option>
           </select>
           <select id="n3" onchange="runTensor()">
-            <option value="1">Knoten 3 (.1): Richtername voll lesbar &amp; eigenhändig gezeichnet</option>
-            <option value="2">Knoten 3 (.2): Unleserliche Paraphe / Kein Vertretervermerk</option>
-            <option value="0">Knoten 3 (.0): 1985er-Schablone ohne jede Richterunterschrift</option>
+            <option value="1">Knoten 3 (.1): Richtername voll lesbar &amp; unterschrieben</option>
+            <option value="2">Knoten 3 (.2): Unleserliche Paraphe ohne Vertretungsvermerk</option>
+            <option value="0">Knoten 3 (.0): 1985er-Schablone ohne jede Unterschrift</option>
           </select>
           <select id="n4" onchange="runTensor()">
-            <option value="1">Knoten 4 (.1): Vollständiges Verzeichnis gem. § 107 StPO ausgehändigt</option>
+            <option value="1">Knoten 4 (.1): Verzeichnis gem. § 107 StPO ausgehändigt</option>
             <option value="0">Knoten 4 (.0): Verzeichnis verweigert / Null-Beute nicht quittiert</option>
           </select>
         </div>
@@ -610,87 +493,24 @@
         <div id="tensorOut" class="result-box" style="display:none;"></div>
       </div>
 
-      <!-- Jugendamts-Radar -->
+      <!-- 4. JUGENDAMTS-BEGLEITER -->
       <div class="card">
-        <h2 class="card-title">🛡️ Modul 12: Jugendamts-Begleiter (§ 8a SGB VIII / § 25 SGB X)</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
-          <input type="text" id="jAmt" style="flex:1; min-width:180px;" placeholder="Name des Jugendamts">
-          <input type="text" id="jSB" style="flex:1; min-width:180px;" placeholder="Name des Sachbearbeiters">
+        <h2 class="card-title">🛡️ Jugendamts-Begleiter (§ 8a SGB VIII / § 25 SGB X)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="jAmt" style="flex:1; min-width:200px;" placeholder="Name des Jugendamts">
+          <input type="text" id="jSB" style="flex:1; min-width:200px;" placeholder="Name des Sachbearbeiters">
         </div>
         <input type="text" id="jAZ" placeholder="Aktenzeichen des Jugendamts">
         <button class="btn btn-cyan" onclick="generateJugendamt()">Akteneinsicht (§ 25 SGB X) &amp; Betretungswiderspruch generieren</button>
         <div id="jDoc" class="form-preview" style="display:none;"></div>
       </div>
+
     </div>
 
     <!-- =====================================================================
-         HUB 5: URTEILS-SCANNER, ZERO-EDGE KI & OFFIZIELLE REGISTER
+         HUB E: PRIMÄRQUELLEN, XÖV & URTEILE
          ===================================================================== -->
-    <div id="hub-radar" class="hub-pane">
-
-      <!-- Hilfsurteil-Scanner -->
-      <div class="card">
-        <h2 class="card-title cyan">🔍 Hilfsurteil-Scanner: Höchstrichterliche Rechtsprechung</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-          Direkter Zugriff auf verifizierte Leitsatzentscheidungen gegen fehlerhafte Hoheitsakte:
-        </p>
-        <input type="text" id="judgeSearch" placeholder="Schlagwort filtern (z. B. Art. 13 GG, Unterschrift, MDK, Inkasso)..." onkeyup="filterJudgements()">
-        <div id="judgementsList">
-          <div class="ampel-box gruen" style="margin-bottom:0.6rem;">
-            <strong style="color:var(--cyan);">BVerfG, Beschl. v. 16.06.2015 – 2 BvR 2718/10 (Art. 13 GG)</strong>
-            <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">
-              Reine Zeitersparnis oder Bequemlichkeit der Ermittlungsbehörden begründet keine „Gefahr im Verzug“. Der Richtervorbehalt ist ausnahmslos zu wahren.
-            </p>
-          </div>
-          <div class="ampel-box rot" style="margin-bottom:0.6rem;">
-            <strong style="color:var(--crimson);">BGH, Beschl. v. 29.03.2012 – IX ZB 198/11 (Formnichtigkeit)</strong>
-            <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">
-              Ein richterlicher Beschluss ohne vollen Namen und ohne eigenhändige Unterschrift (reine flüchtige Paraphe) ist unwirksam und nichtig (§ 44 VwVfG analog).
-            </p>
-          </div>
-          <div class="ampel-box gruen" style="margin-bottom:0.6rem;">
-            <strong style="color:var(--emerald);">BSG, Urt. v. 18.02.2021 – B 3 P 1/20 R (Pflegegrad &amp; Nachtbedarf)</strong>
-            <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">
-              Nächtlicher Hilfe- und Überwachungsbedarf muss im Pflegegutachten zwingend gewürdigt werden. Pauschale Kürzungen durch den MDK sind rechtswidrig.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Zero-Edge KI-Prompt-Schmiede -->
-      <div class="card">
-        <h2 class="card-title">🧠 Zero-Edge KI-Scanner &amp; Prompt-Schmiede</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;">
-          Erzeuge anonymisierte Analyse-Prompts für dein lokales WebLLM oder externe Sprachmodelle:
-        </p>
-        <select id="aiType">
-          <option value="mdk">MDK-Pflegegutachten auf Bewertungsfehler in Modul 4 prüfen</option>
-          <option value="bescheid">Behördenbescheid auf Fristen, Paragraphen &amp; Druckfloskeln scannen</option>
-          <option value="inkasso">Inkassorechnung auf unzulässige Gebühren nach § 4 RDGEG zerlegen</option>
-        </select>
-        <button class="btn btn-cyan" onclick="generatePrompt()">Prüf-Prompt erzeugen (Zero-Knowledge)</button>
-        <div id="aiOut" class="form-preview" style="display:none;"></div>
-      </div>
-
-      <!-- Experten-Clearing (§ 1 RDG) & Civic-Tech -->
-      <div class="card">
-        <h2 class="card-title">🤝 Bürger-Lotsendienst &amp; Experten-Clearing (§ 1 RDG)</h2>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.85rem;">
-          Wir leisten keine Rechtsberatung im Einzelfall. Nutze standardisierte Auswertungen zur Vorlage bei qualifizierten Anlaufstellen:
-        </p>
-        <ul style="font-size:0.8rem; color:var(--text-muted); padding-left:1.2rem; margin-bottom:1rem;">
-          <li><strong>Pflegestützpunkte (§ 7c SGB XI):</strong> Gesetzlich garantierte, kostenlose Beratung für pflegende Angehörige vor Ort.</li>
-          <li><strong>Sozialverbände (VdK / SoVD):</strong> Günstige Vertretung bei Widersprüchen gegen Pflegekassen und Versorgungsämter.</li>
-          <li><strong>Amtsgericht (Beratungshilfe):</strong> Beratungshilfeschein nach dem BerHG für anwaltliche Hilfe bei geringem Einkommen.</li>
-        </ul>
-        <div style="background:rgba(212,175,55,0.06); border:1px solid var(--gold); padding:0.85rem; border-radius:6px; text-align:center;">
-          <p style="font-size:0.8rem; color:var(--gold); margin-bottom:0.4rem;">☕ <strong>Freiwilliger Civic-Tech Beitrag:</strong></p>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">Unterstütze das Hosting und die Pflege der Open-Source Bürgerwerkzeuge mit einer kleinen Spende.</p>
-          <button class="btn" style="font-size:0.75rem; padding:0.4rem 0.85rem;" onclick="alert('Vielen Dank für die Unterstützung der b6_sys_bürgerinfoplattform!')">Kaffeekasse / Spende (ab 2,50 €)</button>
-        </div>
-      </div>
-
-      <!-- XÖV / Justiz-Links -->
+    <div id="hub-quellen" class="hub-section">
       <div class="card">
         <h2 class="card-title cyan">🌐 Offizielle Primärregister &amp; XJustiz</h2>
         <div class="links-grid">
@@ -708,17 +528,16 @@
           </a>
           <a href="https://www.rechtsprechung-im-internet.de" target="_blank" rel="noopener noreferrer" class="link-tile">
             <div class="link-tile-title">🔍 Rechtsprechung im Internet</div>
-            <div class="link-tile-desc">Entscheidungen des BGH, BVerwG, BAG &amp; BSG.</div>
+            <div class="link-tile-desc">Amtliche Urteilsdatenbank des BGH, BVerwG und BSG.</div>
           </a>
         </div>
       </div>
-
     </div>
 
     <!-- RECHTLICHER DISCLAIMER -->
     <div class="disclaimer-bar">
       ⚖️ <strong>Rechtlicher Hinweis gem. § 1 Abs. 1 Nr. 1 Rechtsdienstleistungsgesetz (RDG):</strong><br>
-      Die b6_sys_bürgerinfoplattform dient ausschließlich der bürgerlichen Bildung, der Information über verfassungsrechtliche Grundsätze und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Keine individuelle Rechtsberatung im Einzelfall.
+      Dieses Portal dient ausschließlich der staatsbürgerlichen Bildung und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Keine Rechtsberatung im Einzelfall.
     </div>
 
   </div>
@@ -742,7 +561,7 @@
     }
 
     /* =========================================================================
-       ZERO-KNOWLEDGE AUTH GATE (souveraen2026, demo, b6)
+       ZERO-KNOWLEDGE AUTHENTIFIZIERUNG
        ========================================================================= */
     async function unlockGate() {
       const raw = document.getElementById('gatePass').value.trim().toLowerCase();
@@ -750,8 +569,7 @@
       const buf = await crypto.subtle.digest('SHA-256', enc.encode(raw));
       const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-      // Exakter Hash für "souveraen2026"
-      const validHash = "c126e66e1fca88a3b352604449330f7fdb98f0437c5d78ba5922a308d33941fc";
+      const validHash = "c126e66e1fca88a3b352604449330f7fdb98f0437c5d78ba5922a308d33941fc"; // souveraen2026
 
       if (hash === validHash || raw === "souveraen2026" || raw === "demo" || raw === "b6") {
         const id = getNextCaseId();
@@ -779,22 +597,22 @@
     });
 
     /* =========================================================================
-       HUB NAVIGATION
+       HUB-NAVIGATION (EIN KLICK = VOLLER INHALT, KEINE VERSCHACHTELUNG)
        ========================================================================= */
     function switchHub(hubId) {
       document.querySelectorAll('.hub-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.hub-pane').forEach(p => p.classList.remove('active'));
-      const btn = Array.from(document.querySelectorAll('.hub-btn')).find(b => b.getAttribute('onclick').includes(hubId));
-      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.hub-btn')).find(b => b.getAttribute('onclick').includes(hubId));
+      if (activeBtn) activeBtn.classList.add('active');
       const target = document.getElementById(hubId);
       if (target) target.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     /* =========================================================================
-       HUB 1: PFLEGEGRAD-ARITHMETIK & WIDERSPRUCH
+       HUB A: PFLEGEGRAD-ARITHMETIK (SGB XI)
        ========================================================================= */
-    function calcPflege() {
+    function calcPflegegrad() {
       const m1 = parseFloat(document.getElementById('m1Score').value) || 0;
       const m2 = parseFloat(document.getElementById('m2Score').value) || 0;
       const m4 = parseFloat(document.getElementById('m4Score').value) || 0;
@@ -810,14 +628,14 @@
       else if (total >= 27) { grad = 2; geld = 332; sach = 761; }
       else if (total >= 12.5) { grad = 1; geld = 0; sach = 125; }
 
-      const out = document.getElementById('pflegeOut');
-      out.style.display = 'block';
+      const res = document.getElementById('pflegeResult');
+      res.style.display = 'block';
 
       if (grad === 0) {
-        out.innerHTML = `📊 <strong>Errechnete Gesamtpunkte:</strong> ${total.toFixed(1)} / 100 Pkt.<br>` +
-          `❌ Kein Pflegegrad erreicht (unter 12,5 Pkt). Bei MDK-Begutachtung Tagesform dokumentieren!`;
+        res.innerHTML = `📊 <strong>Errechnete Gesamtpunkte:</strong> ${total.toFixed(1)} von 100 Pkt.<br>` +
+          `❌ <strong>Ergebnis:</strong> Kein Pflegegrad erreicht (unter 12,5 Pkt). Bei MDK-Begutachtung Tagesform dokumentieren!`;
       } else {
-        out.innerHTML = `🎖️ <strong>Gesetzlicher Anspruch:</strong> <span style="color:#fff; font-size:1.1rem; font-weight:800;">PFLEGEGRAD ${grad}</span> (${total.toFixed(1)} Pkt)<br>` +
+        res.innerHTML = `🎖️ <strong>Gesetzlicher Anspruch:</strong> <span style="color:#fff; font-size:1.1rem; font-weight:800;">PFLEGEGRAD ${grad}</span> (${total.toFixed(1)} Pkt)<br>` +
           `💰 <strong>Monatliches Pflegegeld (§ 37 SGB XI):</strong> ${geld} € / Monat<br>` +
           `🩺 <strong>Pflegesachleistung (§ 36 SGB XI):</strong> bis zu ${sach} € / Monat<br>` +
           `💡 <strong>Zusatzleistungen:</strong> 125 € Entlastungsbetrag (§ 45b) + 4.000 € Wohnumfeld-Zuschuss (§ 40 SGB XI).`;
@@ -825,10 +643,10 @@
     }
 
     function generatePflegeWiderspruch() {
-      const name = document.getElementById('wName').value || '[NAME VERSICHERTE/R]';
+      const name = document.getElementById('wVersicherter').value || '[NAME VERSICHERTER]';
       const kasse = document.getElementById('wKasse').value || '[PFLEGEKASSE]';
-      const bDate = document.getElementById('wBescheidDate').value || '[DATUM DES BESCHEIDS]';
-      const versNr = document.getElementById('wVersNr').value || '[VERSICHERUNGSNUMMER]';
+      const bescheidDate = document.getElementById('wBescheidDatum').value || '[DATUM DES BESCHEIDS]';
+      const versNr = document.getElementById('wVersicherungsNr').value || '[VERSICHERUNGSNUMMER]';
       const caseId = sessionStorage.getItem('current_b6_case') || 'B6-00001';
       const today = new Date().toLocaleDateString('de-DE');
 
@@ -842,43 +660,43 @@ Datum:              ${today}
 An Pflegekasse:     ${kasse}
 Versicherte(r):     ${name} | Vers.-Nr.: ${versNr}
 
-WIDERSPRUCH gegen Ihren Einstufungsbescheid vom: ${bDate}
+WIDERSPRUCH gegen Ihren Einstufungsbescheid vom: ${bescheidDate}
 
 Sehr geehrte Damen und Herren,
 
-gegen Ihren Bescheid vom ${bDate} über die Einstufung in den Pflegegrad lege ich hiermit
-frist- und formgerecht
+gegen den oben genannten Bescheid über die Feststellung bzw. Ablehnung des Pflegegrades
+lege ich hiermit form- und fristgerecht
 
                                 W I D E R S P R U C H
 
 ein.
 
-RÜGE DER MDK-BEGUTACHTUNG (BRi & § 15 SGB XI):
-Das Gutachten des Medizinischen Dienstes (MD) erfasst den tatsächlichen, täglichen
-Pflegebedarf nicht zutreffend. Insbesondere in Modul 4 (Selbstversorgung) und Modul 5
-(Umgang mit krankheitsbedingten Belastungen) wurden erhebliche Einschränkungen an
-schlechten Tagen vollständig ausgeblendet.
+BEGRÜNDUNG (BRi & § 15 SGB XI):
+Die Begutachtung durch den Medizinischen Dienst (MD) spiegelt den tatsächlichen, täglichen
+Hilfe- und Pflegebedarf in den Modulen des SGB XI nicht zutreffend wider. Insbesondere in den
+Bereichen der Selbstversorgung (Modul 4) sowie der krankheitsbedingten Anforderungen (Modul 5)
+wurden erhebliche Einschränkungen unberücksichtigt gelassen.
 
-ZUR VERFAHRENSWAHRUNG WIRD BEANTRAGT:
-1. Unverzügliche Übersendung des vollständigen MDK-Pflegegutachtens in Kopie.
-2. Einräumung einer Nachbegründungsfrist von vier Wochen ab Gutachteneingang.
-3. Durchführung einer Zweitbegutachtung durch einen unabhängigen Gutachter.
+ZUR VERFAHRENSWAHRUNG BEANTRAGE ICH:
+1. Die unverzügliche Übersendung des vollständigen MD-Pflegegutachtens in Kopie.
+2. Die Einräumung einer Nachbegründungsfrist von vier Wochen nach Eingang des Gutachtens.
+3. Die Veranlassung einer Zweitbegutachtung durch einen unabhängigen Gutachter.
 
 Mit freundlichen Grüßen,
 
 Unterschrift: ____________________________________`;
 
-      const box = document.getElementById('pflegeDoc');
+      const box = document.getElementById('widerspruchOutput');
       box.style.display = 'block';
       box.innerText = txt;
     }
 
     /* =========================================================================
-       HUB 2: EXISTENZ & VORSCHUSS
+       HUB B: EXISTENZ & VORSCHUSS (§ 42 SGB I)
        ========================================================================= */
     function generateVorschuss() {
-      const n = document.getElementById('vName').value || '[DEIN NAME]';
-      const a = document.getElementById('vAmt').value || '[JOB-CENTER / SOZIALAMT]';
+      const n = document.getElementById('sozName').value || '[DEIN NAME]';
+      const amt = document.getElementById('sozAmt').value || '[JOB-CENTER / SOZIALAMT]';
       const caseId = sessionStorage.getItem('current_b6_case') || 'B6-00001';
       const today = new Date().toLocaleDateString('de-DE');
 
@@ -889,45 +707,45 @@ Unterschrift: ____________________________________`;
 ================================================================================
 VORGANGS-ID: ${caseId}
 Datum:       ${today}
-An:          ${a}
+An:          ${amt}
 Antragsteller: ${n}
 
 Sehr geehrte Damen und Herren,
 
 mein Antrag auf existenzsichernde Leistungen liegt Ihnen vor. Bis heute ist weder
-ein Bescheid noch eine Auszahlung erfolgt. Ich verfüge über keinerlei Barmittel.
+ein Bescheid noch eine Auszahlung erfolgt. Ich verfüge über keinerlei liquide Barmittel.
 Mein Existenzminimum (Art. 1 Abs. 1 i.V.m. Art. 20 Abs. 1 GG) ist akut gefährdet.
 
-Gemäß § 42 Abs. 1 Satz 1 SGB I hat der Leistungsträger Vorschüsse zu zahlen, wenn
-ein Anspruch dem Grunde nach besteht. Ich beantrage die sofortige BARAUSZAHLUNG
-eines angemessenen Vorschusses am heutigen Tag. Bei Verweigerung ergeht unverzüglich
-Eilantrag beim Sozialgericht (§ 86b SGG).
+Gemäß § 42 Abs. 1 Satz 1 SGB I hat der Leistungsträger Vorschüsse zu zahlen, wenn ein
+Anspruch auf Geldleistungen dem Grunde nach besteht. Ich beantrage die sofortige
+BARAUSZAHLUNG eines angemessenen Vorschusses am heutigen Tage. Bei Verweigerung ergeht
+unverzüglich Eilantrag beim Sozialgericht (§ 86b SGG).
 
 Unterschrift: ____________________________________`;
 
-      const box = document.getElementById('vorschussDoc');
+      const box = document.getElementById('sozOutput');
       box.style.display = 'block';
       box.innerText = txt;
     }
 
     /* =========================================================================
-       HUB 3: INKASSO-ARITHMETIK
+       HUB C: INKASSO-KÜRZUNG
        ========================================================================= */
     function calcInkasso() {
-      const h = parseFloat(document.getElementById('inHaupt').value) || 0;
-      const k = parseFloat(document.getElementById('inKosten').value) || 0;
-      const limit = (h * 0.15 + 18).toFixed(2);
+      const h = parseFloat(document.getElementById('inkassoHaupt').value) || 0;
+      const k = parseFloat(document.getElementById('inkassoKosten').value) || 0;
+      const angemessen = (h * 0.15 + 20).toFixed(2);
+      const res = document.getElementById('inkassoResult');
+      res.style.display = 'block';
 
-      const r = document.getElementById('inResult');
-      r.style.display = 'block';
-      r.innerHTML = `⚖️ <strong>Prüfung nach § 4 Abs. 5 RDGEG / § 254 BGB:</strong><br>` +
+      res.innerHTML = `⚖️ <strong>Prüfung nach § 4 Abs. 5 RDGEG &amp; § 254 BGB:</strong><br>` +
         `Gefordert: <strong>${k.toFixed(2)} €</strong> Inkassokosten.<br>` +
-        `Gesetzliche Obergrenze bei Erstmahnschreiben: ca. <strong>${limit} €</strong>.<br>` +
-        `🚨 <strong>Taktik:</strong> Unzulässige Phantasiegebühren (Kontoführung, Reaktivierungsgebühr) sind nach § 254 BGB ersatzlos zu streichen! Zahle ausschließlich die berechtigte Hauptforderung direkt an den Ursprungsgläubiger.`;
+        `Geschätzte gesetzliche Obergrenze bei Erstverzug: ca. <strong>${angemessen} €</strong>.<br>` +
+        `🚨 <strong>Taktik:</strong> Unzulässige Phantasieposten (Kontoführung, Reaktivierung) nach § 254 BGB streichen! Nur die berechtigte Hauptforderung direkt beim Gläubiger begleichen.`;
     }
 
     /* =========================================================================
-       HUB 4: BEHÖRDEN-SCHILD (BEISTAND, TENSOR, JUGENDAMT)
+       HUB D: BEHÖRDEN-SCHILD (BEISTAND, TENSOR, JUGENDAMT)
        ========================================================================= */
     function generateBeistand() {
       const n1 = document.getElementById('bName').value || '[DEIN NAME]';
@@ -935,7 +753,7 @@ Unterschrift: ____________________________________`;
       const caseId = sessionStorage.getItem('current_b6_case') || 'B6-00001';
       const today = new Date().toLocaleDateString('de-DE');
 
-      const txt =
+      const text =
 `BEISTANDSERKLÄRUNG (§ 13 Abs. 4 SGB X / § 14 VwVfG)
 VORGANGS-ID: ${caseId} | Datum: ${today}
 
@@ -951,7 +769,7 @@ Unterschrift: ___________________________`;
 
       const box = document.getElementById('beistandDoc');
       box.style.display = 'block';
-      box.innerText = txt;
+      box.innerText = text;
     }
 
     function runTensor() {
@@ -964,12 +782,12 @@ Unterschrift: ___________________________`;
       const out = document.getElementById('tensorOut');
       out.style.display = 'block';
 
-      if (n1 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n1=0):</strong> Unzulässige Ausforschung. Verfassungsbeschwerde (Art. 13 GG) und Beschwerde (§ 304 StPO).`;
-      else if (n2 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n2=0):</strong> Richtervorbehalt umgangen. Absolutes Beweisverwertungsverbot!`;
-      else if (n3 === "0") out.innerHTML = `🚨 <strong>FORM-NICHTIGKEIT (n3=0):</strong> 1985er-Schablone ohne Richterunterschrift ist rechtsunwirksam (§ 44 VwVfG / BGH). Haftung nach § 839 BGB!`;
-      else if (n3 === "2") out.innerHTML = `🟡 <strong>ZWEIFELSFALL (n3=2):</strong> Paraphe ohne Vertretungsanzeige. Originalakte anfordern (§ 147 StPO).`;
-      else if (n4 === "0") out.innerHTML = `🔴 <strong>VERSTOSS (n4=0):</strong> Verletzung § 107 StPO. Antrag auf gerichtliche Entscheidung gem. § 98 Abs. 2 StPO.`;
-      else out.innerHTML = `🟢 <strong>DETERMINISTISCH ORDNUNGSGEMÄSS (1.1.1.1):</strong> Form gewahrt. Beistand hinzuziehen.`;
+      if (n1 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n1=0):</strong> Rechtswidrige Ausforschung. Verfassungsbeschwerde (Art. 13 GG) und Beschwerde (§ 304 StPO).`;
+      else if (n2 === "0") out.innerHTML = `🔴 <strong>ABBRUCH (n2=0):</strong> Umgehung des Richtervorbehalts. Absolutes Beweisverwertungsverbot!`;
+      else if (n3 === "0") out.innerHTML = `🚨 <strong>KARDINAL-KOLLAPS (n3=0):</strong> FORM-NICHTIGKEIT (§ 44 VwVfG / BGH). Schein-Beschluss ohne Unterschrift entfaltet keine Wirkung. Persönliche Haftung gem. § 839 BGB!`;
+      else if (n3 === "2") out.innerHTML = `🟡 <strong>ZWEIFELSFALL (n3=2):</strong> Paraphe ohne Vertretung. Original-Akteneinsicht verlangen (§ 147 StPO).`;
+      else if (n4 === "0") out.innerHTML = `🔴 <strong>VERSTOSS (n4=0):</strong> Verletzung § 107 StPO. Antrag auf gerichtliche Entscheidung gem. § 98 Abs. 2 StPO stellen.`;
+      else out.innerHTML = `🟢 <strong>DETERMINISTISCHER VOLLZUG (1.1.1.1):</strong> Form gewahrt. Beistand hinzuziehen.`;
     }
 
     function generateJugendamt() {
@@ -981,55 +799,31 @@ Unterschrift: ___________________________`;
 
       const txt =
 `================================================================================
-          ANTRAG AUF AKTENEINSICHT & RECHTSWAHRUNG (§ 25 SGB X)
+          FÖRMLICHER ANTRAG AUF VOLLSTÄNDIGE AKTENEINSICHT
+               gem. § 25 SGB X / Rüge unangekündigter Maßnahmen
 ================================================================================
 VORGANGS-ID: ${caseId} | Datum: ${today}
-An: ${a} | Zu Händen: ${sb} | Az.: ${az}
+An:    ${a}
+Zu Händen: ${sb}
+Az.:   ${az}
 
 Sehr geehrte Damen und Herren,
 
-gemäß § 25 Abs. 1 SGB X beantrage ich vollständige Einsicht in sämtliche über mich
-und meine Familie geführten Akten (inkl. Handakten und Gesprächsnotizen).
+gemäß § 25 Abs. 1 SGB X beantrage ich unverzüglich vollständige Einsicht in sämtliche
+über mich und meine Familie geführten Akten (inkl. Sonderakten und interner Vermerke).
 
-VORSORGLICHE ERKLÄRUNG:
+VORSORGLICHE VERHALTENS- & RECHTSWAHRUNG:
 1. Einem unangekündigten Betreten der Wohnung wird unter Verweis auf Art. 13 GG widersprochen.
-2. Gespräche werden ausschließlich unter Hinzuziehung eines Beistands (§ 13 SGB X) geführt.
-3. Bitte führen Sie die Kommunikation ab sofort ausschließlich schriftlich auf dem Postweg.
+2. Gespräche werden ausschließlich unter Hinzuziehung eines Beistands (§ 13 SGB X) wahrgenommen.
+3. Ich fordere Sie auf, jegliche Kommunikation ausschließlich schriftlich auf dem Postweg zu führen.
+
+Mit freundlichen Grüßen,
 
 Unterschrift: ____________________________________`;
 
       const box = document.getElementById('jDoc');
       box.style.display = 'block';
       box.innerText = txt;
-    }
-
-    /* =========================================================================
-       HUB 5: RECHTSPRECHUNG-FILTER & PROMPT-GENERATOR
-       ========================================================================= */
-    function filterJudgements() {
-      const q = document.getElementById('judgeSearch').value.toLowerCase();
-      document.querySelectorAll('#judgementsList .ampel-box').forEach(b => {
-        b.style.display = b.innerText.toLowerCase().includes(q) ? 'block' : 'none';
-      });
-    }
-
-    function generatePrompt() {
-      const t = document.getElementById('aiType').value;
-      const caseId = sessionStorage.getItem('current_b6_case') || 'B6-00001';
-      let p = `Du bist ein hochpräziser juristischer Aktenprüfer für die b6_sys_bürgerinfoplattform (Vorgang: ${caseId}).\nAnalysiere den folgenden Text streng sachlich und neutral:\n\n`;
-
-      if (t === 'mdk') {
-        p += `1. Vergleiche die geschilderten Einschränkungen mit den 6 Modulen des NBA (§ 15 SGB XI).\n2. Identifiziere typische Bewertungsfehler in Modul 4 (Selbstversorgung) und Modul 5.\n3. Formuliere 3 konkrete Rügepunkte für den Widerspruch nach § 84 SGG.`;
-      } else if (t === 'bescheid') {
-        p += `1. Isoliere alle Fristen und rechne das genaue Fristende aus (§ 31 VwVfG).\n2. Prüfe, ob die Rechtsbehelfsbelehrung vollständig ist.\n3. Markiere formelhafte Druckdrohungen ohne Ermächtigungsgrundlage.`;
-      } else {
-        p += `1. Trenne Hauptforderung von Nebenkosten.\n2. Vergleiche die Inkassopauschale mit § 4 Abs. 5 RDGEG und RVG.\n3. Formuliere eine Zurückweisung für überhöhte Gebühren nach § 254 BGB.`;
-      }
-
-      p += `\n\n[TEXT HIER EINFÜGEN]`;
-      const out = document.getElementById('aiOut');
-      out.style.display = 'block';
-      out.innerText = p;
     }
   </script>
 </body>
