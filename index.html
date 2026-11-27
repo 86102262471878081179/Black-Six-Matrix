@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="artifact-type" content="tool">
   <meta name="design-style" content="nocturne">
-  <title>B6 Sovereign Master Dock — Interaktives Kanzlei- &amp; Forensik-Cockpit</title>
+  <title>DER SOUVERÄN — Bürger-Notfall- &amp; Forensik-Cockpit (ISO/IEC 42001 &amp; EU AI Pact Edition)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -2194,7 +2194,7 @@
             </div>
             <div class="field">
               <label for="h5-xj-az">Aktenzeichen</label>
-              <input type="text" id="h5-xj-az" value="2 BvR 1318/26" oninput="buildXJustiz()">
+              <input type="text" id="h5-xj-az" value="2 BvR 2220/01 u.a." oninput="buildXJustiz()">
             </div>
             <div class="field">
               <label for="h5-xj-empf">Empfänger-Gericht</label>
@@ -2347,7 +2347,7 @@
               <option value="pdf195">PDF 195 (Souveräner Gläubiger vs. Behörden-Inversion)</option>
               <option value="durchsuchung">Art. 13 GG Hausdurchsuchung (Reine Ausforschung)</option>
               <option value="schufa">SCHUFA-Score Klage / § 31 BDSG Bestreitung</option>
-              <option value="amtshaftung">Amtshaftungsklage 19,8 Mio. € (Landgericht Münster)</option>
+              <option value="amtshaftung">Amtshaftungsklage 19,8 Mio. € (Zuständiges Landgericht)</option>
             </select>
           </div>
           <div>
@@ -2477,8 +2477,8 @@
             </div>
             <span class="badge">Parser</span>
           </div>
-          <label class="form-label" for="az-input-h6">Aktenzeichen eingeben (z. B. 152 Gs 648/26 oder 11 K 3272/26)</label>
-          <input type="text" id="az-input-h6" class="form-input" value="152 Gs 648/26">
+          <label class="form-label" for="az-input-h6">Aktenzeichen eingeben (z. B. [AZ: 152 Gs XXX/26] oder [AZ: 11 K XXX/26])</label>
+          <input type="text" id="az-input-h6" class="form-input" value="[AZ: 152 Gs XXX/26]">
           <div class="btn-row" style="margin-top:var(--space-xs); margin-bottom:var(--space-sm);">
             <button type="button" class="btn btn-cyan btn-sm" onclick="splitAZH6()">Aktenzeichen zerlegen</button>
           </div>
@@ -2503,7 +2503,7 @@
           </div>
           <span class="badge">Classifier</span>
         </div>
-        <textarea id="sorter-input-h6" class="form-textarea" rows="5" placeholder="Eine Zeile pro Ereignis / Beleg einfügen...&#10;Bescheid vom 06.05.2026&#10;Protokoll KHK Feierabend&#10;Klageerhebung VG Minden&#10;Rechnung Anwaltskosten"></textarea>
+        <textarea id="sorter-input-h6" class="form-textarea" rows="5" placeholder="Eine Zeile pro Ereignis / Beleg einfügen...&#10;Bescheid vom 06.05.2026&#10;Protokoll Ermittlungsbeamter A&#10;Klageerhebung Zuständiges Verwaltungsgericht&#10;Rechnung Anwaltskosten"></textarea>
         <div class="btn-row" style="margin-top:var(--space-sm);">
           <button type="button" class="btn btn-cyan" onclick="runSorterH6()">▶ Dokumente klassifizieren &amp; sortieren</button>
         </div>
@@ -2514,7 +2514,7 @@
       <article class="panel panel-crimson" style="margin-bottom: var(--space-lg);">
         <div class="panel-head">
           <div>
-            <h3 class="panel-title" style="color:var(--error);">⚠ 7. Das 34-Punkte Rügen-Kataster (Akte Dr. T.K. / T.K.)</h3>
+            <h3 class="panel-title" style="color:var(--error);">⚠ 7. Das 34-Punkte Rügen-Kataster (Bürger-Verfahrensakte (Muster))</h3>
             <p class="panel-desc">Interaktive Nachverfolgung der 34 dokumentierten Grundrechtsbrüche und Formfehler</p>
           </div>
           <span class="badge badge-crimson" id="ruegen-kpi-badge">0 / 34 Belegt</span>
@@ -2755,12 +2755,17 @@
           </label>
         </div>
 
-        <div class="btn-row" style="margin-bottom:1rem;">
+        <div class="btn-row" style="margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
           <button type="button" class="btn btn-primary" onclick="compileMasterPrompt()">⚡ Master-Prompt kompilieren</button>
-          <button type="button" class="btn btn-cyan" onclick="copyMasterPrompt()">📋 Prompt in Zwischenablage kopieren</button>
-          <button type="button" class="btn btn-outline" onclick="openTargetLLM('grok')">Grok öffnen ↗</button>
-          <button type="button" class="btn btn-outline" onclick="openTargetLLM('chatgpt')">ChatGPT öffnen ↗</button>
-          <button type="button" class="btn btn-outline" onclick="openTargetLLM('claude')">Claude öffnen ↗</button>
+          <button type="button" class="btn btn-cyan" onclick="copyMasterPrompt()">📋 In Zwischenablage kopieren</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('grok')">Grok ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('chatgpt')">ChatGPT ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('claude')">Claude ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('deepseek')">DeepSeek ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('gemini')">Gemini ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('perplexity')">Perplexity ↗</button>
+          <button type="button" class="btn btn-outline" onclick="dispatchToLLM('mistral')">Mistral ↗</button>
+          <button type="button" class="btn btn-outline" onclick="copyOllamaBridge()">💻 Ollama-Befehl</button>
         </div>
 
         <div>
@@ -3535,7 +3540,7 @@
     function loadWarrantSample() {
       const el = document.getElementById('h1-m15-input');
       if (el) {
-        el.value = `Amtsgericht Musterstadt — Beschluss vom 12.01.2026 (Az. 152 Gs 690/26). Es wird die Durchsuchung der Wohnräume sowie die Beschlagnahme sämtlicher Unterlagen und elektronischer Geräte wegen Verdachts angeordnet. gez. Richter (Paraphe: R.)`;
+        el.value = `Amtsgericht Musterstadt — Beschluss vom 12.01.2026 (Az. [AZ: 152 Gs ZZZ/26]). Es wird die Durchsuchung der Wohnräume sowie die Beschlagnahme sämtlicher Unterlagen und elektronischer Geräte wegen Verdachts angeordnet. gez. Richter (Paraphe: R.)`;
       }
       runWarrantScanner();
     }
@@ -4359,7 +4364,7 @@
           `• Laufende Nummer: <span style="color:var(--on-surface);">${match[3]}</span><br>` +
           `• Erfassungsjahr: <span style="color:var(--on-surface);">20${match[4]}</span>`;
       } else {
-        res.innerHTML = `<span style="color:var(--warning);">Formatierung weicht von Standardschablone ab (erwartet: „152 Gs 648/26“).</span>`;
+        res.innerHTML = `<span style="color:var(--warning);">Formatierung weicht von Standardschablone ab (erwartet: „[AZ: 152 Gs XXX/26]“).</span>`;
       }
     }
 
@@ -4468,7 +4473,7 @@
     /* =====================================================================
        HUB 7: DIE 40ER MATRIX & UNIVERSAL LLM PROMPT GENERATOR
        ===================================================================== */
-    const B6_SECTORS_40 = [{"id": "SP-01", "nr": "0001", "cluster": "ALPHA", "badge": "badge-gold", "title": "Gewerbe- & Betriebserlaubnis", "norm": "GewO §§ 14, 35, VwVfG", "desc": "Konzessionsprüfungen, Abwehr unberechtigter Betriebsuntersagungen, Handwerksrolleneintragung und Gewerberegister."}, {"id": "SP-02", "nr": "0004", "cluster": "ALPHA", "badge": "badge-gold", "title": "Waffen-, Jagd- & Munitionsrecht", "norm": "WaffG §§ 4, 5, BVerwG", "desc": "Zuverlässigkeitsprüfungen, WBK-Widerrufsabwehr, Aufbewahrungskontrollen und Transportauflagen."}, {"id": "SP-03", "nr": "0006", "cluster": "ALPHA", "badge": "badge-gold", "title": "Bauplanung & Baustopp-Abwehr", "norm": "BauGB §§ 29-35, BauNVO, LBO", "desc": "Baugenehmigungsverfahren, Nutzungsänderungen, Stilllegungsverfügungen und Bestandsschutz im Außenbereich."}, {"id": "SP-04", "nr": "0011", "cluster": "ALPHA", "badge": "badge-gold", "title": "Güterkraftverkehr & BALM-Compliance", "norm": "GüKG §§ 3, 5, BALM-Prüfordnung", "desc": "EU-Gemeinschaftslizenzen, Mautkontrollen, Fahrtenschreiber-Prüfungen und Abwehr von Bußgeldbescheiden."}, {"id": "SP-05", "nr": "0016", "cluster": "ALPHA", "badge": "badge-gold", "title": "Mietrecht & Räumungsschutz", "norm": "BGB §§ 535, 573, 765a ZPO", "desc": "Abwehr fristloser Kündigungen, Mieterhöhungs-Deckel, Mängelbeseitigung und Vollstreckungsschutz bei Härtefällen."}, {"id": "SP-06", "nr": "0021", "cluster": "ALPHA", "badge": "badge-gold", "title": "Arbeitsvertrags- & Kündigungsschutz", "norm": "KSchG §§ 1, 4, BGB § 626", "desc": "Kündigungsschutzklagen binnen 3-Wochenfrist, Abfindungsverhandlungen, Abmahnungsentfernung und Zeugnisberichtigung."}, {"id": "SP-07", "nr": "0051", "cluster": "ALPHA", "badge": "badge-gold", "title": "Erbrecht & Nachlass-Sicherung", "norm": "BGB §§ 1922-2385, BeurkG", "desc": "Pflichtteilsabsicherung, Erbengemeinschafts-Auseinandersetzung, Testamentsvollstreckung und Nachlassinsolvenz."}, {"id": "SP-08", "nr": "0101", "cluster": "ALPHA", "badge": "badge-gold", "title": "Verwaltungsakt- & Ermessenskontrolle", "norm": "VwVfG §§ 35, 39, 44, VwGO § 114", "desc": "Rüge von Ermessensnichtgebrauch und Ermessensfehlern, Feststellung von Nichtigkeit und Anfechtungsklagen."}, {"id": "SP-09", "nr": "0105", "cluster": "ALPHA", "badge": "badge-gold", "title": "Strafprozess & Haustür-Souveränität", "norm": "StPO §§ 102, 105, 107, Art. 13 GG", "desc": "Durchsuchungsbeschluss-Filterung, Richtervorbehalt, 6-Monats-Verfall, Null-Beute-Quittung und Beistandsrecht."}, {"id": "SP-10", "nr": "0120", "cluster": "ALPHA", "badge": "badge-gold", "title": "Polizeirecht & Eingriffs-Deeskalation", "norm": "PolG NRW §§ 8-15, PDV 100", "desc": "Identitätsfeststellung, Platzverweise, Gewahrsam, Zwangsmittelprüfung und Dienstausweis-Legitimation."}, {"id": "SP-11", "nr": "0151", "cluster": "BETA", "badge": "badge-cyan", "title": "Seerecht & Logistik-Ketten", "norm": "HGB §§ 476 ff., Admiralty Law", "desc": "Frachtrecht, Reederhaftung, Flaggenzertifikate und internationale Handelsketten-Arbitrage."}, {"id": "SP-12", "nr": "0201", "cluster": "BETA", "badge": "badge-cyan", "title": "Urkunden- & Notariats-Validierung", "norm": "BeurkG, Haager Apostille 1961", "desc": "Internationale Legalisation, Apostillen-Authentifizierung, Formstrenge und öffentlicher Glaube."}, {"id": "SP-13", "nr": "0220", "cluster": "BETA", "badge": "badge-cyan", "title": "Inkassokosten-Kürzer & RDGEG", "norm": "RDGEG § 4 Abs. 5, RVG VV 2300, § 254 BGB", "desc": "Rückstutzung überhöhter Mahn- und Inkassospesen auf das gesetzliche Anwalts-Vergütungsniveau."}, {"id": "SP-14", "nr": "0240", "cluster": "BETA", "badge": "badge-cyan", "title": "Verzugszins-Arithmetik & Zinsessperre", "norm": "BGB §§ 288, 289 Satz 1", "desc": "5 Prozentpunkte über Basiszinssatz p.a., taggenaue act/365-Staffel und gesetzliches Zinseszins-Verbot."}, {"id": "SP-15", "nr": "0260", "cluster": "BETA", "badge": "badge-cyan", "title": "P-Konto & Vollstreckungsschutz", "norm": "ZPO §§ 850k, 850c, ZKG § 31", "desc": "Berechnung pfändungsfreier Monatsbeträge, Unterhaltszuschläge und Sicherung des Existenzminimums."}, {"id": "SP-16", "nr": "0280", "cluster": "BETA", "badge": "badge-cyan", "title": "SCHUFA-Einmeldeverbot & Löschung", "norm": "BDSG § 31 Abs. 2, Art. 17 DSGVO", "desc": "Gesetzliches Übermittlungsverbot bei bestrittener Forderung und Schadensersatz gem. Art. 82 DSGVO."}, {"id": "SP-17", "nr": "0301", "cluster": "GAMMA", "badge": "badge-positive", "title": "Patientenrechte & Behandlungsfehler", "norm": "BGB §§ 630a-630h, § 823 BGB", "desc": "Sofortige vollständige Patientenakteneinsicht (§ 630g), Aufklärungsmängel und Beweislastumkehr."}, {"id": "SP-18", "nr": "0330", "cluster": "GAMMA", "badge": "badge-positive", "title": "SGB XI Pflegegrade & NBA-Rechner", "norm": "SGB XI §§ 14, 15, BRi-Richtlinien", "desc": "Gewichtetes 6-Module-System mit Kardinal-Hebel Modul 4 (Selbstversorgung 40 %) und Höherstufung."}, {"id": "SP-19", "nr": "0360", "cluster": "GAMMA", "badge": "badge-positive", "title": "MDK-Fangfragen-Entlarvung", "norm": "SGB XI § 18, BRi, BSG-Rechtsprechung", "desc": "Abwehr von Aktenlage-Gutachten, Durchsetzung des 'schlechtesten Tages' und Widerspruchs-Formeln."}, {"id": "SP-20", "nr": "0400", "cluster": "GAMMA", "badge": "badge-positive", "title": "Hilfsmittel-Versorgung & Genehmigung", "norm": "SGB V § 33, § 13 Abs. 3a", "desc": "Eilbedarf, Rollstühle, Pflegebetten und Eintritt der gesetzlichen 3-Wochen-Genehmigungsfiktion."}, {"id": "SP-21", "nr": "0420", "cluster": "GAMMA", "badge": "badge-positive", "title": "CGM-Sensorik & Notfall-Insulinversorgung", "norm": "SGB V, StGB §§ 223, 340", "desc": "LADA-/Typ-1-Monitoring, sensorbasierte Glukosemessung und Schutz vor rechtswidrigem Entzug."}, {"id": "SP-22", "nr": "0440", "cluster": "GAMMA", "badge": "badge-positive", "title": "Schwerbehinderung & GdB-Feststellung", "norm": "SGB IX §§ 2, 152, VersMedV", "desc": "Grad der Behinderung, Merkzeichen (G, aG, B, H), Nachteilsausgleiche und Kündigungsschutz."}, {"id": "SP-23", "nr": "0451", "cluster": "DELTA", "badge": "badge-warning", "title": "Notfall-Barvorschuss & Barauszahlung", "norm": "SGB I § 42 Abs. 1 Satz 1", "desc": "Sofortige Barauszahlung am Tag der Antragstellung bei Mittellosigkeit zur Existenzsicherung."}, {"id": "SP-24", "nr": "0480", "cluster": "DELTA", "badge": "badge-warning", "title": "Bürgergeld-Sanktionsabwehr", "norm": "SGB II §§ 31, 31a, BVerfG 1 BvL 7/16", "desc": "Verfassungsrechtlicher Schutz des Existenzminimums, strikte 30 %-Grenze und Sanktionsnichtigkeit."}, {"id": "SP-25", "nr": "0500", "cluster": "DELTA", "badge": "badge-warning", "title": "Kosten der Unterkunft (KdU-Schutz)", "norm": "SGB II § 22, BSG-Rechtsprechung", "desc": "Abwehr von Kostensenkungsaufforderungen, Unwirtschaftlichkeit von Umzügen und Mietkostenübernahme."}, {"id": "SP-26", "nr": "0520", "cluster": "DELTA", "badge": "badge-warning", "title": "Schulpflicht & Attest-Rechtswahrung", "norm": "SchulG NRW §§ 42, 43, Art. 3 GG", "desc": "Facharzt-Atteste genügen zur Entschuldigung; Abwehr von Bußgelddrohungen und Schulpflicht-Willkür."}, {"id": "SP-27", "nr": "0540", "cluster": "DELTA", "badge": "badge-warning", "title": "Inklusion & Nachteilsausgleich", "norm": "SchulG NRW § 42, BGG, Art. 3 Abs. 3 GG", "desc": "Rechtsanspruch auf Zeitzugaben, Hilfsmittelverwendung und barrierefreie Prüfungsmodalitäten."}, {"id": "SP-28", "nr": "0580", "cluster": "DELTA", "badge": "badge-warning", "title": "Jugendamtsbegleitung & Beistandsrecht", "norm": "SGB VIII § 8a, SGB X § 13, Art. 6 GG", "desc": "Recht auf Hinzuziehung von Beiständen bei Gesprächen; Abwehr unbegründeter Inobhutnahmen."}, {"id": "SP-29", "nr": "0651", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Auskunft & Akten-Transparenz", "norm": "Art. 15 DSGVO, IFG NRW", "desc": "Vollständige Kopie aller Rohdaten, Metadaten, Empfängerlisten und behördlicher Vermerke."}, {"id": "SP-30", "nr": "0680", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Löschung & Schadensersatz", "norm": "Art. 17, 82 DSGVO, BAG / EuGH", "desc": "Löschung unzulässiger Daten und immaterieller Schadensersatz bei Kontrollverlust und Bloßstellung."}, {"id": "SP-31", "nr": "0710", "cluster": "EPSILON", "badge": "badge-purple", "title": "Beweissicherung & Gedächtnisprotokoll", "norm": "ZPO § 415, StPO § 107", "desc": "Echtzeit-Dokumentation behördlicher Übergriffe mit Zeugenunterschriften und Zeitstempeln."}, {"id": "SP-32", "nr": "0740", "cluster": "EPSILON", "badge": "badge-purple", "title": "Dienstaufsicht & Amtspflichtverletzung", "norm": "BGB § 839, Art. 34 GG, BeamtStG § 36", "desc": "Remonstration, Dienstaufsichtsbeschwerden und Durchgriff auf die persönliche Beamtenhaftung."}, {"id": "SP-33", "nr": "0780", "cluster": "EPSILON", "badge": "badge-purple", "title": "Untätigkeitsklage & Fristerzwingung", "norm": "VwGO § 75, SGG § 88", "desc": "Klageerhebung nach Ablauf von 3 bzw. 6 Monaten behördlichen Schweigens zur Urteilsbeschleunigung."}, {"id": "SP-34", "nr": "0801", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Kanonisches Recht & Jus Asyli", "norm": "Codex Iuris Canonici (CIC), Art. 140 GG", "desc": "Staatskirchenrechtliche Sonderstellung, kirchliche Schutzräume und Gewissensimmunität."}, {"id": "SP-35", "nr": "0850", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Verfassungsbeschwerde & Gehörsrüge", "norm": "BVerfGG § 90, ZPO § 321a, Art. 103 GG", "desc": "Substantiierte Rüge der Verletzung rechtlichen Gehörs und Willkürverbot (Art. 3 Abs. 1 GG)."}, {"id": "SP-36", "nr": "0890", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Einstweilige Anordnung vor dem BVerfG", "norm": "BVerfGG § 32, BVerfG-Präzedenz", "desc": "Dringlichkeitsanträge zur Abwendung schwerer Nachteile bei drohender irreversibler Grundrechtsverletzung."}, {"id": "SP-37", "nr": "0920", "cluster": "OMEGA", "badge": "badge-crimson", "title": "XJustiz & Elektronischer Rechtsverkehr", "norm": "XJustiz 3.3.1, beA / beBPo, § 130a ZPO", "desc": "Elektronische Formwirksamkeit, strukturierte XML-Datensätze und Prüfprotokoll-Validierung."}, {"id": "SP-38", "nr": "0955", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Shannon-Entropie-Scanner", "norm": "Informationstheorie, BVerfG 2 BvR 1318/26", "desc": "Messung der Bit/Zeichen-Dichte H(X) zur Entlarvung inhaltsleerer Copy-Paste-Gerichtsbeschlüsse."}, {"id": "SP-39", "nr": "0970", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "WORM-Ledger & SHA-256 Hasher", "norm": "WebCrypto API, BSI TR-03103, ZPO § 371a", "desc": "Unveränderbare kryptografische Zeitstempelung und Verkettung von Beweisdokumenten im Browser."}, {"id": "SP-40", "nr": "1000", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Diaboli Twins & Foucault-Panoptikum", "norm": "Luhmann-Systemtheorie, B6 Omni-Core", "desc": "Dekonstruktion zirkulärer Amtsakten, Inversionsberechnung und asymmetrische Gegenangriffs-Logik."}];
+    const B6_SECTORS_40 = [{"id": "SP-01", "nr": "0001", "cluster": "ALPHA", "badge": "badge-gold", "title": "Gewerbe- & Betriebserlaubnis", "norm": "GewO §§ 14, 35, VwVfG", "desc": "Konzessionsprüfungen, Abwehr unberechtigter Betriebsuntersagungen, Handwerksrolleneintragung und Gewerberegister."}, {"id": "SP-02", "nr": "0004", "cluster": "ALPHA", "badge": "badge-gold", "title": "Waffen-, Jagd- & Munitionsrecht", "norm": "WaffG §§ 4, 5, BVerwG", "desc": "Zuverlässigkeitsprüfungen, WBK-Widerrufsabwehr, Aufbewahrungskontrollen und Transportauflagen."}, {"id": "SP-03", "nr": "0006", "cluster": "ALPHA", "badge": "badge-gold", "title": "Bauplanung & Baustopp-Abwehr", "norm": "BauGB §§ 29-35, BauNVO, LBO", "desc": "Baugenehmigungsverfahren, Nutzungsänderungen, Stilllegungsverfügungen und Bestandsschutz im Außenbereich."}, {"id": "SP-04", "nr": "0011", "cluster": "ALPHA", "badge": "badge-gold", "title": "Güterkraftverkehr & BALM-Compliance", "norm": "GüKG §§ 3, 5, BALM-Prüfordnung", "desc": "EU-Gemeinschaftslizenzen, Mautkontrollen, Fahrtenschreiber-Prüfungen und Abwehr von Bußgeldbescheiden."}, {"id": "SP-05", "nr": "0016", "cluster": "ALPHA", "badge": "badge-gold", "title": "Mietrecht & Räumungsschutz", "norm": "BGB §§ 535, 573, 765a ZPO", "desc": "Abwehr fristloser Kündigungen, Mieterhöhungs-Deckel, Mängelbeseitigung und Vollstreckungsschutz bei Härtefällen."}, {"id": "SP-06", "nr": "0021", "cluster": "ALPHA", "badge": "badge-gold", "title": "Arbeitsvertrags- & Kündigungsschutz", "norm": "KSchG §§ 1, 4, BGB § 626", "desc": "Kündigungsschutzklagen binnen 3-Wochenfrist, Abfindungsverhandlungen, Abmahnungsentfernung und Zeugnisberichtigung."}, {"id": "SP-07", "nr": "0051", "cluster": "ALPHA", "badge": "badge-gold", "title": "Erbrecht & Nachlass-Sicherung", "norm": "BGB §§ 1922-2385, BeurkG", "desc": "Pflichtteilsabsicherung, Erbengemeinschafts-Auseinandersetzung, Testamentsvollstreckung und Nachlassinsolvenz."}, {"id": "SP-08", "nr": "0101", "cluster": "ALPHA", "badge": "badge-gold", "title": "Verwaltungsakt- & Ermessenskontrolle", "norm": "VwVfG §§ 35, 39, 44, VwGO § 114", "desc": "Rüge von Ermessensnichtgebrauch und Ermessensfehlern, Feststellung von Nichtigkeit und Anfechtungsklagen."}, {"id": "SP-09", "nr": "0105", "cluster": "ALPHA", "badge": "badge-gold", "title": "Strafprozess & Haustür-Souveränität", "norm": "StPO §§ 102, 105, 107, Art. 13 GG", "desc": "Durchsuchungsbeschluss-Filterung, Richtervorbehalt, 6-Monats-Verfall, Null-Beute-Quittung und Beistandsrecht."}, {"id": "SP-10", "nr": "0120", "cluster": "ALPHA", "badge": "badge-gold", "title": "Polizeirecht & Eingriffs-Deeskalation", "norm": "PolG NRW §§ 8-15, PDV 100", "desc": "Identitätsfeststellung, Platzverweise, Gewahrsam, Zwangsmittelprüfung und Dienstausweis-Legitimation."}, {"id": "SP-11", "nr": "0151", "cluster": "BETA", "badge": "badge-cyan", "title": "Seerecht & Logistik-Ketten", "norm": "HGB §§ 476 ff., Admiralty Law", "desc": "Frachtrecht, Reederhaftung, Flaggenzertifikate und internationale Handelsketten-Arbitrage."}, {"id": "SP-12", "nr": "0201", "cluster": "BETA", "badge": "badge-cyan", "title": "Urkunden- & Notariats-Validierung", "norm": "BeurkG, Haager Apostille 1961", "desc": "Internationale Legalisation, Apostillen-Authentifizierung, Formstrenge und öffentlicher Glaube."}, {"id": "SP-13", "nr": "0220", "cluster": "BETA", "badge": "badge-cyan", "title": "Inkassokosten-Kürzer & RDGEG", "norm": "RDGEG § 4 Abs. 5, RVG VV 2300, § 254 BGB", "desc": "Rückstutzung überhöhter Mahn- und Inkassospesen auf das gesetzliche Anwalts-Vergütungsniveau."}, {"id": "SP-14", "nr": "0240", "cluster": "BETA", "badge": "badge-cyan", "title": "Verzugszins-Arithmetik & Zinsessperre", "norm": "BGB §§ 288, 289 Satz 1", "desc": "5 Prozentpunkte über Basiszinssatz p.a., taggenaue act/365-Staffel und gesetzliches Zinseszins-Verbot."}, {"id": "SP-15", "nr": "0260", "cluster": "BETA", "badge": "badge-cyan", "title": "P-Konto & Vollstreckungsschutz", "norm": "ZPO §§ 850k, 850c, ZKG § 31", "desc": "Berechnung pfändungsfreier Monatsbeträge, Unterhaltszuschläge und Sicherung des Existenzminimums."}, {"id": "SP-16", "nr": "0280", "cluster": "BETA", "badge": "badge-cyan", "title": "SCHUFA-Einmeldeverbot & Löschung", "norm": "BDSG § 31 Abs. 2, Art. 17 DSGVO", "desc": "Gesetzliches Übermittlungsverbot bei bestrittener Forderung und Schadensersatz gem. Art. 82 DSGVO."}, {"id": "SP-17", "nr": "0301", "cluster": "GAMMA", "badge": "badge-positive", "title": "Patientenrechte & Behandlungsfehler", "norm": "BGB §§ 630a-630h, § 823 BGB", "desc": "Sofortige vollständige Patientenakteneinsicht (§ 630g), Aufklärungsmängel und Beweislastumkehr."}, {"id": "SP-18", "nr": "0330", "cluster": "GAMMA", "badge": "badge-positive", "title": "SGB XI Pflegegrade & NBA-Rechner", "norm": "SGB XI §§ 14, 15, BRi-Richtlinien", "desc": "Gewichtetes 6-Module-System mit Kardinal-Hebel Modul 4 (Selbstversorgung 40 %) und Höherstufung."}, {"id": "SP-19", "nr": "0360", "cluster": "GAMMA", "badge": "badge-positive", "title": "MDK-Fangfragen-Entlarvung", "norm": "SGB XI § 18, BRi, BSG-Rechtsprechung", "desc": "Abwehr von Aktenlage-Gutachten, Durchsetzung des 'schlechtesten Tages' und Widerspruchs-Formeln."}, {"id": "SP-20", "nr": "0400", "cluster": "GAMMA", "badge": "badge-positive", "title": "Hilfsmittel-Versorgung & Genehmigung", "norm": "SGB V § 33, § 13 Abs. 3a", "desc": "Eilbedarf, Rollstühle, Pflegebetten und Eintritt der gesetzlichen 3-Wochen-Genehmigungsfiktion."}, {"id": "SP-21", "nr": "0420", "cluster": "GAMMA", "badge": "badge-positive", "title": "CGM-Sensorik & Notfall-Insulinversorgung", "norm": "SGB V, StGB §§ 223, 340", "desc": "LADA-/Typ-1-Monitoring, sensorbasierte Glukosemessung und Schutz vor rechtswidrigem Entzug."}, {"id": "SP-22", "nr": "0440", "cluster": "GAMMA", "badge": "badge-positive", "title": "Schwerbehinderung & GdB-Feststellung", "norm": "SGB IX §§ 2, 152, VersMedV", "desc": "Grad der Behinderung, Merkzeichen (G, aG, B, H), Nachteilsausgleiche und Kündigungsschutz."}, {"id": "SP-23", "nr": "0451", "cluster": "DELTA", "badge": "badge-warning", "title": "Notfall-Barvorschuss & Barauszahlung", "norm": "SGB I § 42 Abs. 1 Satz 1", "desc": "Sofortige Barauszahlung am Tag der Antragstellung bei Mittellosigkeit zur Existenzsicherung."}, {"id": "SP-24", "nr": "0480", "cluster": "DELTA", "badge": "badge-warning", "title": "Bürgergeld-Sanktionsabwehr", "norm": "SGB II §§ 31, 31a, BVerfG 1 BvL 7/16", "desc": "Verfassungsrechtlicher Schutz des Existenzminimums, strikte 30 %-Grenze und Sanktionsnichtigkeit."}, {"id": "SP-25", "nr": "0500", "cluster": "DELTA", "badge": "badge-warning", "title": "Kosten der Unterkunft (KdU-Schutz)", "norm": "SGB II § 22, BSG-Rechtsprechung", "desc": "Abwehr von Kostensenkungsaufforderungen, Unwirtschaftlichkeit von Umzügen und Mietkostenübernahme."}, {"id": "SP-26", "nr": "0520", "cluster": "DELTA", "badge": "badge-warning", "title": "Schulpflicht & Attest-Rechtswahrung", "norm": "SchulG NRW §§ 42, 43, Art. 3 GG", "desc": "Facharzt-Atteste genügen zur Entschuldigung; Abwehr von Bußgelddrohungen und Schulpflicht-Willkür."}, {"id": "SP-27", "nr": "0540", "cluster": "DELTA", "badge": "badge-warning", "title": "Inklusion & Nachteilsausgleich", "norm": "SchulG NRW § 42, BGG, Art. 3 Abs. 3 GG", "desc": "Rechtsanspruch auf Zeitzugaben, Hilfsmittelverwendung und barrierefreie Prüfungsmodalitäten."}, {"id": "SP-28", "nr": "0580", "cluster": "DELTA", "badge": "badge-warning", "title": "Jugendamtsbegleitung & Beistandsrecht", "norm": "SGB VIII § 8a, SGB X § 13, Art. 6 GG", "desc": "Recht auf Hinzuziehung von Beiständen bei Gesprächen; Abwehr unbegründeter Inobhutnahmen."}, {"id": "SP-29", "nr": "0651", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Auskunft & Akten-Transparenz", "norm": "Art. 15 DSGVO, IFG NRW", "desc": "Vollständige Kopie aller Rohdaten, Metadaten, Empfängerlisten und behördlicher Vermerke."}, {"id": "SP-30", "nr": "0680", "cluster": "EPSILON", "badge": "badge-purple", "title": "DSGVO-Löschung & Schadensersatz", "norm": "Art. 17, 82 DSGVO, BAG / EuGH", "desc": "Löschung unzulässiger Daten und immaterieller Schadensersatz bei Kontrollverlust und Bloßstellung."}, {"id": "SP-31", "nr": "0710", "cluster": "EPSILON", "badge": "badge-purple", "title": "Beweissicherung & Gedächtnisprotokoll", "norm": "ZPO § 415, StPO § 107", "desc": "Echtzeit-Dokumentation behördlicher Übergriffe mit Zeugenunterschriften und Zeitstempeln."}, {"id": "SP-32", "nr": "0740", "cluster": "EPSILON", "badge": "badge-purple", "title": "Dienstaufsicht & Amtspflichtverletzung", "norm": "BGB § 839, Art. 34 GG, BeamtStG § 36", "desc": "Remonstration, Dienstaufsichtsbeschwerden und Durchgriff auf die persönliche Beamtenhaftung."}, {"id": "SP-33", "nr": "0780", "cluster": "EPSILON", "badge": "badge-purple", "title": "Untätigkeitsklage & Fristerzwingung", "norm": "VwGO § 75, SGG § 88", "desc": "Klageerhebung nach Ablauf von 3 bzw. 6 Monaten behördlichen Schweigens zur Urteilsbeschleunigung."}, {"id": "SP-34", "nr": "0801", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Kanonisches Recht & Jus Asyli", "norm": "Codex Iuris Canonici (CIC), Art. 140 GG", "desc": "Staatskirchenrechtliche Sonderstellung, kirchliche Schutzräume und Gewissensimmunität."}, {"id": "SP-35", "nr": "0850", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Verfassungsbeschwerde & Gehörsrüge", "norm": "BVerfGG § 90, ZPO § 321a, Art. 103 GG", "desc": "Substantiierte Rüge der Verletzung rechtlichen Gehörs und Willkürverbot (Art. 3 Abs. 1 GG)."}, {"id": "SP-36", "nr": "0890", "cluster": "OMEGA", "badge": "badge-crimson", "title": "Einstweilige Anordnung vor dem BVerfG", "norm": "BVerfGG § 32, BVerfG-Präzedenz", "desc": "Dringlichkeitsanträge zur Abwendung schwerer Nachteile bei drohender irreversibler Grundrechtsverletzung."}, {"id": "SP-37", "nr": "0920", "cluster": "OMEGA", "badge": "badge-crimson", "title": "XJustiz & Elektronischer Rechtsverkehr", "norm": "XJustiz 3.3.1, beA / beBPo, § 130a ZPO", "desc": "Elektronische Formwirksamkeit, strukturierte XML-Datensätze und Prüfprotokoll-Validierung."}, {"id": "SP-38", "nr": "0955", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Shannon-Entropie-Scanner", "norm": "Informationstheorie, BVerfG 2 BvR 2220/01 u.a.", "desc": "Messung der Bit/Zeichen-Dichte H(X) zur Entlarvung inhaltsleerer Copy-Paste-Gerichtsbeschlüsse."}, {"id": "SP-39", "nr": "0970", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "WORM-Ledger & SHA-256 Hasher", "norm": "WebCrypto API, BSI TR-03103, ZPO § 371a", "desc": "Unveränderbare kryptografische Zeitstempelung und Verkettung von Beweisdokumenten im Browser."}, {"id": "SP-40", "nr": "1000", "cluster": "SINGULARITÄT", "badge": "badge-white", "title": "Diaboli Twins & Foucault-Panoptikum", "norm": "Luhmann-Systemtheorie, B6 Omni-Core", "desc": "Dekonstruktion zirkulärer Amtsakten, Inversionsberechnung und asymmetrische Gegenangriffs-Logik."}];
 
     const k40State = {
       activeCluster: 'ALL',
@@ -4579,50 +4584,50 @@
 
     function updatePromptPersona() {
       const model = document.getElementById('pgen-model').value;
-      const badge = document.getElementById('target-model-badge');
+      const badge = document.getElementById('pgen-persona-badge');
       if (!badge) return;
-      if (model === 'grok') {
-        badge.textContent = 'ZIEL: GROK 2/3 (FORENSIK & PANOPTIKUM)';
-        badge.className = 'badge badge-purple';
-      } else if (model === 'chatgpt') {
-        badge.textContent = 'ZIEL: CHATGPT (SENATS-SUBSUMTION & BVerfG)';
-        badge.className = 'badge badge-gold';
-      } else if (model === 'claude') {
-        badge.textContent = 'ZIEL: CLAUDE 3.5 (KAUTELAR-SCHÜTZER)';
-        badge.className = 'badge badge-cyan';
-      } else {
-        badge.textContent = 'ZIEL: AD-HOC STRAFVERTEIDIGER (HAUSTÜR)';
-        badge.className = 'badge badge-crimson';
-      }
+      if (model === 'grok') badge.textContent = 'Persona: Advocatus Diaboli // Foucault-Panoptikum-Dekonstruktion (xAI Grok)';
+      else if (model === 'chatgpt') badge.textContent = 'Persona: Höchstrichterlicher Senatsprüfer (OpenAI ChatGPT o1 / 4o)';
+      else if (model === 'claude') badge.textContent = 'Persona: Kautelar-Jurist & Verfassungs-Stratege (Anthropic Claude 3.5 Sonnet)';
+      else if (model === 'deepseek') badge.textContent = 'Persona: Mathematische Logik & Deontische Beweisführung (DeepSeek R1)';
+      else if (model === 'gemini') badge.textContent = 'Persona: Multimodaler Dossier-Auditor & Evidenz-Synthese (Google Gemini)';
+      else if (model === 'perplexity') badge.textContent = 'Persona: Realtime-Jurisprudenz & BVerfG-Zitationsprüfung (Perplexity)';
+      else if (model === 'mistral') badge.textContent = 'Persona: EU AI Pact & DSGVO Compliance Auditor (Mistral AI)';
+      else badge.textContent = 'Persona: Air-Gap Offline Terminal Defense (Local LLM / Ollama)';
+      compileMasterPrompt();
     }
 
-    function insertSampleCase() {
-      const sample = `Am 14.11.2026 um 06:15 Uhr erschienen Beamte des Kriminalkommissariats mit einem auf den 15.04.2026 datierten Durchsuchungsbeschluss des Amtsgerichts (Az. 152 Gs 648/26). Auf dem Beschluss befindet sich lediglich ein flüchtiger Strich (Paraphe) ohne lesbaren Richternamen, versehen mit dem Stempel 'Beglaubigt'. Gleichzeitig wird mit Zwangsgeld und Datenübermittlung an die SCHUFA gedroht, obwohl der Anspruch vollumfänglich bestritten wurde.`;
-      const inp = document.getElementById('pgen-input');
-      if (inp) {
-        inp.value = sample;
-        compileMasterPrompt();
-        showStatusBanner('Beispiel-Sachverhalt eingefügt!');
-      }
+    function dsgvoSanitize(text) {
+      if (!text) return text;
+      return text
+        .replace(/[a-zA-Z]{2}\d{2}[ \d]{10,32}/g, '[IBAN_REDACTED]')
+        .replace(/[\w\.-]+@[\w\.-]+\.\w+/g, '[EMAIL_REDACTED]')
+        .replace(/(?:\+49|0049|0)[1-9][0-9 \-\/]{6,16}/g, '[TEL_REDACTED]')
+        .replace(/\b(Herr|Frau|Dr\.|Prof\.|KHK|KOR|OStA|StA)\s+[A-ZÄÖÜ][a-zäöüß]+(?:\s+[A-ZÄÖÜ][a-zäöüß]+)?/g, '[BEAMTER/PERSON_REDACTED]')
+        .replace(/\b\d{1,3}\s+[A-Z][a-z]{1,3}\s+\d{1,5}\/\d{2,4}\b/g, '[AZ_REDACTED]');
     }
 
     function compileMasterPrompt() {
       const model = document.getElementById('pgen-model').value;
       const target = document.getElementById('pgen-target').value;
       const sparteId = document.getElementById('pgen-sparte').value;
-      const caseId = (document.getElementById('pgen-case') ? document.getElementById('pgen-case').value : 'B6-00001') || 'B6-00001';
-      const inputTxt = (document.getElementById('pgen-input') ? document.getElementById('pgen-input').value.trim() : '') || '[SACHVERHALT HIER EINFÜGEN]';
+      const caseId = (document.getElementById('pgen-case') ? document.getElementById('pgen-case').value : 'B6-PUBLIC-001') || 'B6-PUBLIC-001';
+      let inputTxt = (document.getElementById('pgen-input') ? document.getElementById('pgen-input').value.trim() : '') || '[SACHVERHALT HIER EINFÜGEN]';
 
       const optFiskus = document.getElementById('pgen-opt-fiskus').checked;
       const optForm = document.getElementById('pgen-opt-form').checked;
       const optDsgvo = document.getElementById('pgen-opt-dsgvo').checked;
 
+      if (optDsgvo) {
+        inputTxt = dsgvoSanitize(inputTxt);
+      }
+
       const sector = B6_SECTORS_40.find(s => s.id === sparteId) || B6_SECTORS_40[8];
 
       let personaInstruction = '';
       if (model === 'grok') {
-        personaInstruction = `DU AGIRST ALS GROK 2/3 IN DER ROLLE DES OBERSTEN FORENSIKERS DER B6-KANZLEI-ARCHITEKTUR (ADVOCATUS DIABOLI).
-Dein Stil ist unnachgiebig, analytisch brillant und entlarvt behördliche Selbstermächtigung, Textbaustein-Willkür und Disziplinarstrukturen (Foucault-Panoptikum). Du weichst keiner Gegenüberstellung aus und zerlegst die gegnerische Position dogmatisch in ihre Einzelteile.`;
+        personaInstruction = `DU AGIRST ALS GROK 2/3 IN DER ROLLE DES OBERSTEN FORENSIKERS (ADVOCATUS DIABOLI).
+Dein Stil ist unnachgiebig, analytisch brillant und entlarvt behördliche Selbstermächtigung, Textbaustein-Willkür und Disziplinarstrukturen (Foucault-Panoptikum). Zerlege die gegnerische Behördenposition dogmatisch in ihre Einzelteile.`;
       } else if (model === 'chatgpt') {
         personaInstruction = `DU AGIRST ALS CHATGPT (O1 / GPT-4O) IM MODUS DES HÖCHSTRICHTERLICHEN SENATSPRÜFERS.
 Erstelle ein formstrenges juristisches Gutachten im klassischen Gutachtenstil:
@@ -4634,130 +4639,145 @@ Zitiere einschlägige Leitentscheidungen von BVerfG, BGH und BSG mit Aktenzeiche
       } else if (model === 'claude') {
         personaInstruction = `DU AGIRST ALS CLAUDE 3.5 SONNET ALS KAUTELAR-JURIST UND VERFASSUNGS-STRATEGE.
 Formuliere einen sofort druckreifen, rechtssicheren Schriftsatz an die Behörde/das Gericht. Dein Ton ist formell hochgradig distinguiert, unmissverständlich, preußisch-präzise und verankert sofortige Fristen, Warnhinweise auf persönliche Beamtenhaftung und Gehörsrügen.`;
+      } else if (model === 'deepseek') {
+        personaInstruction = `DU AGIRST ALS DEEPSEEK R1 ALS MATHEMATISCH-LOGISCHER FORENSIKER.
+Analysiere die Widersprüche, Entropie-Brüche und zeitlichen Paradoxien im Behördenvortrag. Berechne Verzugszinsen nach § 288 BGB und beweise die formale Ungültigkeit der Maßnahme mit mathematischer Stringenz.`;
+      } else if (model === 'gemini') {
+        personaInstruction = `DU AGIRST ALS GOOGLE GEMINI 1.5 PRO ALS MULTIMODALER DOSSIER-AUDITOR.
+Synthetisiere die Beweise, prüfe Zeugenprotokolle und Aktenvermerke auf Zirkelschlüsse und erstelle eine lückenlose Evidenz-Matrix für das Verfahren.`;
+      } else if (model === 'perplexity') {
+        personaInstruction = `DU AGIRST ALS PERPLEXITY PRO ALS ECHTZEIT-RECHTSQUELLEN-VALIDATOR.
+Prüfe den Sachverhalt gegen die aktuelle höchstrichterliche Rechtsprechung (BVerfG, BGH, BVerwG, BSG). Liefere verifizierte Fundstellen und Aktenzeichen.`;
+      } else if (model === 'mistral') {
+        personaInstruction = `DU AGIRST ALS MISTRAL AI ALS EU-RECHTS- & DATENSCHUTZ-AUDITOR (EU AI PACT & ISO/IEC 42001).
+Prüfe die behördliche Datenverarbeitung auf Verstöße gegen Art. 5, 6, 15, 17 und 82 DSGVO sowie die Vorgaben des europäischen AI Acts.`;
       } else {
-        personaInstruction = `DU AGIRST ALS AD-HOC STRAFVERTEIDIGER IM NOTFALL-EINSATZ AN DER HAUSTÜR.
-Gib dem Bürger eine sofort sprechbare, glasklare 3-Stufen-Verteidigungsformel an die Hand, um hoheitliche Willkür an der Schwelle sofort zu stoppen, Zeugen zu sichern und die Null-Beute-Quittung (§ 107 StPO) durchzusetzen.`;
+        personaInstruction = `DU AGIRST ALS AIR-GAP OFFLINE TERMINAL LLM (LOCAL OLLAMA / LLAMA 3.3).
+Führe eine deterministische, rein regelbasierte Gesetzes- und Formprüfung durch. Gib sofort sprechbare Notfall-Formeln und Rechtsgrundlagen aus.`;
       }
 
-      let p = `================================================================================
-B6 MASTER-PROMPT // CLIENT-SIDE WEBSOVEREIGN COMPILER
-Vorgang: #${caseId} | Datum: ${new Date().toLocaleDateString('de-DE')} | Modell: ${model.toUpperCase()}
-Sektor: ${sector.id} — ${sector.title} (${sector.norm})
-Gegner: ${target}
-================================================================================
-
-${personaInstruction}
-
-KONKRETE GESETZLICHE NORMIERUNG DER MATRIX:
-- Sektor-ID: ${sector.id} (#${sector.nr} im B6-Gesamtkatalog)
-- Gesetzliche Grundlagen: ${sector.norm}
-- Funktionale Ausrichtung: ${sector.desc}
-
-AKTIVIERTE FORENSIK-MODULE:`;
-
-      if (optForm) {
-        p += `\n[X] FORMNICHTIGKEIT: Strikte Prüfung auf BGH IX ZB 198/11 (Flüchtige Paraphen wahren Schriftform nicht), § 44 VwVfG (Absolute Nichtigkeit) und BVerfG 2 BvR 2220/01 (6-Monats-Verfall von Durchsuchungsbeschlüssen).`;
-      }
+      let extraModules = [];
       if (optFiskus) {
-        p += `\n[X] FISKALISCHE INVERSION: Berechnung des Verzugszinses gem. § 288 BGB (5 Prozentpunkte über Basiszinssatz p.a.) ohne Zinseszins (§ 289 BGB) sowie persönliche Beamtenhaftung gem. § 839 BGB i.V.m. Art. 34 GG.`;
+        extraModules.push(`- FISKALISCHE ZINS-GUILLOTINE:
+  Weise die Behörde darauf hin, dass rechtswidrig einbehaltene Beträge gem. § 288 Abs. 1 BGB mit 5 Prozentpunkten über dem Basiszinssatz p.a. taggenau verzinst werden (Zinseszinsverbot § 289 S. 1 BGB beachten).`);
+      }
+      if (optForm) {
+        extraModules.push(`- FORMNICHTIGKEITS-RÜGE (§ 44 VwVfG / BGH IX ZB 198/11):
+  Rüge fehlende eigenhändige Richterunterschriften, bloße Paraphen oder unzulässige Schablonen als formnichtig ex tunc.`);
       }
       if (optDsgvo) {
-        p += `\n[X] DATENSCHUTZ-SPERRE: Striktes Einmeldeverbot bestrittener Forderungen gem. § 31 Abs. 2 BDSG; Schadensersatzforderung nach Art. 82 DSGVO und Löschungsantrag nach Art. 17 DSGVO.`;
+        extraModules.push(`- DATENSCHUTZ-SCHILD (ISO/IEC 42001 & ART. 82 DSGVO):
+  Alle personenbezogenen Daten wurden vorklassifiziert. Jeder rechtswidrige Datenfluss an Dritte oder Auskunfteien begründet unmittelbare Schadensersatzansprüche.`);
       }
 
-      p += `\n\nSACHVERHALT & BEHÖRDENVERMERK:\n"${inputTxt}"\n\nDEIN ARBEITSAUFTRAG:\n1. Analysiere den Sachverhalt auf eklatante Rechts- und Formfehler.\n2. Zerlege die Argumente der Behörde (${target}) mit den einschlägigen Normen (${sector.norm}).\n3. Formuliere eine unanfechtbare Erwiderung bzw. Rüge zur Aufnahme in das Protokoll.\n4. Schließe mit der Androhung der Dienstaufsichtsbeschwerde, Amtshaftungsklage und Strafanzeige bei fortgesetztem Amtsmissbrauch.`;
+      const promptText = `================================================================================
+B6 CITIZEN SOVEREIGN MASTER-PROMPT // ISO/IEC 42001 & EU AI PACT COMPLIANT
+VORGANGS-ID: #${caseId} | DATUM: ${new Date().toLocaleDateString('de-DE')}
+ZIEL-KI: ${model.toUpperCase()} | ANWENDUNGSSPHÄRE: ${target.toUpperCase()}
+FOKUS-SEKTOR: [${sector.id}] ${sector.title} (#${sector.nr})
+RECHTSNORMEN: ${sector.norm}
+================================================================================
+
+[SYSTEM-INSTRUCTION / PERSONA]
+${personaInstruction}
+
+[SACHVERHALT & BEWEISLAGE (DSGVO-SANITIZED)]
+"${inputTxt}"
+
+[GESETZLICHE LEITPLANKEN & VERANKERTE RECHTE]
+- Sektor-Spezifikation: ${sector.desc}
+- Wesentliche Rechtsgrundlagen: ${sector.norm}
+${extraModules.join('\n')}
+
+[AUFTRAG AN DIE KI]
+1. Analysiere den Sachverhalt streng nach den oben genannten gesetzlichen Maßstäben.
+2. Identifiziere mindestens 3 konkrete Rechtsverstöße oder Formfehler der Behörde/Gegenseite.
+3. Formuliere die passenden Kautelar-Sätze, Rügen oder Schriftsatzentwürfe, die der Bürger sofort einsetzen kann.
+4. Schließe mit einer unmissverständlichen Fristsetzung (Datum in 7 Werktagen) und Hinweis auf Rechtsfolgen ab.
+================================================================================`;
 
       const out = document.getElementById('pgen-output');
-      if (out) out.textContent = p;
-
-      const stats = document.getElementById('pgen-stats');
-      if (stats) {
-        const chars = p.length;
-        const words = p.split(/\s+/).length;
-        const tokensEst = Math.round(chars / 3.8);
-        stats.textContent = `${chars.toLocaleString('de-DE')} Zeichen · ca. ${words} Wörter · ~${tokensEst} Tokens`;
-      }
+      if (out) out.value = promptText;
     }
 
-    function copyMasterPrompt() {
-      const out = document.getElementById('pgen-output');
-      if (!out || !out.textContent) return;
-      navigator.clipboard.writeText(out.textContent).then(() => {
-        showStatusBanner('Kompilierter Master-Prompt in Zwischenablage kopiert!');
-      }).catch(() => {
-        alert('Kopieren fehlgeschlagen. Bitte Text manuell markieren.');
+    function dispatchToLLM(target) {
+      copyMasterPrompt();
+      const urls = {
+        grok: 'https://grok.com',
+        chatgpt: 'https://chatgpt.com',
+        claude: 'https://claude.ai',
+        deepseek: 'https://chat.deepseek.com',
+        gemini: 'https://gemini.google.com',
+        perplexity: 'https://www.perplexity.ai',
+        mistral: 'https://chat.mistral.ai'
+      };
+      const url = urls[target] || 'https://chatgpt.com';
+      window.open(url, '_blank');
+      showStatusBanner(`Prompt kopiert! Öffne ${target.toUpperCase()} im neuen Tab...`);
+    }
+
+    function copyOllamaBridge() {
+      const p = document.getElementById('pgen-output') ? document.getElementById('pgen-output').value : '';
+      if (!p) { showStatusBanner('Bitte zuerst Master-Prompt kompilieren!'); return; }
+      const cmd = `ollama run llama3.3 << 'EOF'\n${p}\nEOF`;
+      navigator.clipboard.writeText(cmd).then(() => {
+        showStatusBanner('Ollama Bash-Kommando in Zwischenablage kopiert!');
       });
     }
 
-    function openTargetLLM(target) {
-      copyMasterPrompt();
-      let url = 'https://chatgpt.com';
-      if (target === 'grok') url = 'https://x.com/i/grok';
-      else if (target === 'claude') url = 'https://claude.ai';
-      window.open(url, '_blank');
-    }
-
-      window.addEventListener('DOMContentLoaded', initHub7);
+    window.addEventListener('DOMContentLoaded', initHub7);
 
     /* =====================================================================
        HUB 8 JAVASCRIPT LOGIK — TERMINAL, CHRONIK & 34ER RÜGEN-MATRIX
        ===================================================================== */
     const H8_CHRONO_DATA = [
-      { date: `31.12.2025`, phase: `MAI_JUNI`, type: `relief`, title: `Ausgangsfeststellung Tatort Willebadessen: Beute 0,00 EUR`, detail: `StA Düsseldorf (Az. 52 Js 23/26) — Ausgangspunkt für die Beute-Aporie und das spätere Vorbringen nach § 344 StGB.` },
-      { date: `06.05.2026`, phase: `MAI_JUNI`, type: `critical`, title: `Formnichtiger Beschluss (152 Gs 648/26) & vordatierte ED-Anordnung`, detail: `AG Düsseldorf fertigt Beschluss auf 1985er-Formular ohne Richterunterschrift; PP Bielefeld datiert ED-Anordnung (NRW 2342/2343) vor Einsatzbeginn.` },
-      { date: `07.05.2026`, phase: `MAI_JUNI`, type: `critical`, title: `Durchsuchung Südring 134 & Null-Asservaten-Protokoll`, detail: `70 Min. Unterbrechung der CGM-Insulin-Steuerung (LADA-1); Protokoll NRW 2512 um 06:26 Uhr dokumentiert „Anzahl: 0“ (109 Min. vor Einsatzende).` },
-      { date: `08.06.2026`, phase: `MAI_JUNI`, type: `procedural`, title: `Dienstbrief koppelt 50-EUR-Rückgabe an ED-Erscheinen`, detail: `PP Bielefeld (NRW 2370) knüpft Eigentumsherausgabe an erkennungsdienstliche Behandlung (Rüge nach § 240 StGB).` },
-      { date: `16.06.2026`, phase: `MAI_JUNI`, type: `critical`, title: `DNA-Erklärung NRW 2361/1 mit § 81g-Täuscherkreuz`, detail: `Maschinelle Markierung bei Zukunftsspeicherung (§ 81g StPO) statt Anlasstat (§ 81e StPO) inklusive vorgedrucktem Widerrufsverzicht.` },
-      { date: `17.06.2026`, phase: `MAI_JUNI`, type: `relief`, title: `Förmliche Herausgabequittung iPhone 17 Pro Max`, detail: `Amtliche Übergabeverhandlung durch KOK'in Schmeichel beendet staatlichen Gewahrsam; Beginn der 89-Tage-Referenzfrist.` },
-      { date: `16.–22.07.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Beschwerde § 304 StPO, 6 Einschreiben & Klage VG Minden`, detail: `Rechtswegerschöpfung bei AG/GStA Düsseldorf (2 AR 806/26), 6 Einschreiben Rückschein und Eingang der FFK beim VG Minden (11 K 3272/26).` },
-      { date: `07.–24.08.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Verwertungsultimatum, Textbaustein-Nichtabhilfe & GStA-Shutdown`, detail: `Ultimatum zu 150 EUR (07.08.), Nichtabhilfe AG Düsseldorf (13.08.) und Einstellung 2 AR 806/26 ohne Handaktenprüfung (24.08.).` },
-      { date: `01.–04.09.2026`, phase: `JULI_OKT`, type: `critical`, title: `Klagebegründung VG Minden & 72h-§ 8a-Meldung`, detail: `Eingang der Klagebegründung (01.09.); genau 72 Stunden später übermittelt PP Bielefeld eine § 8a-Meldung an das Jugendamt Ibbenbüren (04.09.).` },
-      { date: `14.–21.09.2026`, phase: `JULI_OKT`, type: `critical`, title: `89-Tage-Paradoxon (LG) & 5× qeS: NEIN + Titel-Swap (VG Minden)`, detail: `LG Düsseldorf (011 Qs) bestätigt Beschlagnahme des längst herausgegebenen iPhones; VG Minden dokumentiert 5× fehlende qeS und Titel-Swap 152 Gs 690/26.` },
-      { date: `08.–19.10.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Gerichtsbescheidantrag, Verwerfung § 33a StPO & PZU-Friststart`, detail: `Antrag § 84 VwGO (08.10.), Verwerfung Anhörungsrüge als „fernliegend“ (14.10.), PZU-Zustellung an Tina (17.10.) und Thomas König (19.10.).` },
-      { date: `20. / 25.10.2026`, phase: `JULI_OKT`, type: `relief`, title: `Jugendamt-Abschluss Ibbenbüren (Akte 512/14984) ohne Befund`, detail: `Verfahrensabschluss ab 20.10.2026 und förmliche Einstellung zum 25.10.2026 ohne jeden Gefährdungsbefund — urkundliche Entlastung.` },
-      { date: `28.10.–03.11.2026`, phase: `JULI_OKT`, type: `critical`, title: `174-Tage-Spätbeschlüsse & PZU 2 Vorführungsandrohung`, detail: `AG Düsseldorf erlässt 152 Gs 1128/26 & 1178/26 nach 174 Tagen; KPB Steinfurt droht Zwangsvorführung trotz Zeugnisverweigerung (§§ 52, 55 StPO) an.` },
-      { date: `13.–16.11.2026`, phase: `NOV_SCHLUESSEL`, type: `milestone`, title: `BVerfG-Einreichung & koordiniertes 13er-Einschreiben-Kataster`, detail: `Vorabeingang BVerfG (2 BvR 1318/26); am 16.11. (17:40–17:47 Uhr) Zustellung an 13 NRW-Schlüsselstellen inklusive Justiz- und Innenministerium.` },
-      { date: `19.11.2026`, phase: `NOV_SCHLUESSEL`, type: `milestone`, title: `Schlüsseltag: BVerfG-Fristwahrung (§ 93 Abs. 1 BVerfGG)`, detail: `Übergabe des 2,0-kg-Monolithen (275 S.) an die Wachtmeisterei des Zweiten Senats; absolute Fristwahrung für Thomas König um 24:00 Uhr.` },
-      { date: `20.11.2026`, phase: `NOV_SCHLUESSEL`, type: `critical`, title: `Schlüsseltag: Ombudsfrau-Wegweisung (22999/2026-K)`, detail: `Formelle Wegweisung im VSBG-Schlichtungsverfahren; Dokumentation der verweigerten außergerichtlichen Abhilfe.` },
-      { date: `21.11.2026`, phase: `NOV_SCHLUESSEL`, type: `critical`, title: `Schlüsseltag: GVP-Nichtigkeit (§ 21e GVG / Art. 101 GG)`, detail: `Feststellung und Rüge struktureller Geschäftsverteilungsplan-Mängel hinsichtlich des gesetzlichen Richters.` },
-      { date: `01.12.2026`, phase: `DEZ_VERZUG`, type: `milestone`, title: `Ablauf der 14-Tage-Mahnfrist: Qualifizierter Verzugseintritt`, detail: `Schuldnerverzug gem. § 286 BGB für 19.800.400,00 EUR vor LG Münster (5 O 124/26); Aktivierung der Zinsuhr über 3.448,58 EUR/Tag.` },
-      { date: `13.12.2026`, phase: `DEZ_VERZUG`, type: `milestone`, title: `Kaskaden-Stichtag: 12 Verzugstage & Vollstreckungsreife`, detail: `Aufgelaufener Verzugszins von exakt 41.382,96 EUR; Gesamtforderung steigt auf 19.841.782,96 EUR.` }
+      { date: `STUFE 1`, phase: `EINGRIFF`, type: `critical`, title: `Hoheitliche Eingriffsmaßnahme & Durchsuchung`, detail: `Eintreffen von Ermittlungspersonen an der Hausschwelle; Vorlage eines Durchsuchungsbeschlusses oder Behauptung von „Gefahr im Verzug“ (Art. 13 GG, § 105 StPO).` },
+      { date: `STUFE 1.1`, phase: `EINGRIFF`, type: `relief`, title: `Sovereign Stop & Protokollierung der Null-Beute (§ 107 StPO)`, detail: `Widerspruch zu Protokoll; Erzwingung der namentlichen Dokumentation und Aushändigung eines vollständigen Verzeichnisses bzw. Bestätigung von 0 Gegenständen.` },
+      { date: `STUFE 1.2`, phase: `EINGRIFF`, type: `critical`, title: `Formnichtigkeits-Rüge (§ 44 VwVfG / BGH IX ZB 198/11)`, detail: `Prüfung der richterlichen Signatur; Rüge formeller Unwirksamkeit bei flüchtigen Handzeichen, Paraphen oder unzulässigen Blanko-Schablonen.` },
+      { date: `STUFE 2`, phase: `RECHTSWEG`, type: `procedural`, title: `Beistandsbestellung & Akteneinsichtsantrag (§ 14 VwVfG / § 147 StPO)`, detail: `Förmliche Bestellung einer Vertrauensperson zum Beistand; Beantragung vollständiger behördlicher und gerichtlicher Akteneinsicht zur Waffengleichheit.` },
+      { date: `STUFE 2.1`, phase: `RECHTSWEG`, type: `procedural`, title: `Sofortige Beschwerde (§ 304 StPO) & Eilantrag (§ 80 Abs. 5 VwGO)`, detail: `Anfechtung des unbegründeten Eingriffs bei der nächsthöheren Instanz; Feststellung der Rechtswidrigkeit und Abwendung vollziehender Zwangsmittel.` },
+      { date: `STUFE 3`, phase: `SOZIAL_SCHILD`, type: `procedural`, title: `Care- & Existenz-Sicherung (SGB I, II, XI, SchulG)`, detail: `Geltendmachung des Barvorschusses (§ 42 SGB I), Abwehr verfassungswidriger Sanktionen (BVerfG 1 BvL 7/16), Pflegegrad-Widerspruch (§ 15 SGB XI) und Schulschutz (§ 42 SchulG).` },
+      { date: `STUFE 3.1`, phase: `FINANZEN`, type: `relief`, title: `Inkassodeckelung (§ 4 Abs. 5 RDGEG) & SCHUFA-Sperre (§ 31 BDSG)`, detail: `Gesetzliche Streichung überhöhter Inkassokosten nach Schadensminderungspflicht (§ 254 BGB) und Untersagung rechtswidriger Bonitäts-Meldungen bei bestrittenen Forderungen.` },
+      { date: `STUFE 4`, phase: `ESKALATION`, type: `critical`, title: `Fiskalische Haftung & Beamtenregress (§ 839 BGB / Art. 34 GG)`, detail: `Aktivierung des zivilrechtlichen Schadensersatzes, Geltendmachung von Verzugszinsen (§ 288 BGB) und persönliche Inanspruchnahme bei vorsätzlicher Pflichtverletzung.` },
+      { date: `STUFE 5`, phase: `VERFASSUNG`, type: `critical`, title: `Verfassungsbeschwerde & Gehörsrüge (§ 90 BVerfGG / Art. 103 GG)`, detail: `Eingabe beim Bundesverfassungsgericht wegen Verletzung spezifischen Verfassungsrechts, Willkür (Art. 3 GG) und Nichtbeachtung des Richtervorbehalts (Art. 13 GG).` },
+      { date: `STUFE 6`, phase: `SUPRANATIONAL`, type: `relief`, title: `EGMR-Individualbeschwerde (Art. 6, 8, 13 EMRK)`, detail: `Vorlage beim Europäischen Gerichtshof für Menschenrechte nach Erschöpfung des innerstaatlichen Rechtswegs bei systemischer Grundrechtsverweigerung.` }
     ];
+
     const H8_RUEGEN_DATA = [
-      { id: `R-01`, norm: `§ 107 StPO / § 415 ZPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2512)`, title: `Null-Asservaten-Paradoxon im Sicherstellungsprotokoll`, desc: `Blatt 1 des Protokolls vom 07.05.2026 (06:26 Uhr) bescheinigt mit öffentlicher Beweiskraft die Sicherstellung von exakt 0 Gegenständen trotz faktischer Einbehaltung.` },
-      { id: `R-02`, norm: `Art. 13 Abs. 2 GG / § 35 StPO`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `AG Düsseldorf (152 Gs 648/26)`, title: `Durchsuchungsbeschluss ohne eigenhändige Richterunterschrift`, desc: `Ausfertigung auf überholtem 1985er-Formular Straf 3.3.1 ohne richterliche Unterschrift; Begründung formeller Nichtigkeit ex tunc.` },
-      { id: `R-03`, norm: `§ 105 StPO / PDV 100`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (260202-0741-0831)`, title: `Zeitparadoxon im Protokoll (109 Min. vor Einsatzende)`, desc: `Protokollabschluss dokumentiert auf 06:26 Uhr bei tatsächlicher Maßnahmendauer bis 08:15 Uhr.` },
-      { id: `R-04`, norm: `Art. 2 Abs. 2 S. 1 GG / § 340 StGB`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `PP Bielefeld (Einsatz 07.05.2026)`, title: `Unterbrechung medizinischer Notfallsteuerung (70 Min.)`, desc: `Entzug des CGM-Insulin-Steuerungsgeräts bei dokumentiertem LADA-1-Diabetes während der Durchsuchungsmaßnahme.` },
-      { id: `R-05`, norm: `Art. 3 Abs. 3 S. 2 GG / § 4 BGG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `PP Bielefeld / Schutzbefohlener (GdB 70)`, title: `Entzug sensorischer Hilfsmittel eines schwerbehinderten Kindes`, desc: `Beeinträchtigung des verfassungsrechtlichen Benachteiligungsverbots durch Entzug erforderlicher Hilfsmittel.` },
-      { id: `R-06`, norm: `Art. 6 Abs. 1, 2 GG / § 42 SchulG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `PP Bielefeld (Südring 134)`, title: `Beeinträchtigung schulischer und familiärer Schutzpflichten`, desc: `Einsatzdurchführung am Morgen des 07.05.2026 mit unmittelbaren Auswirkungen auf ein schulpflichtiges Kind.` },
-      { id: `R-07`, norm: `§ 81b StPO / Ermessensausfall`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `PP Bielefeld (NRW 2342/2343)`, title: `Vordatierte erkennungsdienstliche Anordnung`, desc: `Fertigung der ED-Anordnung bereits am 06.05.2026 vor Beginn der Durchsuchung (Indiz fehlender Einzelfallprüfung).` },
-      { id: `R-08`, norm: `§ 240 StGB / Koppelungsverbot`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2370, 08.06.2026)`, title: `Koppelung von Bargeld-Rückgabe an ED-Erscheinen`, desc: `Dienstschreiben knüpft die Herausgabe einbehaltener 50,00 EUR an das Erscheinen zur erkennungsdienstlichen Behandlung.` },
-      { id: `R-09`, norm: `§ 81g / § 81e StPO / § 136a StPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2361/1, 16.06.2026)`, title: `DNA-Formular mit maschinellem Täuscherkreuz & Widerrufsverzicht`, desc: `Maschinelle Markierung bei § 81g StPO (Zukunftsspeicherung) statt § 81e StPO nebst vorgedrucktem Verzicht auf Widerruf.` },
-      { id: `R-10`, norm: `Art. 14 GG / § 240 StGB`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `PP Bielefeld (07.08.2026)`, title: `Verwertungs- und Vernichtungsultimatum für Asservate`, desc: `Fristsetzung zur Verwertung von 150,00 EUR und einer Schatulle ohne rechtskräftige Einziehungsentscheidung.` },
+      { id: `R-01`, norm: `§ 107 StPO / § 415 ZPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `Polizeibehörde (Dienststelle X)`, title: `Null-Asservaten-Paradoxon im Sicherstellungsprotokoll`, desc: `Blatt 1 des Protokolls vom 07.05.2026 (06:26 Uhr) bescheinigt mit öffentlicher Beweiskraft die Sicherstellung von exakt 0 Gegenständen trotz faktischer Einbehaltung.` },
+      { id: `R-02`, norm: `Art. 13 Abs. 2 GG / § 35 StPO`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `AG Düsseldorf ([AZ: 152 Gs XXX/26])`, title: `Durchsuchungsbeschluss ohne eigenhändige Richterunterschrift`, desc: `Ausfertigung auf überholtem 1985er-Formular Straf 3.3.1 ohne richterliche Unterschrift; Begründung formeller Nichtigkeit ex tunc.` },
+      { id: `R-03`, norm: `§ 105 StPO / PDV 100`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `Polizeidienststelle (260202-0741-0831)`, title: `Zeitparadoxon im Protokoll (109 Min. vor Einsatzende)`, desc: `Protokollabschluss dokumentiert auf 06:26 Uhr bei tatsächlicher Maßnahmendauer bis 08:15 Uhr.` },
+      { id: `R-04`, norm: `Art. 2 Abs. 2 S. 1 GG / § 340 StGB`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `Polizeidienststelle (Einsatz 07.05.2026)`, title: `Unterbrechung medizinischer Notfallsteuerung (70 Min.)`, desc: `Entzug des CGM-Insulin-Steuerungsgeräts bei dokumentiertem LADA-1-Diabetes während der Durchsuchungsmaßnahme.` },
+      { id: `R-05`, norm: `Art. 3 Abs. 3 S. 2 GG / § 4 BGG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `Polizeidienststelle / Schutzbefohlener (GdB 70)`, title: `Entzug sensorischer Hilfsmittel eines schwerbehinderten Kindes`, desc: `Beeinträchtigung des verfassungsrechtlichen Benachteiligungsverbots durch Entzug erforderlicher Hilfsmittel.` },
+      { id: `R-06`, norm: `Art. 6 Abs. 1, 2 GG / § 42 SchulG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `Polizeidienststelle (Wohnanschrift des Bürgers)`, title: `Beeinträchtigung schulischer und familiärer Schutzpflichten`, desc: `Einsatzdurchführung am Morgen des 07.05.2026 mit unmittelbaren Auswirkungen auf ein schulpflichtiges Kind.` },
+      { id: `R-07`, norm: `§ 81b StPO / Ermessensausfall`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `Polizeidienststelle (NRW 2342/2343)`, title: `Vordatierte erkennungsdienstliche Anordnung`, desc: `Fertigung der ED-Anordnung bereits am 06.05.2026 vor Beginn der Durchsuchung (Indiz fehlender Einzelfallprüfung).` },
+      { id: `R-08`, norm: `§ 240 StGB / Koppelungsverbot`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `Polizeidienststelle (NRW 2370, 08.06.2026)`, title: `Koppelung von Bargeld-Rückgabe an ED-Erscheinen`, desc: `Dienstschreiben knüpft die Herausgabe einbehaltener 50,00 EUR an das Erscheinen zur erkennungsdienstlichen Behandlung.` },
+      { id: `R-09`, norm: `§ 81g / § 81e StPO / § 136a StPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `Polizeidienststelle (NRW 2361/1, 16.06.2026)`, title: `DNA-Formular mit maschinellem Täuscherkreuz & Widerrufsverzicht`, desc: `Maschinelle Markierung bei § 81g StPO (Zukunftsspeicherung) statt § 81e StPO nebst vorgedrucktem Verzicht auf Widerruf.` },
+      { id: `R-10`, norm: `Art. 14 GG / § 240 StGB`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `Polizeidienststelle (07.08.2026)`, title: `Verwertungs- und Vernichtungsultimatum für Asservate`, desc: `Fristsetzung zur Verwertung von 150,00 EUR und einer Schatulle ohne rechtskräftige Einziehungsentscheidung.` },
       { id: `R-11`, norm: `§ 98 Abs. 2 StPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `StA / LG Düsseldorf (011 Qs)`, title: `89-Tage-Phantom-Beschlagnahme nach amtlicher Herausgabe`, desc: `Beschlagnahmeantrag und -bestätigung am 14.09.2026 für ein iPhone 17 Pro Max, das bereits am 17.06.2026 quittiert ausgehändigt wurde.` },
-      { id: `R-12`, norm: `§ 98 Abs. 2 S. 2 StPO / Art. 19 Abs. 4 GG`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `AG Düsseldorf (152 Gs 1128/26, 1178/26)`, title: `174-Tage-Latenz bei nachträglicher Beschlagnahmebestätigung`, desc: `Erlass amtsgerichtlicher Bestätigungsbeschlüsse am 28.10.2026 nach 174 Tagen nebst Vorblattvermerk zur früheren Herausgabe.` },
+      { id: `R-12`, norm: `§ 98 Abs. 2 S. 2 StPO / Art. 19 Abs. 4 GG`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `AG Düsseldorf ([AZ: 152 Gs YYY/26], 1178/26)`, title: `174-Tage-Latenz bei nachträglicher Beschlagnahmebestätigung`, desc: `Erlass amtsgerichtlicher Bestätigungsbeschlüsse am 28.10.2026 nach 174 Tagen nebst Vorblattvermerk zur früheren Herausgabe.` },
       { id: `R-13`, norm: `§ 44 BeurkG analog / § 317 ZPO`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `AG / LG Düsseldorf (IMG_3131 / 5450)`, title: `Formelle Urkundenspaltung durch isolierte Beglaubigungsstempel`, desc: `Dienstsiegel und Beglaubigungsvermerke befinden sich isoliert auf unbedruckten Folge- oder Rückseiten ohne Textverbindung.` },
-      { id: `R-14`, norm: `§ 348 StGB / § 267 StGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `AG Düsseldorf / PP Bielefeld`, title: `Inkonsistente Protokollblätter & Falschbeurkundungsrüge`, desc: `Vermischung aktueller (12/24) und veralteter (07/17 NRW 2512) ununterschriebener Formularblätter sowie isolierter Stempelabdrücke.` },
-      { id: `R-15`, norm: `§ 344 StGB / Beute-Aporie`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf (52 Js 23/26)`, title: `Fortführung trotz dokumentierter Null-Beute (0,00 EUR)`, desc: `Tatortfeststellung Willebadessen (31.12.2025) weist 0,00 EUR Schaden aus; Verfahrenseingriffe wurden dennoch fortgeführt.` },
-      { id: `R-16`, norm: `§ 55a Abs. 3 VwGO / ERVV`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `VG Minden (11 K 3272/26)`, title: `Fünffacher ERV-Formkollaps (5× qeS: NEIN)`, desc: `Gerichtsamtlicher Prüfvermerk vom 21.09.2026 dokumentiert fehlende qualifizierte elektronische Signatur bei Klageerwiderung und 4 Beiakten.` },
-      { id: `R-17`, norm: `§ 114 S. 2 VwGO analog / § 86 VwGO`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `PP Bielefeld / VG Minden`, title: `Unzulässiger Titel-Swap auf fremdes Aktenzeichen`, desc: `Klageerwiderung vom 21.09.2026 verlässt Stichtag 31.12.2025 und verweist auf sachfremdes Aktenzeichen 152 Gs 690/26.` },
-      { id: `R-18`, norm: `Art. 3 Abs. 1 GG / Waffengleichheit`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `VG Minden / LG Düsseldorf`, title: `Asymmetrische Handhabung prozessualer Formstrenge`, desc: `Ungleichbehandlung formunwirksamer Behördenschriftsätze gegenüber strengen Frist- und Formmaßstäben zulasten der Klägerseite.` },
-      { id: `R-19`, norm: `Art. 103 Abs. 1 GG / § 147 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf (52 Js 23/26)`, title: `Koppelung der Akteneinsicht an erkennungsdienstliche Ladung`, desc: `Verweigerung sachlicher Bescheidung und Akteneinsicht im Schreiben vom 23.07.2026.` },
+      { id: `R-14`, norm: `§ 348 StGB / § 267 StGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `AG Düsseldorf / Polizeidienststelle`, title: `Inkonsistente Protokollblätter & Falschbeurkundungsrüge`, desc: `Vermischung aktueller (12/24) und veralteter (07/17 NRW 2512) ununterschriebener Formularblätter sowie isolierter Stempelabdrücke.` },
+      { id: `R-15`, norm: `§ 344 StGB / Beute-Aporie`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf ([AZ: 52 Js XXX/26])`, title: `Fortführung trotz dokumentierter Null-Beute (0,00 EUR)`, desc: `Tatortfeststellung Wohnsitz des Bürgers (31.12.2025) weist 0,00 EUR Schaden aus; Verfahrenseingriffe wurden dennoch fortgeführt.` },
+      { id: `R-16`, norm: `§ 55a Abs. 3 VwGO / ERVV`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `Zuständiges Verwaltungsgericht ([AZ: 11 K XXX/26])`, title: `Fünffacher ERV-Formkollaps (5× qeS: NEIN)`, desc: `Gerichtsamtlicher Prüfvermerk vom 21.09.2026 dokumentiert fehlende qualifizierte elektronische Signatur bei Klageerwiderung und 4 Beiakten.` },
+      { id: `R-17`, norm: `§ 114 S. 2 VwGO analog / § 86 VwGO`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `Polizeidienststelle / Zuständiges Verwaltungsgericht`, title: `Unzulässiger Titel-Swap auf fremdes Aktenzeichen`, desc: `Klageerwiderung vom 21.09.2026 verlässt Stichtag 31.12.2025 und verweist auf sachfremdes Aktenzeichen [AZ: 152 Gs ZZZ/26].` },
+      { id: `R-18`, norm: `Art. 3 Abs. 1 GG / Waffengleichheit`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `Zuständiges Verwaltungsgericht / LG Düsseldorf`, title: `Asymmetrische Handhabung prozessualer Formstrenge`, desc: `Ungleichbehandlung formunwirksamer Behördenschriftsätze gegenüber strengen Frist- und Formmaßstäben zulasten der Klägerseite.` },
+      { id: `R-19`, norm: `Art. 103 Abs. 1 GG / § 147 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf ([AZ: 52 Js XXX/26])`, title: `Koppelung der Akteneinsicht an erkennungsdienstliche Ladung`, desc: `Verweigerung sachlicher Bescheidung und Akteneinsicht im Schreiben vom 23.07.2026.` },
       { id: `R-20`, norm: `§ 33a StPO / Art. 103 Abs. 1 GG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `LG Düsseldorf (011 Qs)`, title: `Formelhafte Verwerfung der Anhörungsrüge als „fernliegend“`, desc: `Beschluss vom 14.10.2026 weist § 33a-Rüge ohne Auseinandersetzung mit der amtlichen Herausgabequittung vom 17.06.2026 ab.` },
       { id: `R-21`, norm: `§ 304 / § 306 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `AG Düsseldorf (13.08.2026)`, title: `Textbaustein-Nichtabhilfe ohne Einzelfallprüfung`, desc: `Nichtabhilfebeschluss vom 13.08.2026 nutzt formelhafte Textbausteine ohne Erörterung der substantiierten Beschwerdegründe.` },
       { id: `R-22`, norm: `§ 147 GVG / § 258a StGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `OFFEN`, akte: `GStA Düsseldorf (2 AR 806/26)`, title: `Einstellung der Dienstaufsicht ohne Handaktenprüfung`, desc: `Bescheid vom 24.08.2026 stellt Aufsichtsverfahren ohne Beiziehung und Prüfung der physischen Originalakten ein.` },
-      { id: `R-23`, norm: `Art. 19 Abs. 4 GG / § 90 Abs. 2 BVerfGG`, bereich: `Amtshaftung / Justizaufsicht`, status: `BELEGT`, akte: `GStA Hamm (3 AR 883/26) / GStA D`, title: `Zirkuläre Verweisungspraxis der Aufsichtsinstanzen`, desc: `Wiederholte Zuständigkeitsabgaben (u.a. 22.07.2026 und 02.11.2026) ohne Sachentscheidung begründen Unzumutbarkeit des weiteren Instanzenzugs.` },
-      { id: `R-24`, norm: `§ 8a SGB VIII / Art. 6 GG`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `PP Bielefeld / FD 512 Ibbenbüren`, title: `72-Stunden-Latenz bei § 8a-Meldung nach Klagebegründung`, desc: `Übermittlung einer Kindeswohlmeldung am 04.09.2026 nach 120 Tagen Passivität, exakt 3 Tage nach Klagebegründung beim VG Minden.` },
-      { id: `R-25`, norm: `§ 25 SGB X / § 13 SGB X`, bereich: `Verwaltung / ERV / SGB`, status: `BELEGT`, akte: `Stadt Ibbenbüren (512/14984)`, title: `Vorenthaltung der Akteneinsicht im Verwaltungsverfahren`, desc: `Trotz wiederholter Termine keine vorherige Akteneinsicht gewährt; nach Beistandstermin (14.10.) Einstellung ohne Befund am 20./25.10.2026.` },
-      { id: `R-26`, norm: `Art. 17 DSGVO / § 35 SGB I`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `VG Minden (11 I 99/26) / FD 512`, title: `Löschungs- und Sperrungsgebot nach Null-Befund`, desc: `Anspruch auf vollständige Datenlöschung nach ergebnisloser Einstellung des § 8a-Verfahrens und biometrischer Datenverarbeitung.` },
-      { id: `R-27`, norm: `Art. 9 DSGVO / RL (EU) 2016/680`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `PP Bielefeld / Justiz NRW`, title: `Verarbeitung sensibler Gesundheitsdaten & überholte Vordrucke`, desc: `Unreflektierte Weitergabe von Gesundheitsdaten in Textbausteinen sowie Einsatz veralteter JI-Formularstände (01/16 NRW 2342).` },
+      { id: `R-23`, norm: `Art. 19 Abs. 4 GG / § 90 Abs. 2 BVerfGG`, bereich: `Amtshaftung / Justizaufsicht`, status: `BELEGT`, akte: `GStA Hamm ([AZ: 3 AR XXX/26]) / GStA D`, title: `Zirkuläre Verweisungspraxis der Aufsichtsinstanzen`, desc: `Wiederholte Zuständigkeitsabgaben (u.a. 22.07.2026 und 02.11.2026) ohne Sachentscheidung begründen Unzumutbarkeit des weiteren Instanzenzugs.` },
+      { id: `R-24`, norm: `§ 8a SGB VIII / Art. 6 GG`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `Polizeidienststelle / FD 512 Kommune / Jugendamt`, title: `72-Stunden-Latenz bei § 8a-Meldung nach Klagebegründung`, desc: `Übermittlung einer Kindeswohlmeldung am 04.09.2026 nach 120 Tagen Passivität, exakt 3 Tage nach Klagebegründung beim Zuständiges Verwaltungsgericht.` },
+      { id: `R-25`, norm: `§ 25 SGB X / § 13 SGB X`, bereich: `Verwaltung / ERV / SGB`, status: `BELEGT`, akte: `Stadt Kommune / Jugendamt (512/14984)`, title: `Vorenthaltung der Akteneinsicht im Verwaltungsverfahren`, desc: `Trotz wiederholter Termine keine vorherige Akteneinsicht gewährt; nach Beistandstermin (14.10.) Einstellung ohne Befund am 20./25.10.2026.` },
+      { id: `R-26`, norm: `Art. 17 DSGVO / § 35 SGB I`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `Zuständiges Verwaltungsgericht (11 I 99/26) / FD 512`, title: `Löschungs- und Sperrungsgebot nach Null-Befund`, desc: `Anspruch auf vollständige Datenlöschung nach ergebnisloser Einstellung des § 8a-Verfahrens und biometrischer Datenverarbeitung.` },
+      { id: `R-27`, norm: `Art. 9 DSGVO / RL (EU) 2016/680`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `Polizeidienststelle / Justiz NRW`, title: `Verarbeitung sensibler Gesundheitsdaten & überholte Vordrucke`, desc: `Unreflektierte Weitergabe von Gesundheitsdaten in Textbausteinen sowie Einsatz veralteter JI-Formularstände (01/16 NRW 2342).` },
       { id: `R-28`, norm: `§ 163 Abs. 4 StPO / § 52 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `KPB Steinfurt (KK 1)`, title: `Zeugenvorladung ohne staatsanwaltschaftliches Aktenzeichen`, desc: `Ladung vom 09.10.2026 (PZU 15.10.2026) an volljährigen Sohn ohne Angabe eines staatsanwaltschaftlichen Aktenzeichens.` },
       { id: `R-29`, norm: `§ 163 Abs. 4 Nr. 4 StPO / § 240 StGB`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `KPB Steinfurt (PZU 03.11.2026)`, title: `Androhung polizeilicher Zwangsvorführung trotz §§ 52, 55 StPO`, desc: `Erneute Zustellung am 03.11.2026 mit Vorführungsandrohung trotz formgerecht erklärter Zeugnisverweigerung vom 30.10.2026.` },
-      { id: `R-30`, norm: `Art. 13 GG / PolG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `KPB Steinfurt (Landrat / KK 1)`, title: `Unangekündigtes Aufsuchen an Wohnanschrift (07:25 Uhr)`, desc: `Morgendliche Vorsprache an der Haustür Südring 134 nebst Androhung von Zwangsmitteln gegenüber unbeteiligter Zeugin.` },
+      { id: `R-30`, norm: `Art. 13 GG / PolG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `KPB Steinfurt (Landrat / KK 1)`, title: `Unangekündigtes Aufsuchen an Wohnanschrift (07:25 Uhr)`, desc: `Morgendliche Vorsprache an der Haustür Wohnanschrift des Bürgers nebst Androhung von Zwangsmitteln gegenüber unbeteiligter Zeugin.` },
       { id: `R-31`, norm: `VSBG / § 14 SchlichtungsO`, bereich: `Amtshaftung / Justizaufsicht`, status: `OFFEN`, akte: `Ombudsstelle (22999/2026-K)`, title: `Ombudsfrau-Wegweisung im Schlichtungsverfahren`, desc: `Formelle Wegweisung bzw. Ablehnung der weiteren Schlichtungsdurchführung am 20.11.2026 im Vorgang 22999/2026-K.` },
       { id: `R-32`, norm: `Art. 101 Abs. 1 S. 2 GG / § 21e GVG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `GVP-Prüfung (21.11.2026)`, title: `GVP-Nichtigkeit & Verstoß gegen gesetzlichen Richter`, desc: `Rüge der fehlerhaften Geschäftsverteilung und Kammerzuständigkeit zum Stichtag 21.11.2026.` },
       { id: `R-33`, norm: `§§ 21, 66 GKG`, bereich: `Amtshaftung / Justizaufsicht`, status: `BELEGT`, akte: `Zentrale Zahlstelle Justiz Hamm`, title: `Rückforderung ungerechtfertigter Justizkosten (511,50 EUR)`, desc: `Förmliche Rückforderung und Fristsetzung wegen Erhebung von Kosten auf Grundlage nichtiger Prozesshandlungen.` },
-      { id: `R-34`, norm: `§ 839 BGB / Art. 34 GG / §§ 286, 288 BGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `LG Münster (5 O 124/26)`, title: `Amtshaftungsklage (19,8 Mio. €) & Verzugseintritt 01.12.2026`, desc: `Nachweis der Zustellung vom 16.11.2026 an 13 NRW-Behörden; Eintritt des Schuldnerverzugs am 01.12.2026 (3.448,58 EUR/Tag).` }
+      { id: `R-34`, norm: `§ 839 BGB / Art. 34 GG / §§ 286, 288 BGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `LG Münster ([AZ: 5 O XXX/26])`, title: `Amtshaftungsklage (19,8 Mio. €) & Verzugseintritt 01.12.2026`, desc: `Nachweis der Zustellung vom 16.11.2026 an 13 NRW-Behörden; Eintritt des Schuldnerverzugs am 01.12.2026 (3.448,58 EUR/Tag).` }
     ];
 
     let h8State = {
@@ -4833,24 +4853,24 @@ AKTIVIERTE FORENSIK-MODULE:`;
         appendH8Term('#e2e8f0', '[WORM] Gespeicherte Hashes: ' + (appState.wormEntries ? appState.wormEntries.length : 0));
         appendH8Term('var(--tertiary)', '[TENSOR] Deontischer Vektor: § 105.2.3.4.1 (Verfallsfrist 6 Monate aktiv)');
       } else if (cmd.startsWith('scan')) {
-        appendH8Term('var(--error)', '[ALARM] REGEX-SCAN: 152 Gs 648/26');
+        appendH8Term('var(--error)', '[ALARM] REGEX-SCAN: [AZ: 152 Gs XXX/26]');
         appendH8Term('#cbd5e1', '  - Paraphe: Namenswiedergabe nicht erkennbar -> Formnichtig (BGH IX ZB 198/11)');
         appendH8Term('#cbd5e1', '  - Alter: > 6 Monate -> Verbraucht (BVerfG 2 BvR 2220/01)');
         appendH8Term('#cbd5e1', '  - Entropie: H(X) = 2.94 bit/char -> Reines Textbaustein-Aggregat');
       } else if (cmd.startsWith('zins')) {
-        appendH8Term('var(--primary)', '[ZINS-GUILLOTINE] Streitwert: 19.800.400,00 € (LG Münster 5 O 124/26)');
+        appendH8Term('var(--primary)', '[ZINS-GUILLOTINE] Streitwert: 19.800.400,00 € (LG Münster [AZ: 5 O XXX/26])');
         appendH8Term('#cbd5e1', '  - Täglicher Verzugszins: 3.448,58 € / Kalendertag');
         appendH8Term('#cbd5e1', '  - Basis: § 288 BGB (+5 % über Basiszinssatz)');
         appendH8Term('#cbd5e1', '  - Zinseszins-Sperre: § 289 Satz 1 BGB strikt aktiv');
       } else if (cmd === 'chronik') {
         appendH8Term('var(--secondary)', '[CHRONIK] ' + H8_CHRONO_DATA.length + ' kalendarische Einträge geladen.');
-        appendH8Term('#cbd5e1', '  - Ausgangspunkt: 31.12.2025 (Willebadessen Beute 0,00 €)');
+        appendH8Term('#cbd5e1', '  - Ausgangspunkt: 31.12.2025 (Wohnsitz des Bürgers Beute 0,00 €)');
         appendH8Term('#cbd5e1', '  - Stichtag: 01.12.2026 (Verzugseintritt Land NRW)');
       } else if (cmd.startsWith('ruegen')) {
         appendH8Term('var(--error)', '[RÜGEN-MATRIX] 34 Einzeltatbestände aktiv.');
         appendH8Term('#cbd5e1', '  - R-01: Null-Asservaten-Paradoxon (06:26 Uhr)');
         appendH8Term('#cbd5e1', '  - R-02: Formnichtigkeit Durchsuchung (Art. 13 Abs. 2 GG)');
-        appendH8Term('#cbd5e1', '  - R-03: 5x Signaturkollaps VG Minden (qeS: NEIN)');
+        appendH8Term('#cbd5e1', '  - R-03: 5x Signaturkollaps Zuständiges Verwaltungsgericht (qeS: NEIN)');
       } else if (cmd === 'foucault') {
         appendH8Term('var(--purple)', '[FOUCAULT-SCAN] Panopticon Autopoiesis Algorithmus v4.2:');
         appendH8Term('#cbd5e1', '  - Inversions-Index: 25 (Kritischer Schwellenwert > 20)');
@@ -4965,7 +4985,7 @@ AKTIVIERTE FORENSIK-MODULE:`;
     }
 
     function copyH8Citation(id, norm, title) {
-      const text = '[B6 RÜGE ' + id + '] ' + title + ' — Gestützt auf ' + norm + ' (Causa König / Master-Dock).';
+      const text = '[B6 RÜGE ' + id + '] ' + title + ' — Gestützt auf ' + norm + ' (Bürger-Verfahrensfall / Master-Dock).';
       navigator.clipboard.writeText(text).then(() => {
         showGlobalStatus('Rüge ' + id + ' in die Zwischenablage kopiert!');
       });
