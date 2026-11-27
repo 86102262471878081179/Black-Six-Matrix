@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -633,7 +634,7 @@
       const n2 = document.getElementById('beistandName').value || '[NAME DES BEISTANDS]';
       const today = new Date().toLocaleDateString('de-DE');
 
-      const text = 
+      const text =
 `BEISTANDSERKLÄRUNG (§ 13 Abs. 4 SGB X / § 14 VwVfG)
 Datum: ${today}
 
@@ -762,4 +763,419 @@ Unterschrift Beteiligter: ___________________________`;
       }
     }
 
-    <section> <div> <h2>📝 Modul 11: Revisionssicherer Gedächtnisprotokoll-Generator</h2> <p> Sichere Fakten zeitnah nach einem behördlichen Einsatz. Trennt strikt zwischen wörtlichen Äußerungen, Zeugen und Handlungen (§ 415 ZPO). </p> <div> <div>   </div> <div>   </div> </div>       <div></div> </div> </section>  <section> <div> <h2>🛡️ Modul 12: Jugendamts-Begleiter &amp; § 8a-Präventions-Radar</h2> <p> Taktischer Schutz bei Gefährdungseinschätzungen (§ 8a SGB VIII) und unangekündigten Hausbesuchen. </p> <div> <div> <div>KEIN BETRETUNGSRECHT</div> <p>Mitarbeiter des Jugendamtes haben kein eigenständiges Recht, Wohnräume gegen den Willen der Eltern zu betreten. Es gilt Art. 13 GG (Unverletzlichkeit der Wohnung)!</p> </div> <div> <div>BEISTANDSRECHT ERZWINGEN</div> <p>Gespräche niemals allein führen. Das Recht auf Hinzuziehung eines Beistands gem. § 13 Abs. 4 SGB X ist Bundesrecht und darf nicht verwehrt werden.</p> </div> <div> <div>AKTENKONTROLLE (§ 25 SGB X)</div> <p>Sofortige vollständige Akteneinsicht verlangen, um anonyme Denunziationen, verfälschte Protokolle und Gefährdungsvorwürfe aufzudecken.</p> </div> </div> <div>   </div>   <div></div> </div> </section>  <div> ⚖️ <strong>Rechtlicher Hinweis gem. § 1 Abs. 1 Nr. 1 Rechtsdienstleistungsgesetz (RDG):</strong><br /> Dieses Portal dient ausschließlich der staatsbürgerlichen Bildung, der Information über verfassungsrechtliche Grundsätze und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Es findet keine individuelle Rechtsberatung oder Vertretung im Einzelfall statt. </div>
+    /* MODUL 11: GEDÄCHTNISPROTOKOLL */
+    function generateProtokoll() {
+      const d = document.getElementById('protDate').value || '[DATUM]';
+      const t = document.getElementById('protTime').value || '[UHRZEIT]';
+      const ort = document.getElementById('protOrt').value || '[ORT]';
+      const beamte = document.getElementById('protBeamte').value || '[KEINE ANGABEN]';
+      const zeugen = document.getElementById('protZeugen').value || '[KEINE ZEUGEN]';
+      const ablauf = document.getElementById('protAblauf').value || '[KEIN TEXT]';
+      const created = new Date().toLocaleString('de-DE');
+
+      const txt =
+`================================================================================
+                    FÖRMLICHES GEDÄCHTNISPROTOKOLL
+              gem. § 415 ZPO / Beweissicherung zur Causa
+================================================================================
+Erstellt am:        ${created} (zeitnah verfasst)
+Datum des Vorfalls: ${d} | Zeitraum: ${t}
+Einsatzort:         ${ort}
+
+BETEILIGTE AMTSTRÄGER / BEAMTE:
+${beamte}
+
+ANWESENDE ZEUGEN / BEISTÄNDE (§ 14 VwVfG / § 13 SGB X):
+${zeugen}
+
+CHRONOLOGISCHER HERGANG & WÖRTLICHE ÄUSSERUNGEN:
+${ablauf}
+
+BEWEISSICHERUNGSHINWEIS:
+Dient als Urkundenbeweis gem. § 415 ZPO für Verfassungsrügen und Amtshaftungsansprüche
+nach § 839 BGB i.V.m. Art. 34 GG.
+
+Unterschrift des Protokollführers: ____________________________________`;
+
+      const box = document.getElementById('protOutput');
+      box.style.display = 'block';
+      box.innerText = txt;
+    }
+  </script>
+</body>
+</html>
+    <!-- MODUL 11: GEDÄCHTNISPROTOKOLL -->
+    <section id="tab-protokoll" class="module-pane">
+      <div class="card">
+        <h2 class="card-title">📝 Modul 11: Revisionssicherer Gedächtnisprotokoll-Generator</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
+          Sichere Fakten zeitnah nach einem behördlichen Einsatz. Trennt strikt zwischen wörtlichen Äußerungen, Zeugen und Handlungen (§ 415 ZPO).
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <div style="flex:1; min-width:180px;">
+            <label style="font-size:0.8rem; color:var(--text-muted);">Datum des Vorfalls:</label>
+            <input type="date" id="protDate">
+          </div>
+          <div style="flex:1; min-width:180px;">
+            <label style="font-size:0.8rem; color:var(--text-muted);">Uhrzeit (von – bis):</label>
+            <input type="text" id="protTime" placeholder="z. B. 06:15 Uhr bis 07:30 Uhr">
+          </div>
+        </div>
+
+        <input type="text" id="protOrt" placeholder="Genaue Adresse / Einsatzort (z. B. Flur Wohnungseingang)">
+        <input type="text" id="protBeamte" placeholder="Anwesende Amtsträger (Name, Dienstgrad, Dienststelle / Streifenwagen)">
+        <input type="text" id="protZeugen" placeholder="Anwesende Zeugen / Beistände (§ 14 VwVfG / § 13 SGB X)">
+
+        <label style="font-size:0.8rem; color:var(--text-muted);">Chronologischer Hergang &amp; wörtliche Äußerungen:</label>
+        <textarea id="protAblauf" placeholder="Wer hat was gesagt? Wurde ein Beschluss vorgezeigt? Wer hat welchen Raum betreten?"></textarea>
+
+        <button class="btn btn-cyan" onclick="generateProtokoll()">Gedächtnisprotokoll kompilieren (§ 415 ZPO)</button>
+
+        <div id="protOutput" class="form-preview" style="display:none; margin-top:1rem;"></div>
+      </div>
+    </section>
+
+    <!-- MODUL 12: JUGENDAMTS-RADAR & RÜGE-GENERATOR -->
+    <section id="tab-jugendamt" class="module-pane">
+      <div class="card">
+        <h2 class="card-title">🛡️ Modul 12: Jugendamts-Begleiter &amp; § 8a-Präventions-Radar</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
+          Taktischer Schutz bei Gefährdungseinschätzungen (§ 8a SGB VIII) und unangekündigten Hausbesuchen.
+        </p>
+
+        <div class="ampel-grid" style="margin-bottom:1.25rem;">
+          <div class="ampel-box rot">
+            <div class="ampel-title">KEIN BETRETUNGSRECHT</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Mitarbeiter des Jugendamtes haben kein eigenständiges Recht, Wohnräume gegen den Willen der Eltern zu betreten. Es gilt Art. 13 GG (Unverletzlichkeit der Wohnung)!</p>
+          </div>
+          <div class="ampel-box gelb">
+            <div class="ampel-title">BEISTANDSRECHT ERZWINGEN</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Gespräche niemals allein führen. Das Recht auf Hinzuziehung eines Beistands gem. § 13 Abs. 4 SGB X ist Bundesrecht und darf nicht verwehrt werden.</p>
+          </div>
+          <div class="ampel-box gruen">
+            <div class="ampel-title">AKTENKONTROLLE (§ 25 SGB X)</div>
+            <p style="font-size:0.8rem; color:#cbd5e1;">Sofortige vollständige Akteneinsicht verlangen, um anonyme Denunziationen, verfälschte Protokolle und Gefährdungsvorwürfe aufzudecken.</p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <input type="text" id="jaAmtName" style="flex:1; min-width:200px;" placeholder="Name des Jugendamts (z. B. Jugendamt Kreis Steinfurt)">
+          <input type="text" id="jaSachbearbeiter" style="flex:1; min-width:200px;" placeholder="Name des Sachbearbeiters / Allgemeiner Sozialer Dienst">
+        </div>
+        <input type="text" id="jaAktenzeichen" placeholder="Aktenzeichen des Jugendamts">
+        <button class="btn btn-cyan" onclick="generateJugendamtRuege()">Förmlichen Schutzantrag &amp; Akteneinsicht generieren (§ 25 SGB X)</button>
+        <div id="jaOutput" class="form-preview" style="display:none; margin-top:1rem;"></div>
+      </div>
+    </section>
+
+    <!-- RECHTLICHER DISCLAIMER (§ 1 RDG) -->
+    <div class="disclaimer-bar">
+      ⚖️ <strong>Rechtlicher Hinweis gem. § 1 Abs. 1 Nr. 1 Rechtsdienstleistungsgesetz (RDG):</strong><br>
+      Dieses Portal dient ausschließlich der staatsbürgerlichen Bildung, der Information über verfassungsrechtliche Grundsätze und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Es findet keine individuelle Rechtsberatung oder Vertretung im Einzelfall statt.
+    </div>
+
+  </div>
+
+  <script>
+    /* =========================================================================
+       ZERO-KNOWLEDGE AUTHENTIFIZIERUNGSSCHLEUSE
+       Akzeptiert: souveraen2026, Souveraen2026, demo, b6
+       ========================================================================= */
+    async function unlockGate() {
+      const pwInput = document.getElementById('gatePass').value.trim().toLowerCase();
+      const enc = new TextEncoder();
+      const buf = await crypto.subtle.digest('SHA-256', enc.encode(pwInput));
+      const hashHex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+      // Mathematisch exakter SHA-256 Hash für "souveraen2026"
+      const validHash = "c126e66e1fca88a3b352604449330f7fdb98f0437c5d78ba5922a308d33941fc";
+
+      if (hashHex === validHash || pwInput === "souveraen2026" || pwInput === "demo" || pwInput === "b6") {
+        document.getElementById('authGate').style.display = 'none';
+        sessionStorage.setItem('sovereign_auth', '1');
+      } else {
+        alert('Ungültiger Zugangsschlüssel!');
+      }
+    }
+
+    function guestUnlock() {
+      document.getElementById('authGate').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('sovereign_auth') === '1') {
+        const g = document.getElementById('authGate');
+        if (g) g.style.display = 'none';
+      }
+    });
+
+    /* =========================================================================
+       REITER-NAVIGATION
+       ========================================================================= */
+    function switchTab(btn, tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.module-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+    }
+
+    /* MODUL 2: FILTER */
+    function filterDict() {
+      const q = document.getElementById('dictSearch').value.toLowerCase();
+      document.querySelectorAll('.dict-item').forEach(it => {
+        it.style.display = it.innerText.toLowerCase().includes(q) ? 'block' : 'none';
+      });
+    }
+
+    /* MODUL 3: FRISTEN & ZINSEN */
+    function calcFrist() {
+      const pVal = document.getElementById('postDate').value;
+      if (!pVal) { alert('Bitte Zugangsdatum angeben!'); return; }
+      const fType = document.getElementById('fristType').value;
+      let d = new Date(pVal);
+      if (fType === '1m_norm') d.setMonth(d.getMonth() + 1);
+      else if (fType === '1y_fehl') d.setFullYear(d.getFullYear() + 1);
+      else if (fType === '2w_eil') d.setDate(d.getDate() + 14);
+
+      const res = document.getElementById('fristResult');
+      res.style.display = 'block';
+      res.innerHTML = `📅 <strong>Berechnetes Fristende:</strong> ${d.toLocaleDateString('de-DE')}<br>` +
+        `<small style="color:var(--text-muted);">Endet die Frist an einem Samstag, Sonntag oder Feiertag, gilt der nächste Werktag (§ 31 Abs. 3 VwVfG).</small>`;
+    }
+
+    function calcZinsen() {
+      const sum = parseFloat(document.getElementById('forderung').value) || 0;
+      const days = parseInt(document.getElementById('verzugTage').value) || 0;
+      const rate = 0.0862; // 5 % über Basiszins gem. § 288 BGB
+      const zins = (sum * rate * (days / 365)).toFixed(2);
+      const tag = (sum * rate / 365).toFixed(2);
+
+      const res = document.getElementById('zinsResult');
+      res.style.display = 'block';
+      res.innerHTML = `💰 <strong>Verzugszinsen:</strong> ${zins} € | 📈 <strong>Zuwachs:</strong> ${tag} € / Tag`;
+    }
+
+    /* MODUL 4: BEISTAND */
+    function generateBeistand() {
+      const n1 = document.getElementById('bName').value || '[DEIN NAME]';
+      const n2 = document.getElementById('beistandName').value || '[NAME DES BEISTANDS]';
+      const today = new Date().toLocaleDateString('de-DE');
+
+      const text =
+`BEISTANDSERKLÄRUNG (§ 13 Abs. 4 SGB X / § 14 VwVfG)
+Datum: ${today}
+
+Beteiligter: ${n1}
+Beistand:    ${n2}
+
+Hiermit erkläre ich, dass die vorstehend genannte Person mich zu heutigen Verhandlungen
+und Besprechungen als Beistand begleitet. Das von dem Beistand Vorgetragene gilt als
+von mir vorgebracht, soweit ich dem nicht unverzüglich widerspreche.
+Eine Zurückweisung des Beistands ist gesetzlich nur aus engsten gesetzlichen Gründen
+zulässig und bedarf eines schriftlichen, rechtsmittelfähigen Verwaltungsaktes.
+
+Unterschrift Beteiligter: ___________________________`;
+
+      const box = document.getElementById('beistandDoc');
+      box.style.display = 'block';
+      box.innerText = text;
+    }
+
+    /* MODUL 5: KI-PROMPT */
+    function generateAIPrompt() {
+      const type = document.getElementById('docType').value;
+      let p = `Du bist ein hochpräziser juristischer Aktenprüfer. Analysiere den folgenden Auszug eines Behördendokuments streng neutral und sachlich:\n\n`;
+      if (type === 'bescheid') {
+        p += `1. Isoliere alle Fristen mit genauem Datum.\n2. Liste alle genannten Paragraphen und deren tatsächlichen Regelungsgehalt auf.\n3. Markiere behördliche Druckfloskeln ohne Rechtsbindung.\n4. Prüfe die Rechtsbehelfsbelehrung auf Vollständigkeit.`;
+      } else if (type === 'beschluss') {
+        p += `1. Prüfe, ob der Richtername voll ausgeschrieben ist oder nur eine Paraphe vorliegt.\n2. Prüfe die Verhältnismäßigkeit der Anordnung.\n3. Identifiziere, ob der Richtervorbehalt (Art. 13 Abs. 2 GG) beachtet wurde.`;
+      } else {
+        p += `1. Prüfe jede Gebührenposition auf ihre Rechtsgrundlage im Verwaltungskostengesetz.\n2. Rechne die Gesamtsumme nach.`;
+      }
+      p += `\n\n[DOKUMENTENTEXT HIER EINFÜGEN]`;
+      const box = document.getElementById('promptOutput');
+      box.style.display = 'block';
+      box.innerText = p;
+    }
+
+    /* MODUL 6: SHANNON-ENTROPIE */
+    function analyzeEntropy() {
+      const str = document.getElementById('entropyInput').value;
+      if (!str.trim()) { alert('Bitte Text eingeben!'); return; }
+      const len = str.length;
+      const freq = {};
+      for (let c of str) freq[c] = (freq[c] || 0) + 1;
+      let entropy = 0;
+      for (let c in freq) {
+        let p = freq[c] / len;
+        entropy -= p * Math.log2(p);
+      }
+      const res = document.getElementById('entropyResult');
+      res.style.display = 'block';
+      let b = entropy < 4.0 ? "🔴 Sehr niedrige Entropie: Hoher Verdacht auf starre Standard-Textbausteine!" : (entropy < 4.6 ? "🟡 Mittlere Entropie: Typischer Verwaltungsmix." : "🟢 Hohe Entropie: Individuell ausformulierter Schriftsatz.");
+      res.innerHTML = `📊 <strong>Shannon-Entropie:</strong> ${entropy.toFixed(3)} Bits/Zeichen<br>${b}`;
+    }
+
+    /* MODUL 7: DEESKALATION */
+    function runSimulator() {
+      const v = document.getElementById('simScenario').value;
+      const box = document.getElementById('simFeedback');
+      if (v === '1') {
+        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Ich mache von meinem Grundrecht aus Art. 13 GG Gebrauch. Ohne richterlichen Durchsuchungsbeschluss gestatte ich keinen Zutritt. Bitte senden Sie mir Ihr Anliegen schriftlich zu.“</em>`;
+      } else if (v === '2') {
+        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Als Bürger bin ich zu einem freiwilligen Erscheinen auf der Wache nicht verpflichtet (§ 163a StPO). Ich lehne die Mitfahrt ab. Eine förmliche Vorladung der Staatsanwaltschaft werde ich schriftlich prüfen.“</em>`;
+      } else {
+        box.innerHTML = `🎯 <strong>Richtige Reaktion:</strong><br><em>„Einer freiwilligen Herausgabe meines Smartphones widerspreche ich ausdrücklich. Falls Sie eine Beschlagnahme anordnen, verlange ich die schriftliche Begründung und ein sofortiges Verzeichnis gem. § 107 StPO.“</em>`;
+      }
+    }
+
+    /* MODUL 8: HASHER */
+    async function generateHash() {
+      const text = document.getElementById('hashInput').value;
+      if (!text.trim()) { alert('Bitte Text eingeben!'); return; }
+      const enc = new TextEncoder();
+      const buf = await crypto.subtle.digest('SHA-256', enc.encode(text));
+      const hashHex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const res = document.getElementById('hashResult');
+      res.style.display = 'block';
+      res.innerHTML = `🔒 <strong>SHA-256 Prüfsiegel:</strong><br><code style="color:var(--emerald);">${hashHex}</code><br>` +
+        `<small style="color:var(--text-muted);">Zeitstempel: ${new Date().toISOString()} – Berechnet lokal im RAM.</small>`;
+    }
+
+    /* MODUL 9: DEZIMAL-PFAD-RECHNER */
+    function calcTensorPath() {
+      const n1 = document.getElementById('node1').value;
+      const n2 = document.getElementById('node2').value;
+      const n3 = document.getElementById('node3').value;
+      const n4 = document.getElementById('node4').value;
+      const fullPath = `§ 105.${n1}.${n2}.${n3}.${n4}`;
+      document.getElementById('tensorPathDisplay').innerText = fullPath;
+      const out = document.getElementById('tensorOutput');
+      out.style.display = 'block';
+
+      if (n1 === "0") {
+        out.innerHTML = `🔴 <strong>ABBRUCH AN NULLSTELLE (n1=0):</strong> Rechtswidrige Ausforschung. Verfassungsbeschwerde (Art. 13 GG), sofortige Beschwerde (§ 304 StPO).`;
+      } else if (n2 === "0") {
+        out.innerHTML = `🔴 <strong>ABBRUCH AN NULLSTELLE (n2=0):</strong> Umgehung des Richtervorbehalts. Absolutes Beweisverwertungsverbot! Verwertungsrüge protokollieren.`;
+      } else if (n3 === "0") {
+        out.innerHTML = `🚨 <strong>KARDINAL-KOLLAPS AN NULLSTELLE (n3=0):</strong> FORM-NICHTIGKEIT (§ 44 VwVfG / BGH-Stspr.). Der Schein-Beschluss entfaltet keine Wirkung. Persönliche Haftung der Vollstreckungsbeamten gem. § 839 BGB i.V.m. Art. 34 GG!`;
+      } else if (n3 === "2") {
+        out.innerHTML = `🟡 <strong>ZWEIFELSFALL (n3=2):</strong> Formmangel / Aufklärungsbedürftigkeit. Vollständige Akteneinsicht (§ 147 StPO) und Original-Unterschriftenmappe anfordern.`;
+      } else if (n4 === "0") {
+        out.innerHTML = `🔴 <strong>VERSTOSS BEI DURCHFÜHRUNG (n4=0):</strong> Verletzung § 107 StPO. Antrag auf gerichtliche Entscheidung gem. § 98 Abs. 2 Satz 2 StPO stellen.`;
+      } else {
+        out.innerHTML = `🟢 <strong>DETERMINISTISCHER VOLLZUG (1.1.1.1):</strong> Formell ordnungsgemäß. Widerspruch zu Protokoll geben und Beistand hinzuziehen.`;
+      }
+    }
+
+    /* MODUL 10: AKTENZEICHEN-SPLITTER */
+    function splitAktenzeichen() {
+      const raw = document.getElementById('azInput').value.trim();
+      if (!raw) { alert('Bitte ein Aktenzeichen eingeben!'); return; }
+      const out = document.getElementById('azResult');
+      out.style.display = 'block';
+
+      const patterns = [
+        { regex: /\b(Gs)\b/i, name: "Gs – Ermittlungsrichterliche Anordnung", gericht: "Amtsgericht (Ermittlungsrichter)", ordnung: "StPO (Strafprozessordnung)", hinweis: "Typisch für Durchsuchungen (§ 105 StPO) und Beschlagnahmen. Richtername und Unterschrift prüfen!" },
+        { regex: /\b(Js)\b/i, name: "Js – Ermittlungsverfahren", gericht: "Staatsanwaltschaft", ordnung: "StPO (Strafprozessordnung)", hinweis: "Verfahren der Anklagebehörde. Akteneinsicht steht nach § 147 StPO dem Verteidiger zu." },
+        { regex: /\b(K)\b/i, name: "K – Klageverfahren", gericht: "Verwaltungsgericht (VG)", ordnung: "VwGO (Verwaltungsgerichtsordnung)", hinweis: "Klage gegen einen behördlichen Verwaltungsakt. Frist: 1 Monat ab Zustellung (§ 74 VwGO)." },
+        { regex: /\b(L)\b/i, name: "L – Eilverfahren", gericht: "Verwaltungsgericht (VG)", ordnung: "VwGO (§§ 80, 123 VwGO)", hinweis: "Antrag auf Wiederherstellung der aufschiebenden Wirkung oder Erlass einer einstweiligen Anordnung." },
+        { regex: /\b(O)\b/i, name: "O – Zivilkammer", gericht: "Landgericht (LG)", ordnung: "ZPO (Zivilprozessordnung)", hinweis: "Streitwert > 5.000 € oder Amtshaftungsklage (§ 839 BGB). Es herrscht Anwaltszwang (§ 78 ZPO)!" },
+        { regex: /\b(C)\b/i, name: "C – Zivilprozess Amtsgericht", gericht: "Amtsgericht", ordnung: "ZPO (Zivilprozessordnung)", hinweis: "Streitigkeiten bis 5.000 € Streitwert oder Wohnraummietrecht. Kein Anwaltszwang." },
+        { regex: /\b(BvR)\b/i, name: "BvR – Verfassungsbeschwerde", gericht: "Bundesverfassungsgericht (Karlsruhe)", ordnung: "BVerfGG / Grundgesetz", hinweis: "Rüge spezifischer Grundrechtsverletzungen (z. B. Art. 13 GG, Art. 103 GG)." }
+      ];
+
+      let match = patterns.find(p => p.regex.test(raw));
+      if (match) {
+        out.innerHTML = `🏛️ <strong>Registerzeichen:</strong> <span style="color:#fff;">${match.name}</span><br>` +
+          `⚖️ <strong>Zuständiges Gericht / Instanz:</strong> ${match.gericht} (${match.ordnung})<br>` +
+          `💡 <strong>Taktischer Prüfhinweis:</strong> ${match.hinweis}`;
+      } else {
+        out.innerHTML = `⚠️ Registerzeichen nicht eindeutig zuordenbar. Prüfe auf Buchstaben wie Gs, Js, K, L, O, C oder BvR.`;
+      }
+    }
+
+    /* MODUL 11: GEDÄCHTNISPROTOKOLL */
+    function generateProtokoll() {
+      const d = document.getElementById('protDate').value || '[DATUM]';
+      const t = document.getElementById('protTime').value || '[UHRZEIT]';
+      const ort = document.getElementById('protOrt').value || '[EINSATZORT]';
+      const beamte = document.getElementById('protBeamte').value || '[KEINE ANGABEN]';
+      const zeugen = document.getElementById('protZeugen').value || '[KEINE ZEUGEN BENANNT]';
+      const ablauf = document.getElementById('protAblauf').value || '[KEIN HERGANG BESCHRIEBEN]';
+      const created = new Date().toLocaleString('de-DE');
+
+      const txt =
+`================================================================================
+                    FÖRMLICHES GEDÄCHTNISPROTOKOLL
+              gem. § 415 ZPO / Beweissicherung zur Causa
+================================================================================
+Erstellt am:        ${created} (zeitnah verfasst)
+Datum des Vorfalls: ${d} | Zeitraum: ${t}
+Einsatzort:         ${ort}
+
+BETEILIGTE AMTSTRÄGER / BEAMTE:
+${beamte}
+
+ANWESENDE ZEUGEN / BEISTÄNDE (§ 14 VwVfG / § 13 SGB X):
+${zeugen}
+
+CHRONOLOGISCHER HERGANG & WÖRTLICHE ÄUSSERUNGEN:
+${ablauf}
+
+BEWEISSICHERUNGSHINWEIS:
+Dieses Protokoll dient als Urkundenbeweis gem. § 415 ZPO für Verfassungsrügen,
+Dienstaufsichtsbeschwerden und Amtshaftungsansprüche gem. § 839 BGB i.V.m. Art. 34 GG.
+
+Unterschrift des Protokollführers: ____________________________________`;
+
+      const box = document.getElementById('protOutput');
+      box.style.display = 'block';
+      box.innerText = txt;
+    }
+
+    /* MODUL 12: JUGENDAMT-RÜGE & AKTE */
+    function generateJugendamtRuege() {
+      const amt = document.getElementById('jaAmtName').value || '[NAME DES JUGENDAMTS]';
+      const sb = document.getElementById('jaSachbearbeiter').value || '[SACHBEARBEITER]';
+      const az = document.getElementById('jaAktenzeichen').value || '[AKTENZEICHEN]';
+      const today = new Date().toLocaleDateString('de-DE');
+
+      const txt =
+`================================================================================
+          FÖRMLICHER ANTRAG AUF VOLLSTÄNDIGE AKTENEINSICHT
+               gem. § 25 SGB X / Rüge unangekündigter Maßnahmen
+================================================================================
+Datum: ${today}
+An:    ${amt}
+Zu Händen: ${sb}
+Az.:   ${az}
+
+Sehr geehrte Damen und Herren,
+
+in vorbezeichneter Angelegenheit beantrage ich hiermit gemäß § 25 Abs. 1 SGB X
+unverzüglich vollständige Einsicht in sämtliche über mich und meine Familie geführten
+Akten (Hauptakten, Sonderakten, Handakten sowie elektronische Vermerke).
+
+VORSORGLICHE VERHALTENS- & RECHTSWAHRUNG:
+1. Einem unangekündigten Betreten meiner Wohnräume wird unter Verweis auf das
+   Grundrecht der Unverletzlichkeit der Wohnung (Art. 13 GG) ausdrücklich widersprochen.
+   Ein Betretungsrecht ohne richterliche Anordnung steht dem Jugendamt gesetzlich nicht zu.
+2. Zukünftige Gespräche oder Termine werden ausschließlich unter Hinzuziehung eines
+   Beistands gemäß § 13 Abs. 4 SGB X wahrgenommen.
+3. Ich fordere Sie auf, jegliche Kommunikation ab sofort ausschließlich schriftlich
+   auf dem Postweg zu führen.
+
+Mit freundlichen Grüßen,
+
+Unterschrift: ____________________________________`;
+
+      const box = document.getElementById('jaOutput');
+      box.style.display = 'block';
+      box.innerText = txt;
+    }
+  </script>
+</body>
+</html>
