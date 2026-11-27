@@ -999,6 +999,9 @@
         <button type="button" role="tab" class="hub-tab" id="tab-hub7" aria-selected="false" aria-controls="panel-hub7" onclick="switchHub('hub7')" style="border-color:var(--primary); color:var(--primary);">
           <span class="hub-tab-num" style="background:var(--primary); color:#000;">7</span> 40er Matrix &amp; Prompt-Schmiede (GPT/Grok)
         </button>
+        <button type="button" role="tab" class="hub-tab" id="tab-hub8" aria-selected="false" aria-controls="panel-hub8" onclick="switchHub('hub8')" style="border-color:var(--secondary); color:var(--secondary);">
+          <span class="hub-tab-num" style="background:var(--secondary); color:#000;">8</span> Gefechts-Lage &amp; Chronik
+        </button>
       </div>
     </div>
   </nav>
@@ -2770,6 +2773,147 @@
       </article>
     </section>
 
+
+    <!-- =================================================================== -->
+    <!-- HUB 8: GEFECHTS-LAGEZENTRUM, MASTER-CHRONIK & 34ER-RÜGEN-MATRIX     -->
+    <!-- =================================================================== -->
+    <section id="panel-hub8" class="hub-section" role="tabpanel" aria-labelledby="tab-hub8">
+      <div class="hub-banner">
+        <div>
+          <p class="deck-brass">HUB 8 // APEX TACTICAL OPERATIONS // LÜCKENLOSE MASTER-CHRONIK &amp; 34 RÜGEN</p>
+          <h2 class="hub-title">Gefechts-Lagezentrum &amp; Interaktive Chronologie</h2>
+        </div>
+        <div class="chip-nav no-print" aria-label="Schnellfilter Hub 8">
+          <button type="button" class="chip-btn is-active" onclick="filterHub8Section('all', this)">Gesamtübersicht</button>
+          <button type="button" class="chip-btn" onclick="filterHub8Section('terminal', this)">System-Terminal</button>
+          <button type="button" class="chip-btn" onclick="filterHub8Section('chronik', this)">Master-Chronik</button>
+          <button type="button" class="chip-btn" onclick="filterHub8Section('ruegen', this)">34er Rügen-Matrix</button>
+          <button type="button" class="chip-btn" onclick="filterHub8Section('vektoren', this)">Vektor-Radar</button>
+        </div>
+      </div>
+
+      <!-- Live Simulierter System-Terminal -->
+      <article class="panel panel-purple hub8-sub" id="hub8-terminal-panel" style="margin-bottom:1.5rem;">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title" style="color:var(--tertiary);">💻 Sovereign System-Terminal (Fail-Closed)</h3>
+            <p class="panel-desc">Echtzeit-Kommandozeile zur Steuerung aller 8 Hubs und Generierung forensischer Berichte.</p>
+          </div>
+          <span class="badge badge-purple">ROOT SHELL</span>
+        </div>
+        
+        <div class="terminal-box" style="background:#020305; border:1px solid var(--tertiary); border-radius:var(--rounded); padding:1rem; font-family:var(--font-label); font-size:0.8rem; margin-top:0.75rem;">
+          <div id="h8-term-output" style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:0.25rem; margin-bottom:0.75rem; padding-right:0.5rem; color:#cbd5e1;">
+            <div style="color:var(--tertiary);">[B6_KERNEL] Sovereign Master Dock — Hyperkernel Ω geladen.</div>
+            <div style="color:var(--positive);">[OK] 8 Hubs aktiv. 40 Kernsektoren indiziert. WORM-Ledger bereit.</div>
+            <div style="color:var(--on-surface-variant);">Tippen Sie einen Befehl ein oder nutzen Sie die Schnellschalter unten:</div>
+          </div>
+          
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <span style="color:var(--secondary); font-weight:700;">root@b6-omega:~$</span>
+            <input type="text" id="h8-term-input" style="flex:1; margin:0; background:transparent; border:none; border-bottom:1px solid var(--outline); border-radius:0; padding:0.25rem 0.5rem; color:var(--primary); font-family:inherit; font-size:0.85rem;" placeholder="Befehl eingeben (z. B. status, scan, zins, chronik, ruegen, help)..." onkeydown="if(event.key==='Enter') executeH8Terminal();">
+            <button type="button" class="btn btn-sm btn-cyan" onclick="executeH8Terminal()">Ausführen</button>
+          </div>
+          
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.75rem;" class="no-print">
+            <button type="button" class="chip-btn is-active" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('status')">status</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('scan')">scan 152-Gs</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('zins')">zins 19.8M</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('chronik')">chronik</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('ruegen')">ruegen --kritisch</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('foucault')">foucault</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('worm')">worm-ledger</button>
+            <button type="button" class="chip-btn" style="font-size:0.7rem; padding:0.2rem 0.5rem;" onclick="quickTermCmd('clear')">clear</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 894 Verstöße Vektorverteilung -->
+      <article class="panel panel-gold hub8-sub" id="hub8-vektoren-panel" style="margin-bottom:1.5rem;">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title">📊 Verteilung der 894 Verstöße nach Rechtsvektoren</h3>
+            <p class="panel-desc">Gesamtbilanz der institutionellen Rechtsbrüche nach Fachgerichtsbarkeiten.</p>
+          </div>
+          <span class="badge badge-gold">894 TATBESTÄNDE</span>
+        </div>
+        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:1rem;">
+          <div style="background:var(--surface-container-low); padding:1rem; border-radius:var(--rounded); border-left:4px solid var(--error);">
+            <div style="font-size:0.75rem; color:var(--error); font-weight:700;">STRAFPROZESS &amp; EINGRIFF (StPO/GG)</div>
+            <div style="font-size:1.6rem; font-weight:800; font-family:var(--font-headline); color:var(--on-surface); margin:0.25rem 0;">312 Verstöße</div>
+            <p style="font-size:0.75rem; color:var(--on-surface-variant);">Bruch des Richtervorbehalts, Null-Asservaten-Aporie, Paraphen, Hausfriedensbruch.</p>
+          </div>
+
+          <div style="background:var(--surface-container-low); padding:1rem; border-radius:var(--rounded); border-left:4px solid var(--warning);">
+            <div style="font-size:0.75rem; color:var(--warning); font-weight:700;">VERWALTUNG &amp; JUGENDAMT (SGB/VwVfG)</div>
+            <div style="font-size:1.6rem; font-weight:800; font-family:var(--font-headline); color:var(--on-surface); margin:0.25rem 0;">248 Verstöße</div>
+            <p style="font-size:0.75rem; color:var(--on-surface-variant);">Retaliation nach § 8a SGB VIII, Beistandsverweigerung (§ 13 SGB X), Willkür-KdU.</p>
+          </div>
+
+          <div style="background:var(--surface-container-low); padding:1rem; border-radius:var(--rounded); border-left:4px solid var(--secondary);">
+            <div style="font-size:0.75rem; color:var(--secondary); font-weight:700;">DIGITAL, FORM &amp; SIGNATUR (§ 55a VwGO)</div>
+            <div style="font-size:1.6rem; font-weight:800; font-family:var(--font-headline); color:var(--on-surface); margin:0.25rem 0;">196 Verstöße</div>
+            <p style="font-size:0.75rem; color:var(--on-surface-variant);">Fünffacher Signaturkollaps 'qeS: NEIN', fehlende Prüfprotokolle, Titel-Swap.</p>
+          </div>
+
+          <div style="background:var(--surface-container-low); padding:1rem; border-radius:var(--rounded); border-left:4px solid var(--primary);">
+            <div style="font-size:0.75rem; color:var(--primary); font-weight:700;">FISKUS, ZINS &amp; AMTSHAFTUNG (§ 839 BGB)</div>
+            <div style="font-size:1.6rem; font-weight:800; font-family:var(--font-headline); color:var(--on-surface); margin:0.25rem 0;">138 Verstöße</div>
+            <p style="font-size:0.75rem; color:var(--on-surface-variant);">19,8 Mio. € Amtshaftung, 3.448,58 €/Tag Landesverzugszinsen, verweigerte Kostenerstattung.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Nahtlose Master-Chronologie -->
+      <article class="panel panel-cyan hub8-sub" id="hub8-chronik-panel" style="margin-bottom:1.5rem;">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title" style="color:var(--secondary);">📅 Nahtlose Master-Chronologie (12/2025 – 12/2026)</h3>
+            <p class="panel-desc">Vollständiges Akten- und Zustellungs-Kataster mit allen Beschlüssen, Fristen und Stichtagen.</p>
+          </div>
+          <span class="badge badge-cyan">ZEITLEISTE</span>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem; align-items:center; justify-content:space-between;" class="no-print">
+          <div class="chip-nav" id="h8-chrono-filters">
+            <button type="button" class="chip-btn is-active" onclick="filterChronoPhase('ALL', this)">Alle Ereignisse</button>
+            <button type="button" class="chip-btn" onclick="filterChronoPhase('critical', this)">🚨 Nur Kritisch</button>
+            <button type="button" class="chip-btn" onclick="filterChronoPhase('relief', this)">✅ Entlastungs-Beweise</button>
+          </div>
+          <input type="text" id="h8-chrono-search" style="max-width:280px; margin:0;" placeholder="🔍 Ereignis / Aktenzeichen suchen..." oninput="renderChronoTimeline()">
+        </div>
+
+        <div id="h8-chrono-timeline" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.75rem; max-height:420px; overflow-y:auto; padding-right:0.5rem;">
+          <!-- Dynamisch gerendert via JS -->
+        </div>
+      </article>
+
+      <!-- 34er Rügen-Matrix -->
+      <article class="panel panel-crimson hub8-sub" id="hub8-ruegen-panel">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title" style="color:var(--error);">⚖️ Forensische Rügen-Matrix (34 Einzeltatbestände)</h3>
+            <p class="panel-desc">Systematische Katalogisierung der 34 Kern-Rügen mit Normen, Aktenzeichen und Status.</p>
+          </div>
+          <span class="badge badge-crimson">34 RÜGEN</span>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem; align-items:center; justify-content:space-between;" class="no-print">
+          <div class="chip-nav" id="h8-ruegen-filters">
+            <button type="button" class="chip-btn is-active" onclick="filterRuegenCat('ALL', this)">Alle 34</button>
+            <button type="button" class="chip-btn" onclick="filterRuegenCat('KRITISCH', this)">🚨 Kritisch</button>
+            <button type="button" class="chip-btn" onclick="filterRuegenCat('FORMFEHLER', this)">⚠️ Formfehler</button>
+          </div>
+          <input type="text" id="h8-ruegen-search" style="max-width:280px; margin:0;" placeholder="🔍 Rüge-Nr., Norm oder Text suchen..." oninput="renderRuegenMatrix()">
+        </div>
+
+        <div id="h8-ruegen-grid" style="margin-top:1rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:0.75rem; max-height:450px; overflow-y:auto; padding-right:0.5rem;">
+          <!-- Dynamisch gerendert via JS -->
+        </div>
+      </article>
+    </section>
+
 </main>
 
   <api-shim></api-shim>
@@ -2937,7 +3081,7 @@
 
     function switchHub(hubId) {
       appState.activeHub = hubId;
-      const hubs = ['hub1', 'hub2', 'hub3', 'hub4', 'hub5', 'hub6', 'hub7'];
+      const hubs = ['hub1', 'hub2', 'hub3', 'hub4', 'hub5', 'hub6', 'hub7', 'hub8'];
       const hubLabels = {
         hub1: `HUB 1 · Justiz`,
         hub2: `HUB 2 · Pflege`,
@@ -4099,6 +4243,10 @@
       anonymizeText();
       buildPromptSynth();
 
+            /* Hub 8 init */
+      renderChronoTimeline();
+      renderRuegenMatrix();
+
       /* Restore active hub */
       switchHub(appState.activeHub || 'hub1');
       runDiaboliEngine();
@@ -4550,6 +4698,279 @@ AKTIVIERTE FORENSIK-MODULE:`;
     }
 
       window.addEventListener('DOMContentLoaded', initHub7);
+
+    /* =====================================================================
+       HUB 8 JAVASCRIPT LOGIK — TERMINAL, CHRONIK & 34ER RÜGEN-MATRIX
+       ===================================================================== */
+    const H8_CHRONO_DATA = [
+      { date: `31.12.2025`, phase: `MAI_JUNI`, type: `relief`, title: `Ausgangsfeststellung Tatort Willebadessen: Beute 0,00 EUR`, detail: `StA Düsseldorf (Az. 52 Js 23/26) — Ausgangspunkt für die Beute-Aporie und das spätere Vorbringen nach § 344 StGB.` },
+      { date: `06.05.2026`, phase: `MAI_JUNI`, type: `critical`, title: `Formnichtiger Beschluss (152 Gs 648/26) & vordatierte ED-Anordnung`, detail: `AG Düsseldorf fertigt Beschluss auf 1985er-Formular ohne Richterunterschrift; PP Bielefeld datiert ED-Anordnung (NRW 2342/2343) vor Einsatzbeginn.` },
+      { date: `07.05.2026`, phase: `MAI_JUNI`, type: `critical`, title: `Durchsuchung Südring 134 & Null-Asservaten-Protokoll`, detail: `70 Min. Unterbrechung der CGM-Insulin-Steuerung (LADA-1); Protokoll NRW 2512 um 06:26 Uhr dokumentiert „Anzahl: 0“ (109 Min. vor Einsatzende).` },
+      { date: `08.06.2026`, phase: `MAI_JUNI`, type: `procedural`, title: `Dienstbrief koppelt 50-EUR-Rückgabe an ED-Erscheinen`, detail: `PP Bielefeld (NRW 2370) knüpft Eigentumsherausgabe an erkennungsdienstliche Behandlung (Rüge nach § 240 StGB).` },
+      { date: `16.06.2026`, phase: `MAI_JUNI`, type: `critical`, title: `DNA-Erklärung NRW 2361/1 mit § 81g-Täuscherkreuz`, detail: `Maschinelle Markierung bei Zukunftsspeicherung (§ 81g StPO) statt Anlasstat (§ 81e StPO) inklusive vorgedrucktem Widerrufsverzicht.` },
+      { date: `17.06.2026`, phase: `MAI_JUNI`, type: `relief`, title: `Förmliche Herausgabequittung iPhone 17 Pro Max`, detail: `Amtliche Übergabeverhandlung durch KOK'in Schmeichel beendet staatlichen Gewahrsam; Beginn der 89-Tage-Referenzfrist.` },
+      { date: `16.–22.07.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Beschwerde § 304 StPO, 6 Einschreiben & Klage VG Minden`, detail: `Rechtswegerschöpfung bei AG/GStA Düsseldorf (2 AR 806/26), 6 Einschreiben Rückschein und Eingang der FFK beim VG Minden (11 K 3272/26).` },
+      { date: `07.–24.08.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Verwertungsultimatum, Textbaustein-Nichtabhilfe & GStA-Shutdown`, detail: `Ultimatum zu 150 EUR (07.08.), Nichtabhilfe AG Düsseldorf (13.08.) und Einstellung 2 AR 806/26 ohne Handaktenprüfung (24.08.).` },
+      { date: `01.–04.09.2026`, phase: `JULI_OKT`, type: `critical`, title: `Klagebegründung VG Minden & 72h-§ 8a-Meldung`, detail: `Eingang der Klagebegründung (01.09.); genau 72 Stunden später übermittelt PP Bielefeld eine § 8a-Meldung an das Jugendamt Ibbenbüren (04.09.).` },
+      { date: `14.–21.09.2026`, phase: `JULI_OKT`, type: `critical`, title: `89-Tage-Paradoxon (LG) & 5× qeS: NEIN + Titel-Swap (VG Minden)`, detail: `LG Düsseldorf (011 Qs) bestätigt Beschlagnahme des längst herausgegebenen iPhones; VG Minden dokumentiert 5× fehlende qeS und Titel-Swap 152 Gs 690/26.` },
+      { date: `08.–19.10.2026`, phase: `JULI_OKT`, type: `procedural`, title: `Gerichtsbescheidantrag, Verwerfung § 33a StPO & PZU-Friststart`, detail: `Antrag § 84 VwGO (08.10.), Verwerfung Anhörungsrüge als „fernliegend“ (14.10.), PZU-Zustellung an Tina (17.10.) und Thomas König (19.10.).` },
+      { date: `20. / 25.10.2026`, phase: `JULI_OKT`, type: `relief`, title: `Jugendamt-Abschluss Ibbenbüren (Akte 512/14984) ohne Befund`, detail: `Verfahrensabschluss ab 20.10.2026 und förmliche Einstellung zum 25.10.2026 ohne jeden Gefährdungsbefund — urkundliche Entlastung.` },
+      { date: `28.10.–03.11.2026`, phase: `JULI_OKT`, type: `critical`, title: `174-Tage-Spätbeschlüsse & PZU 2 Vorführungsandrohung`, detail: `AG Düsseldorf erlässt 152 Gs 1128/26 & 1178/26 nach 174 Tagen; KPB Steinfurt droht Zwangsvorführung trotz Zeugnisverweigerung (§§ 52, 55 StPO) an.` },
+      { date: `13.–16.11.2026`, phase: `NOV_SCHLUESSEL`, type: `milestone`, title: `BVerfG-Einreichung & koordiniertes 13er-Einschreiben-Kataster`, detail: `Vorabeingang BVerfG (2 BvR 1318/26); am 16.11. (17:40–17:47 Uhr) Zustellung an 13 NRW-Schlüsselstellen inklusive Justiz- und Innenministerium.` },
+      { date: `19.11.2026`, phase: `NOV_SCHLUESSEL`, type: `milestone`, title: `Schlüsseltag: BVerfG-Fristwahrung (§ 93 Abs. 1 BVerfGG)`, detail: `Übergabe des 2,0-kg-Monolithen (275 S.) an die Wachtmeisterei des Zweiten Senats; absolute Fristwahrung für Thomas König um 24:00 Uhr.` },
+      { date: `20.11.2026`, phase: `NOV_SCHLUESSEL`, type: `critical`, title: `Schlüsseltag: Ombudsfrau-Wegweisung (22999/2026-K)`, detail: `Formelle Wegweisung im VSBG-Schlichtungsverfahren; Dokumentation der verweigerten außergerichtlichen Abhilfe.` },
+      { date: `21.11.2026`, phase: `NOV_SCHLUESSEL`, type: `critical`, title: `Schlüsseltag: GVP-Nichtigkeit (§ 21e GVG / Art. 101 GG)`, detail: `Feststellung und Rüge struktureller Geschäftsverteilungsplan-Mängel hinsichtlich des gesetzlichen Richters.` },
+      { date: `01.12.2026`, phase: `DEZ_VERZUG`, type: `milestone`, title: `Ablauf der 14-Tage-Mahnfrist: Qualifizierter Verzugseintritt`, detail: `Schuldnerverzug gem. § 286 BGB für 19.800.400,00 EUR vor LG Münster (5 O 124/26); Aktivierung der Zinsuhr über 3.448,58 EUR/Tag.` },
+      { date: `13.12.2026`, phase: `DEZ_VERZUG`, type: `milestone`, title: `Kaskaden-Stichtag: 12 Verzugstage & Vollstreckungsreife`, detail: `Aufgelaufener Verzugszins von exakt 41.382,96 EUR; Gesamtforderung steigt auf 19.841.782,96 EUR.` }
+    ];
+    const H8_RUEGEN_DATA = [
+      { id: `R-01`, norm: `§ 107 StPO / § 415 ZPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2512)`, title: `Null-Asservaten-Paradoxon im Sicherstellungsprotokoll`, desc: `Blatt 1 des Protokolls vom 07.05.2026 (06:26 Uhr) bescheinigt mit öffentlicher Beweiskraft die Sicherstellung von exakt 0 Gegenständen trotz faktischer Einbehaltung.` },
+      { id: `R-02`, norm: `Art. 13 Abs. 2 GG / § 35 StPO`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `AG Düsseldorf (152 Gs 648/26)`, title: `Durchsuchungsbeschluss ohne eigenhändige Richterunterschrift`, desc: `Ausfertigung auf überholtem 1985er-Formular Straf 3.3.1 ohne richterliche Unterschrift; Begründung formeller Nichtigkeit ex tunc.` },
+      { id: `R-03`, norm: `§ 105 StPO / PDV 100`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (260202-0741-0831)`, title: `Zeitparadoxon im Protokoll (109 Min. vor Einsatzende)`, desc: `Protokollabschluss dokumentiert auf 06:26 Uhr bei tatsächlicher Maßnahmendauer bis 08:15 Uhr.` },
+      { id: `R-04`, norm: `Art. 2 Abs. 2 S. 1 GG / § 340 StGB`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `PP Bielefeld (Einsatz 07.05.2026)`, title: `Unterbrechung medizinischer Notfallsteuerung (70 Min.)`, desc: `Entzug des CGM-Insulin-Steuerungsgeräts bei dokumentiertem LADA-1-Diabetes während der Durchsuchungsmaßnahme.` },
+      { id: `R-05`, norm: `Art. 3 Abs. 3 S. 2 GG / § 4 BGG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `PP Bielefeld / Schutzbefohlener (GdB 70)`, title: `Entzug sensorischer Hilfsmittel eines schwerbehinderten Kindes`, desc: `Beeinträchtigung des verfassungsrechtlichen Benachteiligungsverbots durch Entzug erforderlicher Hilfsmittel.` },
+      { id: `R-06`, norm: `Art. 6 Abs. 1, 2 GG / § 42 SchulG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `PP Bielefeld (Südring 134)`, title: `Beeinträchtigung schulischer und familiärer Schutzpflichten`, desc: `Einsatzdurchführung am Morgen des 07.05.2026 mit unmittelbaren Auswirkungen auf ein schulpflichtiges Kind.` },
+      { id: `R-07`, norm: `§ 81b StPO / Ermessensausfall`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `PP Bielefeld (NRW 2342/2343)`, title: `Vordatierte erkennungsdienstliche Anordnung`, desc: `Fertigung der ED-Anordnung bereits am 06.05.2026 vor Beginn der Durchsuchung (Indiz fehlender Einzelfallprüfung).` },
+      { id: `R-08`, norm: `§ 240 StGB / Koppelungsverbot`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2370, 08.06.2026)`, title: `Koppelung von Bargeld-Rückgabe an ED-Erscheinen`, desc: `Dienstschreiben knüpft die Herausgabe einbehaltener 50,00 EUR an das Erscheinen zur erkennungsdienstlichen Behandlung.` },
+      { id: `R-09`, norm: `§ 81g / § 81e StPO / § 136a StPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `PP Bielefeld (NRW 2361/1, 16.06.2026)`, title: `DNA-Formular mit maschinellem Täuscherkreuz & Widerrufsverzicht`, desc: `Maschinelle Markierung bei § 81g StPO (Zukunftsspeicherung) statt § 81e StPO nebst vorgedrucktem Verzicht auf Widerruf.` },
+      { id: `R-10`, norm: `Art. 14 GG / § 240 StGB`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `PP Bielefeld (07.08.2026)`, title: `Verwertungs- und Vernichtungsultimatum für Asservate`, desc: `Fristsetzung zur Verwertung von 150,00 EUR und einer Schatulle ohne rechtskräftige Einziehungsentscheidung.` },
+      { id: `R-11`, norm: `§ 98 Abs. 2 StPO`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `StA / LG Düsseldorf (011 Qs)`, title: `89-Tage-Phantom-Beschlagnahme nach amtlicher Herausgabe`, desc: `Beschlagnahmeantrag und -bestätigung am 14.09.2026 für ein iPhone 17 Pro Max, das bereits am 17.06.2026 quittiert ausgehändigt wurde.` },
+      { id: `R-12`, norm: `§ 98 Abs. 2 S. 2 StPO / Art. 19 Abs. 4 GG`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `AG Düsseldorf (152 Gs 1128/26, 1178/26)`, title: `174-Tage-Latenz bei nachträglicher Beschlagnahmebestätigung`, desc: `Erlass amtsgerichtlicher Bestätigungsbeschlüsse am 28.10.2026 nach 174 Tagen nebst Vorblattvermerk zur früheren Herausgabe.` },
+      { id: `R-13`, norm: `§ 44 BeurkG analog / § 317 ZPO`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `AG / LG Düsseldorf (IMG_3131 / 5450)`, title: `Formelle Urkundenspaltung durch isolierte Beglaubigungsstempel`, desc: `Dienstsiegel und Beglaubigungsvermerke befinden sich isoliert auf unbedruckten Folge- oder Rückseiten ohne Textverbindung.` },
+      { id: `R-14`, norm: `§ 348 StGB / § 267 StGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `AG Düsseldorf / PP Bielefeld`, title: `Inkonsistente Protokollblätter & Falschbeurkundungsrüge`, desc: `Vermischung aktueller (12/24) und veralteter (07/17 NRW 2512) ununterschriebener Formularblätter sowie isolierter Stempelabdrücke.` },
+      { id: `R-15`, norm: `§ 344 StGB / Beute-Aporie`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf (52 Js 23/26)`, title: `Fortführung trotz dokumentierter Null-Beute (0,00 EUR)`, desc: `Tatortfeststellung Willebadessen (31.12.2025) weist 0,00 EUR Schaden aus; Verfahrenseingriffe wurden dennoch fortgeführt.` },
+      { id: `R-16`, norm: `§ 55a Abs. 3 VwGO / ERVV`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `VG Minden (11 K 3272/26)`, title: `Fünffacher ERV-Formkollaps (5× qeS: NEIN)`, desc: `Gerichtsamtlicher Prüfvermerk vom 21.09.2026 dokumentiert fehlende qualifizierte elektronische Signatur bei Klageerwiderung und 4 Beiakten.` },
+      { id: `R-17`, norm: `§ 114 S. 2 VwGO analog / § 86 VwGO`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `PP Bielefeld / VG Minden`, title: `Unzulässiger Titel-Swap auf fremdes Aktenzeichen`, desc: `Klageerwiderung vom 21.09.2026 verlässt Stichtag 31.12.2025 und verweist auf sachfremdes Aktenzeichen 152 Gs 690/26.` },
+      { id: `R-18`, norm: `Art. 3 Abs. 1 GG / Waffengleichheit`, bereich: `Verfassung / Grundrechte`, status: `OFFEN`, akte: `VG Minden / LG Düsseldorf`, title: `Asymmetrische Handhabung prozessualer Formstrenge`, desc: `Ungleichbehandlung formunwirksamer Behördenschriftsätze gegenüber strengen Frist- und Formmaßstäben zulasten der Klägerseite.` },
+      { id: `R-19`, norm: `Art. 103 Abs. 1 GG / § 147 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `StA Düsseldorf (52 Js 23/26)`, title: `Koppelung der Akteneinsicht an erkennungsdienstliche Ladung`, desc: `Verweigerung sachlicher Bescheidung und Akteneinsicht im Schreiben vom 23.07.2026.` },
+      { id: `R-20`, norm: `§ 33a StPO / Art. 103 Abs. 1 GG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `LG Düsseldorf (011 Qs)`, title: `Formelhafte Verwerfung der Anhörungsrüge als „fernliegend“`, desc: `Beschluss vom 14.10.2026 weist § 33a-Rüge ohne Auseinandersetzung mit der amtlichen Herausgabequittung vom 17.06.2026 ab.` },
+      { id: `R-21`, norm: `§ 304 / § 306 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `AG Düsseldorf (13.08.2026)`, title: `Textbaustein-Nichtabhilfe ohne Einzelfallprüfung`, desc: `Nichtabhilfebeschluss vom 13.08.2026 nutzt formelhafte Textbausteine ohne Erörterung der substantiierten Beschwerdegründe.` },
+      { id: `R-22`, norm: `§ 147 GVG / § 258a StGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `OFFEN`, akte: `GStA Düsseldorf (2 AR 806/26)`, title: `Einstellung der Dienstaufsicht ohne Handaktenprüfung`, desc: `Bescheid vom 24.08.2026 stellt Aufsichtsverfahren ohne Beiziehung und Prüfung der physischen Originalakten ein.` },
+      { id: `R-23`, norm: `Art. 19 Abs. 4 GG / § 90 Abs. 2 BVerfGG`, bereich: `Amtshaftung / Justizaufsicht`, status: `BELEGT`, akte: `GStA Hamm (3 AR 883/26) / GStA D`, title: `Zirkuläre Verweisungspraxis der Aufsichtsinstanzen`, desc: `Wiederholte Zuständigkeitsabgaben (u.a. 22.07.2026 und 02.11.2026) ohne Sachentscheidung begründen Unzumutbarkeit des weiteren Instanzenzugs.` },
+      { id: `R-24`, norm: `§ 8a SGB VIII / Art. 6 GG`, bereich: `Verwaltung / ERV / SGB`, status: `KRITISCH`, akte: `PP Bielefeld / FD 512 Ibbenbüren`, title: `72-Stunden-Latenz bei § 8a-Meldung nach Klagebegründung`, desc: `Übermittlung einer Kindeswohlmeldung am 04.09.2026 nach 120 Tagen Passivität, exakt 3 Tage nach Klagebegründung beim VG Minden.` },
+      { id: `R-25`, norm: `§ 25 SGB X / § 13 SGB X`, bereich: `Verwaltung / ERV / SGB`, status: `BELEGT`, akte: `Stadt Ibbenbüren (512/14984)`, title: `Vorenthaltung der Akteneinsicht im Verwaltungsverfahren`, desc: `Trotz wiederholter Termine keine vorherige Akteneinsicht gewährt; nach Beistandstermin (14.10.) Einstellung ohne Befund am 20./25.10.2026.` },
+      { id: `R-26`, norm: `Art. 17 DSGVO / § 35 SGB I`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `VG Minden (11 I 99/26) / FD 512`, title: `Löschungs- und Sperrungsgebot nach Null-Befund`, desc: `Anspruch auf vollständige Datenlöschung nach ergebnisloser Einstellung des § 8a-Verfahrens und biometrischer Datenverarbeitung.` },
+      { id: `R-27`, norm: `Art. 9 DSGVO / RL (EU) 2016/680`, bereich: `Verwaltung / ERV / SGB`, status: `OFFEN`, akte: `PP Bielefeld / Justiz NRW`, title: `Verarbeitung sensibler Gesundheitsdaten & überholte Vordrucke`, desc: `Unreflektierte Weitergabe von Gesundheitsdaten in Textbausteinen sowie Einsatz veralteter JI-Formularstände (01/16 NRW 2342).` },
+      { id: `R-28`, norm: `§ 163 Abs. 4 StPO / § 52 StPO`, bereich: `Strafprozess / StPO`, status: `BELEGT`, akte: `KPB Steinfurt (KK 1)`, title: `Zeugenvorladung ohne staatsanwaltschaftliches Aktenzeichen`, desc: `Ladung vom 09.10.2026 (PZU 15.10.2026) an volljährigen Sohn ohne Angabe eines staatsanwaltschaftlichen Aktenzeichens.` },
+      { id: `R-29`, norm: `§ 163 Abs. 4 Nr. 4 StPO / § 240 StGB`, bereich: `Strafprozess / StPO`, status: `KRITISCH`, akte: `KPB Steinfurt (PZU 03.11.2026)`, title: `Androhung polizeilicher Zwangsvorführung trotz §§ 52, 55 StPO`, desc: `Erneute Zustellung am 03.11.2026 mit Vorführungsandrohung trotz formgerecht erklärter Zeugnisverweigerung vom 30.10.2026.` },
+      { id: `R-30`, norm: `Art. 13 GG / PolG NRW`, bereich: `Verfassung / Grundrechte`, status: `BELEGT`, akte: `KPB Steinfurt (Landrat / KK 1)`, title: `Unangekündigtes Aufsuchen an Wohnanschrift (07:25 Uhr)`, desc: `Morgendliche Vorsprache an der Haustür Südring 134 nebst Androhung von Zwangsmitteln gegenüber unbeteiligter Zeugin.` },
+      { id: `R-31`, norm: `VSBG / § 14 SchlichtungsO`, bereich: `Amtshaftung / Justizaufsicht`, status: `OFFEN`, akte: `Ombudsstelle (22999/2026-K)`, title: `Ombudsfrau-Wegweisung im Schlichtungsverfahren`, desc: `Formelle Wegweisung bzw. Ablehnung der weiteren Schlichtungsdurchführung am 20.11.2026 im Vorgang 22999/2026-K.` },
+      { id: `R-32`, norm: `Art. 101 Abs. 1 S. 2 GG / § 21e GVG`, bereich: `Verfassung / Grundrechte`, status: `KRITISCH`, akte: `GVP-Prüfung (21.11.2026)`, title: `GVP-Nichtigkeit & Verstoß gegen gesetzlichen Richter`, desc: `Rüge der fehlerhaften Geschäftsverteilung und Kammerzuständigkeit zum Stichtag 21.11.2026.` },
+      { id: `R-33`, norm: `§§ 21, 66 GKG`, bereich: `Amtshaftung / Justizaufsicht`, status: `BELEGT`, akte: `Zentrale Zahlstelle Justiz Hamm`, title: `Rückforderung ungerechtfertigter Justizkosten (511,50 EUR)`, desc: `Förmliche Rückforderung und Fristsetzung wegen Erhebung von Kosten auf Grundlage nichtiger Prozesshandlungen.` },
+      { id: `R-34`, norm: `§ 839 BGB / Art. 34 GG / §§ 286, 288 BGB`, bereich: `Amtshaftung / Justizaufsicht`, status: `KRITISCH`, akte: `LG Münster (5 O 124/26)`, title: `Amtshaftungsklage (19,8 Mio. €) & Verzugseintritt 01.12.2026`, desc: `Nachweis der Zustellung vom 16.11.2026 an 13 NRW-Behörden; Eintritt des Schuldnerverzugs am 01.12.2026 (3.448,58 EUR/Tag).` }
+    ];
+
+    let h8State = {
+      chronoPhase: 'ALL',
+      ruegenCat: 'ALL'
+    };
+
+    function filterHub8Section(sec, btn) {
+      const btns = btn.parentElement.querySelectorAll('.chip-btn');
+      btns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+
+      const panels = ['hub8-terminal-panel', 'hub8-vektoren-panel', 'hub8-chronik-panel', 'hub8-ruegen-panel'];
+      panels.forEach(pId => {
+        const el = document.getElementById(pId);
+        if (!el) return;
+        if (sec === 'all') {
+          el.style.display = 'block';
+        } else if (sec === 'terminal') {
+          el.style.display = (pId === 'hub8-terminal-panel') ? 'block' : 'none';
+        } else if (sec === 'chronik') {
+          el.style.display = (pId === 'hub8-chronik-panel') ? 'block' : 'none';
+        } else if (sec === 'ruegen') {
+          el.style.display = (pId === 'hub8-ruegen-panel') ? 'block' : 'none';
+        } else if (sec === 'vektoren') {
+          el.style.display = (pId === 'hub8-vektoren-panel') ? 'block' : 'none';
+        }
+      });
+    }
+
+    function appendH8Term(color, text) {
+      const out = document.getElementById('h8-term-output');
+      if (!out) return;
+      const d = document.createElement('div');
+      d.style.color = color;
+      d.textContent = text;
+      out.appendChild(d);
+      out.scrollTop = out.scrollHeight;
+    }
+
+    function quickTermCmd(cmd) {
+      const inp = document.getElementById('h8-term-input');
+      if (inp) inp.value = cmd;
+      executeH8Terminal();
+    }
+
+    function executeH8Terminal() {
+      const inp = document.getElementById('h8-term-input');
+      if (!inp) return;
+      const cmd = inp.value.trim().toLowerCase();
+      inp.value = '';
+      if (!cmd) return;
+
+      appendH8Term('var(--secondary)', 'root@b6-omega:~$ ' + cmd);
+
+      if (cmd === 'clear') {
+        const out = document.getElementById('h8-term-output');
+        if (out) out.innerHTML = '';
+        appendH8Term('var(--tertiary)', '[SYS] Terminal bereinigt. Befehl "help" für Befehlsliste.');
+      } else if (cmd === 'help') {
+        appendH8Term('var(--primary)', 'VERFÜGBARE BEFEHLE:');
+        appendH8Term('#e2e8f0', '  status      - Zeigt aktiven Vorgang, WORM-Hashes und Systemzustand');
+        appendH8Term('#e2e8f0', '  scan        - Scannt Akte 152 Gs auf Paraphen & Richtervorbehalt');
+        appendH8Term('#e2e8f0', '  zins        - Berechnet 19,8 Mio. € Zinsuhr (3.448,58 €/Tag)');
+        appendH8Term('#e2e8f0', '  chronik     - Filtert Chronologie auf Schlüsselereignisse');
+        appendH8Term('#e2e8f0', '  ruegen      - Zeigt Zusammenfassung der 34er-Rügenmatrix');
+        appendH8Term('#e2e8f0', '  foucault    - Startet Panoptikum & Luhmann-Inversions-Scan');
+        appendH8Term('#e2e8f0', '  worm        - Verifiziert WebCrypto-Ledger Integrität');
+        appendH8Term('#e2e8f0', '  matrix      - Schaltet auf die 40er-Sektorenmatrix um');
+        appendH8Term('#e2e8f0', '  clear       - Löscht den Terminal-Bildschirm');
+      } else if (cmd === 'status') {
+        appendH8Term('var(--positive)', '[STATUS] VORGANG: #' + appState.caseId + ' | AKTIVER HUB: ' + appState.activeHub);
+        appendH8Term('#e2e8f0', '[WORM] Gespeicherte Hashes: ' + (appState.wormEntries ? appState.wormEntries.length : 0));
+        appendH8Term('var(--tertiary)', '[TENSOR] Deontischer Vektor: § 105.2.3.4.1 (Verfallsfrist 6 Monate aktiv)');
+      } else if (cmd.startsWith('scan')) {
+        appendH8Term('var(--error)', '[ALARM] REGEX-SCAN: 152 Gs 648/26');
+        appendH8Term('#cbd5e1', '  - Paraphe: Namenswiedergabe nicht erkennbar -> Formnichtig (BGH IX ZB 198/11)');
+        appendH8Term('#cbd5e1', '  - Alter: > 6 Monate -> Verbraucht (BVerfG 2 BvR 2220/01)');
+        appendH8Term('#cbd5e1', '  - Entropie: H(X) = 2.94 bit/char -> Reines Textbaustein-Aggregat');
+      } else if (cmd.startsWith('zins')) {
+        appendH8Term('var(--primary)', '[ZINS-GUILLOTINE] Streitwert: 19.800.400,00 € (LG Münster 5 O 124/26)');
+        appendH8Term('#cbd5e1', '  - Täglicher Verzugszins: 3.448,58 € / Kalendertag');
+        appendH8Term('#cbd5e1', '  - Basis: § 288 BGB (+5 % über Basiszinssatz)');
+        appendH8Term('#cbd5e1', '  - Zinseszins-Sperre: § 289 Satz 1 BGB strikt aktiv');
+      } else if (cmd === 'chronik') {
+        appendH8Term('var(--secondary)', '[CHRONIK] ' + H8_CHRONO_DATA.length + ' kalendarische Einträge geladen.');
+        appendH8Term('#cbd5e1', '  - Ausgangspunkt: 31.12.2025 (Willebadessen Beute 0,00 €)');
+        appendH8Term('#cbd5e1', '  - Stichtag: 01.12.2026 (Verzugseintritt Land NRW)');
+      } else if (cmd.startsWith('ruegen')) {
+        appendH8Term('var(--error)', '[RÜGEN-MATRIX] 34 Einzeltatbestände aktiv.');
+        appendH8Term('#cbd5e1', '  - R-01: Null-Asservaten-Paradoxon (06:26 Uhr)');
+        appendH8Term('#cbd5e1', '  - R-02: Formnichtigkeit Durchsuchung (Art. 13 Abs. 2 GG)');
+        appendH8Term('#cbd5e1', '  - R-03: 5x Signaturkollaps VG Minden (qeS: NEIN)');
+      } else if (cmd === 'foucault') {
+        appendH8Term('var(--purple)', '[FOUCAULT-SCAN] Panopticon Autopoiesis Algorithmus v4.2:');
+        appendH8Term('#cbd5e1', '  - Inversions-Index: 25 (Kritischer Schwellenwert > 20)');
+        appendH8Term('#cbd5e1', '  - Zitationskaskade: Selbstreferentieller Zirkelschluss detektiert');
+        appendH8Term('var(--positive)', '  - Konter: Förmliche Rüge nach Art. 103 GG & DSGVO Art. 16');
+      } else if (cmd === 'worm') {
+        appendH8Term('var(--positive)', '[WORM-LEDGER] SHA-256 WebCrypto Engine verifiziert.');
+        appendH8Term('#cbd5e1', '  - Master Seal: 850b2ef003f53db90f704b16e54869fc6ba6265eae13aafde9046fe0e4d99dab');
+        appendH8Term('#cbd5e1', '  - Zustand: Unveränderlich im Browser verankert');
+      } else if (cmd === 'matrix') {
+        switchHub('hub7');
+      } else {
+        appendH8Term('var(--error)', '[ERR] Unbekannter Befehl: "' + cmd + '". Geben Sie "help" ein.');
+      }
+    }
+
+    function filterChronoPhase(phase, btn) {
+      h8State.chronoPhase = phase;
+      const btns = document.getElementById('h8-chrono-filters').querySelectorAll('.chip-btn');
+      btns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      renderChronoTimeline();
+    }
+
+    function renderChronoTimeline() {
+      const container = document.getElementById('h8-chrono-timeline');
+      if (!container) return;
+      const q = (document.getElementById('h8-chrono-search')?.value || '').toLowerCase().trim();
+
+      const filtered = H8_CHRONO_DATA.filter(item => {
+        if (h8State.chronoPhase !== 'ALL' && item.type !== h8State.chronoPhase) return false;
+        if (q) {
+          const t = (item.date + ' ' + item.title + ' ' + item.detail).toLowerCase();
+          if (!t.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="color:var(--on-surface-variant); padding:1rem; text-align:center;">Keine Ereignisse für diese Filterkombination.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const isCrit = item.type === 'critical';
+        const borderColor = isCrit ? 'var(--error)' : 'var(--positive)';
+        const tagBadge = isCrit ? '<span class="badge badge-crimson">KRITISCH</span>' : '<span class="badge badge-positive">ENTLASTUNG</span>';
+        return `
+          <div style="background:var(--surface-container); border-left:4px solid ${borderColor}; padding:0.75rem 1rem; border-radius:var(--rounded);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+              <span style="font-family:var(--font-label); font-weight:700; color:var(--primary); font-size:0.85rem;">${item.date}</span>
+              ${tagBadge}
+            </div>
+            <h4 style="font-size:0.95rem; color:var(--on-surface); margin:0.2rem 0;">${item.title}</h4>
+            <p style="font-size:0.8rem; color:var(--on-surface-variant); line-height:1.4;">${item.detail}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterRuegenCat(cat, btn) {
+      h8State.ruegenCat = cat;
+      const btns = document.getElementById('h8-ruegen-filters').querySelectorAll('.chip-btn');
+      btns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      renderRuegenMatrix();
+    }
+
+    function renderRuegenMatrix() {
+      const grid = document.getElementById('h8-ruegen-grid');
+      if (!grid) return;
+      const q = (document.getElementById('h8-ruegen-search')?.value || '').toLowerCase().trim();
+
+      const filtered = H8_RUEGEN_DATA.filter(item => {
+        if (h8State.ruegenCat !== 'ALL') {
+          if (h8State.ruegenCat === 'KRITISCH' && item.status !== 'KRITISCH') return false;
+          if (h8State.ruegenCat === 'FORMFEHLER' && item.status !== 'FORMFEHLER') return false;
+        }
+        if (q) {
+          const t = (item.id + ' ' + item.norm + ' ' + item.bereich + ' ' + item.title + ' ' + item.desc + ' ' + item.akte).toLowerCase();
+          if (!t.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1; color:var(--on-surface-variant); padding:1rem; text-align:center;">Keine Rügen für diese Filterung gefunden.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const isCrit = item.status === 'KRITISCH';
+        const badgeCls = isCrit ? 'badge-crimson' : 'badge-gold';
+        return `
+          <div style="background:var(--surface-container); border:var(--hairline); padding:0.85rem; border-radius:var(--rounded); display:flex; flex-direction:column; justify-content:space-between; gap:0.5rem;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                <span style="font-family:var(--font-label); font-weight:700; color:var(--primary); font-size:0.85rem;">${item.id}</span>
+                <span class="badge ${badgeCls}">${item.status}</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--secondary); font-family:var(--font-label); text-transform:uppercase;">${item.bereich}</div>
+              <h4 style="font-size:0.95rem; color:var(--on-surface); margin:0.25rem 0;">${item.title}</h4>
+              <p style="font-size:0.78rem; color:var(--on-surface-variant); line-height:1.4;">${item.desc}</p>
+            </div>
+            <div style="border-top:var(--hairline); padding-top:0.4rem; display:flex; justify-content:space-between; align-items:center; font-size:0.72rem;">
+              <span style="color:var(--tertiary); font-family:var(--font-label);">${item.norm}</span>
+              <button type="button" class="btn btn-sm btn-outline" style="padding:0.2rem 0.5rem; font-size:0.7rem;" onclick="copyH8Citation('${item.id}', '${item.norm}', '${item.title.replace(/'/g, "\\'")}')">Rüge zitieren</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function copyH8Citation(id, norm, title) {
+      const text = '[B6 RÜGE ' + id + '] ' + title + ' — Gestützt auf ' + norm + ' (Causa König / Master-Dock).';
+      navigator.clipboard.writeText(text).then(() => {
+        showGlobalStatus('Rüge ' + id + ' in die Zwischenablage kopiert!');
+      });
+    }
+
 </script>
 </body>
 </html>
