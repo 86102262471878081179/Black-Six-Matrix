@@ -762,44 +762,4 @@ Unterschrift Beteiligter: ___________________________`;
       }
     }
 
-    /* MODUL 11: GEDÄCHTNISPROTOKOLL */
-    function generateProtokoll() {
-      const d = document.getElementById('protDate').value || '[DATUM]';
-      const t = document.getElementById('protTime').value || '[UHRZEIT]';
-      const ort = document.getElementById('protOrt').value || '[ORT]';
-      const beamte = document.getElementById('protBeamte').value || '[KEINE ANGABEN]';
-      const zeugen = document.getElementById('protZeugen').value || '[KEINE ZEUGEN]';
-      const ablauf = document.getElementById('protAblauf').value || '[KEIN TEXT]';
-      const created = new Date().toLocaleString('de-DE');
-
-      const txt = 
-`================================================================================
-                    FÖRMLICHES GEDÄCHTNISPROTOKOLL
-              gem. § 415 ZPO / Beweissicherung zur Causa
-================================================================================
-Erstellt am:        ${created} (zeitnah verfasst)
-Datum des Vorfalls: ${d} | Zeitraum: ${t}
-Einsatzort:         ${ort}
-
-BETEILIGTE AMTSTRÄGER / BEAMTE:
-${beamte}
-
-ANWESENDE ZEUGEN / BEISTÄNDE (§ 14 VwVfG / § 13 SGB X):
-${zeugen}
-
-CHRONOLOGISCHER HERGANG & WÖRTLICHE ÄUSSERUNGEN:
-${ablauf}
-
-BEWEISSICHERUNGSHINWEIS:
-Dient als Urkundenbeweis gem. § 415 ZPO für Verfassungsrügen und Amtshaftungsansprüche 
-nach § 839 BGB i.V.m. Art. 34 GG.
-
-Unterschrift des Protokollführers: ____________________________________`;
-
-      const box = document.getElementById('protOutput');
-      box.style.display = 'block';
-      box.innerText = txt;
-    }
-  </script>
-</body>
-</html>
+    <section> <div> <h2>📝 Modul 11: Revisionssicherer Gedächtnisprotokoll-Generator</h2> <p> Sichere Fakten zeitnah nach einem behördlichen Einsatz. Trennt strikt zwischen wörtlichen Äußerungen, Zeugen und Handlungen (§ 415 ZPO). </p> <div> <div>   </div> <div>   </div> </div>       <div></div> </div> </section>  <section> <div> <h2>🛡️ Modul 12: Jugendamts-Begleiter &amp; § 8a-Präventions-Radar</h2> <p> Taktischer Schutz bei Gefährdungseinschätzungen (§ 8a SGB VIII) und unangekündigten Hausbesuchen. </p> <div> <div> <div>KEIN BETRETUNGSRECHT</div> <p>Mitarbeiter des Jugendamtes haben kein eigenständiges Recht, Wohnräume gegen den Willen der Eltern zu betreten. Es gilt Art. 13 GG (Unverletzlichkeit der Wohnung)!</p> </div> <div> <div>BEISTANDSRECHT ERZWINGEN</div> <p>Gespräche niemals allein führen. Das Recht auf Hinzuziehung eines Beistands gem. § 13 Abs. 4 SGB X ist Bundesrecht und darf nicht verwehrt werden.</p> </div> <div> <div>AKTENKONTROLLE (§ 25 SGB X)</div> <p>Sofortige vollständige Akteneinsicht verlangen, um anonyme Denunziationen, verfälschte Protokolle und Gefährdungsvorwürfe aufzudecken.</p> </div> </div> <div>   </div>   <div></div> </div> </section>  <div> ⚖️ <strong>Rechtlicher Hinweis gem. § 1 Abs. 1 Nr. 1 Rechtsdienstleistungsgesetz (RDG):</strong><br /> Dieses Portal dient ausschließlich der staatsbürgerlichen Bildung, der Information über verfassungsrechtliche Grundsätze und der Bereitstellung standardisierter Selbsthilfe-Werkzeuge. Es findet keine individuelle Rechtsberatung oder Vertretung im Einzelfall statt. </div>
